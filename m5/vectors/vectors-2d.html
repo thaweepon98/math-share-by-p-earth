@@ -1,0 +1,959 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>สื่อการสอน : เวกเตอร์ในพิกัดฉาก 2 มิติ ม.5</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800&display=swap');
+
+  :root {
+    --primary: #1C3B22; --secondary: #FF8A3D; --accent: #68EF3F; --accent-2: #3FA82E; --warning: #FFB347;
+    --bg: #F3F7EC; --card: #FFFFFF; --text: #2D3748; --muted: #718096; --border: #E2E8F0;
+    --shadow: 0 4px 24px rgba(28,59,34,0.10); --radius: 16px;
+    --pos: #047857; --pos-bg: #ECFDF5; --neg: #BE185D; --neg-bg: #FFF4EC;
+    --cu: #2563EB; --cv: #DC2626; --cw: #7C3AED; --cr: #111827; --ci: #059669; --cj: #EA580C; --ck: #0891B2;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Sarabun', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+  header { background: linear-gradient(135deg, #1C3B22 0%, #2E5936 100%); color: white; padding: 28px 40px 20px; text-align: center; position: relative; overflow: hidden; }
+  header::before { content: ''; position: absolute; top: -60px; right: -60px; width: 200px; height: 200px; background: rgba(255,255,255,0.07); border-radius: 50%; }
+  header h1 { font-size: 2rem; font-weight: 800; letter-spacing: .5px; }
+  header p { font-size: 1rem; opacity: .85; margin-top: 4px; }
+  .back-link { position: absolute; top: 14px; left: 20px; color: white; text-decoration: none; font-size: .85rem; font-weight: 600; opacity: .9; z-index: 2; }
+  .back-link:hover { opacity: 1; text-decoration: underline; }
+  .lang-toggle { position: absolute; top: 14px; right: 20px; background: rgba(255,255,255,.15); color: white; border: 1.5px solid rgba(255,255,255,.5); border-radius: 20px; padding: 5px 14px; font-family: 'Sarabun', sans-serif; font-size: .8rem; font-weight: 700; cursor: pointer; z-index: 2; }
+  .lang-toggle:hover { background: rgba(255,255,255,.28); }
+
+  nav { display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; padding: 20px 24px 0; background: white; border-bottom: 3px solid var(--border); }
+  .tab-btn { padding: 10px 18px; border: none; background: transparent; border-radius: 10px 10px 0 0; font-family: 'Sarabun', sans-serif; font-size: 0.95rem; font-weight: 600; color: var(--muted); cursor: pointer; transition: all .25s; border-bottom: 3px solid transparent; margin-bottom: -3px; }
+  .tab-btn:hover { color: var(--primary); background: #E3F3D8; }
+  .tab-btn.active { color: var(--primary); border-bottom-color: var(--primary); background: #E3F3D8; }
+
+  main { max-width: 980px; margin: 0 auto; padding: 32px 20px 60px; }
+  .tab-panel { display: none; animation: fadeIn .35s ease; }
+  .tab-panel.active { display: block; }
+  @keyframes fadeIn { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
+
+  .card { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); padding: 28px 32px; margin-bottom: 24px; }
+  .card-title { font-size: 1.25rem; font-weight: 700; color: var(--primary); margin-bottom: 12px; display: flex; align-items: center; gap: 10px; }
+  .card-title .icon { font-size: 1.5rem; }
+  .intro { font-size: 1.02rem; line-height: 1.8; margin-bottom: 14px; }
+  .box-info { background: #EEF7E6; border-left: 4px solid var(--primary); border-radius: 10px; padding: 14px 18px; margin: 14px 0; line-height: 1.8; }
+  .box-warn { background: #FFF7ED; border-left: 4px solid var(--warning); border-radius: 10px; padding: 14px 18px; margin: 14px 0; line-height: 1.8; }
+  .box-ok   { background: #ECFDF5; border-left: 4px solid var(--accent);  border-radius: 10px; padding: 14px 18px; margin: 14px 0; line-height: 1.8; }
+  .formula { background: linear-gradient(135deg,#1C3B22,#2E5936); color: white; border-radius: 12px; padding: 14px 24px; text-align: center; font-size: 1.3rem; font-weight: 700; margin: 14px 0; letter-spacing: .5px; display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 4px 6px; line-height: 1.9; }
+  .link-tag { display: inline-block; background: #E3F3D8; color: var(--primary); border-radius: 999px; padding: 2px 12px; font-size: .78rem; font-weight: 700; margin: 2px 4px 2px 0; }
+  .note { color: var(--muted); font-size: .9rem; }
+
+  .btn { padding: 10px 24px; background: var(--primary); color: white; border: none; border-radius: 30px; font-family: 'Sarabun', sans-serif; font-size: 1rem; font-weight: 700; cursor: pointer; transition: background .2s, opacity .2s; }
+  .btn:hover:not(:disabled) { background: #2E5936; }
+  .btn:disabled { opacity: .45; cursor: not-allowed; }
+  .btn.ghost { background: white; color: var(--primary); border: 2px solid var(--primary); }
+  .btn.ghost:hover:not(:disabled) { background: #E3F3D8; }
+  .btn.small { padding: 6px 16px; font-size: .9rem; }
+  .btn-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 14px; align-items: center; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0; }
+  .chip { padding: 8px 16px; border: 2px solid var(--border); border-radius: 30px; background: #fff; font-family: 'Sarabun', sans-serif; font-weight: 700; font-size: 1rem; cursor: pointer; color: var(--text); display: inline-flex; align-items: center; gap: 4px; }
+  .chip:hover { border-color: var(--primary); }
+  .chip.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+  .chip.wrong { border-color: var(--neg); background: var(--neg-bg); color: var(--neg); }
+
+  .frac { display: inline-flex; flex-direction: column; align-items: center; font-weight: 700; line-height: 1; vertical-align: middle; margin: 0 4px; }
+  .frac .num { font-size: 1em; border-bottom: 2.5px solid currentColor; padding-bottom: 2px; min-width: 18px; text-align: center; white-space: nowrap; }
+  .frac .den { font-size: 1em; padding-top: 3px; min-width: 18px; text-align: center; white-space: nowrap; }
+  .frac .num:has(.v) { padding-top: .55em; }
+
+  /* ตัวแปรเวกเตอร์: ลูกศรบนหัว (วาดด้วย CSS เพราะอักขระลูกศรรวมแสดงไม่ได้ในหลายฟอนต์) */
+  .v { position: relative; display: inline-block; font-style: normal; white-space: nowrap; line-height: 1; padding-top: .34em; }
+  .v::before { content: ''; position: absolute; left: 4%; right: 4%; top: .14em; height: 0; border-top: .08em solid currentColor; }
+  .v::after { content: ''; position: absolute; right: 4%; top: .14em; width: .32em; height: .32em; border-top: .08em solid currentColor; border-right: .08em solid currentColor; transform: translate(-4%, -50%) rotate(45deg) scale(.75); transform-origin: center; }
+  .v.tall { padding-top: .5em; }
+  .v.tall::before, .v.tall::after { top: .1em; }
+  .cu { color: var(--cu); } .cv { color: var(--cv); } .cw { color: var(--cw); } .cr { color: var(--cr); }
+  .ci { color: var(--ci); } .cj { color: var(--cj); } .ck { color: var(--ck); }
+  .formula .cu { color: #93C5FD; } .formula .cv { color: #FCA5A5; } .formula .cw { color: #C4B5FD; } .formula .cr { color: #fff; }
+  .formula .ci { color: #86EFAC; } .formula .cj { color: #FDBA74; } .formula .ck { color: #67E8F9; }
+  .colvec { display: inline-flex; flex-direction: column; align-items: center; border-left: 2px solid currentColor; border-right: 2px solid currentColor; border-radius: 6px; padding: 2px 8px; margin: 0 4px; vertical-align: middle; line-height: 1.25; font-weight: 700; }
+
+  .align { display: grid; grid-template-columns: auto auto auto; justify-content: start; column-gap: .55em; row-gap: 3px; align-items: center; margin: 4px 0; }
+  .align .l { justify-self: end; text-align: right; }
+  .align .m { justify-self: center; font-weight: 700; }
+  .align .r { justify-self: start; }
+  .align .full { grid-column: 1 / -1; }
+
+  .wk-cell { position: relative; background: #fff; border: 2px solid var(--border); border-radius: 14px; padding: 12px 16px 12px 52px; margin-bottom: 12px; line-height: 1.9; }
+  .wk-cell.fresh { animation: rowIn .5s ease; }
+  @keyframes rowIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+  .wk-cell .stepno { position: absolute; left: 14px; top: 14px; width: 26px; height: 26px; border-radius: 50%; background: var(--primary); color: #fff; font-size: .85rem; font-weight: 800; display: flex; align-items: center; justify-content: center; }
+  .hl-i { background: #D1FAE5; border-radius: 5px; padding: 0 5px; }
+  .hl-j { background: #FFEDD5; border-radius: 5px; padding: 0 5px; }
+  .hl-k { background: #CFFAFE; border-radius: 5px; padding: 0 5px; }
+  .hl-y { background: #FEF9C3; border-radius: 5px; padding: 0 5px; }
+  .strike { text-decoration: line-through; opacity: .35; }
+
+  /* เวทีวาดรูป */
+  svg.stage { display: block; width: 100%; height: auto; background: #fff; border: 2px solid var(--border); border-radius: 14px; touch-action: none; user-select: none; -webkit-user-select: none; }
+  svg.stage text { font-family: 'Sarabun', sans-serif; font-weight: 700; }
+  svg.stage .drag { cursor: grab; }
+  svg.stage .pick { cursor: pointer; }
+  .stage-wrap { max-width: 720px; margin: 8px auto; }
+  .readout { background: #F8FAFC; border: 2px solid var(--border); border-radius: 12px; padding: 12px 16px; margin: 10px 0; line-height: 1.9; font-size: 1.02rem; }
+  .readout.big { font-size: 1.15rem; font-weight: 700; text-align: center; }
+  .readout.ok { border-color: var(--accent-2); background: var(--pos-bg); }
+  .readout.no { border-color: var(--secondary); background: var(--neg-bg); }
+  .two-col { display: grid; grid-template-columns: 1.15fr 1fr; gap: 18px; align-items: start; }
+  .legend { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: .92rem; font-weight: 700; margin: 8px 0; }
+  .legend .sw { display: inline-block; width: 22px; height: 5px; border-radius: 3px; margin-right: 6px; vertical-align: middle; }
+
+  .stepper { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin: 12px 0 6px; justify-content: center; }
+  .stepper .cnt { font-weight: 800; color: var(--primary); min-width: 52px; text-align: center; }
+  .cap { text-align: center; font-size: 1.08rem; font-weight: 600; line-height: 1.8; min-height: 3.6em; margin: 4px 0; }
+  .eqline { text-align: center; font-size: 1.35rem; font-weight: 800; line-height: 2.2; min-height: 2.4em; }
+
+  .slider-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin: 10px 0; }
+  .slider-row b { min-width: 34px; }
+  input[type=range] { accent-color: var(--primary); width: min(320px, 100%); }
+  .slider-val { font-weight: 800; color: var(--primary); font-size: 1.1rem; min-width: 44px; }
+  .numin { display: inline-flex; align-items: center; gap: 4px; font-weight: 700; margin: 4px 10px 4px 0; }
+  .numin input { width: 68px; padding: 6px 8px; border: 2px solid var(--border); border-radius: 10px; font-family: 'Sarabun', sans-serif; font-size: 1rem; font-weight: 700; text-align: center; }
+  .numin input:focus { outline: none; border-color: var(--primary); }
+  .row-inputs { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 6px; margin: 8px 0; }
+  .row-inputs .lbl { font-weight: 800; margin-right: 4px; }
+  .err-msg { color: var(--neg); font-weight: 600; font-size: .95rem; min-height: 22px; margin-top: 4px; }
+
+  table.tbl { border-collapse: collapse; margin: 10px auto; font-size: 1.02rem; }
+  table.tbl th, table.tbl td { border: 2px solid var(--border); padding: 8px 14px; text-align: center; }
+  table.tbl th { background: #E3F3D8; color: var(--primary); }
+  table.tbl td.hl { background: #FEF9C3; }
+
+  .quiz-q { font-size: 1.1rem; font-weight: 600; margin-bottom: 12px; line-height: 1.8; }
+  .quiz-opts { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 10px; }
+  .quiz-opt { padding: 10px 20px; border: 2px solid var(--border); border-radius: 30px; cursor: pointer; font-family: 'Sarabun', sans-serif; font-size: 1rem; font-weight: 600; transition: all .2s; background: white; }
+  .quiz-opt:hover { border-color: var(--primary); color: var(--primary); }
+  .quiz-opt.correct { border-color: var(--accent); background: #ECFDF5; color: #047857; }
+  .quiz-opt.wrong { border-color: var(--secondary); background: #FFF4EC; color: #BE185D; }
+  .quiz-feedback { font-weight: 700; font-size: 1rem; min-height: 24px; line-height: 1.8; }
+  .quiz-feedback.ok { color: #047857; }
+  .quiz-feedback.err { color: #BE185D; }
+  .quiz-fig { max-width: 340px; margin: 6px 0 12px; }
+  .btn-next { margin-top: 10px; padding: 10px 28px; background: var(--primary); color: white; border: none; border-radius: 30px; font-family: 'Sarabun', sans-serif; font-size: 1rem; font-weight: 700; cursor: pointer; transition: background .2s; }
+  .btn-next:hover { background: #142B1A; }
+  .score-badge { display: inline-block; background: linear-gradient(135deg,#68EF3F,#1C3B22); color: white; border-radius: 30px; padding: 6px 20px; font-weight: 700; font-size: 1rem; }
+
+  @media (max-width: 700px) {
+    header { padding: 44px 16px 16px; }
+    header h1 { font-size: 1.4rem; }
+    .card { padding: 20px 14px; }
+    .tab-btn { font-size: .85rem; padding: 8px 10px; }
+    .wk-cell { padding-left: 46px; }
+    .two-col { grid-template-columns: 1fr; }
+    .formula { font-size: 1.1rem; padding: 12px 10px; }
+    .eqline { font-size: 1.15rem; }
+    main { padding: 20px 10px 50px; }
+  }
+
+  .hand-wrap { max-width: 380px; margin: 6px auto; }
+  svg.hand { width: 100%; height: auto; display: block; }
+  svg.hand .fg { cursor: pointer; transition: fill .2s; }
+  .dot-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin: 10px 0; }
+  .dot-grid .kv { background: #F8FAFC; border: 2px solid var(--border); border-radius: 12px; padding: 8px 12px; text-align: center; font-weight: 700; line-height: 1.6; }
+  .dot-grid .kv small { display: block; color: var(--muted); font-weight: 600; }
+  .yes { color: var(--pos); } .nope { color: var(--neg); }
+</style>
+</head>
+<body>
+
+<header>
+  <button id="langToggle" class="lang-toggle" onclick="toggleLang()">EN</button>
+  <h1 data-th="📐 เวกเตอร์ในพิกัดฉาก 2 มิติ" data-en="📐 Vectors in 2D Coordinates">📐 เวกเตอร์ในพิกัดฉาก 2 มิติ</h1>
+  <p data-th="ai+bj มาได้ยังไง • ปลาย−ต้น • ดำเนินการ • ขนาน • ขนาด • หนึ่งหน่วย • dot • ม.5" data-en="Where ai+bj comes from • tip−tail • operations • parallel • magnitude • unit vector • dot product">ai+bj มาได้ยังไง • ปลาย−ต้น • ดำเนินการ • ขนาน • ขนาด • หนึ่งหน่วย • dot • ม.5</p>
+</header>
+
+<nav>
+  <button class="tab-btn active" onclick="showTab('ai',this)" data-th="① ai+bj มาได้ไง ⭐" data-en="① Where ai+bj comes from ⭐">① ai+bj มาได้ไง ⭐</button>
+  <button class="tab-btn" onclick="showTab('ab',this)" data-th="② สร้างเวกเตอร์ AB" data-en="② Building AB">② สร้างเวกเตอร์ AB</button>
+  <button class="tab-btn" onclick="showTab('op',this)" data-th="③ ดำเนินการ" data-en="③ Operations">③ ดำเนินการ</button>
+  <button class="tab-btn" onclick="showTab('pl',this)" data-th="④ ขนาน & ตรงข้าม" data-en="④ Parallel & Opposite">④ ขนาน & ตรงข้าม</button>
+  <button class="tab-btn" onclick="showTab('mg',this)" data-th="⑤ ขนาด & หนึ่งหน่วย" data-en="⑤ Magnitude & Unit">⑤ ขนาด & หนึ่งหน่วย</button>
+  <button class="tab-btn" onclick="showTab('dt',this)" data-th="⑥ dot" data-en="⑥ Dot product">⑥ dot</button>
+  <button class="tab-btn" onclick="showTab('quiz',this)" data-th="🎯 แบบฝึกหัด" data-en="🎯 Quiz">🎯 แบบฝึกหัด</button>
+</nav>
+
+<main>
+  <section id="tab-ai" class="tab-panel active"></section>
+  <section id="tab-ab" class="tab-panel"></section>
+  <section id="tab-op" class="tab-panel"></section>
+  <section id="tab-pl" class="tab-panel"></section>
+  <section id="tab-mg" class="tab-panel"></section>
+  <section id="tab-dt" class="tab-panel"></section>
+  <section id="tab-quiz" class="tab-panel">
+    <div class="card">
+      <div class="card-title"><span class="icon">🎯</span><span data-th="แบบฝึกหัด — ทดสอบความเข้าใจ" data-en="Quiz — Test Your Understanding">แบบฝึกหัด — ทดสอบความเข้าใจ</span></div>
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:20px;">
+        <span id="quizProgress" style="color:var(--muted); font-size:1rem;"></span>
+        <span class="score-badge"><span data-th="คะแนน:" data-en="Score:">คะแนน:</span> <span id="quizScore">0</span> / <span id="quizTotal">10</span></span>
+      </div>
+      <div id="quizBox"></div>
+      <div style="margin-top:16px; display:flex; gap:12px; flex-wrap:wrap;">
+        <button class="btn-next" id="btnNext" onclick="nextQuestion()" style="display:none;" data-th="ข้อต่อไป ▶" data-en="Next ▶">ข้อต่อไป ▶</button>
+        <button class="btn-next" id="btnRetry" onclick="initQuiz()" style="display:none; background:var(--accent);" data-th="เล่นใหม่ 🔄" data-en="Play Again 🔄">เล่นใหม่ 🔄</button>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script>
+const PAGE_TITLE = { th: "สื่อการสอน : เวกเตอร์ในพิกัดฉาก 2 มิติ ม.5", en: "Teaching Aid: Vectors in 2D Coordinates (Grade 11)" };
+// ══════════════ ภาษาไทย/อังกฤษ (ค่าใน data-th/data-en ถือเป็น HTML — ดู docs/adr/0002) ══════════════
+let langMemory = 'th';
+function getLang() { try { return localStorage.getItem('siteLang') || 'th'; } catch (e) { return langMemory; } }
+function applyLang(lang) {
+  document.documentElement.lang = lang;
+  document.title = PAGE_TITLE[lang];
+  document.querySelectorAll('[data-th]').forEach(el => { el.innerHTML = (lang === 'en' && el.dataset.en) ? el.dataset.en : el.dataset.th; });
+  const btn = document.getElementById('langToggle');
+  if (btn) btn.textContent = lang === 'en' ? 'ไทย' : 'EN';
+  if (typeof onLangChange === 'function') onLangChange(lang);
+}
+function toggleLang() {
+  const next = getLang() === 'en' ? 'th' : 'en';
+  langMemory = next;
+  try { localStorage.setItem('siteLang', next); } catch (e) {}
+  applyLang(next);
+}
+function onLangChange() { stpStopAll(); renderAll(); refreshQuizLang(); }
+
+// ══════════════ ตัวช่วยพื้นฐาน ══════════════
+const $ = id => document.getElementById(id);
+const EN = () => getLang() === 'en';
+const L = (th, en) => (EN() ? en : th);
+const T = (th, en) => ({ th, en });
+const tx = v => typeof v === 'function' ? v() : (typeof v === 'string' ? v : v[getLang()]);
+const frac = (n, d) => `<span class="frac"><span class="num">${n}</span><span class="den">${d}</span></span>`;
+const P = s => `<div>${s}</div>`;
+const al = rows => `<div class="align">${rows.map(r => Array.isArray(r)
+  ? `<span class="l">${r[0]}</span><span class="m">${r[1]}</span><span class="r">${r[2]}</span>` : `<span class="full">${r}</span>`).join('')}</div>`;
+const sg = n => { n = Math.round(n * 1000) / 1000; return String(n).replace('-', '−'); };          // เลขติดลบใช้ − จริง
+const sgp = n => (n < 0 ? '−' + sg(-n) : sg(n));
+// ตัวแปรเวกเตอร์ มีลูกศรบนหัว
+const V = (s, cls) => `<span class="v${cls ? ' ' + cls : ''}">${s}</span>`;
+const vu = V('u', 'cu'), vv = V('v', 'cv'), vw = V('w', 'cw');
+const vi = V('i', 'ci tall'), vj = V('j', 'cj tall'), vk = V('k', 'ck');
+const box = (cls, html) => `<div class="${cls}">${html}</div>`;
+const linkTag = (th, en) => `<span class="link-tag">🔗 ${L(th, en)}</span>`;
+const gcd = (a, b) => { a = Math.abs(a); b = Math.abs(b); while (b) { [a, b] = [b, a % b]; } return a; };
+// √n ที่ถอดกรณฑ์แล้ว เช่น 8 → "2√2", 25 → "5", 13 → "√13"
+function sqrtParts(n) { let k = 1, r = n; for (let d = 2; d * d <= r; d++) { while (r % (d * d) === 0) { r /= d * d; k *= d; } } return { k, r }; }
+function sqrtStr(n) { const { k, r } = sqrtParts(n); if (r === 1) return String(k); return (k > 1 ? k : '') + '√' + r; }
+// นิพจน์ a·i + b·j (+ c·k) แบบมีสี ตัดพจน์ที่เป็น 0 และสัมประสิทธิ์ ±1
+function comb(a, b, c) {
+  const items = [[a, vi], [b, vj]]; if (c !== undefined) items.push([c, vk]);
+  let out = '';
+  items.forEach(([n, u]) => {
+    if (n === 0) return;
+    const mag = Math.abs(n) === 1 ? '' : sg(Math.abs(n));
+    out += (out ? (n < 0 ? ' − ' : ' + ') : (n < 0 ? '−' : '')) + mag + u;
+  });
+  return out || V('0', 'cr');
+}
+const vecCol = (vals) => `<span class="colvec">${vals.map(x => `<span>${x}</span>`).join('')}</span>`;
+
+// ══════════════ แท็บ ══════════════
+function showTab(id, btn) {
+  stpStopAll();
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  if (btn) btn.classList.add('active');
+  if (id !== 'quiz') { resetWkAll(); resetSteppers(); if (typeof resetWidgets === 'function') resetWidgets(id); renderAll(); }
+}
+
+// ══════════════ ตัวแสดงขั้นตอนทีละขั้น (ตัวอย่างการคำนวณ — เริ่มที่ 0 ขั้นทุกครั้งที่เปิดแท็บ) ══════════════
+const WK = {}, wkShown = {};
+function addWk(key, w) { WK[key] = w; wkShown[key] = 0; }
+function resetWkAll() { Object.keys(WK).forEach(k => wkShown[k] = 0); }
+function wkHtml(key, prev) {
+  const w = WK[key], en = EN(), n = w.steps.length;
+  let h = `<div class="card" id="wk-${key}">
+    <div class="card-title"><span class="icon">✏️</span><span>${tx(w.title)}</span></div>
+    ${w.intro ? `<p class="intro">${tx(w.intro)}</p>` : ''}
+    <div class="formula">${tx(w.prob)}</div>`;
+  w.steps.forEach((s, i) => {
+    if (i >= wkShown[key]) return;
+    h += `<div class="wk-cell${i >= (prev || 0) ? ' fresh' : ''}"><span class="stepno">${i + 1}</span>${tx(s.h)}</div>`;
+  });
+  h += `<div class="btn-row">
+      <button class="btn" onclick="wkNext('${key}')" ${wkShown[key] >= n ? 'disabled' : ''}>${en ? 'Next step ▶' : 'ขั้นถัดไป ▶'} (${wkShown[key]}/${n})</button>
+      <button class="btn ghost" onclick="wkAll('${key}')" ${wkShown[key] >= n ? 'disabled' : ''}>${en ? 'Show all' : 'เผยทั้งหมด'}</button>
+      <button class="btn ghost" onclick="wkReset('${key}')" ${wkShown[key] === 0 ? 'disabled' : ''}>${en ? '↺ Reset' : '↺ เริ่มใหม่'}</button>
+    </div></div>`;
+  return h;
+}
+function wkRender(key, prev) { const el = document.getElementById('wk-' + key); if (el) el.outerHTML = wkHtml(key, prev); }
+function wkNext(k) { const p = wkShown[k]; if (wkShown[k] < WK[k].steps.length) wkShown[k]++; wkRender(k, p); }
+function wkAll(k) { const p = wkShown[k]; wkShown[k] = WK[k].steps.length; wkRender(k, p); }
+function wkReset(k) { wkShown[k] = 0; wkRender(k, 0); }
+
+// ══════════════ แอนิเมชันหลายขั้น ◀ ▶ / เล่นอัตโนมัติ ══════════════
+const STP = {};
+function stpReg(id, min, max, draw) { const old = STP[id]; STP[id] = { step: old ? old.step : min, min, max, start: min, draw, timer: null }; }
+function stpHtml(id) {
+  return `<div class="stepper" id="stp-${id}">
+    <button class="btn ghost small" data-act="prev" onclick="stpGo('${id}',-1)">◀ ${L('ย้อน', 'Back')}</button>
+    <span class="cnt"></span>
+    <button class="btn small" data-act="next" onclick="stpGo('${id}',1)">${L('ถัดไป', 'Next')} ▶</button>
+    <button class="btn ghost small" data-act="play" onclick="stpPlay('${id}')">${L('▶▶ เล่นอัตโนมัติ', '▶▶ Auto-play')}</button>
+  </div>`;
+}
+function stpUi(id) {
+  const s = STP[id], el = document.getElementById('stp-' + id); if (!s || !el) return;
+  el.querySelector('.cnt').textContent = `${s.step - s.min + 1}/${s.max - s.min + 1}`;
+  el.querySelector('[data-act=prev]').disabled = s.step <= s.min;
+  el.querySelector('[data-act=next]').disabled = s.step >= s.max;
+  el.querySelector('[data-act=play]').textContent = s.timer ? L('⏸ หยุด', '⏸ Pause') : L('▶▶ เล่นอัตโนมัติ', '▶▶ Auto-play');
+}
+function stpDraw(id) { const s = STP[id]; if (!s) return; s.draw(s.step); stpUi(id); }
+function stpStop(id) { const s = STP[id]; if (s && s.timer) { clearInterval(s.timer); s.timer = null; } stpUi(id); }
+function stpStopAll() { Object.keys(STP).forEach(stpStop); }
+function stpGo(id, d) { const s = STP[id]; stpStop(id); s.step = Math.max(s.min, Math.min(s.max, s.step + d)); stpDraw(id); }
+function stpSet(id, n) { const s = STP[id]; stpStop(id); s.step = n; stpDraw(id); }
+function stpPlay(id) {
+  const s = STP[id];
+  if (s.timer) { stpStop(id); return; }
+  if (s.step >= s.max) { s.step = s.min; stpDraw(id); }
+  s.timer = setInterval(() => { if (s.step >= s.max) { stpStop(id); return; } s.step++; stpDraw(id); if (s.step >= s.max) stpStop(id); }, 3000);
+  stpUi(id);
+}
+function resetSteppers() { Object.keys(STP).forEach(id => { stpStop(id); STP[id].step = STP[id].start; }); }
+
+// ══════════════ วาดรูป SVG แบบ 2 มิติ ══════════════
+const r1 = n => Math.round(n * 100) / 100;
+function svgLine(x1, y1, x2, y2, o) {
+  o = o || {};
+  return `<line x1="${r1(x1)}" y1="${r1(y1)}" x2="${r1(x2)}" y2="${r1(y2)}" stroke="${o.c || '#94A3B8'}" stroke-width="${o.w || 2}"${o.dash ? ` stroke-dasharray="${o.dash}"` : ''}${o.op !== undefined ? ` opacity="${o.op}"` : ''} stroke-linecap="round"/>`;
+}
+function svgArrow(x1, y1, x2, y2, o) {
+  o = o || {};
+  const w = o.w || 4, hd = o.head || (10 + w * 1.4), c = o.c || '#111827';
+  const dx = x2 - x1, dy = y2 - y1, len = Math.hypot(dx, dy);
+  if (len < 1) return '';
+  const ux = dx / len, uy = dy / len, hl = Math.min(hd, len * 0.7);
+  const bx = x2 - ux * hl, by = y2 - uy * hl, nx = -uy * hl * 0.42, ny = ux * hl * 0.42;
+  return `<g${o.op !== undefined ? ` opacity="${o.op}"` : ''}${o.attrs ? ' ' + o.attrs : ''}>
+    <line x1="${r1(x1)}" y1="${r1(y1)}" x2="${r1(bx + ux * 1.5)}" y2="${r1(by + uy * 1.5)}" stroke="${c}" stroke-width="${w}"${o.dash ? ` stroke-dasharray="${o.dash}"` : ''} stroke-linecap="round"/>
+    <polygon points="${r1(x2)},${r1(y2)} ${r1(bx + nx)},${r1(by + ny)} ${r1(bx - nx)},${r1(by - ny)}" fill="${c}"/></g>`;
+}
+// ป้ายชื่อเวกเตอร์: parts เป็นอาเรย์ของข้อความ ตัวที่ขึ้นต้นด้วย ^ จะมีลูกศรบนหัว เช่น ['a·','^i']
+function svgLab(x, y, parts, c, size, opts) {
+  size = size || 18; opts = opts || {};
+  if (typeof parts === 'string') parts = [parts];
+  const cw = size * 0.6;
+  const widths = parts.map(p => (p[0] === '^' ? p.length - 1 : p.length) * cw);
+  const total = widths.reduce((a, b) => a + b, 0);
+  let x0 = x - total / 2, out = '';
+  parts.forEach((p, i) => {
+    const arrow = p[0] === '^', s = arrow ? p.slice(1) : p, w = widths[i], mid = x0 + w / 2;
+    out += `<text x="${r1(x0)}" y="${r1(y)}" font-size="${size}" fill="${c || '#111'}" stroke="#fff" stroke-width="4" paint-order="stroke" stroke-linejoin="round" text-anchor="start"${opts.bold === false ? ' font-weight="500"' : ''}>${s}</text>`;
+    if (arrow) {
+      const ay = y - size * (/^[ij]$/.test(s) ? 1.02 : 0.82), hw = Math.max(size * 0.32, w / 2 - 1);
+      out += `<path d="M${r1(mid - hw)},${r1(ay)} L${r1(mid + hw)},${r1(ay)} M${r1(mid + hw - 4)},${r1(ay - 3.2)} L${r1(mid + hw)},${r1(ay)} L${r1(mid + hw - 4)},${r1(ay + 3.2)}" stroke="${c || '#111'}" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`;
+    }
+    x0 += w;
+  });
+  return out;
+}
+// ป้ายชื่อข้างกลางลูกศร (เยื้องไปด้านบนของเส้น)
+function svgSideLab(x1, y1, x2, y2, parts, c, off, size) {
+  const mx = (x1 + x2) / 2, my = (y1 + y2) / 2, dx = x2 - x1, dy = y2 - y1, l = Math.hypot(dx, dy) || 1;
+  let nx = -dy / l, ny = dx / l; if (ny > 0 || (ny === 0 && nx > 0)) { nx = -nx; ny = -ny; }
+  return svgLab(mx + nx * (off || 20), my + ny * (off || 20) + (size || 18) * 0.35, parts, c, size);
+}
+// เลือกตำแหน่งป้ายชื่อข้างเส้น base=[x1,y1,x2,y2] ที่ห่างจากเส้นอื่น (avoid) มากที่สุด — กันป้ายทับเส้น
+function segDist(px, py, l) { const dx = l[2] - l[0], dy = l[3] - l[1], t = clamp(((px - l[0]) * dx + (py - l[1]) * dy) / (dx * dx + dy * dy || 1), 0, 1); return Math.hypot(px - (l[0] + t * dx), py - (l[1] + t * dy)); }
+function bestLabelSpot(base, avoid, bounds) {
+  const [x1, y1, x2, y2] = base, len = Math.hypot(x2 - x1, y2 - y1) || 1, nx = -(y2 - y1) / len, ny = (x2 - x1) / len, bd = bounds || [30, 610, 30, 320];
+  let best = null;
+  [0.25, 0.35, 0.45, 0.55, 0.65, 0.75].forEach(t => [-1, 1].forEach(side => [24, 34, 46].forEach(off => {
+    const px = x1 + (x2 - x1) * t + nx * side * off, py = y1 + (y2 - y1) * t + ny * side * off;
+    let d = Infinity; avoid.forEach(a => { d = Math.min(d, segDist(px, py, a)); });
+    if (px < bd[0] || px > bd[1] || py < bd[2] || py > bd[3]) d = -1;
+    const sc = Math.min(d, 60) - off * 0.2;
+    if (!best || sc > best.s) best = { x: px, y: py, s: sc };
+  })));
+  return best;
+}
+function svgText(x, y, s, c, size, anchor) {
+  return `<text x="${r1(x)}" y="${r1(y)}" font-size="${size || 16}" fill="${c || '#334155'}" text-anchor="${anchor || 'middle'}" stroke="#fff" stroke-width="4" paint-order="stroke" stroke-linejoin="round">${s}</text>`;
+}
+function svgDot(x, y, c, r, extra) { return `<circle cx="${r1(x)}" cy="${r1(y)}" r="${r || 5}" fill="${c || '#111'}" stroke="#fff" stroke-width="2"${extra ? ' ' + extra : ''}/>`; }
+// ตัวจับลาก: วงใหญ่โปร่งใสรับเมาส์/นิ้ว + จุดจริงอยู่ข้างใน
+function svgHandle(name, x, y, c, r) {
+  return `<g class="drag" data-drag="${name}"><circle cx="${r1(x)}" cy="${r1(y)}" r="${(r || 6) + 12}" fill="${c}" opacity=".13"/><circle cx="${r1(x)}" cy="${r1(y)}" r="${r || 6}" fill="${c}" stroke="#fff" stroke-width="2.5"/></g>`;
+}
+function svgPt(svg, e) { const p = svg.createSVGPoint(); p.x = e.clientX; p.y = e.clientY; const q = p.matrixTransform(svg.getScreenCTM().inverse()); return [q.x, q.y]; }
+// ลากตัวจับ [data-drag] ในเวที svg — cb(ชื่อ, x, y, 'down'|'move'|'up')
+function bindDrag(svg, cb) {
+  let cur = null;
+  svg.addEventListener('pointerdown', e => {
+    const t = e.target.closest('[data-drag]'); if (!t) return;
+    cur = t.dataset.drag; svg.setPointerCapture(e.pointerId); e.preventDefault();
+    const [x, y] = svgPt(svg, e); cb(cur, x, y, 'down');
+  });
+  svg.addEventListener('pointermove', e => { if (!cur) return; const [x, y] = svgPt(svg, e); cb(cur, x, y, 'move'); });
+  const end = () => { if (cur) { const n = cur; cur = null; cb(n, 0, 0, 'up'); } };
+  svg.addEventListener('pointerup', end); svg.addEventListener('pointercancel', end);
+}
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+// กระดานพิกัด 2 มิติ: origin (ox,oy) หน่วยละ cell พิกเซล
+function svgAxes2d(W, H, ox, oy, cell, o) {
+  o = o || {};
+  const nx = Math.floor(ox / cell), px = Math.floor((W - ox) / cell), ny = Math.floor(oy / cell), py = Math.floor((H - oy) / cell);
+  let s = '';
+  for (let i = -nx; i <= px; i++) s += svgLine(ox + i * cell, 0, ox + i * cell, H, { c: '#E5EAF0', w: 1 });
+  for (let j = -py; j <= ny; j++) s += svgLine(0, oy - j * cell, W, oy - j * cell, { c: '#E5EAF0', w: 1 });
+  s += svgArrow(8, oy, W - 8, oy, { c: '#475569', w: 2, head: 11 }) + svgArrow(ox, H - 8, ox, 8, { c: '#475569', w: 2, head: 11 });
+  s += svgText(W - 14, oy + 22, o.xn || 'x', '#475569', 16) + svgText(ox + 16, 20, o.yn || 'y', '#475569', 16);
+  if (o.ticks) {
+    for (let i = -nx + 1; i <= px - 1; i++) if (i !== 0 && i % (o.tickStep || 1) === 0) s += svgText(ox + i * cell, oy + 18, sgp(i), '#94A3B8', 12);
+    for (let j = -py + 1; j <= ny - 1; j++) if (j !== 0 && j % (o.tickStep || 1) === 0) s += svgText(ox - 12, oy - j * cell + 4, sgp(j), '#94A3B8', 12, 'end');
+  }
+  s += svgText(ox - 12, oy + 18, 'O', '#475569', 14, 'end');
+  return s;
+}
+
+// ══════════════ แบบฝึกหัด (ปรนัย สลับตัวเลือกทุกครั้งที่เล่น) ══════════════
+let quizData = [], qIdx = 0, score = 0, answered = false, qPerm = [];
+function qt(key) {
+  const en = EN();
+  return { prog: en ? `Question ${qIdx + 1} / ${quizData.length}` : `ข้อที่ ${qIdx + 1} / ${quizData.length}`,
+    ok: en ? '✅ Correct! ' : '✅ ถูกต้อง! ', bad: en ? '❌ Not quite — ' : '❌ ไม่ถูกต้อง — ', title: en ? 'Your Score' : 'ผลคะแนนของคุณ' }[key];
+}
+function grade(s) {
+  const r = s / quizData.length;
+  if (EN()) return r >= .9 ? '🌟 Excellent!' : r >= .7 ? '👍 Great job!' : r >= .5 ? '💪 Not bad, review a bit' : '📚 Go back and review';
+  return r >= .9 ? '🌟 ยอดเยี่ยมมาก!' : r >= .7 ? '👍 ดีมาก!' : r >= .5 ? '💪 พอใช้ได้ ลองทบทวนดูนะ' : '📚 ลองกลับไปทบทวนอีกรอบ';
+}
+function shuffled(n) { const a = [...Array(n).keys()]; for (let i = n - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+function initQuiz() {
+  if (!quizData.length) return;
+  qIdx = 0; score = 0; answered = false;
+  document.getElementById('quizScore').textContent = 0;
+  document.getElementById('quizTotal').textContent = quizData.length;
+  document.getElementById('btnRetry').style.display = 'none';
+  renderQuestion();
+}
+const qOpts = q => { const en = EN(); const o = (en && q.opts_en) ? q.opts_en : q.opts; return qPerm.map(i => tx(o[i])); };
+function renderQuestion() {
+  const q = quizData[qIdx], en = EN();
+  answered = false; qPerm = shuffled(q.opts.length);
+  document.getElementById('quizProgress').textContent = qt('prog');
+  document.getElementById('btnNext').style.display = 'none';
+  document.getElementById('quizBox').innerHTML = `
+    <div class="quiz-q">${qIdx + 1}. ${tx(en ? q.q_en : q.q_th)}</div>
+    ${q.fig ? `<div class="quiz-fig">${q.fig}</div>` : ''}
+    <div class="quiz-opts">${qOpts(q).map((o, i) => `<button class="quiz-opt" onclick="answer(${i})">${o}</button>`).join('')}</div>
+    <div class="quiz-feedback" id="qfb"></div>`;
+}
+function refreshQuizLang() {
+  const box = document.getElementById('quizBox');
+  if (!box || !box.querySelector('.quiz-q')) return;
+  const q = quizData[qIdx], en = EN();
+  document.getElementById('quizProgress').textContent = qt('prog');
+  box.querySelector('.quiz-q').innerHTML = `${qIdx + 1}. ${tx(en ? q.q_en : q.q_th)}`;
+  const o = qOpts(q);
+  box.querySelectorAll('.quiz-opt').forEach((b, i) => b.innerHTML = o[i]);
+  if (answered) {
+    const fb = document.getElementById('qfb');
+    if (fb) fb.innerHTML = (fb.classList.contains('ok') ? qt('ok') : qt('bad')) + tx(en ? q.exp_en : q.exp_th);
+  }
+  const card = document.getElementById('scoreCard');
+  if (card) card.outerHTML = scoreCardHtml();
+}
+function scoreCardHtml() {
+  return `<div id="scoreCard" style="margin-top:20px; background:linear-gradient(135deg,#1C3B22,#2E5936); color:white; border-radius:16px; padding:24px; text-align:center;">
+    <div style="font-size:2.5rem;">🎉</div><div style="font-size:1.5rem; font-weight:800; margin:8px 0;">${qt('title')}</div>
+    <div style="font-size:3rem; font-weight:800;">${score} / ${quizData.length}</div>
+    <div style="font-size:1.1rem; opacity:.9; margin-top:8px;">${grade(score)}</div></div>`;
+}
+function answer(i) {
+  if (answered) return;
+  answered = true;
+  const q = quizData[qIdx], exp = tx(EN() ? q.exp_en : q.exp_th), fb = document.getElementById('qfb');
+  const right = qPerm[i] === q.ans;
+  document.querySelectorAll('.quiz-opt').forEach((b, idx) => {
+    if (qPerm[idx] === q.ans) b.classList.add('correct'); else if (idx === i) b.classList.add('wrong');
+    b.style.pointerEvents = 'none';
+  });
+  if (right) { score++; document.getElementById('quizScore').textContent = score; fb.className = 'quiz-feedback ok'; fb.innerHTML = qt('ok') + exp; }
+  else { fb.className = 'quiz-feedback err'; fb.innerHTML = qt('bad') + exp; }
+  if (qIdx < quizData.length - 1) document.getElementById('btnNext').style.display = 'inline-block';
+  else {
+    document.getElementById('btnRetry').style.display = 'inline-block';
+    setTimeout(() => { document.getElementById('quizBox').insertAdjacentHTML('beforeend', scoreCardHtml()); }, 300);
+  }
+}
+function nextQuestion() { qIdx++; renderQuestion(); }
+
+
+// ═══════════════════════ กระดานพิกัด (ทุกแท็บใช้ร่วมกัน) ═══════════════════════
+const CU = '#2563EB', CV = '#DC2626', CW = '#7C3AED', CR = '#111827', CI = '#059669', CJ = '#EA580C';
+const G = { W: 640, H: 440, ox: 320, oy: 222, c: 36 };
+const gx = x => G.ox + x * G.c, gy = y => G.oy - y * G.c;
+const fromPx = (px, py) => [Math.round((px - G.ox) / G.c), Math.round((G.oy - py) / G.c)];
+const axes = () => svgAxes2d(G.W, G.H, G.ox, G.oy, G.c, { ticks: true });
+const arr = (p, q, o) => svgArrow(gx(p[0]), gy(p[1]), gx(q[0]), gy(q[1]), o);
+const lab = (p, q, parts, c, off, size) => svgSideLab(gx(p[0]), gy(p[1]), gx(q[0]), gy(q[1]), parts, c, off, size || 19);
+const pt = p => `(${sg(p[0])}, ${sg(p[1])})`;
+const par = n => (n < 0 ? '(' + sg(n) + ')' : sg(n));
+const title = (icon, th, en) => `<div class="card-title"><span class="icon">${icon}</span><span>${L(th, en)}</span></div>`;
+const bd = id => `<div class="stage-wrap"><svg class="stage" id="${id}" viewBox="0 0 ${G.W} ${G.H}"></svg></div>`;
+const hd = (name, p, c) => svgHandle(name, gx(p[0]), gy(p[1]), c, 7);
+const mag2 = v => v[0] * v[0] + v[1] * v[1];
+const vAB = V('AB', 'cv'), vOA = V('OA', 'cu'), vOB = V('OB', 'cr');
+function renderAll() {
+  ['ai', 'ab', 'op', 'pl', 'mg', 'dt'].forEach(id => { $('tab-' + id).innerHTML = window['tab_' + id](); });
+  mountAi(); mountAb(); mountOp(); mountPl(); mountMg(); mountDt();
+}
+function resetWidgets() {}
+
+// ═══════════════════════ ① ai+bj มาได้ไง ⭐ ═══════════════════════
+const AI = { a: 3, b: 2 };
+function tab_ai() {
+  return `
+  <div class="card">${title('⭐', 'ai + bj มาได้ยังไง?', 'Where does ai + bj come from?')}
+    <p class="intro">${L(`เวกเตอร์ ${vu} คือลูกศรจาก (0,0) ไปยังจุด (a, b) — ทำไมถึงเขียนเป็น <b>a${vi} + b${vj}</b> ได้? กดทีละขั้นดูเลย (ลากจุดสีดำเพื่อเปลี่ยน a, b ได้ทุกขั้น)`,
+      `Vector ${vu} is the arrow from (0,0) to the point (a, b). Why can we write it as <b>a${vi} + b${vj}</b>? Step through it (drag the black point to change a and b at any step).`)}</p>
+    ${stpHtml('ai')}
+    ${bd('aiBoard')}
+    <div class="cap" id="aiCap"></div>
+    <div class="eqline" id="aiEq"></div>
+    <div class="legend"><span><span class="sw" style="background:${CR}"></span>${vu}</span><span><span class="sw" style="background:${CI}"></span>${vi} (${L('ยาว 1 ตามแกน x', 'length 1 along x')})</span><span><span class="sw" style="background:${CJ}"></span>${vj} (${L('ยาว 1 ตามแกน y', 'length 1 along y')})</span></div>
+  </div>
+  <div class="card">${title('📘', 'ในหนังสือเขียนต่างกันนิดหน่อย', 'The textbook writes it slightly differently')}
+    <div class="box-info">${L('ในหนังสือมักเขียนเวกเตอร์เป็นตัวเลขซ้อนแนวตั้ง', 'Textbooks often stack the numbers vertically')}
+      <div style="font-size:1.3rem;font-weight:800;margin-top:8px;display:flex;align-items:center;gap:12px;flex-wrap:wrap">${vecCol(['a', 'b'])} = a${vi} + b${vj} &nbsp; <span class="note">${L('เช่น', 'e.g.')}</span> ${vecCol([3, 2])} = 3${vi} + 2${vj}</div>
+      <div style="margin-top:6px">${L('<b>คือสิ่งเดียวกัน</b> — สื่อชุดนี้ใช้ <b>ai + bj</b> เป็นหลัก เพราะเห็นที่มา (ยืด แล้วต่อหัวต่อหาง) ชัดกว่า', '<b>Exactly the same thing</b> — this set uses <b>ai + bj</b> because it shows where it comes from (stretch, then head-to-tail).')}</div></div>
+  </div>`;
+}
+function aiCap(step) {
+  const { a, b } = AI;
+  switch (step) {
+    case 1: return L(`ขั้น 1 — วาง ${vu} จากจุดกำเนิด (0,0) ไปถึงจุด (${sg(a)}, ${sg(b)})`, `Step 1 — draw ${vu} from the origin (0,0) to the point (${sg(a)}, ${sg(b)})`);
+    case 2: return L(`ขั้น 2 — นิยาม ${vi} = ลูกศร<b>ยาว 1</b> บนแกน x และ ${vj} = ลูกศร<b>ยาว 1</b> บนแกน y (นี่คือ "หน่วย" ของเรา)`, `Step 2 — define ${vi} = the arrow of <b>length 1</b> on the x-axis and ${vj} = the arrow of <b>length 1</b> on the y-axis (our "units")`);
+    case 3: return L(`ขั้น 3 — ยืด ${vi} ให้ยาว <b>${sg(a)} เท่า</b> ได้ ${sg(a)}${vi}` + (a < 0 ? ' (ติดลบ → กลับทิศไปทางซ้าย)' : a === 0 ? ' (0 เท่า → ไม่เหลือความยาว)' : '') + '<br>' + linkTag('จากสื่อ 1 ④: คูณสเกลาร์ = ยืด/หด/กลับทิศ', 'From part 1 ④: scalar multiple = stretch/shrink/flip'),
+      `Step 3 — stretch ${vi} to <b>${sg(a)} times</b> its length: ${sg(a)}${vi}` + (a < 0 ? ' (negative → flips to the left)' : a === 0 ? ' (0 times → no length left)' : '') + '<br>' + linkTag('จากสื่อ 1 ④: คูณสเกลาร์ = ยืด/หด/กลับทิศ', 'From part 1 ④: scalar multiple = stretch/shrink/flip'));
+    case 4: return L(`ขั้น 4 — ต่อ<b>หัว</b>ของ ${sg(a)}${vi} ด้วย ${vj} ที่ยืด <b>${sg(b)} เท่า</b> ได้ ${sg(b)}${vj}` + (b < 0 ? ' (ติดลบ → ชี้ลง)' : b === 0 ? ' (0 เท่า)' : ''), `Step 4 — attach to the <b>head</b> of ${sg(a)}${vi} the arrow ${vj} stretched <b>${sg(b)} times</b>: ${sg(b)}${vj}` + (b < 0 ? ' (negative → points down)' : b === 0 ? ' (0 times)' : ''));
+    default: return L(`ขั้น 5 — บวกแบบลาก (ต่อหัวต่อหาง) ลากจากจุดเริ่มต้นถึงจุดสิ้นสุด ได้ลูกศร<b>เดิมพอดี</b>!<br>` + linkTag('จากสื่อ 1 ②: บวกแบบลาก', 'From part 1 ②: head-to-tail addition'), `Step 5 — add head-to-tail: draw from the start to the end and you get the <b>very same arrow</b>!<br>` + linkTag('จากสื่อ 1 ②: บวกแบบลาก', 'From part 1 ②: head-to-tail addition'));
+  }
+}
+function aiEq(step) {
+  const { a, b } = AI;
+  switch (step) {
+    case 1: return `${vu} = O → (${sg(a)}, ${sg(b)})`;
+    case 2: return `${vi} = (1, 0) &nbsp;&nbsp; ${vj} = (0, 1)`;
+    case 3: return `${sg(a)}·${vi} ${a === 0 ? '= 0' : ''}`;
+    case 4: return `${sg(a)}${vi} + ${par(b)}${vj}`;
+    default: return `${vu} = ${sg(a)}${vi} + ${par(b)}${vj} = <span style="background:#FEF9C3;border-radius:8px;padding:2px 10px">${comb(a, b)}</span>`;
+  }
+}
+function drawAi(step) {
+  const svg = $('aiBoard'); if (!svg) return;
+  const { a, b } = AI, O = [0, 0], P = [a, b];
+  let s = axes();
+  const ghost = step >= 2 && step < 5;
+  if (step === 1) {
+    s += svgLine(gx(a), gy(b), gx(a), gy(0), { c: '#94A3B8', w: 2, dash: '5 5' }) + svgLine(gx(a), gy(b), gx(0), gy(b), { c: '#94A3B8', w: 2, dash: '5 5' });
+    s += svgText(gx(a), gy(0) + (b >= 0 ? 36 : -28), 'a = ' + sg(a), CI, 15) + svgText(gx(0) + (a >= 0 ? -34 : 34), gy(b) + 5, 'b = ' + sg(b), CJ, 15, a >= 0 ? 'end' : 'start');
+  }
+  if (a || b) s += arr(O, P, { c: CR, w: ghost ? 4 : 6, op: ghost ? .22 : 1 }) + (step === 5 || step === 1 ? lab(O, P, ['^u'], CR, 24, 22) : '');
+  const sa = Math.sign(a) || 1, sb = Math.sign(b) || 1;
+  if (step === 2) {
+    s += arr(O, [1, 0], { c: CI, w: 6, head: 14 }) + svgText(gx(0.5), gy(0) + 34, L('ยาว 1', 'length 1'), CI, 14) + svgLab(gx(0.5), gy(0) - 16, ['^i'], CI, 21);
+    s += arr(O, [0, 1], { c: CJ, w: 6, head: 14 }) + svgText(gx(0) + 40, gy(0.5) + 5, L('ยาว 1', 'length 1'), CJ, 14) + svgLab(gx(0) - 22, gy(0.5) + 6, ['^j'], CJ, 21);
+  }
+  if (step >= 3) {
+    for (let k = 1; k <= Math.abs(a); k++) s += arr([sa * (k - 1), 0], [sa * k, 0], { c: CI, w: 6, head: 12, op: k % 2 ? 1 : .68 });
+    if (a === 0) s += svgDot(gx(0), gy(0), CI, 6);
+    else s += svgLab(gx(a / 2), gy(0) + (b >= 0 ? 44 : -26), [sg(a) + '·', '^i'], CI, 20);
+  }
+  if (step >= 4) {
+    for (let k = 1; k <= Math.abs(b); k++) s += arr([a, sb * (k - 1)], [a, sb * k], { c: CJ, w: 6, head: 12, op: k % 2 ? 1 : .68 });
+    if (b === 0) s += svgDot(gx(a), gy(0), CJ, 6);
+    else s += svgLab(gx(a) + (a >= 0 ? 34 : -34), gy(b / 2) + 6, [sg(b) + '·', '^j'], CJ, 20);
+  }
+  s += svgText(gx(a) + (a >= 0 ? 12 : -12), gy(b) + (b >= 0 ? -16 : 28), `(${sg(a)}, ${sg(b)})`, '#111827', 15, a >= 0 ? 'start' : 'end');
+  s += hd('P', P, CR);
+  svg.innerHTML = s;
+  $('aiCap').innerHTML = aiCap(step); $('aiEq').innerHTML = aiEq(step);
+}
+function mountAi() {
+  stpReg('ai', 1, 5, drawAi);
+  bindDrag($('aiBoard'), (n, x, y, ph) => { if (ph === 'up') return; const [a, b] = fromPx(x, y); AI.a = clamp(a, -6, 6); AI.b = clamp(b, -6, 6); stpDraw('ai'); });
+  stpDraw('ai');
+}
+
+// ═══════════════════════ ② สร้างเวกเตอร์ AB ═══════════════════════
+const AB = { A: [-2, 1], B: [3, 4] };
+function tab_ab() {
+  return `
+  <div class="card">${title('🎯', 'AB = ปลาย − ต้น', 'AB = tip − tail')}
+    <p class="intro">${L('ลากจุด A และ B ดูเลย — ลูกศร ' + vAB + ' คือลูกศรจาก A ไป B', 'Drag points A and B — the arrow ' + vAB + ' goes from A to B.')}</p>
+    ${bd('abBoard')}
+    <div class="readout" id="abRead"></div>
+    <div class="box-info"><b>${L('ทำไมถึง ปลาย − ต้น?', 'Why tip − tail?')}</b><br>
+      ${L('ต่อหัวต่อหาง: เดินจาก O ไป A แล้วต่อไป B ก็คือเดินจาก O ไป B ตรงๆ', 'Head-to-tail: walking O → A then A → B is the same as walking O → B.')}
+      <div class="formula" style="margin-top:8px">${vOA} + ${vAB} = ${vOB} &nbsp;⇒&nbsp; ${vAB} = ${vOB} − ${vOA}</div>
+      ${linkTag('จากสื่อ 1 ②: บวกแบบลาก', 'From part 1 ②: head-to-tail addition')}</div>
+    <div class="formula">${vAB} = ${L('ปลาย − ต้น', 'tip − tail')} = (x₂ − x₁)${vi} + (y₂ − y₁)${vj}</div>
+  </div>
+  ${wkHtml('ab1')}
+  ${wkHtml('ab2')}`;
+}
+function drawAb() {
+  const svg = $('abBoard'); if (!svg) return;
+  const { A, B } = AB, O = [0, 0];
+  let s = axes();
+  if (A[0] || A[1]) s += arr(O, A, { c: CU, w: 4 }) + lab(O, A, ['^OA'], CU, 26, 18);
+  if (B[0] || B[1]) s += arr(O, B, { c: CR, w: 4, op: .85 }) + lab(O, B, ['^OB'], CR, 24, 18);
+  if (A[0] !== B[0] || A[1] !== B[1]) s += arr(A, B, { c: CV, w: 6 }) + lab(A, B, ['^AB'], CV, 26, 20);
+  s += svgText(gx(A[0]) - 12, gy(A[1]) - 14, 'A' + pt(A), CU, 15, 'end') + svgText(gx(B[0]) + 12, gy(B[1]) - 14, 'B' + pt(B), CR, 15, 'start');
+  s += hd('A', A, CU) + hd('B', B, CR);
+  svg.innerHTML = s;
+  const d = [B[0] - A[0], B[1] - A[1]];
+  $('abRead').innerHTML = `${vAB} = ${vOB} − ${vOA} = (${comb(B[0], B[1])}) − (${comb(A[0], A[1])})<br>= (${sg(B[0])} − ${par(A[0])})${vi} + (${sg(B[1])} − ${par(A[1])})${vj} = <b style="background:#FEF9C3;border-radius:8px;padding:2px 10px">${comb(d[0], d[1])}</b>`;
+}
+function mountAb() {
+  bindDrag($('abBoard'), (n, x, y, ph) => { if (ph === 'up') return; const [a, b] = fromPx(x, y); AB[n] = [clamp(a, -7, 7), clamp(b, -5, 5)]; drawAb(); });
+  drawAb();
+}
+addWk('ab1', { title: T('ตัวอย่างที่ 1', 'Example 1'), prob: () => L('A(1, 2) และ B(4, 6) จงหา ', 'A(1, 2) and B(4, 6). Find ') + vAB,
+  steps: [
+    { h: () => P(L('ใช้ <b>ปลาย − ต้น</b>: ปลายคือ B ต้นคือ A', 'Use <b>tip − tail</b>: the tip is B, the tail is A')) + al([[vAB, '=', `${vOB} − ${vOA}`], ['', '=', `(4${vi} + 6${vj}) − (1${vi} + 2${vj})`]]) },
+    { h: () => P(L('จับ ' + vi + ' คู่ ' + vi + ', ' + vj + ' คู่ ' + vj, 'Pair ' + vi + ' with ' + vi + ', ' + vj + ' with ' + vj)) + al([[vAB, '=', `<span class="hl-i">(4 − 1)${vi}</span> + <span class="hl-j">(6 − 2)${vj}</span>`]]) },
+    { h: () => P(L('ตอบ', 'Answer')) + `<div class="formula">${vAB} = 3${vi} + 4${vj}</div>` },
+  ] });
+addWk('ab2', { title: T('ตัวอย่างที่ 2 (มีค่าติดลบ)', 'Example 2 (with negatives)'), prob: () => L('A(−2, 3) และ B(1, −1) จงหา ', 'A(−2, 3) and B(1, −1). Find ') + vAB,
+  steps: [
+    { h: () => P(L('ปลาย − ต้น = B − A', 'tip − tail = B − A')) + al([[vAB, '=', `(1${vi} − 1${vj}) − (−2${vi} + 3${vj})`]]) },
+    { h: () => P(L('ระวังเครื่องหมาย: ลบของค่าติดลบกลายเป็นบวก', 'Mind the signs: subtracting a negative becomes plus')) + al([[vAB, '=', `<span class="hl-i">(1 − (−2))${vi}</span> + <span class="hl-j">(−1 − 3)${vj}</span>`]]) },
+    { h: () => P(L('ตอบ', 'Answer')) + `<div class="formula">${vAB} = 3${vi} − 4${vj}</div>` },
+  ] });
+
+// ═══════════════════════ ③ ดำเนินการ ═══════════════════════
+const OP = { op: 'add', U: [2, 3], V: [3, -1], c: 2 };
+const OPS = { eq: ['เท่ากัน', 'Equal'], neg: ['นิเสธ', 'Negative'], add: ['บวก', 'Add'], sub: ['ลบ', 'Subtract'], mul: ['คูณสเกลาร์', 'Scalar ×'] };
+function tab_op() {
+  return `
+  <div class="card">${title('🧮', 'ดำเนินการกับ ai + bj', 'Operations with ai + bj')}
+    <div class="formula">${L('จับ ', 'Pair ')}${vi}${L(' คู่ ', ' with ')}${vi}, ${vj}${L(' คู่ ', ' with ')}${vj}</div>
+    <div class="chips">${Object.keys(OPS).map(k => `<button class="chip ${OP.op === k ? 'active' : ''}" onclick="OP.op='${k}';renderOpCard()">${L(OPS[k][0], OPS[k][1])}</button>`).join('')}</div>
+    <div id="opCard"></div>
+  </div>`;
+}
+function renderOpCard() {
+  const card = $('opCard'); if (!card) return;
+  document.querySelectorAll('#tab-op .chip').forEach((b, i) => b.classList.toggle('active', Object.keys(OPS)[i] === OP.op));
+  card.innerHTML = `<div class="two-col"><div>${bd('opBoard')}${OP.op === 'mul' ? `<div class="slider-row"><b>c =</b><input type="range" min="-2" max="2" step="0.5" value="${OP.c}" oninput="OP.c=parseFloat(this.value);drawOp()"><span class="slider-val" id="opC"></span></div>` : ''}
+    <div class="note">${L('ลากปลายลูกศรได้', 'Drag the arrow tips')}</div></div><div id="opAlg"></div></div>`;
+  bindDrag($('opBoard'), (n, x, y, ph) => {
+    if (ph === 'up') return; const [a, b] = fromPx(x, y), p = [clamp(a, -4, 4), clamp(b, -3, 3)];
+    if (n === 'U') OP.U = p;
+    else if (OP.op === 'add') OP.V = [clamp(a - OP.U[0], -4, 4), clamp(b - OP.U[1], -3, 3)];
+    else if (OP.op === 'sub') OP.V = [clamp(OP.U[0] - a, -4, 4), clamp(OP.U[1] - b, -3, 3)];
+    else OP.V = p;
+    drawOp();
+  });
+  drawOp();
+}
+function drawOp() {
+  const svg = $('opBoard'); if (!svg) return;
+  const { U, V, c, op } = OP, O = [0, 0];
+  let s = axes();
+  const draw = (p, q, col, w, l, off, extra) => { if (p[0] === q[0] && p[1] === q[1]) return ''; return arr(p, q, Object.assign({ c: col, w }, extra || {})) + (l ? lab(p, q, l, col, off || 22, 19) : ''); };
+  const S = [U[0] + V[0], U[1] + V[1]], D = [U[0] - V[0], U[1] - V[1]], N = [-U[0], -U[1]], M = [c * U[0], c * U[1]];
+  let handles = hd('U', U, CU);
+  if (op === 'eq') { s += draw(O, V, CV, 5, ['^v'], -24) + draw(O, U, CU, 5, ['^u'], 24, { op: .9 }); handles += hd('V', V, CV); }
+  if (op === 'neg') { s += draw(O, N, CV, 5, ['−', '^u'], -26) + draw(O, U, CU, 5, ['^u'], 24); }
+  if (op === 'add') { s += draw(O, U, CU, 5, ['^u'], 24) + draw(U, S, CV, 5, ['^v'], 24) + draw(O, S, CR, 6, ['^u', '+', '^v'], -30); handles += hd('V', S, CV); }
+  if (op === 'sub') { s += draw(O, U, CU, 5, ['^u'], 24) + draw(U, D, CV, 5, ['−', '^v'], 26) + draw(O, D, CR, 6, ['^u', '−', '^v'], -30); handles += hd('V', D, CV); }
+  if (op === 'mul') { s += draw(O, U, CU, 4, ['^u'], 24, { op: .5 }) + draw(O, M, CV, 6, [sg(c) + '·', '^u'], -28); }
+  s += handles; svg.innerHTML = s;
+  if ($('opC')) $('opC').textContent = sg(c);
+  $('opAlg').innerHTML = opAlgebra();
+}
+function opAlgebra() {
+  const { U, V, c, op } = OP, [a1, b1] = U, [a2, b2] = V;
+  const hi = t => `<span class="hl-i">${t}</span>`, hj = t => `<span class="hl-j">${t}</span>`;
+  const head = `<div class="readout">${vu} = ${comb(a1, b1)}${op === 'eq' || op === 'add' || op === 'sub' ? `<br>${vv} = ${comb(a2, b2)}` : ''}</div>`;
+  let body = '';
+  if (op === 'eq') {
+    const ok = a1 === a2 && b1 === b2;
+    body = `<div class="readout ${ok ? 'ok' : 'no'}"><div>${hi(vi + ': ' + sg(a1) + ' ' + (a1 === a2 ? '=' : '≠') + ' ' + sg(a2))}</div><div>${hj(vj + ': ' + sg(b1) + ' ' + (b1 === b2 ? '=' : '≠') + ' ' + sg(b2))}</div>
+      <div style="margin-top:6px;font-weight:700">${ok ? `${vu} = ${vv} ✅` : `${vu} ≠ ${vv}`}</div></div>
+      <div class="box-info">${vu} = ${vv} ⇔ ${hi('a₁ = a₂')} ${L('และ', 'and')} ${hj('b₁ = b₂')}</div>`;
+  } else if (op === 'neg') {
+    body = `<div class="readout">−${vu} = −(${comb(a1, b1)})<br>= ${hi(sg(-a1) + vi)} + ${hj(par(-b1) + vj)}<br><b>= ${comb(-a1, -b1)}</b></div>
+      <div class="box-info">${L('นิเสธ = ทิศตรงข้าม: เปลี่ยนเครื่องหมายของทุกตัว', 'Negative = opposite direction: flip every sign')}</div>`;
+  } else if (op === 'add') {
+    body = `<div class="readout">${vu} + ${vv} = (${comb(a1, b1)}) + (${comb(a2, b2)})<br>= ${hi('(' + sg(a1) + ' + ' + par(a2) + ')' + vi)} + ${hj('(' + sg(b1) + ' + ' + par(b2) + ')' + vj)}<br><b>= ${comb(a1 + a2, b1 + b2)}</b></div>
+      <div class="box-info">${linkTag('จากสื่อ 1 ②: ต่อหัวต่อหาง', 'From part 1 ②: head-to-tail')}<br>${L('ภาพ: ต่อหัว ' + vu + ' ด้วยหาง ' + vv + ' — พีชคณิต: ' + vi + ' บวก ' + vi + ', ' + vj + ' บวก ' + vj, 'Picture: join the tail of ' + vv + ' to the head of ' + vu + ' — algebra: ' + vi + ' plus ' + vi + ', ' + vj + ' plus ' + vj)}</div>`;
+  } else if (op === 'sub') {
+    body = `<div class="readout">${vu} − ${vv} = (${comb(a1, b1)}) − (${comb(a2, b2)})<br>= ${hi('(' + sg(a1) + ' − ' + par(a2) + ')' + vi)} + ${hj('(' + sg(b1) + ' − ' + par(b2) + ')' + vj)}<br><b>= ${comb(a1 - a2, b1 - b2)}</b></div>
+      <div class="box-info">${linkTag('จากสื่อ 1 ②: สวนทาง = ลบ', 'From part 1 ②: against = minus')}<br>${L('ภาพ: เดินตาม ' + vu + ' แล้วเดินสวนทาง ' + vv, 'Picture: walk with ' + vu + ' then against ' + vv)}</div>`;
+  } else {
+    body = `<div class="readout">${sg(c)}·${vu} = ${sg(c)}(${comb(a1, b1)})<br>= ${hi('(' + sg(c) + '·' + par(a1) + ')' + vi)} + ${hj('(' + sg(c) + '·' + par(b1) + ')' + vj)}<br><b>= ${comb(c * a1, c * b1)}</b></div>
+      <div class="box-info">${linkTag('จากสื่อ 1 ④: คูณสเกลาร์', 'From part 1 ④: scalar multiple')}<br>${L('คูณทุกตัวด้วย c: ยืด/หด/กลับทิศ', 'Multiply each part by c: stretch/shrink/flip')}</div>`;
+  }
+  return head + body;
+}
+function mountOp() { renderOpCard(); }
+
+// ═══════════════════════ ④ ขนาน & ตรงข้าม ═══════════════════════
+const PL = { a1: 2, b1: 3, a2: 6, b2: 9 };
+function tab_pl() {
+  return `
+  <div class="card">${title('∥', 'เวกเตอร์ขนาน และตรงข้าม', 'Parallel and opposite vectors')}
+    <p class="intro">${linkTag('จากสื่อ 1 ④: ' + 'u = c·v', 'From part 1 ④: u = c·v')}<br>${L('ถ้า ' + vu + ' ขนาน ' + vv + ' จะได้ ' + vu + ' = c·' + vv + ' ซึ่งแปลว่าตัวเลขหน้า ' + vi + ' และหน้า ' + vj + ' ต้องเป็นอัตราส่วนเดียวกัน', 'If ' + vu + ' ∥ ' + vv + ' then ' + vu + ' = c·' + vv + ', which means the numbers in front of ' + vi + ' and ' + vj + ' are in the same ratio.')}</p>
+    <div class="formula">${vu} = c·${vv} &nbsp;⇒&nbsp; ${frac('a₁', 'a₂')} = ${frac('b₁', 'b₂')} = c</div>
+    <div class="two-col"><div>
+      <div class="box-info">c &gt; 0 → ${L('ขนาน ทิศเดียวกัน', 'parallel, same direction')}<br>c &lt; 0 → ${L('ตรงข้าม (ขนานทิศตรงข้าม)', 'opposite (parallel, reversed)')}</div></div>
+      <div><b>${L('ลองเช็คเอง', 'Try it yourself')}</b>
+        <div class="row-inputs"><span class="lbl">${vu} =</span>${numIn('a1')}${vi} + ${numIn('b1')}${vj}</div>
+        <div class="row-inputs"><span class="lbl">${vv} =</span>${numIn('a2')}${vi} + ${numIn('b2')}${vj}</div></div></div>
+    ${bd('plBoard')}
+    <div class="readout big" id="plRead"></div>
+  </div>
+  ${wkHtml('pl1')}
+  ${wkHtml('pl2')}`;
+}
+const numIn = k => `<span class="numin"><input type="number" step="1" value="${PL[k]}" oninput="PL.${k}=Math.max(-9,Math.min(9,Math.round(+this.value||0)));drawPl()" onblur="this.value=PL.${k}"></span>`;
+function drawPl() {
+  const svg = $('plBoard'); if (!svg) return;
+  const { a1, b1, a2, b2 } = PL, m = Math.max(1, Math.abs(a1), Math.abs(b1), Math.abs(a2), Math.abs(b2));
+  const c = Math.min(36, 190 / m), ox = 320, oy = 222, X = x => ox + x * c, Y = y => oy - y * c;
+  let s = svgAxes2d(G.W, G.H, ox, oy, 36, {});
+  s += svgArrow(X(0), Y(0), X(a2), Y(b2), { c: CV, w: 5 }) + svgSideLab(X(0), Y(0), X(a2), Y(b2), ['^v'], CV, -24, 19);
+  s += svgArrow(X(0), Y(0), X(a1), Y(b1), { c: CU, w: 5, op: .9 }) + svgSideLab(X(0), Y(0), X(a1), Y(b1), ['^u'], CU, 24, 19);
+  svg.innerHTML = s;
+  const cross = a1 * b2 - a2 * b1, rd = $('plRead');
+  let t, cls;
+  if ((a1 === 0 && b1 === 0) || (a2 === 0 && b2 === 0)) { t = L('มีเวกเตอร์ศูนย์ — ลองเปลี่ยนตัวเลขให้ไม่เป็น 0 ทั้งคู่', 'One is the zero vector — try non-zero numbers'); cls = 'no'; }
+  else if (cross === 0) {
+    const same = a1 * a2 + b1 * b2 > 0, cc = a2 !== 0 ? [a1, a2] : [b1, b2], g = gcd(cc[0], cc[1]) || 1, sgn = (cc[0] < 0) !== (cc[1] < 0) ? -1 : 1;
+    const cv = `${sgn < 0 ? '−' : ''}${frac(Math.abs(cc[0]) / g, Math.abs(cc[1]) / g)}`;
+    t = `${frac(sg(a1), sg(a2))}${b2 !== 0 && a2 !== 0 ? ` = ${frac(sg(b1), sg(b2))}` : ''} ⇒ c = ${cv} ${same ? '&gt; 0' : '&lt; 0'}<br>${same ? L('✅ ขนาน ทิศเดียวกัน', '✅ Parallel, same direction') : L('✅ ตรงข้าม (ขนานทิศตรงข้าม)', '✅ Opposite (parallel, reversed)')}`; cls = 'ok';
+  } else { t = L('❌ ไม่ขนาน — อัตราส่วนหน้า ' + vi + ' กับหน้า ' + vj + ' ไม่เท่ากัน', '❌ Not parallel — the ratios in front of ' + vi + ' and ' + vj + ' differ'); cls = 'no'; }
+  rd.className = 'readout big ' + cls; rd.innerHTML = t;
+}
+function mountPl() { drawPl(); }
+addWk('pl1', { title: T('ตัวอย่าง: หา x จากเงื่อนไขขนาน', 'Example: find x from parallel'), prob: () => L(`${vu} = 2${vi} + 3${vj} ขนานกับ ${vv} = 6${vi} + x${vj} จงหา x`, `${vu} = 2${vi} + 3${vj} is parallel to ${vv} = 6${vi} + x${vj}. Find x`),
+  steps: [
+    { h: () => P(L('ขนาน ⇒ ตัวเลขหน้า ' + vi + ' และหน้า ' + vj + ' ต้องเป็นอัตราส่วนเดียวกัน', 'Parallel ⇒ the numbers in front of ' + vi + ' and ' + vj + ' are in the same ratio')) + `<div style="text-align:center;font-size:1.2rem">${frac(2, 6)} = ${frac(3, 'x')}</div>` },
+    { h: () => P(L('คูณไขว้ แล้วแก้สมการ', 'Cross-multiply and solve')) + al([['2 · x', '=', '3 · 6'], ['2x', '=', '18'], ['x', '=', '<b>9</b>']]) },
+    { h: () => P(L('ตรวจ c: ', 'Check c: ') + `c = ${frac(2, 6)} = ${frac(1, 3)} &gt; 0 ⇒ ` + L('ขนาน<b>ทิศเดียวกัน</b>', 'parallel, <b>same direction</b>')) + `<div class="formula" style="font-size:1.1rem">${vv} = 6${vi} + 9${vj} = 3·${vu} ✅</div>` },
+  ] });
+addWk('pl2', { title: T('ตัวอย่าง: เวกเตอร์ตรงข้าม', 'Example: opposite vectors'), prob: () => L(`${V('a', 'cu')} = x${vi} − 4${vj} ตรงข้ามกับ ${V('b', 'cv')} = −3${vi} + 6${vj} จงหา x`, `${V('a', 'cu')} = x${vi} − 4${vj} is opposite to ${V('b', 'cv')} = −3${vi} + 6${vj}. Find x`),
+  steps: [
+    { h: () => P(L('ตรงข้ามก็คือขนานแบบ c &lt; 0 — ใช้อัตราส่วนเดียวกัน', 'Opposite is parallel with c &lt; 0 — same ratio idea')) + `<div style="text-align:center;font-size:1.2rem">${frac('x', '−3')} = ${frac('−4', 6)} = c</div>` },
+    { h: () => P(L('หา c จากตัวที่รู้ครบ', 'Get c from the complete pair')) + `<div style="text-align:center;font-size:1.2rem">c = ${frac('−4', 6)} = −${frac(2, 3)}</div>` },
+    { h: () => P(L('แทน c เพื่อหา x', 'Use c to find x')) + al([[frac('x', '−3'), '=', '−' + frac(2, 3)], ['x', '=', `(−3)(−${frac(2, 3)}) = <b>2</b>`]]) },
+    { h: () => P(L('เช็ค: c ติดลบ ⇒ ตรงข้ามจริง', 'Check: c is negative ⇒ truly opposite')) + `<div class="formula" style="font-size:1.1rem">${V('a', 'cu')} = 2${vi} − 4${vj} = −${frac(2, 3)}·${V('b', 'cv')} ✅</div>` },
+  ] });
+
+// ═══════════════════════ ⑤ ขนาด & เวกเตอร์หนึ่งหน่วย ═══════════════════════
+const MG = { a: 3, b: 4 };
+function tab_mg() {
+  return `
+  <div class="card">${title('📏', 'ขนาดของเวกเตอร์ |u|', 'Magnitude |u|')}
+    <p class="intro">${L('ลากปลายลูกศร — ขนาดคือความยาวของลูกศร มาจาก <b>พีทาโกรัส</b> บนสามเหลี่ยมมุมฉากที่มีด้าน a และ b', 'Drag the tip — the magnitude is the arrow’s length, from <b>Pythagoras</b> on the right triangle with legs a and b.')}</p>
+    ${bd('mgBoard')}
+    <div class="legend"><span><span class="sw" style="background:${CR}"></span>${vu}</span><span><span class="sw" style="background:${CW}"></span>${L('เวกเตอร์หนึ่งหน่วย (ยาว 1)', 'unit vector (length 1)')}</span></div>
+    <div class="readout" id="mgRead"></div>
+    <div class="formula">|${vu}| = √(a² + b²)</div>
+  </div>
+  <div class="card">${title('1️⃣', 'เวกเตอร์หนึ่งหน่วย', 'Unit vector')}
+    <p class="intro">${L('เวกเตอร์หนึ่งหน่วยคือเวกเตอร์ที่ <b>ยาว 1</b> ชี้ทางเดียวกับ ' + vu + ' — หาได้โดยหาร ' + vu + ' ด้วยความยาวของมันเอง (ลูกศรสีม่วงในภาพ)', 'A unit vector has <b>length 1</b> and points the same way as ' + vu + ' — divide ' + vu + ' by its own length (the purple arrow in the picture).')}</p>
+    <div class="formula">${frac(vu, '|' + vu + '|')} = ${frac('a' + vi + ' + b' + vj, '√(a² + b²)')}</div>
+    <div class="readout" id="mgUnit"></div>
+  </div>`;
+}
+function unitText(a, b) {
+  const n = a * a + b * b, k = Math.sqrt(n);
+  if (n === 0) return null;
+  if (!Number.isInteger(k)) return frac(comb(a, b), sqrtStr(n));
+  const part = (x, u, first) => { if (x === 0) return ''; const g = gcd(x, k), f = frac(Math.abs(x) / g, k / g); return (first ? (x < 0 ? '−' : '') : (x < 0 ? ' − ' : ' + ')) + f + u; };
+  return part(a, vi, true) + part(b, vj, a === 0);
+}
+function drawMg() {
+  const svg = $('mgBoard'); if (!svg) return;
+  const { a, b } = MG, O = [0, 0], n = a * a + b * b, k = Math.sqrt(n);
+  let s = axes();
+  s += svgLine(gx(0), gy(0), gx(a), gy(0), { c: CI, w: 5 }) + svgLine(gx(a), gy(0), gx(a), gy(b), { c: CJ, w: 5 });
+  if (a && b) { const q = 12, sx = Math.sign(-a), sy = Math.sign(b); s += `<path d="M${gx(a) + sx * q},${gy(0)} l0,${-sy * q} l${-sx * q},0" stroke="#64748B" stroke-width="1.5" fill="none"/>`; }
+  s += svgText(gx(a / 2), gy(0) + (b >= 0 ? 36 : -26), 'a = ' + sg(a), CI, 16) + svgText(gx(a) + (a >= 0 ? 44 : -44), gy(b / 2) + 5, 'b = ' + sg(b), CJ, 16);
+  if (n) {
+    s += arr(O, [a, b], { c: CR, w: 5 }) + lab(O, [a, b], ['|', '^u', '|'], CR, 30, 19);
+    s += arr(O, [a / k, b / k], { c: CW, w: 8, head: 16 });
+  }
+  s += hd('P', [a, b], CR);
+  svg.innerHTML = s;
+  const kk = sqrtStr(n), U = vu;
+  if (n) {
+    const rows = [[`|${U}|`, '=', '√(a² + b²)'], ['', '=', `√(${a}² + ${par(b)}²)`], ['', '=', `√(${a * a} + ${b * b})`], ['', '=', `√${n}`]];
+    if (kk !== '√' + n) rows.push(['', '=', `<b>${kk}</b>`]);
+    if (!Number.isInteger(k)) rows.push(['', '≈', k.toFixed(3)]);
+    $('mgRead').innerHTML = al(rows);
+  } else $('mgRead').innerHTML = L('u = 0 (ไม่มีความยาว)', 'u = 0 (no length)');
+  const up = unitText(a, b);
+  $('mgUnit').innerHTML = up ? al([[frac(U, '|' + U + '|'), '=', frac(comb(a, b), kk)]].concat(up !== frac(comb(a, b), kk) ? [['', '=', up]] : [])) + `<div class="note" style="font-weight:600">${L('ความยาว = 1 พอดี ✅', 'its length is exactly 1 ✅')}</div>` : L('u = 0 ไม่มีทิศทาง จึงไม่มีเวกเตอร์หนึ่งหน่วย', 'u = 0 has no direction, so no unit vector');
+}
+function mountMg() {
+  bindDrag($('mgBoard'), (n, x, y, ph) => { if (ph === 'up') return; const [a, b] = fromPx(x, y); MG.a = clamp(a, -6, 6); MG.b = clamp(b, -6, 6); drawMg(); });
+  drawMg();
+}
+
+// ═══════════════════════ ⑥ dot (ผลคูณเชิงสเกลาร์) ═══════════════════════
+const DT = { U: [3, 1], V: [-1, 3] };
+const HD = { sel: 2 };
+const HANDDEG = [0, 30, 45, 60, 90];
+function tab_dt() {
+  return `
+  <div class="card">${title('✖️', 'dot — ผลคูณเชิงสเกลาร์', 'dot — the scalar product')}
+    <div class="box-info">${L('ผลลัพธ์ของ dot เป็น <b>ตัวเลข</b> (สเกลาร์) ไม่ใช่เวกเตอร์', 'The result of a dot product is a <b>number</b> (a scalar), not a vector.')}</div>
+    <div class="formula" style="flex-direction:column;gap:2px"><div>${L('เอาเลขข้างหน้าคูณกัน แล้วบวก', 'Multiply the matching numbers, then add')}</div>
+      <div>(a₁${vi} + b₁${vj}) · (a₂${vi} + b₂${vj}) = a₁a₂ + b₁b₂</div></div>
+  </div>
+  ${wkHtml('dt1')}
+  <div class="card">${title('📐', 'สูตรหามุม', 'Finding the angle')}
+    <div class="formula">${vu}·${vv} = |${vu}||${vv}| cosθ &nbsp;⇒&nbsp; cosθ = ${frac(vu + '·' + vv, '|' + vu + '||' + vv + '|')}</div>
+    <p class="intro">${L('ลากปลายลูกศรน้ำเงิน ' + vu + ' และแดง ' + vv + ' ดู dot กับมุมสดๆ', 'Drag the tips of the blue ' + vu + ' and red ' + vv + ' to see the dot product and angle live.')}</p>
+    ${bd('dtBoard')}
+    <div class="dot-grid" id="dtGrid"></div>
+    <div class="readout big" id="dtRead"></div>
+    <div class="box-info">${L('<b>ตั้งฉาก</b> ⇔ ', '<b>Perpendicular</b> ⇔ ')}${vu}·${vv} = 0 ${L('(cos 90° = 0)', '(cos 90° = 0)')}</div>
+  </div>
+  <div class="card">${title('✋', 'ทริกมือ: ค่า sin ของมุมพิเศษ', 'Hand trick: sin of the special angles')}
+    <p class="intro">${L('นิ้วโป้ง→ก้อย คือ 0°, 30°, 45°, 60°, 90° — ค่า <b>sin</b> = ' + frac('√n', 2) + ' เมื่อ n คือ 0, 1, 2, 3, 4 ตามนิ้ว (cos ไล่กลับด้าน) — กดนิ้วดูได้เลย', 'Thumb → pinky are 0°, 30°, 45°, 60°, 90° — <b>sin</b> = ' + frac('√n', 2) + ' with n = 0, 1, 2, 3, 4 along the fingers (cos runs backwards) — tap a finger.')}</p>
+    <div class="hand-wrap"><svg class="hand" id="handSvg" viewBox="0 0 360 300"></svg></div>
+    <div id="handTable"></div>
+  </div>
+  <div class="card">${title('⭐', 'ดูสูตรยกกำลังสอง', 'The squared-length formulas')}
+    <div class="formula" style="flex-direction:column"><div>|${vu} + ${vv}|² = |${vu}|² + 2${vu}·${vv} + |${vv}|²</div><div>|${vu} − ${vv}|² = |${vu}|² − 2${vu}·${vv} + |${vv}|²</div></div>
+    <div class="readout" id="dtStar"></div>
+    <div class="note">${L('ตัวเลขข้างบนคำนวณสดจากลูกศรในภาพด้านบน', 'Computed live from the arrows in the picture above.')}</div>
+  </div>
+  ${wkHtml('dt2')}
+  ${wkHtml('dt3')}
+  ${wkHtml('dt4')}`;
+}
+function drawDt() {
+  const svg = $('dtBoard'); if (!svg) return;
+  const { U, V: W } = DT, O = [0, 0];
+  let s = axes();
+  const lu = Math.sqrt(mag2(U)), lv = Math.sqrt(mag2(W)), d = U[0] * W[0] + U[1] * W[1];
+  if (lu && lv) {
+    const cs = clamp(d / (lu * lv), -1, 1), th = Math.acos(cs), a0 = Math.atan2(U[1], U[0]);
+    let diff = Math.atan2(W[1], W[0]) - a0; while (diff > Math.PI) diff -= 2 * Math.PI; while (diff < -Math.PI) diff += 2 * Math.PI;
+    const pts = []; for (let i = 0; i <= 24; i++) { const ang = a0 + diff * i / 24; pts.push(`${r1(gx(0) + 34 * Math.cos(ang))},${r1(gy(0) - 34 * Math.sin(ang))}`); }
+    s += `<polyline points="${pts.join(' ')}" fill="none" stroke="${CW}" stroke-width="3"/>`;
+    const am = a0 + diff / 2; s += svgText(gx(0) + 58 * Math.cos(am), gy(0) - 58 * Math.sin(am) + 5, 'θ', CW, 18);
+  }
+  if (lu) s += arr(O, U, { c: CU, w: 5 }) + lab(O, U, ['^u'], CU, 24, 19);
+  if (lv) s += arr(O, W, { c: CV, w: 5 }) + lab(O, W, ['^v'], CV, -24, 19);
+  s += hd('U', U, CU) + hd('V', W, CV);
+  svg.innerHTML = s;
+  const nu = mag2(U), nv = mag2(W);
+  const kv = (small, big) => `<div class="kv"><small>${small}</small>${big}</div>`;
+  $('dtGrid').innerHTML = kv(vu + '·' + vv, `(${sg(U[0])})(${sg(W[0])}) + (${sg(U[1])})(${sg(W[1])}) = <b>${d}</b>`) + kv('|' + vu + '|', sqrtStr(nu) === '0' ? '0' : '√' + nu + (sqrtStr(nu) !== '√' + nu ? ' = ' + sqrtStr(nu) : '')) + kv('|' + vv + '|', nv ? '√' + nv + (sqrtStr(nv) !== '√' + nv ? ' = ' + sqrtStr(nv) : '') : '0');
+  const rd = $('dtRead');
+  if (!nu || !nv) { rd.className = 'readout big no'; rd.innerHTML = L('มีเวกเตอร์ศูนย์ — ลากออกจาก (0,0)', 'One vector is zero — drag it away from (0,0)'); }
+  else {
+    const cs = d / Math.sqrt(nu * nv), deg = Math.acos(clamp(cs, -1, 1)) * 180 / Math.PI;
+    rd.className = 'readout big ' + (d === 0 ? 'ok' : '');
+    rd.innerHTML = `cosθ = ${frac(sg(d), '√' + nu + ' · √' + nv)} ≈ ${cs.toFixed(3)} &nbsp;⇒&nbsp; θ ≈ <b>${deg.toFixed(1)}°</b>` + (d === 0 ? `<br>✅ ${L('ตั้งฉากกัน (dot = 0)', 'perpendicular (dot = 0)')}` : d > 0 ? `<br><span class="note">${L('มุมแหลม (dot เป็นบวก)', 'acute angle (dot positive)')}</span>` : `<br><span class="note">${L('มุมป้าน (dot เป็นลบ)', 'obtuse angle (dot negative)')}</span>`);
+  }
+  const sum = [U[0] + W[0], U[1] + W[1]], dif = [U[0] - W[0], U[1] - W[1]];
+  $('dtStar').innerHTML = `|${vu}+${vv}|² = ${mag2(sum)} &nbsp;|&nbsp; ${nu} + 2(${d}) + ${nv} = <b>${nu + 2 * d + nv}</b> ${mag2(sum) === nu + 2 * d + nv ? '✅' : '❌'}<br>|${vu}−${vv}|² = ${mag2(dif)} &nbsp;|&nbsp; ${nu} − 2(${d}) + ${nv} = <b>${nu - 2 * d + nv}</b> ${mag2(dif) === nu - 2 * d + nv ? '✅' : '❌'}`;
+}
+function drawHand() {
+  const svg = $('handSvg'); if (!svg) return;
+  const F = [
+    { r: '<rect x="56" y="160" width="40" height="100" rx="20" transform="rotate(-42 76 210)"', t: [62, 196] },
+    { r: '<rect x="104" y="72" width="38" height="110" rx="19"', t: [123, 108] },
+    { r: '<rect x="146" y="40" width="40" height="140" rx="20"', t: [166, 76] },
+    { r: '<rect x="190" y="66" width="38" height="116" rx="19"', t: [209, 102] },
+    { r: '<rect x="232" y="92" width="34" height="90" rx="17"', t: [249, 126] },
+  ];
+  let s = F.map((f, i) => `<g class="fg" data-f="${i}" onclick="HD.sel=${i};drawHand()">${f.r} fill="${HD.sel === i ? '#BBF7D0' : '#FDE7D3'}" stroke="${HD.sel === i ? '#15803D' : '#C08457'}" stroke-width="${HD.sel === i ? 4 : 3}"/><text x="${f.t[0]}" y="${f.t[1]}" text-anchor="middle" font-size="19" font-weight="800" fill="#1E3A8A" style="pointer-events:none">${HANDDEG[i]}°</text></g>`).join('');
+  s += '<rect x="90" y="140" width="190" height="140" rx="34" fill="#FDE7D3" stroke="#C08457" stroke-width="3"/>';
+  s += `<text x="185" y="196" text-anchor="middle" font-size="30" font-weight="800" fill="#1E3A8A">√n</text><line x1="145" y1="208" x2="225" y2="208" stroke="#1E3A8A" stroke-width="4" stroke-linecap="round"/><text x="185" y="256" text-anchor="middle" font-size="42" font-weight="800" fill="#1E3A8A">2</text>`;
+  svg.innerHTML = s;
+  const th = HANDDEG, sinN = [0, 1, 2, 3, 4], cosN = [4, 3, 2, 1, 0], simp = ['0', frac(1, 2), frac('√2', 2), frac('√3', 2), '1'], simpC = ['1', frac('√3', 2), frac('√2', 2), frac(1, 2), '0'];
+  const cell = (i, html) => `<td class="${HD.sel === i ? 'hl' : ''}">${html}</td>`;
+  $('handTable').innerHTML = `<div style="overflow-x:auto"><table class="tbl"><tr><th>θ</th>${th.map((d, i) => cell(i, d + '°')).join('')}</tr>
+    <tr><th>sin θ</th>${th.map((d, i) => cell(i, frac('√' + sinN[i], 2))).join('')}</tr>
+    <tr><th></th>${th.map((d, i) => cell(i, simp[i])).join('')}</tr>
+    <tr><th>cos θ</th>${th.map((d, i) => cell(i, frac('√' + cosN[i], 2))).join('')}</tr>
+    <tr><th></th>${th.map((d, i) => cell(i, simpC[i])).join('')}</tr></table></div>
+    ${HD.sel !== null ? `<div class="readout big">sin ${th[HD.sel]}° = ${frac('√' + sinN[HD.sel], 2)} = ${simp[HD.sel]} &nbsp;•&nbsp; cos ${th[HD.sel]}° = ${frac('√' + cosN[HD.sel], 2)} = ${simpC[HD.sel]}</div>` : ''}`;
+}
+function mountDt() {
+  bindDrag($('dtBoard'), (n, x, y, ph) => { if (ph === 'up') return; const [a, b] = fromPx(x, y); DT[n] = [clamp(a, -6, 6), clamp(b, -6, 6)]; drawDt(); });
+  drawDt(); drawHand();
+}
+addWk('dt1', { title: T('ตัวอย่าง: คำนวณ dot', 'Example: computing a dot product'), prob: () => `(2${vi} + ${vj}) · (${vi} + 3${vj})`,
+  steps: [
+    { h: () => P(L('เอาเลขข้างหน้า ' + vi + ' คูณกัน', 'Multiply the numbers in front of ' + vi)) + `<div style="font-size:1.2rem"><span class="hl-i">2 × 1</span></div>` },
+    { h: () => P(L('เอาเลขข้างหน้า ' + vj + ' คูณกัน', 'Multiply the numbers in front of ' + vj)) + `<div style="font-size:1.2rem"><span class="hl-i">(2 × 1)</span> + <span class="hl-j">(1 × 3)</span></div>` },
+    { h: () => P(L('บวกกัน — ได้ตัวเลข (ไม่ใช่เวกเตอร์)', 'Add them — a number (not a vector)')) + `<div class="formula">(2×1) + (1×3) = 2 + 3 = 5</div>` },
+  ] });
+addWk('dt2', { title: T('ตัวอย่าง: หามุมระหว่างเวกเตอร์', 'Example: angle between vectors'), prob: () => L(`หามุมระหว่าง ${vu} = ${vi} + ${vj} กับ ${vv} = 2${vi}`, `Find the angle between ${vu} = ${vi} + ${vj} and ${vv} = 2${vi}`),
+  steps: [
+    { h: () => P('dot') + al([[`${vu}·${vv}`, '=', '(1×2) + (1×0) = 2']]) },
+    { h: () => P(L('หาขนาด', 'Find the magnitudes')) + al([[`|${vu}|`, '=', '√(1² + 1²) = √2'], [`|${vv}|`, '=', '√(2² + 0²) = 2']]) },
+    { h: () => P(L('แทนในสูตร', 'Plug into the formula')) + al([['cosθ', '=', `${frac(2, '√2 · 2')} = ${frac(1, '√2')} = ${frac('√2', 2)}`]]) },
+    { h: () => P(L('ดูทริกมือ: sin/cos เท่ากับ ' + frac('√2', 2) + ' คือนิ้วกลาง', 'Hand trick: a value of ' + frac('√2', 2) + ' is the middle finger')) + `<div class="formula">θ = 45°</div>` },
+  ] });
+addWk('dt3', { title: T('ตัวอย่าง: ตั้งฉาก หา k', 'Example: perpendicular, find k'), prob: () => L(`${vu} = 2${vi} + 3${vj} ตั้งฉากกับ ${vv} = k${vi} − 4${vj} จงหา k`, `${vu} = 2${vi} + 3${vj} is perpendicular to ${vv} = k${vi} − 4${vj}. Find k`),
+  steps: [
+    { h: () => P(L('ตั้งฉาก ⇔ dot = 0', 'Perpendicular ⇔ dot = 0')) + al([[`${vu}·${vv}`, '=', '0']]) },
+    { h: () => P(L('เอาเลขข้างหน้าคูณกัน', 'Multiply the matching numbers')) + al([['(2)(k) + (3)(−4)', '=', '0'], ['2k − 12', '=', '0'], ['k', '=', '<b>6</b>']]) },
+  ] });
+addWk('dt4', { title: T('ตัวอย่าง ★: |u+v|² และ |u−v|²', 'Example ★: |u+v|² and |u−v|²'), prob: () => L(`|${vu}| = 2, |${vv}| = 3 และมุมระหว่างเวกเตอร์ 60° จงหา |${vu}+${vv}| และ |${vu}−${vv}|`, `|${vu}| = 2, |${vv}| = 3 and the angle between them is 60°. Find |${vu}+${vv}| and |${vu}−${vv}|`),
+  steps: [
+    { h: () => P('dot') + al([[`${vu}·${vv}`, '=', `2 · 3 · cos 60° = 6 · ${frac(1, 2)} = 3`]]) },
+    { h: () => P('|u+v|²') + al([[`|${vu}+${vv}|²`, '=', `|${vu}|² + 2${vu}·${vv} + |${vv}|²`], ['', '=', '4 + 2(3) + 9 = 19'], [`|${vu}+${vv}|`, '=', '<b>√19</b>']]) },
+    { h: () => P('|u−v|²') + al([[`|${vu}−${vv}|²`, '=', `|${vu}|² − 2${vu}·${vv} + |${vv}|²`], ['', '=', '4 − 2(3) + 9 = 7'], [`|${vu}−${vv}|`, '=', '<b>√7</b>']]) },
+  ] });
+
+// ═══════════════════════ แบบฝึกหัด ═══════════════════════
+const K = (a, b) => comb(a, b);
+quizData = [
+  { q_th: 'เวกเตอร์ที่ลากจาก (0,0) ไปยังจุด (3, −2) เขียนเป็น ai + bj ได้ข้อใด?', q_en: 'The vector from (0,0) to the point (3, −2) written as ai + bj is…', opts: [K(3, -2), K(-3, 2), K(3, 2), K(2, -3)], ans: 0,
+    exp_th: 'ยืด ' + vi + ' เป็น 3 เท่า แล้วต่อด้วย ' + vj + ' ที่ยืด −2 เท่า (ชี้ลง) → 3' + vi + ' − 2' + vj, exp_en: 'Stretch ' + vi + ' by 3, then attach ' + vj + ' stretched by −2 (pointing down) → 3' + vi + ' − 2' + vj },
+  { q_th: vi + ' คืออะไร?', q_en: 'What is ' + vi + '?', opts: ['ลูกศรยาว 1 หน่วยบนแกน x ทางบวก', 'ลูกศรยาว 1 หน่วยบนแกน y ทางบวก', 'จุด (1, 1)', 'เวกเตอร์ศูนย์'], opts_en: ['The arrow of length 1 on the positive x-axis', 'The arrow of length 1 on the positive y-axis', 'The point (1, 1)', 'The zero vector'], ans: 0,
+    exp_th: vi + ' = ลูกศรยาว 1 ตามแกน x ส่วน ' + vj + ' คือยาว 1 ตามแกน y', exp_en: vi + ' is the length-1 arrow along x; ' + vj + ' is the length-1 arrow along y.' },
+  { q_th: 'A(2, −1) และ B(−1, 3) จงหา ' + vAB, q_en: 'A(2, −1) and B(−1, 3). Find ' + vAB, opts: [K(-3, 4), K(3, -4), K(1, 2), K(-3, 2)], ans: 0,
+    exp_th: 'ปลาย − ต้น = (−1 − 2)' + vi + ' + (3 − (−1))' + vj + ' = −3' + vi + ' + 4' + vj, exp_en: 'tip − tail = (−1 − 2)' + vi + ' + (3 − (−1))' + vj + ' = −3' + vi + ' + 4' + vj },
+  { q_th: vu + ' = 3' + vi + ' + 2' + vj + ' และ ' + vv + ' = 2' + vi + ' − 3' + vj + ' ข้อใดถูกต้อง?', q_en: vu + ' = 3' + vi + ' + 2' + vj + ' and ' + vv + ' = 2' + vi + ' − 3' + vj + '. Which is true?', opts: [vu + '·' + vv + ' = 0 จึงตั้งฉากกัน', vu + ' ขนาน ' + vv, vu + ' = ' + vv, vu + '·' + vv + ' = 12'], opts_en: [vu + '·' + vv + ' = 0 so they are perpendicular', vu + ' ∥ ' + vv, vu + ' = ' + vv, vu + '·' + vv + ' = 12'], ans: 0,
+    exp_th: '(3)(2) + (2)(−3) = 6 − 6 = 0 → ตั้งฉาก', exp_en: '(3)(2) + (2)(−3) = 6 − 6 = 0 → perpendicular' },
+  { q_th: vu + ' = 2' + vi + ' − ' + vj + ' และ ' + vv + ' = ' + vi + ' + 4' + vj + ' จงหา 2' + vu + ' − ' + vv, q_en: vu + ' = 2' + vi + ' − ' + vj + ' and ' + vv + ' = ' + vi + ' + 4' + vj + '. Find 2' + vu + ' − ' + vv, opts: [K(3, -6), K(5, 2), K(3, 2), K(5, -6)], ans: 0,
+    exp_th: '2' + vu + ' = 4' + vi + ' − 2' + vj + ' แล้วลบ ' + vv + ': (4−1)' + vi + ' + (−2−4)' + vj + ' = 3' + vi + ' − 6' + vj, exp_en: '2' + vu + ' = 4' + vi + ' − 2' + vj + ', subtract ' + vv + ': (4−1)' + vi + ' + (−2−4)' + vj + ' = 3' + vi + ' − 6' + vj },
+  { q_th: vu + ' = 2' + vi + ' + 3' + vj + ' ขนานกับ ' + vv + ' = 4' + vi + ' + x' + vj + ' ค่า x คือ?', q_en: vu + ' = 2' + vi + ' + 3' + vj + ' is parallel to ' + vv + ' = 4' + vi + ' + x' + vj + '. What is x?', opts: ['6', '5', '8', '−6'], ans: 0,
+    exp_th: frac(2, 4) + ' = ' + frac(3, 'x') + ' → 2x = 12 → x = 6', exp_en: frac(2, 4) + ' = ' + frac(3, 'x') + ' → 2x = 12 → x = 6' },
+  { q_th: '|6' + vi + ' − 8' + vj + '| เท่ากับข้อใด?', q_en: 'What is |6' + vi + ' − 8' + vj + '|?', opts: ['10', '14', '2', '100'], ans: 0,
+    exp_th: '√(6² + (−8)²) = √(36 + 64) = √100 = 10', exp_en: '√(6² + (−8)²) = √(36 + 64) = √100 = 10' },
+  { q_th: 'เวกเตอร์หนึ่งหน่วยที่ทิศเดียวกับ 3' + vi + ' + 4' + vj + ' คือข้อใด?', q_en: 'Which is the unit vector in the direction of 3' + vi + ' + 4' + vj + '?', opts: [frac(3, 5) + vi + ' + ' + frac(4, 5) + vj, frac(3, 7) + vi + ' + ' + frac(4, 7) + vj, frac(3, 25) + vi + ' + ' + frac(4, 25) + vj, frac(4, 5) + vi + ' + ' + frac(3, 5) + vj], ans: 0,
+    exp_th: '|u| = 5 → หารทั้งเวกเตอร์ด้วย 5 ได้ ' + frac(3, 5) + vi + ' + ' + frac(4, 5) + vj, exp_en: '|u| = 5 → divide the whole vector by 5 to get ' + frac(3, 5) + vi + ' + ' + frac(4, 5) + vj },
+  { q_th: vu + ' = 3' + vi + ' + 2' + vj + ' และ ' + vv + ' = −2' + vi + ' + 4' + vj + ' ค่าของ ' + vu + '·' + vv + ' คือ?', q_en: vu + ' = 3' + vi + ' + 2' + vj + ' and ' + vv + ' = −2' + vi + ' + 4' + vj + '. What is ' + vu + '·' + vv + '?', opts: ['2', '−14', '14', '−2'], ans: 0,
+    exp_th: '(3)(−2) + (2)(4) = −6 + 8 = 2', exp_en: '(3)(−2) + (2)(4) = −6 + 8 = 2' },
+  { q_th: 'ถ้า cosθ = ' + frac('√2', 2) + ' แล้ว θ (ระหว่าง 0° ถึง 90°) คือเท่าไร? (ใช้ทริกมือ)', q_en: 'If cosθ = ' + frac('√2', 2) + ', what is θ (between 0° and 90°)? (use the hand trick)', opts: ['45°', '30°', '60°', '90°'], ans: 0,
+    exp_th: frac('√2', 2) + ' อยู่ที่นิ้วกลาง = 45° (ทั้ง sin และ cos)', exp_en: frac('√2', 2) + ' sits on the middle finger = 45° (for both sin and cos)' },
+];
+
+window.addEventListener('load', () => { initQuiz(); applyLang(getLang()); });
+</script>
+</body>
+</html>

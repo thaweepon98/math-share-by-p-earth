@@ -1,0 +1,1111 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>สื่อการสอน : การดำเนินการพหุนามและการแยกตัวประกอบ ม.4</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800&display=swap');
+
+  :root {
+    --primary: #1C3B22; --secondary: #FF8A3D; --accent: #68EF3F; --accent-2: #3FA82E; --warning: #FFB347;
+    --bg: #F3F7EC; --card: #FFFFFF; --text: #2D3748; --muted: #718096; --border: #E2E8F0;
+    --shadow: 0 4px 24px rgba(28,59,34,0.10); --radius: 16px;
+    --pos: #047857; --pos-bg: #ECFDF5; --neg: #BE185D; --neg-bg: #FFF4EC;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Sarabun', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+  header { background: linear-gradient(135deg, #1C3B22 0%, #2E5936 100%); color: white; padding: 28px 40px 20px; text-align: center; position: relative; overflow: hidden; }
+  header::before { content: ''; position: absolute; top: -60px; right: -60px; width: 200px; height: 200px; background: rgba(255,255,255,0.07); border-radius: 50%; }
+  header h1 { font-size: 2rem; font-weight: 800; letter-spacing: .5px; }
+  header p { font-size: 1rem; opacity: .85; margin-top: 4px; }
+  .back-link { position: absolute; top: 14px; left: 20px; color: white; text-decoration: none; font-size: .85rem; font-weight: 600; opacity: .9; z-index: 2; }
+  .back-link:hover { opacity: 1; text-decoration: underline; }
+  .lang-toggle { position: absolute; top: 14px; right: 20px; background: rgba(255,255,255,.15); color: white; border: 1.5px solid rgba(255,255,255,.5); border-radius: 20px; padding: 5px 14px; font-family: 'Sarabun', sans-serif; font-size: .8rem; font-weight: 700; cursor: pointer; z-index: 2; }
+  .lang-toggle:hover { background: rgba(255,255,255,.28); }
+
+  nav { display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; padding: 20px 24px 0; background: white; border-bottom: 3px solid var(--border); }
+  .tab-btn { padding: 10px 18px; border: none; background: transparent; border-radius: 10px 10px 0 0; font-family: 'Sarabun', sans-serif; font-size: 0.95rem; font-weight: 600; color: var(--muted); cursor: pointer; transition: all .25s; border-bottom: 3px solid transparent; margin-bottom: -3px; }
+  .tab-btn:hover { color: var(--primary); background: #E3F3D8; }
+  .tab-btn.active { color: var(--primary); border-bottom-color: var(--primary); background: #E3F3D8; }
+
+  main { max-width: 980px; margin: 0 auto; padding: 32px 20px 60px; }
+  .tab-panel { display: none; animation: fadeIn .35s ease; }
+  .tab-panel.active { display: block; }
+  @keyframes fadeIn { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
+
+  .card { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); padding: 28px 32px; margin-bottom: 24px; }
+  .card-title { font-size: 1.25rem; font-weight: 700; color: var(--primary); margin-bottom: 12px; display: flex; align-items: center; gap: 10px; }
+  .card-title .icon { font-size: 1.5rem; }
+  .intro { font-size: 1.02rem; line-height: 1.8; margin-bottom: 14px; }
+  .box-info { background: #EEF7E6; border-left: 4px solid var(--primary); border-radius: 10px; padding: 14px 18px; margin: 14px 0; line-height: 1.8; }
+  .box-warn { background: #FFF7ED; border-left: 4px solid var(--warning); border-radius: 10px; padding: 14px 18px; margin: 14px 0; line-height: 1.8; }
+  .box-ok   { background: #ECFDF5; border-left: 4px solid var(--accent);  border-radius: 10px; padding: 14px 18px; margin: 14px 0; line-height: 1.8; }
+  .formula { background: linear-gradient(135deg,#1C3B22,#2E5936); color: white; border-radius: 12px; padding: 14px 24px; text-align: center; font-size: 1.3rem; font-weight: 700; margin: 14px 0; letter-spacing: .5px; display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 4px; }
+
+  .btn { padding: 10px 24px; background: var(--primary); color: white; border: none; border-radius: 30px; font-family: 'Sarabun', sans-serif; font-size: 1rem; font-weight: 700; cursor: pointer; transition: background .2s, opacity .2s; }
+  .btn:hover:not(:disabled) { background: #2E5936; }
+  .btn:disabled { opacity: .45; cursor: not-allowed; }
+  .btn.ghost { background: white; color: var(--primary); border: 2px solid var(--primary); }
+  .btn.ghost:hover:not(:disabled) { background: #E3F3D8; }
+  .btn-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 14px; align-items: center; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0; }
+  .chip { padding: 8px 16px; border: 2px solid var(--border); border-radius: 30px; background: #fff; font-family: 'Sarabun', sans-serif; font-weight: 700; font-size: 1rem; cursor: pointer; color: var(--text); display: inline-flex; align-items: center; gap: 4px; }
+  .chip:hover { border-color: var(--primary); }
+  .chip.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+  .chip.wrong { border-color: var(--neg); background: var(--neg-bg); color: var(--neg); }
+
+  .frac { display: inline-flex; flex-direction: column; align-items: center; font-weight: 700; line-height: 1; vertical-align: middle; margin: 0 4px; }
+  .frac .num { font-size: 1em; border-bottom: 2.5px solid currentColor; padding-bottom: 2px; min-width: 18px; text-align: center; white-space: nowrap; }
+  .frac .den { font-size: 1em; padding-top: 3px; min-width: 18px; text-align: center; white-space: nowrap; }
+
+  .align { display: grid; grid-template-columns: auto auto auto; justify-content: start; column-gap: .55em; row-gap: 3px; align-items: center; margin: 4px 0; }
+  .align .l { justify-self: end; text-align: right; }
+  .align .m { justify-self: center; font-weight: 700; }
+  .align .r { justify-self: start; }
+  .align .full { grid-column: 1 / -1; }
+
+  .wk-cell { position: relative; background: #fff; border: 2px solid var(--border); border-radius: 14px; padding: 12px 16px 12px 52px; margin-bottom: 12px; line-height: 1.8; }
+  .wk-cell.fresh { animation: rowIn .5s ease; }
+  @keyframes rowIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+  .wk-cell .stepno { position: absolute; left: 14px; top: 14px; width: 26px; height: 26px; border-radius: 50%; background: var(--primary); color: #fff; font-size: .85rem; font-weight: 800; display: flex; align-items: center; justify-content: center; }
+
+  /* พจน์กำลังเดียวกันติดสีเดียวกันเพื่อให้เห็นว่ารวมกลุ่มกัน */
+  .g0 { background: #DBEAFE; color: #1E40AF; border-radius: 5px; padding: 0 4px; }
+  .g1 { background: #FDE68A; color: #92400E; border-radius: 5px; padding: 0 4px; }
+  .g2 { background: #FBCFE8; color: #9D174D; border-radius: 5px; padding: 0 4px; }
+  .g3 { background: #D9F99D; color: #3F6212; border-radius: 5px; padding: 0 4px; }
+
+  svg.diag { display: block; width: 100%; max-width: 460px; height: auto; margin: 10px auto; }
+  /* ลูกศรกระจาย: วัดตำแหน่งจริงจาก DOM แล้วค่อยวาด svg ทับ จึงตรงกับตัวอักษรเป๊ะไม่ว่าจอกว้างแค่ไหน */
+  .dist-wrap { position: relative; display: inline-block; font-size: 1.2rem; font-weight: 800; padding: 30px 4px 2px; color: var(--text); }
+  .dist-wrap .dt { display: inline-block; }
+  .dist-wrap .dt.active { color: var(--secondary); }
+  .dist-wrap .dt.dim { opacity: .32; }
+  .slider-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin: 10px 0; }
+  .slider-row b { min-width: 34px; }
+  input[type=range] { accent-color: var(--primary); width: min(320px, 100%); }
+  .slider-val { font-weight: 800; color: var(--primary); font-size: 1.1rem; min-width: 44px; }
+  .err-msg { color: var(--neg); font-weight: 600; font-size: .95rem; min-height: 22px; margin-top: 4px; }
+
+  /* วงกลมตัวเลขจับคู่ตัวประกอบ (สไตล์ลูกศร/วงกลมลายมือ) */
+  .numcircle { display: inline-flex; align-items: center; justify-content: center; min-width: 38px; height: 38px; padding: 0 6px; border-radius: 19px; border: 2.5px solid var(--border); font-weight: 800; font-size: 1.05rem; background: #fff; color: var(--text); }
+  .numcircle.hit { border-color: #3F6212; color: #3F6212; background: #ECFDF0; }
+  .numcircle.sel { border-color: var(--primary); background: #E3F3D8; }
+  .numcircle.wrong { border-color: var(--neg); color: var(--neg); background: var(--neg-bg); }
+  .numcircle.c-green { border-color: #3F6212; color: #3F6212; background: #ECFDF0; }
+  .numcircle.c-purple { border-color: #7C3AED; color: #5B21B6; background: #F5F3FF; }
+  /* ต้นไม้ตัวประกอบ: เขียนพหุนาม แล้วคู่ตัวเลขห้อยใต้พจน์ที่ถูกแตก (ตำแหน่งวัดจาก DOM ใน layoutFtrees) */
+  /* overflow-anchor: none กัน Chrome เลื่อนจอชดเชยตอนความสูงการ์ดเปลี่ยน ซึ่งทำให้ตำแหน่งที่วัดไว้ก่อนหน้ากลายเป็นค่าเก่า (ดูสาเหตุจริงใน layoutFtrees) */
+  .ftree { position: relative; margin: 16px 0 10px 8px; width: fit-content; max-width: 100%; overflow-anchor: none; }
+  .ft-poly { display: flex; gap: .35em; align-items: baseline; font-size: 1.35rem; font-weight: 800; white-space: nowrap; }
+  .ft-cols { position: relative; }
+  .ft-col { position: absolute; top: 26px; display: flex; flex-direction: column; gap: 8px; }
+  .ft-row { position: relative; display: flex; gap: 6px; background: none; border: none; padding: 0; font: inherit; }
+  button.ft-row { cursor: pointer; }
+  button.ft-row:hover .numcircle { border-color: var(--primary); }
+  .ft-row.dim { opacity: .35; }
+  .ft-notes { display: flex; flex-wrap: wrap; gap: 4px 18px; }
+  .ft-note { white-space: nowrap; font-weight: 700; font-size: .95rem; }
+  .ft-note.hit { color: #047857; }
+  .ft-note.wrong { color: var(--neg); }
+  .ft-sum { font-weight: 700; margin-top: 2px; }
+  /* แถบทดลอง: คู่หน้า + คู่หลังที่ลองแล้วผิด พร้อมเส้นจับคู่/ผลคูณ ใต้แผนภาพหลัก */
+  .ft-trial { position: relative; margin: 14px 0 4px; padding-top: 2px; overflow-anchor: none; }
+  .ft-trial-row { display: flex; gap: 44px; margin: 4px 0 66px; align-items: center; }
+  /* ชิ้นส่วนตอนดึงตัวร่วม: ส้ม = ชิ้นร่วมทุกพจน์มี, ฟ้า = ชิ้นที่เหลือ */
+  /* ภาพเคลื่อนไหวกำลังสองสมบูรณ์ */
+  svg.sq-anim [data-sq] { transition: transform .9s ease, fill .6s, stroke .6s, stroke-width .6s, opacity .6s; }
+  svg.sq-anim.sq-instant [data-sq] { transition: none !important; }
+  .sq-eq { text-align: center; font-size: 1.25rem; font-weight: 800; color: var(--primary); margin: 6px 0 4px; min-height: 5.6em; display: flex; align-items: center; justify-content: center; flex-direction: column; }
+  .pc { display: inline-flex; align-items: center; justify-content: center; min-width: 30px; height: 32px; padding: 0 6px; border-radius: 9px; font-weight: 800; font-size: 1.05rem; }
+  .pc.com { background: #FFEDD5; border: 2.5px solid #F97316; color: #9A3412; }
+  .pc.rest { background: #DBEAFE; border: 2.5px solid #2563EB; color: #1E40AF; }
+  .pc-row { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; font-weight: 800; font-size: 1.1rem; margin: 8px 0; }
+  .pc-row .pc-label { min-width: 52px; text-align: right; }
+  /* ดึงตัวร่วมออกหน้าวงเล็บ: แถวบนกระจาย [3x²]∙(x)+[3x²]∙(2) แถวล่างรวมเป็น [3x²]( (x)+(2) ) ลูกศรวัดจาก DOM (drawPullOut) */
+  .pullout { position: relative; padding: 4px 4px 40px; overflow-anchor: none; }
+  .po-row { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; font-weight: 800; font-size: 1.1rem; }
+  .po-row + .po-row { margin-top: 48px; }
+
+  .pascal { display: flex; justify-content: center; gap: 30px; margin: 18px 0; flex-wrap: wrap; }
+  .pterm { text-align: center; }
+  .pterm .co { font-size: 1.3rem; font-weight: 800; color: var(--secondary); }
+  .pterm .expr { font-size: 1.15rem; font-weight: 700; margin-top: 4px; }
+  .pterm .arrows { font-size: .8rem; color: var(--muted); margin-top: 4px; }
+
+  .quiz-q { font-size: 1.1rem; font-weight: 600; margin-bottom: 12px; }
+  .quiz-opts { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 10px; }
+  .quiz-opt { padding: 10px 20px; border: 2px solid var(--border); border-radius: 30px; cursor: pointer; font-family: 'Sarabun', sans-serif; font-size: 1rem; font-weight: 600; transition: all .2s; background: white; }
+  .quiz-opt:hover { border-color: var(--primary); color: var(--primary); }
+  .quiz-opt.correct { border-color: var(--accent); background: #ECFDF5; color: #047857; }
+  .quiz-opt.wrong { border-color: var(--secondary); background: #FFF4EC; color: #BE185D; }
+  .quiz-feedback { font-weight: 700; font-size: 1rem; min-height: 24px; }
+  .quiz-feedback.ok { color: #047857; }
+  .quiz-feedback.err { color: #BE185D; }
+  .btn-next { margin-top: 10px; padding: 10px 28px; background: var(--primary); color: white; border: none; border-radius: 30px; font-family: 'Sarabun', sans-serif; font-size: 1rem; font-weight: 700; cursor: pointer; transition: background .2s; }
+  .btn-next:hover { background: #142B1A; }
+  .score-badge { display: inline-block; background: linear-gradient(135deg,#68EF3F,#1C3B22); color: white; border-radius: 30px; padding: 6px 20px; font-weight: 700; font-size: 1rem; }
+
+  @media (max-width: 700px) {
+    header h1 { font-size: 1.4rem; }
+    .card { padding: 20px 14px; }
+    .tab-btn { font-size: .85rem; padding: 8px 10px; }
+    .wk-cell { padding-left: 46px; }
+    .pascal { gap: 14px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <button id="langToggle" class="lang-toggle" onclick="toggleLang()">EN</button>
+  <h1 data-th="🧮 พหุนามและการแยกตัวประกอบ" data-en="🧮 Polynomials & Factoring">🧮 พหุนามและการแยกตัวประกอบ</h1>
+  <p data-th="บวก ลบ คูณ • ดึงตัวร่วม • แยกตัวประกอบไขว้ • กำลังสองสมบูรณ์ • สูตร 4 สูตร • ม.4" data-en="Add/subtract/multiply • common factor • cross-method • completing the square • the 4 formulas">บวก ลบ คูณ • ดึงตัวร่วม • แยกตัวประกอบไขว้ • กำลังสองสมบูรณ์ • สูตร 4 สูตร • ม.4</p>
+</header>
+
+<nav>
+  <button class="tab-btn active" onclick="showTab('op')" data-th="➕➖✖️ การดำเนินการ" data-en="➕➖✖️ Operations">➕➖✖️ การดำเนินการ</button>
+  <button class="tab-btn" onclick="showTab('fac')" data-th="🎯 แยกตัวประกอบ" data-en="🎯 Factoring">🎯 แยกตัวประกอบ</button>
+  <button class="tab-btn" onclick="showTab('sq')" data-th="🟦 กำลังสองสมบูรณ์" data-en="🟦 Completing the Square">🟦 กำลังสองสมบูรณ์</button>
+  <button class="tab-btn" onclick="showTab('form')" data-th="📐 สูตร 4 สูตร" data-en="📐 The 4 Formulas">📐 สูตร 4 สูตร</button>
+  <button class="tab-btn" onclick="showTab('quiz')" data-th="🎯 แบบฝึกหัด" data-en="🎯 Quiz">🎯 แบบฝึกหัด</button>
+</nav>
+
+<main>
+  <section id="tab-op" class="tab-panel active"></section>
+  <section id="tab-fac" class="tab-panel"></section>
+  <section id="tab-sq" class="tab-panel"></section>
+  <section id="tab-form" class="tab-panel"></section>
+  <section id="tab-quiz" class="tab-panel">
+    <div class="card">
+      <div class="card-title"><span class="icon">🎯</span><span data-th="แบบฝึกหัด — ทดสอบความเข้าใจ" data-en="Quiz — Test Your Understanding">แบบฝึกหัด — ทดสอบความเข้าใจ</span></div>
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:20px;">
+        <span id="quizProgress" style="color:var(--muted); font-size:1rem;"></span>
+        <span class="score-badge"><span data-th="คะแนน:" data-en="Score:">คะแนน:</span> <span id="quizScore">0</span> / <span id="quizTotal">10</span></span>
+      </div>
+      <div id="quizBox"></div>
+      <div style="margin-top:16px; display:flex; gap:12px; flex-wrap:wrap;">
+        <button class="btn-next" id="btnNext" onclick="nextQuestion()" style="display:none;" data-th="ข้อต่อไป ▶" data-en="Next ▶">ข้อต่อไป ▶</button>
+        <button class="btn-next" id="btnRetry" onclick="initQuiz()" style="display:none; background:var(--accent);" data-th="เล่นใหม่ 🔄" data-en="Play Again 🔄">เล่นใหม่ 🔄</button>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script>
+// ══════════════ ภาษาไทย/อังกฤษ (ค่าใน data-th/data-en ถือเป็น HTML — ดู docs/adr/0002) ══════════════
+const PAGE_TITLE = { th: "สื่อการสอน : การดำเนินการพหุนามและการแยกตัวประกอบ ม.4", en: "Teaching Aid: Polynomial Operations & Factoring" };
+let langMemory = 'th';
+function getLang() { try { return localStorage.getItem('siteLang') || 'th'; } catch (e) { return langMemory; } }
+function applyLang(lang) {
+  document.documentElement.lang = lang;
+  document.title = PAGE_TITLE[lang];
+  document.querySelectorAll('[data-th]').forEach(el => { el.innerHTML = (lang === 'en' && el.dataset.en) ? el.dataset.en : el.dataset.th; });
+  const btn = document.getElementById('langToggle');
+  if (btn) btn.textContent = lang === 'en' ? 'ไทย' : 'EN';
+  if (typeof onLangChange === 'function') onLangChange(lang);
+}
+function toggleLang() {
+  const next = getLang() === 'en' ? 'th' : 'en';
+  langMemory = next;
+  try { localStorage.setItem('siteLang', next); } catch (e) {}
+  applyLang(next);
+}
+function onLangChange() { renderAll(); refreshQuizLang(); }
+function renderAll() { renderOps(); renderFac(); renderSq(); renderForm(); requestAnimationFrame(drawAllArrows); }
+
+// สีมาตรฐาน 3 ขั้นที่ใช้ทุกที่ที่มีการกระจาย/ดึงทีละขั้น (ฟ้า→ส้ม→ม่วง)
+const STEP_COLOR = ['#2563EB', '#EA580C', '#9333EA'];
+// สร้างนิพจน์ (ก)(ข) เป็น <span> รายพจน์ — พจน์ที่กำลังกระจายเน้นสีส้ม(active) ฝั่งตรงข้ามทั้งหมดเป็นเป้าลูกศร (สีเดียวกันหมดตามขั้นที่ระบุ) ฝั่งเดียวกันที่ไม่ใช่ตัวกระจายให้จาง
+function distExpr(leftTerms, rightTerms, activeSide, activeIdx, color) {
+  const mk = (terms, side) => terms.map((t, i) => {
+    const isActive = side === activeSide && i === activeIdx;
+    const isTarget = side !== activeSide;
+    const cls = isActive ? 'dt active' : (isTarget ? 'dt' : 'dt dim');
+    const role = isActive ? 'from' : (isTarget ? 'to' : '');
+    const colorAttr = isTarget && color ? ` data-gcolor="${color}"` : '';
+    return `<span class="${cls}"${role ? ` data-role="${role}"` : ''}${colorAttr}>${t}</span>`;
+  }).join('');
+  return `<div class="dist-wrap" data-arrows>(${mk(leftTerms, 'l')})(${mk(rightTerms, 'r')})</div>`;
+}
+// วัดตำแหน่งพจน์ "ต้นทาง" กับทุกพจน์ "ปลายทาง" จริงจาก DOM แล้ววาดเส้นโค้งลูกศรทับ (แม่นยำไม่ว่าฟอนต์/จอกว้างแค่ไหน)
+function drawDistArrows() {
+  document.querySelectorAll('.dist-wrap[data-arrows]').forEach(wrap => {
+    const from = wrap.querySelector('[data-role="from"]');
+    const tos = [...wrap.querySelectorAll('[data-role="to"]')];
+    wrap.querySelectorAll('.dist-arrows-svg').forEach(e => e.remove());
+    if (!from || !tos.length) return;
+    const wr = wrap.getBoundingClientRect();
+    const fr = from.getBoundingClientRect();
+    const fx = fr.left + fr.width / 2 - wr.left, fy = fr.top - wr.top;
+    const colors = [...new Set(tos.map(t => t.dataset.gcolor || '#FF8A3D'))];
+    let svg = `<svg class="dist-arrows-svg" style="position:absolute;top:0;left:0;width:100%;height:100%;overflow:visible;pointer-events:none;">
+      <defs>${colors.map(c => `<marker id="distArrow-${c.slice(1)}" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="${c}"/></marker>`).join('')}</defs>`;
+    tos.forEach((to, i) => {
+      const tr = to.getBoundingClientRect();
+      const tx = tr.left + tr.width / 2 - wr.left, ty = tr.top - wr.top;
+      const midY = Math.min(fy, ty) - 20 - i * 4;
+      const c = to.dataset.gcolor || '#FF8A3D';
+      svg += `<path d="M${fx},${fy} Q${(fx + tx) / 2},${midY} ${tx},${ty}" fill="none" stroke="${c}" stroke-width="2" marker-end="url(#distArrow-${c.slice(1)})"/>`;
+    });
+    wrap.insertAdjacentHTML('beforeend', svg + '</svg>');
+  });
+}
+// ═══════════════════════ ดึงตัวร่วม: แตกเป็นชิ้นสี แล้วดึงชิ้นร่วมออกหน้าวงเล็บ ═══════════════════════
+// terms: พจน์ตั้งต้น 2 พจน์ (string), common: ตัวร่วมที่ดึงออก (string), rests: พจน์ที่เหลือหลังดึง 2 ตัว (string[])
+function pullOutHtml(terms, common, rests) {
+  const top = `<div class="po-row">
+    <span>${terms[0]}</span><span>${terms[1]}</span><span> = </span>
+    <span class="pc com" data-role="src0">${common}</span><span>·</span><span class="pc rest" data-role="restA0">${rests[0]}</span>
+    <span> + </span>
+    <span class="pc com" data-role="src1">${common}</span><span>·</span><span class="pc rest" data-role="restA1">${rests[1]}</span>
+  </div>`;
+  const bot = `<div class="po-row">
+    <span> = </span><span class="pc com" data-role="dst">${common}</span>
+    <span>( </span><span class="pc rest" data-role="restB0">${rests[0]}</span><span> + </span><span class="pc rest" data-role="restB1">${rests[1]}</span><span> )</span>
+  </div>`;
+  return `<div class="pullout" data-pullout>${top}${bot}</div>`;
+}
+// ลูกศรส้ม 2 เส้น: ตัวร่วมทั้งสองตัวแถวบนบรรจบเป็นตัวเดียวแถวล่าง — ลูกศรฟ้า: พจน์ที่เหลือแต่ละตัวชี้ตรงลงไปยังตัวเดียวกันในวงเล็บ
+function drawPullOut() {
+  document.querySelectorAll('[data-pullout]').forEach(wrap => {
+    wrap.querySelectorAll('.ft-svg').forEach(e => e.remove());
+    const src0 = wrap.querySelector('[data-role="src0"]'), src1 = wrap.querySelector('[data-role="src1"]'), dst = wrap.querySelector('[data-role="dst"]');
+    const rA0 = wrap.querySelector('[data-role="restA0"]'), rA1 = wrap.querySelector('[data-role="restA1"]');
+    const rB0 = wrap.querySelector('[data-role="restB0"]'), rB1 = wrap.querySelector('[data-role="restB1"]');
+    if (!src0 || !dst) return;
+    const wr = wrap.getBoundingClientRect();
+    if (!wr.width) return;
+    const P = el => { const b = el.getBoundingClientRect(); return { x: b.left + b.width / 2 - wr.left, top: b.top - wr.top, bot: b.bottom - wr.top }; };
+    let svg = `<svg class="ft-svg" style="position:absolute;top:0;left:0;width:100%;height:100%;overflow:visible;pointer-events:none;">
+      <defs>
+        <marker id="poArrowO" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0L8,4L0,8Z" fill="#F97316"/></marker>
+        <marker id="poArrowB" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0L8,4L0,8Z" fill="#2563EB"/></marker>
+      </defs>`;
+    [src0, src1].forEach(s => { const S = P(s), D = P(dst);
+      svg += `<path d="M${S.x},${S.bot} Q${(S.x + D.x) / 2},${(S.bot + D.top) / 2 + 16} ${D.x},${D.top}" fill="none" stroke="#F97316" stroke-width="2.5" marker-end="url(#poArrowO)"/>`;
+    });
+    [[rA0, rB0], [rA1, rB1]].forEach(([a, b]) => { if (!a || !b) return; const A = P(a), B = P(b);
+      svg += `<path d="M${A.x},${A.bot} L${B.x},${B.top - 2}" fill="none" stroke="#2563EB" stroke-width="2.5" marker-end="url(#poArrowB)"/>`;
+    });
+    wrap.insertAdjacentHTML('beforeend', svg + '</svg>');
+  });
+}
+function drawAllArrows() { drawDistArrows(); drawPullOut(); layoutFtrees(); drawTrials(); }
+// วาดใหม่เมื่อหน้าจอเปลี่ยนขนาด (debounce) และเมื่อฟอนต์ Sarabun โหลดเสร็จ (โหลดช้ากว่า layout แรกเสมอ ทำให้ตำแหน่งที่วัดไว้ตอนแรกคลาดเคลื่อน)
+let _ftResizeT;
+window.addEventListener('resize', () => { clearTimeout(_ftResizeT); _ftResizeT = setTimeout(drawAllArrows, 150); });
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(drawAllArrows);
+
+// เข้าแท็บที่มีตัวแสดงขั้นตอนทีไร เริ่มที่ 0 ขั้นเสมอ (ยังไม่เฉลย)
+function showTab(id) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  event.target.classList.add('active');
+  if (['op', 'fac', 'sq', 'form'].includes(id)) { resetWkAll(); renderAll(); }
+}
+
+// ══════════════ ตัวช่วย ══════════════
+const EN = () => getLang() === 'en';
+const frac = (n, d) => `<span class="frac"><span class="num">${n}</span><span class="den">${d}</span></span>`;
+const T = (th, en) => ({ th, en });
+const tx = v => typeof v === 'string' ? v : v[getLang()];
+const al = rows => `<div class="align">${rows.map(r => Array.isArray(r)
+  ? `<span class="l">${r[0]}</span><span class="m">${r[1]}</span><span class="r">${r[2]}</span>` : `<span class="full">${r}</span>`).join('')}</div>`;
+const P = s => `<div>${s}</div>`;
+const sgn = v => v.toString().replace('-', '−');
+const g = (n, cls) => `<span class="${cls}">${n}</span>`;
+const markChips = btn => btn.parentNode.querySelectorAll('.chip').forEach(b => b.classList.toggle('active', b === btn));
+
+// ═══════════════════════ ตัวแสดงขั้นตอนทีละขั้น (ทุกแท็บใช้ร่วมกัน) ═══════════════════════
+const WK = {};
+const wkShown = {};
+function addWk(key, w) { WK[key] = w; wkShown[key] = 0; }
+function resetWkAll() { Object.keys(WK).forEach(k => wkShown[k] = 0); }
+function wkHtml(key, prev) {
+  const w = WK[key], en = EN(), n = w.steps.length;
+  let h = `<div class="card" id="wk-${key}">
+    <div class="card-title"><span class="icon">✏️</span><span>${tx(w.title)}</span></div>
+    ${w.intro ? `<p class="intro">${tx(w.intro)}</p>` : ''}
+    <div class="formula">${w.prob}</div>`;
+  w.steps.forEach((s, i) => {
+    if (i >= wkShown[key]) return;
+    // ขั้นแรกเขียนโจทย์ตั้งต้นซ้ำก่อนลงมือ (ขั้นถัดไปเห็นสมการก่อนหน้าจากกล่องที่ยังเปิดค้างไว้ด้านบนอยู่แล้ว)
+    const echo = i === 0 ? P('<b>' + w.prob + '</b>') : '';
+    h += `<div class="wk-cell${i >= prev ? ' fresh' : ''}"><span class="stepno">${i + 1}</span>${echo}${tx(s.h)}${s.vis ? `<div>${s.vis()}</div>` : ''}</div>`;
+  });
+  h += `<div class="btn-row">
+      <button class="btn" onclick="wkNext('${key}')" ${wkShown[key] >= n ? 'disabled' : ''}>${en ? 'Next step ▶' : 'ขั้นถัดไป ▶'} (${wkShown[key]}/${n})</button>
+      <button class="btn ghost" onclick="wkAll('${key}')" ${wkShown[key] >= n ? 'disabled' : ''}>${en ? 'Show all' : 'เผยทั้งหมด'}</button>
+      <button class="btn ghost" onclick="wkReset('${key}')" ${wkShown[key] === 0 ? 'disabled' : ''}>${en ? '↺ Reset' : '↺ เริ่มใหม่'}</button>
+    </div></div>`;
+  return h;
+}
+function wkRender(key, prev) { const el = document.getElementById('wk-' + key); if (el) el.outerHTML = wkHtml(key, prev); requestAnimationFrame(drawAllArrows); }
+function wkNext(k) { const p = wkShown[k]; if (wkShown[k] < WK[k].steps.length) wkShown[k]++; wkRender(k, p); }
+function wkAll(k) { const p = wkShown[k]; wkShown[k] = WK[k].steps.length; wkRender(k, p); }
+function wkReset(k) { wkShown[k] = 0; wkRender(k, 0); }
+
+const SEL = { op: 1, fac: 1 };
+function chipRow(kind, labels) {
+  return `<div class="chips">${labels.map((l, i) => `<button class="chip ${SEL[kind] === i + 1 ? 'active' : ''}" onclick="setSel('${kind}', ${i + 1})">${l}</button>`).join('')}</div>`;
+}
+function setSel(kind, n) { SEL[kind] = n; resetWkAll(); renderAll(); }
+
+// ═══════════════════════ TAB 1: การดำเนินการ (บวก ลบ คูณ) ═══════════════════════
+addWk('add1', { title: T('ตัวอย่าง: การบวก', 'Example: addition'), prob: '(2x + 3) + (4x² + 4x + 1)',
+  steps: [
+    { h: T(P('จัดกลุ่มพจน์ที่มีเลขชี้กำลังเดียวกัน (สีเดียวกัน = กลุ่มเดียวกัน)') + al([[g('x²', 'g0'), '→', g('4x²', 'g0') + ' (ไม่มีคู่)'], [g('2x', 'g1') + ' , ' + g('4x', 'g1'), '→', 'กลุ่มเดียวกัน'], [g('3', 'g2') + ' , ' + g('1', 'g2'), '→', 'กลุ่มเดียวกัน']]),
+         P('Group terms with the same exponent (same color = same group)') + al([[g('x²', 'g0'), '→', g('4x²', 'g0') + ' (no partner)'], [g('2x', 'g1') + ' , ' + g('4x', 'g1'), '→', 'same group'], [g('3', 'g2') + ' , ' + g('1', 'g2'), '→', 'same group']])) },
+    { h: T(P('บวกแต่ละกลุ่ม (สัมประสิทธิ์บวกกัน ตัวแปร/เลขชี้กำลังคงเดิม)') + al([['2x + 4x', '=', '6x'], ['3 + 1', '=', '4']]), P('Add each group (add the coefficients, keep the variable/exponent)') + al([['2x + 4x', '=', '6x'], ['3 + 1', '=', '4']])) },
+    { h: T(P('ตอบ: <b>4x² + 6x + 4</b>'), P('Answer: <b>4x² + 6x + 4</b>')) } ] });
+addWk('sub1', { title: T('ตัวอย่าง: การลบ', 'Example: subtraction'), prob: '(4x² + 5x + 3) − (3x + 5)',
+  steps: [
+    { h: T(P('แจกจ่ายเครื่องหมายลบเข้าไปในวงเล็บที่สอง (แต่ละพจน์ในนั้นสลับเครื่องหมาย)') + al([['4x² + 5x + 3', '', ''], ['− 3x − 5', '', '']]), P('Distribute the minus sign into the second bracket (every term flips sign)') + al([['4x² + 5x + 3', '', ''], ['− 3x − 5', '', '']])) },
+    { h: T(P('จัดกลุ่มพจน์ที่มีเลขชี้กำลังเดียวกัน') + al([[g('5x', 'g1') + ' − ' + g('3x', 'g1'), '', ''], [g('3', 'g2') + ' − ' + g('5', 'g2'), '', '']]), P('Group terms with the same exponent') + al([[g('5x', 'g1') + ' − ' + g('3x', 'g1'), '', ''], [g('3', 'g2') + ' − ' + g('5', 'g2'), '', '']])) },
+    { h: T(P('ตอบ: <b>4x² + 2x − 2</b>'), P('Answer: <b>4x² + 2x − 2</b>')) } ] });
+// ═══ ตัวช่วยของ mul1/mul2: แต่ละขั้นกระจาย "สีของขั้นนั้น" เหมือนกันทั้งลูกศรและพจน์ผลลัพธ์ แล้วต่อบรรทัด "=" ให้ยาวขึ้นเรื่อยๆ ทีละขั้น ═══
+const SUP = { 0: '', 1: '', 2: '²', 3: '³', 4: '⁴' };
+const GROUP_SYM = { 0: '☆', 1: '○', 2: '□', 3: '△' };
+// เขียนพจน์เดี่ยว {c,d} เป็นข้อความ เช่น (5,2)→"5x²", (-1,3)→"− x³" (สัมประสิทธิ์ 1 ไม่แสดง) — first: ไม่ใส่เครื่องหมาย + นำหน้า
+function termStr(c, d, first) {
+  const av = Math.abs(c);
+  const varStr = d === 0 ? '' : 'x' + (SUP[d] || '');
+  const coefStr = (av === 1 && d !== 0) ? '' : String(av);
+  const body = coefStr + varStr;
+  return first ? (c < 0 ? '−' : '') + body : (c < 0 ? ' − ' : ' + ') + body;
+}
+function flattenSteps(steps) {
+  const flat = [];
+  steps.forEach((s, si) => s.terms.forEach(t => flat.push({ c: t.c, d: t.d, step: si })));
+  return flat;
+}
+// คืนอาเรย์บรรทัด "=" หนึ่งบรรทัดต่อขั้น ให้แต่ละขั้นดึง[i]ไปต่อท้าย h ของตัวเอง (ของเก่าคงสีเดิม ของใหม่ที่เพิ่งเติมตัวหนา)
+function growSteps(steps, prob) {
+  const flat = flattenSteps(steps);
+  let before = 0;
+  return steps.map(s => {
+    const upto = before + s.terms.length;
+    const html = flat.slice(0, upto).map((t, i) => {
+      const bold = i >= before;
+      return `<span style="color:${STEP_COLOR[t.step]};${bold ? 'font-weight:800' : ''}">${termStr(t.c, t.d, i === 0)}</span>`;
+    }).join('');
+    const line = `<div class="ft-sum" style="margin-top:10px;">${before === 0 ? prob + ' = ' : '= '}${html}</div>`;
+    before = upto;
+    return line;
+  });
+}
+// ขั้นรวมพจน์เหมือนสุดท้าย: พจน์เลขชี้กำลังเดียวกัน (≥2 พจน์) ติดสัญลักษณ์ใต้พจน์ (ตัวหนังสือคงสีของขั้นที่มา) แล้วโชว์บรรทัดรวมทีละกลุ่ม
+function combineStepHtml(steps) {
+  const flat = flattenSteps(steps);
+  const byDeg = {};
+  flat.forEach(t => (byDeg[t.d] = byDeg[t.d] || []).push(t));
+  const groupDegs = Object.keys(byDeg).map(Number).filter(d => byDeg[d].length >= 2).sort((a, b) => b - a);
+  const line = flat.map((t, i) => {
+    // white-space:pre — ไม่งั้นช่องว่างหน้าเครื่องหมาย +/− ถูกตัดทิ้งเมื่ออยู่ใน inline-flex ทำให้ระยะห่างระหว่างพจน์ไม่เท่ากัน
+    const span = `<span style="color:${STEP_COLOR[t.step]};white-space:pre;">${termStr(t.c, t.d, i === 0)}</span>`;
+    if (!groupDegs.includes(t.d)) return span;
+    return `<span style="display:inline-flex;flex-direction:column;align-items:center;line-height:1.15;">${span}<span style="font-size:.95em;line-height:1;color:var(--text);">${GROUP_SYM[t.d]}</span></span>`;
+  }).join('');
+  const groupLines = groupDegs.map(d => {
+    const members = byDeg[d];
+    const expr = members.map((t, i) => `<span style="color:${STEP_COLOR[t.step]};">${termStr(t.c, t.d, i === 0)}</span>`).join('');
+    const sum = members.reduce((s, t) => s + t.c, 0);
+    return `<div>${GROUP_SYM[d]} ${d === 0 ? '' : 'x' + (SUP[d] || '')}: ${expr} = <b>${termStr(sum, d, true)}</b></div>`;
+  });
+  const finalTerms = [];
+  Object.keys(byDeg).map(Number).sort((a, b) => b - a).forEach(d => {
+    const sum = byDeg[d].reduce((s, t) => s + t.c, 0);
+    if (sum !== 0) finalTerms.push({ c: sum, d });
+  });
+  const finalLine = finalTerms.map((t, i) => termStr(t.c, t.d, i === 0)).join('');
+  return `<div class="ft-sum">${line}</div>${groupLines.join('')}<div class="ft-sum" style="margin-top:6px;">= <b>${finalLine}</b></div>`;
+}
+
+const MUL1_L = ['2x', '+ 1'], MUL1_R = ['x²', '+ 3x', '+ 2'];
+const MUL1_STEPS = [{ terms: [{ c: 2, d: 3 }, { c: 6, d: 2 }, { c: 4, d: 1 }] }, { terms: [{ c: 1, d: 2 }, { c: 3, d: 1 }, { c: 2, d: 0 }] }];
+const MUL1_GROW = growSteps(MUL1_STEPS, '(2x + 1)(x² + 3x + 2)'), MUL1_COMBINE = combineStepHtml(MUL1_STEPS);
+addWk('mul1', { title: T('ตัวอย่าง: การคูณ (ทวินาม × ไตรนาม)', 'Example: multiplication (binomial × trinomial)'), prob: '(2x + 1)(x² + 3x + 2)',
+  intro: T('แต่ละพจน์ในวงเล็บแรก ต้องคูณกับ<b>ทุกพจน์</b>ในวงเล็บที่สอง — คูณตัวแปรกัน เลขชี้กำลังบวกกัน แต่ละขั้นใช้สีของตัวเอง', 'Every term in the first bracket multiplies <b>every term</b> in the second — variables multiply, exponents add. Each step gets its own color'),
+  steps: [
+    { vis: () => distExpr(MUL1_L, MUL1_R, 'l', 0, STEP_COLOR[0]),
+      h: T(P('กระจาย 2x เข้าไปคูณทุกพจน์') + al([['2x · x²', '=', '2x³'], ['2x · 3x', '=', '6x²'], ['2x · 2', '=', '4x']]) + MUL1_GROW[0],
+           P('Distribute 2x into every term') + al([['2x · x²', '=', '2x³'], ['2x · 3x', '=', '6x²'], ['2x · 2', '=', '4x']]) + MUL1_GROW[0]) },
+    { vis: () => distExpr(MUL1_L, MUL1_R, 'l', 1, STEP_COLOR[1]),
+      h: T(P('กระจาย 1 เข้าไปคูณทุกพจน์') + al([['1 · x²', '=', 'x²'], ['1 · 3x', '=', '3x'], ['1 · 2', '=', '2']]) + MUL1_GROW[1],
+           P('Distribute 1 into every term') + al([['1 · x²', '=', 'x²'], ['1 · 3x', '=', '3x'], ['1 · 2', '=', '2']]) + MUL1_GROW[1]) },
+    { h: T(P('รวมพจน์เหมือน (สัญลักษณ์ใต้พจน์ = เลขชี้กำลังเดียวกัน)') + MUL1_COMBINE, P('Collect like terms (symbol under a term = same exponent)') + MUL1_COMBINE) },
+    { h: T(P('ตอบ: <b>2x³ + 7x² + 7x + 2</b>'), P('Answer: <b>2x³ + 7x² + 7x + 2</b>')) } ] });
+
+const MUL2_L = ['x²', '+ 2x', '+ 1'], MUL2_R = ['x²', '− x', '− 2'];
+const MUL2_STEPS = [{ terms: [{ c: 1, d: 4 }, { c: -1, d: 3 }, { c: -2, d: 2 }] }, { terms: [{ c: 2, d: 3 }, { c: -2, d: 2 }, { c: -4, d: 1 }] }, { terms: [{ c: 1, d: 2 }, { c: -1, d: 1 }, { c: -2, d: 0 }] }];
+const MUL2_GROW = growSteps(MUL2_STEPS, '(x² + 2x + 1)(x² − x − 2)'), MUL2_COMBINE = combineStepHtml(MUL2_STEPS);
+addWk('mul2', { title: T('ตัวอย่าง: การคูณ (ไตรนาม × ไตรนาม)', 'Example: multiplication (trinomial × trinomial)'), prob: '(x² + 2x + 1)(x² − x − 2)',
+  steps: [
+    { vis: () => distExpr(MUL2_L, MUL2_R, 'l', 0, STEP_COLOR[0]),
+      h: T(P('กระจาย x² เข้าไปคูณทุกพจน์') + al([['x² · x²', '=', 'x⁴'], ['x² · (−x)', '=', '−x³'], ['x² · (−2)', '=', '−2x²']]) + MUL2_GROW[0],
+           P('Distribute x² into every term') + al([['x² · x²', '=', 'x⁴'], ['x² · (−x)', '=', '−x³'], ['x² · (−2)', '=', '−2x²']]) + MUL2_GROW[0]) },
+    { vis: () => distExpr(MUL2_L, MUL2_R, 'l', 1, STEP_COLOR[1]),
+      h: T(P('กระจาย 2x เข้าไปคูณทุกพจน์') + al([['2x · x²', '=', '2x³'], ['2x · (−x)', '=', '−2x²'], ['2x · (−2)', '=', '−4x']]) + MUL2_GROW[1],
+           P('Distribute 2x into every term') + al([['2x · x²', '=', '2x³'], ['2x · (−x)', '=', '−2x²'], ['2x · (−2)', '=', '−4x']]) + MUL2_GROW[1]) },
+    { vis: () => distExpr(MUL2_L, MUL2_R, 'l', 2, STEP_COLOR[2]),
+      h: T(P('กระจาย 1 เข้าไปคูณทุกพจน์') + al([['1 · x²', '=', 'x²'], ['1 · (−x)', '=', '−x'], ['1 · (−2)', '=', '−2']]) + MUL2_GROW[2],
+           P('Distribute 1 into every term') + al([['1 · x²', '=', 'x²'], ['1 · (−x)', '=', '−x'], ['1 · (−2)', '=', '−2']]) + MUL2_GROW[2]) },
+    { h: T(P('รวมพจน์เหมือน (สัญลักษณ์ใต้พจน์ = เลขชี้กำลังเดียวกัน)') + MUL2_COMBINE, P('Collect like terms (symbol under a term = same exponent)') + MUL2_COMBINE) },
+    { h: T(P('ตอบ: <b>x⁴ + x³ − 3x² − 5x − 2</b>'), P('Answer: <b>x⁴ + x³ − 3x² − 5x − 2</b>')) } ] });
+function renderOps() {
+  const en = EN();
+  document.getElementById('tab-op').innerHTML = `
+    <div class="card">
+      <div class="card-title"><span class="icon">➕➖✖️</span><span>${en ? 'Add, subtract, multiply — the difference' : 'บวก ลบ คูณ ต่างกันตรงไหน'}</span></div>
+      <div class="intro">
+        <div>${en ? '<b>Add / subtract:</b> only terms with the <u>same exponent</u> combine — add the coefficients, keep the variable' : '<b>บวก / ลบ:</b> รวมกันได้เฉพาะพจน์ที่มี<u>เลขชี้กำลังเดียวกัน</u> — บวกสัมประสิทธิ์ ตัวแปรคงเดิม'}</div>
+        <div>${en ? '<b>Multiply:</b> every term in one bracket multiplies every term in the other — multiply the coefficients, <u>add</u> the exponents' : '<b>คูณ:</b> ทุกพจน์ในวงเล็บหนึ่งคูณกับทุกพจน์ในอีกวงเล็บ — คูณสัมประสิทธิ์ <u>บวก</u>เลขชี้กำลังกัน'}</div>
+      </div>
+      <div class="box-warn"><b>${en ? '⚠️ Common mix-up:' : '⚠️ จุดพลาดบ่อย:'}</b> ${en ? 'x + 2x = 3x (add), but x · 2x = 2x² (multiply) — never the other way around' : 'x + 2x = 3x (บวก) แต่ x · 2x = 2x² (คูณ) — อย่าสลับกัน'}</div>
+      ${chipRow('op', [en ? 'Addition' : 'การบวก', en ? 'Subtraction' : 'การลบ', en ? 'Multiply (2 × 3 terms)' : 'คูณ (2 พจน์ × 3 พจน์)', en ? 'Multiply (3 × 3 terms)' : 'คูณ (3 พจน์ × 3 พจน์)'])}
+    </div>` + wkHtml(['add1', 'sub1', 'mul1', 'mul2'][SEL.op - 1], 0);
+}
+
+// ═══════════════════════ TAB 2: แยกตัวประกอบ ═══════════════════════
+const GCF_PIECES_TH = `<div class="pc-row"><span class="pc-label">3x³</span><span>=</span><span class="pc com">3</span>·<span class="pc com">x</span>·<span class="pc com">x</span>·<span class="pc rest">x</span></div>
+  <div class="pc-row"><span class="pc-label">6x²</span><span>=</span><span class="pc com">3</span>·<span class="pc com">x</span>·<span class="pc com">x</span>·<span class="pc rest">2</span></div>
+  <div style="color:var(--muted); font-size:.9rem; margin-top:2px;">6 = 3 × 2</div>`;
+addWk('gcf1', { title: T('ดึงตัวร่วม', 'Factor out the common factor'), prob: '3x³ + 6x²',
+  intro: T('แตกแต่ละพจน์ออกเป็นชิ้นๆ แล้วดูว่าชิ้นไหนที่ทุกพจน์มีเหมือนกัน (สีส้ม) — นั่นคือตัวร่วม', 'Break each term into pieces and see which pieces every term shares (orange) — that shared piece is the common factor'),
+  steps: [
+    { h: T(P('แตกแต่ละพจน์เป็นชิ้น (ส้ม = ชิ้นที่อาจซ้ำกันได้, ฟ้า = ส่วนที่เหลือของพจน์นั้น)') + GCF_PIECES_TH,
+           P('Break each term into pieces (orange = pieces that may repeat, blue = what is left of that term)') + GCF_PIECES_TH) },
+    { h: T(P('ชิ้นส้มที่ <b>ทุกพจน์มีเหมือนกัน</b> คือตัวร่วม') +
+        `<div class="pc-row"><span class="pc com">3</span>·<span class="pc com">x</span>·<span class="pc com">x</span><span>=</span><span class="pc com" style="min-width:56px;">3x²</span><span style="color:var(--muted); font-weight:400; font-size:.95rem;">← ตัวร่วม</span></div>
+         <div style="color:var(--muted); font-size:.9rem;">ห.ร.ม.(3, 6) = 3, เลขชี้กำลังต่ำสุดของ x ที่มีร่วมกัน = x²</div>`,
+           P('The orange pieces <b>every term shares</b> are the common factor') +
+        `<div class="pc-row"><span class="pc com">3</span>·<span class="pc com">x</span>·<span class="pc com">x</span><span>=</span><span class="pc com" style="min-width:56px;">3x²</span><span style="color:var(--muted); font-weight:400; font-size:.95rem;">← common factor</span></div>
+         <div style="color:var(--muted); font-size:.9rem;">gcd(3, 6) = 3, lowest shared power of x = x²</div>`) },
+    { vis: () => pullOutHtml(['3x³', '+ 6x²'], '3x²', ['x', '2']),
+      h: T(P('ดึง 3x² ออกมาไว้หน้าวงเล็บ — ลูกศรส้มคือตัวร่วมสองก้อนบรรจบเป็นก้อนเดียว ลูกศรฟ้าคือส่วนที่เหลือของแต่ละพจน์ไปอยู่ในวงเล็บ'),
+           P('Pull 3x² out in front of the bracket — orange arrows: the two common-factor pieces merge into one; blue arrows: what remains of each term lands inside the bracket')) },
+    { vis: () => distExpr(['3x²'], ['x', '+ 2'], 'l', 0, '#F97316'),
+      h: T(P('ตรวจคำตอบ: คูณ 3x² กลับเข้าไปในวงเล็บ ต้องได้พจน์ตั้งต้นเป๊ะ') + al([['3x² · x', '=', '3x³'], ['3x² · 2', '=', '6x²']]) + '<div class="box-ok">3x³ + 6x² ✓ เท่ากับโจทย์ตั้งต้น</div>',
+           P('Check: multiply 3x² back into the bracket — must return the original exactly') + al([['3x² · x', '=', '3x³'], ['3x² · 2', '=', '6x²']]) + '<div class="box-ok">3x³ + 6x² ✓ matches the original</div>') },
+    { h: T(P('ตอบ: <b><span style="color:#F97316">3x²</span>(<span style="color:#2563EB">x</span> + <span style="color:#2563EB">2</span>)</b>'), P('Answer: <b><span style="color:#F97316">3x²</span>(<span style="color:#2563EB">x</span> + <span style="color:#2563EB">2</span>)</b>')) } ] });
+// เขียนตัวประกอบของ n ทุกคู่ (ไม่เรียงซ้ำ ไม่นับสลับข้าง) แล้วลองใส่เครื่องหมายตามกฎ เพื่อดูว่าคู่ไหนบวกกันได้ตรงพจน์กลาง
+function divPairsHalf(n) { n = Math.abs(n); const out = []; for (let i = 1; i * i <= n; i++) if (n % i === 0) out.push([i, n / i]); return out; }
+// ตัวประกอบของ a ต้องนับทั้งสองข้าง (สลับ p,q) เพราะ p ผูกกับวงเล็บหน้า q ผูกกับวงเล็บหลัง สลับแล้วได้ผลไขว้ต่างกัน
+function divPairsFull(n) { n = Math.abs(n); const out = []; for (let i = 1; i <= n; i++) if (n % i === 0) out.push([i, n / i]); return out; }
+// คู่ตัวประกอบของ c พร้อมเครื่องหมาย เรียงตัวใหญ่ก่อนแบบที่ครูเขียนมือ ("2 1" แล้ว "−2 −1")
+// bothOrders: ตอน a≠1 ลำดับสำคัญ (ตัวซ้ายคูณกับตัวหน้าซ้าย) จึงต้องมีทั้ง "2 1" และ "1 2" ไม่งั้นเลือกตัวหน้าบางแบบแล้วจะไม่มีคู่หลังที่ถูก
+function backPairs(c, bothOrders) {
+  const out = [];
+  divPairsHalf(c).forEach(([i, j]) => (c >= 0 ? [[j, i], [-j, -i]] : [[j, -i], [-j, i]]).forEach(k => {
+    out.push(k);
+    if (bothOrders && k[0] !== k[1]) out.push([k[1], k[0]]);
+  }));
+  return out;
+}
+// เหมือน backPairs แต่กรองเฉพาะเครื่องหมายที่เลือกไว้แล้ว (sign: 'pp' บวกทั้งคู่ / 'nn' ลบทั้งคู่ / 'pn' ต่างกันทั้งสองแบบ)
+function backPairsForSign(c, sign, bothOrders) {
+  const out = [];
+  divPairsHalf(c).forEach(([i, j]) => {
+    const variants = sign === 'pp' ? [[j, i]] : sign === 'nn' ? [[-j, -i]] : [[j, -i], [-j, i]];
+    variants.forEach(k => { out.push(k); if (bothOrders && k[0] !== k[1]) out.push([k[1], k[0]]); });
+  });
+  return out;
+}
+// จับคู่: หน้าซ้าย×หลังซ้าย (เขียว) + หน้าขวา×หลังขวา (ม่วง) ต้องได้ b → คำตอบ (f₀x + k₁)(f₁x + k₀) เลขหลังสลับข้าง
+const crossSum = (f, k) => f[0] * k[0] + f[1] * k[1];
+function findCross(a, b, c) {
+  for (const f of divPairsFull(a)) for (const k of backPairs(c)) if (crossSum(f, k) === b) return { f, k };
+  return null;
+}
+const CG = '#3F6212', CP = '#7C3AED';
+const par = v => v < 0 ? `(${sgn(v)})` : `${v}`;
+const lin = (co, k, cc, ck) => `(<span style="color:${cc}">${co === 1 ? '' : co}</span>x ${k < 0 ? '−' : '+'} <span style="color:${ck}">${Math.abs(k)}</span>)`;
+const answerHtml = (f, k, monic) => monic ? lin(1, k[0], CG, CG) + lin(1, k[1], CG, CG) : lin(f[0], k[1], CG, CP) + lin(f[1], k[0], CP, CG);
+const crossSumLine = (f, k) => `<div class="ft-sum"><span style="color:${CG}">${f[0]}×${par(k[0])}</span> + <span style="color:${CP}">${f[1]}×${par(k[1])}</span> = ${sgn(f[0] * k[0])} + ${par(f[1] * k[1])} = <b>${sgn(crossSum(f, k))} ✓</b></div>`;
+// แผนภาพต้นไม้ตัวประกอบ: เขียนพหุนามก่อน แล้วแตกตัวหลัง (และตัวหน้าถ้า a≠1) ลงมาเป็นคู่ใต้พจน์นั้นตรงๆ
+// แถว (row) = { pair, cls, note, onclick, link } — link คือคู่ที่ถูกจับคู่ไขว้กัน
+function ftreeHtml({ a, b, c, front, back, cross, footer }) {
+  const row = r => {
+    const cl = i => r.link && cross ? (i ? 'c-purple' : 'c-green') : (r.cls || '');
+    const tag = r.onclick ? 'button' : 'div';
+    return `<${tag} class="ft-row ${r.cls || ''}"${r.link ? ' data-link' : ''}${r.onclick ? ` onclick="${r.onclick}"` : ''}>` +
+      r.pair.map((v, i) => `<span class="numcircle ${cl(i)}" data-v="${v}">${sgn(v)}</span>`).join('') + `</${tag}>`;
+  };
+  const col = (key, rows) => `<div class="ft-col" data-col="${key}">${rows.map(row).join('')}</div>`;
+  const notes = [...(front || []), ...back].filter(r => r.note);
+  return `<div class="ftree" data-ftree${cross ? ' data-cross' : ''}>
+    <div class="ft-poly"><span>(</span><span class="ft-term" data-term="a">${a === 1 ? '' : a}x²</span>${b === 0 ? '' : `<span>${b > 0 ? '+' : '−'}</span><span class="ft-term">${Math.abs(b) === 1 ? '' : Math.abs(b)}x</span>`}<span>${c > 0 ? '+' : '−'}</span><span class="ft-term" data-term="c">${Math.abs(c)}</span><span>)</span></div>
+    <div class="ft-cols">${front ? col('a', front) : ''}${col('c', back)}</div>
+    ${notes.length ? `<div class="ft-notes">${notes.map(r => `<span class="ft-note ${r.cls}">${r.note}</span>`).join('')}</div>` : ''}${footer || ''}</div>`;
+}
+// วัดตำแหน่งพจน์จริงจาก DOM: วางคอลัมน์คู่ตัวเลขใต้พจน์ ลากเส้น ^ จากพจน์ลงมา และลากเส้นจับคู่ไขว้พร้อมผลคูณ
+// กฎสำคัญ: ต้อง "เขียน" ตำแหน่ง/ขนาดทั้งหมดให้นิ่งก่อน แล้วค่อย "อ่าน" ตำแหน่งมาวาดเส้นทีเดียว —
+// เดิมอ่าน tr (bounding rect ของทั้งต้นไม้) ก่อนเขียน cols.style.height ทำให้พอตั้งความสูงคอลัมน์แล้วการ์ดสูงขึ้น
+// Chrome ใช้ scroll anchoring เลื่อนจอชดเชยให้ (ถ้าเนื้อหานี้อยู่เหนือ/ในวิวพอร์ต) ค่า tr ที่ถือไว้ตั้งแต่ก่อนหน้าจึงกลายเป็นค่าเก่า
+// ทำให้เส้นทั้งหมดลอยขึ้นไปเท่ากับความสูงที่เพิ่ม — แก้โดยอ่าน tr/ตำแหน่งวงกลม "หลังจาก" ตั้งความสูงเสร็จแล้วเท่านั้น
+function layoutFtrees() {
+  document.querySelectorAll('[data-ftree]').forEach(t => {
+    t.querySelectorAll('.ft-svg').forEach(e => e.remove());
+    const cols = t.querySelector('.ft-cols');
+    const termOf = col => t.querySelector(`[data-term="${col.dataset.col}"]`);
+    const colEls = [...cols.querySelectorAll('.ft-col')];
+    // 1) เขียนตำแหน่ง/ขนาดให้เสร็จก่อนทั้งหมด
+    let h = 0;
+    colEls.forEach(col => {
+      const term = termOf(col).getBoundingClientRect(), cr = cols.getBoundingClientRect();
+      col.style.left = Math.max(0, term.left + term.width / 2 - cr.left - col.offsetWidth / 2) + 'px';
+      h = Math.max(h, col.offsetHeight);
+    });
+    const crossing = t.hasAttribute('data-cross');
+    cols.style.height = (h + 26 + (crossing ? 58 : 6)) + 'px';
+    // 2) อ่านตำแหน่งทั้งหมด "หลังจาก" ขนาด/ตำแหน่งนิ่งแล้วเท่านั้น
+    const tr = t.getBoundingClientRect();
+    if (!tr.width) return;
+    const P = el => { const b = el.getBoundingClientRect(); return { x: b.left + b.width / 2 - tr.left, top: b.top - tr.top, bot: b.bottom - tr.top }; };
+    let svg = '';
+    colEls.forEach(col => {
+      // คอลัมน์อาจว่าง (ยังไม่ถึงขั้นเลือกคู่ตัวหลัง เช่น ยังไม่ได้เลือกเครื่องหมาย) — ข้ามไปเงียบๆ ไม่งั้น querySelector คืน null แล้วโยน error ทำให้ต้นไม้ทั้งอันไม่ถูกวาดเลย
+      const row = col.querySelector('.ft-row');
+      if (!row) return;
+      const T0 = P(termOf(col));
+      row.querySelectorAll('.numcircle').forEach(n => { const q = P(n);
+        svg += `<line x1="${T0.x}" y1="${T0.bot}" x2="${q.x}" y2="${q.top}" stroke="#DC2626" stroke-width="2" stroke-linecap="round"/>`; });
+    });
+    if (crossing) {
+      const f = t.querySelectorAll('[data-col="a"] [data-link] .numcircle'), k = t.querySelectorAll('[data-col="c"] [data-link] .numcircle');
+      if (f.length === 2 && k.length === 2) {
+        const low = Math.max(...[...f, ...k].map(n => P(n).bot));
+        [[0, CG, 50], [1, CP, 30]].forEach(([i, clr, d]) => {
+          const A = P(f[i]), B = P(k[i]), cx = (A.x + B.x) / 2, cy = low + d, my = (A.bot + 2 * cy + B.bot) / 4;
+          svg += `<path d="M${A.x},${A.bot} Q${cx},${cy} ${B.x},${B.bot + 2}" fill="none" stroke="${clr}" stroke-width="2.5" marker-end="url(#ftArrow${i})"/>
+            <text x="${cx}" y="${my + 17}" text-anchor="middle" font-size="14" font-weight="800" fill="${clr}">${sgn(f[i].dataset.v * k[i].dataset.v)}</text>`;
+        });
+      }
+    }
+    t.insertAdjacentHTML('beforeend', `<svg class="ft-svg" style="position:absolute;top:0;left:0;width:100%;height:100%;overflow:visible;pointer-events:none;"><defs>
+      <marker id="ftArrow0" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0L8,4L0,8Z" fill="${CG}"/></marker>
+      <marker id="ftArrow1" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0L8,4L0,8Z" fill="${CP}"/></marker></defs>${svg}</svg>`);
+  });
+}
+// แถบทดลอง (คู่หลังที่กดแล้วผิด): คู่หน้าแถวบน (เขียว/ม่วง) + คู่หลังที่ลองแถวล่าง (ขอบแดง) ลากเส้นจับคู่แบบเดียวกับตอนถูก
+function drawTrials() {
+  document.querySelectorAll('[data-trial]').forEach(wrap => {
+    wrap.querySelectorAll('.ft-svg').forEach(e => e.remove());
+    const f0 = wrap.querySelector('[data-role="f0"]'), f1 = wrap.querySelector('[data-role="f1"]');
+    const k0 = wrap.querySelector('[data-role="k0"]'), k1 = wrap.querySelector('[data-role="k1"]');
+    if (!f0 || !k0) return;
+    const wr = wrap.getBoundingClientRect();
+    if (!wr.width) return;
+    const P = el => { const b = el.getBoundingClientRect(); return { x: b.left + b.width / 2 - wr.left, top: b.top - wr.top, bot: b.bottom - wr.top }; };
+    // คู่หน้ากับคู่หลังอยู่แถวเดียวกัน เส้นโค้งอ้อมลงข้างล่างแล้วขึ้นไปหาคู่หลัง พร้อมผลคูณกำกับ (หน้าตาเดียวกับตอนตอบถูกใน layoutFtrees)
+    const pairs = [[f0, k0, CG, 50, 'twArrow0'], [f1, k1, CP, 30, 'twArrow1']];
+    const low = Math.max(...pairs.flatMap(([a, b]) => [P(a).bot, P(b).bot]));
+    let svg = `<svg class="ft-svg" style="position:absolute;top:0;left:0;width:100%;height:100%;overflow:visible;pointer-events:none;"><defs>
+      <marker id="twArrow0" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0L8,4L0,8Z" fill="${CG}"/></marker>
+      <marker id="twArrow1" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0L8,4L0,8Z" fill="${CP}"/></marker></defs>`;
+    pairs.forEach(([a, b, clr, d, mk]) => { const A = P(a), B = P(b), cx = (A.x + B.x) / 2, cy = low + d, my = (A.bot + 2 * cy + B.bot) / 4;
+      svg += `<path d="M${A.x},${A.bot} Q${cx},${cy} ${B.x},${B.bot + 2}" fill="none" stroke="${clr}" stroke-width="2.5" marker-end="url(#${mk})"/>
+        <text x="${cx}" y="${my + 17}" text-anchor="middle" font-size="14" font-weight="800" fill="${clr}">${sgn(a.dataset.v * b.dataset.v)}</text>`;
+    });
+    svg += '</svg>';
+    wrap.insertAdjacentHTML('beforeend', svg);
+  });
+}
+const SIGN_RULE_TH = '<b>กฎเครื่องหมาย:</b> พจน์ท้าย (c) เป็น<b>บวก</b> → ตัวประกอบสองตัว<b>เครื่องหมายเดียวกัน</b> (ตามพจน์กลาง b บวกหรือลบ) — พจน์ท้ายเป็น<b>ลบ</b> → ตัวประกอบสองตัว<b>เครื่องหมายตรงข้ามกัน</b> (ตัวที่ค่าสัมบูรณ์มากกว่าถือเครื่องหมายของ b)';
+const SIGN_RULE_EN = '<b>Sign rule:</b> if the last term (c) is <b>positive</b> → both factors have the <b>same sign</b> (matching b) — if c is <b>negative</b> → factors have <b>opposite signs</b> (the larger one takes the sign of b)';
+
+// ═══════════════════════ วิดเจ็ต "กดเลือกคู่ตัวประกอบ" — ตัวเดียวใช้ 3 การ์ด: ex1 (หน้า=1 คงที่), ex2 (หน้า≠1 คงที่), try (พิมพ์เอง) ═══════════════════════
+const FW = {
+  ex1: { a: 1, b: 3, c: 2, editable: false },
+  ex2: { a: 2, b: 7, c: 6, editable: false },
+  try: { a: 1, b: -1, c: -2, editable: true },
+};
+function fwReset(id) {
+  const st = FW[id];
+  st.f = st.a === 1 ? [1, 1] : null;
+  st.sign = null; st.signWrong = null; st.k = null; st.trial = null;
+}
+Object.keys(FW).forEach(fwReset);
+function correctSign(a, b, c) { return c > 0 ? (b >= 0 ? 'pp' : 'nn') : (c < 0 ? 'pn' : null); }
+function signWrongMsg(picked, b, c, en) {
+  if (c > 0 && picked === 'pn') return en ? `c = ${c} is positive → the pair must have the same sign` : `c = ${sgn(c)} เป็นบวก → คู่ต้องเครื่องหมายเดียวกัน`;
+  if (c < 0 && picked !== 'pn') return en ? `c = ${c} is negative → the pair must have opposite signs (one positive, one negative)` : `c = ${sgn(c)} เป็นลบ → คู่ต้องเครื่องหมายต่างกัน (ตัวหนึ่งบวก ตัวหนึ่งลบ)`;
+  const wantPos = b >= 0;
+  return en ? `c is positive and the middle term ${sgn(b)}x is ${wantPos ? 'positive' : 'negative'} → use ${wantPos ? 'both positive' : 'both negative'}`
+            : `c เป็นบวก และพจน์กลาง ${sgn(b)}x เป็น${wantPos ? 'บวก' : 'ลบ'} → ใช้${wantPos ? 'บวกทั้งคู่' : 'ลบทั้งคู่'}`;
+}
+function fwSetField(id, f, v) {
+  let n = Math.round(parseFloat(v)) || 0;
+  n = f === 'a' ? Math.max(1, Math.min(9, n || 1)) : Math.max(-30, Math.min(30, n));
+  FW[id][f] = n;
+  fwReset(id);
+  fwRender(id);
+}
+function fwPickFront(id, p, q) { const st = FW[id]; st.f = [p, q]; st.k = null; st.trial = null; fwRender(id); }
+function fwPickSign(id, sign) {
+  const st = FW[id];
+  if (correctSign(st.a, st.b, st.c) === sign) { st.sign = sign; st.signWrong = null; } else { st.signWrong = sign; }
+  st.k = null; st.trial = null;
+  fwRender(id);
+}
+function fwPickBack(id, u, v) {
+  const st = FW[id], f = st.a === 1 ? [1, 1] : st.f;
+  if (crossSum(f, [u, v]) === st.b) { st.k = [u, v]; st.trial = null; } else { st.trial = [u, v]; }
+  fwRender(id);
+}
+function fwSignButtons(id, st, en) {
+  const opts = [['pp', '+ +', en ? 'both positive' : 'บวกทั้งคู่'], ['nn', '− −', en ? 'both negative' : 'ลบทั้งคู่'], ['pn', '+ −', en ? 'different' : 'ต่างกัน']];
+  const chips = opts.map(([key, sym, label]) => {
+    const cls = st.sign === key ? 'active' : (st.signWrong === key ? 'wrong' : '');
+    return `<button class="chip ${cls}" onclick="fwPickSign('${id}','${key}')">${sym} ${label}</button>`;
+  }).join('');
+  const reason = st.signWrong ? `<div class="ft-note wrong" style="margin-top:4px;">${signWrongMsg(st.signWrong, st.b, st.c, en)}</div>` : '';
+  return `<div class="chips">${chips}</div>${reason}`;
+}
+// แถบทดลอง: คู่หน้า (เขียว/ม่วง) + คู่หลังที่ลองแล้วผิด (ขอบแดง) พร้อมผลคูณ — a=1 ไม่มีเส้นไขว โชว์แค่ผลบวก
+function fwTrialHtml(st, en) {
+  const monic = st.a === 1, f = monic ? [1, 1] : st.f, k = st.trial;
+  if (monic) {
+    const sum = k[0] + k[1];
+    return `<div class="ft-trial"><span class="numcircle wrong">${sgn(k[0])}</span><span class="numcircle wrong">${sgn(k[1])}</span>
+      <span class="ft-note wrong" style="margin-left:10px;">${sgn(k[0])} + ${par(k[1])} = ${sgn(sum)} ≠ ${sgn(st.b)} ✗</span></div>`;
+  }
+  const cross = crossSum(f, k);
+  return `<div class="ft-trial" data-trial>
+    <div class="ft-trial-row">
+      <div class="ft-row"><span class="numcircle c-green" data-role="f0" data-v="${f[0]}">${sgn(f[0])}</span><span class="numcircle c-purple" data-role="f1" data-v="${f[1]}">${sgn(f[1])}</span></div>
+      <div class="ft-row"><span class="numcircle wrong" data-role="k0" data-v="${k[0]}">${sgn(k[0])}</span><span class="numcircle wrong" data-role="k1" data-v="${k[1]}">${sgn(k[1])}</span></div>
+    </div>
+    <div class="ft-sum">${f[0]}×${par(k[0])} + ${f[1]}×${par(k[1])} = ${sgn(f[0] * k[0])} + ${par(f[1] * k[1])} = ${sgn(cross)} ≠ ${sgn(st.b)} ✗ ${en ? 'try another pair' : 'ลองคู่อื่น'}</div>
+  </div>`;
+}
+function fwRender(id) {
+  const box = document.getElementById('fw-' + id); if (!box) return;
+  const st = FW[id], en = EN(), monic = st.a === 1;
+  const bt = st.b === 0 ? '' : (st.b > 0 ? ' + ' : ' − ') + (Math.abs(st.b) === 1 ? '' : Math.abs(st.b)) + 'x';
+  const formula = `<div class="formula">${st.a === 1 ? '' : st.a}x²${bt}${st.c >= 0 ? ' + ' : ' − '}${Math.abs(st.c)}</div>`;
+  if (!findCross(st.a, st.b, st.c)) {
+    box.innerHTML = formula + `<div class="box-warn">${en ? 'This cannot be factored with integers' + (st.editable ? ' — try different a, b, c' : '') : 'โจทย์นี้แยกด้วยจำนวนเต็มไม่ได้ครับ' + (st.editable ? ' — ลองเปลี่ยนค่า a, b, c ใหม่' : '')}</div>`;
+    return;
+  }
+  if (st.k) {
+    const front = monic ? null : [{ pair: st.f, link: true }];
+    const back = [{ pair: st.k, cls: 'hit', link: true, note: monic ? `${sgn(st.k[0])} + ${par(st.k[1])} = ${sgn(st.b)} ✓` : '' }];
+    box.innerHTML = formula + ftreeHtml({ a: st.a, b: st.b, c: st.c, front, back, cross: !monic, footer: !monic ? crossSumLine(st.f, st.k) : '' }) +
+      `<div class="readout box-ok"><b>✓ ${en ? 'Correct! Answer' : 'ถูกต้อง! ตอบ'}: ${answerHtml(st.f, st.k, monic)}</b></div>`;
+    requestAnimationFrame(drawAllArrows);
+    return;
+  }
+  const showFront = !monic, frontChosen = monic || !!st.f;
+  const same = (x, y) => !!x && !!y && x[0] === y[0] && x[1] === y[1];
+  const front = showFront ? divPairsFull(st.a).map(f => ({ pair: f, cls: same(f, st.f) ? 'sel' : '', onclick: `fwPickFront('${id}',${f[0]},${f[1]})` })) : null;
+  let stepMsg, back = [], signHtml = '', trialHtml = '', noFrontMsg = '';
+  if (!frontChosen) {
+    stepMsg = en ? `Step 1 — tap a factor pair under the front term (a = ${st.a})` : `ขั้น 1 — กดเลือกคู่ตัวประกอบใต้ตัวหน้า (a = ${st.a})`;
+  } else if (!st.sign) {
+    stepMsg = showFront ? (en ? 'Step 2 — pick the sign of the back-term pair' : 'ขั้น 2 — เลือกเครื่องหมายของคู่ตัวหลัง') : (en ? 'Pick the sign of the back-term pair first' : 'เลือกเครื่องหมายของคู่ตัวหลังก่อน');
+    signHtml = fwSignButtons(id, st, en);
+  } else {
+    signHtml = fwSignButtons(id, st, en);
+    back = backPairsForSign(st.c, st.sign, !monic).map(k => {
+      const isWrong = st.trial && st.trial[0] === k[0] && st.trial[1] === k[1];
+      return { pair: k, cls: isWrong ? 'wrong' : '', onclick: `fwPickBack('${id}',${k[0]},${k[1]})` };
+    });
+    stepMsg = monic
+      ? (en ? `Tap the pair under the last term that adds to ${sgn(st.b)}` : `กดเลือกคู่ใต้ตัวหลังที่บวกกันได้ตรงกลาง (${sgn(st.b)})`)
+      : (en ? `Step 3 — tap the pair under the last term so the pair-products add to ${sgn(st.b)}` : `ขั้น 3 — กดเลือกคู่ใต้ตัวหลัง ที่คูณจับคู่กับตัวหน้าแล้วบวกกันได้ตรงกลาง (${sgn(st.b)})`);
+    if (st.trial) trialHtml = fwTrialHtml(st, en);
+    if (!monic && !backPairsForSign(st.c, st.sign, true).some(k => crossSum(st.f, k) === st.b)) {
+      noFrontMsg = `<div class="ft-note wrong" style="margin-top:8px;">${en ? 'No back pair works with this front pair — try a different front pair' : 'คู่ตัวหน้านี้ไม่มีคู่หลังที่ใช้ได้ — ลองเปลี่ยนคู่ตัวหน้า'}</div>`;
+    }
+  }
+  box.innerHTML = formula + `<p class="intro">${stepMsg}</p>` + signHtml +
+    ftreeHtml({ a: st.a, b: st.b, c: st.c, front, back, cross: false }) + noFrontMsg + trialHtml;
+  requestAnimationFrame(drawAllArrows);
+}
+function fwCardHtml(id, title, intro) {
+  const st = FW[id], en = EN();
+  const inputs = st.editable ? `
+      <div class="slider-row"><b>a =</b><input type="number" step="1" value="${st.a}" style="width:64px;" oninput="fwSetField('${id}','a',this.value)"></div>
+      <div class="slider-row"><b>b =</b><input type="number" step="1" value="${st.b}" style="width:64px;" oninput="fwSetField('${id}','b',this.value)"></div>
+      <div class="slider-row"><b>c =</b><input type="number" step="1" value="${st.c}" style="width:64px;" oninput="fwSetField('${id}','c',this.value)"></div>` : '';
+  return `<div class="card">
+    <div class="card-title"><span class="icon">${st.editable ? '🎮' : '✏️'}</span><span>${tx(title)}</span></div>
+    ${intro ? `<p class="intro">${tx(intro)}</p>` : ''}
+    ${inputs}
+    <div id="fw-${id}"></div>
+    <div class="btn-row"><button class="btn ghost" onclick="fwReset('${id}');fwRender('${id}');">${en ? '↺ Start over' : '↺ เริ่มใหม่'}</button></div>
+  </div>`;
+}
+function renderFac() {
+  const en = EN();
+  const labels = en ? ['Common factor', 'Cross method'] : ['ดึงตัวร่วม', 'แยกตัวประกอบไขว้'];
+  let html = `
+    <div class="card">
+      <div class="card-title"><span class="icon">🎯</span><span>${en ? 'Two ways to factor' : 'สองวิธีแยกตัวประกอบ'}</span></div>
+      <div class="intro">
+        <div>${en ? '<b>Common factor:</b> pull out the largest piece shared by every term' : '<b>ดึงตัวร่วม:</b> ดึงส่วนที่ใหญ่ที่สุดซึ่งทุกพจน์มีร่วมกันออกมา'}</div>
+        <div>${en ? '<b>Cross method:</b> for ax² + bx + c, find factors that cross-multiply and add to b' : '<b>แยกตัวประกอบไขว้:</b> สำหรับ ax² + bx + c หาตัวประกอบที่คูณไขว้แล้วบวกกันได้ b'}</div>
+      </div>
+      ${chipRow('fac', labels)}
+    </div>`;
+  if (SEL.fac === 1) {
+    html += wkHtml('gcf1', 0);
+  } else {
+    html += fwCardHtml('ex1', T('แยกตัวประกอบไขว้: หน้า x² เป็น 1', 'Cross method: leading coefficient 1'), T(SIGN_RULE_TH, SIGN_RULE_EN));
+    html += fwCardHtml('ex2', T('แยกตัวประกอบไขว้: หน้า x² ไม่ใช่ 1', 'Cross method: leading coefficient not 1'),
+      T('เมื่อ a ≠ 1 ต้องเลือกทั้งคู่ตัวหน้าและคู่ตัวหลัง แล้วจับคู่คูณ (หน้าคูณหลัง) บวกกันให้ได้ตรงกลาง<br>' + SIGN_RULE_TH,
+        'When a ≠ 1, pick both a front pair and a back pair, then pair-multiply (front × back) and add to get the middle term<br>' + SIGN_RULE_EN));
+    html += fwCardHtml('try', T('ลองเลือกเอง', 'Try picking it yourself'), T('พิมพ์ a, b, c เอง แล้วลองเลือกคู่ตัวประกอบด้วยตัวเอง', 'Type your own a, b, c, then pick the factor pairs yourself'));
+  }
+  document.getElementById('tab-fac').innerHTML = html;
+  if (SEL.fac === 2) { fwRender('ex1'); fwRender('ex2'); fwRender('try'); }
+}
+
+// ═══════════════════════ TAB 3: กำลังสองสมบูรณ์ (algebra tiles) ═══════════════════════
+const SQ = { h: 7, c: 49, step: 0, timer: null };
+const SQ_LAST = 9;
+const SQ_G = { S: 220, ox: 56, oy: 46, VW: 420, VH: 410 }; // สเกลภาพไม่ตรงกับ x จริง (h เลื่อนได้ 1–9 แถบกว้าง h·12) ขอบซ้าย/บนเผื่อป้ายความยาว ขอบขวา/ล่างเผื่อชิ้นที่เลื่อนออก
+// แบ่งไม่เท่า (ภาพเทียบขั้น 1): a + b = 2h แต่ a ≠ b เช่น h=7 → 10 กับ 4 (h=1 ใช้ 1.5 กับ 0.5 เพราะ b ต้องเป็นบวก)
+const sqUneven = h => { const a = h === 1 ? 1.5 : h + Math.max(1, Math.ceil(3 * h / 7)); return [a, 2 * h - a]; };
+// ค่าเป้าหมายของแต่ละชิ้นในแต่ละขั้น (key = data-sq) — ใช้ทั้งตอนวาดใหม่ (instant) และตอนกดขั้นถัดไป (มี transition) เป็นฟังก์ชันของ step ล้วน ๆ เพื่อให้ย้อนขั้นได้
+function sqTargets(s, w) {
+  const d = w + 24;
+  const base = { fill: '#DBEAFE', stroke: '#DBEAFE' }, blue = { fill: '#DBEAFE', stroke: '#93C5FD' };
+  const yel = { fill: '#FDE68A', stroke: '#92400E' }, org = { fill: '#FB923C', stroke: '#991B1B' };
+  const on = c => ({ opacity: c ? 1 : 0 });
+  const dim = c => ({ opacity: c ? 1 : 0, fill: s >= 7 ? '#1E40AF' : '#4A5568', fontWeight: s >= 7 ? 800 : 400 });
+  return {
+    ob: on(s <= 1), dv: on(s === 1), mini: on(s === 1),
+    rbO: { opacity: s >= 2 && s !== 6 ? 1 : 0, strokeWidth: s >= 7 ? 4 : 2 }, rbL: on(s === 6),
+    rr: s >= 2 ? yel : base,
+    rk: { ...(s >= 2 ? org : base), strokeWidth: s === 3 ? 4 : 2 },
+    rd: s >= 3 ? yel : s >= 2 ? blue : base,
+    // แถบขวาเลื่อนออกทั้งแถบ (รวมมุมจริง) ขั้น 4 / แถบล่างเลื่อนออกขั้น 5 / ขั้น 6 ชิ้นฟ้า h×h ที่มุมขวาล่างของจัตุรัสฟ้าเลื่อนเฉียงลงไปเติมช่องเส้นประ (เกิดรู) / ขั้น 7 แผ่น +h² หล่นลงอุดรู
+    gR: { transform: `translate(${s >= 4 ? d : 0}px,0px)` },
+    gD: { transform: `translate(0px,${s >= 5 ? d : 0}px)` },
+    ch: { transform: `translate(${s >= 6 ? w : 0}px,${s >= 6 ? w + d : 0}px)` },
+    chr: s >= 6 ? yel : base, chT: on(s >= 6),
+    hole: on(s === 6), tH: on(s === 6),
+    pl: { transform: `translate(0px,${s >= 7 ? 0 : -(SQ_G.oy + SQ_G.S - w + 10)}px)`, opacity: s >= 7 ? 1 : 0 },
+    rrO: on(s >= 2), rdO: on(s >= 3), gh: on(s === 5), tG: on(s === 5),
+    brR: on(s === 2), brD: on(s === 3),
+    tX2: on(s <= 1), tB: on(s >= 2 && s <= 5), tBb: on(s >= 7),
+    tR: on(s >= 2), tK: on(s >= 2), tK2: on(s === 3), tD: on(s >= 3),
+    lx: on(s === 0), ly: on(s === 0), tkT: on(s >= 1), tkL: on(s >= 1),
+    lxh: dim(s >= 1), lyxh: dim(s >= 1), lh: on(s >= 1 && s <= 3), lyh: on(s >= 1 && s <= 4),
+  };
+}
+function tileSvg(h) {
+  const { S, ox, oy, VW, VH } = SQ_G, w = h * 12, kept = S - w, hh = h * h, en = EN();
+  const t = (id, x, y, fs, fill, txt, anchor = 'middle') => `<text data-sq="${id}" x="${x}" y="${y}" text-anchor="${anchor}" font-size="${fs}" font-weight="800" fill="${fill}" style="pointer-events:none">${txt}</text>`;
+  const lab = (id, x, y, txt, anchor = 'middle') => `<text data-sq="${id}" x="${x}" y="${y}" text-anchor="${anchor}" font-size="14" fill="#4A5568" style="pointer-events:none">${txt}</text>`;
+  const tick = (id, x1, y1, x2, y2) => `<line data-sq="${id}" x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="#4A5568" stroke-width="1.3"/>`;
+  const fs = w < 24 ? 10 : 13, cxR = ox + kept + w / 2;
+  const hx = ox + kept - w, hy = oy + kept - w; // มุมซ้ายบนของ "รู" = มุมขวาล่างของจัตุรัสฟ้า
+  // ป้ายชิ้นในแถบ: ส่วนเหลืองของแถบ = h(x−h) และมุมส้ม = h² (ไม่เขียน hx บนส่วนเหลือง เพราะ hx คือพื้นที่ของทั้งแถบ)
+  const tH = w >= 44
+    ? `<text data-sq="tH" text-anchor="middle" font-size="13" font-weight="800" fill="#DC2626" style="pointer-events:none"><tspan x="${hx + w / 2}" y="${hy + w / 2 - 2}">${en ? 'hole' : 'รู'}</tspan><tspan x="${hx + w / 2}" y="${hy + w / 2 + 15}">−${hh}</tspan></text>`
+    : t('tH', hx + w / 2, hy + w / 2 + 4, 10, '#DC2626', `−${hh}`);
+  // วงเล็บปีกกาขวา "}" (เต็มความสูง S) และล่าง "︸" (เต็มความกว้าง S) บอกความยาวเต็มด้านกับพื้นที่ของทั้งแถบ
+  const bx = ox + S + 6, bym = oy + S / 2;
+  const braceR = `<g data-sq="brR"><path d="M${bx},${oy} Q${bx + 8},${oy} ${bx + 8},${oy + 10} L${bx + 8},${bym - 10} Q${bx + 8},${bym} ${bx + 16},${bym} Q${bx + 8},${bym} ${bx + 8},${bym + 10} L${bx + 8},${oy + S - 10} Q${bx + 8},${oy + S} ${bx},${oy + S}" fill="none" stroke="#92400E" stroke-width="2"/><text text-anchor="start" font-size="14" font-weight="800" fill="#92400E" style="pointer-events:none"><tspan x="${bx + 22}" y="${bym - 6}">${en ? 'height x' : 'สูง x'}</tspan><tspan x="${bx + 22}" y="${bym + 17}">${en ? 'area' : 'พื้นที่'} ${h}x</tspan></text></g>`;
+  const by = oy + S + 6, bxm = ox + S / 2;
+  const braceD = `<g data-sq="brD"><path d="M${ox},${by} Q${ox},${by + 8} ${ox + 10},${by + 8} L${bxm - 10},${by + 8} Q${bxm},${by + 8} ${bxm},${by + 16} Q${bxm},${by + 8} ${bxm + 10},${by + 8} L${ox + S - 10},${by + 8} Q${ox + S},${by + 8} ${ox + S},${by}" fill="none" stroke="#92400E" stroke-width="2"/>${t('brDt', bxm, by + 38, 14, '#92400E', `${en ? 'width x · area' : 'กว้าง x · พื้นที่'} ${h}x`)}</g>`;
+  // ภาพเทียบขั้น 1 (อยู่ใต้ภาพหลัก): แบ่งเท่า → เหลือจัตุรัส / แบ่งไม่เท่า → เหลือผืนผ้า ใช้สเกล M/(4h) ต่อหน่วย
+  const [ua, ub] = sqUneven(h), M = 80, u = M / (4 * h), mY = oy + S + 24, m1 = ox + 80, m2 = m1 + 170;
+  const miniSq = (cx, cr, cb, l1, l2, col) => {
+    const x0 = cx - M / 2;
+    return `<rect x="${x0 + M - cr}" y="${mY}" width="${cr}" height="${M}" fill="#FDE68A" stroke="#92400E" stroke-width="1.5"/>
+      <rect x="${x0}" y="${mY + M - cb}" width="${M}" height="${cb}" fill="#FDE68A" stroke="#92400E" stroke-width="1.5"/>
+      <rect x="${x0 + M - cr}" y="${mY + M - cb}" width="${cr}" height="${cb}" fill="#FB923C" stroke="#991B1B" stroke-width="1.5"/>
+      <rect x="${x0}" y="${mY}" width="${M - cr}" height="${M - cb}" fill="#DBEAFE" stroke="#1E40AF" stroke-width="2"/>
+      <text x="${cx}" y="${mY + M + 17}" text-anchor="middle" font-size="12" font-weight="800" fill="${col}">${l1}</text>
+      <text x="${cx}" y="${mY + M + 32}" text-anchor="middle" font-size="12" fill="${col}">${l2}</text>`;
+  };
+  const mini = `<g data-sq="mini">${miniSq(m1, h * u, h * u, `${en ? 'Equal' : 'แบ่งเท่า'} (${h}x + ${h}x) ✓`, `${en ? 'left' : 'เหลือ'} (x−${h})² ${en ? 'square' : 'จัตุรัส'}`, '#166534')}${miniSq(m2, ua * u, ub * u, `${en ? 'Unequal' : 'แบ่งไม่เท่า'} (${ua}x + ${ub}x) ✗`, `${en ? 'left' : 'เหลือ'} (x−${ua})(x−${ub}) ${en ? 'rectangle' : 'ผืนผ้า'}`, '#B91C1C')}</g>`;
+  return `<svg class="diag sq-anim" viewBox="0 0 ${VW} ${VH}" xmlns="http://www.w3.org/2000/svg">
+    <!-- แกนความยาว: บน (กว้าง) และซ้าย (สูง) ขั้น 0 = x ทั้งด้าน ขั้น 1 เป็นต้นไปแบ่งเป็น x−h กับ h -->
+    <line x1="${ox}" y1="${oy - 10}" x2="${ox + S}" y2="${oy - 10}" stroke="#4A5568" stroke-width="1.3"/>
+    ${tick('tkTa', ox, oy - 14, ox, oy - 6)}${tick('tkTb', ox + S, oy - 14, ox + S, oy - 6)}${tick('tkT', ox + kept, oy - 14, ox + kept, oy - 6)}
+    ${lab('lx', ox + S / 2, oy - 16, 'x')}${lab('lxh', ox + kept / 2, oy - 16, `x−${h}`)}${lab('lh', ox + kept + w / 2, oy - 16, `${h}`)}
+    <line x1="${ox - 10}" y1="${oy}" x2="${ox - 10}" y2="${oy + S}" stroke="#4A5568" stroke-width="1.3"/>
+    ${tick('tkLa', ox - 14, oy, ox - 6, oy)}${tick('tkLb', ox - 14, oy + S, ox - 6, oy + S)}${tick('tkL', ox - 14, oy + kept, ox - 6, oy + kept)}
+    ${lab('ly', ox - 18, oy + S / 2 + 5, 'x', 'end')}${lab('lyxh', ox - 18, oy + kept / 2 + 5, `x−${h}`, 'end')}${lab('lyh', ox - 18, oy + kept + w / 2 + 5, `${h}`, 'end')}
+    <rect data-sq="rb" x="${ox}" y="${oy}" width="${kept}" height="${kept}" style="fill:#DBEAFE"/>
+    <rect data-sq="hole" x="${hx}" y="${hy}" width="${w}" height="${w}" fill="#FFFFFF" stroke="#DC2626" stroke-width="2.5" stroke-dasharray="5,4"/>
+    <g data-sq="ch"><rect data-sq="chr" x="${hx}" y="${hy}" width="${w}" height="${w}" stroke-width="2"/>${t('chT', hx + w / 2, hy + w / 2 + 5, fs, '#7F1D1D', `${hh}`)}</g>
+    ${tH}
+    <g data-sq="pl"><rect x="${hx}" y="${hy}" width="${w}" height="${w}" fill="#BBF7D0" stroke="#166534" stroke-width="2"/>${t('plT', hx + w / 2, hy + w / 2 + 5, fs + 1, '#166534', `+${hh}`)}</g>
+    <rect data-sq="rbO" x="${ox}" y="${oy}" width="${kept}" height="${kept}" fill="none" stroke="#1E40AF" stroke-width="2"/>
+    <path data-sq="rbL" d="M${ox},${oy} H${ox + kept} V${hy} H${hx} V${oy + kept} H${ox} Z" fill="none" stroke="#1E40AF" stroke-width="2"/>
+    ${t('tB', ox + kept / 2, oy + kept / 2 + 5, 16, '#1E40AF', `(x−${h})²`)}
+    ${t('tX2', ox + S / 2, oy + S / 2 + 10, 34, '#1E40AF', 'x²')}
+    ${t('tBb', ox + kept / 2, oy + kept + 34, 20, '#1E40AF', `(x−${h})²`)}
+    <g data-sq="gD"><rect data-sq="rd" x="${ox}" y="${oy + kept}" width="${kept}" height="${w}" stroke-width="2"/>
+      <rect data-sq="gh" x="${ox + kept}" y="${oy + kept}" width="${w}" height="${w}" fill="none" stroke="#EA580C" stroke-width="2.5" stroke-dasharray="5,4"/>
+      <rect data-sq="rdO" x="${ox}" y="${oy + kept}" width="${S}" height="${w}" fill="none" stroke="#92400E" stroke-width="3"/>
+      ${t('tD', ox + kept / 2, oy + kept + w / 2 + 5, fs, '#92400E', `${h}(x−${h})`)}
+      ${t('tG', ox + kept + w / 2, oy + kept + w / 2 + 7, 22, '#EA580C', '?')}${braceD}</g>
+    <g data-sq="gR"><rect data-sq="rr" x="${ox + kept}" y="${oy}" width="${w}" height="${kept}" stroke-width="2"/>
+      <rect data-sq="rk" x="${ox + kept}" y="${oy + kept}" width="${w}" height="${w}" stroke-width="2"/>
+      <rect data-sq="rrO" x="${ox + kept}" y="${oy}" width="${w}" height="${S}" fill="none" stroke="#92400E" stroke-width="3"/>
+      ${t('tR', cxR, oy + kept / 2 + 5, fs, '#92400E', `${h}(x−${h})`)}${t('tK', cxR, oy + kept + w / 2 + 5, fs, '#7F1D1D', `${hh}`)}${w >= 60 ? t('tK2', cxR, oy + kept + w / 2 + 20, 10, '#7F1D1D', en ? 'in both strips' : 'นับ 2 แถบ') : ''}${braceR}</g>
+    <g data-sq="dv"><line x1="${ox + kept}" y1="${oy}" x2="${ox + kept}" y2="${oy + S}" stroke="#1E40AF" stroke-width="1.5" stroke-dasharray="5,4"/><line x1="${ox}" y1="${oy + kept}" x2="${ox + S}" y2="${oy + kept}" stroke="#1E40AF" stroke-width="1.5" stroke-dasharray="5,4"/></g>
+    <rect data-sq="ob" x="${ox}" y="${oy}" width="${S}" height="${S}" fill="none" stroke="#1E40AF" stroke-width="2.5" style="pointer-events:none"/>
+    ${mini}
+  </svg>`;
+}
+// เลื่อนชิ้น/ระบายสีตามขั้นปัจจุบัน + อัปเดตสมการ คำอธิบาย ตัวนับ (instant=true คือวาดทันทีไม่ต้องเลื่อนให้ดู ใช้ตอนวาดหน้าใหม่)
+function sqApply(instant) {
+  const svg = document.querySelector('svg.sq-anim'); if (!svg) return;
+  const w = SQ.h * 12, t = sqTargets(SQ.step, w);
+  if (instant) svg.classList.add('sq-instant');
+  Object.entries(t).forEach(([k, o]) => { const el = svg.querySelector(`[data-sq="${k}"]`); if (el) Object.entries(o).forEach(([p, v]) => { el.style[p] = v; }); });
+  if (instant) { void svg.getBoundingClientRect(); svg.classList.remove('sq-instant'); }
+  const en = EN(), e = id => document.getElementById(id);
+  if (e('sqCap')) e('sqCap').innerHTML = sqCaption(SQ.step, en);
+  if (e('sqEq')) e('sqEq').innerHTML = sqEq(SQ.step, en);
+  if (e('sqCount')) e('sqCount').textContent = `${SQ.step}/${SQ_LAST}`;
+  if (e('sqPrev')) e('sqPrev').disabled = SQ.step === 0;
+  if (e('sqNext')) e('sqNext').disabled = SQ.step === SQ_LAST;
+}
+// ขั้น 9: แก้ (x−h)² + rem = 0 ตามกรณี (คืนบรรทัดของสมการ)
+function sqSolveLines(en) {
+  const { h, c } = SQ, rem = c - h * h, k = -rem, fac = v => v === 0 ? 'x' : v > 0 ? `(x − ${v})` : `(x + ${-v})`;
+  if (rem === 0) return [`(x − ${h})² = 0`, `x = ${h}  ${en ? '(double root)' : '(รากซ้อน)'}`];
+  if (k > 0 && Number.isInteger(Math.sqrt(k))) {
+    const r = Math.sqrt(k);
+    return [`(x − ${h})² − ${r}² = 0`, `${fac(h - r)}${fac(h + r)} = 0`, `x = ${sgn(h - r)}  ${en ? 'or' : 'หรือ'}  x = ${h + r}`];
+  }
+  if (k > 0) return [`(x − ${h})² = ${k}`, `x = ${h} ± √${k}`];
+  return [`(x − ${h})² = ${sgn(k)}`, en ? 'a square cannot be negative → no real solution' : 'กำลังสองติดลบไม่ได้ → ไม่มีคำตอบจริง'];
+}
+function sqEq(step, en) {
+  const { h, c } = SQ, hh = h * h, cS = c >= 0 ? `+ ${c}` : `− ${-c}`, rem = c - hh, k = -rem, remS = rem >= 0 ? `+ ${rem}` : `− ${-rem}`;
+  const small = s => `<span style="font-size:.75em;font-weight:600">${s}</span>`;
+  const eq = [
+    'x²',
+    `−${2 * h}x  =  −${h}x  −  ${h}x`,
+    `${h}x  =  ${h}(x − ${h}) + ${hh}`,
+    `${h}x  =  ${h}(x − ${h}) + ${hh}<br>${small(en ? `(the corner ${hh} belongs to both strips)` : `(มุม ${hh} เป็นของทั้งสองแถบ)`)}`,
+    `x² − ${h}x`,
+    `x² − ${h}x − ${h}x`,
+    `x² − ${2 * h}x  =  (x − ${h})² − ${hh}`,
+    `x² − ${2 * h}x + ${hh}  =  (x − ${h})²`,
+    // ขั้น 8: ทริกลบ (h²−c) ทั้งสองข้าง ให้ฝั่งซ้ายกลายเป็นโจทย์
+    k === 0 ? `x² − ${2 * h}x + ${hh}  =  (x − ${h})²<br>${small(en ? '(already the same as the problem)' : '(ตรงกับโจทย์พอดีแล้ว)')}`
+      : `x² − ${2 * h}x + ${hh}  =  (x − ${h})²<br><span style="color:#DC2626">${k > 0 ? '−' : '+'} ${Math.abs(k)}${small(en ? '  both sides' : '  ทั้งสองข้าง')}</span><br>x² − ${2 * h}x ${cS}  =  (x − ${h})² ${remS}`,
+    sqSolveLines(en).join('<br>'),
+  ];
+  return eq[step];
+}
+function sqCaption(step, en) {
+  const { h, c } = SQ, hh = h * h, cS = c >= 0 ? `+ ${c}` : `− ${-c}`, rem = c - hh, k = -rem, remS = rem >= 0 ? `+ ${rem}` : `− ${-rem}`, [ua, ub] = sqUneven(h);
+  const th = [
+    `เริ่มจากสี่เหลี่ยมจัตุรัสด้านยาว <b>x</b> พื้นที่ <b>x²</b> เป้าหมายคือหักพจน์ <b>−${2 * h}x</b> ออก แล้วดูว่าเหลืออะไร`,
+    `พจน์ −${2 * h}x ต้อง<b>แบ่งเท่า</b>เป็นสองแถบ แถบละ <b>${h}x</b> (กว้าง ${h} ยาวเต็มด้าน x) หักด้านขวา ${h}x และด้านล่าง ${h}x ถ้าแบ่งไม่เท่า (เช่น ${ua}x กับ ${ub}x ตามภาพด้านล่าง) ส่วนที่เหลือจะเป็นสี่เหลี่ยม<b>ผืนผ้า</b> ไม่ใช่จัตุรัส จึงเขียนเป็นกำลังสองไม่ได้`,
+    `<b>ชำแหละแถบขวา</b> (สูงเต็ม x → พื้นที่ ${h}x): ส่วนสีเหลืองบน = ${h}(x−${h}) และมุมสีส้ม = ${h}×${h} = ${hh} รวมกันได้ <b>${h}x</b>`,
+    `<b>ชำแหละแถบล่าง</b> ทำแบบเดียวกัน: ส่วนสีเหลือง = ${h}(x−${h}) และมุม ${hh} — <b>มุมสีส้มนี้เป็นของทั้งสองแถบ</b> (มีชิ้นเดียว แต่ถูกนับเข้าสองแถบ)`,
+    `ดึง<b>แถบขวา</b>ออก (มุมจริง ${hh} ไปกับแถบนี้แล้ว) → เหลือ <b>x² − ${h}x</b>`,
+    `ดึง<b>แถบล่าง</b>ออก: ตามสูตรต้องหักอีก ${h}x แต่แถบนี้เหลือเนื้อจริงแค่ ${h}(x−${h}) — ช่องเส้นประ ${h}×${h} คือมุมที่แถบขวาเอาไปแล้ว ไม่มีเนื้อให้หักอีก`,
+    `มุม ${hh} ถูกหัก<b>สองครั้ง</b> แต่มีเนื้อให้หักจริงครั้งเดียว ครั้งที่สองจึงต้อง<b>ควักเนื้อ ${h}×${h} จากมุมขวาล่างของจัตุรัสฟ้า</b>ไปเติมแถบล่างให้ครบ ${h}x เกิดเป็น<b>รู</b> รูปที่มีรูนี้มีพื้นที่ (x−${h})² − ${hh} = <b>x² − ${2 * h}x</b> พอดี`,
+    `จะประกอบให้กลับเป็นจัตุรัสฟ้าสมบูรณ์ ต้อง<b>บวก ${hh} คืนหนึ่งครั้ง</b>เพื่ออุดรู ได้ <b>x² − ${2 * h}x + ${hh} = (x−${h})²</b> ด้านของจัตุรัสคือ x − ${h}`,
+    k === 0 ? `ในโจทย์นี้ c = ${c} = ${hh} พอดี ฝั่งซ้าย x² − ${2 * h}x + ${hh} <b>ตรงกับโจทย์เป๊ะอยู่แล้ว</b> ไม่ต้องลบหรือบวกเพิ่ม`
+      : `ทริก: <b>${k > 0 ? 'ลบ' : 'บวก'} ${Math.abs(k)} ทั้งสองข้าง</b> ฝั่งซ้ายกลายเป็น x² − ${2 * h}x ${cS} ซึ่ง<b>ตรงกับสมการโจทย์เป๊ะ</b> ส่วนฝั่งขวาเป็น (x−${h})² ${remS}`,
+    rem === 0 ? `โจทย์ให้เท่ากับ 0 จึงได้ (x−${h})² = 0 → <b>x = ${h}</b> (รากซ้อน)`
+      : k > 0 && Number.isInteger(Math.sqrt(k)) ? `โจทย์ให้เท่ากับ 0 จึงได้ (x−${h})² − ${Math.sqrt(k)}² = 0 แล้วใช้<b>ผลต่างกำลังสอง</b> a² − b² = (a−b)(a+b) แยกต่อจนได้คำตอบ`
+        : k > 0 ? `โจทย์ให้เท่ากับ 0 จึงได้ (x−${h})² = ${k} ถอดรากที่สองทั้งสองข้าง → <b>x = ${h} ± √${k}</b>`
+          : `โจทย์ให้เท่ากับ 0 จึงได้ (x−${h})² = ${sgn(k)} ซึ่ง<b>เป็นไปไม่ได้</b> เพราะกำลังสองไม่ติดลบ → ไม่มีคำตอบจริง`,
+  ];
+  const enA = [
+    `Start with a square of side <b>x</b>, area <b>x²</b>. The goal is to remove the <b>−${2 * h}x</b> term and see what is left.`,
+    `The −${2 * h}x term must be split <b>equally</b> into two strips of <b>${h}x</b> each (width ${h}, as long as the full side x): ${h}x off the right and ${h}x off the bottom. If the split is unequal (e.g. ${ua}x and ${ub}x, see below) what is left is a <b>rectangle</b>, not a square, so it cannot be written as a square.`,
+    `<b>Dissect the right strip</b> (full height x → area ${h}x): the yellow part above = ${h}(x−${h}) and the orange corner = ${h}×${h} = ${hh}. Together they make <b>${h}x</b>.`,
+    `<b>Dissect the bottom strip</b> the same way: the yellow part = ${h}(x−${h}) and the corner ${hh} — <b>this orange corner belongs to both strips</b> (it is one piece, but counted in two strips).`,
+    `Pull out the <b>right strip</b> (the real corner ${hh} leaves with it) → <b>x² − ${h}x</b> is left.`,
+    `Pull out the <b>bottom strip</b>: by the formula we must remove another ${h}x, but this strip only has ${h}(x−${h}) of real material — the dashed ${h}×${h} box is the corner the right strip already took, so there is nothing left to remove there.`,
+    `The corner ${hh} was removed <b>twice</b> but there was material for only one. So the second time we must <b>scoop a ${h}×${h} piece from the bottom-right corner of the blue square</b> to complete the bottom strip to ${h}x, leaving a <b>hole</b>. The shape with the hole has area (x−${h})² − ${hh} = <b>x² − ${2 * h}x</b> exactly.`,
+    `To rebuild the complete blue square we must <b>add ${hh} back once</b> to plug the hole: <b>x² − ${2 * h}x + ${hh} = (x−${h})²</b>. The square has side x − ${h}.`,
+    k === 0 ? `Here c = ${c} = ${hh}, so the left side x² − ${2 * h}x + ${hh} <b>already matches the problem exactly</b> — nothing to add or subtract.`
+      : `Trick: <b>${k > 0 ? 'subtract' : 'add'} ${Math.abs(k)} on both sides</b>. The left side becomes x² − ${2 * h}x ${cS}, which <b>matches the problem exactly</b>; the right side is (x−${h})² ${remS}.`,
+    rem === 0 ? `The problem says = 0, so (x−${h})² = 0 → <b>x = ${h}</b> (double root).`
+      : k > 0 && Number.isInteger(Math.sqrt(k)) ? `The problem says = 0, so (x−${h})² − ${Math.sqrt(k)}² = 0. Use the <b>difference of squares</b> a² − b² = (a−b)(a+b) and finish.`
+        : k > 0 ? `The problem says = 0, so (x−${h})² = ${k}. Take square roots → <b>x = ${h} ± √${k}</b>.`
+          : `The problem says = 0, so (x−${h})² = ${sgn(k)}, which is <b>impossible</b> since a square is never negative → no real solution.`,
+  ];
+  return (en ? enA : th)[step];
+}
+function sqStop() { if (SQ.timer) { clearInterval(SQ.timer); SQ.timer = null; } const b = document.getElementById('sqPlay'); if (b) b.textContent = EN() ? '▶▶ Auto-play' : '▶▶ เล่นอัตโนมัติ'; }
+function sqGo(d) { sqStop(); SQ.step = Math.max(0, Math.min(SQ_LAST, SQ.step + d)); sqApply(false); }
+function sqGoto(n) { sqStop(); SQ.step = n; sqApply(false); }
+function sqPlay() {
+  if (SQ.timer) { sqStop(); return; }
+  if (SQ.step >= SQ_LAST) { SQ.step = 0; sqApply(false); }
+  document.getElementById('sqPlay').textContent = EN() ? '⏸ Pause' : '⏸ หยุด';
+  SQ.timer = setInterval(() => { if (SQ.step >= SQ_LAST) { sqStop(); return; } SQ.step++; sqApply(false); if (SQ.step >= SQ_LAST) sqStop(); }, 3200);
+}
+function renderSq() {
+  sqStop();
+  const en = EN(), { h, c } = SQ, b = -2 * h, rem = c - h * h;
+  document.getElementById('tab-sq').innerHTML = `
+    <div class="card">
+      <div class="card-title"><span class="icon">🟦</span><span>${en ? 'Completing the square with tiles' : 'กำลังสองสมบูรณ์ด้วยแผ่นพีชคณิต'}</span></div>
+      <p class="intro">${en ? 'The −2hx term is split into two strips of hx each, each as long as the full side x, along two sides of the x² square (they overlap at the h×h corner). Press "Next step" (or "Auto-play") and watch the strips slide out one at a time. You can change h and c below.' : 'พจน์ −2hx ถูกแบ่งเป็นสองแถบ แถบละ hx ยาวเต็มด้าน x ตามสองด้านของสี่เหลี่ยม x² (ทั้งสองแถบทับกันที่มุม h×h) กด "ขั้นถัดไป" (หรือ "เล่นอัตโนมัติ") แล้วดูแถบเลื่อนออกทีละขั้น ปรับค่า h และ c ได้ด้านล่าง'}</p>
+      <div class="slider-row"><b>h =</b><input type="range" id="sqH" min="1" max="9" step="1" value="${h}" oninput="SQ.h=parseFloat(this.value);renderSq()"><span class="slider-val">${h}</span> <span class="note">(b = −2h = ${sgn(b)})</span></div>
+      <div class="slider-row"><b>c =</b><input type="range" id="sqC" min="-40" max="90" step="1" value="${c}" oninput="SQ.c=parseFloat(this.value);renderSq()"><span class="slider-val">${sgn(c)}</span></div>
+      <div class="formula">x² ${sgn(b)}x ${c >= 0 ? '+' : '−'} ${Math.abs(c)} = 0</div>
+      ${tileSvg(h)}
+      <div class="sq-eq" id="sqEq"></div>
+      <div class="box-info" id="sqCap"></div>
+      <div class="btn-row">
+        <button class="btn ghost" id="sqPrev" onclick="sqGo(-1)">${en ? '◀ Back' : '◀ ย้อนกลับ'}</button>
+        <button class="btn" id="sqNext" onclick="sqGo(1)">${en ? 'Next step' : 'ขั้นถัดไป'} ▶ (<span id="sqCount"></span>)</button>
+        <button class="btn ghost" id="sqPlay" onclick="sqPlay()">${en ? '▶▶ Auto-play' : '▶▶ เล่นอัตโนมัติ'}</button>
+        <button class="btn ghost" onclick="sqGoto(0)">${en ? '↺ Restart' : '↺ เริ่มใหม่'}</button>
+      </div>
+      <div class="box-info">
+        ${al([['x²' + sgn(b) + 'x', '=', `(x−${h})² − ${h * h}`]])}
+        ${al([['x²' + sgn(b) + 'x' + (c >= 0 ? ' + ' : ' − ') + Math.abs(c), '=', `(x−${h})² ${sgn(rem)}`]])}
+      </div>
+      ${rem === 0 ? `<div class="readout box-ok"><b>${en ? 'Answer' : 'ตอบ'}: x = ${h}</b> ${en ? '(double root)' : '(รากซ้อน)'}</div>` :
+        (rem < 0 && Number.isInteger(Math.sqrt(-rem)) ? (() => { const r = Math.sqrt(-rem); return `<div class="readout box-ok">(x−${h})² − ${r}² = (x−${h}−${r})(x−${h}+${r}) = (x−${h - r})(x−${h + r})<br><b>${en ? 'Answer' : 'ตอบ'}: x = ${h - r} ${en ? 'or' : 'หรือ'} x = ${h + r}</b></div>`; })()
+          : `<div class="readout">${en ? 'Answer' : 'ตอบ'}: x = ${h} ± √${sgn(-rem)} ${rem > 0 ? (en ? ' — no real solution since (x−h)² cannot be negative' : ' — ไม่มีคำตอบจริง เพราะ (x−h)² ติดลบไม่ได้') : ''}</div>`)}
+      <div class="box-warn"><b>${en ? 'Reference example:' : 'ตัวอย่างอ้างอิง:'}</b> x² − 14x + 48 = 0 → h = 7, (x−7)² − 1 = 0 → x = 6 ${en ? 'or' : 'หรือ'} x = 8</div>
+    </div>`;
+  sqApply(true);
+}
+
+// ═══════════════════════ TAB 4: สูตร 4 สูตร ═══════════════════════
+const FORM_A = { a: 3 };
+function renderForm() {
+  const en = EN(), a = FORM_A.a;
+  document.getElementById('tab-form').innerHTML = `
+    <div class="card">
+      <div class="card-title"><span class="icon">📐</span><span>①</span><span>${en ? 'Difference of squares' : 'ผลต่างกำลังสอง'}</span></div>
+      <div class="formula">x² − a² = (x − a)(x + a)</div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="icon">📐</span><span>②</span><span>${en ? 'Perfect square' : 'กำลังสองสมบูรณ์'}</span></div>
+      <div class="formula">(x ± a)² = x² ± 2ax + a²</div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="icon">📐</span><span>③</span><span>${en ? 'Sum / difference of cubes' : 'ผลบวก/ผลต่างกำลังสาม'}</span></div>
+      <div class="formula">x³ ± a³ = (x ± a)(x² ∓ ax + a²)</div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="icon">📐</span><span>④</span><span>${en ? 'Cube of a binomial (Pascal pattern)' : 'กำลังสามของทวินาม (แพทเทิร์นปาสกาล)'}</span></div>
+      <div class="formula">(x ± a)³ = x³ ± 3x²a + 3xa² ± a³</div>
+      <div class="pascal">
+        ${[['1', 'x³', '3', '0'], ['3', 'x²a', '2', '1'], ['3', 'xa²', '1', '2'], ['1', 'a³', '0', '3']].map(([co, expr, px, pa]) =>
+          `<div class="pterm"><div class="co">${co}</div><div class="expr">${expr}</div><div class="arrows">x${en ? ' power' : ' กำลัง'} ${px} · a${en ? ' power' : ' กำลัง'} ${pa}</div></div>`).join('')}
+      </div>
+      <div class="box-info">${en ? '👀 Coefficients 1-3-3-1 (Pascal\'s triangle row 3). The power of x <b>counts down</b> 3→0 while the power of a <b>counts up</b> 0→3.' : '👀 สัมประสิทธิ์ 1-3-3-1 (แถวที่ 3 ของสามเหลี่ยมปาสกาล) เลขชี้กำลังของ x <b>ไล่ลง</b> 3→0 ส่วนของ a <b>ไล่ขึ้น</b> 0→3'}</div>
+      <div class="slider-row"><b>a =</b><input type="range" id="faA" min="1" max="6" step="1" value="${a}" oninput="FORM_A.a=parseFloat(this.value);renderForm()"><span class="slider-val">${a}</span></div>
+      <div id="faOut"></div>
+    </div>`;
+  const out = document.getElementById('faOut');
+  const plus = [1, 3 * a, 3 * a * a, a ** 3], minus = [1, -3 * a, 3 * a * a, -(a ** 3)];
+  out.innerHTML = al([[`(x + ${a})³`, '=', `x³ + ${plus[1]}x² + ${plus[2]}x + ${plus[3]}`], [`(x − ${a})³`, '=', `x³ − ${plus[1]}x² + ${plus[2]}x − ${plus[3]}`]]) +
+    `<div class="readout box-ok">${en ? 'check at x = 2' : 'ตรวจที่ x = 2'}: (2+${a})³ = ${(2 + a) ** 3} , 8 + ${plus[1]}(4) + ${plus[2]}(2) + ${plus[3]} = ${8 + plus[1] * 4 + plus[2] * 2 + plus[3]} ${((2 + a) ** 3) === (8 + plus[1] * 4 + plus[2] * 2 + plus[3]) ? '✅' : '❌'}</div>`;
+}
+
+// ═══════════════════════ แบบฝึกหัด ═══════════════════════
+const quizData = [
+  { q_th: '(3x + 2) + (x² + x + 5) เท่ากับข้อใด?', q_en: 'What is (3x + 2) + (x² + x + 5)?', opts: ['x² + 4x + 7', 'x² + 3x + 10', '4x² + 4x + 7', 'x² + 4x + 10'], ans: 0,
+    exp_th: 'รวมพจน์เหมือน: x² อยู่ตัวเดียว, 3x+x=4x, 2+5=7', exp_en: 'Collect like terms: x² alone, 3x+x=4x, 2+5=7' },
+  { q_th: 'x + 2x เท่ากับข้อใด และ x · 2x เท่ากับข้อใด?', q_en: 'What is x + 2x, and what is x · 2x?', opts: ['3x และ 2x²', '2x² และ 3x', '3x² และ 2x', '2x และ 3x²'], opts_en: ['3x and 2x²', '2x² and 3x', '3x² and 2x', '2x and 3x²'], ans: 0,
+    exp_th: 'บวก: รวมสัมประสิทธิ์ ได้ 3x — คูณ: บวกเลขชี้กำลัง ได้ 2x²', exp_en: 'Add: combine coefficients → 3x — Multiply: add exponents → 2x²' },
+  { q_th: '(2x − 1)(x + 3) เท่ากับข้อใด?', q_en: 'What is (2x − 1)(x + 3)?', opts: ['2x² + 5x − 3', '2x² − 5x − 3', '2x² + 5x + 3', '2x² + 2x − 3'], ans: 0,
+    exp_th: '2x·x+2x·3−1·x−1·3 = 2x²+6x−x−3 = 2x²+5x−3', exp_en: '2x·x+2x·3−1·x−1·3 = 2x²+6x−x−3 = 2x²+5x−3' },
+  { q_th: '3x³ + 6x² ดึงตัวร่วมได้เป็นข้อใด?', q_en: 'What is the common-factor form of 3x³ + 6x²?', opts: ['3x²(x + 2)', '3x(x² + 2x)', 'x²(3x + 6)', '3x³(1 + 2x)'], ans: 0,
+    exp_th: 'ห.ร.ม. ของสัมประสิทธิ์ = 3, เลขชี้กำลังต่ำสุดของ x = x²', exp_en: 'GCD of coefficients = 3, lowest shared power of x = x²' },
+  { q_th: 'x² + 3x + 2 แยกตัวประกอบได้เป็นข้อใด?', q_en: 'How does x² + 3x + 2 factor?', opts: ['(x + 1)(x + 2)', '(x − 1)(x − 2)', '(x + 1)(x − 2)', '(x + 3)(x + 1)'], ans: 0,
+    exp_th: 'หาสองจำนวนคูณกัน=2 บวกกัน=3 ได้ 1 และ 2', exp_en: 'Two numbers multiplying to 2 and adding to 3 are 1 and 2' },
+  { q_th: '2x² − 5x + 2 แยกตัวประกอบได้เป็นข้อใด?', q_en: 'How does 2x² − 5x + 2 factor?', opts: ['(2x − 1)(x − 2)', '(2x + 1)(x + 2)', '(2x − 2)(x − 1)', '(x − 1)(2x − 2)'], ans: 0,
+    exp_th: 'คูณไขว้ 2×(−2) + 1×(−1) = −5 ตรงกับ b', exp_en: 'Cross-multiply: 2×(−2) + 1×(−1) = −5, matching b' },
+  { q_th: 'x² − 14x + 48 = (x − 7)² + ข้อใด?', q_en: 'x² − 14x + 48 = (x − 7)² + what?', opts: ['−1', '1', '−49', '48'], ans: 0,
+    exp_th: '(x−7)² = x²−14x+49 ดังนั้น x²−14x+48 = (x−7)²−1', exp_en: '(x−7)² = x²−14x+49, so x²−14x+48 = (x−7)²−1' },
+  { q_th: 'ทำไมตอนดึงแผ่น −7x สองแถบออกจากสี่เหลี่ยม x² ต้องเติม +49 กลับ?', q_en: 'Why must +49 be added back after removing the two −7x strips from the x² square?', opts: ['เพราะมุม 7×7 ถูกลบซ้ำสองครั้ง', 'เพราะ 49 เป็นเลขสวย', 'เพราะต้องมีค่าคงที่เสมอ', 'ไม่จำเป็นต้องเติม'], opts_en: ['Because the 7×7 corner got subtracted twice', 'Because 49 is a nice number', 'A constant is always required', 'It is not necessary'], ans: 0,
+    exp_th: 'แถบทั้งสองทับกันที่มุม 7×7 การลบทั้งสองแถบจึงลบมุมนี้ไปสองครั้ง', exp_en: 'The two strips overlap at the 7×7 corner, so removing both subtracts that corner twice' },
+  { q_th: 'x² − 9 แยกตัวประกอบได้เป็นข้อใด?', q_en: 'How does x² − 9 factor?', opts: ['(x − 3)(x + 3)', '(x − 9)(x + 1)', '(x − 3)²', 'แยกไม่ได้'], opts_en: ['(x − 3)(x + 3)', '(x − 9)(x + 1)', '(x − 3)²', 'Cannot be factored'], ans: 0,
+    exp_th: 'ผลต่างกำลังสอง: x² − a² = (x−a)(x+a) โดย a = 3', exp_en: 'Difference of squares: x² − a² = (x−a)(x+a) with a = 3' },
+  { q_th: '(x + 2)³ มีสัมประสิทธิ์เรียงตามข้อใด?', q_en: 'What are the coefficients of (x + 2)³ in order?', opts: ['1, 3, 3, 1 (คูณด้วยกำลังของ 2)', '1, 2, 3, 4', '3, 3, 1, 1', '1, 1, 1, 1'], opts_en: ['1, 3, 3, 1 (times powers of 2)', '1, 2, 3, 4', '3, 3, 1, 1', '1, 1, 1, 1'], ans: 0,
+    exp_th: 'สัมประสิทธิ์ทวินามคือ 1,3,3,1 แล้วคูณด้วย aⁿ ตามลำดับ (a=2): 1, 6, 12, 8', exp_en: 'Binomial coefficients are 1,3,3,1, multiplied by increasing powers of a (a=2): 1, 6, 12, 8' },
+];
+let qIdx = 0, score = 0, answered = false;
+function qt(key) {
+  const en = EN();
+  return { prog: en ? `Question ${qIdx + 1} / ${quizData.length}` : `ข้อที่ ${qIdx + 1} / ${quizData.length}`,
+    ok: en ? '✅ Correct! ' : '✅ ถูกต้อง! ', bad: en ? '❌ Not quite — ' : '❌ ไม่ถูกต้อง — ', title: en ? 'Your Score' : 'ผลคะแนนของคุณ' }[key];
+}
+function grade(s) {
+  const r = s / quizData.length;
+  if (EN()) return r >= .9 ? '🌟 Excellent!' : r >= .7 ? '👍 Great job!' : r >= .5 ? '💪 Not bad, review a bit' : '📚 Go back and review';
+  return r >= .9 ? '🌟 ยอดเยี่ยมมาก!' : r >= .7 ? '👍 ดีมาก!' : r >= .5 ? '💪 พอใช้ได้ ลองทบทวนดูนะ' : '📚 ลองกลับไปทบทวนอีกรอบ';
+}
+function initQuiz() {
+  qIdx = 0; score = 0; answered = false;
+  document.getElementById('quizScore').textContent = 0;
+  document.getElementById('quizTotal').textContent = quizData.length;
+  document.getElementById('btnRetry').style.display = 'none';
+  renderQuestion();
+}
+function renderQuestion() {
+  const q = quizData[qIdx], en = EN();
+  answered = false;
+  document.getElementById('quizProgress').textContent = qt('prog');
+  document.getElementById('btnNext').style.display = 'none';
+  const opts = (en && q.opts_en) ? q.opts_en : q.opts;
+  document.getElementById('quizBox').innerHTML = `
+    <div class="quiz-q">${qIdx + 1}. ${en ? q.q_en : q.q_th}</div>
+    <div class="quiz-opts">${opts.map((o, i) => `<button class="quiz-opt" onclick="answer(${i})">${o}</button>`).join('')}</div>
+    <div class="quiz-feedback" id="qfb"></div>`;
+}
+function refreshQuizLang() {
+  const box = document.getElementById('quizBox');
+  if (!box || !box.querySelector('.quiz-q')) return;
+  const q = quizData[qIdx], en = EN();
+  document.getElementById('quizProgress').textContent = qt('prog');
+  box.querySelector('.quiz-q').innerHTML = `${qIdx + 1}. ${en ? q.q_en : q.q_th}`;
+  const opts = (en && q.opts_en) ? q.opts_en : q.opts;
+  box.querySelectorAll('.quiz-opt').forEach((b, i) => b.innerHTML = opts[i]);
+  if (answered) {
+    const fb = document.getElementById('qfb');
+    if (fb) fb.innerHTML = (fb.classList.contains('ok') ? qt('ok') : qt('bad')) + (en ? q.exp_en : q.exp_th);
+  }
+  const card = document.getElementById('scoreCard');
+  if (card) card.outerHTML = scoreCardHtml();
+}
+function scoreCardHtml() {
+  return `<div id="scoreCard" style="margin-top:20px; background:linear-gradient(135deg,#1C3B22,#2E5936); color:white; border-radius:16px; padding:24px; text-align:center;">
+    <div style="font-size:2.5rem;">🎉</div><div style="font-size:1.5rem; font-weight:800; margin:8px 0;">${qt('title')}</div>
+    <div style="font-size:3rem; font-weight:800;">${score} / ${quizData.length}</div>
+    <div style="font-size:1.1rem; opacity:.9; margin-top:8px;">${grade(score)}</div></div>`;
+}
+function answer(i) {
+  if (answered) return;
+  answered = true;
+  const q = quizData[qIdx], exp = EN() ? q.exp_en : q.exp_th, fb = document.getElementById('qfb');
+  document.querySelectorAll('.quiz-opt').forEach((b, idx) => {
+    if (idx === q.ans) b.classList.add('correct'); else if (idx === i) b.classList.add('wrong');
+    b.style.pointerEvents = 'none';
+  });
+  if (i === q.ans) { score++; document.getElementById('quizScore').textContent = score; fb.className = 'quiz-feedback ok'; fb.innerHTML = qt('ok') + exp; }
+  else { fb.className = 'quiz-feedback err'; fb.innerHTML = qt('bad') + exp; }
+  if (qIdx < quizData.length - 1) document.getElementById('btnNext').style.display = 'inline-block';
+  else {
+    document.getElementById('btnRetry').style.display = 'inline-block';
+    setTimeout(() => { document.getElementById('quizBox').insertAdjacentHTML('beforeend', scoreCardHtml()); }, 300);
+  }
+}
+function nextQuestion() { qIdx++; renderQuestion(); }
+
+window.addEventListener('load', () => { initQuiz(); applyLang(getLang()); });
+</script>
+</body>
+</html>

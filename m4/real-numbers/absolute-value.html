@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>สื่อการสอน : ค่าสัมบูรณ์ ม.4</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800&display=swap');
+
+  :root {
+    --primary: #1C3B22; --secondary: #FF8A3D; --accent: #68EF3F; --accent-2: #3FA82E; --warning: #FFB347;
+    --bg: #F3F7EC; --card: #FFFFFF; --text: #2D3748; --muted: #718096; --border: #E2E8F0;
+    --shadow: 0 4px 24px rgba(28,59,34,0.10); --radius: 16px;
+    --pos: #047857; --pos-bg: #ECFDF5; --neg: #BE185D; --neg-bg: #FFF4EC;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Sarabun', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+  header { background: linear-gradient(135deg, #1C3B22 0%, #2E5936 100%); color: white; padding: 28px 40px 20px; text-align: center; position: relative; overflow: hidden; }
+  header::before { content: ''; position: absolute; top: -60px; right: -60px; width: 200px; height: 200px; background: rgba(255,255,255,0.07); border-radius: 50%; }
+  header h1 { font-size: 2rem; font-weight: 800; letter-spacing: .5px; }
+  header p { font-size: 1rem; opacity: .85; margin-top: 4px; }
+  .back-link { position: absolute; top: 14px; left: 20px; color: white; text-decoration: none; font-size: .85rem; font-weight: 600; opacity: .9; z-index: 2; }
+  .back-link:hover { opacity: 1; text-decoration: underline; }
+  .lang-toggle { position: absolute; top: 14px; right: 20px; background: rgba(255,255,255,.15); color: white; border: 1.5px solid rgba(255,255,255,.5); border-radius: 20px; padding: 5px 14px; font-family: 'Sarabun', sans-serif; font-size: .8rem; font-weight: 700; cursor: pointer; z-index: 2; }
+  .lang-toggle:hover { background: rgba(255,255,255,.28); }
+
+  nav { display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; padding: 20px 24px 0; background: white; border-bottom: 3px solid var(--border); }
+  .tab-btn { padding: 10px 18px; border: none; background: transparent; border-radius: 10px 10px 0 0; font-family: 'Sarabun', sans-serif; font-size: 0.95rem; font-weight: 600; color: var(--muted); cursor: pointer; transition: all .25s; border-bottom: 3px solid transparent; margin-bottom: -3px; }
+  .tab-btn:hover { color: var(--primary); background: #E3F3D8; }
+  .tab-btn.active { color: var(--primary); border-bottom-color: var(--primary); background: #E3F3D8; }
+
+  main { max-width: 980px; margin: 0 auto; padding: 32px 20px 60px; }
+  .tab-panel { display: none; animation: fadeIn .35s ease; }
+  .tab-panel.active { display: block; }
+  @keyframes fadeIn { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
+
+  .card { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); padding: 28px 32px; margin-bottom: 24px; }
+  .card-title { font-size: 1.25rem; font-weight: 700; color: var(--primary); margin-bottom: 12px; display: flex; align-items: center; gap: 10px; }
+  .card-title .icon { font-size: 1.5rem; }
+  .intro { font-size: 1.02rem; line-height: 1.7; margin-bottom: 14px; }
+  .box-info { background: #EEF7E6; border-left: 4px solid var(--primary); border-radius: 10px; padding: 14px 18px; margin: 14px 0; line-height: 1.8; }
+  .box-warn { background: #FFF7ED; border-left: 4px solid var(--warning); border-radius: 10px; padding: 14px 18px; margin: 14px 0; line-height: 1.8; }
+  .box-ok   { background: #ECFDF5; border-left: 4px solid var(--accent);  border-radius: 10px; padding: 14px 18px; margin: 14px 0; line-height: 1.8; }
+  .formula { background: linear-gradient(135deg,#1C3B22,#2E5936); color: white; border-radius: 12px; padding: 14px 24px; text-align: center; font-size: 1.3rem; font-weight: 700; margin: 14px 0; letter-spacing: .5px; }
+
+  .btn { padding: 10px 24px; background: var(--primary); color: white; border: none; border-radius: 30px; font-family: 'Sarabun', sans-serif; font-size: 1rem; font-weight: 700; cursor: pointer; transition: background .2s, opacity .2s; }
+  .btn:hover:not(:disabled) { background: #2E5936; }
+  .btn:disabled { opacity: .45; cursor: not-allowed; }
+  .btn.ghost { background: white; color: var(--primary); border: 2px solid var(--primary); }
+  .btn.ghost:hover:not(:disabled) { background: #E3F3D8; }
+  .btn.on { background: var(--secondary); border-color: var(--secondary); color: white; }
+  .btn-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 14px; align-items: center; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0; }
+  .chip { padding: 8px 16px; border: 2px solid var(--border); border-radius: 30px; background: #fff; font-family: 'Sarabun', sans-serif; font-weight: 700; font-size: 1rem; cursor: pointer; color: var(--text); }
+  .chip:hover { border-color: var(--primary); }
+  .chip.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+
+  .frac { display: inline-flex; flex-direction: column; align-items: center; font-weight: 700; line-height: 1; vertical-align: middle; margin: 0 4px; }
+  .frac .num { font-size: 1em; border-bottom: 2.5px solid currentColor; padding-bottom: 2px; min-width: 18px; text-align: center; white-space: nowrap; }
+  .frac .den { font-size: 1em; padding-top: 3px; min-width: 18px; text-align: center; white-space: nowrap; }
+
+  /* สมการจัดแนวเครื่องหมาย (ซ้ายชิดขวา | เครื่องหมาย | ขวาชิดซ้าย) */
+  .align { display: grid; grid-template-columns: auto auto auto; justify-content: start; column-gap: .55em; row-gap: 3px; align-items: center; margin: 4px 0; }
+  .align .l { justify-self: end; text-align: right; }
+  .align .m { justify-self: center; font-weight: 700; }
+  .align .r { justify-self: start; }
+  .align .full { grid-column: 1 / -1; }
+
+  svg.nl { display: block; width: 100%; max-width: 700px; height: auto; margin: 0 auto; touch-action: none; }
+  .drag-track { cursor: grab; }
+  .readout { background: #EEF7E6; border-left: 4px solid var(--primary); border-radius: 10px; padding: 14px 18px; margin-top: 12px; line-height: 1.9; font-size: 1.05rem; }
+  .tag { display: inline-flex; align-items: center; justify-content: center; min-width: 30px; height: 28px; border-radius: 8px; font-weight: 800; padding: 0 8px; }
+  .tag.pos { background: var(--pos-bg); color: var(--pos); }
+  .tag.neg { background: var(--neg-bg); color: var(--neg); }
+  .slider-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin: 10px 0; }
+  .slider-row b { min-width: 34px; }
+  input[type=range] { accent-color: var(--primary); width: min(320px, 100%); }
+  .slider-val { font-weight: 800; color: var(--primary); font-size: 1.1rem; min-width: 44px; }
+
+  .case-tbl { width: 100%; border-collapse: collapse; margin: 12px 0; text-align: center; }
+  .case-tbl th, .case-tbl td { border: 2px solid var(--border); padding: 10px 8px; }
+  .case-tbl th { background: #EEF7E6; color: var(--primary); }
+  .case-tbl tr.live td, .case-tbl td.live { background: #FFF9F2; border-color: var(--secondary); box-shadow: inset 0 0 0 2px rgba(255,138,61,.25); font-weight: 800; }
+
+  .prop-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 14px; margin-top: 14px; }
+  .prop { border: 2px solid var(--border); border-radius: 14px; padding: 12px 16px; background: #fff; line-height: 1.8; }
+  .prop.ok { border-color: var(--accent-2); background: #F6FFF3; }
+  .prop.na { background: #F7FAFC; color: var(--muted); }
+  .prop .st { font-weight: 800; font-size: 1.08rem; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .prop .no { display: inline-flex; width: 24px; height: 24px; border-radius: 50%; background: var(--primary); color: #fff; align-items: center; justify-content: center; font-size: .8rem; }
+
+  .wk-cell { position: relative; background: #fff; border: 2px solid var(--border); border-radius: 14px; padding: 12px 16px 12px 52px; margin-bottom: 12px; line-height: 1.8; }
+  .wk-cell.fresh { animation: rowIn .5s ease; }
+  @keyframes rowIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+  .wk-cell .stepno { position: absolute; left: 14px; top: 14px; width: 26px; height: 26px; border-radius: 50%; background: var(--primary); color: #fff; font-size: .85rem; font-weight: 800; display: flex; align-items: center; justify-content: center; }
+  .wk-head { font-weight: 800; color: var(--primary); font-size: 1.1rem; margin: 6px 0 4px; }
+
+  .quiz-q { font-size: 1.1rem; font-weight: 600; margin-bottom: 12px; }
+  .quiz-opts { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 10px; }
+  .quiz-opt { padding: 10px 20px; border: 2px solid var(--border); border-radius: 30px; cursor: pointer; font-family: 'Sarabun', sans-serif; font-size: 1rem; font-weight: 600; transition: all .2s; background: white; }
+  .quiz-opt:hover { border-color: var(--primary); color: var(--primary); }
+  .quiz-opt.correct { border-color: var(--accent); background: #ECFDF5; color: #047857; }
+  .quiz-opt.wrong { border-color: var(--secondary); background: #FFF4EC; color: #BE185D; }
+  .quiz-feedback { font-weight: 700; font-size: 1rem; min-height: 24px; }
+  .quiz-feedback.ok { color: #047857; }
+  .quiz-feedback.err { color: #BE185D; }
+  .btn-next { margin-top: 10px; padding: 10px 28px; background: var(--primary); color: white; border: none; border-radius: 30px; font-family: 'Sarabun', sans-serif; font-size: 1rem; font-weight: 700; cursor: pointer; transition: background .2s; }
+  .btn-next:hover { background: #142B1A; }
+  .score-badge { display: inline-block; background: linear-gradient(135deg,#68EF3F,#1C3B22); color: white; border-radius: 30px; padding: 6px 20px; font-weight: 700; font-size: 1rem; }
+
+  @media (max-width: 700px) {
+    header h1 { font-size: 1.4rem; }
+    .card { padding: 20px 14px; }
+    .tab-btn { font-size: .85rem; padding: 8px 10px; }
+    .wk-cell { padding-left: 46px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <button id="langToggle" class="lang-toggle" onclick="toggleLang()">EN</button>
+  <h1 data-th="📏 ค่าสัมบูรณ์" data-en="📏 Absolute Value">📏 ค่าสัมบูรณ์</h1>
+  <p data-th="ระยะห่างบนเส้นจำนวน • ปลดแอป • สมบัติ • สมการ • อสมการ • ม.4" data-en="Distance on the number line • unwrapping • properties • equations • inequalities">ระยะห่างบนเส้นจำนวน • ปลดแอป • สมบัติ • สมการ • อสมการ • ม.4</p>
+</header>
+
+<nav>
+  <button class="tab-btn active" onclick="showTab('dist')" data-th="📏 ความหมาย" data-en="📏 Meaning">📏 ความหมาย</button>
+  <button class="tab-btn" onclick="showTab('unwrap')" data-th="🔓 ปลดแอป" data-en="🔓 Unwrapping">🔓 ปลดแอป</button>
+  <button class="tab-btn" onclick="showTab('props')" data-th="📋 สมบัติ 8 ข้อ" data-en="📋 8 Properties">📋 สมบัติ 8 ข้อ</button>
+  <button class="tab-btn" onclick="showTab('eq')" data-th="🟰 สมการ" data-en="🟰 Equations">🟰 สมการ</button>
+  <button class="tab-btn" onclick="showTab('ineq')" data-th="⚖️ อสมการ" data-en="⚖️ Inequalities">⚖️ อสมการ</button>
+  <button class="tab-btn" onclick="showTab('quiz')" data-th="🎯 แบบฝึกหัด" data-en="🎯 Quiz">🎯 แบบฝึกหัด</button>
+</nav>
+
+<main>
+  <section id="tab-dist" class="tab-panel active"></section>
+  <section id="tab-unwrap" class="tab-panel"></section>
+  <section id="tab-props" class="tab-panel"></section>
+  <section id="tab-eq" class="tab-panel"></section>
+  <section id="tab-ineq" class="tab-panel"></section>
+  <section id="tab-quiz" class="tab-panel">
+    <div class="card">
+      <div class="card-title"><span class="icon">🎯</span><span data-th="แบบฝึกหัด — ทดสอบความเข้าใจ" data-en="Quiz — Test Your Understanding">แบบฝึกหัด — ทดสอบความเข้าใจ</span></div>
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:20px;">
+        <span id="quizProgress" style="color:var(--muted); font-size:1rem;"></span>
+        <span class="score-badge"><span data-th="คะแนน:" data-en="Score:">คะแนน:</span> <span id="quizScore">0</span> / <span id="quizTotal">10</span></span>
+      </div>
+      <div id="quizBox"></div>
+      <div style="margin-top:16px; display:flex; gap:12px; flex-wrap:wrap;">
+        <button class="btn-next" id="btnNext" onclick="nextQuestion()" style="display:none;" data-th="ข้อต่อไป ▶" data-en="Next ▶">ข้อต่อไป ▶</button>
+        <button class="btn-next" id="btnRetry" onclick="initQuiz()" style="display:none; background:var(--accent);" data-th="เล่นใหม่ 🔄" data-en="Play Again 🔄">เล่นใหม่ 🔄</button>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script>
+// ══════════════ ภาษาไทย/อังกฤษ (ค่าใน data-th/data-en ถือเป็น HTML — ดู docs/adr/0002) ══════════════
+const PAGE_TITLE = { th: "สื่อการสอน : ค่าสัมบูรณ์ ม.4", en: "Teaching Aid: Absolute Value" };
+let langMemory = 'th';
+function getLang() { try { return localStorage.getItem('siteLang') || 'th'; } catch (e) { return langMemory; } }
+function applyLang(lang) {
+  document.documentElement.lang = lang;
+  document.title = PAGE_TITLE[lang];
+  document.querySelectorAll('[data-th]').forEach(el => { el.innerHTML = (lang === 'en' && el.dataset.en) ? el.dataset.en : el.dataset.th; });
+  const btn = document.getElementById('langToggle');
+  if (btn) btn.textContent = lang === 'en' ? 'ไทย' : 'EN';
+  if (typeof onLangChange === 'function') onLangChange(lang);
+}
+function toggleLang() {
+  const next = getLang() === 'en' ? 'th' : 'en';
+  langMemory = next;
+  try { localStorage.setItem('siteLang', next); } catch (e) {}
+  applyLang(next);
+}
+// เนื้อหาของแท็บทั้งหมดสร้างจาก JS จึงวาดใหม่ทั้งหมดตอนสลับภาษา (ค่าที่ผู้ใช้ตั้งไว้เก็บในตัวแปร ไม่หาย)
+function onLangChange() { renderDist(); renderUnwrap(); renderProps(); renderEq(); renderIneq(); refreshQuizLang(); }
+
+function showTab(id) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  event.target.classList.add('active');
+  if (id === 'eq' || id === 'ineq') { resetWkAll(); renderEq(); renderIneq(); }
+}
+
+// ══════════════ ตัวช่วย ══════════════
+const EN = () => getLang() === 'en';
+const frac = (n, d) => `<span class="frac"><span class="num">${n}</span><span class="den">${d}</span></span>`;
+const T = (th, en) => ({ th, en });
+const tx = v => typeof v === 'string' ? v : v[getLang()];
+const al = rows => `<div class="align">${rows.map(r => Array.isArray(r)
+  ? `<span class="l">${r[0]}</span><span class="m">${r[1]}</span><span class="r">${r[2]}</span>` : `<span class="full">${r}</span>`).join('')}</div>`;
+const P = s => `<div>${s}</div>`;
+const fmt = v => (Math.round(v * 1000) / 1000).toString().replace('-', '−');
+const sgn = v => v.toString().replace('-', '−');
+const NS = 'http://www.w3.org/2000/svg';
+
+// เส้นจำนวน SVG (กว้าง 560): points, ranges(±Infinity ได้), signs, labels เศษส่วนบน/ล่าง, marker, arcs (ระยะ)
+function numberLine(spec) {
+  const W = 560, pad = 20, ay = 58, H = 116;
+  const { min, max } = spec;
+  const X = v => pad + (v - min) * (W - 2 * pad) / (max - min);
+  let s = `<svg class="nl" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">`;
+  s += `<line x1="${pad - 10}" y1="${ay}" x2="${W - pad + 10}" y2="${ay}" stroke="#94A3B8" stroke-width="2"/>`;
+  s += `<polygon points="${W - pad + 10},${ay} ${W - pad},${ay - 5} ${W - pad},${ay + 5}" fill="#94A3B8"/><polygon points="${pad - 10},${ay} ${pad},${ay - 5} ${pad},${ay + 5}" fill="#94A3B8"/>`;
+  for (let v = Math.ceil(min); v <= Math.floor(max); v++) {
+    s += `<line x1="${X(v)}" y1="${ay - 5}" x2="${X(v)}" y2="${ay + 5}" stroke="#CBD5E0"/>`;
+    s += `<text x="${X(v)}" y="${ay + 21}" text-anchor="middle" font-size="12" fill="#4A5568">${sgn(v)}</text>`;
+  }
+  (spec.arcs || []).forEach(a => {
+    const x1 = X(a.a), x2 = X(a.b), mx = (x1 + x2) / 2, up = 30 + Math.min(20, Math.abs(x2 - x1) / 8);
+    s += `<path d="M${x1},${ay - 8} Q${mx},${ay - 8 - up * 1.6} ${x2},${ay - 8}" fill="none" stroke="#FF8A3D" stroke-width="2.5" stroke-dasharray="5,3"/>`;
+    s += `<text x="${mx}" y="${ay - 12 - up * 0.8}" text-anchor="middle" font-size="14" font-weight="800" fill="#C2570C">${a.t}</text>`;
+  });
+  (spec.labels || []).forEach(l => {
+    const x = X(l.v), c = '#1C3B22', y0 = ay + 34;
+    s += `<text x="${x - 12}" y="${y0 + 6}" text-anchor="middle" font-size="12" font-weight="700" fill="${c}">${l.neg ? '−' : ''}</text>`;
+    s += `<text x="${x}" y="${y0}" text-anchor="middle" font-size="12" font-weight="700" fill="${c}">${l.n}</text>`;
+    s += `<line x1="${x - 9}" y1="${y0 + 3}" x2="${x + 9}" y2="${y0 + 3}" stroke="${c}" stroke-width="1.4"/>`;
+    s += `<text x="${x}" y="${y0 + 15}" text-anchor="middle" font-size="12" font-weight="700" fill="${c}">${l.d}</text>`;
+  });
+  (spec.signs || []).forEach(g => {
+    const col = g.c === 'pos' ? '#047857' : g.c === 'neg' ? '#BE185D' : '#4A5568';
+    s += `<text x="${X(g.v)}" y="${ay - 16}" text-anchor="middle" font-size="20" font-weight="800" fill="${col}">${g.t}</text>`;
+  });
+  (spec.ranges || []).forEach(r => {
+    const a = r.a === -Infinity ? pad - 10 : X(r.a), b = r.b === Infinity ? W - pad + 10 : X(r.b);
+    s += `<line x1="${a}" y1="${ay}" x2="${b}" y2="${ay}" stroke="#3FA82E" stroke-width="7"/>`;
+    if (r.a !== -Infinity) s += `<circle cx="${a}" cy="${ay}" r="6.5" fill="${r.ac ? '#1C3B22' : '#fff'}" stroke="#1C3B22" stroke-width="2.2"/>`;
+    if (r.b !== Infinity) s += `<circle cx="${b}" cy="${ay}" r="6.5" fill="${r.bc ? '#1C3B22' : '#fff'}" stroke="#1C3B22" stroke-width="2.2"/>`;
+  });
+  (spec.points || []).forEach(p => { s += `<circle cx="${X(p.v)}" cy="${ay}" r="6.5" fill="${p.closed === false ? '#fff' : '#3FA82E'}" stroke="#1C3B22" stroke-width="2.2"/>`; });
+  if (spec.marker !== undefined && spec.marker !== null) s += `<circle cx="${X(spec.marker)}" cy="${ay}" r="8" fill="#FF8A3D" stroke="#7C2D12" stroke-width="2.2"/>`;
+  return s + '</svg>';
+}
+
+// ═══════════════════════ TAB 1: ความหมาย (ระยะห่าง) ═══════════════════════
+// ลากจุด x บนเส้นจำนวน (แถบลากกว้างครอบทั้งเส้น) — วาดโครงครั้งเดียว แล้วขยับเฉพาะ attribute ระหว่างลาก
+const D = { x: 5, c: 3, MIN: -8, MAX: 10, W: 640, PAD: 30, AY: 100 };
+const dpx = v => D.PAD + (v - D.MIN) * (D.W - 2 * D.PAD) / (D.MAX - D.MIN);
+function renderDist() {
+  const en = EN();
+  const c = [-2, 0, 3].map(v => `<button class="chip ${D.c === v ? 'active' : ''}" onclick="D.c=${v};updateDist();markChips(this)">c = ${sgn(v)}</button>`).join('');
+  let ticks = '';
+  for (let v = D.MIN; v <= D.MAX; v++) ticks += `<line x1="${dpx(v)}" y1="${D.AY - 6}" x2="${dpx(v)}" y2="${D.AY + 6}" stroke="#CBD5E0"/><text x="${dpx(v)}" y="${D.AY + 26}" text-anchor="middle" font-size="13" fill="#4A5568">${sgn(v)}</text>`;
+  document.getElementById('tab-dist').innerHTML = `
+    <div class="card">
+      <div class="card-title"><span class="icon">📏</span><span>${en ? 'Absolute value = distance' : 'ค่าสัมบูรณ์ คือ "ระยะห่าง"'}</span></div>
+      <p class="intro">${en ? '<b>|x − c|</b> is the <b>distance</b> between x and c on the number line — always 0 or more. Drag the green dot and watch the ruler.' : '<b>|x − c|</b> คือ <b>ระยะห่าง</b>ระหว่างจุด x กับจุด c บนเส้นจำนวน จึงไม่มีทางติดลบ ลองลากจุดสีเขียวแล้วดูไม้บรรทัด'}</p>
+      <div class="formula">|x − c| = ${en ? 'distance from x to c' : 'ระยะจาก x ถึง c'}</div>
+      <div class="chips"><span style="align-self:center;font-weight:700;">${en ? 'Pick the fixed point:' : 'เลือกจุดคงที่:'}</span>${c}</div>
+      <svg id="svgDist" class="nl" viewBox="0 0 ${D.W} 170" xmlns="http://www.w3.org/2000/svg">
+        <line x1="${D.PAD - 12}" y1="${D.AY}" x2="${D.W - D.PAD + 12}" y2="${D.AY}" stroke="#94A3B8" stroke-width="2.5"/>${ticks}
+        <line id="dBar" x1="0" y1="${D.AY}" x2="0" y2="${D.AY}" stroke="#FF8A3D" stroke-width="9" stroke-linecap="round" opacity=".85"/>
+        <text id="dLab" x="0" y="${D.AY - 26}" text-anchor="middle" font-size="18" font-weight="800" fill="#C2570C"></text>
+        <circle id="dC" cx="0" cy="${D.AY}" r="11" fill="#fff" stroke="#C2570C" stroke-width="4"/>
+        <text id="dCLab" x="0" y="${D.AY + 52}" text-anchor="middle" font-size="15" font-weight="800" fill="#C2570C">c</text>
+        <rect id="dTrack" class="drag-track" x="${D.PAD - 14}" y="${D.AY - 36}" width="${D.W - 2 * D.PAD + 28}" height="72" fill="transparent"/>
+        <circle id="dX" cx="0" cy="${D.AY}" r="13" fill="var(--accent)" stroke="var(--primary)" stroke-width="3" style="pointer-events:none"/>
+        <text id="dXLab" x="0" y="${D.AY + 52}" text-anchor="middle" font-size="15" font-weight="800" fill="#1C3B22">x</text>
+      </svg>
+      <div id="distInfo" class="readout"></div>
+      <div class="box-info">${en ? '💡 <b>|x|</b> is just the distance from <b>0</b> — pick c = 0 to see it.' : '💡 <b>|x|</b> ก็คือระยะห่างจาก <b>0</b> นั่นเอง — ลองเลือก c = 0 ดู'}</div>
+    </div>`;
+  attachDistDrag();
+  updateDist();
+}
+function markChips(btn) { btn.parentNode.querySelectorAll('.chip').forEach(b => b.classList.toggle('active', b === btn)); }
+function updateDist() {
+  const q = id => document.getElementById(id);
+  if (!q('dX')) return;
+  const xp = dpx(D.x), cp = dpx(D.c), d = Math.abs(D.x - D.c);
+  q('dX').setAttribute('cx', xp); q('dXLab').setAttribute('x', xp);
+  q('dC').setAttribute('cx', cp); q('dCLab').setAttribute('x', cp);
+  q('dBar').setAttribute('x1', cp); q('dBar').setAttribute('x2', xp);
+  q('dLab').setAttribute('x', (xp + cp) / 2); q('dLab').textContent = fmt(d);
+  // ป้าย x กับ c ชนกันตอนซ้อนทับ: ยก c ขึ้นเหนือเส้น
+  q('dCLab').setAttribute('y', Math.abs(xp - cp) < 40 ? D.AY - 22 : D.AY + 52);
+  const inside = D.x - D.c, en = EN();
+  const cs = sgn(D.c), xs = sgn(D.x);
+  const insideStr = D.c === 0 ? `${xs}` : (D.c > 0 ? `${xs} − ${cs}` : `${xs} + ${-D.c}`);
+  q('distInfo').innerHTML = en
+    ? `x = <b>${xs}</b>, c = <b>${cs}</b><br>x − c = ${insideStr} = <b>${fmt(inside)}</b> <span class="tag ${inside >= 0 ? 'pos' : 'neg'}">${inside >= 0 ? 'positive or 0' : 'negative'}</span><br>|x − c| = <b>${fmt(d)}</b> — the distance from ${cs} to ${xs} is <b>${fmt(d)}</b> units`
+    : `x = <b>${xs}</b>, c = <b>${cs}</b><br>x − c = ${insideStr} = <b>${fmt(inside)}</b> <span class="tag ${inside >= 0 ? 'pos' : 'neg'}">${inside >= 0 ? 'บวกหรือศูนย์' : 'ลบ'}</span><br>|x − c| = <b>${fmt(d)}</b> — ระยะจาก ${cs} ถึง ${xs} คือ <b>${fmt(d)}</b> หน่วย`;
+}
+function attachDistDrag() {
+  const svg = document.getElementById('svgDist'), track = document.getElementById('dTrack');
+  if (!track) return;
+  let dragging = false;
+  const toX = clientX => {
+    const r = svg.getBoundingClientRect();
+    const px = (clientX - r.left) * (D.W / r.width);
+    const v = D.MIN + (px - D.PAD) * (D.MAX - D.MIN) / (D.W - 2 * D.PAD);
+    return Math.max(D.MIN, Math.min(D.MAX, Math.round(v * 2) / 2));
+  };
+  const move = clientX => { D.x = toX(clientX); updateDist(); };
+  track.addEventListener('pointerdown', e => { dragging = true; track.setPointerCapture(e.pointerId); move(e.clientX); });
+  track.addEventListener('pointermove', e => { if (dragging) move(e.clientX); });
+  track.addEventListener('pointerup', () => dragging = false);
+  track.addEventListener('pointercancel', () => dragging = false);
+}
+
+// ═══════════════════════ TAB 2: ปลดแอป ═══════════════════════
+// นิพจน์ข้างใน = a·x + b ; ปลดแอปตามเครื่องหมายของข้างใน
+const UNW = [
+  { a: 1, b: -2, show: '|x − 2|', inner: 'x − 2', pos: 'x − 2', neg: '−(x − 2) = −x + 2' },
+  { a: -1, b: 3, show: '|3 − x|', inner: '3 − x', pos: '3 − x', neg: '−(3 − x) = x − 3' },
+  { a: 2, b: 4, show: '|2x + 4|', inner: '2x + 4', pos: '2x + 4', neg: '−(2x + 4) = −2x − 4' },
+];
+const U = { i: 0, x: 0 };
+function renderUnwrap() {
+  const en = EN();
+  const chips = UNW.map((u, i) => `<button class="chip ${U.i === i ? 'active' : ''}" onclick="U.i=${i};markChips(this);updateUnwrap()">${u.show}</button>`).join('');
+  document.getElementById('tab-unwrap').innerHTML = `
+    <div class="card">
+      <div class="card-title"><span class="icon">🔓</span><span>${en ? 'Unwrapping the bars' : 'การปลดแอป (ถอดเครื่องหมายค่าสัมบูรณ์)'}</span></div>
+      <p class="intro">${en ? 'If you know the inside is positive → just remove the bars. If the inside is negative → remove the bars and put a minus in front (making it positive).' : 'ถ้ารู้ว่าข้างในเป็น <b>บวก</b> → ถอดแอปได้เลย ถ้าข้างในเป็น <b>ลบ</b> → ถอดแอปแล้ว <b>ใส่ลบนำหน้า</b> (จะได้ค่าเป็นบวก)'}</p>
+      <div class="box-info">${en ? 'Example: |−7| — inside is negative, so |−7| = −(−7) = <b>7</b>' : 'ตัวอย่าง: |−7| — ข้างในเป็นลบ จึงได้ |−7| = −(−7) = <b>7</b>'}</div>
+      <div class="chips"><span style="align-self:center;font-weight:700;">${en ? 'Try an expression:' : 'ลองนิพจน์:'}</span>${chips}</div>
+      <div class="slider-row"><b>x =</b><input type="range" id="unSlider" min="-6" max="8" step="1" value="${U.x}" oninput="U.x=parseFloat(this.value);updateUnwrap()"><span class="slider-val" id="unVal">${U.x}</span></div>
+      <div id="unOut"></div>
+    </div>`;
+  updateUnwrap();
+}
+function updateUnwrap() {
+  const out = document.getElementById('unOut');
+  if (!out) return;
+  const en = EN(), u = UNW[U.i], x = U.x;
+  document.getElementById('unVal').textContent = x;
+  const inside = u.a * x + u.b, isPos = inside >= 0, res = Math.abs(inside);
+  const cv = -u.b / u.a; // ค่าที่ข้างในเป็น 0
+  const posTxt = u.a > 0 ? `x ≥ ${sgn(cv)}` : `x ≤ ${sgn(cv)}`;
+  const negTxt = u.a > 0 ? `x &lt; ${sgn(cv)}` : `x &gt; ${sgn(cv)}`;
+  out.innerHTML = `
+    <div class="readout">
+      ${en ? 'Substitute' : 'แทน'} x = <b>${x}</b> ${en ? 'inside' : 'ข้างใน'}: ${u.inner} = <b>${sgn(inside)}</b>
+      <span class="tag ${isPos ? 'pos' : 'neg'}">${isPos ? (en ? 'inside is + (or 0)' : 'ข้างในเป็นบวก (หรือ 0)') : (en ? 'inside is −' : 'ข้างในเป็นลบ')}</span><br>
+      ${isPos ? (en ? 'Just remove the bars' : 'ถอดแอปได้เลย') : (en ? 'Remove the bars and put a minus in front' : 'ถอดแอปแล้วเติมลบนำหน้า')}:
+      ${u.show} = <b>${isPos ? u.pos : u.neg}</b> = <b>${sgn(res)}</b> ✓
+    </div>
+    <table class="case-tbl">
+      <tr><th>${en ? 'Case' : 'กรณี'}</th><th>${en ? 'Inside is…' : 'ข้างในเป็น…'}</th><th>${u.show} =</th></tr>
+      <tr class="${isPos ? 'live' : ''}"><td>${posTxt}</td><td>${en ? 'positive / 0' : 'บวก / ศูนย์'}</td><td>${u.pos}</td></tr>
+      <tr class="${isPos ? '' : 'live'}"><td>${negTxt}</td><td>${en ? 'negative' : 'ลบ'}</td><td>${u.neg}</td></tr>
+    </table>
+    <div class="box-warn">${en ? `The critical value is x = ${sgn(cv)} — that is where the inside becomes 0 and the two cases switch.` : `ค่าวิกฤตคือ x = ${sgn(cv)} — ตรงนี้ข้างในเป็น 0 และการปลดแอปสลับกรณี`}</div>`;
+}
+
+// ═══════════════════════ TAB 3: สมบัติ 8 ข้อ ═══════════════════════
+const PR = { x: 4, y: -2 };
+function renderProps() {
+  const en = EN();
+  document.getElementById('tab-props').innerHTML = `
+    <div class="card">
+      <div class="card-title"><span class="icon">📋</span><span>${en ? 'The 8 properties — test them yourself' : 'สมบัติของค่าสัมบูรณ์ 8 ข้อ — ลองแทนค่าเอง'}</span></div>
+      <p class="intro">${en ? 'Move x and y. Every card evaluates both sides and shows whether the property holds.' : 'เลื่อน x และ y แล้วดูว่าทั้งสองข้างของแต่ละสมบัติได้ค่าเท่าไร และเป็นจริงหรือไม่'}</p>
+      <div class="slider-row"><b>x =</b><input type="range" id="prX" min="-8" max="8" step="1" value="${PR.x}" oninput="PR.x=parseFloat(this.value);updateProps()"><span class="slider-val" id="prXv">${PR.x}</span></div>
+      <div class="slider-row"><b>y =</b><input type="range" id="prY" min="-8" max="8" step="1" value="${PR.y}" oninput="PR.y=parseFloat(this.value);updateProps()"><span class="slider-val" id="prYv">${PR.y}</span></div>
+      <div id="propsOut" class="prop-grid"></div>
+    </div>`;
+  updateProps();
+}
+function updateProps() {
+  const out = document.getElementById('propsOut');
+  if (!out) return;
+  const en = EN(), x = PR.x, y = PR.y, A = Math.abs;
+  document.getElementById('prXv').textContent = x; document.getElementById('prYv').textContent = y;
+  const yz = y === 0;
+  const items = [
+    { st: '|x| ≥ 0', v: `|x| = ${fmt(A(x))}`, rel: '≥', r: '0', ok: A(x) >= 0, lhs: A(x), rhs: 0 },
+    { st: '|x| = |−x|', v: `|x| = ${fmt(A(x))}`, rel: '=', r: `|−x| = ${fmt(A(-x))}`, ok: A(x) === A(-x) },
+    { st: '|x − y| = |y − x|', v: `|x − y| = ${fmt(A(x - y))}`, rel: '=', r: `|y − x| = ${fmt(A(y - x))}`, ok: A(x - y) === A(y - x) },
+    { st: '|x|² = |x²| = x²', v: `|x|² = ${fmt(A(x) ** 2)}`, rel: '=', r: `|x²| = ${fmt(A(x * x))} , x² = ${fmt(x * x)}`, ok: A(x) ** 2 === A(x * x) && A(x * x) === x * x },
+    { st: '|xy| = |x||y|', v: `|xy| = ${fmt(A(x * y))}`, rel: '=', r: `|x||y| = ${fmt(A(x) * A(y))}`, ok: A(x * y) === A(x) * A(y) },
+    { st: `|${frac('x', 'y')}| = ${frac('|x|', '|y|')} &nbsp;(y ≠ 0)`, na: yz, v: yz ? '' : `|x/y| = ${fmt(A(x / y))}`, rel: '=', r: yz ? '' : `|x|/|y| = ${fmt(A(x) / A(y))}`, ok: !yz && Math.abs(A(x / y) - A(x) / A(y)) < 1e-9 },
+    { st: '|x + y| ≤ |x| + |y|', v: `|x + y| = ${fmt(A(x + y))}`, rel: A(x + y) === A(x) + A(y) ? '=' : '&lt;', r: `|x| + |y| = ${fmt(A(x) + A(y))}`, ok: A(x + y) <= A(x) + A(y),
+      note: en ? (A(x + y) === A(x) + A(y) ? 'Equal here (x and y have the same sign, or one is 0)' : 'Strictly less (x and y have opposite signs)') : (A(x + y) === A(x) + A(y) ? 'เท่ากันตรงนี้ (x กับ y เครื่องหมายเดียวกัน หรือตัวใดตัวหนึ่งเป็น 0)' : 'น้อยกว่าจริง (x กับ y เครื่องหมายต่างกัน)') },
+    { st: '|x − y| ≥ |x| − |y|', v: `|x − y| = ${fmt(A(x - y))}`, rel: A(x - y) === A(x) - A(y) ? '=' : '&gt;', r: `|x| − |y| = ${fmt(A(x) - A(y))}`, ok: A(x - y) >= A(x) - A(y) },
+  ];
+  out.innerHTML = items.map((it, i) => `
+    <div class="prop ${it.na ? 'na' : (it.ok ? 'ok' : '')}">
+      <div class="st"><span class="no">${i + 1}</span>${it.st}</div>
+      ${it.na ? `<div>${en ? 'y = 0 — not defined, move y away from 0' : 'y = 0 หารไม่ได้ — ลองเลื่อน y ให้ไม่เป็น 0'}</div>` :
+        `<div>${it.v} &nbsp;<b>${it.rel}</b>&nbsp; ${it.r}</div><div>${it.ok ? '✅' : '❌'} ${en ? (it.ok ? 'holds' : 'fails') : (it.ok ? 'เป็นจริง' : 'ไม่จริง')}${it.note ? `<br><small>${it.note}</small>` : ''}</div>`}
+    </div>`).join('');
+}
+
+// ═══════════════════════ ตัวแสดงขั้นตอนทีละขั้น (ใช้ทั้งแท็บสมการและอสมการ) ═══════════════════════
+// steps[i] = { h: ข้อความ/สมการ (T หรือสตริง), vis?: () => svg }
+const WK = {
+  eq1a: { title: T('แบบที่ 1: |□| = a', 'Type 1: |□| = a'), prob: '|x − 3| = 5',
+    intro: T('ค่าสัมบูรณ์ = a (a &gt; 0) คือ "ห่างจากตัวข้างใน a หน่วย" จึงมีสองคำตอบ: บวกและลบ', 'Absolute value = a (a &gt; 0) means "a units away", so there are two answers: + and −'),
+    steps: [
+      { h: T(P('แยกเป็น 2 กรณี (ข้างในเท่ากับ a หรือ −a)') + al([['x − 3', '=', '5'], ['x − 3', '=', '−5']]), P('Split into 2 cases (inside equals a or −a)') + al([['x − 3', '=', '5'], ['x − 3', '=', '−5']])) },
+      { h: T(P('ย้ายข้างแต่ละกรณี') + al([['x', '=', '8'], ['x', '=', '−2']]), P('Solve each case') + al([['x', '=', '8'], ['x', '=', '−2']])) },
+      { h: T(P('ตอบ: <b>{−2, 8}</b> — ห่างจาก 3 ไปทางซ้ายและขวาข้างละ 5 หน่วย'), P('Answer: <b>{−2, 8}</b> — 5 units left and right of 3')),
+        vis: () => numberLine({ min: -4, max: 10, points: [{ v: -2 }, { v: 8 }], marker: 3, arcs: [{ a: 3, b: 8, t: '5' }, { a: 3, b: -2, t: '5' }] }) },
+    ] },
+  eq1b: { title: T('แบบที่ 1 (มี x ทั้งสองข้าง): ต้องตรวจคำตอบ', 'Type 1 with x on both sides: check your answers'), prob: '|x − 1| = 2x + 1',
+    intro: T('ถ้าขวามือมี x ด้วย ต้องเอาคำตอบไปแทนในโจทย์เสมอ เพราะค่าสัมบูรณ์ไม่มีทางเท่ากับจำนวนลบ', 'If x also appears on the right, always substitute the answers back — an absolute value can never equal a negative'),
+    steps: [
+      { h: T(P('แยกเป็น 2 กรณี') + al([['x − 1', '=', '2x + 1'], ['x − 1', '=', '−(2x + 1)']]), P('Split into 2 cases') + al([['x − 1', '=', '2x + 1'], ['x − 1', '=', '−(2x + 1)']])) },
+      { h: T(P('แก้แต่ละกรณี') + al([['−2', '=', 'x'], ['3x', '=', '0']]) + al([['x', '=', '−2'], ['x', '=', '0']]), P('Solve each case') + al([['−2', '=', 'x'], ['3x', '=', '0']]) + al([['x', '=', '−2'], ['x', '=', '0']])) },
+      { h: T(P('<b>ตรวจคำตอบในโจทย์เดิม</b>') + al([['x = −2:  |−2 − 1|', '=', '3'], ['2(−2) + 1', '=', '−3']]) + P('3 ≠ −3 ✗ ตัดทิ้ง') + al([['x = 0:  |0 − 1|', '=', '1'], ['2(0) + 1', '=', '1']]) + P('1 = 1 ✓ ใช้ได้'),
+             P('<b>Check in the original problem</b>') + al([['x = −2:  |−2 − 1|', '=', '3'], ['2(−2) + 1', '=', '−3']]) + P('3 ≠ −3 ✗ reject') + al([['x = 0:  |0 − 1|', '=', '1'], ['2(0) + 1', '=', '1']]) + P('1 = 1 ✓ valid')) },
+      { h: T(P('ตอบ: <b>{0}</b> &nbsp;<small>(ด้านขวา 2x + 1 ต้อง ≥ 0 จึงต้อง x ≥ −' + frac('1', '2') + ')</small>'), P('Answer: <b>{0}</b> &nbsp;<small>(the right side 2x + 1 must be ≥ 0, so x ≥ −' + frac('1', '2') + ')</small>')),
+        vis: () => numberLine({ min: -4, max: 4, points: [{ v: 0 }] }) },
+    ] },
+  eq2: { title: T('แบบที่ 2: |A| = |B| ใช้ u²&nbsp;−&nbsp;v²', 'Type 2: |A| = |B| using u²&nbsp;−&nbsp;v²'), prob: '|2x − 1| = |x + 4|',
+    intro: T('ยกกำลังสองทั้งสองข้างได้เลย (ทั้งสองข้างไม่ติดลบ) แล้วย้ายมาข้างเดียวใช้ u²&nbsp;−&nbsp;v² = (u&nbsp;−&nbsp;v)(u&nbsp;+&nbsp;v)', 'Square both sides (both are non-negative), move everything left and use u²&nbsp;−&nbsp;v² = (u&nbsp;−&nbsp;v)(u&nbsp;+&nbsp;v)'),
+    steps: [
+      { h: T(P('ยกกำลังสองทั้งสองข้าง') + al([['(2x − 1)²', '=', '(x + 4)²']]), P('Square both sides') + al([['(2x − 1)²', '=', '(x + 4)²']])) },
+      { h: T(P('ย้ายมาข้างเดียว แล้วแยกด้วย u²&nbsp;−&nbsp;v² = (u&nbsp;−&nbsp;v)(u&nbsp;+&nbsp;v)') + al([['(2x − 1)² − (x + 4)²', '=', '0']]) + P('ให้ u = 2x − 1 และ v = x + 4') + al([['u − v', '=', 'x − 5'], ['u + v', '=', '3x + 3'], ['(x − 5)(3x + 3)', '=', '0']]),
+             P('Move to one side, then factor with u²&nbsp;−&nbsp;v² = (u&nbsp;−&nbsp;v)(u&nbsp;+&nbsp;v)') + al([['(2x − 1)² − (x + 4)²', '=', '0']]) + P('Let u = 2x − 1 and v = x + 4') + al([['u − v', '=', 'x − 5'], ['u + v', '=', '3x + 3'], ['(x − 5)(3x + 3)', '=', '0']])) },
+      { h: T(P('ให้แต่ละวงเล็บ = 0') + al([['x − 5', '=', '0'], ['3x + 3', '=', '0']]) + al([['x', '=', '5'], ['x', '=', '−1']]), P('Set each bracket to 0') + al([['x − 5', '=', '0'], ['3x + 3', '=', '0']]) + al([['x', '=', '5'], ['x', '=', '−1']])) },
+      { h: T(P('ตรวจคำตอบ') + al([['x = 5:  |2(5) − 1|', '=', '9'], ['|5 + 4|', '=', '9']]) + al([['x = −1:  |2(−1) − 1|', '=', '3'], ['|−1 + 4|', '=', '3']]) + P('เท่ากันทั้งคู่ ✓ ตอบ: <b>{−1, 5}</b>'),
+             P('Check') + al([['x = 5:  |2(5) − 1|', '=', '9'], ['|5 + 4|', '=', '9']]) + al([['x = −1:  |2(−1) − 1|', '=', '3'], ['|−1 + 4|', '=', '3']]) + P('both equal ✓ Answer: <b>{−1, 5}</b>')),
+        vis: () => numberLine({ min: -3, max: 7, points: [{ v: -1 }, { v: 5 }] }) },
+    ] },
+  eq3: { title: T('แบบที่ 3: |A| + |B| = k แยกกรณี', 'Type 3: |A| + |B| = k, split into cases'), prob: '|x| + |x − 2| = 4',
+    intro: T('ค่าสัมบูรณ์หลายตัว ต้องแบ่งช่วงที่ค่าวิกฤต (0 และ 2) แล้วเช็กว่าคำตอบอยู่ในช่วงของกรณีนั้นหรือไม่', 'With several absolute values, split at the critical values (0 and 2), then check each answer lies in its own case'),
+    steps: [
+      { h: T(P('ค่าวิกฤต 0 และ 2 → แบ่ง 3 กรณี: ① x ≤ 0 &nbsp; ② 0 &lt; x &lt; 2 &nbsp; ③ x ≥ 2'), P('Critical values 0 and 2 → 3 cases: ① x ≤ 0 &nbsp; ② 0 &lt; x &lt; 2 &nbsp; ③ x ≥ 2')),
+        vis: () => numberLine({ min: -4, max: 6, points: [{ v: 0, closed: false }, { v: 2, closed: false }], signs: [{ v: -2, t: '①', c: 'n' }, { v: 1, t: '②', c: 'n' }, { v: 4, t: '③', c: 'n' }] }) },
+      { h: T(P('<b>① x ≤ 0</b> (|x| = −x และ |x − 2| = −(x − 2))') + al([['−x − (x − 2)', '=', '4'], ['−2x + 2', '=', '4'], ['x', '=', '−1']]) + P('−1 อยู่ในช่วง x ≤ 0 ✓'),
+             P('<b>① x ≤ 0</b> (|x| = −x and |x − 2| = −(x − 2))') + al([['−x − (x − 2)', '=', '4'], ['−2x + 2', '=', '4'], ['x', '=', '−1']]) + P('−1 is in x ≤ 0 ✓')) },
+      { h: T(P('<b>② 0 &lt; x &lt; 2</b> (|x| = x และ |x − 2| = −(x − 2))') + al([['x − (x − 2)', '=', '4'], ['2', '=', '4']]) + P('เป็นไปไม่ได้ ✗ ไม่มีคำตอบในกรณีนี้'),
+             P('<b>② 0 &lt; x &lt; 2</b> (|x| = x and |x − 2| = −(x − 2))') + al([['x − (x − 2)', '=', '4'], ['2', '=', '4']]) + P('impossible ✗ no answer in this case')) },
+      { h: T(P('<b>③ x ≥ 2</b>') + al([['x + (x − 2)', '=', '4'], ['2x − 2', '=', '4'], ['x', '=', '3']]) + P('3 อยู่ในช่วง x ≥ 2 ✓'),
+             P('<b>③ x ≥ 2</b>') + al([['x + (x − 2)', '=', '4'], ['2x − 2', '=', '4'], ['x', '=', '3']]) + P('3 is in x ≥ 2 ✓')) },
+      { h: T(P('รวมทุกกรณี ตอบ: <b>{−1, 3}</b>'), P('Combine all cases. Answer: <b>{−1, 3}</b>')),
+        vis: () => numberLine({ min: -4, max: 6, points: [{ v: -1 }, { v: 3 }] }) },
+    ] },
+  in2a: { title: T('แบบที่ 2: |A| &lt; |B| ยกกำลังสอง', 'Type 2: |A| &lt; |B| squared'), prob: '|x − 1| &lt; |x + 3|',
+    intro: T('อสมการก็ยกกำลังสองทั้งสองข้างได้ เพราะทั้งสองข้างไม่ติดลบ — แล้วแก้ต่อด้วย u²&nbsp;−&nbsp;v²', 'Inequalities can also be squared, since both sides are non-negative — then use u²&nbsp;−&nbsp;v²'),
+    steps: [
+      { h: T(P('ยกกำลังสองทั้งสองข้าง') + al([['(x − 1)²', '&lt;', '(x + 3)²']]), P('Square both sides') + al([['(x − 1)²', '&lt;', '(x + 3)²']])) },
+      { h: T(P('ย้ายข้างแล้วแยก u²&nbsp;−&nbsp;v² โดย u = x − 1 และ v = x + 3') + al([['(x − 1)² − (x + 3)²', '&lt;', '0'], ['u − v', '=', '−4'], ['u + v', '=', '2x + 2'], ['(−4)(2x + 2)', '&lt;', '0'], ['2x + 2', '&gt;', '0'], ['x', '&gt;', '−1']]) + P('<small>(หารด้วย −4 จึงกลับเครื่องหมาย)</small>'),
+             P('Move and factor with u²&nbsp;−&nbsp;v², where u = x − 1 and v = x + 3') + al([['(x − 1)² − (x + 3)²', '&lt;', '0'], ['u − v', '=', '−4'], ['u + v', '=', '2x + 2'], ['(−4)(2x + 2)', '&lt;', '0'], ['2x + 2', '&gt;', '0'], ['x', '&gt;', '−1']]) + P('<small>(dividing by −4 flips the sign)</small>')) },
+      { h: T(P('ตอบ: <b>(−1, ∞)</b> &nbsp;<small>ลองเช็ก x = 0: |0 − 1| = 1 &lt; |0 + 3| = 3 ✓</small>'), P('Answer: <b>(−1, ∞)</b> &nbsp;<small>Check x = 0: |0 − 1| = 1 &lt; |0 + 3| = 3 ✓</small>')),
+        vis: () => numberLine({ min: -5, max: 5, ranges: [{ a: -1, b: Infinity, ac: false }] }) },
+    ] },
+  in2b: { title: T('แบบที่ 2 (ได้ + − +)', 'Type 2 (giving + − +)'), prob: '|2x − 1| ≥ |x + 2|',
+    intro: T('ถ้าหลังยกกำลังสองได้สมการกำลังสอง ก็กลับไปใช้แผนภาพเครื่องหมาย + − + ตามที่เรียนมา', 'If squaring leaves a quadratic, go back to the + − + sign chart'),
+    steps: [
+      { h: T(P('ยกกำลังสอง ย้ายข้าง แล้วแยก u²&nbsp;−&nbsp;v² โดย u = 2x − 1 และ v = x + 2') + al([['(2x − 1)²', '≥', '(x + 2)²'], ['(2x − 1)² − (x + 2)²', '≥', '0'], ['u − v', '=', 'x − 3'], ['u + v', '=', '3x + 1'], ['(x − 3)(3x + 1)', '≥', '0']]),
+             P('Square, move, and factor with u²&nbsp;−&nbsp;v², where u = 2x − 1 and v = x + 2') + al([['(2x − 1)²', '≥', '(x + 2)²'], ['(2x − 1)² − (x + 2)²', '≥', '0'], ['u − v', '=', 'x − 3'], ['u + v', '=', '3x + 1'], ['(x − 3)(3x + 1)', '≥', '0']])) },
+      { h: T(P('ค่าวิกฤต x = 3 และ x = −' + frac('1', '3') + ' → วาด <b>+ − +</b> แล้วเลือก + (เพราะ ≥)'), P('Critical values x = 3 and x = −' + frac('1', '3') + ' → draw <b>+ − +</b> and pick + (because ≥)')),
+        vis: () => numberLine({ min: -4, max: 6, points: [{ v: -1 / 3 }, { v: 3 }], labels: [{ v: -1 / 3, neg: true, n: '1', d: '3' }], signs: [{ v: -2, t: '+', c: 'pos' }, { v: 1.3, t: '−', c: 'neg' }, { v: 4.5, t: '+', c: 'pos' }] }) },
+      { h: T(P('ตอบ: <b>(−∞, −' + frac('1', '3') + '] ∪ [3, ∞)</b>'), P('Answer: <b>(−∞, −' + frac('1', '3') + '] ∪ [3, ∞)</b>')),
+        vis: () => numberLine({ min: -4, max: 6, ranges: [{ a: -Infinity, b: -1 / 3, bc: true }, { a: 3, b: Infinity, ac: true }], labels: [{ v: -1 / 3, neg: true, n: '1', d: '3' }] }) },
+    ] },
+  in3: { title: T('แบบที่ 3: |A| + |B| &lt; k แยกกรณี', 'Type 3: |A| + |B| &lt; k, split into cases'), prob: '|x| + |x − 2| &lt; 4',
+    intro: T('แต่ละกรณีต้อง <b>∩</b> กับช่วงของกรณีนั้นก่อน แล้วค่อยนำทุกกรณีมา <b>∪</b> กัน', 'In each case take <b>∩</b> with that case\'s interval, then take the <b>∪</b> of all cases'),
+    steps: [
+      { h: T(P('ค่าวิกฤต 0 และ 2 → แบ่ง 3 กรณี: ① x ≤ 0 &nbsp; ② 0 &lt; x &lt; 2 &nbsp; ③ x ≥ 2'), P('Critical values 0 and 2 → 3 cases: ① x ≤ 0 &nbsp; ② 0 &lt; x &lt; 2 &nbsp; ③ x ≥ 2')),
+        vis: () => numberLine({ min: -4, max: 6, points: [{ v: 0, closed: false }, { v: 2, closed: false }], signs: [{ v: -2, t: '①', c: 'n' }, { v: 1, t: '②', c: 'n' }, { v: 4, t: '③', c: 'n' }] }) },
+      { h: T(P('<b>① x ≤ 0</b>') + al([['−x − (x − 2)', '&lt;', '4'], ['−2x + 2', '&lt;', '4'], ['−2x', '&lt;', '2'], ['x', '&gt;', '−1']]) + P('(−1, ∞) <b>∩</b> (−∞, 0] = (−1, 0]'),
+             P('<b>① x ≤ 0</b>') + al([['−x − (x − 2)', '&lt;', '4'], ['−2x + 2', '&lt;', '4'], ['−2x', '&lt;', '2'], ['x', '&gt;', '−1']]) + P('(−1, ∞) <b>∩</b> (−∞, 0] = (−1, 0]')) },
+      { h: T(P('<b>② 0 &lt; x &lt; 2</b>') + al([['x − (x − 2)', '&lt;', '4'], ['2', '&lt;', '4']]) + P('จริงเสมอ → ได้ทั้งช่วง (0, 2)'),
+             P('<b>② 0 &lt; x &lt; 2</b>') + al([['x − (x − 2)', '&lt;', '4'], ['2', '&lt;', '4']]) + P('always true → the whole interval (0, 2)')) },
+      { h: T(P('<b>③ x ≥ 2</b>') + al([['x + (x − 2)', '&lt;', '4'], ['2x − 2', '&lt;', '4'], ['2x', '&lt;', '6'], ['x', '&lt;', '3']]) + P('(−∞, 3) <b>∩</b> [2, ∞) = [2, 3)'),
+             P('<b>③ x ≥ 2</b>') + al([['x + (x − 2)', '&lt;', '4'], ['2x − 2', '&lt;', '4'], ['2x', '&lt;', '6'], ['x', '&lt;', '3']]) + P('(−∞, 3) <b>∩</b> [2, ∞) = [2, 3)')) },
+      { h: T(P('นำทุกกรณีมา <b>∪</b> กัน: (−1, 0] ∪ (0, 2) ∪ [2, 3) ตอบ: <b>(−1, 3)</b>'), P('Take the <b>∪</b>: (−1, 0] ∪ (0, 2) ∪ [2, 3) Answer: <b>(−1, 3)</b>')),
+        vis: () => numberLine({ min: -4, max: 6, ranges: [{ a: -1, b: 3, ac: false, bc: false }] }) },
+    ] },
+};
+const wkShown = {};
+Object.keys(WK).forEach(k => wkShown[k] = 0);
+
+function wkHtml(key, prev) {
+  const w = WK[key], en = EN(), n = w.steps.length;
+  let h = `<div class="card" id="wk-${key}">
+    <div class="card-title"><span class="icon">✏️</span><span>${tx(w.title)}</span></div>
+    <p class="intro">${tx(w.intro)}</p>
+    <div class="formula">${w.prob}</div>`;
+  w.steps.forEach((s, i) => {
+    if (i >= wkShown[key]) return;
+    h += `<div class="wk-cell${i >= prev ? ' fresh' : ''}"><span class="stepno">${i + 1}</span>${tx(s.h)}${s.vis ? `<div>${s.vis()}</div>` : ''}</div>`;
+  });
+  h += `<div class="btn-row">
+      <button class="btn" onclick="wkNext('${key}')" ${wkShown[key] >= n ? 'disabled' : ''}>${en ? 'Next step ▶' : 'ขั้นถัดไป ▶'} (${wkShown[key]}/${n})</button>
+      <button class="btn ghost" onclick="wkAll('${key}')" ${wkShown[key] >= n ? 'disabled' : ''}>${en ? 'Show all' : 'เผยทั้งหมด'}</button>
+      <button class="btn ghost" onclick="wkReset('${key}')" ${wkShown[key] === 0 ? 'disabled' : ''}>${en ? '↺ Reset' : '↺ เริ่มใหม่'}</button>
+    </div></div>`;
+  return h;
+}
+function wkRender(key, prev) { const el = document.getElementById('wk-' + key); if (el) el.outerHTML = wkHtml(key, prev); }
+function wkNext(k) { const p = wkShown[k]; if (wkShown[k] < WK[k].steps.length) wkShown[k]++; wkRender(k, p); }
+function wkAll(k) { const p = wkShown[k]; wkShown[k] = WK[k].steps.length; wkRender(k, p); }
+function wkReset(k) { wkShown[k] = 0; wkRender(k, 0); }
+
+// ═══════════════════════ TAB 4: สมการ ═══════════════════════
+// เลือกดูทีละแบบด้วยปุ่ม (แท็บสมการและอสมการใช้ร่วมกัน) — เลือกแล้ววาดแท็บนั้นใหม่ ขั้นที่เปิดไว้ของแต่ละแบบยังอยู่
+const TYPE_SEL = { eq: 1, ineq: 1 };
+// ทุกครั้งที่เข้าแท็บหรือกดเลือกแบบ ให้ตัวแสดงขั้นตอนกลับไปเริ่มที่ 0 ขั้น (ยังไม่เฉลย) — ผู้ใช้ไม่อยากเห็นของที่เปิดจนจบค้างไว้
+// (สลับภาษายังคงจำนวนขั้นเดิม เพราะ onLangChange ไม่ผ่านฟังก์ชันนี้)
+function resetWkAll() { Object.keys(WK).forEach(k => wkShown[k] = 0); }
+function setType(kind, n) { TYPE_SEL[kind] = n; resetWkAll(); if (kind === 'eq') renderEq(); else renderIneq(); }
+function typeChips(kind, labels) {
+  return `<div class="chips">${labels.map((l, i) => `<button class="chip ${TYPE_SEL[kind] === i + 1 ? 'active' : ''}" onclick="setType('${kind}', ${i + 1})">${l}</button>`).join('')}</div>`;
+}
+
+// ═══════════════════════ TAB 4: สมการ ═══════════════════════
+function renderEq() {
+  const en = EN();
+  const groups = { 1: ['eq1a', 'eq1b'], 2: ['eq2'], 3: ['eq3'] };
+  const lines = en
+    ? ['<b>Type 1:</b> |□| = a → split into two cases', '<b>Type 2:</b> |A| = |B| → square, then use u²&nbsp;−&nbsp;v²', '<b>Type 3:</b> several bars → split at the critical values']
+    : ['<b>แบบที่ 1:</b> |□| = a → แยกเป็นสองกรณี', '<b>แบบที่ 2:</b> |A| = |B| → ยกกำลังสองแล้วใช้ u²&nbsp;−&nbsp;v²', '<b>แบบที่ 3:</b> หลายแอป → แบ่งช่วงที่ค่าวิกฤต'];
+  const labels = en ? ['Type 1: |□| = a', 'Type 2: |A| = |B|', 'Type 3: several bars'] : ['แบบที่ 1: |□| = a', 'แบบที่ 2: |A| = |B|', 'แบบที่ 3: หลายแอป'];
+  document.getElementById('tab-eq').innerHTML =
+    `<div class="card"><div class="card-title"><span class="icon">🟰</span><span>${en ? '3 types of absolute value equations' : 'สมการค่าสัมบูรณ์ 3 แบบ'}</span></div>
+      <div class="intro">${lines.map(l => `<div>${l}</div>`).join('')}</div>
+      ${typeChips('eq', labels)}
+      <div class="box-warn">${en ? '⭐ If x also appears on the right side, <b>always check</b> your answers in the original problem.' : '⭐ ถ้าขวามือมี x ด้วย ต้อง <b>ตรวจคำตอบ</b> ในโจทย์เดิมเสมอ'}</div></div>` +
+    groups[TYPE_SEL.eq].map(k => wkHtml(k, wkShown[k])).join('');
+}
+
+// ═══════════════════════ TAB 5: อสมการ ═══════════════════════
+const IN = { c: 1, a: 3, t: 0, op: '<' };
+function renderIneq() {
+  const en = EN();
+  const ops = [['<', '&lt;'], ['<=', '≤'], ['>', '&gt;'], ['>=', '≥']].map(([o, s]) => `<button class="chip ${IN.op === o ? 'active' : ''}" onclick="IN.op='${o}';markChips(this);updateIneq()">|x − c| ${s} a</button>`).join('');
+  const lines = en
+    ? ['<b>Type 1:</b> |x − c| compared with a → think distance', '<b>Type 2:</b> |A| &lt; |B| → square, then use u²&nbsp;−&nbsp;v²', '<b>Type 3:</b> several bars → split into cases, take ∩ then ∪']
+    : ['<b>แบบที่ 1:</b> |x − c| เทียบกับ a → คิดเป็นระยะห่าง', '<b>แบบที่ 2:</b> |A| &lt; |B| → ยกกำลังสองแล้วใช้ u²&nbsp;−&nbsp;v²', '<b>แบบที่ 3:</b> หลายแอป → แบ่งกรณี แล้ว ∩ และ ∪'];
+  const labels = en ? ['Type 1: |x − c| vs a', 'Type 2: |A| vs |B|', 'Type 3: several bars'] : ['แบบที่ 1: |x − c| เทียบ a', 'แบบที่ 2: |A| เทียบ |B|', 'แบบที่ 3: หลายแอป'];
+  const head = `<div class="card"><div class="card-title"><span class="icon">⚖️</span><span>${en ? '3 types of absolute value inequalities' : 'อสมการค่าสัมบูรณ์ 3 แบบ'}</span></div>
+      <div class="intro">${lines.map(l => `<div>${l}</div>`).join('')}</div>${typeChips('ineq', labels)}</div>`;
+  const groups = { 2: ['in2a', 'in2b'], 3: ['in3'] };
+  if (TYPE_SEL.ineq !== 1) { document.getElementById('tab-ineq').innerHTML = head + groups[TYPE_SEL.ineq].map(k => wkHtml(k, wkShown[k])).join(''); return; }
+  document.getElementById('tab-ineq').innerHTML = head +
+    `<div class="card"><div class="card-title"><span class="icon">📏</span><span>${en ? 'Type 1: think distance' : 'แบบที่ 1: คิดเป็นระยะห่าง'}</span></div>
+      <p class="intro">${en ? '<b>less than</b> means "within a units of c" (one middle interval). <b>greater than</b> means "farther than a units from c" (two outer pieces).' : '<b>น้อยกว่า</b> = "ห่างจาก c ไม่เกิน a" ได้ช่วงตรงกลางช่วงเดียว &nbsp; <b>มากกว่า</b> = "ห่างจาก c เกิน a" ได้สองช่วงด้านนอก'}</p>
+      <div class="chips">${ops}</div>
+      <div class="slider-row"><b>c =</b><input type="range" id="inC" min="-5" max="5" step="1" value="${IN.c}" oninput="IN.c=parseFloat(this.value);updateIneq()"><span class="slider-val" id="inCv"></span></div>
+      <div class="slider-row"><b>a =</b><input type="range" id="inA" min="1" max="6" step="1" value="${IN.a}" oninput="IN.a=parseFloat(this.value);updateIneq()"><span class="slider-val" id="inAv"></span></div>
+      <div class="slider-row"><b>${en ? 'test x =' : 'ทดสอบ x ='}</b><input type="range" id="inT" min="-10" max="10" step="1" value="${IN.t}" oninput="IN.t=parseFloat(this.value);updateIneq()"><span class="slider-val" id="inTv"></span></div>
+      <div id="ineqOut"></div></div>`;
+  updateIneq();
+}
+function updateIneq() {
+  const out = document.getElementById('ineqOut');
+  if (!out) return;
+  const en = EN(), { c, a, t, op } = IN;
+  document.getElementById('inCv').textContent = sgn(c); document.getElementById('inAv').textContent = a; document.getElementById('inTv').textContent = sgn(t);
+  const lo = c - a, hi = c + a, strict = (op === '<' || op === '>'), closed = !strict, less = (op === '<' || op === '<=');
+  const ranges = less ? [{ a: lo, b: hi, ac: closed, bc: closed }] : [{ a: -Infinity, b: lo, bc: closed }, { a: hi, b: Infinity, ac: closed }];
+  const ansStr = less ? `${closed ? '[' : '('}${sgn(lo)}, ${sgn(hi)}${closed ? ']' : ')'}` : `(−∞, ${sgn(lo)}${closed ? ']' : ')'} ∪ ${closed ? '[' : '('}${sgn(hi)}, ∞)`;
+  const d = Math.abs(t - c);
+  const ok = op === '<' ? d < a : op === '<=' ? d <= a : op === '>' ? d > a : d >= a;
+  const opS = { '<': '&lt;', '<=': '≤', '>': '&gt;', '>=': '≥' }[op];
+  const cs = c === 0 ? 'x' : (c > 0 ? `x − ${c}` : `x + ${-c}`);
+  const words = less ? (en ? `within ${a} of ${sgn(c)}` : `ห่างจาก ${sgn(c)} ${closed ? 'ไม่เกิน' : 'น้อยกว่า'} ${a}`) : (en ? `farther than ${a} from ${sgn(c)}` : `ห่างจาก ${sgn(c)} ${closed ? 'ตั้งแต่' : 'เกิน'} ${a}`);
+  out.innerHTML = `
+    <div class="formula">|${cs}| ${opS} ${a}</div>
+    <div class="readout">${en ? 'Meaning' : 'ความหมาย'}: ${words}<br>
+      ${less ? `${sgn(lo)} ${closed ? '≤' : '&lt;'} x ${closed ? '≤' : '&lt;'} ${sgn(hi)}` : `x ${closed ? '≤' : '&lt;'} ${sgn(lo)} ${en ? 'or' : 'หรือ'} x ${closed ? '≥' : '&gt;'} ${sgn(hi)}`}
+      <br>${en ? 'Answer' : 'ตอบ'}: <b>${ansStr}</b></div>
+    ${numberLine({ min: -10, max: 10, ranges, marker: t, arcs: [{ a: c, b: c + a, t: String(a) }, { a: c, b: c - a, t: String(a) }] })}
+    <div class="readout">${en ? 'Test point' : 'จุดทดสอบ'} x = <b>${sgn(t)}</b>: |${sgn(t)} − ${sgn(c)}| = <b>${d}</b> ${opS} ${a} ? <b>${ok ? '✅' : '❌'}</b>
+      → ${en ? (ok ? 'it lies in the green region' : 'it is outside the green region') : (ok ? 'อยู่ในช่วงสีเขียว' : 'อยู่นอกช่วงสีเขียว')}</div>`;
+}
+
+// ═══════════════════════ แบบฝึกหัด ═══════════════════════
+const quizData = [
+  { q_th: '|−7| เท่ากับเท่าใด?', q_en: 'What is |−7|?', opts: ['7', '−7', '0', '±7'], ans: 0,
+    exp_th: 'ข้างในเป็นลบ ปลดแอปแล้วเติมลบ: −(−7) = 7', exp_en: 'The inside is negative: −(−7) = 7' },
+  { q_th: 'เมื่อ x &lt; 4 ค่า |x − 4| ปลดแอปได้เท่ากับข้อใด?', q_en: 'For x &lt; 4, which equals |x − 4|?', opts: ['x − 4', '4 − x', '−x − 4', 'x + 4'], ans: 1,
+    exp_th: 'x &lt; 4 ทำให้ x − 4 ติดลบ จึงเติมลบ: −(x − 4) = 4 − x', exp_en: 'x &lt; 4 makes x − 4 negative, so −(x − 4) = 4 − x' },
+  { q_th: '|x − 3| = 5 มีคำตอบคือ?', q_en: 'What are the solutions of |x − 3| = 5?', opts: ['{8}', '{−2, 8}', '{2}', '{−8, 2}'], ans: 1,
+    exp_th: 'x − 3 = 5 หรือ x − 3 = −5 ได้ x = 8 หรือ −2', exp_en: 'x − 3 = 5 or x − 3 = −5 gives x = 8 or −2' },
+  { q_th: '|x − 1| = 2x + 1 มีคำตอบคือ?', q_en: 'What are the solutions of |x − 1| = 2x + 1?', opts: ['{0}', '{−2}', '{−2, 0}', 'ไม่มีคำตอบ'], opts_en: ['{0}', '{−2}', '{−2, 0}', 'No solution'], ans: 0,
+    exp_th: 'ได้ x = −2 หรือ 0 แต่ x = −2 ทำให้ขวามือ −3 ติดลบ ไม่มีทางเท่ากับค่าสัมบูรณ์ จึงเหลือ {0}', exp_en: 'We get x = −2 or 0, but x = −2 makes the right side −3, which can never equal an absolute value — only {0} remains' },
+  { q_th: '|x + 1| = |x − 3| มีคำตอบคือ?', q_en: 'What is the solution of |x + 1| = |x − 3|?', opts: ['{1}', '{−1, 3}', '{2}', 'ไม่มีคำตอบ'], opts_en: ['{1}', '{−1, 3}', '{2}', 'No solution'], ans: 0,
+    exp_th: '(x + 1)² − (x − 3)² = (4)(2x − 2) = 0 ได้ x = 1 (ห่างจาก −1 และ 3 เท่ากัน คือจุดกึ่งกลาง)', exp_en: '(x + 1)² − (x − 3)² = (4)(2x − 2) = 0 gives x = 1 — the midpoint of −1 and 3' },
+  { q_th: '|x − 2| &lt; 3 มีคำตอบเป็นช่วงใด?', q_en: 'What interval solves |x − 2| &lt; 3?', opts: ['(−1, 5)', '(−∞, −1) ∪ (5, ∞)', '[−1, 5]', '(−5, 1)'], ans: 0,
+    exp_th: 'ห่างจาก 2 น้อยกว่า 3 หน่วย: −3 &lt; x − 2 &lt; 3 ได้ (−1, 5)', exp_en: 'Less than 3 away from 2: −3 &lt; x − 2 &lt; 3 gives (−1, 5)' },
+  { q_th: '|x − 2| &gt; 3 มีคำตอบเป็นช่วงใด?', q_en: 'What interval solves |x − 2| &gt; 3?', opts: ['(−1, 5)', '(−∞, −1) ∪ (5, ∞)', '(−∞, −1] ∪ [5, ∞)', 'ℝ ทั้งหมด'], opts_en: ['(−1, 5)', '(−∞, −1) ∪ (5, ∞)', '(−∞, −1] ∪ [5, ∞)', 'All real numbers ℝ'], ans: 1,
+    exp_th: 'ห่างจาก 2 เกิน 3 หน่วย: x − 2 &lt; −3 หรือ x − 2 &gt; 3 (จุดปลายโปร่ง)', exp_en: 'More than 3 away from 2: x − 2 &lt; −3 or x − 2 &gt; 3 (open ends)' },
+  { q_th: '|x| &lt; 0 มีคำตอบคือ?', q_en: 'What is the solution of |x| &lt; 0?', opts: ['∅ (ไม่มีคำตอบ)', '{0}', 'ℝ ทั้งหมด', 'x &lt; 0'], opts_en: ['∅ (no solution)', '{0}', 'All real numbers ℝ', 'x &lt; 0'], ans: 0,
+    exp_th: 'ระยะห่างไม่มีทางติดลบ จึงไม่มี x ที่ทำให้ |x| น้อยกว่า 0', exp_en: 'A distance is never negative, so no x makes |x| less than 0' },
+  { q_th: '|x − 1| &lt; |x + 3| มีคำตอบคือ?', q_en: 'What is the solution of |x − 1| &lt; |x + 3|?', opts: ['(−1, ∞)', '(−∞, −1)', '(−3, 1)', '(1, ∞)'], ans: 0,
+    exp_th: 'ยกกำลังสอง: (−4)(2x + 2) &lt; 0 หารด้วย −4 กลับเครื่องหมาย ได้ x &gt; −1', exp_en: 'Squaring: (−4)(2x + 2) &lt; 0; dividing by −4 flips the sign, so x &gt; −1' },
+  { q_th: '|x + y| = |x| + |y| เกิดขึ้นเมื่อใด?', q_en: 'When does |x + y| = |x| + |y| happen?', opts: ['เมื่อ x และ y เครื่องหมายเดียวกัน (หรือตัวใดตัวหนึ่งเป็น 0)', 'เมื่อ x และ y เครื่องหมายต่างกัน', 'ไม่มีทางเท่ากัน', 'เท่ากันเสมอ'], opts_en: ['When x and y have the same sign (or one is 0)', 'When x and y have opposite signs', 'Never', 'Always'], ans: 0,
+    exp_th: 'ถ้าเครื่องหมายต่างกัน ค่าจะหักล้างกันบางส่วน |x + y| จึงน้อยกว่า |x| + |y|', exp_en: 'With opposite signs they partly cancel, so |x + y| is smaller than |x| + |y|' },
+];
+let qIdx = 0, score = 0, answered = false;
+function qt(key) {
+  const en = EN();
+  return { prog: en ? `Question ${qIdx + 1} / ${quizData.length}` : `ข้อที่ ${qIdx + 1} / ${quizData.length}`,
+    ok: en ? '✅ Correct! ' : '✅ ถูกต้อง! ', bad: en ? '❌ Not quite — ' : '❌ ไม่ถูกต้อง — ', title: en ? 'Your Score' : 'ผลคะแนนของคุณ' }[key];
+}
+function grade(s) {
+  const r = s / quizData.length;
+  if (EN()) return r >= .9 ? '🌟 Excellent!' : r >= .7 ? '👍 Great job!' : r >= .5 ? '💪 Not bad, review a bit' : '📚 Go back and review';
+  return r >= .9 ? '🌟 ยอดเยี่ยมมาก!' : r >= .7 ? '👍 ดีมาก!' : r >= .5 ? '💪 พอใช้ได้ ลองทบทวนดูนะ' : '📚 ลองกลับไปทบทวนอีกรอบ';
+}
+function initQuiz() {
+  qIdx = 0; score = 0; answered = false;
+  document.getElementById('quizScore').textContent = 0;
+  document.getElementById('quizTotal').textContent = quizData.length;
+  document.getElementById('btnRetry').style.display = 'none';
+  renderQuestion();
+}
+function renderQuestion() {
+  const q = quizData[qIdx], en = EN();
+  answered = false;
+  document.getElementById('quizProgress').textContent = qt('prog');
+  document.getElementById('btnNext').style.display = 'none';
+  const opts = (en && q.opts_en) ? q.opts_en : q.opts;
+  document.getElementById('quizBox').innerHTML = `
+    <div class="quiz-q">${qIdx + 1}. ${en ? q.q_en : q.q_th}</div>
+    <div class="quiz-opts">${opts.map((o, i) => `<button class="quiz-opt" onclick="answer(${i})">${o}</button>`).join('')}</div>
+    <div class="quiz-feedback" id="qfb"></div>`;
+}
+function refreshQuizLang() {
+  const box = document.getElementById('quizBox');
+  if (!box || !box.querySelector('.quiz-q')) return;
+  const q = quizData[qIdx], en = EN();
+  document.getElementById('quizProgress').textContent = qt('prog');
+  box.querySelector('.quiz-q').innerHTML = `${qIdx + 1}. ${en ? q.q_en : q.q_th}`;
+  const opts = (en && q.opts_en) ? q.opts_en : q.opts;
+  box.querySelectorAll('.quiz-opt').forEach((b, i) => b.innerHTML = opts[i]);
+  if (answered) {
+    const fb = document.getElementById('qfb');
+    if (fb) fb.innerHTML = (fb.classList.contains('ok') ? qt('ok') : qt('bad')) + (en ? q.exp_en : q.exp_th);
+  }
+  const card = document.getElementById('scoreCard');
+  if (card) card.outerHTML = scoreCardHtml();
+}
+function scoreCardHtml() {
+  return `<div id="scoreCard" style="margin-top:20px; background:linear-gradient(135deg,#1C3B22,#2E5936); color:white; border-radius:16px; padding:24px; text-align:center;">
+    <div style="font-size:2.5rem;">🎉</div><div style="font-size:1.5rem; font-weight:800; margin:8px 0;">${qt('title')}</div>
+    <div style="font-size:3rem; font-weight:800;">${score} / ${quizData.length}</div>
+    <div style="font-size:1.1rem; opacity:.9; margin-top:8px;">${grade(score)}</div></div>`;
+}
+function answer(i) {
+  if (answered) return;
+  answered = true;
+  const q = quizData[qIdx], exp = EN() ? q.exp_en : q.exp_th, fb = document.getElementById('qfb');
+  document.querySelectorAll('.quiz-opt').forEach((b, idx) => {
+    if (idx === q.ans) b.classList.add('correct'); else if (idx === i) b.classList.add('wrong');
+    b.style.pointerEvents = 'none';
+  });
+  if (i === q.ans) { score++; document.getElementById('quizScore').textContent = score; fb.className = 'quiz-feedback ok'; fb.innerHTML = qt('ok') + exp; }
+  else { fb.className = 'quiz-feedback err'; fb.innerHTML = qt('bad') + exp; }
+  if (qIdx < quizData.length - 1) document.getElementById('btnNext').style.display = 'inline-block';
+  else {
+    document.getElementById('btnRetry').style.display = 'inline-block';
+    setTimeout(() => { document.getElementById('quizBox').insertAdjacentHTML('beforeend', scoreCardHtml()); }, 300);
+  }
+}
+function nextQuestion() { qIdx++; renderQuestion(); }
+
+window.addEventListener('load', () => { initQuiz(); applyLang(getLang()); });
+</script>
+</body>
+</html>

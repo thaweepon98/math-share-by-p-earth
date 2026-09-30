@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>สื่อการสอน : ระบบพิกัดฉาก 3 มิติ ม.5</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800&display=swap');
+
+  :root {
+    --primary: #1C3B22; --secondary: #FF8A3D; --accent: #68EF3F; --accent-2: #3FA82E; --warning: #FFB347;
+    --bg: #F3F7EC; --card: #FFFFFF; --text: #2D3748; --muted: #718096; --border: #E2E8F0;
+    --shadow: 0 4px 24px rgba(28,59,34,0.10); --radius: 16px;
+    --pos: #047857; --pos-bg: #ECFDF5; --neg: #BE185D; --neg-bg: #FFF4EC;
+    --cu: #2563EB; --cv: #DC2626; --cw: #7C3AED; --cr: #111827; --ci: #059669; --cj: #EA580C; --ck: #0891B2;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Sarabun', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+  header { background: linear-gradient(135deg, #1C3B22 0%, #2E5936 100%); color: white; padding: 28px 40px 20px; text-align: center; position: relative; overflow: hidden; }
+  header::before { content: ''; position: absolute; top: -60px; right: -60px; width: 200px; height: 200px; background: rgba(255,255,255,0.07); border-radius: 50%; }
+  header h1 { font-size: 2rem; font-weight: 800; letter-spacing: .5px; }
+  header p { font-size: 1rem; opacity: .85; margin-top: 4px; }
+  .back-link { position: absolute; top: 14px; left: 20px; color: white; text-decoration: none; font-size: .85rem; font-weight: 600; opacity: .9; z-index: 2; }
+  .back-link:hover { opacity: 1; text-decoration: underline; }
+  .lang-toggle { position: absolute; top: 14px; right: 20px; background: rgba(255,255,255,.15); color: white; border: 1.5px solid rgba(255,255,255,.5); border-radius: 20px; padding: 5px 14px; font-family: 'Sarabun', sans-serif; font-size: .8rem; font-weight: 700; cursor: pointer; z-index: 2; }
+  .lang-toggle:hover { background: rgba(255,255,255,.28); }
+
+  nav { display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; padding: 20px 24px 0; background: white; border-bottom: 3px solid var(--border); }
+  .tab-btn { padding: 10px 18px; border: none; background: transparent; border-radius: 10px 10px 0 0; font-family: 'Sarabun', sans-serif; font-size: 0.95rem; font-weight: 600; color: var(--muted); cursor: pointer; transition: all .25s; border-bottom: 3px solid transparent; margin-bottom: -3px; }
+  .tab-btn:hover { color: var(--primary); background: #E3F3D8; }
+  .tab-btn.active { color: var(--primary); border-bottom-color: var(--primary); background: #E3F3D8; }
+
+  main { max-width: 980px; margin: 0 auto; padding: 32px 20px 60px; }
+  .tab-panel { display: none; animation: fadeIn .35s ease; }
+  .tab-panel.active { display: block; }
+  @keyframes fadeIn { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
+
+  .card { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); padding: 28px 32px; margin-bottom: 24px; }
+  .card-title { font-size: 1.25rem; font-weight: 700; color: var(--primary); margin-bottom: 12px; display: flex; align-items: center; gap: 10px; }
+  .card-title .icon { font-size: 1.5rem; }
+  .intro { font-size: 1.02rem; line-height: 1.8; margin-bottom: 14px; }
+  .box-info { background: #EEF7E6; border-left: 4px solid var(--primary); border-radius: 10px; padding: 14px 18px; margin: 14px 0; line-height: 1.8; }
+  .box-warn { background: #FFF7ED; border-left: 4px solid var(--warning); border-radius: 10px; padding: 14px 18px; margin: 14px 0; line-height: 1.8; }
+  .box-ok   { background: #ECFDF5; border-left: 4px solid var(--accent);  border-radius: 10px; padding: 14px 18px; margin: 14px 0; line-height: 1.8; }
+  .formula { background: linear-gradient(135deg,#1C3B22,#2E5936); color: white; border-radius: 12px; padding: 14px 24px; text-align: center; font-size: 1.3rem; font-weight: 700; margin: 14px 0; letter-spacing: .5px; display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 4px 6px; line-height: 1.9; }
+  .link-tag { display: inline-block; background: #E3F3D8; color: var(--primary); border-radius: 999px; padding: 2px 12px; font-size: .78rem; font-weight: 700; margin: 2px 4px 2px 0; }
+  .note { color: var(--muted); font-size: .9rem; }
+
+  .btn { padding: 10px 24px; background: var(--primary); color: white; border: none; border-radius: 30px; font-family: 'Sarabun', sans-serif; font-size: 1rem; font-weight: 700; cursor: pointer; transition: background .2s, opacity .2s; }
+  .btn:hover:not(:disabled) { background: #2E5936; }
+  .btn:disabled { opacity: .45; cursor: not-allowed; }
+  .btn.ghost { background: white; color: var(--primary); border: 2px solid var(--primary); }
+  .btn.ghost:hover:not(:disabled) { background: #E3F3D8; }
+  .btn.small { padding: 6px 16px; font-size: .9rem; }
+  .btn-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 14px; align-items: center; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0; }
+  .chip { padding: 8px 16px; border: 2px solid var(--border); border-radius: 30px; background: #fff; font-family: 'Sarabun', sans-serif; font-weight: 700; font-size: 1rem; cursor: pointer; color: var(--text); display: inline-flex; align-items: center; gap: 4px; }
+  .chip:hover { border-color: var(--primary); }
+  .chip.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+  .chip.wrong { border-color: var(--neg); background: var(--neg-bg); color: var(--neg); }
+
+  .frac { display: inline-flex; flex-direction: column; align-items: center; font-weight: 700; line-height: 1; vertical-align: middle; margin: 0 4px; }
+  .frac .num { font-size: 1em; border-bottom: 2.5px solid currentColor; padding-bottom: 2px; min-width: 18px; text-align: center; white-space: nowrap; }
+  .frac .den { font-size: 1em; padding-top: 3px; min-width: 18px; text-align: center; white-space: nowrap; }
+  .frac .num:has(.v) { padding-top: .55em; }
+
+  /* ตัวแปรเวกเตอร์: ลูกศรบนหัว (วาดด้วย CSS เพราะอักขระลูกศรรวมแสดงไม่ได้ในหลายฟอนต์) */
+  .v { position: relative; display: inline-block; font-style: normal; white-space: nowrap; line-height: 1; padding-top: .34em; }
+  .v::before { content: ''; position: absolute; left: 4%; right: 4%; top: .14em; height: 0; border-top: .08em solid currentColor; }
+  .v::after { content: ''; position: absolute; right: 4%; top: .14em; width: .32em; height: .32em; border-top: .08em solid currentColor; border-right: .08em solid currentColor; transform: translate(-4%, -50%) rotate(45deg) scale(.75); transform-origin: center; }
+  .v.tall { padding-top: .5em; }
+  .v.tall::before, .v.tall::after { top: .1em; }
+  .cu { color: var(--cu); } .cv { color: var(--cv); } .cw { color: var(--cw); } .cr { color: var(--cr); }
+  .ci { color: var(--ci); } .cj { color: var(--cj); } .ck { color: var(--ck); }
+  .formula .cu { color: #93C5FD; } .formula .cv { color: #FCA5A5; } .formula .cw { color: #C4B5FD; } .formula .cr { color: #fff; }
+  .formula .ci { color: #86EFAC; } .formula .cj { color: #FDBA74; } .formula .ck { color: #67E8F9; }
+  .colvec { display: inline-flex; flex-direction: column; align-items: center; border-left: 2px solid currentColor; border-right: 2px solid currentColor; border-radius: 6px; padding: 2px 8px; margin: 0 4px; vertical-align: middle; line-height: 1.25; font-weight: 700; }
+
+  .align { display: grid; grid-template-columns: auto auto auto; justify-content: start; column-gap: .55em; row-gap: 3px; align-items: center; margin: 4px 0; }
+  .align .l { justify-self: end; text-align: right; }
+  .align .m { justify-self: center; font-weight: 700; }
+  .align .r { justify-self: start; }
+  .align .full { grid-column: 1 / -1; }
+
+  .wk-cell { position: relative; background: #fff; border: 2px solid var(--border); border-radius: 14px; padding: 12px 16px 12px 52px; margin-bottom: 12px; line-height: 1.9; }
+  .wk-cell.fresh { animation: rowIn .5s ease; }
+  @keyframes rowIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+  .wk-cell .stepno { position: absolute; left: 14px; top: 14px; width: 26px; height: 26px; border-radius: 50%; background: var(--primary); color: #fff; font-size: .85rem; font-weight: 800; display: flex; align-items: center; justify-content: center; }
+  .hl-i { background: #D1FAE5; border-radius: 5px; padding: 0 5px; }
+  .hl-j { background: #FFEDD5; border-radius: 5px; padding: 0 5px; }
+  .hl-k { background: #CFFAFE; border-radius: 5px; padding: 0 5px; }
+  .hl-y { background: #FEF9C3; border-radius: 5px; padding: 0 5px; }
+  .strike { text-decoration: line-through; opacity: .35; }
+
+  /* เวทีวาดรูป */
+  svg.stage { display: block; width: 100%; height: auto; background: #fff; border: 2px solid var(--border); border-radius: 14px; touch-action: none; user-select: none; -webkit-user-select: none; }
+  svg.stage text { font-family: 'Sarabun', sans-serif; font-weight: 700; }
+  svg.stage .drag { cursor: grab; }
+  svg.stage .pick { cursor: pointer; }
+  .stage-wrap { max-width: 720px; margin: 8px auto; }
+  .readout { background: #F8FAFC; border: 2px solid var(--border); border-radius: 12px; padding: 12px 16px; margin: 10px 0; line-height: 1.9; font-size: 1.02rem; }
+  .readout.big { font-size: 1.15rem; font-weight: 700; text-align: center; }
+  .readout.ok { border-color: var(--accent-2); background: var(--pos-bg); }
+  .readout.no { border-color: var(--secondary); background: var(--neg-bg); }
+  .two-col { display: grid; grid-template-columns: 1.15fr 1fr; gap: 18px; align-items: start; }
+  .legend { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: .92rem; font-weight: 700; margin: 8px 0; }
+  .legend .sw { display: inline-block; width: 22px; height: 5px; border-radius: 3px; margin-right: 6px; vertical-align: middle; }
+
+  .stepper { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin: 12px 0 6px; justify-content: center; }
+  .stepper .cnt { font-weight: 800; color: var(--primary); min-width: 52px; text-align: center; }
+  .cap { text-align: center; font-size: 1.08rem; font-weight: 600; line-height: 1.8; min-height: 3.6em; margin: 4px 0; }
+  .eqline { text-align: center; font-size: 1.35rem; font-weight: 800; line-height: 2.2; min-height: 2.4em; }
+
+  .slider-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin: 10px 0; }
+  .slider-row b { min-width: 34px; }
+  input[type=range] { accent-color: var(--primary); width: min(320px, 100%); }
+  .slider-val { font-weight: 800; color: var(--primary); font-size: 1.1rem; min-width: 44px; }
+  .numin { display: inline-flex; align-items: center; gap: 4px; font-weight: 700; margin: 4px 10px 4px 0; }
+  .numin input { width: 68px; padding: 6px 8px; border: 2px solid var(--border); border-radius: 10px; font-family: 'Sarabun', sans-serif; font-size: 1rem; font-weight: 700; text-align: center; }
+  .numin input:focus { outline: none; border-color: var(--primary); }
+  .row-inputs { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 6px; margin: 8px 0; }
+  .row-inputs .lbl { font-weight: 800; margin-right: 4px; }
+  .err-msg { color: var(--neg); font-weight: 600; font-size: .95rem; min-height: 22px; margin-top: 4px; }
+
+  table.tbl { border-collapse: collapse; margin: 10px auto; font-size: 1.02rem; }
+  table.tbl th, table.tbl td { border: 2px solid var(--border); padding: 8px 14px; text-align: center; }
+  table.tbl th { background: #E3F3D8; color: var(--primary); }
+  table.tbl td.hl { background: #FEF9C3; }
+
+  .quiz-q { font-size: 1.1rem; font-weight: 600; margin-bottom: 12px; line-height: 1.8; }
+  .quiz-opts { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 10px; }
+  .quiz-opt { padding: 10px 20px; border: 2px solid var(--border); border-radius: 30px; cursor: pointer; font-family: 'Sarabun', sans-serif; font-size: 1rem; font-weight: 600; transition: all .2s; background: white; }
+  .quiz-opt:hover { border-color: var(--primary); color: var(--primary); }
+  .quiz-opt.correct { border-color: var(--accent); background: #ECFDF5; color: #047857; }
+  .quiz-opt.wrong { border-color: var(--secondary); background: #FFF4EC; color: #BE185D; }
+  .quiz-feedback { font-weight: 700; font-size: 1rem; min-height: 24px; line-height: 1.8; }
+  .quiz-feedback.ok { color: #047857; }
+  .quiz-feedback.err { color: #BE185D; }
+  .quiz-fig { max-width: 340px; margin: 6px 0 12px; }
+  .btn-next { margin-top: 10px; padding: 10px 28px; background: var(--primary); color: white; border: none; border-radius: 30px; font-family: 'Sarabun', sans-serif; font-size: 1rem; font-weight: 700; cursor: pointer; transition: background .2s; }
+  .btn-next:hover { background: #142B1A; }
+  .score-badge { display: inline-block; background: linear-gradient(135deg,#68EF3F,#1C3B22); color: white; border-radius: 30px; padding: 6px 20px; font-weight: 700; font-size: 1rem; }
+
+  @media (max-width: 700px) {
+    header { padding: 44px 16px 16px; }
+    header h1 { font-size: 1.4rem; }
+    .card { padding: 20px 14px; }
+    .tab-btn { font-size: .85rem; padding: 8px 10px; }
+    .wk-cell { padding-left: 46px; }
+    .two-col { grid-template-columns: 1fr; }
+    .formula { font-size: 1.1rem; padding: 12px 10px; }
+    .eqline { font-size: 1.15rem; }
+    main { padding: 20px 10px 50px; }
+  }
+
+  svg.hand3 { width: 100%; max-width: 330px; height: auto; display: block; margin: 0 auto; }
+  .num3 { display: flex; flex-wrap: wrap; gap: 4px 14px; align-items: center; margin: 8px 0; }
+  .tbl td.hl { background: #FEF9C3; font-weight: 800; }
+  .px { color: #EA580C; } .py { color: #16A34A; } .pz { color: #2563EB; }
+</style>
+</head>
+<body>
+
+<header>
+  <button id="langToggle" class="lang-toggle" onclick="toggleLang()">EN</button>
+  <h1 data-th="🧊 ระบบพิกัดฉาก 3 มิติ" data-en="🧊 3D Coordinate System">🧊 ระบบพิกัดฉาก 3 มิติ</h1>
+  <p data-th="แกน X Y Z • ระนาบอ้างอิง • พล็อตจุดด้วยกล่อง • ภาพฉายของจุด • ระยะห่างสองจุด • ม.5" data-en="X Y Z axes • reference planes • plotting with a box • projections of a point • distance between two points">แกน X Y Z • ระนาบอ้างอิง • พล็อตจุดด้วยกล่อง • ภาพฉายของจุด • ระยะห่างสองจุด • ม.5</p>
+</header>
+
+<nav>
+  <button class="tab-btn active" onclick="showTab('ax',this)" data-th="① แกน 3 มิติ" data-en="① The 3 Axes">① แกน 3 มิติ</button>
+  <button class="tab-btn" onclick="showTab('pl',this)" data-th="② ระนาบอ้างอิง" data-en="② Reference Planes">② ระนาบอ้างอิง</button>
+  <button class="tab-btn" onclick="showTab('bx',this)" data-th="③ พล็อตจุดด้วยกล่อง" data-en="③ Plot with a Box">③ พล็อตจุดด้วยกล่อง</button>
+  <button class="tab-btn" onclick="showTab('pj',this)" data-th="④ ภาพฉายของจุด" data-en="④ Projection of a Point">④ ภาพฉายของจุด</button>
+  <button class="tab-btn" onclick="showTab('ds',this)" data-th="⑤ ระยะห่าง 2 จุด" data-en="⑤ Distance">⑤ ระยะห่าง 2 จุด</button>
+  <button class="tab-btn" onclick="showTab('quiz',this)" data-th="🎯 แบบฝึกหัด" data-en="🎯 Quiz">🎯 แบบฝึกหัด</button>
+</nav>
+
+<main>
+  <section id="tab-ax" class="tab-panel active"></section>
+  <section id="tab-pl" class="tab-panel"></section>
+  <section id="tab-bx" class="tab-panel"></section>
+  <section id="tab-pj" class="tab-panel"></section>
+  <section id="tab-ds" class="tab-panel"></section>
+  <section id="tab-quiz" class="tab-panel">
+    <div class="card">
+      <div class="card-title"><span class="icon">🎯</span><span data-th="แบบฝึกหัด — ทดสอบความเข้าใจ" data-en="Quiz — Test Your Understanding">แบบฝึกหัด — ทดสอบความเข้าใจ</span></div>
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:20px;">
+        <span id="quizProgress" style="color:var(--muted); font-size:1rem;"></span>
+        <span class="score-badge"><span data-th="คะแนน:" data-en="Score:">คะแนน:</span> <span id="quizScore">0</span> / <span id="quizTotal">10</span></span>
+      </div>
+      <div id="quizBox"></div>
+      <div style="margin-top:16px; display:flex; gap:12px; flex-wrap:wrap;">
+        <button class="btn-next" id="btnNext" onclick="nextQuestion()" style="display:none;" data-th="ข้อต่อไป ▶" data-en="Next ▶">ข้อต่อไป ▶</button>
+        <button class="btn-next" id="btnRetry" onclick="initQuiz()" style="display:none; background:var(--accent);" data-th="เล่นใหม่ 🔄" data-en="Play Again 🔄">เล่นใหม่ 🔄</button>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script>
+const PAGE_TITLE = { th: "สื่อการสอน : ระบบพิกัดฉาก 3 มิติ ม.5", en: "Teaching Aid: 3D Coordinate System (Grade 11)" };
+// ══════════════ ภาษาไทย/อังกฤษ (ค่าใน data-th/data-en ถือเป็น HTML — ดู docs/adr/0002) ══════════════
+let langMemory = 'th';
+function getLang() { try { return localStorage.getItem('siteLang') || 'th'; } catch (e) { return langMemory; } }
+function applyLang(lang) {
+  document.documentElement.lang = lang;
+  document.title = PAGE_TITLE[lang];
+  document.querySelectorAll('[data-th]').forEach(el => { el.innerHTML = (lang === 'en' && el.dataset.en) ? el.dataset.en : el.dataset.th; });
+  const btn = document.getElementById('langToggle');
+  if (btn) btn.textContent = lang === 'en' ? 'ไทย' : 'EN';
+  if (typeof onLangChange === 'function') onLangChange(lang);
+}
+function toggleLang() {
+  const next = getLang() === 'en' ? 'th' : 'en';
+  langMemory = next;
+  try { localStorage.setItem('siteLang', next); } catch (e) {}
+  applyLang(next);
+}
+function onLangChange() { stpStopAll(); renderAll(); refreshQuizLang(); }
+
+// ══════════════ ตัวช่วยพื้นฐาน ══════════════
+const $ = id => document.getElementById(id);
+const EN = () => getLang() === 'en';
+const L = (th, en) => (EN() ? en : th);
+const T = (th, en) => ({ th, en });
+const tx = v => typeof v === 'function' ? v() : (typeof v === 'string' ? v : v[getLang()]);
+const frac = (n, d) => `<span class="frac"><span class="num">${n}</span><span class="den">${d}</span></span>`;
+const P = s => `<div>${s}</div>`;
+const al = rows => `<div class="align">${rows.map(r => Array.isArray(r)
+  ? `<span class="l">${r[0]}</span><span class="m">${r[1]}</span><span class="r">${r[2]}</span>` : `<span class="full">${r}</span>`).join('')}</div>`;
+const sg = n => { n = Math.round(n * 1000) / 1000; return String(n).replace('-', '−'); };          // เลขติดลบใช้ − จริง
+const sgp = n => (n < 0 ? '−' + sg(-n) : sg(n));
+// ตัวแปรเวกเตอร์ มีลูกศรบนหัว
+const V = (s, cls) => `<span class="v${cls ? ' ' + cls : ''}">${s}</span>`;
+const vu = V('u', 'cu'), vv = V('v', 'cv'), vw = V('w', 'cw');
+const vi = V('i', 'ci tall'), vj = V('j', 'cj tall'), vk = V('k', 'ck');
+const box = (cls, html) => `<div class="${cls}">${html}</div>`;
+const linkTag = (th, en) => `<span class="link-tag">🔗 ${L(th, en)}</span>`;
+const gcd = (a, b) => { a = Math.abs(a); b = Math.abs(b); while (b) { [a, b] = [b, a % b]; } return a; };
+// √n ที่ถอดกรณฑ์แล้ว เช่น 8 → "2√2", 25 → "5", 13 → "√13"
+function sqrtParts(n) { let k = 1, r = n; for (let d = 2; d * d <= r; d++) { while (r % (d * d) === 0) { r /= d * d; k *= d; } } return { k, r }; }
+function sqrtStr(n) { const { k, r } = sqrtParts(n); if (r === 1) return String(k); return (k > 1 ? k : '') + '√' + r; }
+// นิพจน์ a·i + b·j (+ c·k) แบบมีสี ตัดพจน์ที่เป็น 0 และสัมประสิทธิ์ ±1
+function comb(a, b, c) {
+  const items = [[a, vi], [b, vj]]; if (c !== undefined) items.push([c, vk]);
+  let out = '';
+  items.forEach(([n, u]) => {
+    if (n === 0) return;
+    const mag = Math.abs(n) === 1 ? '' : sg(Math.abs(n));
+    out += (out ? (n < 0 ? ' − ' : ' + ') : (n < 0 ? '−' : '')) + mag + u;
+  });
+  return out || V('0', 'cr');
+}
+const vecCol = (vals) => `<span class="colvec">${vals.map(x => `<span>${x}</span>`).join('')}</span>`;
+
+// ══════════════ แท็บ ══════════════
+function showTab(id, btn) {
+  stpStopAll();
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  if (btn) btn.classList.add('active');
+  if (id !== 'quiz') { resetWkAll(); resetSteppers(); if (typeof resetWidgets === 'function') resetWidgets(id); renderAll(); }
+}
+
+// ══════════════ ตัวแสดงขั้นตอนทีละขั้น (ตัวอย่างการคำนวณ — เริ่มที่ 0 ขั้นทุกครั้งที่เปิดแท็บ) ══════════════
+const WK = {}, wkShown = {};
+function addWk(key, w) { WK[key] = w; wkShown[key] = 0; }
+function resetWkAll() { Object.keys(WK).forEach(k => wkShown[k] = 0); }
+function wkHtml(key, prev) {
+  const w = WK[key], en = EN(), n = w.steps.length;
+  let h = `<div class="card" id="wk-${key}">
+    <div class="card-title"><span class="icon">✏️</span><span>${tx(w.title)}</span></div>
+    ${w.intro ? `<p class="intro">${tx(w.intro)}</p>` : ''}
+    <div class="formula">${tx(w.prob)}</div>`;
+  w.steps.forEach((s, i) => {
+    if (i >= wkShown[key]) return;
+    h += `<div class="wk-cell${i >= (prev || 0) ? ' fresh' : ''}"><span class="stepno">${i + 1}</span>${tx(s.h)}</div>`;
+  });
+  h += `<div class="btn-row">
+      <button class="btn" onclick="wkNext('${key}')" ${wkShown[key] >= n ? 'disabled' : ''}>${en ? 'Next step ▶' : 'ขั้นถัดไป ▶'} (${wkShown[key]}/${n})</button>
+      <button class="btn ghost" onclick="wkAll('${key}')" ${wkShown[key] >= n ? 'disabled' : ''}>${en ? 'Show all' : 'เผยทั้งหมด'}</button>
+      <button class="btn ghost" onclick="wkReset('${key}')" ${wkShown[key] === 0 ? 'disabled' : ''}>${en ? '↺ Reset' : '↺ เริ่มใหม่'}</button>
+    </div></div>`;
+  return h;
+}
+function wkRender(key, prev) { const el = document.getElementById('wk-' + key); if (el) el.outerHTML = wkHtml(key, prev); }
+function wkNext(k) { const p = wkShown[k]; if (wkShown[k] < WK[k].steps.length) wkShown[k]++; wkRender(k, p); }
+function wkAll(k) { const p = wkShown[k]; wkShown[k] = WK[k].steps.length; wkRender(k, p); }
+function wkReset(k) { wkShown[k] = 0; wkRender(k, 0); }
+
+// ══════════════ แอนิเมชันหลายขั้น ◀ ▶ / เล่นอัตโนมัติ ══════════════
+const STP = {};
+function stpReg(id, min, max, draw) { const old = STP[id]; STP[id] = { step: old ? old.step : min, min, max, start: min, draw, timer: null }; }
+function stpHtml(id) {
+  return `<div class="stepper" id="stp-${id}">
+    <button class="btn ghost small" data-act="prev" onclick="stpGo('${id}',-1)">◀ ${L('ย้อน', 'Back')}</button>
+    <span class="cnt"></span>
+    <button class="btn small" data-act="next" onclick="stpGo('${id}',1)">${L('ถัดไป', 'Next')} ▶</button>
+    <button class="btn ghost small" data-act="play" onclick="stpPlay('${id}')">${L('▶▶ เล่นอัตโนมัติ', '▶▶ Auto-play')}</button>
+  </div>`;
+}
+function stpUi(id) {
+  const s = STP[id], el = document.getElementById('stp-' + id); if (!s || !el) return;
+  el.querySelector('.cnt').textContent = `${s.step - s.min + 1}/${s.max - s.min + 1}`;
+  el.querySelector('[data-act=prev]').disabled = s.step <= s.min;
+  el.querySelector('[data-act=next]').disabled = s.step >= s.max;
+  el.querySelector('[data-act=play]').textContent = s.timer ? L('⏸ หยุด', '⏸ Pause') : L('▶▶ เล่นอัตโนมัติ', '▶▶ Auto-play');
+}
+function stpDraw(id) { const s = STP[id]; if (!s) return; s.draw(s.step); stpUi(id); }
+function stpStop(id) { const s = STP[id]; if (s && s.timer) { clearInterval(s.timer); s.timer = null; } stpUi(id); }
+function stpStopAll() { Object.keys(STP).forEach(stpStop); }
+function stpGo(id, d) { const s = STP[id]; stpStop(id); s.step = Math.max(s.min, Math.min(s.max, s.step + d)); stpDraw(id); }
+function stpSet(id, n) { const s = STP[id]; stpStop(id); s.step = n; stpDraw(id); }
+function stpPlay(id) {
+  const s = STP[id];
+  if (s.timer) { stpStop(id); return; }
+  if (s.step >= s.max) { s.step = s.min; stpDraw(id); }
+  s.timer = setInterval(() => { if (s.step >= s.max) { stpStop(id); return; } s.step++; stpDraw(id); if (s.step >= s.max) stpStop(id); }, 3000);
+  stpUi(id);
+}
+function resetSteppers() { Object.keys(STP).forEach(id => { stpStop(id); STP[id].step = STP[id].start; }); }
+
+// ══════════════ วาดรูป SVG แบบ 2 มิติ ══════════════
+const r1 = n => Math.round(n * 100) / 100;
+function svgLine(x1, y1, x2, y2, o) {
+  o = o || {};
+  return `<line x1="${r1(x1)}" y1="${r1(y1)}" x2="${r1(x2)}" y2="${r1(y2)}" stroke="${o.c || '#94A3B8'}" stroke-width="${o.w || 2}"${o.dash ? ` stroke-dasharray="${o.dash}"` : ''}${o.op !== undefined ? ` opacity="${o.op}"` : ''} stroke-linecap="round"/>`;
+}
+function svgArrow(x1, y1, x2, y2, o) {
+  o = o || {};
+  const w = o.w || 4, hd = o.head || (10 + w * 1.4), c = o.c || '#111827';
+  const dx = x2 - x1, dy = y2 - y1, len = Math.hypot(dx, dy);
+  if (len < 1) return '';
+  const ux = dx / len, uy = dy / len, hl = Math.min(hd, len * 0.7);
+  const bx = x2 - ux * hl, by = y2 - uy * hl, nx = -uy * hl * 0.42, ny = ux * hl * 0.42;
+  return `<g${o.op !== undefined ? ` opacity="${o.op}"` : ''}${o.attrs ? ' ' + o.attrs : ''}>
+    <line x1="${r1(x1)}" y1="${r1(y1)}" x2="${r1(bx + ux * 1.5)}" y2="${r1(by + uy * 1.5)}" stroke="${c}" stroke-width="${w}"${o.dash ? ` stroke-dasharray="${o.dash}"` : ''} stroke-linecap="round"/>
+    <polygon points="${r1(x2)},${r1(y2)} ${r1(bx + nx)},${r1(by + ny)} ${r1(bx - nx)},${r1(by - ny)}" fill="${c}"/></g>`;
+}
+// ป้ายชื่อเวกเตอร์: parts เป็นอาเรย์ของข้อความ ตัวที่ขึ้นต้นด้วย ^ จะมีลูกศรบนหัว เช่น ['a·','^i']
+function svgLab(x, y, parts, c, size, opts) {
+  size = size || 18; opts = opts || {};
+  if (typeof parts === 'string') parts = [parts];
+  const cw = size * 0.6;
+  const widths = parts.map(p => (p[0] === '^' ? p.length - 1 : p.length) * cw);
+  const total = widths.reduce((a, b) => a + b, 0);
+  let x0 = x - total / 2, out = '';
+  parts.forEach((p, i) => {
+    const arrow = p[0] === '^', s = arrow ? p.slice(1) : p, w = widths[i], mid = x0 + w / 2;
+    out += `<text x="${r1(x0)}" y="${r1(y)}" font-size="${size}" fill="${c || '#111'}" stroke="#fff" stroke-width="4" paint-order="stroke" stroke-linejoin="round" text-anchor="start"${opts.bold === false ? ' font-weight="500"' : ''}>${s}</text>`;
+    if (arrow) {
+      const ay = y - size * (/^[ij]$/.test(s) ? 1.02 : 0.82), hw = Math.max(size * 0.32, w / 2 - 1);
+      out += `<path d="M${r1(mid - hw)},${r1(ay)} L${r1(mid + hw)},${r1(ay)} M${r1(mid + hw - 4)},${r1(ay - 3.2)} L${r1(mid + hw)},${r1(ay)} L${r1(mid + hw - 4)},${r1(ay + 3.2)}" stroke="${c || '#111'}" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`;
+    }
+    x0 += w;
+  });
+  return out;
+}
+// ป้ายชื่อข้างกลางลูกศร (เยื้องไปด้านบนของเส้น)
+function svgSideLab(x1, y1, x2, y2, parts, c, off, size) {
+  const mx = (x1 + x2) / 2, my = (y1 + y2) / 2, dx = x2 - x1, dy = y2 - y1, l = Math.hypot(dx, dy) || 1;
+  let nx = -dy / l, ny = dx / l; if (ny > 0 || (ny === 0 && nx > 0)) { nx = -nx; ny = -ny; }
+  return svgLab(mx + nx * (off || 20), my + ny * (off || 20) + (size || 18) * 0.35, parts, c, size);
+}
+// เลือกตำแหน่งป้ายชื่อข้างเส้น base=[x1,y1,x2,y2] ที่ห่างจากเส้นอื่น (avoid) มากที่สุด — กันป้ายทับเส้น
+function segDist(px, py, l) { const dx = l[2] - l[0], dy = l[3] - l[1], t = clamp(((px - l[0]) * dx + (py - l[1]) * dy) / (dx * dx + dy * dy || 1), 0, 1); return Math.hypot(px - (l[0] + t * dx), py - (l[1] + t * dy)); }
+function bestLabelSpot(base, avoid, bounds) {
+  const [x1, y1, x2, y2] = base, len = Math.hypot(x2 - x1, y2 - y1) || 1, nx = -(y2 - y1) / len, ny = (x2 - x1) / len, bd = bounds || [30, 610, 30, 320];
+  let best = null;
+  [0.25, 0.35, 0.45, 0.55, 0.65, 0.75].forEach(t => [-1, 1].forEach(side => [24, 34, 46].forEach(off => {
+    const px = x1 + (x2 - x1) * t + nx * side * off, py = y1 + (y2 - y1) * t + ny * side * off;
+    let d = Infinity; avoid.forEach(a => { d = Math.min(d, segDist(px, py, a)); });
+    if (px < bd[0] || px > bd[1] || py < bd[2] || py > bd[3]) d = -1;
+    const sc = Math.min(d, 60) - off * 0.2;
+    if (!best || sc > best.s) best = { x: px, y: py, s: sc };
+  })));
+  return best;
+}
+function svgText(x, y, s, c, size, anchor) {
+  return `<text x="${r1(x)}" y="${r1(y)}" font-size="${size || 16}" fill="${c || '#334155'}" text-anchor="${anchor || 'middle'}" stroke="#fff" stroke-width="4" paint-order="stroke" stroke-linejoin="round">${s}</text>`;
+}
+function svgDot(x, y, c, r, extra) { return `<circle cx="${r1(x)}" cy="${r1(y)}" r="${r || 5}" fill="${c || '#111'}" stroke="#fff" stroke-width="2"${extra ? ' ' + extra : ''}/>`; }
+// ตัวจับลาก: วงใหญ่โปร่งใสรับเมาส์/นิ้ว + จุดจริงอยู่ข้างใน
+function svgHandle(name, x, y, c, r) {
+  return `<g class="drag" data-drag="${name}"><circle cx="${r1(x)}" cy="${r1(y)}" r="${(r || 6) + 12}" fill="${c}" opacity=".13"/><circle cx="${r1(x)}" cy="${r1(y)}" r="${r || 6}" fill="${c}" stroke="#fff" stroke-width="2.5"/></g>`;
+}
+function svgPt(svg, e) { const p = svg.createSVGPoint(); p.x = e.clientX; p.y = e.clientY; const q = p.matrixTransform(svg.getScreenCTM().inverse()); return [q.x, q.y]; }
+// ลากตัวจับ [data-drag] ในเวที svg — cb(ชื่อ, x, y, 'down'|'move'|'up')
+function bindDrag(svg, cb) {
+  let cur = null;
+  svg.addEventListener('pointerdown', e => {
+    const t = e.target.closest('[data-drag]'); if (!t) return;
+    cur = t.dataset.drag; svg.setPointerCapture(e.pointerId); e.preventDefault();
+    const [x, y] = svgPt(svg, e); cb(cur, x, y, 'down');
+  });
+  svg.addEventListener('pointermove', e => { if (!cur) return; const [x, y] = svgPt(svg, e); cb(cur, x, y, 'move'); });
+  const end = () => { if (cur) { const n = cur; cur = null; cb(n, 0, 0, 'up'); } };
+  svg.addEventListener('pointerup', end); svg.addEventListener('pointercancel', end);
+}
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+// กระดานพิกัด 2 มิติ: origin (ox,oy) หน่วยละ cell พิกเซล
+function svgAxes2d(W, H, ox, oy, cell, o) {
+  o = o || {};
+  const nx = Math.floor(ox / cell), px = Math.floor((W - ox) / cell), ny = Math.floor(oy / cell), py = Math.floor((H - oy) / cell);
+  let s = '';
+  for (let i = -nx; i <= px; i++) s += svgLine(ox + i * cell, 0, ox + i * cell, H, { c: '#E5EAF0', w: 1 });
+  for (let j = -py; j <= ny; j++) s += svgLine(0, oy - j * cell, W, oy - j * cell, { c: '#E5EAF0', w: 1 });
+  s += svgArrow(8, oy, W - 8, oy, { c: '#475569', w: 2, head: 11 }) + svgArrow(ox, H - 8, ox, 8, { c: '#475569', w: 2, head: 11 });
+  s += svgText(W - 14, oy + 22, o.xn || 'x', '#475569', 16) + svgText(ox + 16, 20, o.yn || 'y', '#475569', 16);
+  if (o.ticks) {
+    for (let i = -nx + 1; i <= px - 1; i++) if (i !== 0 && i % (o.tickStep || 1) === 0) s += svgText(ox + i * cell, oy + 18, sgp(i), '#94A3B8', 12);
+    for (let j = -py + 1; j <= ny - 1; j++) if (j !== 0 && j % (o.tickStep || 1) === 0) s += svgText(ox - 12, oy - j * cell + 4, sgp(j), '#94A3B8', 12, 'end');
+  }
+  s += svgText(ox - 12, oy + 18, 'O', '#475569', 14, 'end');
+  return s;
+}
+
+// ══════════════ แบบฝึกหัด (ปรนัย สลับตัวเลือกทุกครั้งที่เล่น) ══════════════
+let quizData = [], qIdx = 0, score = 0, answered = false, qPerm = [];
+function qt(key) {
+  const en = EN();
+  return { prog: en ? `Question ${qIdx + 1} / ${quizData.length}` : `ข้อที่ ${qIdx + 1} / ${quizData.length}`,
+    ok: en ? '✅ Correct! ' : '✅ ถูกต้อง! ', bad: en ? '❌ Not quite — ' : '❌ ไม่ถูกต้อง — ', title: en ? 'Your Score' : 'ผลคะแนนของคุณ' }[key];
+}
+function grade(s) {
+  const r = s / quizData.length;
+  if (EN()) return r >= .9 ? '🌟 Excellent!' : r >= .7 ? '👍 Great job!' : r >= .5 ? '💪 Not bad, review a bit' : '📚 Go back and review';
+  return r >= .9 ? '🌟 ยอดเยี่ยมมาก!' : r >= .7 ? '👍 ดีมาก!' : r >= .5 ? '💪 พอใช้ได้ ลองทบทวนดูนะ' : '📚 ลองกลับไปทบทวนอีกรอบ';
+}
+function shuffled(n) { const a = [...Array(n).keys()]; for (let i = n - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+function initQuiz() {
+  if (!quizData.length) return;
+  qIdx = 0; score = 0; answered = false;
+  document.getElementById('quizScore').textContent = 0;
+  document.getElementById('quizTotal').textContent = quizData.length;
+  document.getElementById('btnRetry').style.display = 'none';
+  renderQuestion();
+}
+const qOpts = q => { const en = EN(); const o = (en && q.opts_en) ? q.opts_en : q.opts; return qPerm.map(i => tx(o[i])); };
+function renderQuestion() {
+  const q = quizData[qIdx], en = EN();
+  answered = false; qPerm = shuffled(q.opts.length);
+  document.getElementById('quizProgress').textContent = qt('prog');
+  document.getElementById('btnNext').style.display = 'none';
+  document.getElementById('quizBox').innerHTML = `
+    <div class="quiz-q">${qIdx + 1}. ${tx(en ? q.q_en : q.q_th)}</div>
+    ${q.fig ? `<div class="quiz-fig">${q.fig}</div>` : ''}
+    <div class="quiz-opts">${qOpts(q).map((o, i) => `<button class="quiz-opt" onclick="answer(${i})">${o}</button>`).join('')}</div>
+    <div class="quiz-feedback" id="qfb"></div>`;
+}
+function refreshQuizLang() {
+  const box = document.getElementById('quizBox');
+  if (!box || !box.querySelector('.quiz-q')) return;
+  const q = quizData[qIdx], en = EN();
+  document.getElementById('quizProgress').textContent = qt('prog');
+  box.querySelector('.quiz-q').innerHTML = `${qIdx + 1}. ${tx(en ? q.q_en : q.q_th)}`;
+  const o = qOpts(q);
+  box.querySelectorAll('.quiz-opt').forEach((b, i) => b.innerHTML = o[i]);
+  if (answered) {
+    const fb = document.getElementById('qfb');
+    if (fb) fb.innerHTML = (fb.classList.contains('ok') ? qt('ok') : qt('bad')) + tx(en ? q.exp_en : q.exp_th);
+  }
+  const card = document.getElementById('scoreCard');
+  if (card) card.outerHTML = scoreCardHtml();
+}
+function scoreCardHtml() {
+  return `<div id="scoreCard" style="margin-top:20px; background:linear-gradient(135deg,#1C3B22,#2E5936); color:white; border-radius:16px; padding:24px; text-align:center;">
+    <div style="font-size:2.5rem;">🎉</div><div style="font-size:1.5rem; font-weight:800; margin:8px 0;">${qt('title')}</div>
+    <div style="font-size:3rem; font-weight:800;">${score} / ${quizData.length}</div>
+    <div style="font-size:1.1rem; opacity:.9; margin-top:8px;">${grade(score)}</div></div>`;
+}
+function answer(i) {
+  if (answered) return;
+  answered = true;
+  const q = quizData[qIdx], exp = tx(EN() ? q.exp_en : q.exp_th), fb = document.getElementById('qfb');
+  const right = qPerm[i] === q.ans;
+  document.querySelectorAll('.quiz-opt').forEach((b, idx) => {
+    if (qPerm[idx] === q.ans) b.classList.add('correct'); else if (idx === i) b.classList.add('wrong');
+    b.style.pointerEvents = 'none';
+  });
+  if (right) { score++; document.getElementById('quizScore').textContent = score; fb.className = 'quiz-feedback ok'; fb.innerHTML = qt('ok') + exp; }
+  else { fb.className = 'quiz-feedback err'; fb.innerHTML = qt('bad') + exp; }
+  if (qIdx < quizData.length - 1) document.getElementById('btnNext').style.display = 'inline-block';
+  else {
+    document.getElementById('btnRetry').style.display = 'inline-block';
+    setTimeout(() => { document.getElementById('quizBox').insertAdjacentHTML('beforeend', scoreCardHtml()); }, 300);
+  }
+}
+function nextQuestion() { qIdx++; renderQuestion(); }
+
+// ══════════════ ภาพ 3 มิติบน SVG (ฉาย 3D→2D เอง ลากหมุนได้) ══════════════
+// มุมมองมาตรฐานแบบหนังสือ: X พุ่งออกมาซ้ายล่าง, Y ไปขวา, Z ขึ้น (ระบบมือขวา)
+// กล้องอยู่ทิศ azimuth=yaw (วัดจากแกน X) สูง pitch: right=(-sin yaw, cos yaw, 0), up=(-sin p cos y, -sin p sin y, cos p)
+const VIEW0 = { yaw: 28 * Math.PI / 180, pitch: 20 * Math.PI / 180 };
+const SCV = {};          // จำมุมมองข้ามการวาดใหม่ (เช่นตอนสลับภาษา)
+const SC = {};
+class Scene3D {
+  constructor(name, svg, opts) {
+    opts = opts || {};
+    this.name = name; this.svg = svg; this.R = opts.R || 6; this.W = 640; this.H = opts.H || 440;
+    this.cx = this.W / 2; this.cy = this.H / 2 + (opts.dy === undefined ? 26 : opts.dy);
+    this.scale = (Math.min(this.W, this.H) / 2) * (opts.fit || 0.8) / this.R;
+    const v = SCV[name] || VIEW0; this.yaw = v.yaw; this.pitch = v.pitch;
+    this.draw = null;
+    svg.setAttribute('viewBox', `0 0 ${this.W} ${this.H}`);
+    svg.classList.add('stage'); svg.style.cursor = 'grab';
+    let drag = null;
+    svg.addEventListener('pointerdown', e => { drag = { x: e.clientX, y: e.clientY, moved: 0, pick: e.target.closest('[data-pick]') }; svg.setPointerCapture(e.pointerId); svg.style.cursor = 'grabbing'; });
+    svg.addEventListener('pointermove', e => {
+      if (!drag) return;
+      const k = 0.008, rect = svg.getBoundingClientRect(), f = this.W / rect.width;
+      drag.moved += Math.abs(e.clientX - drag.x) + Math.abs(e.clientY - drag.y);
+      if (drag.moved < 6 && drag.pick) return;
+      this.yaw -= (e.clientX - drag.x) * f * k; this.pitch = clamp(this.pitch + (e.clientY - drag.y) * f * k, -1.45, 1.45);
+      drag.x = e.clientX; drag.y = e.clientY; SCV[name] = { yaw: this.yaw, pitch: this.pitch }; this.render();
+    });
+    svg.addEventListener('pointerup', () => { const d = drag; drag = null; svg.style.cursor = 'grab'; if (d && d.pick && d.moved < 6 && this.onPick) this.onPick(d.pick.dataset.pick); });
+    svg.addEventListener('pointercancel', () => { drag = null; svg.style.cursor = 'grab'; });
+    SC[name] = this;
+  }
+  reset() { this.yaw = VIEW0.yaw; this.pitch = VIEW0.pitch; SCV[this.name] = { yaw: this.yaw, pitch: this.pitch }; this.render(); }
+  render() { this.svg.innerHTML = (this.draw ? this.draw(this) : '') + svgText(10, this.H - 10, L('ลากเพื่อหมุนภาพ', 'Drag to rotate'), '#94A3B8', 12, 'start'); }
+  // แปลงพิกัดโลก [x,y,z] → [sx, sy, ความลึก]
+  P(p) {
+    const cy = Math.cos(this.yaw), sy = Math.sin(this.yaw), cp = Math.cos(this.pitch), sp = Math.sin(this.pitch);
+    const [x, y, z] = p;
+    return [this.cx + (-sy * x + cy * y) * this.scale, this.cy - (-sp * cy * x - sp * sy * y + cp * z) * this.scale, cp * cy * x + cp * sy * y + sp * z];
+  }
+  line(a, b, o) { const A = this.P(a), B = this.P(b); return svgLine(A[0], A[1], B[0], B[1], o); }
+  arrow(a, b, o) { const A = this.P(a), B = this.P(b); return svgArrow(A[0], A[1], B[0], B[1], o); }
+  dot(p, c, r) { const A = this.P(p); return svgDot(A[0], A[1], c, r); }
+  text(p, s, c, size, o) { o = o || {}; const A = this.P(p); return svgText(A[0] + (o.dx || 0), A[1] + (o.dy || 0), s, c, size || 15, o.anchor); }
+  lab(p, parts, c, size, o) { o = o || {}; const A = this.P(p); return svgLab(A[0] + (o.dx || 0), A[1] + (o.dy || 0), parts, c, size || 17); }
+  poly(pts, fill, op, stroke) { return `<polygon points="${pts.map(p => { const A = this.P(p); return r1(A[0]) + ',' + r1(A[1]); }).join(' ')}" fill="${fill}" fill-opacity="${op}" stroke="${stroke || fill}" stroke-width="1.5" stroke-opacity=".7" stroke-linejoin="round"/>`; }
+  // แกน X,Y,Z (บวกเป็นลูกศรทึบ ลบเป็นเส้นประถ้า neg) + เลขบนแกน
+  axes(o) {
+    o = o || {}; const R = o.len || this.R, C = '#374151';
+    let s = '';
+    if (o.neg) { s += this.line([0, 0, 0], [-R, 0, 0], { c: C, w: 1.5, dash: '5 5', op: .5 }) + this.line([0, 0, 0], [0, -R, 0], { c: C, w: 1.5, dash: '5 5', op: .5 }) + this.line([0, 0, 0], [0, 0, -R], { c: C, w: 1.5, dash: '5 5', op: .5 }); }
+    s += this.arrow([0, 0, 0], [R, 0, 0], { c: C, w: 2.6, head: 13 }) + this.arrow([0, 0, 0], [0, R, 0], { c: C, w: 2.6, head: 13 }) + this.arrow([0, 0, 0], [0, 0, R], { c: C, w: 2.6, head: 13 });
+    s += this.text([R + .45, 0, 0], 'X', C, 17) + this.text([0, R + .45, 0], 'Y', C, 17) + this.text([0, 0, R + .45], 'Z', C, 17);
+    s += this.text([0, 0, 0], 'O', C, 15, { dx: -12, dy: 16 });
+    if (o.ticks) {
+      const n = Math.floor(R - 1), lo = o.neg ? -n : 1;
+      for (let i = lo; i <= n; i++) {
+        if (!i) continue;
+        s += this.text([i, 0, 0], sgp(i), '#9CA3AF', 11, { dx: -9, dy: 12 }) + this.text([0, i, 0], sgp(i), '#9CA3AF', 11, { dy: 15 }) + this.text([0, 0, i], sgp(i), '#9CA3AF', 11, { dx: -10, dy: 4 });
+      }
+    }
+    return s;
+  }
+  // กริดจางๆ บนระนาบ: plane 'xy' | 'yz' | 'xz' ช่วง −n..n
+  grid(plane, n, c) {
+    let s = ''; c = c || '#CBD5E1';
+    const mk = (a, b) => plane === 'xy' ? [a, b, 0] : plane === 'yz' ? [0, a, b] : [a, 0, b];
+    for (let i = -n; i <= n; i++) s += this.line(mk(i, -n), mk(i, n), { c, w: 1, op: .8 }) + this.line(mk(-n, i), mk(n, i), { c, w: 1, op: .8 });
+    return s;
+  }
+  plane(name, n, fill) {
+    const q = { xy: [[-n, -n, 0], [n, -n, 0], [n, n, 0], [-n, n, 0]], yz: [[0, -n, -n], [0, n, -n], [0, n, n], [0, -n, n]], xz: [[-n, 0, -n], [n, 0, -n], [n, 0, n], [-n, 0, n]] }[name];
+    return this.poly(q, fill, .16);
+  }
+  // กล่องขนานแกนที่มีมุมตรงข้าม p, q
+  box(p, q, o) {
+    o = o || {}; const [x1, y1, z1] = p, [x2, y2, z2] = q;
+    const V8 = [[x1, y1, z1], [x2, y1, z1], [x2, y2, z1], [x1, y2, z1], [x1, y1, z2], [x2, y1, z2], [x2, y2, z2], [x1, y2, z2]];
+    const E = [[0, 1], [1, 2], [2, 3], [3, 0], [4, 5], [5, 6], [6, 7], [7, 4], [0, 4], [1, 5], [2, 6], [3, 7]];
+    return E.map(([a, b]) => this.line(V8[a], V8[b], { c: o.c || '#64748B', w: o.w || 2, dash: o.dash })).join('');
+  }
+}
+function mkScene(name, svgId, opts) { const svg = document.getElementById(svgId); if (!svg) return null; return new Scene3D(name, svg, opts); }
+// ตัวช่วยเรขาคณิต 3 มิติ
+const dot3 = (u, v) => u[0] * v[0] + u[1] * v[1] + u[2] * v[2];
+const cross3 = (u, v) => [u[1] * v[2] - u[2] * v[1], u[2] * v[0] - u[0] * v[2], u[0] * v[1] - u[1] * v[0]];
+const sub3 = (a, b) => [a[0] - b[0], a[1] - b[1], a[2] - b[2]];
+const add3 = (a, b) => [a[0] + b[0], a[1] + b[1], a[2] + b[2]];
+const len3sq = v => v[0] * v[0] + v[1] * v[1] + v[2] * v[2];
+const len3 = v => Math.sqrt(len3sq(v));
+const scl3 = (v, c) => [v[0] * c, v[1] * c, v[2] * c];
+
+
+const CX = '#EA580C', CY = '#16A34A', CZ = '#2563EB';
+const title = (icon, th, en) => `<div class="card-title"><span class="icon">${icon}</span><span>${L(th, en)}</span></div>`;
+const sceneBox = (id, h) => `<div class="stage-wrap"><svg class="stage" id="${id}"></svg></div>`;
+const viewBtn = name => `<button class="btn ghost small" onclick="SC.${name}.reset()">🧭 ${L('มุมมองมาตรฐาน', 'Standard view')}</button>`;
+const P3 = p => `(${p.map(sg).join(', ')})`;
+// ช่องกรอกตัวเลข: st = ชื่อสถานะใน S3, cb = ชื่อฟังก์ชันที่เรียกหลังเปลี่ยน
+const S3 = { bx: { x: 2, y: 3, z: 2 }, pj: { x: 3, y: 2, z: 2, mode: 'XY' }, ds: { a: [1, -1, -1], b: [3, 2, 5] } };
+function nin(label, st, key, cb, idx) {
+  const cur = idx === undefined ? S3[st][key] : S3[st][key][idx];
+  return `<span class="numin"><b>${label}</b><input type="number" step="1" min="-5" max="5" value="${cur}" oninput="setNum('${st}','${key}',${idx === undefined ? 'null' : idx},this,'${cb}')" onblur="this.value=clamp(Math.round(+this.value||0),-5,5)"></span>`;
+}
+function setNum(st, key, idx, el, cb) {
+  const v = clamp(Math.round(+el.value || 0), -5, 5);
+  if (idx === null) S3[st][key] = v; else S3[st][key][idx] = v;
+  window[cb]();
+}
+function renderAll() {
+  ['ax', 'pl', 'bx', 'pj', 'ds'].forEach(id => { $('tab-' + id).innerHTML = window['tab_' + id](); });
+  mountAx(); mountPl(); mountBx(); mountPj(); mountDs();
+}
+function resetWidgets(id) { if (id === 'bx') { BXR.clear(); } }
+
+// ═══════════════════════ ① แกน 3 มิติ ═══════════════════════
+const AXS = { neg: false };
+function handSvg() {
+  const finger = (x2, y2, col, lab, lx, ly, ax, ay) => `<line x1="150" y1="165" x2="${x2}" y2="${y2}" stroke="#B9814F" stroke-width="30" stroke-linecap="round"/><line x1="150" y1="165" x2="${x2}" y2="${y2}" stroke="#FDE7D3" stroke-width="24" stroke-linecap="round"/>
+    ${svgArrow(x2, y2, ax, ay, { c: col, w: 5, head: 15 })}<text x="${lx}" y="${ly}" font-size="20" font-weight="800" fill="${col}" text-anchor="middle">${lab}</text>`;
+  return `<svg class="hand3" viewBox="0 0 330 300">
+    ${finger(150, 78, CX, L('นิ้วโป้ง = X', 'thumb = X'), 150, 22, 150, 40)}
+    ${finger(70, 160, CY, L('นิ้วชี้ = Y', 'index = Y'), 46, 130, 30, 160)}
+    ${finger(92, 232, CZ, L('นิ้วกลาง = Z', 'middle = Z'), 92, 288, 64, 262)}
+</svg>`;
+}
+function tab_ax() {
+  return `
+  <div class="card">${title('✋', 'กฎมือขวา: กำหนดทิศของแกน', 'The right-hand rule')}
+    <p class="intro">${L('ในระบบพิกัดฉาก 3 มิติ เส้นตรง X, Y, Z ตั้งฉากกันและกันที่จุด <b>O</b> เรียกว่า <b>จุดกำเนิด</b> ทิศทางของแกนทั้งสามใช้ระบบมือขวา:', 'In 3D coordinates, the lines X, Y and Z are mutually perpendicular at the point <b>O</b>, the <b>origin</b>. Their directions follow the right-hand rule:')}</p>
+    <div class="two-col"><div>${handSvg()}</div>
+      <div class="box-info" style="line-height:2.1">🖐 <b class="px">${L('นิ้วโป้ง', 'Thumb')}</b> = ${L('ทางบวกของแกน', 'positive direction of axis')} <b>X</b><br>☝ <b class="py">${L('นิ้วชี้', 'Index')}</b> = ${L('ทางบวกของแกน', 'positive direction of axis')} <b>Y</b><br>🖕 <b class="pz">${L('นิ้วกลาง', 'Middle')}</b> = ${L('ทางบวกของแกน', 'positive direction of axis')} <b>Z</b></div></div>
+  </div>
+  <div class="card">${title('🧭', 'แกนที่เห็นในหนังสือ (ลากหมุนได้)', 'The axes as drawn in the textbook (drag to rotate)')}
+    <p class="intro">${L('นิยมวาดแค่แกน<b>ทางบวก</b>ของ X, Y, Z ที่มีหัวลูกศร — มุมมองมาตรฐาน: X พุ่งออกมาซ้ายล่าง, Y ไปทางขวา, Z ขึ้นบน', 'Books usually draw only the <b>positive</b> half of X, Y, Z with arrowheads. Standard view: X comes out to the lower left, Y goes right, Z goes up.')}</p>
+    ${sceneBox('axSvg')}
+    <div class="btn-row">${viewBtn('ax')}<button class="chip ${AXS.neg ? 'active' : ''}" onclick="AXS.neg=!AXS.neg;renderAll()">${L('โชว์แกนทางลบ (เส้นประ)', 'Show negative axes (dashed)')}</button></div>
+  </div>`;
+}
+function mountAx() { const sc = mkScene('ax', 'axSvg', { R: 5, fit: .966 }); if (!sc) return; sc.draw = S => S.axes({ neg: AXS.neg, ticks: true, len: 5 }); sc.render(); }
+
+// ═══════════════════════ ② ระนาบอ้างอิง ═══════════════════════
+const PLN = { xy: true, yz: false, xz: false };
+const PLC = { xy: '#3B82F6', yz: '#EF4444', xz: '#22C55E' };
+function tab_pl() {
+  const nm = { xy: L('ระนาบ XY', 'XY-plane'), yz: L('ระนาบ YZ', 'YZ-plane'), xz: L('ระนาบ XZ', 'XZ-plane') };
+  return `
+  <div class="card">${title('🟦', 'ระนาบอ้างอิง 3 ระนาบ', 'The three reference planes')}
+    <p class="intro">${L('จากแกน X, Y, Z จะกำหนดได้ 3 ระนาบ เรียกว่า <b>ระนาบอ้างอิง</b>: ระนาบที่กำหนดด้วยแกน X กับ Y เรียก <b>ระนาบ XY</b> เป็นต้น เปิด/ปิดทีละระนาบดูเลย', 'The axes X, Y, Z determine three <b>reference planes</b>: the plane made by axes X and Y is the <b>XY-plane</b>, and so on. Toggle them one at a time.')}</p>
+    <div class="chips">${['xy', 'yz', 'xz'].map(k => `<button class="chip ${PLN[k] ? 'active' : ''}" onclick="PLN.${k}=!PLN.${k};renderAll()" style="${PLN[k] ? `background:${PLC[k]};border-color:${PLC[k]}` : `border-color:${PLC[k]}`}">${nm[k]}</button>`).join('')}</div>
+    ${sceneBox('plSvg')}
+    <div class="btn-row">${viewBtn('pl')}</div>
+    <div class="box-info">${L('ระนาบ XY มี <b>z = 0</b> ทุกจุด • ระนาบ YZ มี <b>x = 0</b> ทุกจุด • ระนาบ XZ มี <b>y = 0</b> ทุกจุด', 'Every point of the XY-plane has <b>z = 0</b> • YZ-plane: <b>x = 0</b> • XZ-plane: <b>y = 0</b>')}</div>
+  </div>`;
+}
+function mountPl() {
+  const sc = mkScene('pl', 'plSvg', { R: 5, fit: .966 }); if (!sc) return;
+  sc.draw = S => {
+    let s = '';
+    ['xy', 'yz', 'xz'].forEach(k => { if (PLN[k]) s += S.plane(k, 4.6, PLC[k]) + S.grid(k, 4, PLC[k]); });
+    s += S.axes({ len: 5, neg: true });
+    if (PLN.xy) s += S.text([3.6, 3.6, 0], L('ระนาบ XY', 'XY-plane'), '#1D4ED8', 15);
+    if (PLN.yz) s += S.text([0, 3.6, 3.6], L('ระนาบ YZ', 'YZ-plane'), '#B91C1C', 15);
+    if (PLN.xz) s += S.text([3.6, 0, 3.6], L('ระนาบ XZ', 'XZ-plane'), '#15803D', 15);
+    return s;
+  };
+  sc.render();
+}
+
+// ═══════════════════════ ③ พล็อตจุดด้วยกล่อง ═══════════════════════
+const BXR = new Set();
+const BOXV = { A: [2, 4, 2], B: [0, 4, 2], C: [0, 0, 2], D: [2, 0, 2], E: [2, 0, 0], F: [2, 4, 0], G: [0, 4, 0] };
+function tab_bx() {
+  return `
+  <div class="card">${title('📦', 'พล็อตจุด P(x, y, z) ด้วยกล่อง', 'Plot P(x, y, z) with a box')}
+    <p class="intro">${L('เดินจาก O ตามแกนทีละขั้น: <b class="px">x</b> ตามแกน X → <b class="py">y</b> ขนานแกน Y → <b class="pz">z</b> ขนานแกน Z แล้วจะได้ <b>กล่อง</b> ที่มีจุด P อยู่มุมตรงข้าม O', 'Walk from O one axis at a time: <b class="px">x</b> along X → <b class="py">y</b> parallel to Y → <b class="pz">z</b> parallel to Z. You end up with a <b>box</b> whose corner opposite O is P.')}</p>
+    <div class="num3">${nin('x', 'bx', 'x', 'updBx')}${nin('y', 'bx', 'y', 'updBx')}${nin('z', 'bx', 'z', 'updBx')}</div>
+    <div class="chips"><span class="note" style="align-self:center">${L('ตัวอย่างจาก PDF:', 'From the PDF:')}</span>
+      ${[['A', [2, 2, -1]], ['B', [1, -3, 2]], ['C', [-1, 3, 3]]].map(([n, p]) => `<button class="chip" onclick="setBx([${p}])">${n}${P3(p)}</button>`).join('')}</div>
+    ${stpHtml('bx')}
+    ${sceneBox('bxSvg')}
+    <div class="cap" id="bxCap"></div>
+    <div class="btn-row">${viewBtn('bx')}</div>
+  </div>
+  <div class="card">${title('🧩', 'ฝึก: อ่านพิกัดจากกล่อง 2 × 4 × 2', 'Practice: read coordinates off a 2 × 4 × 2 box')}
+    <p class="intro">${L('กล่องกว้าง 2 (ตามแกน X) ยาว 4 (ตามแกน Y) สูง 2 (ตามแกน Z) — คิดพิกัดของจุด A–G ในใจก่อน แล้ว<b>กดที่จุด</b>เพื่อเฉลย (หมุนภาพได้)', 'The box is 2 (along X) by 4 (along Y) by 2 (along Z). Work out the coordinates of A–G in your head, then <b>tap a point</b> to check (you can rotate the view).')}</p>
+    ${sceneBox('bx2Svg')}
+    <div class="btn-row">${viewBtn('bx2')}<button class="btn small" onclick="BXR.clear();['A','B','C','D','E','F','G'].forEach(k=>BXR.add(k));SC.bx2.render();bx2List()">${L('เผยทั้งหมด', 'Reveal all')}</button><button class="btn ghost small" onclick="BXR.clear();SC.bx2.render();bx2List()">${L('ซ่อนทั้งหมด', 'Hide all')}</button></div>
+    <div class="readout" id="bx2List"></div>
+  </div>`;
+}
+function setBx(p) { S3.bx.x = p[0]; S3.bx.y = p[1]; S3.bx.z = p[2]; renderAll(); stpSet('bx', 3); }
+function updBx() { stpDraw('bx'); }
+function drawBx(S, step) {
+  const { x, y, z } = S3.bx;
+  let s = S.grid('xy', 5) + S.axes({ len: 5.6, neg: true, ticks: true });
+  const O = [0, 0, 0], p1 = [x, 0, 0], p2 = [x, y, 0], p3 = [x, y, z];
+  if (step >= 3) s += S.box(O, p3, { c: '#94A3B8', w: 1.6, dash: '5 5' });
+  if (step >= 1 && x) s += S.arrow(O, p1, { c: CX, w: 5 }) + S.text([x / 2, 0, 0], 'x = ' + sg(x), CX, 15, { dy: 24 });
+  if (step >= 2 && y) s += S.arrow(p1, p2, { c: CY, w: 5 }) + S.text([x, y / 2, 0], 'y = ' + sg(y), CY, 15, { dx: 24, dy: 18 });
+  if (step >= 3 && z) s += S.arrow(p2, p3, { c: CZ, w: 5 }) + S.text([x, y, z / 2], 'z = ' + sg(z), CZ, 15, { dx: 30 });
+  if (step >= 1) s += S.dot(step === 1 ? p1 : step === 2 ? p2 : p3, step === 3 ? '#DC2626' : '#111827', step === 3 ? 7 : 5);
+  if (step >= 3) s += S.text(p3, 'P' + P3([x, y, z]), '#DC2626', 16, { dy: -14 });
+  return s;
+}
+function mountBx() {
+  const sc = mkScene('bx', 'bxSvg', { R: 6, fit: .966 }); if (!sc) return;
+  stpReg('bx', 0, 3, step => {
+    sc.draw = S => drawBx(S, step); sc.render();
+    const { x, y, z } = S3.bx;
+    $('bxCap').innerHTML = [
+      L('เริ่มที่จุดกำเนิด O(0, 0, 0)', 'Start at the origin O(0, 0, 0)'),
+      L(`ขั้น 1 — เดินตามแกน X ไป <b class="px">x = ${sg(x)}</b> ${x < 0 ? '(ติดลบ = ถอยไปทางตรงข้าม)' : ''}`, `Step 1 — walk along X by <b class="px">x = ${sg(x)}</b> ${x < 0 ? '(negative = the opposite way)' : ''}`),
+      L(`ขั้น 2 — เดินขนานแกน Y ไป <b class="py">y = ${sg(y)}</b> ${y < 0 ? '(ติดลบ)' : ''}`, `Step 2 — walk parallel to Y by <b class="py">y = ${sg(y)}</b> ${y < 0 ? '(negative)' : ''}`),
+      L(`ขั้น 3 — เดินขนานแกน Z ไป <b class="pz">z = ${sg(z)}</b> ${z < 0 ? '(ติดลบ = ลงไป)' : ''} ถึงจุด <b>P${P3([x, y, z])}</b> = มุมตรงข้าม O ของกล่อง`, `Step 3 — walk parallel to Z by <b class="pz">z = ${sg(z)}</b> ${z < 0 ? '(negative = down)' : ''} to reach <b>P${P3([x, y, z])}</b>, the corner opposite O`),
+    ][step];
+  });
+  stpDraw('bx');
+  const s2 = mkScene('bx2', 'bx2Svg', { R: 5, fit: .96 }); if (!s2) return;
+  s2.draw = S => {
+    let s = S.axes({ len: 5, ticks: true });
+    s += S.box([0, 0, 0], [2, 4, 2], { c: '#6366F1', w: 2.4 });
+    Object.keys(BOXV).forEach(k => {
+      const p = BOXV[k], A = S.P(p), shown = BXR.has(k);
+      s += `<g class="pick" data-pick="${k}"><circle cx="${r1(A[0])}" cy="${r1(A[1])}" r="18" fill="#fff" fill-opacity="0"/>${svgDot(A[0], A[1], shown ? '#DC2626' : '#F59E0B', 6)}</g>`;
+      s += svgText(A[0] + 10, A[1] - 10, shown ? k + P3(p) : k, shown ? '#B91C1C' : '#111827', 15, 'start');
+    });
+    return s;
+  };
+  s2.onPick = k => { BXR.has(k) ? BXR.delete(k) : BXR.add(k); s2.render(); bx2List(); };
+  s2.render(); bx2List();
+}
+function bx2List() {
+  const el = $('bx2List'); if (!el) return;
+  el.innerHTML = Object.keys(BOXV).map(k => `<span style="display:inline-block;min-width:150px;margin-right:8px">${k} = ${BXR.has(k) ? '<b>' + P3(BOXV[k]) + '</b>' : '?'}</span>`).join('') + `<div class="note">${L('มุม O = (0, 0, 0) • ตามแกน X ไป 2, Y ไป 4, Z ไป 2', 'Corner O = (0, 0, 0) • 2 along X, 4 along Y, 2 along Z')}</div>`;
+}
+
+// ═══════════════════════ ④ ภาพฉายของจุด ═══════════════════════
+const PJM = { XY: [1, 1, 0], YZ: [0, 1, 1], XZ: [1, 0, 1], X: [1, 0, 0], Y: [0, 1, 0], Z: [0, 0, 1] };
+function tab_pj() {
+  const modes = ['XY', 'YZ', 'XZ', 'X', 'Y', 'Z', 'ALL'];
+  return `
+  <div class="card">${title('🔦', 'ภาพฉายของจุด', 'Projection of a point')}
+    <div class="box-info">${L('<b>ภาพฉายของจุด P</b> คือจุดที่ได้จากการลากเส้นผ่าน P <u>ขนานกับแกนที่ไม่อยู่บนระนาบนั้น</u> ไปชนระนาบ — เช่น ลากขนานแกน Z ไปชนระนาบ XY ได้ Q(x, y, 0)', '<b>The projection of P</b> is where the line through P, <u>parallel to the axis not on that plane</u>, meets the plane — e.g. going parallel to Z down to the XY-plane gives Q(x, y, 0).')}</div>
+    <div class="formula">${L('กฎจำ: พิกัดของแกนที่อยู่บนระนาบ <u>คงไว้</u> ตัวที่เหลือเป็น <u>0</u>', 'Rule: keep the coordinates of the axes on the plane, set the rest to 0')}</div>
+    <div class="num3">${nin('x', 'pj', 'x', 'updPj')}${nin('y', 'pj', 'y', 'updPj')}${nin('z', 'pj', 'z', 'updPj')}</div>
+    <div class="chips">${modes.map(m => `<button class="chip ${S3.pj.mode === m ? 'active' : ''}" onclick="S3.pj.mode='${m}';updPj(true)">${m === 'ALL' ? L('ดูทั้งหมด', 'Show all') : (m.length === 2 ? L('ระนาบ ', 'plane ') + m : L('แกน ', 'axis ') + m)}</button>`).join('')}</div>
+    ${sceneBox('pjSvg')}
+    <div class="btn-row">${viewBtn('pj')}</div>
+    <div class="readout big" id="pjRead"></div>
+    <div id="pjTable"></div>
+  </div>`;
+}
+const pjPt = (m, { x, y, z }) => [x * PJM[m][0], y * PJM[m][1], z * PJM[m][2]];
+function updPj(chips) {
+  if (chips) document.querySelectorAll('#tab-pj .chips .chip').forEach((b, i) => b.classList.toggle('active', ['XY', 'YZ', 'XZ', 'X', 'Y', 'Z', 'ALL'][i] === S3.pj.mode));
+  SC.pj.render();
+  const P = S3.pj, m = S3.pj.mode;
+  $('pjRead').innerHTML = m === 'ALL' ? L('P' + P3([P.x, P.y, P.z]) + ' — ดูภาพฉายทั้ง 6 จุดพร้อมกัน', 'P' + P3([P.x, P.y, P.z]) + ' — all six projections at once')
+    : `P${P3([P.x, P.y, P.z])} ${L('ฉายลง' + (m.length === 2 ? 'ระนาบ ' : 'แกน ') + m, 'projected onto ' + (m.length === 2 ? 'plane ' : 'axis ') + m)} = <b>${P3(pjPt(m, P))}</b>`;
+  const nm = { XY: '(x, y, 0)', YZ: '(0, y, z)', XZ: '(x, 0, z)', X: '(x, 0, 0)', Y: '(0, y, 0)', Z: '(0, 0, z)' };
+  $('pjTable').innerHTML = `<div style="overflow-x:auto"><table class="tbl"><tr><th>${L('ฉายลง', 'onto')}</th><th>${L('สูตร', 'formula')}</th><th>${L('ได้', 'result')}</th></tr>
+    ${Object.keys(PJM).map(k => `<tr class="${m === k ? '' : ''}"><td class="${m === k ? 'hl' : ''}">${k.length === 2 ? L('ระนาบ ', 'plane ') : L('แกน ', 'axis ')}${k}</td><td class="${m === k ? 'hl' : ''}">${nm[k]}</td><td class="${m === k ? 'hl' : ''}">${P3(pjPt(k, P))}</td></tr>`).join('')}</table></div>`;
+}
+function mountPj() {
+  const sc = mkScene('pj', 'pjSvg', { R: 5, fit: .966 }); if (!sc) return;
+  sc.draw = S => {
+    const P = S3.pj, m = P.mode, p = [P.x, P.y, P.z];
+    let s = '';
+    if (m.length === 2 && m !== 'ALL') { const k = m.toLowerCase(); s += S.plane(k, 4.6, PLC[k]) + S.grid(k, 4, PLC[k]); }
+    s += S.axes({ len: 5, neg: true, ticks: true });
+    if (m === 'ALL') {
+      s += S.box([0, 0, 0], p, { c: '#94A3B8', w: 1.6, dash: '5 5' });
+      const pts = [['Q', [P.x, P.y, 0]], ['R', [0, P.y, P.z]], ['S', [P.x, 0, P.z]], ["P'", [P.x, 0, 0]], ["P''", [0, P.y, 0]], ["P'''", [0, 0, P.z]]];
+      pts.forEach(([n, q]) => { s += S.line(p, q, { c: '#F59E0B', w: 1.8, dash: '4 4' }) + S.dot(q, '#16A34A', 5) + S.text(q, n + P3(q), '#166534', 13, { dx: 4, dy: -9 }); });
+    } else {
+      const q = pjPt(m, P);
+      s += S.line(p, q, { c: '#F59E0B', w: 2.6, dash: '6 5' }) + S.dot(q, '#16A34A', 7) + S.text(q, P3(q), '#166534', 15, { dy: 24 });
+    }
+    return s + S.dot(p, '#DC2626', 7) + S.text(p, 'P' + P3(p), '#B91C1C', 15, { dy: -14 });
+  };
+  updPj();
+}
+
+// ═══════════════════════ ⑤ ระยะห่าง 2 จุด ═══════════════════════
+function tab_ds() {
+  return `
+  <div class="card">${title('📏', 'ระยะห่างระหว่างจุด 2 จุด', 'Distance between two points')}
+    <p class="intro">${L('ใช้ <b>พีทาโกรัส 2 รอบ</b> บนกล่องที่มี P₁, P₂ เป็นมุมตรงข้าม: รอบแรกหาเส้นทแยงของ<b>พื้น</b> รอบสองหาเส้นทแยงของ<b>กล่อง</b>', 'Use <b>Pythagoras twice</b> on the box with P₁ and P₂ as opposite corners: first the diagonal of the <b>floor</b>, then the diagonal of the <b>box</b>.')}</p>
+    <div class="num3"><b>P₁</b> ${nin('x₁', 'ds', 'a', 'updDs', 0)}${nin('y₁', 'ds', 'a', 'updDs', 1)}${nin('z₁', 'ds', 'a', 'updDs', 2)}</div>
+    <div class="num3"><b>P₂</b> ${nin('x₂', 'ds', 'b', 'updDs', 0)}${nin('y₂', 'ds', 'b', 'updDs', 1)}${nin('z₂', 'ds', 'b', 'updDs', 2)}</div>
+    ${stpHtml('ds')}
+    ${sceneBox('dsSvg')}
+    <div class="cap" id="dsCap"></div>
+    <div class="btn-row">${viewBtn('ds')}</div>
+    <div class="formula">d = √((x₂−x₁)² + (y₂−y₁)² + (z₂−z₁)²)</div>
+  </div>
+  ${wkHtml('ds1')}`;
+}
+function updDs() { stpDraw('ds'); }
+function mountDs() {
+  const sc = mkScene('ds', 'dsSvg', { R: 6, fit: .966 }); if (!sc) return;
+  stpReg('ds', 1, 2, step => {
+    const a = S3.ds.a, b = S3.ds.b, dx = b[0] - a[0], dy = b[1] - a[1], dz = b[2] - a[2];
+    sc.draw = S => {
+      let s = S.grid('xy', 5) + S.axes({ len: 5.6, neg: true, ticks: true }) + S.box(a, b, { c: '#94A3B8', w: 1.8 });
+      const f = [b[0], b[1], a[2]], m = [b[0], a[1], a[2]];
+      if (a.some((v, i) => v !== b[i])) {
+        s += S.line(a, m, { c: CX, w: 3, dash: '5 4' }) + S.line(m, f, { c: CY, w: 3, dash: '5 4' });
+        if (dx || dy) s += S.arrow(a, f, { c: '#F59E0B', w: step === 1 ? 6 : 4 });
+        if (step === 2) { if (dz) s += S.line(f, b, { c: CZ, w: 3, dash: '5 4' }); s += S.arrow(a, b, { c: '#DC2626', w: 6 }); }
+      }
+      return s + S.dot(a, '#111827', 6) + S.text(a, 'P₁' + P3(a), '#111827', 14, { dx: -6, dy: 20 }) + S.dot(b, '#111827', 6) + S.text(b, 'P₂' + P3(b), '#111827', 14, { dy: -12 });
+    };
+    sc.render();
+    const d1 = dx * dx + dy * dy, dd = d1 + dz * dz;
+    $('dsCap').innerHTML = step === 1
+      ? L(`รอบที่ 1 (พื้นกล่อง) — ด้านประกอบมุมฉากคือ <span class="px">|Δx| = ${Math.abs(dx)}</span> กับ <span class="py">|Δy| = ${Math.abs(dy)}</span><br>เส้นทแยงพื้น d₁² = ${dx * dx} + ${dy * dy} = <b>${d1}</b>`, `Round 1 (the floor) — legs <span class="px">|Δx| = ${Math.abs(dx)}</span> and <span class="py">|Δy| = ${Math.abs(dy)}</span><br>floor diagonal d₁² = ${dx * dx} + ${dy * dy} = <b>${d1}</b>`)
+      : L(`รอบที่ 2 (ทแยงกล่อง) — ด้านประกอบมุมฉากคือ d₁ = √${d1} กับ <span class="pz">|Δz| = ${Math.abs(dz)}</span><br>d² = ${d1} + ${dz * dz} = <b>${dd}</b> → <b>d = ${sqrtStr(dd)}</b>${Number.isInteger(Math.sqrt(dd)) ? '' : ' ≈ ' + Math.sqrt(dd).toFixed(3)}`, `Round 2 (the box diagonal) — legs d₁ = √${d1} and <span class="pz">|Δz| = ${Math.abs(dz)}</span><br>d² = ${d1} + ${dz * dz} = <b>${dd}</b> → <b>d = ${sqrtStr(dd)}</b>${Number.isInteger(Math.sqrt(dd)) ? '' : ' ≈ ' + Math.sqrt(dd).toFixed(3)}`);
+  });
+  stpDraw('ds');
+}
+addWk('ds1', { title: T('ตัวอย่าง: หาระยะห่าง', 'Example: find the distance'), prob: () => L('A(1, 2, 3) และ B(4, 6, 15) ห่างกันเท่าไร', 'How far apart are A(1, 2, 3) and B(4, 6, 15)?'),
+  steps: [
+    { h: () => P(L('หาผลต่างของแต่ละพิกัด', 'Take the difference in each coordinate')) + al([[`<span class="px">Δx</span>`, '=', '4 − 1 = 3'], [`<span class="py">Δy</span>`, '=', '6 − 2 = 4'], [`<span class="pz">Δz</span>`, '=', '15 − 3 = 12']]) },
+    { h: () => P(L('พีทาโกรัสรอบ 1 — เส้นทแยงของพื้น', 'Pythagoras round 1 — the floor diagonal')) + al([['d₁²', '=', '3² + 4² = 9 + 16 = 25'], ['d₁', '=', '5']]) },
+    { h: () => P(L('พีทาโกรัสรอบ 2 — เส้นทแยงของกล่อง', 'Pythagoras round 2 — the box diagonal')) + al([['d²', '=', '5² + 12² = 25 + 144 = 169'], ['d', '=', '<b>13</b>']]) },
+    { h: () => P(L('สูตรลัด (ทั้งสองรอบรวมกัน)', 'The one-line formula (both rounds together)')) + `<div class="formula" style="font-size:1.1rem">d = √(3² + 4² + 12²) = √169 = 13</div>` },
+  ] });
+
+// ═══════════════════════ แบบฝึกหัด ═══════════════════════
+quizData = [
+  { q_th: 'ในระบบมือขวา <b>นิ้วโป้ง</b> แทนทิศบวกของแกนใด?', q_en: 'In the right-hand rule, the <b>thumb</b> is the positive direction of which axis?', opts: ['แกน X', 'แกน Y', 'แกน Z', 'ไม่แทนแกนใด'], opts_en: ['X-axis', 'Y-axis', 'Z-axis', 'None of them'], ans: 0,
+    exp_th: 'นิ้วโป้ง = X, นิ้วชี้ = Y, นิ้วกลาง = Z', exp_en: 'Thumb = X, index = Y, middle = Z.' },
+  { q_th: 'ในระบบมือขวา <b>นิ้วกลาง</b> แทนทิศบวกของแกนใด?', q_en: 'The <b>middle finger</b> is the positive direction of which axis?', opts: ['แกน Z', 'แกน X', 'แกน Y', 'ไม่แทนแกนใด'], opts_en: ['Z-axis', 'X-axis', 'Y-axis', 'None of them'], ans: 0,
+    exp_th: 'นิ้วกลางแทนแกน Z', exp_en: 'The middle finger stands for Z.' },
+  { q_th: 'จุด (3, 0, 5) อยู่บนระนาบใด?', q_en: 'On which plane does the point (3, 0, 5) lie?', opts: ['ระนาบ XZ', 'ระนาบ XY', 'ระนาบ YZ', 'ไม่อยู่บนระนาบอ้างอิงใดเลย'], opts_en: ['XZ-plane', 'XY-plane', 'YZ-plane', 'On no reference plane'], ans: 0,
+    exp_th: 'y = 0 → อยู่บนระนาบ XZ', exp_en: 'y = 0 → it lies on the XZ-plane.' },
+  { q_th: 'กล่องกว้าง 2 (แกน X) ยาว 4 (แกน Y) สูง 2 (แกน Z) มีมุมหนึ่งที่จุดกำเนิด พิกัดมุมตรงข้าม O คือ?', q_en: 'A box 2 along X, 4 along Y and 2 along Z has one corner at the origin. What is the corner opposite O?', opts: ['(2, 4, 2)', '(4, 2, 2)', '(2, 2, 4)', '(0, 4, 2)'], ans: 0,
+    exp_th: 'เดิน x = 2, y = 4, z = 2 ตามลำดับ → (2, 4, 2)', exp_en: 'Walk x = 2, y = 4, z = 2 in turn → (2, 4, 2).' },
+  { q_th: 'ภาพฉายของจุด (2, −3, 5) บนระนาบ XY คือ?', q_en: 'What is the projection of (2, −3, 5) onto the XY-plane?', opts: ['(2, −3, 0)', '(0, −3, 5)', '(2, 0, 5)', '(2, −3, 5)'], ans: 0,
+    exp_th: 'ระนาบ XY: คง x กับ y ไว้ ส่วน z เป็น 0', exp_en: 'XY-plane: keep x and y, set z to 0.' },
+  { q_th: 'ภาพฉายของจุด (4, 5, −2) บนระนาบ YZ คือ?', q_en: 'What is the projection of (4, 5, −2) onto the YZ-plane?', opts: ['(0, 5, −2)', '(4, 5, 0)', '(4, 0, −2)', '(0, 0, −2)'], ans: 0,
+    exp_th: 'ระนาบ YZ: คง y กับ z ไว้ ส่วน x เป็น 0', exp_en: 'YZ-plane: keep y and z, set x to 0.' },
+  { q_th: 'ภาพฉายของจุด (1, 2, 3) บน<b>แกน Z</b> คือ?', q_en: 'What is the projection of (1, 2, 3) onto the <b>Z-axis</b>?', opts: ['(0, 0, 3)', '(1, 0, 0)', '(0, 2, 0)', '(1, 2, 0)'], ans: 0,
+    exp_th: 'บนแกน Z คง z ไว้ ที่เหลือเป็น 0', exp_en: 'On the Z-axis keep z, set the others to 0.' },
+  { q_th: 'ระยะจากจุดกำเนิด (0, 0, 0) ถึง (1, 2, 2) คือ?', q_en: 'What is the distance from the origin to (1, 2, 2)?', opts: ['3', '5', '9', '√5'], ans: 0,
+    exp_th: '√(1² + 2² + 2²) = √9 = 3', exp_en: '√(1² + 2² + 2²) = √9 = 3' },
+  { q_th: 'ระยะห่างของ A(−1, 2, 0) และ B(3, −2, 7) คือ?', q_en: 'What is the distance between A(−1, 2, 0) and B(3, −2, 7)?', opts: ['9', '81', '√33', '7'], ans: 0,
+    exp_th: 'Δ = (4, −4, 7) → √(16 + 16 + 49) = √81 = 9', exp_en: 'Δ = (4, −4, 7) → √(16 + 16 + 49) = √81 = 9' },
+  { q_th: 'ทำไมหาระยะห่างในสามมิติต้องใช้พีทาโกรัส 2 รอบ?', q_en: 'Why does 3D distance need Pythagoras twice?', opts: ['รอบแรกหาเส้นทแยงพื้น รอบสองรวมกับความสูง', 'รอบแรกหาความสูง รอบสองหาความกว้าง', 'เพราะมี 2 จุด', 'ใช้รอบเดียวก็พอ'], opts_en: ['First the floor diagonal, then combine it with the height', 'First the height, then the width', 'Because there are two points', 'One round is enough'], ans: 0,
+    exp_th: 'd₁² = Δx² + Δy² (พื้น) แล้ว d² = d₁² + Δz² (ทแยงกล่อง)', exp_en: 'd₁² = Δx² + Δy² (floor), then d² = d₁² + Δz² (box diagonal).' },
+];
+
+window.addEventListener('load', () => { initQuiz(); applyLang(getLang()); });
+</script>
+</body>
+</html>

@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>สื่อการสอน : ทำไมต้อง + − + (อสมการพหุนาม) ม.4</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800&display=swap');
+
+  :root {
+    --primary: #1C3B22;
+    --secondary: #FF8A3D;
+    --accent: #68EF3F;
+    --accent-2: #3FA82E;
+    --warning: #FFB347;
+    --bg: #F3F7EC;
+    --card: #FFFFFF;
+    --text: #2D3748;
+    --muted: #718096;
+    --border: #E2E8F0;
+    --shadow: 0 4px 24px rgba(28,59,34,0.10);
+    --radius: 16px;
+    --pos: #047857;
+    --pos-bg: #ECFDF5;
+    --neg: #BE185D;
+    --neg-bg: #FFF4EC;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body { font-family: 'Sarabun', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+  header {
+    background: linear-gradient(135deg, #1C3B22 0%, #2E5936 100%);
+    color: white; padding: 28px 40px 20px; text-align: center; position: relative; overflow: hidden;
+  }
+  header::before { content: ''; position: absolute; top: -60px; right: -60px; width: 200px; height: 200px; background: rgba(255,255,255,0.07); border-radius: 50%; }
+  header h1 { font-size: 2rem; font-weight: 800; letter-spacing: .5px; }
+  header p { font-size: 1rem; opacity: .85; margin-top: 4px; }
+  .back-link { position: absolute; top: 14px; left: 20px; color: white; text-decoration: none; font-size: .85rem; font-weight: 600; opacity: .9; z-index: 2; }
+  .back-link:hover { opacity: 1; text-decoration: underline; }
+  .lang-toggle {
+    position: absolute; top: 14px; right: 20px; background: rgba(255,255,255,.15); color: white;
+    border: 1.5px solid rgba(255,255,255,.5); border-radius: 20px; padding: 5px 14px;
+    font-family: 'Sarabun', sans-serif; font-size: .8rem; font-weight: 700; cursor: pointer; z-index: 2;
+  }
+  .lang-toggle:hover { background: rgba(255,255,255,.28); }
+
+  nav { display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; padding: 20px 24px 0; background: white; border-bottom: 3px solid var(--border); }
+  .tab-btn {
+    padding: 10px 20px; border: none; background: transparent; border-radius: 10px 10px 0 0;
+    font-family: 'Sarabun', sans-serif; font-size: 0.95rem; font-weight: 600; color: var(--muted);
+    cursor: pointer; transition: all .25s; border-bottom: 3px solid transparent; margin-bottom: -3px;
+  }
+  .tab-btn:hover { color: var(--primary); background: #E3F3D8; }
+  .tab-btn.active { color: var(--primary); border-bottom-color: var(--primary); background: #E3F3D8; }
+
+  main { max-width: 980px; margin: 0 auto; padding: 32px 20px 60px; }
+
+  .tab-panel { display: none; animation: fadeIn .35s ease; }
+  .tab-panel.active { display: block; }
+  @keyframes fadeIn { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
+
+  .card { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); padding: 28px 32px; margin-bottom: 24px; }
+  .card-title { font-size: 1.25rem; font-weight: 700; color: var(--primary); margin-bottom: 16px; display: flex; align-items: center; gap: 10px; }
+  .card-title .icon { font-size: 1.5rem; }
+
+  .box-info { background: #EEF7E6; border-left: 4px solid var(--primary); border-radius: 10px; padding: 14px 18px; margin: 14px 0; }
+  .box-warn { background: #FFF7ED; border-left: 4px solid var(--warning); border-radius: 10px; padding: 14px 18px; margin: 14px 0; }
+  .box-ok   { background: #ECFDF5; border-left: 4px solid var(--accent);  border-radius: 10px; padding: 14px 18px; margin: 14px 0; }
+  .box-pink { background: #FFF4EC; border-left: 4px solid var(--secondary); border-radius: 10px; padding: 14px 18px; margin: 14px 0; }
+
+  .formula { background: linear-gradient(135deg,#1C3B22,#2E5936); color: white; border-radius: 12px; padding: 16px 24px; text-align: center; font-size: 1.3rem; font-weight: 700; margin: 16px 0; letter-spacing: .5px; }
+
+  .steps { counter-reset: step; }
+  .step { display: flex; gap: 16px; align-items: flex-start; margin-bottom: 16px; }
+  .step-num { min-width: 36px; height: 36px; background: var(--primary); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1rem; flex-shrink: 0; }
+  .step-body { flex: 1; padding-top: 6px; font-size: 1.05rem; line-height: 1.7; }
+
+  .btn { padding: 10px 26px; background: var(--primary); color: white; border: none; border-radius: 30px; font-family: 'Sarabun', sans-serif; font-size: 1rem; font-weight: 700; cursor: pointer; transition: background .2s, opacity .2s; }
+  .btn:hover:not(:disabled) { background: #2E5936; }
+  .btn:disabled { opacity: .45; cursor: not-allowed; }
+  .btn.ghost { background: white; color: var(--primary); border: 2px solid var(--primary); }
+  .btn.ghost:hover:not(:disabled) { background: #E3F3D8; }
+  .btn-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 14px; align-items: center; }
+
+  .frac { display: inline-flex; flex-direction: column; align-items: center; font-weight: 700; line-height: 1; vertical-align: middle; margin: 0 4px; }
+  .frac .num { font-size: 1.1em; border-bottom: 3px solid currentColor; padding-bottom: 2px; min-width: 20px; text-align: center; white-space: nowrap; }
+  .frac .den { font-size: 1.1em; padding-top: 4px; min-width: 20px; text-align: center; white-space: nowrap; }
+
+  .numline-wrap { overflow-x: auto; margin: 16px 0; }
+  svg.numline { display: block; margin: 0 auto; touch-action: none; max-width: 100%; }
+  .drag-dot { cursor: grab; }
+  .drag-dot:active { cursor: grabbing; }
+
+  .sub-panel { background: #EEF7E6; border-left: 4px solid var(--primary); border-radius: 10px; padding: 14px 18px; margin-top: 14px; font-size: 1.05rem; line-height: 1.9; }
+  .sub-panel .sign-tag { display: inline-flex; align-items: center; justify-content: center; min-width: 32px; height: 30px; border-radius: 8px; font-weight: 800; font-size: 1.1rem; padding: 0 6px; }
+  .sign-tag.pos { background: var(--pos-bg); color: var(--pos); }
+  .sign-tag.neg { background: var(--neg-bg); color: var(--neg); }
+  .sign-tag.zero { background: #EDF2F7; color: var(--muted); }
+
+  .drop-strip { display: flex; justify-content: center; margin-top: 4px; }
+
+  .op-row { display: flex; gap: 10px; flex-wrap: wrap; margin: 14px 0; }
+  .op-btn { padding: 10px 24px; border: 2px solid var(--border); border-radius: 30px; background: white; font-weight: 800; font-size: 1.2rem; cursor: pointer; transition: all .2s; font-family: 'Sarabun', sans-serif; color: var(--text); }
+  .op-btn:hover { border-color: var(--primary); }
+  .op-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
+
+  .sign-table { width: 100%; border-collapse: collapse; margin: 16px 0; text-align: center; }
+  .sign-table th, .sign-table td { border: 1px solid var(--border); padding: 10px 6px; font-size: .95rem; }
+  .sign-table th { background: #EEF7E6; color: var(--primary); font-weight: 700; }
+  .sign-table td.pos { background: var(--pos-bg); color: var(--pos); font-weight: 800; font-size: 1.2rem; }
+  .sign-table td.neg { background: var(--neg-bg); color: var(--neg); font-weight: 800; font-size: 1.2rem; }
+  .sign-table td.label { text-align: left; font-weight: 700; }
+
+  .chip { display: inline-block; padding: 5px 12px; margin: 3px 4px 3px 0; border-radius: 20px; background: #EEF7E6; border: 1.5px solid #CFE6BC; color: var(--primary); font-weight: 700; font-size: .95rem; }
+
+  .factor-builder { display: flex; flex-direction: column; gap: 12px; margin: 16px 0; }
+  .factor-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; background: #F8FBF5; border: 1px solid var(--border); border-radius: 12px; padding: 10px 16px; }
+  .factor-row .fdisplay { font-weight: 800; font-size: 1.15rem; min-width: 120px; }
+  .factor-row input[type=number] { width: 64px; padding: 6px 8px; border: 2px solid var(--border); border-radius: 8px; font-family: 'Sarabun', sans-serif; font-size: .95rem; text-align: center; }
+  .chip-toggle { display: flex; border: 2px solid var(--border); border-radius: 20px; overflow: hidden; }
+  .chip-toggle button { border: none; background: white; padding: 6px 14px; font-family: 'Sarabun', sans-serif; font-weight: 700; cursor: pointer; font-size: .85rem; color: var(--text); }
+  .chip-toggle button.active { background: var(--primary); color: white; }
+  .factor-row .rm-btn { margin-left: auto; background: none; border: none; color: var(--neg); font-weight: 800; font-size: 1.1rem; cursor: pointer; padding: 4px 8px; }
+
+  .answer-box { background: linear-gradient(135deg,#1C3B22,#2E5936); color: white; border-radius: 14px; padding: 18px 24px; margin-top: 18px; font-size: 1.35rem; font-weight: 800; text-align: center; letter-spacing: .5px; }
+  .domain-note { color: var(--neg); font-weight: 700; margin-top: 10px; }
+  .err-msg { color: var(--neg); font-weight: 600; font-size: .95rem; min-height: 22px; margin-top: 4px; }
+  .hint { color: var(--muted); font-size: .92rem; margin-top: 6px; }
+
+  .quiz-q { font-size: 1.1rem; font-weight: 600; margin-bottom: 12px; }
+  .quiz-opts { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 10px; }
+  .quiz-opt { padding: 10px 20px; border: 2px solid var(--border); border-radius: 30px; cursor: pointer; font-family: 'Sarabun', sans-serif; font-size: 1rem; font-weight: 600; transition: all .2s; background: white; }
+  .quiz-opt:hover { border-color: var(--primary); color: var(--primary); }
+  .quiz-opt.correct { border-color: var(--accent); background: #ECFDF5; color: #047857; }
+  .quiz-opt.wrong { border-color: var(--secondary); background: #FFF4EC; color: #BE185D; }
+  .quiz-feedback { font-weight: 700; font-size: 1rem; min-height: 24px; }
+  .quiz-feedback.ok { color: #047857; }
+  .quiz-feedback.err { color: #BE185D; }
+  .btn-next { margin-top: 10px; padding: 10px 28px; background: var(--primary); color: white; border: none; border-radius: 30px; font-family: 'Sarabun', sans-serif; font-size: 1rem; font-weight: 700; cursor: pointer; transition: background .2s; }
+  .btn-next:hover { background: #142B1A; }
+  .score-badge { display: inline-block; background: linear-gradient(135deg,#68EF3F,#1C3B22); color: white; border-radius: 30px; padding: 6px 20px; font-weight: 700; font-size: 1rem; }
+
+  @media (max-width: 600px) {
+    header h1 { font-size: 1.4rem; }
+    .card { padding: 20px 16px; }
+    .tab-btn { font-size: .85rem; padding: 8px 12px; }
+    .factor-row .fdisplay { min-width: 100%; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <button id="langToggle" class="lang-toggle" onclick="toggleLang()">EN</button>
+  <h1 data-th="🔀 ทำไมต้อง + − +" data-en="🔀 Why It's + − +">🔀 ทำไมต้อง + − +</h1>
+  <p data-th="สื่อการสอนแบบโต้ตอบ • อสมการพหุนาม ม.4" data-en="Interactive Teaching Aid • Polynomial Inequalities">สื่อการสอนแบบโต้ตอบ • อสมการพหุนาม ม.4</p>
+</header>
+
+<nav>
+  <button class="tab-btn active" onclick="showTab('try')" data-th="🧪 ลองแทนค่า" data-en="🧪 Try Substituting">🧪 ลองแทนค่า</button>
+  <button class="tab-btn" onclick="showTab('why')" data-th="🔄 ทำไมถึงสลับ" data-en="🔄 Why It Flips">🔄 ทำไมถึงสลับ</button>
+  <button class="tab-btn" onclick="showTab('cmp')" data-th="⚖️ มากกว่า/น้อยกว่า" data-en="⚖️ Greater/Less">⚖️ มากกว่า/น้อยกว่า</button>
+  <button class="tab-btn" onclick="showTab('tool')" data-th="🛠️ เครื่องมือ" data-en="🛠️ Builder Tool">🛠️ เครื่องมือ</button>
+  <button class="tab-btn" onclick="showTab('quiz')" data-th="🎯 แบบฝึกหัด" data-en="🎯 Quiz">🎯 แบบฝึกหัด</button>
+</nav>
+
+<main>
+
+<!-- ══════════════ TAB 1: ลองแทนค่า ══════════════ -->
+<section id="tab-try" class="tab-panel active">
+  <div class="card">
+    <div class="card-title"><span class="icon">🧪</span><span data-th="ลองแทนค่าดูก่อน" data-en="Try substituting first">ลองแทนค่าดูก่อน</span></div>
+    <p data-th="ลองใช้ (x+2)(x-1) เป็นตัวอย่าง ลากจุดสีเขียวบนเส้นจำนวนด้านล่าง แล้วดูว่าแทนค่า x ตรงนั้นแล้วผลคูณเป็นบวกหรือลบ" data-en="Let's use (x+2)(x-1) as our example. Drag the green dot on the number line below and watch whether substituting that x makes the product positive or negative.">ลองใช้ (x+2)(x-1) เป็นตัวอย่าง ลากจุดสีเขียวบนเส้นจำนวนด้านล่าง แล้วดูว่าแทนค่า x ตรงนั้นแล้วผลคูณเป็นบวกหรือลบ</p>
+    <div class="formula">(x + 2)(x − 1)</div>
+
+    <div class="numline-wrap"><svg id="svgTry" class="numline" viewBox="0 0 640 165" width="640" height="165"></svg></div>
+    <div id="subPanel" class="sub-panel"></div>
+
+    <div class="btn-row">
+      <button class="btn ghost" onclick="revealTryRegions()" data-th="เฉลยสีทั้งช่วง" data-en="Reveal region colors">เฉลยสีทั้งช่วง</button>
+      <button class="btn" onclick="dropRandomPoints()" data-th="🎲 โยนจุดสุ่ม 10 จุด" data-en="🎲 Drop 10 random points">🎲 โยนจุดสุ่ม 10 จุด</button>
+    </div>
+    <div id="dropConclusion" class="box-ok" style="display:none; margin-top:16px;"></div>
+  </div>
+</section>
+
+<!-- ══════════════ TAB 2: ทำไมถึงสลับ ══════════════ -->
+<section id="tab-why" class="tab-panel">
+  <div class="card">
+    <div class="card-title"><span class="icon">🔄</span><span data-th="แยกดูทีละวงเล็บ" data-en="Look at each bracket separately">แยกดูทีละวงเล็บ</span></div>
+    <p data-th="เครื่องหมายของผลคูณจะสลับ ก็ต่อเมื่อมีวงเล็บใดวงเล็บหนึ่งพลิกเครื่องหมายตรงจุดนั้น — (x+2) พลิกที่ x=-2 และ (x-1) พลิกที่ x=1" data-en="The product's sign flips exactly when one of the brackets flips there — (x+2) flips at x=-2 and (x-1) flips at x=1">เครื่องหมายของผลคูณจะสลับ ก็ต่อเมื่อมีวงเล็บใดวงเล็บหนึ่งพลิกเครื่องหมายตรงจุดนั้น — (x+2) พลิกที่ x=-2 และ (x-1) พลิกที่ x=1</p>
+    <table class="sign-table">
+      <tr><th data-th="ช่วง" data-en="Interval"></th><td class="label">x &lt; −2</td><td class="label">−2 &lt; x &lt; 1</td><td class="label">x &gt; 1</td></tr>
+      <tr><th>(x + 2)</th><td class="neg">−</td><td class="pos">+</td><td class="pos">+</td></tr>
+      <tr><th>(x − 1)</th><td class="neg">−</td><td class="neg">−</td><td class="pos">+</td></tr>
+      <tr><th data-th="ผลคูณ" data-en="Product"><span data-th="ผลคูณ" data-en="Product">ผลคูณ</span></th><td class="pos">+</td><td class="neg">−</td><td class="pos">+</td></tr>
+    </table>
+    <div class="box-info" data-th="สังเกต: แถวผลคูณจะพลิกเครื่องหมาย ทุกครั้งที่ผ่านค่าวิกฤต (−2 และ 1) เพราะมีวงเล็บหนึ่งตัวพลิก" data-en="Notice: the product row flips sign every time we cross a critical value (−2 and 1), because exactly one bracket flips there">สังเกต: แถวผลคูณจะพลิกเครื่องหมาย ทุกครั้งที่ผ่านค่าวิกฤต (−2 และ 1) เพราะมีวงเล็บหนึ่งตัวพลิก</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="icon">🟰</span><span data-th="กรณีพิเศษ 1: กำลังคู่ไม่พลิก" data-en="Special case 1: an even power never flips">กรณีพิเศษ 1: กำลังคู่ไม่พลิก</span></div>
+    <div class="formula">(x − 1)²</div>
+    <table class="sign-table">
+      <tr><th></th><td class="label">x &lt; 1</td><td class="label">x &gt; 1</td></tr>
+      <tr><th>(x − 1)²</th><td class="pos">+</td><td class="pos">+</td></tr>
+    </table>
+    <div class="box-warn" data-th="ยกกำลังสอง (หรือกำลังคู่ใดๆ) ผลลัพธ์ไม่ติดลบเลย นอกจากจะเท่ากับ 0 พอดีตรงค่าวิกฤต จึงไม่มีการพลิกเครื่องหมาย" data-en="Squaring (or any even power) never gives a negative result — except exactly 0 at the critical value — so the sign never flips">ยกกำลังสอง (หรือกำลังคู่ใดๆ) ผลลัพธ์ไม่ติดลบเลย นอกจากจะเท่ากับ 0 พอดีตรงค่าวิกฤต จึงไม่มีการพลิกเครื่องหมาย</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="icon">➖</span><span data-th="กรณีพิเศษ 2: หน้า x ต้องเป็นบวกก่อน" data-en="Special case 2: make the x-coefficient positive first">กรณีพิเศษ 2: หน้า x ต้องเป็นบวกก่อน</span></div>
+    <p data-th="ถ้าวงเล็บหน้าตาเป็น (−x + 2) สัมประสิทธิ์หน้า x ติดลบอยู่ (ภาพในฝัน ข้อ 3 บอกว่าหน้า x ต้องเป็นบวก) ต้องคูณ −1 ตลอดทั้งสองข้างก่อน แล้ว &quot;กลับเครื่องหมายอสมการ&quot;" data-en="If the bracket looks like (−x + 2), the x-coefficient is negative (the '3 dream-image rules' say it must be positive) — multiply both sides by −1 first, and flip the inequality sign">ถ้าวงเล็บหน้าตาเป็น (−x + 2) สัมประสิทธิ์หน้า x ติดลบอยู่ (ภาพในฝัน ข้อ 3 บอกว่าหน้า x ต้องเป็นบวก) ต้องคูณ −1 ตลอดทั้งสองข้างก่อน แล้ว "กลับเครื่องหมายอสมการ"</p>
+    <div class="steps">
+      <div class="step"><div class="step-num">1</div><div class="step-body">−x + 2 &gt; 0</div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-body">−x &gt; −2 <span class="hint" data-th="(ย้าย 2 ไปลบ)" data-en="(move 2 to subtract)">(ย้าย 2 ไปลบ)</span></div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-body">x &lt; 2 <span class="hint" data-th="(หารด้วย −1 → กลับเครื่องหมาย!)" data-en="(divide by −1 → flip the sign!)">(หารด้วย −1 → กลับเครื่องหมาย!)</span></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ TAB 3: มากกว่า/น้อยกว่า ══════════════ -->
+<section id="tab-cmp" class="tab-panel">
+  <div class="card">
+    <div class="card-title"><span class="icon">⚖️</span><span data-th="ถามมากกว่าเลือก + ถามน้อยกว่าเลือก −" data-en="Asked 'greater' → pick + ; asked 'less' → pick −">ถามมากกว่าเลือก + ถามน้อยกว่าเลือก −</span></div>
+    <p data-th="เลือกเครื่องหมายด้านล่าง แล้วดูว่าช่วงคำตอบและจุดปลาย (ทึบ/โปร่ง) เปลี่ยนไปอย่างไร" data-en="Pick a comparison symbol below and watch how the solution region and its endpoints (filled/open) change">เลือกเครื่องหมายด้านล่าง แล้วดูว่าช่วงคำตอบและจุดปลาย (ทึบ/โปร่ง) เปลี่ยนไปอย่างไร</p>
+    <div class="op-row" id="opRow">
+      <button class="op-btn active" data-op="&gt;" onclick="setOp('&gt;')">&gt;</button>
+      <button class="op-btn" data-op="&gt;=" onclick="setOp('&gt;=')">≥</button>
+      <button class="op-btn" data-op="&lt;" onclick="setOp('&lt;')">&lt;</button>
+      <button class="op-btn" data-op="&lt;=" onclick="setOp('&lt;=')">≤</button>
+    </div>
+
+    <div class="box-info"><span data-th="ตัวอย่าง A (พหุนามล้วน):" data-en="Example A (pure polynomial):">ตัวอย่าง A (พหุนามล้วน):</span> <span id="exprA" style="font-weight:800;">(x + 2)(x − 1)</span> <span id="opALabel"></span> 0</div>
+    <div class="numline-wrap"><svg id="svgA" class="numline" viewBox="0 0 640 120" width="640" height="120"></svg></div>
+    <div id="ansA" class="answer-box"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="icon">➗</span><span data-th="ตัวอย่าง B (มีตัวส่วน)" data-en="Example B (with a denominator)">ตัวอย่าง B (มีตัวส่วน)</span></div>
+    <p data-th="ใช้เครื่องหมายเดียวกับด้านบน — สังเกตว่าจุด x = 1 (มาจากตัวส่วน) เป็นวงกลมโปร่งเสมอ ไม่ว่าโจทย์จะเป็น ≥ หรือไม่ก็ตาม เพราะทำให้ส่วนเป็น 0 ไม่ได้" data-en="Uses the same symbol as above — notice x = 1 (from the denominator) is always an open circle, no matter the operator, because the denominator can never be 0">ใช้เครื่องหมายเดียวกับด้านบน — สังเกตว่าจุด x = 1 (มาจากตัวส่วน) เป็นวงกลมโปร่งเสมอ ไม่ว่าโจทย์จะเป็น ≥ หรือไม่ก็ตาม เพราะทำให้ส่วนเป็น 0 ไม่ได้</p>
+    <div class="box-info" style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
+      <span data-th="ตัวอย่าง B:" data-en="Example B:">ตัวอย่าง B:</span>
+      <span class="frac"><span class="num">x + 2</span><span class="den">x − 1</span></span>
+      <span id="opBLabel"></span> 0
+    </div>
+    <div class="numline-wrap"><svg id="svgB" class="numline" viewBox="0 0 640 120" width="640" height="120"></svg></div>
+    <div class="domain-note" data-th="โดเมน: x ≠ 1" data-en="Domain: x ≠ 1">โดเมน: x ≠ 1</div>
+    <div id="ansB" class="answer-box"></div>
+  </div>
+</section>
+
+<!-- ══════════════ TAB 4: เครื่องมือเชิงโต้ตอบ ══════════════ -->
+<section id="tab-tool" class="tab-panel">
+  <div class="card">
+    <div class="card-title"><span class="icon">🛠️</span><span data-th="ต่ออสมการเองแล้วดูผล" data-en="Build your own inequality">ต่ออสมการเองแล้วดูผล</span></div>
+    <p data-th="เลือกวงเล็บ (x − r) ได้สูงสุด 3 วง กำหนดค่า r กำลัง (1 หรือ 2) และตำแหน่ง (เศษ/ส่วน) ของแต่ละวง แล้วกดสร้างแผนภาพ" data-en="Pick up to 3 brackets of the form (x − r). Set r, the power (1 or 2), and whether each sits on top or bottom, then build the chart">เลือกวงเล็บ (x − r) ได้สูงสุด 3 วง กำหนดค่า r กำลัง (1 หรือ 2) และตำแหน่ง (เศษ/ส่วน) ของแต่ละวง แล้วกดสร้างแผนภาพ</p>
+
+    <div id="factorBuilder" class="factor-builder"></div>
+    <div class="btn-row">
+      <button class="btn ghost" id="addFactorBtn" onclick="addFactor()" data-th="+ เพิ่มวงเล็บ" data-en="+ Add bracket">+ เพิ่มวงเล็บ</button>
+    </div>
+
+    <div style="margin-top:18px;">
+      <div class="hint" data-th="เปรียบเทียบกับ 0 โดยใช้เครื่องหมาย:" data-en="Compare with 0 using:">เปรียบเทียบกับ 0 โดยใช้เครื่องหมาย:</div>
+      <div class="op-row" id="toolOpRow">
+        <button class="op-btn active" data-op="&gt;" onclick="setToolOp('&gt;')">&gt;</button>
+        <button class="op-btn" data-op="&gt;=" onclick="setToolOp('&gt;=')">≥</button>
+        <button class="op-btn" data-op="&lt;" onclick="setToolOp('&lt;')">&lt;</button>
+        <button class="op-btn" data-op="&lt;=" onclick="setToolOp('&lt;=')">≤</button>
+      </div>
+    </div>
+
+    <div class="btn-row"><button class="btn" onclick="buildTool()" data-th="สร้างแผนภาพ ▶" data-en="Build chart ▶">สร้างแผนภาพ ▶</button></div>
+    <div id="toolErr" class="err-msg"></div>
+
+    <div id="toolOutput" style="margin-top:10px;"></div>
+  </div>
+</section>
+
+<!-- ══════════════ TAB 5: แบบฝึกหัด ══════════════ -->
+<section id="tab-quiz" class="tab-panel">
+  <div class="card">
+    <div class="card-title"><span class="icon">🎯</span><span data-th="แบบฝึกหัด — ทดสอบความเข้าใจ" data-en="Quiz — Test Your Understanding">แบบฝึกหัด — ทดสอบความเข้าใจ</span></div>
+    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:20px;">
+      <span id="quizProgress" style="color:var(--muted); font-size:1rem;"></span>
+      <span class="score-badge"><span data-th="คะแนน:" data-en="Score:">คะแนน:</span> <span id="quizScore">0</span> / <span id="quizTotal">10</span></span>
+    </div>
+    <div id="quizBox"></div>
+    <div style="margin-top:16px; display:flex; gap:12px; flex-wrap:wrap;">
+      <button class="btn-next" id="btnNext" onclick="nextQuestion()" style="display:none;" data-th="ข้อต่อไป ▶" data-en="Next ▶">ข้อต่อไป ▶</button>
+      <button class="btn-next" id="btnRetry" onclick="initQuiz()" style="display:none; background:var(--accent);" data-th="เล่นใหม่ 🔄" data-en="Play Again 🔄">เล่นใหม่ 🔄</button>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<script>
+// ══════════════ ภาษาไทย/อังกฤษ (ค่าใน data-th/data-en ถือเป็น HTML — ดู docs/adr/0002) ══════════════
+const PAGE_TITLE = { th: "สื่อการสอน : ทำไมต้อง + − + (อสมการพหุนาม) ม.4", en: "Teaching Aid: Why It's + − + (Polynomial Inequalities)" };
+let langMemory = 'th';
+function getLang() { try { return localStorage.getItem('siteLang') || 'th'; } catch (e) { return langMemory; } }
+function applyLang(lang) {
+  document.documentElement.lang = lang;
+  document.title = PAGE_TITLE[lang];
+  document.querySelectorAll('[data-th]').forEach(el => {
+    el.innerHTML = (lang === 'en' && el.dataset.en) ? el.dataset.en : el.dataset.th;
+  });
+  const btn = document.getElementById('langToggle');
+  if (btn) btn.textContent = lang === 'en' ? 'ไทย' : 'EN';
+  if (typeof onLangChange === 'function') onLangChange(lang);
+}
+function toggleLang() {
+  const next = getLang() === 'en' ? 'th' : 'en';
+  langMemory = next;
+  try { localStorage.setItem('siteLang', next); } catch (e) {}
+  applyLang(next);
+}
+// รีเฟรชเนื้อหาที่สร้างจาก JS ล้วน (ไม่ใช่ data-th) ให้ตรงภาษาปัจจุบันทันทีที่สลับภาษา
+// โดยรีเฟรชเฉพาะแท็บที่กำลังเปิดอยู่ — ไม่งั้นข้อความในแท็บนั้นจะค้างเป็นภาษาเดิมจนกว่าจะกดแท็บซ้ำ
+let currentTab = 'try';
+function onLangChange(lang) {
+  if (currentTab === 'try') {
+    updateSubPanel();
+    const concl = document.getElementById('dropConclusion');
+    if (concl && concl.style.display === 'block') showDropConclusion(); // สรุปผลค้างภาษาเดิมได้ ถ้าไม่รีเฟรชตรงนี้ (บั๊ก D)
+  }
+  if (currentTab === 'cmp') { drawCmpA(); drawCmpB(); }
+  if (currentTab === 'tool') renderToolOutputIfAny();
+  refreshQuizLang();
+}
+
+// ══════════════ TAB NAVIGATION ══════════════
+function showTab(id) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  event.target.classList.add('active');
+  currentTab = id;
+  if (id === 'try') drawTry();
+  if (id === 'cmp') { drawCmpA(); drawCmpB(); }
+}
+
+// ══════════════ พิกัด SVG เส้นจำนวน ══════════════
+function mkMapper(min, max, w, padX) {
+  const scale = (w - padX * 2) / (max - min);
+  return {
+    toPx: v => padX + (v - min) * scale,
+    scale
+  };
+}
+
+// วาดแกน ขีดจำนวนเต็ม และป้ายค่าวิกฤต — ใช้ร่วมกันทุกไดอะแกรมในหน้านี้
+function drawAxis(svg, min, max, w, h, axisY, padX, criticalValues) {
+  const m = mkMapper(min, max, w, padX);
+  let html = `<line x1="${padX-10}" y1="${axisY}" x2="${w-padX+10}" y2="${axisY}" stroke="#94A3B8" stroke-width="2"/>`;
+  html += `<polygon points="${w-padX+10},${axisY} ${w-padX},${axisY-5} ${w-padX},${axisY+5}" fill="#94A3B8"/>`;
+  html += `<polygon points="${padX-10},${axisY} ${padX},${axisY-5} ${padX},${axisY+5}" fill="#94A3B8"/>`;
+  for (let v = Math.ceil(min); v <= Math.floor(max); v++) {
+    const x = m.toPx(v);
+    const isCrit = criticalValues.includes(v);
+    if (!isCrit) {
+      html += `<line x1="${x}" y1="${axisY-5}" x2="${x}" y2="${axisY+5}" stroke="#CBD5E0" stroke-width="1.5"/>`;
+      // สีเข้มกว่า --muted (#718096) เพราะตัวเลขวางทับแถบสี +/− อยู่บ่อย จางเกินไปจะอ่านไม่ออก
+      html += `<text x="${x}" y="${axisY+22}" text-anchor="middle" font-size="12" fill="#4A5568" font-family="Sarabun,sans-serif">${v}</text>`;
+    }
+  }
+  return { html, m };
+}
+
+// ═══════════════════════════ TAB 1: ลองแทนค่า ═══════════════════════════
+const TRY_MIN = -6, TRY_MAX = 4, TRY_W = 640, TRY_PAD = 46, TRY_AXIS_Y = 85;
+let tryX = -4; // ตำแหน่ง x ปัจจุบันของจุดที่ลาก
+
+function evalTryExample(x) {
+  const a = x + 2, b = x - 1;
+  return { a, b, product: a * b };
+}
+function signSymbol(v) { return v > 0 ? '+' : (v < 0 ? '−' : '0'); }
+function signClass(v) { return v > 0 ? 'pos' : (v < 0 ? 'neg' : 'zero'); }
+
+let tryRevealed = false;
+// เลขรอบของอนิเมชัน "โยนจุดสุ่ม" — กด/สลับแท็บระหว่างที่ยังเล่นอยู่แล้วรอบเก่าต้องหยุดสนิท
+// (เคยเป็นบั๊กจริง: setInterval/setTimeout เก่ายังเดินต่อแล้วเติมจุดลง SVG ใหม่ ได้จำนวนจุดผิดเช่น 18 หรือ 8)
+let dropRun = 0;
+
+// วาดครั้งเดียวตอนเปิดแท็บ/โหลดหน้า — จุดลากกับแถบเฉลยเป็นสมาชิกถาวรของ SVG นี้
+// ห้ามเรียก svg.innerHTML = ... ซ้ำระหว่างลาก เพราะจะทำลาย element เดิมที่ pointer capture ผูกอยู่
+// (เคยเป็นบั๊กจริง: ลากแล้วรีบิลด์ทั้ง SVG ทุกครั้งที่ขยับเมาส์ ทำให้จับจุดหลุดง่ายมาก)
+function drawTry() {
+  dropRun++; // ยกเลิกรอบ "โยนจุดสุ่ม" เดิมที่อาจค้างอยู่ ก่อนจะล้าง SVG ทิ้ง
+  const svg = document.getElementById('svgTry');
+  const { html: axisHtml, m } = drawAxis(svg, TRY_MIN, TRY_MAX, TRY_W, 150, TRY_AXIS_Y, TRY_PAD, [-2, 1]);
+  let html = axisHtml;
+
+  // แถบสี + ป้ายเครื่องหมายของทั้งสามช่วง (ซ่อนไว้ก่อน จนกว่าจะกด "เฉลยสีทั้งช่วง" หรือโยนจุดครบ)
+  const bands = [
+    { from: TRY_MIN, to: -2, sign: evalTryExample((TRY_MIN + -2) / 2).product },
+    { from: -2, to: 1, sign: evalTryExample(-0.5).product },
+    { from: 1, to: TRY_MAX, sign: evalTryExample((1 + TRY_MAX) / 2).product },
+  ];
+  bands.forEach((b, i) => {
+    const x1 = m.toPx(b.from), x2 = m.toPx(b.to);
+    const fill = b.sign > 0 ? 'var(--pos-bg)' : 'var(--neg-bg)';
+    const op = tryRevealed ? 0.9 : 0;
+    html += `<rect id="tryBand${i}" x="${x1}" y="${TRY_AXIS_Y-28}" width="${x2-x1}" height="56" fill="${fill}" opacity="${op}" style="transition:opacity .4s;"/>`;
+    // ป้าย +/− วางไว้ใต้แกน พ้นจากจุดลาก (ซึ่งอยู่ที่ cy=TRY_AXIS_Y เสมอ) กันไม่ให้จุดบังเครื่องหมายเวลาลากมาทับ
+    html += `<text id="tryBandSign${i}" x="${(x1+x2)/2}" y="${TRY_AXIS_Y+52}" text-anchor="middle" font-size="24" font-weight="800"
+      fill="${b.sign>0?'var(--pos)':'var(--neg)'}" opacity="${tryRevealed?1:0}" style="transition:opacity .4s;" font-family="Sarabun,sans-serif">${b.sign>0?'+':'−'}</text>`;
+  });
+
+  // เส้นประที่ค่าวิกฤต
+  [-2, 1].forEach(v => {
+    const x = m.toPx(v);
+    html += `<line x1="${x}" y1="${TRY_AXIS_Y-32}" x2="${x}" y2="${TRY_AXIS_Y+32}" stroke="#A0AEC0" stroke-width="1.5" stroke-dasharray="4,3"/>`;
+    html += `<text x="${x}" y="${TRY_AXIS_Y-38}" text-anchor="middle" font-size="13" font-weight="700" fill="var(--primary)" font-family="Sarabun,sans-serif">${v}</text>`;
+  });
+
+  // แถบลากแบบมองไม่เห็นครอบทั้งเส้น (สูง 60px) — กดตรงไหนใกล้ๆ เส้นก็ลากได้เลย ไม่ต้องเล็งจุดแม่นๆ
+  html += `<rect id="tryTrack" x="${TRY_PAD-14}" y="${TRY_AXIS_Y-30}" width="${TRY_W-2*(TRY_PAD-14)}" height="60" fill="transparent" style="cursor:grab;"/>`;
+
+  // จุดลาก (pointer-events ปิดไว้ ให้คลิกทะลุไปโดนแถบลากด้านล่างเสมอ)
+  const dotPx = m.toPx(tryX);
+  html += `<circle id="tryDot" class="drag-dot" cx="${dotPx}" cy="${TRY_AXIS_Y}" r="12" fill="var(--accent)" stroke="var(--primary)" stroke-width="2.5" style="pointer-events:none;"/>`;
+
+  svg.innerHTML = html;
+  attachTryDrag(svg, m);
+  updateSubPanel();
+}
+
+// ลากด้วยแถบกว้าง (tryTrack) ไม่ใช่ตัวจุดเอง แล้วขยับแค่ cx ของจุด/ตัวเลขในแผง — ไม่รีบิลด์ SVG ทั้งก้อน
+function attachTryDrag(svg, m) {
+  const track = document.getElementById('tryTrack');
+  const dot = document.getElementById('tryDot');
+  if (!track || !dot) return;
+  let dragging = false;
+  const getX = (clientX) => {
+    const rect = svg.getBoundingClientRect();
+    const scaleFactor = TRY_W / rect.width;
+    const px = (clientX - rect.left) * scaleFactor;
+    let v = TRY_MIN + (px - TRY_PAD) / m.scale;
+    return Math.max(TRY_MIN, Math.min(TRY_MAX, v));
+  };
+  const move = (clientX) => {
+    tryX = Math.round(getX(clientX) * 10) / 10;
+    dot.setAttribute('cx', m.toPx(tryX));
+    updateSubPanel();
+  };
+  track.addEventListener('pointerdown', e => { dragging = true; track.setPointerCapture(e.pointerId); move(e.clientX); });
+  track.addEventListener('pointermove', e => { if (dragging) move(e.clientX); });
+  track.addEventListener('pointerup', () => dragging = false);
+  track.addEventListener('pointercancel', () => dragging = false);
+}
+
+function updateSubPanel() {
+  const r = evalTryExample(tryX);
+  const lang = getLang();
+  const th = `แทน x = <strong>${tryX}</strong> → (x+2) = <strong>${r.a.toFixed(1)}</strong>, (x−1) = <strong>${r.b.toFixed(1)}</strong>
+    <br>ผลคูณ = ${r.a.toFixed(1)} × ${r.b.toFixed(1)} = <strong>${r.product.toFixed(2)}</strong>
+    &nbsp; <span class="sign-tag ${signClass(r.product)}">${r.product > 0 ? 'บวก +' : (r.product < 0 ? 'ลบ −' : '0')}</span>`;
+  const en = `Substitute x = <strong>${tryX}</strong> → (x+2) = <strong>${r.a.toFixed(1)}</strong>, (x−1) = <strong>${r.b.toFixed(1)}</strong>
+    <br>Product = ${r.a.toFixed(1)} × ${r.b.toFixed(1)} = <strong>${r.product.toFixed(2)}</strong>
+    &nbsp; <span class="sign-tag ${signClass(r.product)}">${r.product > 0 ? 'positive +' : (r.product < 0 ? 'negative −' : '0')}</span>`;
+  document.getElementById('subPanel').innerHTML = lang === 'en' ? en : th;
+}
+
+// เปิดโอเพซิตี้ของแถบสี + ตัวเลขเครื่องหมาย โดยไม่รีบิลด์ SVG (ไม่งั้นจุดลากจะหลุด)
+function revealTryRegions() {
+  tryRevealed = true;
+  for (let i = 0; i < 3; i++) {
+    const band = document.getElementById('tryBand' + i);
+    const sign = document.getElementById('tryBandSign' + i);
+    if (band) band.setAttribute('opacity', 0.9);
+    if (sign) sign.setAttribute('opacity', 1);
+  }
+}
+
+function dropRandomPoints() {
+  tryRevealed = false;
+  drawTry(); // เพิ่ม dropRun ให้เองด้านใน (ยกเลิกรอบเก่าที่อาจค้าง)
+  const run = ++dropRun; // เลขรอบของอนิเมชันรอบนี้โดยเฉพาะ
+  document.getElementById('dropConclusion').style.display = 'none'; // ซ่อนสรุปเก่าไว้ก่อนเริ่มรอบใหม่ (บั๊ก D)
+  const svg = document.getElementById('svgTry');
+  const m = mkMapper(TRY_MIN, TRY_MAX, TRY_W, TRY_PAD);
+  // กันจุดตกใกล้ค่าวิกฤตเกินไป และกันจุดทับกันเอง — รวมสองเงื่อนไขเป็นเช็คระยะห่างจากตำแหน่งที่ "ใช้แล้ว" ชุดเดียว
+  // (0.45 หน่วยแกน x ที่มาตราส่วนของกราฟนี้ ≈ เกินเส้นผ่านศูนย์กลางจุด กันจุดซ้อนจุดได้จริง — เคยเป็นบั๊ก 4 คู่ทับกัน)
+  const used = [-2, 1];
+  const MIN_GAP = 0.45;
+  let i = 0;
+  const timer = setInterval(() => {
+    if (run !== dropRun) { clearInterval(timer); return; } // รอบนี้ถูกยกเลิกไปแล้ว (กดซ้ำ/สลับแท็บ) — หยุดทันที ไม่เติมจุดต่อ
+    if (i >= 10) { clearInterval(timer); revealTryRegions(); showDropConclusion(); return; }
+    let x, tries = 0;
+    do { x = +(Math.random() * (TRY_MAX - TRY_MIN) + TRY_MIN).toFixed(1); tries++; }
+    while (used.some(u => Math.abs(x - u) < MIN_GAP) && tries < 50);
+    used.push(x);
+    const r = evalTryExample(x);
+    const px = m.toPx(x);
+    const dot = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    dot.setAttribute('cx', px); dot.setAttribute('cy', 20); dot.setAttribute('r', 7);
+    dot.setAttribute('fill', r.product > 0 ? 'var(--pos)' : 'var(--neg)');
+    dot.style.transition = 'cy .5s ease';
+    svg.appendChild(dot);
+    requestAnimationFrame(() => { if (run === dropRun) dot.setAttribute('cy', TRY_AXIS_Y - 40); });
+    // ป้าย +/− ยกขึ้นไปอยู่เหนือจุด (ไม่ใช่ตำแหน่งเดียวกับที่จุดจะตกลงมา) กันไม่ให้จุดบังป้ายของตัวเอง (บั๊ก A)
+    const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    label.setAttribute('x', px); label.setAttribute('y', TRY_AXIS_Y - 58);
+    label.setAttribute('text-anchor', 'middle'); label.setAttribute('font-size', '13');
+    label.setAttribute('font-weight', '800'); label.setAttribute('fill', r.product > 0 ? 'var(--pos)' : 'var(--neg)');
+    label.setAttribute('font-family', 'Sarabun,sans-serif');
+    label.textContent = r.product > 0 ? '+' : '−';
+    setTimeout(() => { if (run === dropRun) svg.appendChild(label); }, 500);
+    i++;
+  }, 350);
+}
+function showDropConclusion() {
+  const el = document.getElementById('dropConclusion');
+  el.style.display = 'block';
+  const lang = getLang();
+  el.innerHTML = lang === 'en'
+    ? '✅ Every point landing in the <strong>same region</strong> got the <strong>same sign</strong> — that\'s why one test point per interval is enough.'
+    : '✅ ทุกจุดที่ตกอยู่ใน<strong>ช่วงเดียวกัน</strong> ได้<strong>เครื่องหมายเดียวกัน</strong>เสมอ — นี่คือเหตุผลที่แค่ทดสอบจุดเดียวต่อช่วงก็พอ';
+}
+
+// ═══════════════════════════ TAB 3: มากกว่า/น้อยกว่า ═══════════════════════════
+let cmpOp = '>';
+function setOp(op) {
+  cmpOp = op;
+  document.querySelectorAll('#opRow .op-btn').forEach(b => b.classList.toggle('active', b.dataset.op === op));
+  drawCmpA(); drawCmpB();
+}
+function opText(op) { return op === '>' ? '>' : op === '>=' ? '≥' : op === '<' ? '<' : '≤'; }
+function opBase(op) { return (op === '>' || op === '>=') ? 1 : -1; }
+function opStrict(op) { return op === '>' || op === '<'; }
+
+// เขียนไดอะแกรมช่วง + จุดวิกฤต + คำตอบ ให้ทั้งตัวอย่าง A และ B ใช้ร่วมกัน
+function renderIntervalDiagram(svgId, min, max, criticalPoints, signFn, op, ansElId, hasFraction) {
+  const svg = document.getElementById(svgId);
+  const w = 640, axisY = 60, pad = 46, h = 120;
+  const { html: axisHtml, m } = drawAxis(svg, min, max, w, h, axisY, pad, criticalPoints.map(c => c.value));
+  let html = axisHtml;
+  const base = opBase(op), strict = opStrict(op);
+
+  // คำนวณเครื่องหมายของแต่ละช่วง แล้วระบายแถบสี
+  const pts = criticalPoints.map(c => c.value);
+  const bounds = [min, ...pts, max];
+  const signs = [];
+  for (let i = 0; i < bounds.length - 1; i++) {
+    const mid = (bounds[i] + bounds[i+1]) / 2;
+    const s = signFn(mid);
+    signs.push(s);
+    const included = (s > 0 && base > 0) || (s < 0 && base < 0);
+    const x1 = m.toPx(bounds[i]), x2 = m.toPx(bounds[i+1]);
+    html += `<rect x="${x1}" y="${axisY-22}" width="${x2-x1}" height="44" fill="${s>0?'var(--pos-bg)':'var(--neg-bg)'}" opacity="${included?0.9:0.25}"/>`;
+  }
+  // จุดวิกฤต: ทึบถ้ารวมอยู่ในคำตอบ, โปร่งถ้าไม่รวม (ตัวส่วนโปร่งเสมอ)
+  criticalPoints.forEach(c => {
+    const included = !c.excluded && !strict;
+    const x = m.toPx(c.value);
+    html += `<line x1="${x}" y1="${axisY-26}" x2="${x}" y2="${axisY+26}" stroke="#A0AEC0" stroke-width="1.5" stroke-dasharray="4,3"/>`;
+    html += `<circle cx="${x}" cy="${axisY}" r="8" fill="${included ? (c.excluded?'#fff':'var(--primary)') : '#fff'}" stroke="var(--primary)" stroke-width="2.5"/>`;
+    html += `<text x="${x}" y="${axisY+40}" text-anchor="middle" font-size="13" font-weight="700" fill="var(--primary)" font-family="Sarabun,sans-serif">${c.value}${c.excluded?' 🚫':''}</text>`;
+  });
+  svg.innerHTML = html;
+
+  // เขียนคำตอบเป็นช่วง
+  const cps = criticalPoints.map(c => ({ value: c.value, excluded: c.excluded }));
+  const pieces = mergeSolution(cps, signs, base > 0 ? '+' : '-', strict);
+  document.getElementById(ansElId).textContent = formatPieces(pieces);
+}
+
+function drawCmpA() {
+  document.getElementById('opALabel').textContent = opText(cmpOp);
+  renderIntervalDiagram('svgA', -6, 4, [{value:-2,excluded:false},{value:1,excluded:false}],
+    x => (x+2)*(x-1), cmpOp, 'ansA', false);
+}
+function drawCmpB() {
+  document.getElementById('opBLabel').textContent = opText(cmpOp);
+  renderIntervalDiagram('svgB', -6, 4, [{value:-2,excluded:false},{value:1,excluded:true}],
+    x => (x+2)/(x-1), cmpOp, 'ansB', true);
+}
+
+// ═══════════════════════════ ตัวช่วยคณิตศาสตร์ทั่วไป: รวมช่วงคำตอบ ═══════════════════════════
+// cps: [{value, excluded}] เรียงจากน้อยไปมาก, signs: เครื่องหมาย ('+'/'-') ของ n+1 ช่วง
+// baseSign: เครื่องหมายที่ต้องการ (ตามด้าน > หรือ <), strict: true ถ้าไม่รวมจุดวิกฤต (>, <)
+function mergeSolution(cps, signs, baseSign, strict) {
+  const n = cps.length;
+  const intervalIncluded = signs.map(s => (s > 0 ? '+' : '-') === baseSign);
+  // จุดวิกฤตจากตัวส่วนไม่รวมเสมอ ไม่ว่าเครื่องหมายจะเป็น ≥ หรือ ≤ ก็ตาม
+  const pointIncluded = cps.map(c => !c.excluded && !strict);
+
+  const pieces = [];
+  let building = false, leftVal, leftClosed;
+
+  for (let i = 0; i <= n; i++) {
+    const incl = intervalIncluded[i];
+    const leftBound = i === 0 ? -Infinity : cps[i-1].value;
+    if (incl && !building) { building = true; leftVal = leftBound; leftClosed = false; }
+    if (!incl && building) { pieces.push({ left: leftVal, leftClosed, right: leftBound, rightClosed: false }); building = false; }
+
+    if (i < n) {
+      const pt = cps[i], ptIncl = pointIncluded[i], nextIncl = intervalIncluded[i+1];
+      if (ptIncl) {
+        if (building) {
+          if (!nextIncl) { pieces.push({ left: leftVal, leftClosed, right: pt.value, rightClosed: true }); building = false; }
+          // ถ้า nextIncl ด้วย ก็แค่ต่อเนื่องผ่านจุดนี้ไปเลย ไม่ต้องตัด
+        } else {
+          if (nextIncl) { building = true; leftVal = pt.value; leftClosed = true; }
+          else pieces.push({ point: pt.value }); // คำตอบแบบจุดโดดเดี่ยว (กำลังคู่กลางช่วงลบ)
+        }
+      } else {
+        if (building) { pieces.push({ left: leftVal, leftClosed, right: pt.value, rightClosed: false }); building = false; }
+        if (nextIncl) { building = true; leftVal = pt.value; leftClosed = false; }
+      }
+    }
+  }
+  if (building) pieces.push({ left: leftVal, leftClosed, right: Infinity, rightClosed: false });
+  return pieces;
+}
+function formatPieces(pieces) {
+  if (pieces.length === 0) return '∅';
+  return pieces.map(p => {
+    if (p.point !== undefined) return `{${p.point}}`;
+    const lb = p.leftClosed ? '[' : '(';
+    const rb = p.rightClosed ? ']' : ')';
+    const lv = p.left === -Infinity ? '-∞' : p.left;
+    const rv = p.right === Infinity ? '∞' : p.right;
+    return `${lb}${lv}, ${rv}${rb}`;
+  }).join(' ∪ ');
+}
+
+// ═══════════════════════════ TAB 4: เครื่องมือเชิงโต้ตอบ ═══════════════════════════
+let factors = [ { r: -2, power: 1, loc: 'top' }, { r: 1, power: 1, loc: 'top' } ];
+let toolOp = '>';
+
+function factorDisplay(f) {
+  const inner = f.r === 0 ? 'x' : (f.r > 0 ? `x − ${f.r}` : `x + ${-f.r}`);
+  return f.power === 2 ? `(${inner})²` : `(${inner})`;
+}
+function renderFactorBuilder() {
+  const lang = getLang();
+  // ป้ายชิปเหล่านี้สร้างจาก JS ล้วน ไม่ใช่ data-th จึงไม่รีเฟรชเองตอนสลับภาษา ต้องเลือกข้อความตรงนี้เอง (บั๊ก F)
+  const L = lang === 'en'
+    ? { power1: 'Power 1', power2: 'Power 2', top: 'Numerator', bottom: 'Denominator' }
+    : { power1: 'กำลัง 1', power2: 'กำลัง 2', top: 'เศษ (บน)', bottom: 'ส่วน (ล่าง)' };
+  const wrap = document.getElementById('factorBuilder');
+  wrap.innerHTML = factors.map((f, i) => `
+    <div class="factor-row">
+      <span class="fdisplay">${factorDisplay(f)}</span>
+      <label class="hint">r = <input type="number" value="${f.r}" min="-9" max="9" step="1" onchange="setFactorR(${i}, this.value)"></label>
+      <div class="chip-toggle">
+        <button class="${f.power===1?'active':''}" onclick="setFactorPower(${i},1)">${L.power1}</button>
+        <button class="${f.power===2?'active':''}" onclick="setFactorPower(${i},2)">${L.power2}</button>
+      </div>
+      <div class="chip-toggle">
+        <button class="${f.loc==='top'?'active':''}" onclick="setFactorLoc(${i},'top')">${L.top}</button>
+        <button class="${f.loc==='bottom'?'active':''}" onclick="setFactorLoc(${i},'bottom')">${L.bottom}</button>
+      </div>
+      ${factors.length > 1 ? `<button class="rm-btn" onclick="removeFactor(${i})">✕</button>` : ''}
+    </div>
+  `).join('');
+  document.getElementById('addFactorBtn').disabled = factors.length >= 3;
+}
+function setFactorR(i, v) { factors[i].r = parseInt(v, 10) || 0; renderFactorBuilder(); }
+function setFactorPower(i, p) { factors[i].power = p; renderFactorBuilder(); }
+function setFactorLoc(i, loc) { factors[i].loc = loc; renderFactorBuilder(); }
+function addFactor() { if (factors.length < 3) { factors.push({ r: 0, power: 1, loc: 'top' }); renderFactorBuilder(); } }
+function removeFactor(i) { factors.splice(i, 1); renderFactorBuilder(); }
+function setToolOp(op) {
+  toolOp = op;
+  document.querySelectorAll('#toolOpRow .op-btn').forEach(b => b.classList.toggle('active', b.dataset.op === op));
+}
+
+function buildTool() {
+  const errEl = document.getElementById('toolErr');
+  errEl.textContent = '';
+  const roots = factors.map(f => f.r);
+  const dupes = roots.some((r, i) => roots.indexOf(r) !== i);
+  if (dupes) {
+    errEl.textContent = getLang() === 'en' ? '⚠️ Please use a different r for each bracket.' : '⚠️ กรุณาใช้ r ไม่ซ้ำกันในแต่ละวงเล็บ';
+    return;
+  }
+  const sorted = [...factors].sort((a, b) => a.r - b.r);
+  const cps = sorted.map(f => ({ value: f.r, excluded: f.loc === 'bottom' }));
+  const bounds = [Math.min(...roots) - 2, ...sorted.map(f=>f.r), Math.max(...roots) + 2];
+  if (bounds[0] === bounds[bounds.length-1]) { bounds[0] -= 3; bounds[bounds.length-1] += 3; } // กรณีมีวงเล็บเดียว
+
+  function evalSign(x) {
+    let s = 1;
+    sorted.forEach(f => {
+      const d = x - f.r;
+      if (f.power === 2) { /* กำลังคู่ไม่ทำให้เครื่องหมายเปลี่ยน ณ จุดทดสอบ (d ไม่เท่ากับ 0) */ }
+      else s *= (d > 0 ? 1 : -1);
+    });
+    return s;
+  }
+  const signs = [];
+  for (let i = 0; i < bounds.length - 1; i++) signs.push(evalSign((bounds[i] + bounds[i+1]) / 2));
+
+  const base = opBase(toolOp), strict = opStrict(toolOp);
+  const pieces = mergeSolution(cps, signs, base > 0 ? '+' : '-', strict);
+  const exprStr = sorted.map(f => (f.loc==='bottom' ? '÷' : '') + factorDisplay(f)).join(' ');
+  const domainExcl = sorted.filter(f => f.loc === 'bottom').map(f => f.r);
+
+  // ตารางเครื่องหมาย
+  // labels ต้องมีจำนวนเท่ากับ "ช่วง" (bounds.length - 1) ไม่ใช่เท่ากับจำนวนจุด bounds เอง
+  const labels = [];
+  const lastIdx = bounds.length - 2; // ดัชนีช่วงสุดท้าย
+  for (let i = 0; i <= lastIdx; i++) {
+    if (i === 0) labels.push(`x &lt; ${sorted[0].r}`);
+    else if (i === lastIdx) labels.push(`x &gt; ${sorted[sorted.length-1].r}`);
+    else labels.push(`${sorted[i-1].r} &lt; x &lt; ${sorted[i].r}`);
+  }
+  let tableHtml = '<table class="sign-table"><tr><th></th>' + labels.map(l=>`<td class="label">${l}</td>`).join('') + '</tr>';
+  sorted.forEach(f => {
+    const row = [];
+    for (let i = 0; i < bounds.length - 1; i++) {
+      const mid = (bounds[i]+bounds[i+1])/2;
+      const d = mid - f.r;
+      const s = f.power === 2 ? 1 : (d > 0 ? 1 : -1);
+      row.push(`<td class="${s>0?'pos':'neg'}">${s>0?'+':'−'}</td>`);
+    }
+    const bottomTag = f.loc === 'bottom' ? (getLang() === 'en' ? ' (denom.)' : ' (ส่วน)') : '';
+    tableHtml += `<tr><th>${factorDisplay(f)}${bottomTag}</th>${row.join('')}</tr>`;
+  });
+  tableHtml += '<tr><th>' + (getLang()==='en'?'Total':'รวม') + '</th>' + signs.map(s=>`<td class="${s>0?'pos':'neg'}">${s>0?'+':'−'}</td>`).join('') + '</tr></table>';
+
+  const svgId = 'toolSvg';
+  const out = document.getElementById('toolOutput');
+  out.innerHTML = `
+    <div class="box-info"><strong>${exprStr}</strong> ${opText(toolOp)} 0</div>
+    ${domainExcl.length ? `<div class="domain-note">${getLang()==='en'?'Domain':'โดเมน'}: x ≠ ${domainExcl.join(', ')}</div>` : ''}
+    ${tableHtml}
+    <div class="numline-wrap"><svg id="${svgId}" class="numline" viewBox="0 0 640 120" width="640" height="120"></svg></div>
+    <div class="answer-box">${formatPieces(pieces)}</div>
+  `;
+
+  // วาดไดอะแกรมเส้นจำนวน
+  const svg = document.getElementById(svgId);
+  const w = 640, axisY = 60, pad = 46, h = 120;
+  const min = bounds[0], max = bounds[bounds.length-1];
+  const { html: axisHtml, m } = drawAxis(svg, min, max, w, h, axisY, pad, sorted.map(f=>f.r));
+  let html = axisHtml;
+  for (let i = 0; i < bounds.length - 1; i++) {
+    const s = signs[i];
+    const included = (s > 0 && base > 0) || (s < 0 && base < 0);
+    const x1 = m.toPx(bounds[i]), x2 = m.toPx(bounds[i+1]);
+    html += `<rect x="${x1}" y="${axisY-22}" width="${x2-x1}" height="44" fill="${s>0?'var(--pos-bg)':'var(--neg-bg)'}" opacity="${included?0.9:0.25}"/>`;
+  }
+  sorted.forEach(f => {
+    const included = f.loc !== 'bottom' && !strict;
+    const x = m.toPx(f.r);
+    html += `<line x1="${x}" y1="${axisY-26}" x2="${x}" y2="${axisY+26}" stroke="#A0AEC0" stroke-width="1.5" stroke-dasharray="4,3"/>`;
+    html += `<circle cx="${x}" cy="${axisY}" r="8" fill="${included ? 'var(--primary)' : '#fff'}" stroke="var(--primary)" stroke-width="2.5"/>`;
+    html += `<text x="${x}" y="${axisY+40}" text-anchor="middle" font-size="13" font-weight="700" fill="var(--primary)" font-family="Sarabun,sans-serif">${f.r}${f.loc==='bottom'?' 🚫':''}</text>`;
+  });
+  svg.innerHTML = html;
+}
+function renderToolOutputIfAny() { if (document.getElementById('toolOutput') && document.getElementById('toolOutput').innerHTML.trim()) buildTool(); renderFactorBuilder(); }
+
+// รีเฟรชคำถาม/ป้ายความคืบหน้าของแบบฝึกหัดให้ตรงภาษา โดยไม่รีเซ็ตคะแนนหรือสถานะที่ตอบไปแล้ว
+// (quizData/qIdx ประกาศไว้ด้านล่าง แต่ฟังก์ชันนี้ถูกเรียกหลังโหลดหน้าเสร็จเท่านั้น จึงใช้ได้)
+function refreshQuizLang() {
+  const box = document.getElementById('quizBox');
+  if (!box || !box.querySelector('.quiz-q')) return;
+  document.getElementById('quizProgress').textContent = t('quizProgress');
+  const q = quizData[qIdx];
+  const lang = getLang();
+  box.querySelector('.quiz-q').innerHTML = `${qIdx + 1}. ${lang === 'en' ? q.q_en : q.q_th}`;
+  if (answered) {
+    const fb = document.getElementById('qfb');
+    const exp = lang === 'en' ? q.exp_en : q.exp_th;
+    if (fb) fb.innerHTML = (fb.classList.contains('ok') ? t('correctPrefix') : t('wrongPrefix')) + exp;
+  }
+}
+
+// ═══════════════════════════ QUIZ ═══════════════════════════
+const quizData = [
+  { q_th: '(x−2)(x+3) &gt; 0 มีคำตอบเป็นช่วงใด?', q_en: 'What is the solution to (x−2)(x+3) &gt; 0?',
+    opts: ['(−3, 2)', '(−∞, −3) ∪ (2, ∞)', '[−3, 2]', '(−∞, −3] ∪ [2, ∞)'], ans: 1,
+    exp_th: 'พาราโบลาหงายขึ้น รากคือ −3, 2 → เป็นบวกนอกช่วงราก', exp_en: 'Upward parabola with roots −3, 2 → positive outside the roots' },
+  { q_th: '(x−2)(x+3) &lt; 0 มีคำตอบเป็นช่วงใด?', q_en: 'What is the solution to (x−2)(x+3) &lt; 0?',
+    opts: ['(−3, 2)', '(−∞, −3) ∪ (2, ∞)', '(−∞, −3]', '[2, ∞)'], ans: 0,
+    exp_th: 'เป็นลบเฉพาะช่วงระหว่างราก', exp_en: 'Negative only between the two roots' },
+  { q_th: 'x² − 1 ≥ 0 มีคำตอบเป็นช่วงใด?', q_en: 'What is the solution to x² − 1 ≥ 0?',
+    opts: ['(−1, 1)', '[−1, 1]', '(−∞, −1] ∪ [1, ∞)', '(−∞, −1) ∪ (1, ∞)'], ans: 2,
+    exp_th: 'รากคือ −1, 1 เครื่องหมาย ≥ จึงรวมจุดวิกฤตด้วย (จุดทึบ)', exp_en: 'Roots are −1, 1; ≥ includes the critical points (closed dots)' },
+  { q_th: '1/(x−2) &gt; 0 มีคำตอบเป็นช่วงใด?', q_en: 'What is the solution to 1/(x−2) &gt; 0?',
+    opts: ['(2, ∞)', '(−∞, 2)', '[2, ∞)', 'ℝ'], ans: 0,
+    exp_th: 'x = 2 ทำให้ส่วนเป็น 0 ต้องเป็นวงกลมโปร่งเสมอ', exp_en: 'x = 2 makes the denominator 0, always an open circle' },
+  { q_th: '(x+1)/(x−3) &lt; 0 มีคำตอบเป็นช่วงใด?', q_en: 'What is the solution to (x+1)/(x−3) &lt; 0?',
+    opts: ['(−1, 3)', '(−∞, −1) ∪ (3, ∞)', '(−∞, −1)', '(3, ∞)'], ans: 0,
+    exp_th: 'ราก −1 (เศษ) และ 3 (ส่วน) ลองแทนค่าช่วงกลางจะได้ผลลบ', exp_en: 'Roots −1 (numerator) and 3 (denominator); the middle interval tests negative' },
+  { q_th: 'จุดวิกฤตที่มาจากตัวส่วนเสมอ วาดเป็นวงกลมแบบใด?', q_en: 'A critical point coming from the denominator is always drawn as what kind of dot?',
+    opts: ['จุดทึบเสมอ', 'จุดโปร่งเสมอ', 'ขึ้นกับเครื่องหมายอสมการ', 'ไม่ต้องวาด'],
+    opts_en_flag: true, ans: 1,
+    exp_th: 'ทำให้ส่วนเป็น 0 ไม่ได้ ไม่ว่าโจทย์จะเป็น ≥ หรือ ≤ ก็ตาม', exp_en: 'The denominator can never be 0, no matter if the operator is ≥ or ≤' },
+  { q_th: '(x−1)² &gt; 0 มีคำตอบเป็นช่วงใด?', q_en: 'What is the solution to (x−1)² &gt; 0?',
+    opts: ['ℝ ทั้งหมด', '(−∞, 1) ∪ (1, ∞)', '{1}', '∅'], ans: 1,
+    exp_th: 'เป็นบวกทุกที่ ยกเว้นที่ x=1 ซึ่งเท่ากับ 0 พอดี (ไม่ &gt; 0) จึงตัดจุดนั้นออก', exp_en: 'Positive everywhere except x=1 where it equals exactly 0 (not &gt; 0), so that point is excluded' },
+  { q_th: 'x² + 4 &lt; 0 มีคำตอบเป็นช่วงใด?', q_en: 'What is the solution to x² + 4 &lt; 0?',
+    opts: ['∅ (ไม่มีคำตอบ)', 'ℝ ทั้งหมด', '(−2, 2)', '{−2, 2}'], ans: 0,
+    exp_th: 'x² + 4 เป็นบวกเสมอสำหรับทุก x จริง จึงไม่มีทางน้อยกว่า 0', exp_en: 'x² + 4 is always positive for every real x, so it can never be less than 0' },
+  { q_th: '(x+2)x²(x−3) ≥ 0 — จุด x = 0 (มาจากวงเล็บกำลังสอง) เป็นคำตอบหรือไม่?', q_en: 'For (x+2)x²(x−3) ≥ 0, is x = 0 (from the squared bracket) part of the solution?',
+    opts: ['ใช่ เป็นคำตอบแบบจุดโดดเดี่ยว', 'ไม่ใช่ เพราะรอบข้างเป็นลบทั้งคู่', 'ใช่ เพราะเป็นช่วงเต็ม', 'เป็นไปไม่ได้ที่จะเกิดกรณีนี้'], ans: 0,
+    exp_th: 'แม้สองช่วงรอบ x=0 จะเป็นลบทั้งคู่ แต่ที่ x=0 ค่าฟังก์ชันเท่ากับ 0 พอดี ซึ่ง 0 ≥ 0 จริง จึงยังเป็นคำตอบแบบจุดเดียวโดดๆ', exp_en: 'Even though both neighboring intervals are negative, at x=0 the value is exactly 0, and 0 ≥ 0 is true — so it\'s a lone isolated solution point' },
+  { q_th: 'ข้อใดอธิบาย "ถามมากกว่าเลือก +" ได้ถูกต้องที่สุด?', q_en: 'Which best explains "asked greater-than, pick the + regions"?',
+    opts: ['เพราะคำตอบของ &gt; 0 คือช่วงที่ผลคูณเป็นบวก', 'เพราะทุกคำตอบต้องเป็นจำนวนบวก', 'เพราะค่า x ต้องมากกว่า 0 เสมอ', 'ไม่มีข้อถูก'], ans: 0,
+    exp_th: '&gt; 0 หมายถึง "มากกว่าศูนย์" ซึ่งตรงกับช่วงที่มีเครื่องหมาย + ในแผนภาพเครื่องหมาย', exp_en: '"&gt; 0" means "greater than zero", which matches the intervals marked + on the sign chart' },
+];
+
+let qIdx = 0, score = 0, answered = false;
+function t(key) {
+  const lang = getLang();
+  const map = {
+    quizProgress: lang === 'en' ? `Question ${qIdx+1} / ${quizData.length}` : `ข้อที่ ${qIdx+1} / ${quizData.length}`,
+    correctPrefix: lang === 'en' ? '✅ Correct! ' : '✅ ถูกต้อง! ',
+    wrongPrefix: lang === 'en' ? '❌ Not quite — ' : '❌ ไม่ถูกต้อง — ',
+    scoreTitle: lang === 'en' ? 'Your Score' : 'ผลคะแนนของคุณ',
+  };
+  return map[key];
+}
+function grade(s) {
+  const lang = getLang();
+  if (lang === 'en') return s >= 9 ? '🌟 Excellent!' : s >= 7 ? '👍 Great job!' : s >= 5 ? '💪 Not bad, review a bit' : '📚 Go back and review';
+  return s >= 9 ? '🌟 ยอดเยี่ยมมาก!' : s >= 7 ? '👍 ดีมาก!' : s >= 5 ? '💪 พอใช้ได้ ลองทบทวนดูนะ' : '📚 ลองกลับไปทบทวนอีกรอบ';
+}
+function initQuiz() {
+  qIdx = 0; score = 0; answered = false;
+  document.getElementById('quizScore').textContent = 0;
+  document.getElementById('quizTotal').textContent = quizData.length;
+  document.getElementById('btnRetry').style.display = 'none';
+  renderQuestion();
+}
+function renderQuestion() {
+  const q = quizData[qIdx];
+  answered = false;
+  document.getElementById('quizProgress').textContent = t('quizProgress');
+  document.getElementById('btnNext').style.display = 'none';
+  const lang = getLang();
+  document.getElementById('quizBox').innerHTML = `
+    <div class="quiz-q">${qIdx + 1}. ${lang === 'en' ? q.q_en : q.q_th}</div>
+    <div class="quiz-opts">${q.opts.map((o, i) => `<button class="quiz-opt" onclick="answer(${i})" id="qopt${i}">${o}</button>`).join('')}</div>
+    <div class="quiz-feedback" id="qfb"></div>
+  `;
+}
+function answer(i) {
+  if (answered) return;
+  answered = true;
+  const q = quizData[qIdx];
+  const exp = getLang() === 'en' ? q.exp_en : q.exp_th;
+  const fb = document.getElementById('qfb');
+  document.querySelectorAll('.quiz-opt').forEach((b, idx) => {
+    if (idx === q.ans) b.classList.add('correct');
+    else if (idx === i) b.classList.add('wrong');
+    b.style.pointerEvents = 'none';
+  });
+  if (i === q.ans) {
+    score++;
+    document.getElementById('quizScore').textContent = score;
+    fb.className = 'quiz-feedback ok';
+    fb.innerHTML = t('correctPrefix') + exp;
+  } else {
+    fb.className = 'quiz-feedback err';
+    fb.innerHTML = t('wrongPrefix') + exp;
+  }
+  if (qIdx < quizData.length - 1) {
+    document.getElementById('btnNext').style.display = 'inline-block';
+  } else {
+    document.getElementById('btnNext').style.display = 'none';
+    document.getElementById('btnRetry').style.display = 'inline-block';
+    setTimeout(() => {
+      document.getElementById('quizBox').innerHTML += `
+        <div style="margin-top:20px; background:linear-gradient(135deg,#1C3B22,#2E5936); color:white; border-radius:16px; padding:24px; text-align:center;">
+          <div style="font-size:2.5rem;">🎉</div>
+          <div style="font-size:1.5rem; font-weight:800; margin:8px 0;">${t('scoreTitle')}</div>
+          <div style="font-size:3rem; font-weight:800;">${score} / ${quizData.length}</div>
+          <div style="font-size:1.1rem; opacity:.9; margin-top:8px;">${grade(score)}</div>
+        </div>`;
+    }, 300);
+  }
+}
+function nextQuestion() { qIdx++; renderQuestion(); }
+
+// ══════════════ INIT ══════════════
+window.addEventListener('load', () => {
+  drawTry();
+  drawCmpA(); drawCmpB();
+  renderFactorBuilder();
+  buildTool();
+  initQuiz();
+  applyLang(getLang());
+});
+</script>
+
+</body>
+</html>
