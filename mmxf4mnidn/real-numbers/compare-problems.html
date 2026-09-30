@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>สื่อการสอน : เทียบความต่างของโจทย์ สมการ vs อสมการ ม.4</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800&display=swap');
+
+  :root {
+    --primary: #1C3B22; --secondary: #FF8A3D; --accent: #68EF3F; --accent-2: #3FA82E; --warning: #FFB347;
+    --bg: #F3F7EC; --card: #FFFFFF; --text: #2D3748; --muted: #718096; --border: #E2E8F0;
+    --shadow: 0 4px 24px rgba(28,59,34,0.10); --radius: 16px;
+    --pos: #047857; --pos-bg: #ECFDF5; --neg: #BE185D; --neg-bg: #FFF4EC;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Sarabun', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+  header { background: linear-gradient(135deg, #1C3B22 0%, #2E5936 100%); color: white; padding: 28px 40px 20px; text-align: center; position: relative; overflow: hidden; }
+  header::before { content: ''; position: absolute; top: -60px; right: -60px; width: 200px; height: 200px; background: rgba(255,255,255,0.07); border-radius: 50%; }
+  header h1 { font-size: 2rem; font-weight: 800; letter-spacing: .5px; }
+  header p { font-size: 1rem; opacity: .85; margin-top: 4px; }
+  .back-link { position: absolute; top: 14px; left: 20px; color: white; text-decoration: none; font-size: .85rem; font-weight: 600; opacity: .9; z-index: 2; }
+  .back-link:hover { opacity: 1; text-decoration: underline; }
+  .lang-toggle { position: absolute; top: 14px; right: 20px; background: rgba(255,255,255,.15); color: white; border: 1.5px solid rgba(255,255,255,.5); border-radius: 20px; padding: 5px 14px; font-family: 'Sarabun', sans-serif; font-size: .8rem; font-weight: 700; cursor: pointer; z-index: 2; }
+  .lang-toggle:hover { background: rgba(255,255,255,.28); }
+
+  nav { display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; padding: 20px 24px 0; background: white; border-bottom: 3px solid var(--border); }
+  .tab-btn { padding: 10px 18px; border: none; background: transparent; border-radius: 10px 10px 0 0; font-family: 'Sarabun', sans-serif; font-size: 0.95rem; font-weight: 600; color: var(--muted); cursor: pointer; transition: all .25s; border-bottom: 3px solid transparent; margin-bottom: -3px; }
+  .tab-btn:hover { color: var(--primary); background: #E3F3D8; }
+  .tab-btn.active { color: var(--primary); border-bottom-color: var(--primary); background: #E3F3D8; }
+
+  main { max-width: 1040px; margin: 0 auto; padding: 32px 20px 60px; }
+  .tab-panel { display: none; animation: fadeIn .35s ease; }
+  .tab-panel.active { display: block; }
+  @keyframes fadeIn { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
+
+  .card { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); padding: 28px 32px; margin-bottom: 24px; }
+  .card-title { font-size: 1.25rem; font-weight: 700; color: var(--primary); margin-bottom: 12px; display: flex; align-items: center; gap: 10px; }
+  .card-title .icon { font-size: 1.5rem; }
+  .intro { font-size: 1.02rem; line-height: 1.7; margin-bottom: 14px; }
+
+  .box-info { background: #EEF7E6; border-left: 4px solid var(--primary); border-radius: 10px; padding: 14px 18px; margin: 14px 0; }
+  .box-warn { background: #FFF7ED; border-left: 4px solid var(--warning); border-radius: 10px; padding: 14px 18px; margin: 14px 0; }
+  .box-ok   { background: #ECFDF5; border-left: 4px solid var(--accent);  border-radius: 10px; padding: 14px 18px; margin: 14px 0; }
+
+  .btn { padding: 10px 26px; background: var(--primary); color: white; border: none; border-radius: 30px; font-family: 'Sarabun', sans-serif; font-size: 1rem; font-weight: 700; cursor: pointer; transition: background .2s, opacity .2s; }
+  .btn:hover:not(:disabled) { background: #2E5936; }
+  .btn:disabled { opacity: .45; cursor: not-allowed; }
+  .btn.ghost { background: white; color: var(--primary); border: 2px solid var(--primary); }
+  .btn.ghost:hover:not(:disabled) { background: #E3F3D8; }
+  .btn-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; align-items: center; }
+
+  .frac { display: inline-flex; flex-direction: column; align-items: center; font-weight: 700; line-height: 1; vertical-align: middle; margin: 0 4px; }
+  .frac .num { font-size: 1em; border-bottom: 2.5px solid currentColor; padding-bottom: 2px; min-width: 18px; text-align: center; white-space: nowrap; }
+  .frac .den { font-size: 1em; padding-top: 3px; min-width: 18px; text-align: center; white-space: nowrap; }
+
+  /* ── ตารางเทียบ 2 ฝั่ง: หัวโจทย์ + แถวขั้นตอน (ซ้าย = สมการ, ขวา = อสมการ) ── */
+  .cmp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .cmp-head { border-radius: 14px; padding: 14px 16px; text-align: center; color: white; font-weight: 800; }
+  .cmp-head.eq   { background: linear-gradient(135deg,#1C3B22,#2E5936); }
+  .cmp-head.ineq { background: linear-gradient(135deg,#C2570C,#FF8A3D); }
+  .cmp-head .kind { font-size: .85rem; font-weight: 700; opacity: .9; margin-bottom: 4px; }
+  .cmp-head .prob { font-size: 1.35rem; display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 4px; }
+  .cmp-cell { position: relative; background: #fff; border: 2px solid var(--border); border-radius: 14px; padding: 12px 14px; font-size: 1rem; line-height: 1.8; min-height: 64px; }
+  .cmp-cell .lab { display: none; font-size: .78rem; font-weight: 800; color: var(--muted); margin-bottom: 2px; }
+  .cmp-cell.fresh { animation: rowIn .5s ease; }
+  @keyframes rowIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+  .cmp-cell.diff { border-color: var(--secondary); background: #FFF9F2; box-shadow: 0 0 0 3px rgba(255,138,61,.18); }
+  /* เลขขั้นวางมุมซ้ายบนของกล่อง ไม่แย่งบรรทัดกับสมการ (สมการที่จัดแนวเป็นบล็อก จะได้ไม่ถูกดันลงไปอีกบรรทัด) */
+  .cmp-cell { padding-left: 46px; }
+  .cmp-cell .stepno { position: absolute; left: 12px; top: 13px; display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px; border-radius: 50%; background: var(--primary); color: white; font-size: .8rem; font-weight: 800; }
+  .cmp-cell.diff .stepno { background: var(--secondary); }
+  .difftag { position: absolute; top: -11px; right: 10px; background: var(--secondary); color: white; font-size: .72rem; font-weight: 800; padding: 2px 10px; border-radius: 20px; }
+  .flipsign { display: inline-block; color: var(--neg); font-weight: 800; animation: flip 1.1s ease 2; }
+  @keyframes flip { 0% { transform: rotate(0); } 50% { transform: rotate(180deg) scale(1.5); } 100% { transform: rotate(360deg); } }
+  /* สมการแบบจัดแนวเครื่องหมาย: 3 คอลัมน์ (ซ้ายชิดขวา | เครื่องหมายกึ่งกลาง | ขวาชิดซ้าย) ทุกแถวใช้คอลัมน์ร่วมกัน เครื่องหมายจึงตรงกันเป๊ะ */
+  .align { display: grid; grid-template-columns: auto auto auto; justify-content: start; column-gap: .55em; row-gap: 3px; align-items: center; margin: 4px 0; }
+  .align .l { justify-self: end; text-align: right; }
+  .align .m { justify-self: center; font-weight: 700; }
+  .align .r { justify-self: start; }
+  .align .full { grid-column: 1 / -1; }
+  .vis { margin-top: 6px; }
+  .vis svg { width: 100%; height: auto; display: block; }
+
+  /* ── ตัวทดสอบ "ห้ามคูณไขว้" ── */
+  .xm-row { display: flex; gap: 14px; flex-wrap: wrap; margin: 12px 0; }
+  .xm-box { flex: 1 1 240px; border: 2px solid var(--border); border-radius: 12px; padding: 12px 16px; background: #fff; line-height: 1.8; }
+  .xm-box.bad { border-color: var(--neg); background: var(--neg-bg); }
+  .xm-box.good { border-color: var(--accent-2); background: var(--pos-bg); }
+  .slider-row { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; margin: 10px 0; }
+  input[type=range] { accent-color: var(--primary); width: min(320px, 100%); }
+  .slider-val { font-weight: 800; color: var(--primary); font-size: 1.15rem; min-width: 48px; }
+
+  .quiz-q { font-size: 1.1rem; font-weight: 600; margin-bottom: 12px; }
+  .quiz-opts { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 10px; }
+  .quiz-opt { padding: 10px 20px; border: 2px solid var(--border); border-radius: 30px; cursor: pointer; font-family: 'Sarabun', sans-serif; font-size: 1rem; font-weight: 600; transition: all .2s; background: white; }
+  .quiz-opt:hover { border-color: var(--primary); color: var(--primary); }
+  .quiz-opt.correct { border-color: var(--accent); background: #ECFDF5; color: #047857; }
+  .quiz-opt.wrong { border-color: var(--secondary); background: #FFF4EC; color: #BE185D; }
+  .quiz-feedback { font-weight: 700; font-size: 1rem; min-height: 24px; }
+  .quiz-feedback.ok { color: #047857; }
+  .quiz-feedback.err { color: #BE185D; }
+  .btn-next { margin-top: 10px; padding: 10px 28px; background: var(--primary); color: white; border: none; border-radius: 30px; font-family: 'Sarabun', sans-serif; font-size: 1rem; font-weight: 700; cursor: pointer; transition: background .2s; }
+  .btn-next:hover { background: #142B1A; }
+  .score-badge { display: inline-block; background: linear-gradient(135deg,#68EF3F,#1C3B22); color: white; border-radius: 30px; padding: 6px 20px; font-weight: 700; font-size: 1rem; }
+
+  @media (max-width: 700px) {
+    header h1 { font-size: 1.4rem; }
+    .card { padding: 20px 14px; }
+    .tab-btn { font-size: .85rem; padding: 8px 10px; }
+    /* จอแคบ: เรียงบนลงล่าง (สมการแล้วอสมการ ทีละขั้น) และแปะป้ายบอกว่าเป็นฝั่งไหน */
+    .cmp-grid { grid-template-columns: 1fr; }
+    .cmp-cell .lab { display: block; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <a href="./index.html" class="back-link" data-th="← กลับหน้าจำนวนจริง" data-en="← Back to Real Numbers">← กลับหน้าจำนวนจริง</a>
+  <button id="langToggle" class="lang-toggle" onclick="toggleLang()">EN</button>
+  <h1 data-th="🆚 เทียบความต่างของโจทย์" data-en="🆚 Equation vs Inequality">🆚 เทียบความต่างของโจทย์</h1>
+  <p data-th="โจทย์หน้าตาคล้ายกัน แต่วิธีทำต่างกันตรงไหน • ม.4" data-en="Similar-looking problems — where the method really differs">โจทย์หน้าตาคล้ายกัน แต่วิธีทำต่างกันตรงไหน • ม.4</p>
+</header>
+
+<nav id="tabNav">
+  <button class="tab-btn active" onclick="showTab('poly')" data-th="1 พหุนาม" data-en="1 Polynomial">1 พหุนาม</button>
+  <button class="tab-btn" onclick="showTab('flip')" data-th="2 ย้ายข้าง" data-en="2 Moving Terms">2 ย้ายข้าง</button>
+  <button class="tab-btn" onclick="showTab('frac')" data-th="3 เศษส่วน" data-en="3 Fractions">3 เศษส่วน</button>
+  <button class="tab-btn" onclick="showTab('sq')" data-th="4 | | ยกกำลังสอง" data-en="4 | | Squaring">4 | | ยกกำลังสอง</button>
+  <button class="tab-btn" onclick="showTab('cases')" data-th="5 | | แยกกรณี" data-en="5 | | Cases">5 | | แยกกรณี</button>
+  <button class="tab-btn" onclick="showTab('quiz')" data-th="🎯 แบบฝึกหัด" data-en="🎯 Quiz">🎯 แบบฝึกหัด</button>
+</nav>
+
+<main>
+  <section id="tab-poly" class="tab-panel active"></section>
+  <section id="tab-flip" class="tab-panel"></section>
+  <section id="tab-frac" class="tab-panel"></section>
+  <section id="tab-sq" class="tab-panel"></section>
+  <section id="tab-cases" class="tab-panel"></section>
+
+  <section id="tab-quiz" class="tab-panel">
+    <div class="card">
+      <div class="card-title"><span class="icon">🎯</span><span data-th="แบบฝึกหัด — ข้อนี้ต้องทำต่างจากสมการตรงไหน" data-en="Quiz — how does this differ from the equation?">แบบฝึกหัด — ข้อนี้ต้องทำต่างจากสมการตรงไหน</span></div>
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:20px;">
+        <span id="quizProgress" style="color:var(--muted); font-size:1rem;"></span>
+        <span class="score-badge"><span data-th="คะแนน:" data-en="Score:">คะแนน:</span> <span id="quizScore">0</span> / <span id="quizTotal">8</span></span>
+      </div>
+      <div id="quizBox"></div>
+      <div style="margin-top:16px; display:flex; gap:12px; flex-wrap:wrap;">
+        <button class="btn-next" id="btnNext" onclick="nextQuestion()" style="display:none;" data-th="ข้อต่อไป ▶" data-en="Next ▶">ข้อต่อไป ▶</button>
+        <button class="btn-next" id="btnRetry" onclick="initQuiz()" style="display:none; background:var(--accent);" data-th="เล่นใหม่ 🔄" data-en="Play Again 🔄">เล่นใหม่ 🔄</button>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script>
+// ══════════════ ภาษาไทย/อังกฤษ (ค่าใน data-th/data-en ถือเป็น HTML — ดู docs/adr/0002) ══════════════
+const PAGE_TITLE = { th: "สื่อการสอน : เทียบความต่างของโจทย์ สมการ vs อสมการ ม.4", en: "Teaching Aid: Equation vs Inequality" };
+let langMemory = 'th';
+function getLang() { try { return localStorage.getItem('siteLang') || 'th'; } catch (e) { return langMemory; } }
+function applyLang(lang) {
+  document.documentElement.lang = lang;
+  document.title = PAGE_TITLE[lang];
+  document.querySelectorAll('[data-th]').forEach(el => {
+    el.innerHTML = (lang === 'en' && el.dataset.en) ? el.dataset.en : el.dataset.th;
+  });
+  const btn = document.getElementById('langToggle');
+  if (btn) btn.textContent = lang === 'en' ? 'ไทย' : 'EN';
+  if (typeof onLangChange === 'function') onLangChange(lang);
+}
+function toggleLang() {
+  const next = getLang() === 'en' ? 'th' : 'en';
+  langMemory = next;
+  try { localStorage.setItem('siteLang', next); } catch (e) {}
+  applyLang(next);
+}
+// เนื้อหาของแท็บเทียบทั้งหมดสร้างจาก JS (ไม่ใช้ data-th) จึงต้องวาดใหม่เองตอนสลับภาษา โดยคงจำนวนขั้นที่เปิดไว้
+function onLangChange() { renderAllCmp(0); renderXmul(); refreshQuizLang(); }
+
+function showTab(id) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  event.target.classList.add('active');
+  // เข้าแท็บเทียบทีไรให้เริ่มที่ 0 ขั้น (ยังไม่เฉลย) — ไม่ให้เจอของที่เปิดจนจบค้างไว้ (สลับภาษายังคงขั้นเดิม)
+  if (CMP_ORDER.includes(id)) { CMP_ORDER.forEach(k => shown[k] = 0); renderAllCmp(0); }
+}
+
+// ══════════════ ตัวช่วยแสดงผล ══════════════
+const frac = (n, d) => `<span class="frac"><span class="num">${n}</span><span class="den">${d}</span></span>`;
+const T = (th, en) => ({ th, en });
+const tx = v => typeof v === 'string' ? v : v[getLang()];
+// จัดสมการให้เครื่องหมาย = ≥ ≤ อยู่ตรงกันเป็นแนวตั้ง: แต่ละแถว [ซ้าย, เครื่องหมาย, ขวา] ส่วนสตริงเดี่ยวคือบรรทัดข้อความเต็มความกว้าง
+const al = rows => `<div class="align">${rows.map(r => Array.isArray(r)
+  ? `<span class="l">${r[0]}</span><span class="m">${r[1]}</span><span class="r">${r[2]}</span>` : `<span class="full">${r}</span>`).join('')}</div>`;
+const P = s => `<div>${s}</div>`;
+
+// เส้นจำนวนขนาดเล็กสำหรับโชว์คำตอบในแต่ละฝั่ง
+// spec: { min, max, points:[{v,closed}], ranges:[{a,b,ac,bc}] (a/b เป็น ±Infinity ได้), signs:[{v,t,c}], labels:[{v,t}], marker:{v} }
+function numberLine(spec) {
+  const W = 320, pad = 16, ay = 46;
+  const H = (spec.labels && spec.labels.length) ? 96 : 84; // มีป้ายเศษส่วนสองแถวจึงต้องสูงขึ้นอีกหน่อย
+  const { min, max } = spec;
+  const X = v => pad + (v - min) * (W - 2 * pad) / (max - min);
+  let s = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">`;
+  s += `<line x1="${pad-8}" y1="${ay}" x2="${W-pad+8}" y2="${ay}" stroke="#94A3B8" stroke-width="2"/>`;
+  s += `<polygon points="${W-pad+8},${ay} ${W-pad},${ay-4} ${W-pad},${ay+4}" fill="#94A3B8"/><polygon points="${pad-8},${ay} ${pad},${ay-4} ${pad},${ay+4}" fill="#94A3B8"/>`;
+  for (let v = Math.ceil(min); v <= Math.floor(max); v++) {
+    s += `<line x1="${X(v)}" y1="${ay-4}" x2="${X(v)}" y2="${ay+4}" stroke="#CBD5E0"/>`;
+    s += `<text x="${X(v)}" y="${ay+18}" text-anchor="middle" font-size="9.5" fill="#4A5568">${v}</text>`;
+  }
+  // ป้ายเศษส่วนต้องเป็นบน/ล่างตาม CONTEXT.md — วาดเลขเศษ ขีด เลขส่วน เอง (ใส่ HTML ใน SVG ไม่ได้) พร้อมเครื่องหมายลบนำหน้า
+  (spec.labels || []).forEach(l => {
+    const x = X(l.v), c = '#1C3B22';
+    s += `<text x="${x - 11}" y="${ay + 38}" text-anchor="middle" font-size="11" font-weight="700" fill="${c}">−</text>`;
+    s += `<text x="${x}" y="${ay + 33}" text-anchor="middle" font-size="10" font-weight="700" fill="${c}">${l.n}</text>`;
+    s += `<line x1="${x - 8}" y1="${ay + 36}" x2="${x + 8}" y2="${ay + 36}" stroke="${c}" stroke-width="1.3"/>`;
+    s += `<text x="${x}" y="${ay + 46}" text-anchor="middle" font-size="10" font-weight="700" fill="${c}">${l.d}</text>`;
+  });
+  (spec.signs || []).forEach(g => {
+    const col = g.c === 'pos' ? '#047857' : g.c === 'neg' ? '#BE185D' : '#4A5568';
+    s += `<text x="${X(g.v)}" y="${ay-14}" text-anchor="middle" font-size="17" font-weight="800" fill="${col}">${g.t}</text>`;
+  });
+  (spec.ranges || []).forEach(r => {
+    const a = r.a === -Infinity ? pad - 8 : X(r.a), b = r.b === Infinity ? W - pad + 8 : X(r.b);
+    s += `<line x1="${a}" y1="${ay}" x2="${b}" y2="${ay}" stroke="#3FA82E" stroke-width="6"/>`;
+    if (r.a !== -Infinity) s += `<circle cx="${a}" cy="${ay}" r="5.5" fill="${r.ac ? '#1C3B22' : '#fff'}" stroke="#1C3B22" stroke-width="2"/>`;
+    if (r.b !== Infinity) s += `<circle cx="${b}" cy="${ay}" r="5.5" fill="${r.bc ? '#1C3B22' : '#fff'}" stroke="#1C3B22" stroke-width="2"/>`;
+  });
+  (spec.points || []).forEach(p => {
+    s += `<circle cx="${X(p.v)}" cy="${ay}" r="5.5" fill="${p.closed === false ? '#fff' : '#3FA82E'}" stroke="#1C3B22" stroke-width="2"/>`;
+  });
+  if (spec.marker) s += `<circle cx="${X(spec.marker.v)}" cy="${ay}" r="7" fill="#FF8A3D" stroke="#7C2D12" stroke-width="2"/>`;
+  return s + '</svg>';
+}
+
+// ══════════════ ข้อมูลการเทียบ 5 คู่ ══════════════
+// steps[i] = { l, r (ข้อความซ้าย/ขวา), diff (ขั้นนี้ต่างกันจริงหรือไม่), lv, rv (ภาพเส้นจำนวน ถ้ามี) }
+// ข้อความเป็น HTML สร้างจาก JS ครั้งเดียวผ่าน innerHTML จึงเขียน &lt; &gt; ได้ตามปกติ (ไม่เกี่ยวกับกฎ double-escape ของ data-th)
+const CMP = {
+  poly: {
+    title: T('พหุนาม: จุด vs ช่วง', 'Polynomial: points vs interval'),
+    intro: T('เหมือนกันเกือบทุกอย่างจนถึงขั้นหาค่าวิกฤต แต่คำตอบสมการเป็น "จุด" ส่วนอสมการเป็น "ช่วง"', 'Almost identical until the critical values — but the equation gives "points" while the inequality gives an "interval"'),
+    eq: '(x + 2)(x − 1) = 0', ineq: '(x + 2)(x − 1) &lt; 0',
+    steps: [
+      { l: T('ขวามือเป็น 0 อยู่แล้ว และแยกตัวประกอบพร้อมแล้ว', 'The right side is already 0 and it is already factored'),
+        r: T('ขวามือเป็น 0 อยู่แล้ว และแยกตัวประกอบพร้อมแล้ว', 'The right side is already 0 and it is already factored'), diff: false },
+      { l: T(P('ให้แต่ละวงเล็บ = 0') + al([['x + 2', '=', '0'], ['x − 1', '=', '0']]), P('Set each bracket to 0') + al([['x + 2', '=', '0'], ['x − 1', '=', '0']])),
+        r: T(P('หาค่าวิกฤต (แต่ละวงเล็บ = 0)') + al([['x', '=', '−2'], ['x', '=', '1']]), P('Find the critical values (each bracket = 0)') + al([['x', '=', '−2'], ['x', '=', '1']])), diff: false },
+      { l: T(P('ได้ x ออกมาเลย') + al([['x', '=', '−2'], ['x', '=', '1']]), P('We get x directly') + al([['x', '=', '−2'], ['x', '=', '1']])),
+        r: T('ยังไม่จบ! ต้องวาดเส้นจำนวนแล้วใส่เครื่องหมาย <b>+ − +</b>', 'Not done! Draw the number line and mark the signs <b>+ − +</b>'), diff: true,
+        rv: () => numberLine({ min: -5, max: 4, points: [{ v: -2, closed: false }, { v: 1, closed: false }], signs: [{ v: -3.5, t: '+', c: 'pos' }, { v: -0.5, t: '−', c: 'neg' }, { v: 2.5, t: '+', c: 'pos' }] }) },
+      { l: T('ตอบ: <b>{−2, 1}</b> ได้เป็น "จุด"', 'Answer: <b>{−2, 1}</b> — "points"'),
+        r: T('ถามน้อยกว่า → เลือกช่วง <b>−</b><br>ตอบ: <b>(−2, 1)</b> ได้เป็น "ช่วง"', 'Asked "less than" → pick the <b>−</b> region<br>Answer: <b>(−2, 1)</b> — an "interval"'), diff: true,
+        lv: () => numberLine({ min: -5, max: 4, points: [{ v: -2 }, { v: 1 }] }),
+        rv: () => numberLine({ min: -5, max: 4, ranges: [{ a: -2, b: 1, ac: false, bc: false }] }) },
+    ]
+  },
+  flip: {
+    title: T('ย้ายข้าง: ตอนหารด้วยจำนวนลบ', 'Moving terms: dividing by a negative'),
+    intro: T('ย้ายข้างเหมือนกันทุกอย่าง ต่างกันตรงตอนหารหรือคูณด้วย "จำนวนลบ" — อสมการต้องกลับเครื่องหมาย', 'Moving terms works the same — the difference is when you divide or multiply by a "negative": the inequality must flip'),
+    eq: '−x + 1 = 0', ineq: '−x + 1 &gt; 0',
+    steps: [
+      { l: T(P('ย้าย +1 ไปอีกข้าง (บวกกลายเป็นลบ)') + al([['−x + 1', '=', '0'], ['−x', '=', '−1']]), P('Move +1 across (plus becomes minus)') + al([['−x + 1', '=', '0'], ['−x', '=', '−1']])),
+        r: T(P('ย้าย +1 ไปอีกข้าง (บวกกลายเป็นลบ)') + al([['−x + 1', '&gt;', '0'], ['−x', '&gt;', '−1']]), P('Move +1 across (plus becomes minus)') + al([['−x + 1', '&gt;', '0'], ['−x', '&gt;', '−1']])), diff: false },
+      { l: T(P('หารทั้งสองข้างด้วย −1') + al([['x', '=', '1']]), P('Divide both sides by −1') + al([['x', '=', '1']])),
+        r: T(P('หารทั้งสองข้างด้วย −1 <b>ต้องกลับเครื่องหมาย!</b>') + al([['x', '<span class="flipsign">&lt;</span>', '1']]), P('Divide both sides by −1 — <b>flip the sign!</b>') + al([['x', '<span class="flipsign">&lt;</span>', '1']])), diff: true },
+      { l: T('ตอบ: <b>{1}</b>', 'Answer: <b>{1}</b>'),
+        r: T('ตอบ: <b>(−∞, 1)</b><br>ลองเช็ก x = 0 ได้ −0 + 1 = 1 ซึ่งเป็นบวก ✓', 'Answer: <b>(−∞, 1)</b><br>Check x = 0: −0 + 1 = 1, which is positive ✓'), diff: true,
+        lv: () => numberLine({ min: -4, max: 4, points: [{ v: 1 }] }),
+        rv: () => numberLine({ min: -4, max: 4, ranges: [{ a: -Infinity, b: 1, bc: false }] }) },
+    ]
+  },
+  frac: {
+    title: T('เศษส่วน: ดูแค่เศษ vs ดูทั้งเศษและส่วน', 'Fractions: numerator only vs both'),
+    intro: T('สมการดูแค่ตัวเศษ แต่อสมการต้องดูทั้งเศษและส่วน — และห้ามคูณไขว้ (ดูตัวทดสอบด้านล่าง)', 'The equation only looks at the numerator; the inequality needs both — and never cross-multiply (see the tester below)'),
+    eq: frac('x + 2', 'x − 1') + ' = 0', ineq: frac('x + 2', 'x − 1') + ' ≥ 0',
+    steps: [
+      { l: T(P('เศษส่วน = 0 ได้ก็ต่อเมื่อ <b>เศษ = 0</b>') + al([['x + 2', '=', '0'], ['x', '=', '−2']]), P('A fraction is 0 only when the <b>numerator = 0</b>') + al([['x + 2', '=', '0'], ['x', '=', '−2']])),
+        r: T(P('ต้องหาค่าวิกฤตจาก<b>ทั้งเศษและส่วน</b>') + P('เศษ:') + al([['x + 2', '=', '0'], ['x', '=', '−2']]) + P('ส่วน:') + al([['x − 1', '=', '0'], ['x', '=', '1']]),
+             P('Find critical values from <b>both parts</b>') + P('Top:') + al([['x + 2', '=', '0'], ['x', '=', '−2']]) + P('Bottom:') + al([['x − 1', '=', '0'], ['x', '=', '1']])), diff: true },
+      { l: T('เช็กว่าส่วนไม่เป็น 0: x ≠ 1<br>x = −2 ผ่าน ✓', 'Check the denominator is not 0: x ≠ 1<br>x = −2 passes ✓'),
+        r: T('วาดเส้นจำนวน ใส่ <b>+ − +</b><br>ส่วน x = 1 เป็น <b>วงกลมโปร่งเสมอ</b> ส่วนเศษ x = −2 เป็นจุดทึบ (เพราะ ≥)', 'Draw the line and mark <b>+ − +</b><br>Bottom root x = 1 is <b>always open</b>; top root x = −2 is filled (because ≥)'), diff: true,
+        rv: () => numberLine({ min: -5, max: 4, points: [{ v: -2, closed: true }, { v: 1, closed: false }], signs: [{ v: -3.5, t: '+', c: 'pos' }, { v: -0.5, t: '−', c: 'neg' }, { v: 2.5, t: '+', c: 'pos' }] }) },
+      { l: T('ตอบ: <b>{−2}</b>', 'Answer: <b>{−2}</b>'),
+        r: T('ตอบ: <b>(−∞, −2] ∪ (1, ∞)</b>', 'Answer: <b>(−∞, −2] ∪ (1, ∞)</b>'), diff: true,
+        lv: () => numberLine({ min: -5, max: 4, points: [{ v: -2 }] }),
+        rv: () => numberLine({ min: -5, max: 4, ranges: [{ a: -Infinity, b: -2, bc: true }, { a: 1, b: Infinity, ac: false }] }) },
+    ]
+  },
+  sq: {
+    title: T('ค่าสัมบูรณ์แบบยกกำลังสอง', 'Absolute value: squaring'),
+    intro: T('เมื่อมีค่าสัมบูรณ์ทั้งสองข้าง ยกกำลังสองได้เลย สมการได้คำตอบเป็นจุด ส่วนอสมการต้องใช้ + − + และอย่าลืมตัดค่าที่ทำให้ส่วนเป็น 0', 'With absolute values on both sides you can square directly. The equation gives points; the inequality needs + − + and you must cut out values that zero the denominator'),
+    eq: frac('|x − 5|', '|x + 2|') + ' = 3', ineq: frac('|x + 1|', '|x − 2|') + ' &gt; 2',
+    steps: [
+      { l: T(P('ย้ายส่วนไปคูณ (ระบุเงื่อนไข <b>x ≠ −2</b>)') + al([['|x − 5|', '=', '3|x + 2|']]), P('Move the denominator over (note the condition <b>x ≠ −2</b>)') + al([['|x − 5|', '=', '3|x + 2|']])),
+        r: T(P('ย้ายส่วนไปคูณ (เงื่อนไข x ≠ 2)') + al([['|x + 1|', '&gt;', '2|x − 2|']]) + P('<small>ส่วนเป็นค่าสัมบูรณ์ จึงเป็นบวกเสมอ ไม่ต้องกลับเครื่องหมาย</small>'),
+             P('Move the denominator over (condition x ≠ 2)') + al([['|x + 1|', '&gt;', '2|x − 2|']]) + P('<small>The denominator is an absolute value, so it is always positive — no flip</small>')), diff: false },
+      { l: T(P('ยกกำลังสองทั้งสองข้าง (ทั้งสองข้างไม่ติดลบ จึงปลอดภัย)') + al([['(x − 5)²', '=', '9(x + 2)²']]), P('Square both sides (both sides are non-negative, so it is safe)') + al([['(x − 5)²', '=', '9(x + 2)²']])),
+        r: T(P('ยกกำลังสองทั้งสองข้าง') + al([['(x + 1)²', '&gt;', '4(x − 2)²']]), P('Square both sides') + al([['(x + 1)²', '&gt;', '4(x − 2)²']])), diff: false },
+      { l: T(al([['x² − 10x + 25', '=', '9x² + 36x + 36'], ['0', '=', '8x² + 46x + 11'], ['0', '=', '(4x + 1)(2x + 11)']]) + P('ให้แต่ละวงเล็บ = 0'), al([['x² − 10x + 25', '=', '9x² + 36x + 36'], ['0', '=', '8x² + 46x + 11'], ['0', '=', '(4x + 1)(2x + 11)']]) + P('Set each bracket to 0')),
+        r: T(al([['x² + 2x + 1', '&gt;', '4x² − 16x + 16'], ['0', '&gt;', '3x² − 18x + 15'], ['0', '&gt;', '3(x − 1)(x − 5)'], ['(x − 1)(x − 5)', '&lt;', '0']]) + P('<small>(หารด้วย 3 บรรทัดสุดท้าย)</small>') + P('ค่าวิกฤต x = 1, 5') + P('วาด <b>+ − +</b> แล้วเลือก −'),
+             al([['x² + 2x + 1', '&gt;', '4x² − 16x + 16'], ['0', '&gt;', '3x² − 18x + 15'], ['0', '&gt;', '3(x − 1)(x − 5)'], ['(x − 1)(x − 5)', '&lt;', '0']]) + P('<small>(last line: divide by 3)</small>') + P('Critical values x = 1, 5') + P('Draw <b>+ − +</b> and pick −')), diff: true,
+        rv: () => numberLine({ min: -7, max: 7, points: [{ v: 1, closed: false }, { v: 5, closed: false }], signs: [{ v: -3, t: '+', c: 'pos' }, { v: 3, t: '−', c: 'neg' }, { v: 6.2, t: '+', c: 'pos' }] }) },
+      { l: T(al([['x', '=', '−' + frac('1', '4')], ['x', '=', '−' + frac('11', '2')]]) + P('ไม่มี x = −2 อยู่ในนี้ จึงเป็นคำตอบทั้งคู่ ✓'), al([['x', '=', '−' + frac('1', '4')], ['x', '=', '−' + frac('11', '2')]]) + P('Neither is x = −2, so both are answers ✓')),
+        r: T('ได้ (1, 5) แต่ต้อง<b>ตัด x = 2 ออก</b><br>ตอบ: <b>(1, 2) ∪ (2, 5)</b>', 'We get (1, 5) but must <b>remove x = 2</b><br>Answer: <b>(1, 2) ∪ (2, 5)</b>'), diff: true,
+        lv: () => numberLine({ min: -7, max: 7, points: [{ v: -5.5 }, { v: -0.25 }], labels: [{ v: -5.5, n: '11', d: '2' }, { v: -0.25, n: '1', d: '4' }] }),
+        rv: () => numberLine({ min: -7, max: 7, ranges: [{ a: 1, b: 2, ac: false, bc: false }, { a: 2, b: 5, ac: false, bc: false }] }) },
+    ]
+  },
+  cases: {
+    title: T('ค่าสัมบูรณ์แบบแยกกรณี', 'Absolute value: splitting into cases'),
+    intro: T('สมการแค่เช็กว่าคำตอบอยู่ในช่วงของกรณีนั้นไหม แต่อสมการต้องเอา "∩ กับช่วงของกรณี" แล้วค่อยนำทุกกรณีมา "∪" กัน', 'The equation just checks if each answer lies in its case interval; the inequality must "∩ with the case interval" and then "∪" all cases'),
+    eq: '|x| − |x − 2| = x − 1', ineq: '|x| + |x − 2| ≥ x + 4',
+    steps: [
+      { l: T('ค่าวิกฤตของค่าสัมบูรณ์คือ 0 และ 2 → แบ่ง 3 กรณี<br>① x ≤ 0 &nbsp; ② 0 &lt; x &lt; 2 &nbsp; ③ x ≥ 2', 'Critical values of the absolute values are 0 and 2 → 3 cases<br>① x ≤ 0 &nbsp; ② 0 &lt; x &lt; 2 &nbsp; ③ x ≥ 2'),
+        r: T('ค่าวิกฤตของค่าสัมบูรณ์คือ 0 และ 2 → แบ่ง 3 กรณี<br>① x ≤ 0 &nbsp; ② 0 &lt; x &lt; 2 &nbsp; ③ x ≥ 2', 'Critical values of the absolute values are 0 and 2 → 3 cases<br>① x ≤ 0 &nbsp; ② 0 &lt; x &lt; 2 &nbsp; ③ x ≥ 2'), diff: false,
+        lv: () => numberLine({ min: -5, max: 9, points: [{ v: 0, closed: false }, { v: 2, closed: false }], signs: [{ v: -2.5, t: '①', c: 'n' }, { v: 1, t: '②', c: 'n' }, { v: 5.5, t: '③', c: 'n' }] }),
+        rv: () => numberLine({ min: -5, max: 9, points: [{ v: 0, closed: false }, { v: 2, closed: false }], signs: [{ v: -2.5, t: '①', c: 'n' }, { v: 1, t: '②', c: 'n' }, { v: 5.5, t: '③', c: 'n' }] }) },
+      { l: T(P('<b>① x ≤ 0</b>') + al([['−x − (−(x − 2))', '=', 'x − 1'], ['−2', '=', 'x − 1'], ['x', '=', '−1']]) + P('−1 อยู่ในช่วง x ≤ 0 ? ✓ ใช่'),
+             P('<b>① x ≤ 0</b>') + al([['−x − (−(x − 2))', '=', 'x − 1'], ['−2', '=', 'x − 1'], ['x', '=', '−1']]) + P('Is −1 in x ≤ 0 ? ✓ yes')),
+        r: T(P('<b>① x ≤ 0</b>') + al([['−x − (x − 2)', '≥', 'x + 4'], ['−2x + 2', '≥', 'x + 4'], ['−2', '≥', '3x'], ['x', '≤', '−' + frac('2', '3')]]) + P('(−∞, −' + frac('2', '3') + '] <b>∩</b> (−∞, 0]') + P('= (−∞, −' + frac('2', '3') + ']'),
+             P('<b>① x ≤ 0</b>') + al([['−x − (x − 2)', '≥', 'x + 4'], ['−2x + 2', '≥', 'x + 4'], ['−2', '≥', '3x'], ['x', '≤', '−' + frac('2', '3')]]) + P('(−∞, −' + frac('2', '3') + '] <b>∩</b> (−∞, 0]') + P('= (−∞, −' + frac('2', '3') + ']')), diff: true },
+      { l: T(P('<b>② 0 &lt; x &lt; 2</b>') + al([['x − (−(x − 2))', '=', 'x − 1'], ['2x − 2', '=', 'x − 1'], ['x', '=', '1']]) + P('1 อยู่ในช่วง 0 &lt; x &lt; 2 ? ✓ ใช่'),
+             P('<b>② 0 &lt; x &lt; 2</b>') + al([['x − (−(x − 2))', '=', 'x − 1'], ['2x − 2', '=', 'x − 1'], ['x', '=', '1']]) + P('Is 1 in 0 &lt; x &lt; 2 ? ✓ yes')),
+        r: T(P('<b>② 0 &lt; x &lt; 2</b>') + al([['x + (−(x − 2))', '≥', 'x + 4'], ['2', '≥', 'x + 4'], ['x', '≤', '−2']]) + P('(−∞, −2] <b>∩</b> (0, 2)') + P('= ∅ (ไม่มีส่วนร่วม)'),
+             P('<b>② 0 &lt; x &lt; 2</b>') + al([['x + (−(x − 2))', '≥', 'x + 4'], ['2', '≥', 'x + 4'], ['x', '≤', '−2']]) + P('(−∞, −2] <b>∩</b> (0, 2)') + P('= ∅ (no overlap)')), diff: true },
+      { l: T(P('<b>③ x ≥ 2</b>') + al([['x − (x − 2)', '=', 'x − 1'], ['2', '=', 'x − 1'], ['x', '=', '3']]) + P('3 อยู่ในช่วง x ≥ 2 ? ✓ ใช่'),
+             P('<b>③ x ≥ 2</b>') + al([['x − (x − 2)', '=', 'x − 1'], ['2', '=', 'x − 1'], ['x', '=', '3']]) + P('Is 3 in x ≥ 2 ? ✓ yes')),
+        r: T(P('<b>③ x ≥ 2</b>') + al([['x + (x − 2)', '≥', 'x + 4'], ['2x − 2', '≥', 'x + 4'], ['x', '≥', '6']]) + P('[6, ∞) <b>∩</b> [2, ∞)') + P('= [6, ∞)'),
+             P('<b>③ x ≥ 2</b>') + al([['x + (x − 2)', '≥', 'x + 4'], ['2x − 2', '≥', 'x + 4'], ['x', '≥', '6']]) + P('[6, ∞) <b>∩</b> [2, ∞)') + P('= [6, ∞)')), diff: true },
+      { l: T('รวมทุกกรณี ตอบ: <b>{−1, 1, 3}</b>', 'Combine all cases. Answer: <b>{−1, 1, 3}</b>'),
+        r: T('นำทุกกรณีมา <b>∪</b> กัน<br>ตอบ: <b>(−∞, −' + frac('2', '3') + '] ∪ [6, ∞)</b>', 'Take the <b>∪</b> of all cases<br>Answer: <b>(−∞, −' + frac('2', '3') + '] ∪ [6, ∞)</b>'), diff: true,
+        lv: () => numberLine({ min: -5, max: 9, points: [{ v: -1 }, { v: 1 }, { v: 3 }] }),
+        rv: () => numberLine({ min: -5, max: 9, ranges: [{ a: -Infinity, b: -2 / 3, bc: true }, { a: 6, b: Infinity, ac: true }], labels: [{ v: -2 / 3, n: '2', d: '3' }] }) },
+    ]
+  }
+};
+const CMP_ORDER = ['poly', 'flip', 'frac', 'sq', 'cases'];
+const shown = { poly: 0, flip: 0, frac: 0, sq: 0, cases: 0 };
+
+function renderCmp(key, prevShown) {
+  const d = CMP[key], lang = getLang();
+  const en = lang === 'en';
+  const n = d.steps.length;
+  let html = `<div class="card">
+    <div class="card-title"><span class="icon">🆚</span><span>${tx(d.title)}</span></div>
+    <p class="intro">${tx(d.intro)}</p>
+    <div class="cmp-grid" style="margin-top:18px;">
+      <div class="cmp-head eq"><div class="kind">🟰 ${en ? 'Equation' : 'สมการ'}</div><div class="prob">${d.eq}</div></div>
+      <div class="cmp-head ineq"><div class="kind">⚖️ ${en ? 'Inequality' : 'อสมการ'}</div><div class="prob">${d.ineq}</div></div>`;
+  d.steps.forEach((s, i) => {
+    if (i >= shown[key]) return;
+    const fresh = i >= prevShown ? ' fresh' : '';
+    const diff = s.diff ? ' diff' : '';
+    const tag = s.diff ? `<span class="difftag">${en ? 'Differs here' : 'ต่างตรงนี้'}</span>` : '';
+    const cell = (side, text, vis, lab) => `<div class="cmp-cell${diff}${fresh}">${tag}<div class="lab">${lab}</div><span class="stepno">${i + 1}</span>${tx(text)}${vis ? `<div class="vis">${vis()}</div>` : ''}</div>`;
+    html += cell('l', s.l, s.lv, en ? '🟰 Equation' : '🟰 สมการ') + cell('r', s.r, s.rv, en ? '⚖️ Inequality' : '⚖️ อสมการ');
+  });
+  html += `</div>
+    <div class="btn-row">
+      <button class="btn" onclick="cmpNext('${key}')" ${shown[key] >= n ? 'disabled' : ''}>${en ? 'Next step ▶' : 'ขั้นถัดไป ▶'} (${shown[key]}/${n})</button>
+      <button class="btn ghost" onclick="cmpAll('${key}')" ${shown[key] >= n ? 'disabled' : ''}>${en ? 'Show all' : 'เผยทั้งหมด'}</button>
+      <button class="btn ghost" onclick="cmpReset('${key}')" ${shown[key] === 0 ? 'disabled' : ''}>${en ? '↺ Reset' : '↺ เริ่มใหม่'}</button>
+    </div>`;
+  if (shown[key] >= n) {
+    const keyTh = { poly: 'สมการได้ "จุด" ส่วนอสมการได้ "ช่วง"', flip: 'หารหรือคูณด้วยจำนวนลบ อสมการต้องกลับเครื่องหมาย', frac: 'อสมการต้องดูทั้งเศษและส่วน ส่วนเป็นวงกลมโปร่งเสมอ', sq: 'ยกกำลังสองได้ แต่อสมการต้องวาด + − + และตัดค่าที่ส่วนเป็น 0', cases: 'สมการ "เช็กว่าอยู่ในช่วง" อสมการ "∩ แล้ว ∪"' };
+    const keyEn = { poly: 'The equation gives "points", the inequality gives an "interval"', flip: 'Dividing or multiplying by a negative flips the inequality', frac: 'The inequality needs both top and bottom; the bottom root is always open', sq: 'Squaring works, but the inequality needs + − + and must cut out zeros of the denominator', cases: 'Equation: "check it is in the interval". Inequality: "∩ then ∪"' };
+    html += `<div class="box-ok"><b>${en ? '💡 Key difference:' : '💡 สรุปความต่าง:'}</b> ${en ? keyEn[key] : keyTh[key]}</div>`;
+  }
+  html += `</div>`;
+  if (key === 'frac') html += `<div class="card" id="xmulCard"></div>`;
+  document.getElementById('tab-' + key).innerHTML = html;
+  if (key === 'frac') renderXmul();
+}
+function renderAllCmp(prev) { CMP_ORDER.forEach(k => renderCmp(k, prev === undefined ? 0 : (prev === 0 ? shown[k] : prev))); }
+function cmpNext(k) { const p = shown[k]; if (shown[k] < CMP[k].steps.length) shown[k]++; renderCmp(k, p); }
+function cmpAll(k) { const p = shown[k]; shown[k] = CMP[k].steps.length; renderCmp(k, p); }
+function cmpReset(k) { shown[k] = 0; renderCmp(k, 0); }
+
+// ══════════════ ตัวทดสอบ "ห้ามคูณไขว้" (แท็บเศษส่วน) ══════════════
+// โจทย์: 1/(x+1) ≥ 1/(x+4)  คำตอบจริง: x &lt; −4 หรือ x &gt; −1  แต่คูณไขว้ได้ x+4 ≥ x+1 ซึ่งจริงเสมอ (ผิด!)
+let xmX = -2;
+// วาดโครงการ์ด "ครั้งเดียว" (รวมตัวสไลเดอร์) แล้วให้ updateXmul() เขียนเฉพาะผลลัพธ์ตอนลาก
+// ห้ามเขียน innerHTML ทับสไลเดอร์ระหว่างลาก ไม่งั้น element ที่กำลังลากถูกทำลายและการลากขาดกลางคัน
+// (เคยเป็นบั๊กจริง: ลากจาก −2 ไปเป้า 1 แล้วหยุดที่ −0.5 / ตัวควบคุมที่ไม่รีบิลด์ลากถึง 1)
+function renderXmul() {
+  const el = document.getElementById('xmulCard');
+  if (!el) return;
+  const en = getLang() === 'en';
+  el.innerHTML = `
+    <div class="card-title"><span class="icon">🚫</span><span>${en ? 'Why you must NOT cross-multiply an inequality' : 'ทำไมอสมการ "ห้ามคูณไขว้"'}</span></div>
+    <p class="intro">${en ? 'Solve' : 'โจทย์'}: ${frac('1', 'x + 1')} ≥ ${frac('1', 'x + 4')}<br>${en ? 'Cross-multiplying gives x + 4 ≥ x + 1, i.e. 4 ≥ 1 — always true. Drag x and see if that can be right.' : 'ถ้าคูณไขว้จะได้ x + 4 ≥ x + 1 หรือ 4 ≥ 1 ซึ่งจริงเสมอ — ลองลาก x แล้วดูว่าจริงหรือไม่'}</p>
+    <div class="slider-row"><b>x =</b><input type="range" id="xmSlider" min="-7" max="3" step="0.5" value="${xmX}" oninput="xmX=parseFloat(this.value);updateXmul()"><span class="slider-val" id="xmVal">${xmX}</span>
+      <button class="btn ghost" onclick="xmX=-2;renderXmul()">x = −2</button></div>
+    <div id="xmResult"></div>`;
+  updateXmul();
+}
+function updateXmul() {
+  const el = document.getElementById('xmResult');
+  if (!el) return;
+  document.getElementById('xmVal').textContent = xmX;
+  const en = getLang() === 'en';
+  const x = xmX;
+  const undef = (x === -1 || x === -4);
+  const lhs = 1 / (x + 1), rhs = 1 / (x + 4);
+  const orig = !undef && lhs >= rhs;
+  const cross = (x + 4) >= (x + 1); // จริงเสมอ
+  const mismatch = !undef && orig !== cross;
+  const f3 = v => (Math.round(v * 1000) / 1000).toString();
+  el.innerHTML = `
+    <div class="xm-row">
+      <div class="xm-box ${mismatch ? 'bad' : ''}"><b>${en ? 'Real values' : 'แทนค่าจริง'}</b><br>
+        ${undef ? (en ? 'The denominator is 0 — undefined' : 'ตัวส่วนเป็น 0 — นิยามไม่ได้') : `${frac('1', 'x + 1')} = ${f3(lhs)} &nbsp; , &nbsp; ${frac('1', 'x + 4')} = ${f3(rhs)}<br>${f3(lhs)} ≥ ${f3(rhs)} ? <b>${orig ? (en ? '✅ true' : '✅ จริง') : (en ? '❌ false' : '❌ เท็จ')}</b>`}</div>
+      <div class="xm-box ${mismatch ? 'bad' : ''}"><b>${en ? 'Cross-multiplied says' : 'วิธีคูณไขว้บอกว่า'}</b>${al([['x + 4', '≥', 'x + 1'], ['4', '≥', '1']])}<b>${en ? '✅ always true' : '✅ จริงเสมอ'}</b></div>
+    </div>
+    ${mismatch ? `<div class="box-warn"><b>${en ? '⚠️ They disagree!' : '⚠️ ขัดแย้งกัน!'}</b> ${en ? 'At this x the real inequality is false, yet cross-multiplying said "true". Cross-multiplying only works if you know both denominators are positive — here they can be negative.' : 'ที่ x นี้อสมการจริงเป็นเท็จ แต่วิธีคูณไขว้บอกว่าจริง เพราะคูณไขว้ได้เฉพาะตอนรู้ว่าตัวส่วนทั้งสองเป็นบวก แต่ตรงนี้ตัวส่วนอาจติดลบ'}</div>` : ''}
+    <div class="xm-box good"><b>${en ? 'Correct way: move everything to one side' : 'วิธีที่ถูก: ย้ายมาอยู่ข้างเดียว'}</b><br>
+      ${al([[frac('1', 'x + 1') + ' − ' + frac('1', 'x + 4'), '≥', '0'], [frac('3', '(x + 1)(x + 4)'), '≥', '0'], ['(x + 1)(x + 4)', '&gt;', '0']])}
+      <div><small>${en ? '(numerator 3 is positive; denominator can never be 0)' : '(เศษ 3 เป็นบวก และส่วนเป็น 0 ไม่ได้)'}</small></div>
+      <div>${en ? 'Answer' : 'ตอบ'}: <b>(−∞, −4) ∪ (−1, ∞)</b></div>
+      <div class="vis" style="max-width:420px;">${numberLine({ min: -7, max: 3, ranges: [{ a: -Infinity, b: -4, bc: false }, { a: -1, b: Infinity, ac: false }], marker: undef ? null : { v: x } })}</div></div>`;
+}
+
+// ══════════════ แบบฝึกหัด ══════════════
+const quizData = [
+  { q_th: '(x − 3)(x + 1) &lt; 0 คำตอบเป็นแบบไหน?', q_en: 'For (x − 3)(x + 1) &lt; 0, what does the answer look like?',
+    opts: ['จุดสองจุด {−1, 3}', 'ช่วง (−1, 3)', 'ช่วง (−∞, −1) ∪ (3, ∞)', 'ไม่มีคำตอบ'], opts_en: ['Two points {−1, 3}', 'Interval (−1, 3)', 'Interval (−∞, −1) ∪ (3, ∞)', 'No solution'], ans: 1,
+    exp_th: 'ถามน้อยกว่า → เลือกช่วงที่เป็น − ซึ่งอยู่ตรงกลางระหว่างราก', exp_en: '"Less than" → pick the − region, which lies between the roots' },
+  { q_th: '−2x + 6 &gt; 0 ได้คำตอบข้อใด?', q_en: 'What is the solution of −2x + 6 &gt; 0?',
+    opts: ['x &lt; 3', 'x &gt; 3', 'x &gt; −3', 'x &lt; −3'], ans: 0,
+    exp_th: '−2x &gt; −6 แล้วหารด้วย −2 ต้องกลับเครื่องหมาย → x &lt; 3', exp_en: '−2x &gt; −6, then dividing by −2 flips the sign → x &lt; 3' },
+  { q_th: 'สมการ ' + frac('x − 1', 'x + 2') + ' = 0 มีคำตอบคือ?', q_en: 'The equation ' + frac('x − 1', 'x + 2') + ' = 0 has the answer?',
+    opts: ['x = 1', 'x = −2', 'x = 1 และ x = −2', 'ไม่มีคำตอบ'], opts_en: ['x = 1', 'x = −2', 'x = 1 and x = −2', 'No solution'], ans: 0,
+    exp_th: 'เศษ = 0 จึงได้ x = 1 ส่วน x = −2 ทำให้ส่วนเป็น 0 จึงไม่ใช่คำตอบ', exp_en: 'Numerator = 0 gives x = 1; x = −2 zeroes the denominator so it is not an answer' },
+  { q_th: 'ในอสมการ ' + frac('x − 1', 'x + 2') + ' ≥ 0 ค่า x = −2 เป็นคำตอบหรือไม่?', q_en: 'In ' + frac('x − 1', 'x + 2') + ' ≥ 0, is x = −2 an answer?',
+    opts: ['ใช่ เพราะเครื่องหมายมี =', 'ไม่ใช่ เพราะทำให้ส่วนเป็น 0', 'ขึ้นกับค่า x อื่น', 'ใช่ เพราะเป็นค่าวิกฤต'], opts_en: ['Yes, because the sign includes =', 'No, because it makes the denominator 0', 'Depends on other x values', 'Yes, because it is a critical value'], ans: 1,
+    exp_th: 'ค่าจากตัวส่วนเป็นวงกลมโปร่งเสมอ แม้เครื่องหมายจะเป็น ≥ ก็ตาม', exp_en: 'A root from the denominator is always open, even with ≥' },
+  { q_th: 'ทำไมอสมการ ' + frac('1', 'x + 1') + ' ≥ ' + frac('1', 'x + 4') + ' ห้ามคูณไขว้?', q_en: 'Why must ' + frac('1', 'x + 1') + ' ≥ ' + frac('1', 'x + 4') + ' not be cross-multiplied?',
+    opts: ['เพราะเลขหารไม่ลงตัว', 'เพราะไม่รู้ว่าตัวส่วนเป็นบวกหรือลบ ถ้าเป็นลบต้องกลับเครื่องหมาย', 'เพราะจะได้คำตอบเป็นจุด', 'ห้ามเพราะครูไม่ชอบ'], opts_en: ['Because the numbers do not divide evenly', 'Because the sign of each denominator is unknown; a negative one flips the inequality', 'Because it gives points', 'It is just forbidden'], ans: 1,
+    exp_th: 'ตัวอย่าง x = −2 ทำให้ผลจริงเป็นเท็จ แต่คูณไขว้บอกว่าจริง', exp_en: 'At x = −2 the real inequality is false, but cross-multiplying says true' },
+  { q_th: '|x − 5| = |x + 2| ยกกำลังสองทั้งสองข้างได้เพราะเหตุใด?', q_en: 'Why can you square both sides of |x − 5| = |x + 2|?',
+    opts: ['เพราะทั้งสองข้างไม่ติดลบ ยกกำลังสองแล้วไม่เสียความหมาย', 'เพราะสองข้างหน้าตาเหมือนกัน', 'เพราะ x ต้องเป็นบวก', 'ยกกำลังสองไม่ได้'], opts_en: ['Both sides are non-negative, so squaring loses nothing', 'Because both sides look alike', 'Because x must be positive', 'You cannot square it'], ans: 0,
+    exp_th: 'A และ B ที่ไม่ติดลบ: A = B ⇔ A² = B² และ A &gt; B ⇔ A² &gt; B²', exp_en: 'For non-negative A and B: A = B ⇔ A² = B², and A &gt; B ⇔ A² &gt; B²' },
+  { q_th: 'อสมการค่าสัมบูรณ์แบบแยกกรณี ก่อนรวมคำตอบต้องทำอะไรกับผลของแต่ละกรณี?', q_en: 'In a split-case absolute value inequality, what do you do to each case result before combining?',
+    opts: ['เอา ∩ กับช่วงของกรณีนั้น แล้วค่อย ∪ ทุกกรณี', 'บวกกันทุกกรณี', 'เลือกกรณีที่ใหญ่ที่สุดกรณีเดียว', 'ไม่ต้องทำอะไร'], opts_en: ['Intersect with that case\'s interval, then union all cases', 'Add them up', 'Pick only the largest case', 'Nothing'], ans: 0,
+    exp_th: 'สมการแค่เช็กว่าอยู่ในช่วง แต่อสมการได้เป็นช่วง จึงต้อง ∩ ก่อน', exp_en: 'For equations you just check membership; for inequalities you get intervals, so ∩ first' },
+  { q_th: '(x − 2)² ≤ 0 มีคำตอบคือ?', q_en: 'What is the solution of (x − 2)² ≤ 0?',
+    opts: ['{2}', '∅', 'ℝ ทั้งหมด', '(−∞, 2]'], opts_en: ['{2}', '∅', 'All real numbers ℝ', '(−∞, 2]'], ans: 0,
+    exp_th: 'กำลังสองไม่ติดลบ จึงเท่ากับ 0 ได้ที่ x = 2 เท่านั้น', exp_en: 'A square is never negative, so it equals 0 only at x = 2' },
+];
+let qIdx = 0, score = 0, answered = false;
+function qt(key) {
+  const en = getLang() === 'en';
+  return { prog: en ? `Question ${qIdx + 1} / ${quizData.length}` : `ข้อที่ ${qIdx + 1} / ${quizData.length}`,
+    ok: en ? '✅ Correct! ' : '✅ ถูกต้อง! ', bad: en ? '❌ Not quite — ' : '❌ ไม่ถูกต้อง — ', title: en ? 'Your Score' : 'ผลคะแนนของคุณ' }[key];
+}
+function grade(s) {
+  const n = quizData.length, r = s / n;
+  if (getLang() === 'en') return r >= .9 ? '🌟 Excellent!' : r >= .7 ? '👍 Great job!' : r >= .5 ? '💪 Not bad, review a bit' : '📚 Go back and review';
+  return r >= .9 ? '🌟 ยอดเยี่ยมมาก!' : r >= .7 ? '👍 ดีมาก!' : r >= .5 ? '💪 พอใช้ได้ ลองทบทวนดูนะ' : '📚 ลองกลับไปทบทวนอีกรอบ';
+}
+function initQuiz() {
+  qIdx = 0; score = 0; answered = false;
+  document.getElementById('quizScore').textContent = 0;
+  document.getElementById('quizTotal').textContent = quizData.length;
+  document.getElementById('btnRetry').style.display = 'none';
+  renderQuestion();
+}
+function renderQuestion() {
+  const q = quizData[qIdx], en = getLang() === 'en';
+  answered = false;
+  document.getElementById('quizProgress').textContent = qt('prog');
+  document.getElementById('btnNext').style.display = 'none';
+  const opts = (en && q.opts_en) ? q.opts_en : q.opts;
+  document.getElementById('quizBox').innerHTML = `
+    <div class="quiz-q">${qIdx + 1}. ${en ? q.q_en : q.q_th}</div>
+    <div class="quiz-opts">${opts.map((o, i) => `<button class="quiz-opt" onclick="answer(${i})">${o}</button>`).join('')}</div>
+    <div class="quiz-feedback" id="qfb"></div>`;
+}
+// สลับภาษากลางข้อ: เขียนข้อความคำถาม/ตัวเลือก/คำอธิบายใหม่ โดยคงคะแนนและสีที่ตอบไปแล้ว
+function refreshQuizLang() {
+  const box = document.getElementById('quizBox');
+  if (!box || !box.querySelector('.quiz-q')) return;
+  const q = quizData[qIdx], en = getLang() === 'en';
+  document.getElementById('quizProgress').textContent = qt('prog');
+  box.querySelector('.quiz-q').innerHTML = `${qIdx + 1}. ${en ? q.q_en : q.q_th}`;
+  const opts = (en && q.opts_en) ? q.opts_en : q.opts;
+  box.querySelectorAll('.quiz-opt').forEach((b, i) => b.innerHTML = opts[i]);
+  if (answered) {
+    const fb = document.getElementById('qfb');
+    if (fb) fb.innerHTML = (fb.classList.contains('ok') ? qt('ok') : qt('bad')) + (en ? q.exp_en : q.exp_th);
+  }
+  const card = document.getElementById('scoreCard');
+  if (card) card.outerHTML = scoreCardHtml();
+}
+function answer(i) {
+  if (answered) return;
+  answered = true;
+  const q = quizData[qIdx], exp = getLang() === 'en' ? q.exp_en : q.exp_th, fb = document.getElementById('qfb');
+  document.querySelectorAll('.quiz-opt').forEach((b, idx) => {
+    if (idx === q.ans) b.classList.add('correct'); else if (idx === i) b.classList.add('wrong');
+    b.style.pointerEvents = 'none';
+  });
+  if (i === q.ans) { score++; document.getElementById('quizScore').textContent = score; fb.className = 'quiz-feedback ok'; fb.innerHTML = qt('ok') + exp; }
+  else { fb.className = 'quiz-feedback err'; fb.innerHTML = qt('bad') + exp; }
+  if (qIdx < quizData.length - 1) document.getElementById('btnNext').style.display = 'inline-block';
+  else {
+    document.getElementById('btnRetry').style.display = 'inline-block';
+    setTimeout(() => { document.getElementById('quizBox').insertAdjacentHTML('beforeend', scoreCardHtml()); }, 300);
+  }
+}
+// การ์ดคะแนนแยกเป็นฟังก์ชัน เพื่อให้ refreshQuizLang() วาดใหม่ตามภาษาได้ (เคยค้างเป็น "Your Score" หลังสลับภาษา)
+function scoreCardHtml() {
+  return `<div id="scoreCard" style="margin-top:20px; background:linear-gradient(135deg,#1C3B22,#2E5936); color:white; border-radius:16px; padding:24px; text-align:center;">
+    <div style="font-size:2.5rem;">🎉</div><div style="font-size:1.5rem; font-weight:800; margin:8px 0;">${qt('title')}</div>
+    <div style="font-size:3rem; font-weight:800;">${score} / ${quizData.length}</div>
+    <div style="font-size:1.1rem; opacity:.9; margin-top:8px;">${grade(score)}</div></div>`;
+}
+function nextQuestion() { qIdx++; renderQuestion(); }
+
+window.addEventListener('load', () => { renderAllCmp(0); initQuiz(); applyLang(getLang()); });
+</script>
+</body>
+</html>

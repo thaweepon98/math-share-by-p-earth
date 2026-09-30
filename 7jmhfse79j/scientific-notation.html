@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>สื่อการสอน : สัญกรณ์วิทยาศาสตร์ ม.1</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800&display=swap');
+
+  :root {
+    --primary: #1C3B22; --secondary: #FF8A3D; --accent: #68EF3F; --accent-2: #3FA82E; --warning: #FFB347;
+    --bg: #F3F7EC; --card: #FFFFFF; --text: #2D3748; --muted: #718096; --border: #E2E8F0;
+    --shadow: 0 4px 24px rgba(28,59,34,0.10); --radius: 16px;
+    --pos: #047857; --pos-bg: #ECFDF5; --neg: #BE185D; --neg-bg: #FFF4EC;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Sarabun', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+  sup { font-size: .68em; line-height: 0; vertical-align: super; font-weight: 800; }
+  sup sup { font-size: .8em; }
+
+  header { background: linear-gradient(135deg, #1C3B22 0%, #2E5936 100%); color: white; padding: 28px 40px 20px; text-align: center; position: relative; overflow: hidden; }
+  header::before { content: ''; position: absolute; top: -60px; right: -60px; width: 200px; height: 200px; background: rgba(255,255,255,0.07); border-radius: 50%; }
+  header h1 { font-size: 2rem; font-weight: 800; letter-spacing: .5px; }
+  header p { font-size: 1rem; opacity: .85; margin-top: 4px; }
+  .back-link { position: absolute; top: 14px; left: 20px; color: white; text-decoration: none; font-size: .85rem; font-weight: 600; opacity: .9; z-index: 2; }
+  .back-link:hover { opacity: 1; text-decoration: underline; }
+  .lang-toggle { position: absolute; top: 14px; right: 20px; background: rgba(255,255,255,.15); color: white; border: 1.5px solid rgba(255,255,255,.5); border-radius: 20px; padding: 5px 14px; font-family: 'Sarabun', sans-serif; font-size: .8rem; font-weight: 700; cursor: pointer; z-index: 2; }
+  .lang-toggle:hover { background: rgba(255,255,255,.28); }
+
+  nav { display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; padding: 20px 24px 0; background: white; border-bottom: 3px solid var(--border); }
+  .tab-btn { padding: 10px 18px; border: none; background: transparent; border-radius: 10px 10px 0 0; font-family: 'Sarabun', sans-serif; font-size: 0.95rem; font-weight: 600; color: var(--muted); cursor: pointer; transition: all .25s; border-bottom: 3px solid transparent; margin-bottom: -3px; }
+  .tab-btn:hover { color: var(--primary); background: #E3F3D8; }
+  .tab-btn.active { color: var(--primary); border-bottom-color: var(--primary); background: #E3F3D8; }
+
+  main { max-width: 980px; margin: 0 auto; padding: 32px 20px 60px; }
+  .tab-panel { display: none; animation: fadeIn .35s ease; }
+  .tab-panel.active { display: block; }
+  @keyframes fadeIn { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
+  @keyframes rowIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+
+  .card { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); padding: 28px 32px; margin-bottom: 24px; }
+  .card-title { font-size: 1.25rem; font-weight: 700; color: var(--primary); margin-bottom: 12px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .card-title .icon { font-size: 1.5rem; }
+  .intro { font-size: 1.02rem; line-height: 1.8; margin-bottom: 14px; }
+  .box-info { background: #EEF7E6; border-left: 4px solid var(--primary); border-radius: 10px; padding: 14px 18px; margin: 14px 0; line-height: 1.8; }
+  .box-warn { background: #FFF7ED; border-left: 4px solid var(--warning); border-radius: 10px; padding: 14px 18px; margin: 14px 0; line-height: 1.8; }
+  .box-ok   { background: #ECFDF5; border-left: 4px solid var(--accent);  border-radius: 10px; padding: 14px 18px; margin: 14px 0; line-height: 1.8; }
+  .formula { background: linear-gradient(135deg,#1C3B22,#2E5936); color: white; border-radius: 12px; padding: 14px 24px; text-align: center; font-size: 1.3rem; font-weight: 700; margin: 14px 0; letter-spacing: .5px; display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 4px 18px; }
+
+  .btn { padding: 10px 24px; background: var(--primary); color: white; border: none; border-radius: 30px; font-family: 'Sarabun', sans-serif; font-size: 1rem; font-weight: 700; cursor: pointer; transition: background .2s, opacity .2s; }
+  .btn:hover:not(:disabled) { background: #2E5936; }
+  .btn:disabled { opacity: .4; cursor: not-allowed; }
+  .btn.ghost { background: white; color: var(--primary); border: 2px solid var(--primary); }
+  .btn.ghost:hover:not(:disabled) { background: #E3F3D8; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 6px 0; align-items: center; }
+  .chips .chips-label { font-weight: 700; color: var(--muted); font-size: .95rem; margin-right: 2px; }
+  .chip { padding: 7px 16px; border: 2px solid var(--border); border-radius: 30px; background: #fff; font-family: 'Sarabun', sans-serif; font-weight: 700; font-size: 1rem; cursor: pointer; color: var(--text); display: inline-flex; align-items: center; gap: 4px; }
+  .chip:hover { border-color: var(--primary); }
+  .chip.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+
+  .frac { display: inline-flex; flex-direction: column; align-items: center; font-weight: 700; line-height: 1.15; vertical-align: middle; margin: 0 4px; }
+  .frac .num { font-size: 1em; border-bottom: 2.5px solid currentColor; padding: 0 3px 2px; min-width: 18px; text-align: center; white-space: nowrap; }
+  .frac .den { font-size: 1em; padding: 3px 3px 0; min-width: 18px; text-align: center; white-space: nowrap; }
+
+  .slider-row { display: flex; align-items: center; gap: 12px; margin: 6px 0; }
+  .slider-row b { min-width: 30px; font-size: 1.05rem; }
+  input[type=range] { accent-color: var(--primary); flex: 1; max-width: 260px; min-width: 100px; }
+  .slider-val { font-weight: 800; color: var(--primary); font-size: 1.1rem; min-width: 26px; }
+
+  /* ─── ตัวแสดงแผ่นฐาน (stage): แผ่นจัดตำแหน่งแบบ absolute แล้วให้ CSS transition เลื่อนเอง ─── */
+  .stage-outer { position: relative; width: 100%; max-width: 680px; margin: 10px auto 6px; overflow: hidden; background: #FBFDF8; border: 1.5px dashed var(--border); border-radius: 14px; transition: height .45s ease; }
+  .stage-inner { position: absolute; left: 0; top: 0; width: 680px; transform-origin: 0 0; }
+  .st { position: absolute; transition: left .85s ease, top .85s ease, width .85s ease, height .85s ease, opacity .6s ease, background .5s, border-color .5s, color .5s, box-shadow .5s; }
+  .st-t { width: 38px; height: 38px; border-radius: 9px; border: 2.5px solid; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1.05rem; white-space: nowrap; }
+  .st-t[data-n]::after { content: attr(data-n); position: absolute; bottom: -17px; left: 0; right: 0; text-align: center; font-size: .74rem; font-weight: 700; color: var(--muted); }
+  .t-a { background: #DBEAFE; border-color: #2563EB; color: #1E40AF; }
+  .t-b { background: #FEF3C7; border-color: #D97706; color: #92400E; }
+  .t-neg { background: #FFE4E6; border-color: #E11D48; color: #9F1239; }
+  .t-pos { background: #DCFCE7; border-color: #16A34A; color: #166534; }
+  .t-c { background: #FFEDD5; border-color: #F97316; color: #9A3412; }
+  .t-ghost { background: #F1F5F9; border-color: #94A3B8; color: #64748B; border-style: dashed; }
+  .t-pair { box-shadow: 0 0 0 4px rgba(249,115,22,.6); }
+  .t-big { width: 78px; font-size: 1.15rem; }
+  .st-x { border: 2.5px solid; border-radius: 10px; background: transparent; }
+  .x-g { border-color: #94A3B8; }
+  .x-p1 { border-color: #2563EB; background: rgba(37,99,235,.06); }
+  .x-line { height: 3px !important; border: none; background: var(--text); border-radius: 2px; }
+  .st-s { font-weight: 800; color: var(--text); text-align: center; white-space: nowrap; font-size: 1.1rem; line-height: 1.2; }
+  .l-red { color: #DC2626; }
+  .l-mut { color: var(--muted); font-size: .95rem; font-weight: 700; }
+  .l-big { font-size: 3rem; color: var(--primary); }
+  .l-paren { font-size: 2.2rem; font-weight: 400; color: var(--muted); line-height: 1; }
+  .l-neg { color: #E11D48; font-size: 1.7rem; }
+
+  .wg-params { margin-bottom: 4px; }
+  .wg-eq { text-align: center; font-size: 1.35rem; font-weight: 800; color: var(--primary); min-height: 3.1em; display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+  .wg-cap { background: #EEF7E6; border-left: 4px solid var(--primary); border-radius: 10px; padding: 12px 16px; line-height: 1.75; min-height: 3.7em; margin-top: 6px; }
+  .wg-res:not(:empty) { margin-top: 10px; background: #fff; border: 2px solid var(--border); border-radius: 12px; padding: 12px 16px; line-height: 1.9; font-weight: 700; animation: rowIn .5s ease; }
+  .wg-nav { display: flex; justify-content: center; align-items: center; gap: 14px; margin-top: 12px; flex-wrap: wrap; }
+  .wg-nav .btn { padding: 9px 22px; }
+  .wg-cnt { font-weight: 700; color: var(--muted); min-width: 92px; text-align: center; }
+
+  /* ป้ายสมบัติ ①–⑨ (สีประจำแต่ละข้อ) */
+  .pbadge { display: inline-flex; align-items: center; justify-content: center; width: 26px; height: 26px; border-radius: 50%; background: var(--pc); color: #fff; font-weight: 800; font-size: .85rem; vertical-align: middle; flex: none; }
+  .hl { border-radius: 5px; padding: 0 3px; }
+  .ans { background: #ECFDF5; border: 2px solid var(--accent-2); border-radius: 8px; padding: 2px 10px; color: #047857; font-weight: 800; }
+  .ptag { display: inline-block; background: #F1F5F9; border-radius: 20px; padding: 2px 12px; font-size: .88rem; font-weight: 700; color: #475569; }
+
+  .wk-cell { position: relative; background: #fff; border: 2px solid var(--border); border-radius: 14px; padding: 12px 16px 12px 56px; margin-bottom: 12px; line-height: 1.8; }
+  .wk-cell.fresh { animation: rowIn .5s ease; }
+  .wk-cell.q { background: #F8FAFC; }
+  .wk-cell.plain { padding-left: 16px; }
+  .wk-cell.final { border-color: var(--accent-2); }
+  .wk-cell .stepno { position: absolute; left: 14px; top: 14px; width: 28px; height: 28px; border-radius: 50%; background: var(--primary); color: #fff; font-size: .85rem; font-weight: 800; display: flex; align-items: center; justify-content: center; }
+  .wk-cell.q .stepno { background: var(--muted); }
+  .wk-eq { font-size: 1.2rem; font-weight: 700; overflow-x: auto; padding: 2px 0; }
+  .wk-tags { display: flex; flex-wrap: wrap; gap: 6px 14px; align-items: center; margin-top: 4px; font-size: .92rem; font-weight: 600; color: #475569; }
+  .wk-tags span.tg { display: inline-flex; align-items: center; gap: 6px; }
+
+  .lad { max-width: 460px; margin: 10px auto; }
+  .lad-op { text-align: center; color: var(--muted); font-weight: 700; font-size: .95rem; margin: 2px 0; animation: rowIn .4s ease; }
+  .plegend { display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 8px 16px; margin: 10px 0 6px; }
+  .plegend > div { display: flex; align-items: center; gap: 10px; font-weight: 600; font-size: .98rem; }
+
+  .rv { border: 2px solid var(--border); border-radius: 12px; padding: 10px 14px; margin-bottom: 10px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .rv .rv-q { font-size: 1.2rem; font-weight: 800; min-width: 130px; }
+  .rv .rv-steps { font-size: 1.2rem; font-weight: 800; color: var(--primary); display: flex; gap: 12px; flex-wrap: wrap; flex: 1; }
+  .rv .rv-steps span { animation: rowIn .4s ease; }
+  .rv .rv-steps span.last { color: #047857; }
+  .rv button { padding: 5px 14px; font-size: .88rem; }
+
+  /* ─── สัญกรณ์วิทยาศาสตร์: จุดกระโดด ─── */
+  .st.hp-dot { border: none; border-radius: 50%; background: #DC2626; box-shadow: 0 0 0 2.5px #fff, 0 1px 8px rgba(220,38,38,.55); z-index: 5; transition: left .11s linear, top .11s ease-out, opacity .4s ease; }
+  .st.hp-dot.hp-slow { transition: left .85s ease, top .85s ease, opacity .5s ease; }
+  .st.hp-gdot { border: 2.5px dashed #DC2626; border-radius: 50%; background: transparent; }
+  .t-hi { box-shadow: 0 0 0 4px rgba(249,115,22,.65); }
+  .st.cnt { transition: opacity .25s ease; font-size: .95rem; }
+  .cnt-p { color: #047857; }
+  .cnt-n { color: #DB2777; }
+  .hp-x10 { font-size: 1.3rem; color: var(--primary); text-align: left; }
+  .instant .st { transition: none !important; }
+  .wg-res:not(:empty) { text-align: center; font-size: 1.15rem; }
+
+  .chk { display: flex; gap: 14px; align-items: flex-start; border-radius: 12px; padding: 14px 18px; margin-top: 10px; line-height: 1.75; border: 2px solid; font-weight: 600; }
+  .chk.ok { background: #ECFDF5; border-color: #16A34A; }
+  .chk.no { background: #FFF1F2; border-color: #E11D48; }
+  .chk-mark { font-size: 1.8rem; font-weight: 800; line-height: 1.2; }
+  .chk.ok .chk-mark { color: #16A34A; }
+  .chk.no .chk-mark { color: #E11D48; }
+  .chk-q { font-size: 1.4rem; font-weight: 800; }
+
+  .tool-row { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin: 10px 0; }
+  .tool-inp { font-family: 'Sarabun', sans-serif; font-size: 1.3rem; font-weight: 700; padding: 8px 14px; border: 2px solid var(--border); border-radius: 12px; width: 270px; max-width: 100%; color: var(--text); background: #fff; }
+  .tool-inp.mid { width: 170px; }
+  .tool-inp.small { width: 84px; font-size: 1.05rem; padding: 5px 10px; }
+  .tool-inp:focus { outline: none; border-color: var(--primary); }
+  .tool-x { font-size: 1.4rem; font-weight: 800; }
+  .tool-sup { position: relative; top: -14px; }
+  .tool-msg { border-radius: 10px; padding: 12px 16px; line-height: 1.7; margin: 6px 0 10px; font-weight: 600; }
+  .tool-msg.err { background: #FFF1F2; border-left: 4px solid #E11D48; color: #9F1239; }
+  .tool-msg.warn { background: #FFF7ED; border-left: 4px solid var(--warning); }
+
+  @media (max-width: 700px) {
+    header h1 { font-size: 1.4rem; }
+    header { padding: 34px 16px 16px; }
+    .card { padding: 20px 14px; }
+    .tab-btn { font-size: .85rem; padding: 8px 10px; }
+    .wk-cell { padding-left: 48px; }
+    .wg-eq { font-size: 1.15rem; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <a href="./index.html" class="back-link" data-th="← กลับหน้าเลขยกกำลัง" data-en="← Back to Exponents">← กลับหน้าเลขยกกำลัง</a>
+  <button id="langToggle" class="lang-toggle" onclick="toggleLang()">EN</button>
+  <h1 data-th="🔬 สัญกรณ์วิทยาศาสตร์" data-en="🔬 Scientific Notation">🔬 สัญกรณ์วิทยาศาสตร์</h1>
+  <p data-th="จุดทศนิยมกระโดดทีละหลัก • A × 10ⁿ • ตัวเลขยาวๆ ให้สั้นลง • ม.1" data-en="The decimal point hops one place at a time • A × 10ⁿ • shortening very long numbers">จุดทศนิยมกระโดดทีละหลัก • A × 10ⁿ • ตัวเลขยาวๆ ให้สั้นลง • ม.1</p>
+</header>
+
+<nav>
+  <button class="tab-btn active" onclick="showTab('form', this)" data-th="🔬 รูป A × 10ⁿ" data-en="🔬 The form A × 10ⁿ">🔬 รูป A × 10ⁿ</button>
+  <button class="tab-btn" onclick="showTab('n2s', this)" data-th="➡️ ตัวเลข → สัญกรณ์" data-en="➡️ Number → Notation">➡️ ตัวเลข → สัญกรณ์</button>
+  <button class="tab-btn" onclick="showTab('s2n', this)" data-th="⬅️ สัญกรณ์ → ตัวเลข" data-en="⬅️ Notation → Number">⬅️ สัญกรณ์ → ตัวเลข</button>
+  <button class="tab-btn" onclick="showTab('fix', this)" data-th="🔧 จัดรูปให้มาตรฐาน" data-en="🔧 Standard Form">🔧 จัดรูปให้มาตรฐาน</button>
+  <button class="tab-btn" onclick="showTab('try', this)" data-th="🧮 ลองเอง" data-en="🧮 Try It">🧮 ลองเอง</button>
+</nav>
+
+<main>
+  <section id="tab-form" class="tab-panel active"></section>
+  <section id="tab-n2s" class="tab-panel"></section>
+  <section id="tab-s2n" class="tab-panel"></section>
+  <section id="tab-fix" class="tab-panel"></section>
+  <section id="tab-try" class="tab-panel"></section>
+</main>
+
+<script>
+// ══════════════ ภาษาไทย/อังกฤษ (ค่าใน data-th/data-en ถือเป็น HTML — ดู docs/adr/0002) ══════════════
+const PAGE_TITLE = { th: "สื่อการสอน : สัญกรณ์วิทยาศาสตร์ ม.1", en: "Teaching Aid: Scientific Notation" };
+let langMemory = 'th';
+function getLang() { try { return localStorage.getItem('siteLang') || 'th'; } catch (e) { return langMemory; } }
+function applyLang(lang) {
+  document.documentElement.lang = lang;
+  document.title = PAGE_TITLE[lang];
+  document.querySelectorAll('[data-th]').forEach(el => { el.innerHTML = (lang === 'en' && el.dataset.en) ? el.dataset.en : el.dataset.th; });
+  const btn = document.getElementById('langToggle');
+  if (btn) btn.textContent = lang === 'en' ? 'ไทย' : 'EN';
+  if (typeof onLangChange === 'function') onLangChange(lang);
+}
+function toggleLang() {
+  const next = getLang() === 'en' ? 'th' : 'en';
+  langMemory = next;
+  try { localStorage.setItem('siteLang', next); } catch (e) {}
+  applyLang(next);
+}
+function onLangChange() { ALL.forEach(w => w.langRefresh()); }
+
+// ══════════════ ตัวช่วย ══════════════
+const EN = () => getLang() === 'en';
+const T = (th, en) => ({ th, en });
+const tx = v => (v == null ? '' : typeof v === 'string' ? v : v[getLang()]);
+const esc = s => s.replace(/&/g, '&amp;').replace(/"/g, '&quot;');
+const d = (th, en) => `<span data-th="${esc(th)}" data-en="${esc(en)}">${th}</span>`;
+const frac = (n, dd) => `<span class="frac"><span class="num">${n}</span><span class="den">${dd}</span></span>`;
+const P = (b, e) => `${b}<sup>${e}</sup>`;
+const mn = v => String(v).replace('-', '−');
+const rep = (b, c, sep) => Array(c).fill(b).join(sep === undefined ? '×' : sep);
+const isNum = b => /^\d+$/.test(String(b));
+const gcd = (a, b) => b ? gcd(b, a % b) : a;
+
+// ป้ายสมบัติเลขยกกำลัง (เลขเดียวกับสื่อเลขยกกำลัง): ใช้แค่ ① กับ ⑥
+const PC = { 1: '#2563EB', 6: '#DB2777' };
+const PN = {
+  1: T('คูณฐานเดียวกัน → บวกเลขชี้กำลัง', 'Multiply same base → add exponents'),
+  6: T('เลขชี้กำลังลบ → กลับบน–ล่าง', 'Negative exponent → flip top/bottom')
+};
+const pb = n => `<span class="pbadge" style="--pc:${PC[n]}">${n}</span>`;
+const hl = (n, html) => `<span class="hl" style="background:${PC[n]}26;border-bottom:2px solid ${PC[n]}">${html}</span>`;
+const ans = html => `<span class="ans">${html}</span>`;
+const card = (icon, title, inner) => `<div class="card"><div class="card-title"><span class="icon">${icon}</span><span>${title}</span></div>${inner}</div>`;
+
+// ══════════════ ตัวแสดงแผ่นฐาน (Stage) ══════════════
+// แผ่นทุกชิ้นมี id คงที่ ทุกครั้งที่ set() ถ้า id เดิมตำแหน่งใหม่ CSS จะเลื่อนให้เอง
+const W = 680;
+const tl = (id, x, y, txt, cls, o) => Object.assign({ k: 't', id, x, y, txt, cls }, o || {});
+const lb = (id, x, y, html, cls, w, o) => Object.assign({ k: 's', id, x, y, html, cls: cls || '', w: w || 80 }, o || {});
+const bx = (id, x, y, w, h, cls, o) => Object.assign({ k: 'x', id, x, y, w, h, cls: cls || 'x-g' }, o || {});
+// label กึ่งกลางที่ cx
+const lbc = (id, cx, y, html, cls, w, o) => lb(id, cx - (w || 80) / 2, y, html, cls, w, o);
+
+class Stage {
+  constructor(host) {
+    this.outer = host; host.classList.add('stage-outer');
+    this.inner = document.createElement('div'); this.inner.className = 'stage-inner';
+    host.appendChild(this.inner);
+    this.els = new Map(); this.h = 160;
+  }
+  fit() {
+    const w = this.outer.clientWidth; if (!w) return;
+    const s = Math.min(1, w / W);
+    this.inner.style.transform = 'scale(' + s + ')';
+    this.inner.style.height = this.h + 'px';
+    this.outer.style.height = (this.h * s) + 'px';
+  }
+  place(el, it) {
+    const kind = { t: 'st-t', x: 'st-x', s: 'st-s' }[it.k];
+    el.className = 'st ' + kind + ' ' + (it.cls || '');
+    el.style.left = it.x + 'px'; el.style.top = it.y + 'px';
+    if (it.k === 'x') { el.style.width = it.w + 'px'; el.style.height = it.h + 'px'; }
+    if (it.k === 's') el.style.width = (it.w || 80) + 'px';
+    if (it.k === 't') { el.style.width = it.w ? it.w + 'px' : ''; el.style.height = it.hh ? it.hh + 'px' : ''; el.style.fontSize = it.fs || ''; }
+    el.style.opacity = it.op === undefined ? 1 : it.op;
+    const html = it.k === 't' ? it.txt : (it.html || '');
+    if (el._h !== html) { el.innerHTML = html; el._h = html; }
+    if (it.n != null) el.setAttribute('data-n', it.n); else el.removeAttribute('data-n');
+  }
+  set(items, h) {
+    this.h = h; const seen = new Set();
+    items.forEach(it => {
+      seen.add(it.id);
+      let el = this.els.get(it.id);
+      if (!el) {
+        el = document.createElement('div'); this.inner.appendChild(el); this.els.set(it.id, el);
+        const from = it.from || it;
+        el.style.transition = 'none';
+        this.place(el, Object.assign({}, it, { x: from.x, y: from.y, op: 0 }));
+        void el.offsetWidth; el.style.transition = '';
+      }
+      this.place(el, it);
+    });
+    [...this.els].forEach(([id, el]) => {
+      if (!seen.has(id)) { this.els.delete(id); el.style.opacity = 0; setTimeout(() => el.remove(), 700); }
+    });
+    this.fit();
+  }
+}
+
+
+// ══════════════ ตัวเลขแบบสตริงล้วน: แปลงเป็นหลักๆ ไม่ใช้ parseFloat/Number กับค่าทศนิยมเลย ══════════════
+const MAXSIG = 15;   // หลักที่พิมพ์ได้ (นับจากตัวแรกที่ไม่ใช่ 0)
+const MAXBOX = 20;   // จำนวนกล่องสูงสุดที่วาดได้พอดี stage
+const commas = s => s.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+const fmtNum = (ip, fp) => commas(ip) + (fp ? '.' + fp : '');
+const sgn = v => (v > 0 ? '+' + v : mn(v));           // +3 / −3 / 0
+
+const ERR = {
+  empty: T('ยังไม่ได้พิมพ์ตัวเลข', 'Nothing typed yet.'),
+  neg:   T('สื่อนี้ใช้กับจำนวนบวกเท่านั้น (ลองตัดเครื่องหมายลบออก)', 'This page works with positive numbers only (try removing the minus sign).'),
+  chars: T('พิมพ์ได้เฉพาะเลข 0–9 จุดทศนิยม และลูกน้ำ', 'Only digits 0–9, a decimal point and commas are allowed.'),
+  dots:  T('มีจุดทศนิยมมากกว่า 1 จุด', 'There is more than one decimal point.'),
+  zero:  T('ศูนย์เขียนเป็นสัญกรณ์วิทยาศาสตร์ไม่ได้ (ตัวเลขต้องไม่ใช่ 0)', 'Zero cannot be written in scientific notation (the number must not be 0).'),
+  long:  T('ตัวเลขยาวเกิน 15 หลัก', 'The number is longer than 15 digits.'),
+  nbad:  T('เลขชี้กำลัง n ต้องเป็นจำนวนเต็มตั้งแต่ −15 ถึง 15', 'The exponent n must be a whole number from −15 to 15.'),
+  wide:  T('ผลยาวเกินกว่าจะแสดง (เกิน 20 กล่อง) ลองลดจำนวนหลักหรือเลขชี้กำลัง', 'The result is too long to draw (more than 20 boxes). Try fewer digits or a smaller exponent.')
+};
+
+// รับสตริง → { digits, dot, isInt, f, lastNZ }   (dot = จำนวนหลักหน้าจุด, f = ตำแหน่งหลักแรกที่ไม่ใช่ 0)
+function parsePos(raw) {
+  let s = String(raw == null ? '' : raw).replace(/[\s,]/g, '');
+  if (!s) return { err: 'empty' };
+  if (/^[-−–]/.test(s)) return { err: 'neg' };
+  if (s[0] === '+') s = s.slice(1);
+  if (!/^[0-9.]*$/.test(s)) return { err: 'chars' };
+  if (s.split('.').length > 2) return { err: 'dots' };
+  const parts = s.split('.'), ip = parts[0], fp = parts[1] || '';
+  if (!(ip + fp)) return { err: 'chars' };
+  if (!/[1-9]/.test(ip + fp)) return { err: 'zero' };
+  let is = ip.replace(/^0+/, ''); if (!is) is = '0';
+  const digits = is + fp, f = digits.search(/[1-9]/);
+  if (digits.length - f > MAXSIG) return { err: 'long' };
+  let lastNZ = digits.length - 1; while (digits[lastNZ] === '0') lastNZ--;
+  return { digits, dot: is.length, isInt: fp === '', f, lastNZ, ip: is, fp };
+}
+function parseN(raw) {
+  const s = String(raw == null ? '' : raw).replace(/\s/g, '').replace(/[−–]/g, '-');
+  if (!/^[-+]?\d+$/.test(s)) return null;
+  const m = parseInt(s.replace(/^[-+]/, ''), 10);
+  if (m > 15) return null;
+  return m === 0 ? 0 : (s[0] === '-' ? -m : m);
+}
+
+// ขนาดกล่องตามจำนวนกล่อง N
+function geoFor(N, reserve) {
+  const pitch = Math.min(52, Math.floor((640 - 84) / N));
+  const gap = pitch >= 40 ? 14 : pitch >= 32 ? 11 : 8;
+  const tw = pitch - gap, th = Math.min(40, tw + 8), ds = Math.min(12, gap - 2);
+  const fs = tw >= 36 ? '1.3rem' : tw >= 30 ? '1.1rem' : tw >= 24 ? '1rem' : tw >= 18 ? '.85rem' : '.7rem';
+  const rowW = N * pitch - gap;
+  return { N, pitch, gap, tw, th, ds, fs, rowW, ox: Math.round((W - rowW - (reserve || 0)) / 2) };
+}
+const setOf = arr => new Set(arr);
+const rangeArr = (a, b) => { const r = []; for (let i = a; i <= b; i++) r.push(i); return r; };
+
+// ── โจทย์ ตัวเลข → สัญกรณ์ ──
+function mkNum(str) {
+  const p = parsePos(str); if (p.err) return p;
+  const N = p.digits.length; if (N > MAXBOX) return { err: 'wide' };
+  const { digits, dot, isInt, f, lastNZ } = p;
+  const g0 = dot, g1 = f + 1, H = Math.abs(g0 - g1), left = g1 < g0, n = H === 0 ? 0 : left ? H : -H;
+  const trailDrop = rangeArr(lastNZ + 1, N - 1), leadDrop = rangeArr(0, f - 1);
+  const drop3 = setOf(isInt ? leadDrop.concat(trailDrop) : leadDrop);
+  const drop4 = setOf(isInt ? [] : trailDrop);
+  const A4 = digits.slice(f, lastNZ + 1), A3 = isInt ? A4 : digits.slice(f);
+  const fmtA = a => a[0] + (a.length > 1 ? '.' + a.slice(1) : '');
+  const K = lastNZ - f + 1, geo = geoFor(N, 0);
+  const rowK = K * geo.pitch - geo.gap, ox4 = Math.round((W - (rowK + 94)) / 2);
+  return {
+    mode: 'n2s', slots: digits.split('').map(ch => ({ ch, role: 'digit' })), geo, g0, g1, H, left, dir: left ? -1 : 1, n,
+    isInt, f, lastNZ, hi: f, drop3, drop4, keepA: f, keepB: lastNZ, off4: ox4 - geo.ox - f * geo.pitch,
+    dotHideAt: K === 1 ? 4 : 99, hasDrop3: drop3.size > 0, hasLead: leadDrop.length > 0, hasTrail: trailDrop.length > 0,
+    numText: fmtNum(p.ip, p.fp), A3: fmtA(A3), A4: fmtA(A4), hasTrailDec: !isInt && lastNZ < N - 1, final: fmtA(A4)
+  };
+}
+
+// ── โจทย์ สัญกรณ์ → ตัวเลข ──
+function mkSci(aStr, nStr) {
+  const p = parsePos(aStr); if (p.err) return p;
+  const n = parseN(nStr); if (n === null) return { err: 'nbad' };
+  const len = p.digits.length, target = p.dot + n;
+  const L = Math.max(0, -target), R = Math.max(0, target - len);
+  const lead = target + L === 0, s = lead ? 1 : 0;
+  const slots = [];
+  if (lead) slots.push({ ch: '0', role: 'lead' });
+  for (let i = 0; i < L; i++) slots.push({ ch: '0', role: 'pad' });
+  const aFirst = slots.length;
+  p.digits.split('').forEach(ch => slots.push({ ch, role: 'digit' }));
+  const aLast = slots.length - 1;
+  for (let i = 0; i < R; i++) slots.push({ ch: '0', role: 'pad' });
+  const N = slots.length; if (N > MAXBOX) return { err: 'wide' };
+  const g0 = p.dot + L + s, gF = target + L + s, H = Math.abs(n), left = n < 0, dir = left ? -1 : 1;
+  // ช่องที่กระโดดข้าม: ซ้าย → ช่อง g-1, ขวา → ช่อง g
+  slots.forEach((sl, i) => {
+    if (sl.role !== 'pad') return;
+    for (let c = 1; c <= H; c++) { const cs = dir < 0 ? g0 - c : g0 + c - 1; if (cs === i) { sl.hop = c; break; } }
+  });
+  // เก็บกวาด: ศูนย์นำหน้าส่วนจำนวนเต็มที่เกิน 1 ตัว และศูนย์ท้ายส่วนทศนิยม
+  const drop3 = new Set();
+  let i = 0; while (i < gF - 1 && slots[i].ch === '0') { if (slots[i].role === 'lead') break; drop3.add(i); i++; }
+  let e = N - 1; while (e >= gF && slots[e].ch === '0') { drop3.add(e); e--; }
+  const keepB = e;
+  const keepA = Math.min.apply(null, rangeArr(0, N - 1).filter(x => !drop3.has(x)));
+  const fracKept = keepB >= gF;
+  const geo = geoFor(N, 84);
+  const K = keepB - keepA + 1, rowK = K * geo.pitch - geo.gap, ox4 = Math.round((W - rowK) / 2);
+  const ip = slots.slice(keepA, gF).map(x => x.ch).join(''), fp = slots.slice(gF, keepB + 1).map(x => x.ch).join('');
+  const aText = p.ip + (p.fp ? '.' + p.fp : '');
+  return {
+    mode: 's2n', slots, geo, g0, g1: gF, H, left, dir, n, hi: -1, drop3, drop4: new Set(), keepA, keepB, off4: ox4 - geo.ox - keepA * geo.pitch,
+    dotHideAt: fracKept ? 99 : 3, hasDrop3: drop3.size > 0, lead, pads: L + R, aFirst, aLast,
+    std: p.f + 1 === p.dot, aText, aLeftText: aText + ' × 10<sup>' + mn(String(n)) + '</sup>',
+    final: fmtNum(ip, fp), hasLeadDrop: [...drop3].some(x => x < gF), hasTrailDrop: [...drop3].some(x => x >= gF), fracKept
+  };
+}
+
+// ══════════════ สร้างเฟรมของวิดเจ็ตจุดกระโดด ══════════════
+const hopHtml = (pr, done) => {
+  const { H, left } = pr, cls = left ? 'cnt-p' : 'cnt-n';
+  const th = H === 0 ? 'ไม่ต้องกระโดด' : (left ? 'ไปด้านหน้า ' : 'ถอยหลัง ') + H + ' ครั้ง';
+  const en = H === 0 ? 'no hops needed' : (left ? 'forward ' : 'backward ') + H + (H > 1 ? ' hops' : ' hop');
+  return `<span class="${cls}">${left && H ? '◀ ' : ''}${EN() ? en : th} = ${H === 0 ? '0' : left ? '+' + H : mn(-H)}${!left && H ? ' ▶' : ''}</span>`;
+};
+
+function hopFrame(pr, k, hs) {
+  const G = pr.geo, pitch = G.pitch, gap = G.gap, tw = G.tw, th = G.th, ds = G.ds, H = pr.H;
+  const y0 = 40, yC = 8;
+  const up = k === 2 && hs.up, j = k < 2 ? 0 : k === 2 ? hs.j : H;
+  const done = k > 2 || (k === 2 && hs.j >= H && !hs.up);
+  const off = k >= 4 ? pr.off4 : 0;
+  const X = i => G.ox + i * pitch + off;
+  const GX = g => G.ox + g * pitch - gap / 2 + off;
+  const hv = k > 2 ? H : k === 2 ? j + (up ? 1 : 0) : 0;
+  const it = [];
+  pr.slots.forEach((s, i) => {
+    let cls = 't-a', op = 1;
+    if (s.role === 'pad') { if (hv < s.hop) op = 0; cls = (k === 2 && up && s.hop === j + 1) ? 't-ghost' : 't-b'; }
+    else if (s.role === 'lead') { cls = 't-b'; op = k >= 3 ? 1 : 0; }
+    if (pr.hi === i && k >= 1 && k <= 3) cls += ' t-hi';
+    if (pr.drop3.has(i) && k >= 3) { cls = 't-ghost'; op = k >= 4 ? 0 : .4; }
+    if (pr.drop4.has(i) && k >= 4) { cls = 't-ghost'; op = 0; }
+    it.push(tl('d' + i, X(i), y0, s.ch, cls, { w: tw, hh: th, fs: G.fs, op }));
+  });
+  // จุดทศนิยม (วงกลมแดง) + เป้าหมาย (วงประ)
+  const gNow = pr.g0 + pr.dir * j, dyBase = y0 + th - ds - 2;
+  let dx = GX(gNow), dy = dyBase;
+  if (up) { dx = (GX(gNow) + GX(gNow + pr.dir)) / 2; dy -= 22; }
+  const dotOp = k >= pr.dotHideAt ? 0 : (k === 0 && pr.mode === 'n2s' && pr.isInt) ? .45 : 1;
+  it.push(bx('gdot', GX(pr.g1) - (ds + 8) / 2, dyBase - 4, ds + 8, ds + 8, 'hp-gdot', { op: pr.mode === 'n2s' && k === 1 ? 1 : 0 }));
+  it.push(bx('dot', dx - ds / 2, dy, ds, ds, 'hp-dot' + (k === 2 ? '' : ' hp-slow'), { op: dotOp }));
+  // ตัวนับ +1 +2 … เหนือกล่องที่กระโดดข้าม
+  const cnt = k === 2 ? j : k === 3 ? H : 0;
+  for (let c = 1; c <= cnt; c++) {
+    const cs = pr.dir < 0 ? pr.g0 - c : pr.g0 + c - 1;
+    it.push(lbc('c' + c, X(cs) + tw / 2, yC, (pr.left ? '+' : '−') + c, 'cnt ' + (pr.left ? 'cnt-p' : 'cnt-n'), pitch + 6, { op: 1 }));
+  }
+  // ป้าย × 10ⁿ
+  if (pr.mode === 'n2s') {
+    it.push(lb('x10', X(pr.keepB) + tw + 10, y0 + th / 2 - 14, `× 10<sup>${mn(String(pr.n))}</sup>`, 'hp-x10', 92, { op: k >= 4 ? 1 : 0 }));
+  } else {
+    it.push(lb('x10', X(pr.aLast) + tw + 10, y0 + th / 2 - 14, `× 10<sup>${mn(String(pr.n))}</sup>`, 'hp-x10', 92, { op: k < 2 ? 1 : 0 }));
+  }
+  // ป้ายอธิบายใต้แถว (คำใบ้จุดท้ายสุด / กลับเครื่องหมาย / ทิศกระโดด)
+  let note = '', nop = 0, nx = W / 2;
+  if (pr.mode === 's2n' && k === 1) {
+    note = `${P(10, mn(String(pr.n)))} &nbsp;→&nbsp; ${EN() ? 'flip the sign' : 'กลับเครื่องหมาย'} &nbsp;→&nbsp; <span class="${pr.left ? 'cnt-p' : 'cnt-n'}">${sgn(-pr.n)}</span> &nbsp;→&nbsp; ${hopHtml(pr, true)}`;
+    nop = 1;
+  } else if (done && k >= 2 && k < 4) { note = hopHtml(pr, true); nop = 1; }
+  it.push(lbc('note', nx, y0 + th + 14, note, '', 600, { op: nop }));
+  if (pr.mode === 'n2s' && pr.isInt) {
+    const cx = Math.min(GX(pr.g0), W - 110);
+    it.push(lbc('hint', cx, y0 + th + 34, EN() ? '↑ the point hides at the very end' : '↑ จุดซ่อนอยู่ท้ายสุด', 'l-mut', 220, { op: k === 0 ? 1 : 0 }));
+  }
+  const h = y0 + th + 66;
+  const txt = hopText(pr, k, done);
+  return { items: it, h, eq: txt.eq, cap: txt.cap, res: txt.res };
+}
+
+// ข้อความ: สมการ (เขียนเต็มฝั่งซ้ายทุกขั้น) · คำอธิบาย · ผลสรุป
+function hopText(pr, k, done) {
+  const b = s => `<b>${s}</b>`, nT = mn(String(pr.n)), H = pr.H;
+  const hopsTH = H === 0 ? 'ไม่ต้องกระโดด (n = 0)' : (pr.left ? `ไปด้านหน้า ${H} ครั้ง → นับเป็น ${b('+' + H)} (ไปด้านหน้า = +)` : `ถอยหลัง ${H} ครั้ง → นับเป็น ${b(mn(-H))} (ถอยหลัง = −)`);
+  const hopsEN = H === 0 ? 'no hops needed (n = 0)' : (pr.left ? `forward ${H} ${H > 1 ? 'hops' : 'hop'} → counts as ${b('+' + H)} (forward = +)` : `backward ${H} ${H > 1 ? 'hops' : 'hop'} → counts as ${b(mn(-H))} (backward = −)`);
+  if (pr.mode === 'n2s') {
+    const L = pr.numText, it = '<i>A</i> × 10<sup><i>n</i></sup>', ch = pr.slots[pr.f].ch;
+    let eq, cap, res = '';
+    if (k <= 1) eq = `${L} = ${it}`;
+    else if (k === 2) eq = `${L} = ` + (done ? `<i>A</i> × 10<sup>${nT}</sup>` : it);
+    else if (k === 3) eq = `${L} = ${pr.A3} × 10<sup>${nT}</sup>`;
+    else eq = `${L} = ` + (pr.hasTrailDec ? `${pr.A3} × 10<sup>${nT}</sup> = ` : '') + `<span class="ans">${pr.A4} × 10<sup>${nT}</sup></span>`;
+    if (k === 0) cap = T(`ตัวเลขแยกเป็นกล่อง <b>ทีละหลัก</b> — วงกลมแดงคือ <b>จุดทศนิยม</b> ที่อยู่ระหว่างกล่อง${pr.isInt ? ' (จำนวนเต็มไม่เห็นจุด เพราะจุดซ่อนอยู่ท้ายสุด)' : ''}`,
+      `The number is split into boxes, <b>one digit each</b> — the red circle is the <b>decimal point</b> sitting between boxes${pr.isInt ? ' (a whole number shows no point because it hides at the very end)' : ''}.`);
+    else if (k === 1) cap = T(`หาตัวเลขตัวแรกที่ไม่ใช่ 0 → คือ <b>${ch}</b> (กรอบส้ม) จุดต้องไปอยู่ <b>หลัง</b> ตัวนี้ (วงกลมประ)`,
+      `Find the first digit that is not 0 → it is <b>${ch}</b> (orange frame). The point must end up <b>right after</b> it (dashed circle).`);
+    else if (k === 2) cap = T(H === 0 ? 'จุดอยู่หลังตัวเลขตัวแรกที่ไม่ใช่ 0 อยู่แล้ว จึงไม่ต้องกระโดด' : `จุดกระโดดทีละกล่อง แล้วนับครั้ง — ${hopsTH}`, H === 0 ? 'The point already sits right after the first non-zero digit, so it does not need to hop.' : `The point hops one box at a time and we count the hops — ${hopsEN}`);
+    else if (k === 3) {
+      const lead = pr.hasLead, trail = pr.isInt && pr.hasTrail;
+      cap = T(pr.hasDrop3 ? `ตัด <b>ศูนย์ที่ไม่มีความหมาย</b> ทิ้ง (กล่องจาง): ${[lead ? 'ศูนย์นำหน้า' : '', trail ? 'ศูนย์ท้ายของจำนวนเต็ม' : ''].filter(Boolean).join(' และ ')} เหลือ A = <b>${pr.A3}</b>` : `ไม่มีศูนย์นำหน้าหรือท้ายให้ตัด — A = <b>${pr.A3}</b>`,
+        pr.hasDrop3 ? `Drop the <b>meaningless zeros</b> (faded boxes): ${[lead ? 'the leading zeros' : '', trail ? 'the trailing zeros of a whole number' : ''].filter(Boolean).join(' and ')}. A = <b>${pr.A3}</b>` : `No leading or trailing zeros to drop — A = <b>${pr.A3}</b>`);
+    } else {
+      cap = T(`ได้ <b>A × 10ⁿ</b> แล้ว: A = <b>${pr.A4}</b> (1 ≤ A &lt; 10) และ n = <b>${nT}</b> คือจำนวนครั้งที่กระโดด${pr.hasTrailDec ? ` (${pr.A3} เขียนย่อเป็น ${pr.A4} ได้ เพราะศูนย์ท้ายทศนิยมไม่เปลี่ยนค่า)` : ''}`,
+        `That is <b>A × 10ⁿ</b>: A = <b>${pr.A4}</b> (1 ≤ A &lt; 10) and n = <b>${nT}</b>, the number of hops${pr.hasTrailDec ? ` (${pr.A3} can be shortened to ${pr.A4}: trailing decimal zeros do not change the value)` : ''}.`);
+      res = hopHtml(pr, true);
+    }
+    return { eq, cap, res };
+  }
+  // สัญกรณ์ → ตัวเลข
+  const left = pr.aLeftText, flipped = -pr.n;
+  let eq, cap, res = '';
+  if (k <= 2) eq = `${left} = ?`;
+  else if (k === 3) eq = `${left} = ${pr.final}`;
+  else eq = `${left} = <span class="ans">${pr.final}</span>`;
+  if (k === 0) cap = T(`ตัวเลขหน้า <b>A = ${pr.aText}</b> แยกเป็นกล่อง จุดอยู่ตรงที่มันอยู่ และ <b>× 10<sup>${nT}</sup></b> อยู่ข้างๆ`,
+    `The front number <b>A = ${pr.aText}</b> goes into boxes with its point where it already is, and <b>× 10<sup>${nT}</sup></b> sits beside it.`);
+  else if (k === 1) cap = T(pr.n === 0 ? 'n = 0 → กลับเครื่องหมายก็ยังเป็น 0 จึงไม่ต้องกระโดด' : `<b>กลับเครื่องหมาย</b>ของเลขชี้กำลังก่อน: 10<sup>${nT}</sup> → <b>${sgn(flipped)}</b> แล้วกระโดดตามกฎเดิม — ${hopsTH}`,
+    pr.n === 0 ? 'n = 0 → flipping still gives 0, so there is nothing to hop.' : `<b>Flip the sign</b> of the exponent first: 10<sup>${nT}</sup> → <b>${sgn(flipped)}</b>, then hop by the usual rule — ${hopsEN}`);
+  else if (k === 2) cap = T(H === 0 ? 'ไม่ต้องกระโดด' : `จุดกระโดด${pr.left ? 'ไปด้านหน้า' : 'ถอยหลัง'}ทีละกล่อง ${H} ครั้ง — ` + (pr.pads ? `พอหลักหมด ให้ <b>เติม 0</b> ทีละตัวต่อการกระโดด 1 ครั้ง (เติมทั้งหมด ${pr.pads} ตัว)` : 'หลักยังไม่หมด จึงไม่ต้องเติม 0'),
+    H === 0 ? 'No hops needed.' : `The point hops ${pr.left ? 'forward' : 'backward'} ${H} time${H > 1 ? 's' : ''} — ` + (pr.pads ? `when the digits run out, <b>pad one 0</b> per hop (${pr.pads} in total)` : 'the digits never run out, so no zeros are needed'));
+  else if (k === 3) {
+    const parts = [], partsEN = [];
+    if (pr.lead) { parts.push('ใส่ 0 หน้าจุดให้อ่านง่าย'); partsEN.push('put a 0 in front of the point'); }
+    if (pr.hasLeadDrop) { parts.push('ตัดศูนย์นำหน้าที่เกิน'); partsEN.push('drop extra leading zeros'); }
+    if (pr.hasTrailDrop) { parts.push('ตัดศูนย์ท้ายทศนิยมที่ไม่จำเป็น'); partsEN.push('drop needless trailing decimal zeros'); }
+    if (!pr.fracKept) { parts.push('ไม่มีเศษ จึงตัดจุดท้ายออก'); partsEN.push('no fraction is left, so drop the final point'); }
+    cap = T(parts.length ? `ทำให้อ่านง่าย: ${parts.join(' • ')}` : 'ไม่ต้องจัดอะไรเพิ่ม — ได้ตัวเลขแล้ว', partsEN.length ? `Tidy up: ${partsEN.join(' • ')}` : 'Nothing more to tidy — that is the number.');
+  } else {
+    cap = T(`ได้ตัวเลข <b>${pr.final}</b> — กระโดด ${H} ครั้ง${pr.pads ? ` เติม 0 ${pr.pads} ตัว` : ''} (ใส่ลูกน้ำหลักพันเพื่อให้อ่านง่าย)`,
+      `The number is <b>${pr.final}</b> — ${H} hop${H === 1 ? '' : 's'}${pr.pads ? `, ${pr.pads} zero${pr.pads > 1 ? 's' : ''} padded` : ''} (commas added for readability).`);
+    res = hopHtml(pr, true);
+  }
+  return { eq, cap, res };
+}
+
+// ══════════════ Widget จุดกระโดด: ชิปเลือกโจทย์ (หรือไม่มี) + Stage + ◀ ▶ (ดัดแปลงจาก makeWidget) ══════════════
+const ALL = [];
+const HOP_STEPS = 5;
+function makeHop(host, cfg) {
+  const w = { pr: null, k: 0, timers: [], playing: false, key: cfg.chips ? cfg.chips.val : null };
+  host.classList.add('wg');
+  host.innerHTML = '<div class="wg-params"></div><div class="wg-stage"></div><div class="wg-eq"></div><div class="wg-cap"></div><div class="wg-res"></div><div class="wg-nav"><button class="btn ghost prev"></button><span class="wg-cnt"></span><button class="btn next"></button></div>';
+  const q = s => host.querySelector(s);
+  const stage = new Stage(q('.wg-stage'));
+  const prev = q('.prev'), next = q('.next'), cnt = q('.wg-cnt');
+
+  w.buildParams = () => {
+    const box = q('.wg-params'); box.innerHTML = '';
+    if (cfg.chips) {
+      const row = document.createElement('div'); row.className = 'chips';
+      row.innerHTML = `<span class="chips-label">${tx(cfg.chips.label)}</span>` + cfg.chips.opts.map(o => `<button class="chip${o[0] === w.key ? ' active' : ''}" data-v="${o[0]}"><span>${o[1]}</span></button>`).join('');
+      row.querySelectorAll('.chip').forEach(c => c.addEventListener('click', () => {
+        w.key = c.dataset.v; w.pr = cfg.chips.make(w.key); w.k = 0;
+        row.querySelectorAll('.chip').forEach(x => x.classList.toggle('active', x === c));
+        w.render(true);
+      }));
+      box.appendChild(row);
+    }
+    prev.textContent = EN() ? '◀ Back' : '◀ ย้อน';
+    next.textContent = EN() ? 'Next ▶' : 'ถัดไป ▶';
+  };
+  const cancel = () => { w.timers.forEach(clearTimeout); w.timers = []; w.playing = false; };
+  const draw = hs => {
+    const r = hopFrame(w.pr, w.k, hs);
+    stage.set(r.items, r.h);
+    q('.wg-eq').innerHTML = r.eq ? '<span>' + r.eq + '</span>' : '';
+    q('.wg-cap').innerHTML = tx(r.cap);
+    q('.wg-res').innerHTML = r.res || '';
+    cnt.textContent = (EN() ? 'Step ' : 'ขั้นที่ ') + (w.k + 1) + ' / ' + HOP_STEPS;
+    prev.disabled = w.k === 0; next.disabled = w.k >= HOP_STEPS - 1;
+  };
+  // วางตำแหน่งสุดท้ายของขั้นปัจจุบันทันที (instant = ไม่ให้ CSS เลื่อนช้าๆ ตอนเพิ่งตัดแอนิเมชัน)
+  w.render = instant => {
+    cancel();
+    if (!w.pr) return;
+    const o = stage.outer;
+    if (instant) o.classList.add('instant');
+    draw({ j: w.pr.H, up: false });
+    if (instant) { void o.offsetWidth; o.classList.remove('instant'); }
+  };
+  // ขั้นที่ 3 (k=2): จุดกระโดดทีละกล่อง โค้งขึ้นลง รวมไม่เกิน ~3.6 วินาที
+  w.play = () => {
+    cancel();
+    const H = w.pr.H, T0 = Math.min(330, Math.floor(3600 / H));
+    w.playing = true;
+    draw({ j: 0, up: false });
+    for (let j = 0; j < H; j++) {
+      w.timers.push(setTimeout(() => draw({ j, up: true }), 60 + j * T0));
+      w.timers.push(setTimeout(() => draw({ j: j + 1, up: false }), 60 + j * T0 + Math.round(T0 / 2)));
+    }
+    w.timers.push(setTimeout(() => { w.playing = false; }, 60 + H * T0));
+  };
+  w.setProblem = pr => { w.pr = pr; w.k = 0; host.style.display = ''; w.render(true); };
+  w.langRefresh = () => { w.buildParams(); w.render(true); };
+  w.fit = () => stage.fit();
+  prev.addEventListener('click', () => { if (w.k > 0) { const was = w.playing; w.k--; w.render(was); } });
+  next.addEventListener('click', () => {
+    if (!w.pr || w.k >= HOP_STEPS - 1) return;
+    const was = w.playing; w.k++;
+    if (w.k === 2 && w.pr.H > 0) { stage.outer.classList.remove('instant'); w.play(); } else w.render(was);
+  });
+  w.buildParams();
+  if (cfg.chips) w.pr = cfg.chips.make(w.key);
+  if (w.pr) w.render(true);
+  ALL.push(w);
+  return w;
+}
+
+// ══════════════ Stepper ข้อความ (บันได / กับดัก / ตัวอย่างการคำนวณ): เผยทีละแถว สะสมเรื่อยๆ ══════════════
+function makeSteps(host, getRows) {
+  const w = { k: 0, rows: getRows };
+  host.classList.add('wg');
+  host.innerHTML = '<div class="wk-list"></div><div class="wg-nav"><button class="btn ghost prev"></button><span class="wg-cnt"></span><button class="btn next"></button></div>';
+  const list = host.querySelector('.wk-list');
+  const prev = host.querySelector('.prev'), next = host.querySelector('.next'), cnt = host.querySelector('.wg-cnt');
+  w.render = (fresh) => {
+    const rows = w.rows(); if (w.k >= rows.length) w.k = rows.length - 1;
+    list.innerHTML = rows.slice(0, w.k + 1).map((r, i) => {
+      const isLast = i === rows.length - 1;
+      const tags = (r.props || []).map(n => `<span class="tg">${pb(n)} ${tx(PN[n])}</span>`).concat((r.tags || []).map(t => `<span class="ptag">${tx(t)}</span>`)).join('');
+      const no = r.q ? '?' : i;
+      const plain = !!r.plain;
+      return `<div class="wk-cell${r.q ? ' q' : ''}${plain ? ' plain' : ''}${isLast && !r.q && !plain ? ' final' : ''}${i === w.k && fresh ? ' fresh' : ''}">${plain ? '' : `<span class="stepno">${no}</span>`}<div class="wk-eq">${r.html}</div>${tags ? `<div class="wk-tags">${tags}</div>` : ''}${r.note ? `<div class="wk-tags">${tx(r.note)}</div>` : ''}</div>`;
+    }).join('');
+    cnt.textContent = (EN() ? 'Step ' : 'ขั้นที่ ') + (w.k + 1) + ' / ' + rows.length;
+    prev.disabled = w.k === 0; next.disabled = w.k >= rows.length - 1;
+    prev.textContent = EN() ? '◀ Back' : '◀ ย้อน';
+    next.textContent = EN() ? 'Next ▶' : 'ถัดไป ▶';
+  };
+  w.reset = () => { w.k = 0; w.render(false); };
+  w.langRefresh = () => w.render(false);
+  w.fit = () => {};
+  prev.addEventListener('click', () => { if (w.k > 0) { w.k--; w.render(false); } });
+  next.addEventListener('click', () => { if (w.k < w.rows().length - 1) { w.k++; w.render(true); } });
+  w.render(false);
+  ALL.push(w);
+  return w;
+}
+
+function showTab(id, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  if (btn) btn.classList.add('active');
+  requestAnimationFrame(() => ALL.forEach(w => w.fit()));
+}
+let _rsT;
+window.addEventListener('resize', () => { clearTimeout(_rsT); _rsT = setTimeout(() => ALL.forEach(w => w.fit()), 120); });
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => ALL.forEach(w => w.fit()));
+
+// ═══════════════════════ แท็บ 1 · ตัวตรวจ A ═══════════════════════
+const CHK = [
+  ['1.032 × 10<sup>3</sup>', true, T('A = 1.032 → 1 ≤ 1.032 &lt; 10 ✓ หน้าจุดมีหลักเดียว และไม่ใช่ 0', 'A = 1.032 → 1 ≤ 1.032 &lt; 10 ✓ one digit before the point, and it is not 0.')],
+  ['10.32 × 10<sup>2</sup>', false, T('A = 10.32 → มากกว่า 10 (A ≥ 10) ✗ หน้าจุดมี 2 หลัก ต้องกระโดดจุดไปด้านหน้าอีก 1 ครั้ง → 1.032 × 10<sup>3</sup>', 'A = 10.32 → not below 10 (A ≥ 10) ✗ two digits before the point; hop the point forward once more → 1.032 × 10<sup>3</sup>')],
+  ['0.5 × 10<sup>−1</sup>', false, T('A = 0.5 → น้อยกว่า 1 (A &lt; 1) ✗ หน้าจุดเป็น 0 ต้องกระโดดจุดถอยหลัง 1 ครั้ง → 5 × 10<sup>−2</sup>', 'A = 0.5 → below 1 (A &lt; 1) ✗ the digit before the point is 0; hop the point backward once → 5 × 10<sup>−2</sup>')],
+  ['9.99 × 10<sup>5</sup>', true, T('A = 9.99 → 1 ≤ 9.99 &lt; 10 ✓ ใกล้ 10 แต่ยังไม่ถึง ใช้ได้', 'A = 9.99 → 1 ≤ 9.99 &lt; 10 ✓ close to 10 but not there yet, so it is fine.')],
+  ['1 × 10<sup>−10</sup>', true, T('A = 1 → 1 ≤ 1 &lt; 10 ✓ A เท่ากับ 1 ได้ (เพราะเป็น ≤) และ n ติดลบเท่าไรก็ได้', 'A = 1 → 1 ≤ 1 &lt; 10 ✓ A may equal 1 (it is ≤), and n can be as negative as you like.')],
+  ['10 × 10<sup>3</sup>', false, T('A = 10 → A &lt; 10 ไม่รวม 10 ✗ กระโดดจุดไปด้านหน้า 1 ครั้ง → 1 × 10<sup>4</sup>', 'A = 10 → A &lt; 10 excludes 10 ✗ hop the point forward once → 1 × 10<sup>4</sup>')]
+];
+function initChecker(host) {
+  let cur = 0;
+  const paint = () => {
+    host.innerHTML = `<div class="chips"><span class="chips-label">${EN() ? 'Is it in scientific notation?' : 'ข้อไหนเป็นสัญกรณ์วิทยาศาสตร์?'}</span>${CHK.map((c, i) => `<button class="chip${i === cur ? ' active' : ''}" data-i="${i}"><span>${c[0]}</span></button>`).join('')}</div>
+      <div class="chk ${CHK[cur][1] ? 'ok' : 'no'}"><span class="chk-mark">${CHK[cur][1] ? '✓' : '✗'}</span><div><div class="chk-q">${CHK[cur][0]}</div><div>${tx(CHK[cur][2])}</div></div></div>`;
+    host.querySelectorAll('.chip').forEach(c => c.addEventListener('click', () => { cur = +c.dataset.i; paint(); }));
+  };
+  paint();
+  return { langRefresh: paint, fit() {} };
+}
+
+// ═══════════════════════ แท็บ 2/3 · รายการโจทย์ ═══════════════════════
+const N2S_LIST = ['1032', '64310', '45008000', '589030000', '12345670000', '0.00200', '0.0032', '0.8673', '0.000009002', '0.0000000001'];
+const S2N_LIST = [['1.0320', 4], ['2.729', 5], ['3.09', 3], ['2.235', 5], ['6.75', 6], ['3.875', 1], ['3.23', -3], ['7.29', -3], ['1.89', -7], ['4.27', -8], ['6.134', -1]];
+const PROB_LABEL = T('โจทย์', 'Problem');
+
+// ═══════════════════════ แท็บ 4 · จัดรูปให้มาตรฐาน ═══════════════════════
+const FIX = [['29.6', 6], ['567', -4], ['32.9', 4], ['369.7', -9], ['402.859', 3], ['0.067', -8], ['0.076', 4], ['0.0008591', -2], ['0.001234', 6], ['0.0001', -3]];
+const sup10 = v => `10<sup>${mn(String(v))}</sup>`;
+const sumExp = (s, n) => `${mn(String(s))}+${n < 0 ? '(' + mn(String(n)) + ')' : n}`;
+function fixRows(i) {
+  const a = FIX[i][0], n = FIX[i][1], pr = mkNum(a), s = pr.n, tot = s + n, A = pr.numText, B = pr.A4;
+  const left = `${A} × ${sup10(n)}`, dirTH = s > 0 ? 'ไปด้านหน้า' : 'ถอยหลัง', dirEN = s > 0 ? 'forward' : 'backward', k = Math.abs(s);
+  return [
+    { q: true, html: left, note: T(`A = ${A} ยังไม่อยู่ในช่วง 1 ≤ A &lt; 10 → ยังไม่ใช่สัญกรณ์วิทยาศาสตร์ (รูปยังไม่มาตรฐาน)`, `A = ${A} is not in 1 ≤ A &lt; 10 → not scientific notation yet (non-standard form).`) },
+    { html: `${A} = ${B} × ${sup10(s)}`, tags: [T(`จัด A ด้วยจุดกระโดด: ${dirTH} ${k} ครั้ง → ${sgn(s)}`, `Fix A with the hopping point: ${dirEN} ${k} ${k > 1 ? 'hops' : 'hop'} → ${sgn(s)}`)] },
+    { html: `${left} = ${hl(1, `${B} × ${sup10(s)}`)} × ${sup10(n)}`, tags: [T('แทน A ด้วยรูปที่จัดแล้ว', 'Replace A with the fixed form')] },
+    { props: [1], html: `${left} = ${B} × 10<sup>${sumExp(s, n)}</sup> = ${ans(`${B} × ${sup10(tot)}`)}`,
+      note: T(`คูณฐาน 10 เหมือนกัน → บวกเลขชี้กำลัง ${sgn(s)} + ${n < 0 ? '(' + mn(String(n)) + ')' : n} = ${mn(String(tot))} — A ${s > 0 ? 'เล็กลง' : 'ใหญ่ขึ้น'} ${k} หลัก เลขชี้กำลังจึง${s > 0 ? 'เพิ่ม' : 'ลด'} ${k} ชดเชย ค่าจริงไม่เปลี่ยน`,
+        `Same base 10 → add the exponents ${sgn(s)} + ${n < 0 ? '(' + mn(String(n)) + ')' : n} = ${mn(String(tot))} — A got ${k} place${k > 1 ? 's' : ''} ${s > 0 ? 'smaller' : 'bigger'}, so the exponent ${s > 0 ? 'rises' : 'falls'} by ${k} to compensate; the value is unchanged.`) }
+  ];
+}
+let fixId = 0;
+
+// ═══════════════════════ แท็บ 5 · เครื่องมือลองเอง ═══════════════════════
+function initTool(host) {
+  const st = { mode: 'n2s', msg: null };
+  host.innerHTML = `
+    <div class="chips"><span class="chips-label">${d('โหมด', 'Mode')}</span>
+      <button class="chip active" data-m="n2s">${d('ตัวเลข → สัญกรณ์', 'Number → Notation')}</button>
+      <button class="chip" data-m="s2n">${d('สัญกรณ์ → ตัวเลข', 'Notation → Number')}</button></div>
+    <div class="tool-row" data-for="n2s"><input class="tool-inp" id="inNum" type="text" inputmode="decimal" autocomplete="off" spellcheck="false"><button class="btn tool-go">${d('แปลง ▶', 'Convert ▶')}</button></div>
+    <div class="tool-row" data-for="s2n" style="display:none"><input class="tool-inp mid" id="inA" type="text" inputmode="decimal" autocomplete="off" spellcheck="false"><span class="tool-x">× 10</span><span class="tool-sup"><input class="tool-inp small" id="inN" type="text" inputmode="numeric" autocomplete="off" spellcheck="false"></span><button class="btn tool-go">${d('แปลง ▶', 'Convert ▶')}</button></div>
+    <div class="tool-msg" style="display:none"></div>
+    <div class="tool-hop" style="display:none"></div>`;
+  const q = s => host.querySelector(s), inNum = q('#inNum'), inA = q('#inA'), inN = q('#inN'), msgBox = q('.tool-msg');
+  const hopHost = q('.tool-hop');
+  const hop = makeHop(hopHost, {});
+  const showMsg = (kind, obj, extra) => { st.msg = kind ? { kind, obj, extra } : null; paintMsg(); };
+  const paintMsg = () => {
+    if (!st.msg) { msgBox.style.display = 'none'; msgBox.innerHTML = ''; return; }
+    msgBox.style.display = ''; msgBox.className = 'tool-msg ' + st.msg.kind;
+    msgBox.innerHTML = (st.msg.kind === 'err' ? '⚠️ ' : '💡 ') + tx(st.msg.obj) +
+      (st.msg.extra ? ` <button class="btn ghost" style="padding:4px 14px;font-size:.88rem;margin-left:6px">${EN() ? 'Go to Standard Form ▶' : 'ไปแท็บจัดรูป ▶'}</button>` : '');
+    const b = msgBox.querySelector('button'); if (b) b.addEventListener('click', () => showTab('fix', document.querySelectorAll('.tab-btn')[3]));
+  };
+  const convert = () => {
+    let pr;
+    if (st.mode === 'n2s') pr = mkNum(inNum.value); else pr = mkSci(inA.value, inN.value);
+    if (pr.err) { showMsg('err', ERR[pr.err]); return; }
+    if (st.mode === 's2n' && !pr.std) showMsg('warn', T(`A = ${pr.aText} ยังไม่มาตรฐาน (ต้อง 1 ≤ A &lt; 10) — ไปดูแท็บจัดรูป แต่สื่อยังแปลงให้ได้ โดยกระโดดจากตำแหน่งจุดจริงของ A`, `A = ${pr.aText} is not standard yet (it needs 1 ≤ A &lt; 10) — see the Standard Form tab. The converter still works, hopping from A's real point.`), true);
+    else showMsg(null);
+    hopHost.style.display = '';
+    hop.setProblem(pr); hop.fit();
+  };
+  host.querySelectorAll('.tool-go').forEach(b => b.addEventListener('click', convert));
+  [inNum, inA, inN].forEach(i => i.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); convert(); } }));
+  host.querySelectorAll('[data-m]').forEach(c => c.addEventListener('click', () => {
+    st.mode = c.dataset.m;
+    host.querySelectorAll('[data-m]').forEach(x => x.classList.toggle('active', x === c));
+    host.querySelectorAll('.tool-row').forEach(r => { r.style.display = r.dataset.for === st.mode ? '' : 'none'; });
+    hopHost.style.display = 'none'; hop.pr = null; showMsg(null);
+  }));
+  const ph = () => {
+    inNum.placeholder = (EN() ? 'e.g. ' : 'เช่น ') + '0.000009002';
+    inA.placeholder = (EN() ? 'e.g. ' : 'เช่น ') + '1.89'; inN.placeholder = '−7';
+  };
+  ph();
+  return { langRefresh() { ph(); paintMsg(); }, fit() {} };
+}
+
+// ═══════════════════════ สร้างหน้าทั้งหมด ═══════════════════════
+const goTab = (id, i, label) => `<button class="btn ghost" style="padding:6px 18px;font-size:.92rem" onclick="showTab('${id}', document.querySelectorAll('.tab-btn')[${i}])">${label}</button>`;
+
+function buildTabs() {
+  document.getElementById('tab-form').innerHTML =
+    card('🔬', d('สัญกรณ์วิทยาศาสตร์คืออะไร', 'What is scientific notation?'),
+      `<p class="intro">${d('ตัวเลขที่ยาวมากหรือเล็กมาก เขียนให้สั้นลงในรูป <b>A × 10<sup>n</sup></b> — ไม่ต้องนับศูนย์ทีละตัว', 'A very long or very tiny number can be shortened to <b>A × 10<sup>n</sup></b> — no more counting zeros one by one.')}</p>
+       <div class="formula"><span>A × 10<sup>n</sup></span><span>1 ≤ A &lt; 10</span></div>
+       <div class="plegend">
+         <div><span class="pbadge" style="--pc:#2563EB">A</span><span>${d('<b>ตัวเลขหน้า</b> — หน้าจุดมีหลักเดียว และไม่ใช่ 0', 'the <b>front number</b> — exactly one digit before the point, and it is not 0')}</span></div>
+         <div><span class="pbadge" style="--pc:#D97706">n</span><span>${d('<b>จำนวนครั้งที่จุดกระโดด</b> (ไปด้านหน้า = + ถอยหลัง = −)', 'the <b>number of hops</b> of the point (forward = +, backward = −)')}</span></div>
+       </div>
+       <div class="box-warn">${d('ถ้า A ไม่อยู่ในช่วง 1 ≤ A &lt; 10 (เช่น 29.6 × 10<sup>6</sup>) ยัง<b>ไม่ใช่</b>สัญกรณ์วิทยาศาสตร์ — ต้องจัดรูปก่อน (แท็บ 🔧)', 'If A is outside 1 ≤ A &lt; 10 (e.g. 29.6 × 10<sup>6</sup>) it is <b>not</b> scientific notation yet — it must be fixed first (the 🔧 tab).')}</div>`) +
+    card('✅', d('ตัวตรวจ A — กดดูทีละตัว', 'The A checker — tap each one'), '<div id="w-chk"></div>') +
+    card('🔗', d('เชื่อมกับเลขยกกำลัง', 'The link to exponents'),
+      `<div class="box-info" style="font-size:1.15rem;font-weight:700">
+         <div>${P(10, 3)} = 10 × 10 × 10 = 1000 &nbsp;<span class="l-mut">${d('(1 ตามด้วย 0 สามตัว)', '(1 followed by three 0s)')}</span></div>
+         <div>${P(10, '−3')} = ${frac(1, P(10, 3))} = ${frac(1, 1000)} = 0.001 &nbsp;${pb(6)}</div>
+       </div>
+       <div class="box-ok">${d('<b>× 10 หนึ่งครั้ง = จุดทศนิยมกระโดดไปทางขวา 1 หลัก</b> เช่น 1.032 × 10 = 10.32 แล้ว × 10 อีกครั้ง = 103.2 … × 10<sup>3</sup> = กระโดดขวา 3 ครั้ง = 1032 — จึง<b>นับการกระโดดแทนการคูณ</b>ได้', '<b>Multiplying by 10 once = the decimal point hops one place to the right</b>: 1.032 × 10 = 10.32, × 10 again = 103.2 … × 10<sup>3</sup> = three hops right = 1032 — so we can <b>count hops instead of multiplying</b>.')}</div>
+       <div style="text-align:center;margin-top:8px">${goTab('n2s', 1, d('ไปดูจุดกระโดด ▶', 'See the hopping point ▶'))}</div>`);
+
+  document.getElementById('tab-n2s').innerHTML =
+    card('➡️', d('ตัวเลข → สัญกรณ์ : จุดกระโดด', 'Number → notation: the hopping point'),
+      `<p class="intro">${d('เลือกโจทย์แล้วกด ถัดไป ▶ ทีละขั้น — จุดแดงจะ<b>กระโดดไปอยู่หลังตัวเลขตัวแรกที่ไม่ใช่ 0</b> แล้วนับจำนวนครั้ง', 'Pick a problem and press Next ▶ — the red point <b>hops to just after the first non-zero digit</b>, and we count the hops.')}</p><div id="w-n2s"></div>
+       <div class="box-info" style="margin-top:14px"><div class="formula" style="margin-top:0"><span>${d('ไปด้านหน้า = +', 'forward = +')}</span><span>${d('ถอยหลัง = −', 'backward = −')}</span></div>
+       ${d('จุดกระโดดไปทางซ้าย (<b>ไปด้านหน้า</b>ของตัวเลข) นับเป็นบวก · ไปทางขวา (<b>ถอยหลัง</b>) นับเป็นลบ · จำนวนครั้งที่กระโดด = n', 'The point hopping left (<b>forward</b>, toward the front of the number) counts as positive · hopping right (<b>backward</b>) counts as negative · the number of hops = n')}</div>`);
+
+  document.getElementById('tab-s2n').innerHTML =
+    card('⬅️', d('สัญกรณ์ → ตัวเลข : เล่นย้อนกลับ', 'Notation → number: play it backwards'),
+      `<p class="intro">${d('วิดเจ็ตเดิม แต่เริ่มจาก <b>A × 10<sup>n</sup></b> — <b>กลับเครื่องหมาย</b>ของ n ก่อน แล้วจุดกระโดดตามกฎเดิม (10<sup>4</sup> → −4 → ถอยหลัง 4 ครั้ง)', 'The same widget, but starting from <b>A × 10<sup>n</sup></b> — <b>flip the sign</b> of n first, then hop by the same rule (10<sup>4</sup> → −4 → backward 4 hops).')}</p><div id="w-s2n"></div>
+       <div class="box-warn"><b>${d('บอกเท่าไหร่ ใส่ 0 เท่านั้น', 'As many as it says, pad that many zeros — no more')}</b><br>${d('นับ<b>ครั้งที่กระโดด</b> — หลักที่มีอยู่ให้จุดกระโดดข้ามไปก่อน หลักหมดแล้วค่อยเติม 0 ทีละตัวต่อ 1 ครั้ง ไม่ใช่เติม 0 ตามเลขชี้กำลังตรงๆ', 'Count the <b>hops</b> — the point hops over the digits that exist first, and only when they run out do we pad one 0 per hop. Do not just write n zeros.')}
+       <div style="margin-top:6px;font-weight:700">${d('ตัวอย่างที่ผิดบ่อย:', 'A common mistake:')} 2.235 × 10<sup>5</sup> ≠ 2.23500000 &nbsp;${d('(เติม 0 ห้าตัว)', '(five zeros padded)')} &nbsp;→&nbsp; <span style="color:#047857">2.235 × 10<sup>5</sup> = 223,500</span></div>
+       <div style="font-size:.92rem;color:var(--muted);font-weight:600">${d('2235 มีหลักให้กระโดดผ่านอยู่แล้ว 3 ครั้ง เหลืออีก 2 ครั้งจึงเติม 0 แค่สองตัว', '2235 already gives the point 3 digits to hop over, so only the last 2 hops pad a 0 — two zeros.')}</div></div>`);
+
+  document.getElementById('tab-fix').innerHTML =
+    card('🔧', d('จัดรูปที่ยังไม่มาตรฐานให้เป็นสัญกรณ์วิทยาศาสตร์', 'Turning non-standard forms into scientific notation'),
+      `<p class="intro">${d('เมื่อ A ไม่อยู่ในช่วง 1 ≤ A &lt; 10 ให้จัด A ด้วยจุดกระโดด แล้วรวมเลขชี้กำลังด้วยสมบัติ ① — เลือกข้อแล้วกด ถัดไป ▶', 'When A is outside 1 ≤ A &lt; 10, fix A with the hopping point, then combine the exponents with property ①. Pick a problem and press Next ▶.')}</p>
+       <div class="chips" id="fixChips"></div><div id="w-fix"></div>
+       <div class="box-warn">${d('<b>A ใหญ่ขึ้น → เลขชี้กำลังต้องลดลงชดเชย (และกลับกัน)</b> — ค่าจริงของตัวเลขไม่เปลี่ยน', '<b>When A gets bigger, the exponent must drop to compensate (and vice versa)</b> — the real value never changes.')}</div>`);
+
+  document.getElementById('tab-try').innerHTML =
+    card('🧮', d('ลองเอง — พิมพ์ตัวเลขของตัวเองแล้วดูจุดกระโดด', 'Try it yourself — type your own number and watch the point hop'),
+      `<p class="intro">${d('พิมพ์ตัวเลข (จำนวนบวก ไม่เกิน 15 หลัก) แล้วกด <b>แปลง ▶</b> หรือกด Enter — จะเล่นวิดเจ็ตจุดกระโดดตัวเดียวกับแท็บก่อนหน้า', 'Type a positive number (up to 15 digits) and press <b>Convert ▶</b> or Enter — it plays the same hopping-point widget as the earlier tabs.')}</p><div id="w-tool"></div>`);
+}
+
+function initAllWidgets() {
+  ALL.push(initChecker(document.getElementById('w-chk')));
+  makeHop(document.getElementById('w-n2s'), { chips: { label: PROB_LABEL, val: N2S_LIST[0], opts: N2S_LIST.map(s => [s, mkNum(s).numText]), make: mkNum } });
+  makeHop(document.getElementById('w-s2n'), {
+    chips: { label: PROB_LABEL, val: S2N_LIST[0].join('|'), opts: S2N_LIST.map(r => [r.join('|'), `${r[0]} × 10<sup>${mn(String(r[1]))}</sup>`]), make: key => { const p = key.split('|'); return mkSci(p[0], p[1]); } }
+  });
+  const fx = makeSteps(document.getElementById('w-fix'), () => fixRows(fixId));
+  const chips = document.getElementById('fixChips');
+  const paint = () => {
+    chips.innerHTML = `<span class="chips-label">${EN() ? 'Problem' : 'ข้อ'}</span>` + FIX.map((r, i) => `<button class="chip${i === fixId ? ' active' : ''}" data-i="${i}"><span>${mkNum(r[0]).numText} × 10<sup>${mn(String(r[1]))}</sup></span></button>`).join('');
+    chips.querySelectorAll('.chip').forEach(c => c.addEventListener('click', () => { fixId = +c.dataset.i; fx.reset(); paint(); }));
+  };
+  paint();
+  ALL.push({ langRefresh: paint, fit() {} });
+  ALL.push(initTool(document.getElementById('w-tool')));
+}
+
+window.addEventListener('load', () => {
+  buildTabs();
+  initAllWidgets();
+  applyLang(getLang());
+});
+</script>
+</body>
+</html>

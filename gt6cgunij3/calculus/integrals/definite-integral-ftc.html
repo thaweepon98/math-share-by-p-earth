@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>สื่อการสอน : ปริพันธ์จำกัดเขตและทฤษฎีบทหลักมูล (Definite Integrals &amp; FTC)</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800&display=swap');
+  :root { --primary:#1C3B22; --secondary:#FF8A3D; --accent:#68EF3F; --warning:#FFB347; --bg:#F3F7EC; --card:#FFFFFF; --text:#2D3748; --muted:#718096; --border:#E2E8F0; --shadow:0 4px 24px rgba(28,59,34,0.10); --radius:16px; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Sarabun', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+  header { background: linear-gradient(135deg, #1C3B22 0%, #2E5936 100%); color: white; padding: 16px 40px 12px; text-align: center; position: relative; overflow: hidden; }
+  header::before { content:''; position:absolute; top:-60px; right:-60px; width:200px; height:200px; background:rgba(255,255,255,0.07); border-radius:50%; }
+  header h1 { font-size: 1.5rem; font-weight: 800; letter-spacing: 1px; }
+  header p { font-size: .88rem; opacity: .85; margin-top: 2px; }
+  .back-link { position: absolute; top: 12px; left: 20px; color: white; text-decoration: none; font-size: .85rem; font-weight: 600; opacity: .9; z-index: 2; }
+  .back-link:hover { opacity: 1; text-decoration: underline; }
+  .lang-toggle { position: absolute; top: 12px; right: 20px; background: rgba(255,255,255,.15); color: white; border: 1.5px solid rgba(255,255,255,.5); border-radius: 20px; padding: 5px 14px; font-family:'Sarabun',sans-serif; font-size: .8rem; font-weight: 700; cursor: pointer; z-index: 2; }
+  .lang-toggle:hover { background: rgba(255,255,255,.28); }
+  nav { display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; padding: 10px 24px 0; background: white; border-bottom: 3px solid var(--border); }
+  .tab-btn { padding: 10px 20px; border: none; background: transparent; border-radius: 10px 10px 0 0; font-family:'Sarabun',sans-serif; font-size: .92rem; font-weight: 600; color: var(--muted); cursor: pointer; transition: all .25s; border-bottom: 3px solid transparent; margin-bottom: -3px; }
+  .tab-btn:hover { color: var(--primary); background: #E3F3D8; }
+  .tab-btn.active { color: var(--primary); border-bottom-color: var(--primary); background: #E3F3D8; }
+  main { max-width: 1100px; margin: 0 auto; padding: 14px 20px 40px; }
+  .tab-panel { display: none; animation: fadeIn .35s ease; }
+  .tab-panel.active { display: block; }
+  @keyframes fadeIn { from{opacity:0;transform:translateY(10px);} to{opacity:1;transform:translateY(0);} }
+  .card { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); padding: 18px 22px; margin-bottom: 14px; }
+  .card-title { font-size: 1.1rem; font-weight: 700; color: var(--primary); margin-bottom: 12px; display: flex; align-items: center; gap: 10px; }
+  .card-title .icon { font-size: 1.4rem; }
+  .desc-text { font-size: .98rem; line-height: 1.7; color: var(--text); margin-top: 2px; }
+  .box-info { background: #EEF7E6; border-left: 4px solid var(--primary); border-radius: 10px; padding: 14px 18px; margin: 14px 0; font-size: .92rem; line-height: 1.7; color: var(--text); }
+  .box-info b { color: var(--primary); }
+  .formula { background: linear-gradient(135deg,#1C3B22,#2E5936); color: white; border-radius: 12px; padding: 16px 24px; text-align: center; font-size: 1.15rem; font-weight: 700; margin: 16px 0; letter-spacing: .5px; }
+  .formula.small { font-size: 1rem; padding: 12px 18px; }
+  .plot-wrap { background: var(--bg); border: 1px dashed var(--border); border-radius: 12px; padding: .7rem; margin-top: .8rem; }
+  .plot-wrap svg { display: block; width: 100%; height: auto; }
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  @media (max-width: 700px) { .two-col { grid-template-columns: 1fr; } }
+  .grid-line { stroke: var(--border); stroke-width: 1; }
+  .axis-line { stroke: var(--muted); stroke-width: 1.5; }
+  .axis-arrow { fill: var(--muted); }
+  .axis-letter { font-size: 11px; fill: var(--text); font-weight: 700; }
+  .tick-label { font-size: 9.5px; fill: var(--muted); }
+  .curve-base { fill: none; stroke: var(--primary); stroke-width: 2.6; stroke-linecap: round; }
+  .curve-hi { fill: none; stroke: var(--secondary); stroke-width: 2.4; stroke-linecap: round; }
+  .x0-input { width: 4.6em; padding: 5px 7px; border: 1.5px solid var(--border); border-radius: 8px; font-family: 'Sarabun', sans-serif; font-size: .92rem; font-weight: 700; color: var(--primary); text-align: center; }
+  .x0-input:focus { outline: none; border-color: var(--primary); }
+  .frac { display: inline-flex; flex-direction: column; align-items: center; justify-content: center; vertical-align: middle; margin: 0 .25em; font-size: .9em; line-height: 1.35; }
+  .frac .num, .frac .den { padding: 0 .25em; white-space: nowrap; }
+  .frac .num { border-bottom: 1.6px solid currentColor; padding-bottom: .1em; }
+  .frac .den { padding-top: .1em; }
+  .rect-bar { fill: rgba(67,217,173,.35); stroke: var(--accent); stroke-width: 1; }
+  .area-fill { fill: rgba(28,59,34,.16); stroke: none; }
+  .pt { stroke-width: 2.4; }
+  .pt-fillA { fill: var(--accent); stroke: #fff; }
+  .pt-fillP { fill: var(--primary); stroke: #fff; }
+  .plot-caption { font-size: .78rem; fill: var(--text); font-weight: 600; }
+  .round-limit { display: flex; align-items: center; gap: .7rem; }
+  .round-limit input[type="range"] { -webkit-appearance:none; appearance:none; width:12rem; height:5px; border-radius:3px; background: var(--border); outline:none; cursor:pointer; }
+  .round-limit input[type="range"]::-webkit-slider-thumb { -webkit-appearance:none; width:17px; height:17px; border-radius:50%; background: var(--primary); border:2px solid #fff; box-shadow:0 0 0 1px var(--primary); }
+  .round-limit input[type="range"]::-moz-range-thumb { width:15px; height:15px; border-radius:50%; border:2px solid #fff; background: var(--primary); box-shadow:0 0 0 1px var(--primary); }
+  .round-limit .val { font-weight: 700; color: var(--primary); min-width: 3em; text-align: right; }
+  .btn { font-family:'Sarabun',sans-serif; border:none; cursor:pointer; border-radius:999px; width:2.5rem; height:2.5rem; display:inline-flex; align-items:center; justify-content:center; background:var(--card); color:var(--text); border:1px solid var(--border); }
+  .btn-play { background: var(--primary); color:#fff; border-color: var(--primary); }
+  .formula-live { font-size: 1rem; line-height: 2; color: var(--text); margin-top: .8rem; }
+  .formula-live .hl { background:#FFE3E9; color: var(--secondary); padding:.05em .4em; border-radius:6px; font-weight:800; }
+  .formula-live .hlA { background:#E1F8EF; color:#12805F; padding:.05em .4em; border-radius:6px; font-weight:800; }
+  .example-box { background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 14px 18px; margin-top: 10px; }
+  .example-box .step { font-size: .96rem; line-height: 2; }
+  .example-box .step b { color: var(--primary); }
+  .ex-q { font-size: .95rem; font-weight: 700; color: var(--primary); margin-top: 14px; }
+  .ex-q:first-of-type { margin-top: 0; }
+
+  /* ── สองคอลัมน์พิสูจน์ทฤษฎีบทหลักมูล ── */
+  .proof-col { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 16px 18px; }
+  .proof-col.part1 { border-top: 5px solid var(--secondary); }
+  .proof-col.part2 { border-top: 5px solid var(--primary); }
+  .proof-head { font-size: 1rem; font-weight: 800; color: var(--primary); margin-bottom: 4px; }
+  .proof-claim { font-size: .92rem; color: var(--muted); line-height: 1.7; margin-bottom: 10px; }
+  .proof-line { font-size: .95rem; line-height: 2.05; padding: 3px 0; border-bottom: 1px dashed rgba(0,0,0,.05); }
+  .proof-line:last-of-type { border-bottom: none; }
+  .proof-line .no { display: inline-block; min-width: 1.5em; color: var(--muted); font-weight: 700; }
+  .proof-line b { color: var(--primary); }
+  .proof-line .why { color: var(--muted); font-size: .84rem; }
+  .qed { text-align: right; font-weight: 800; color: var(--primary); font-size: 1.05rem; margin-top: 6px; }
+  .proof-src { font-size: .78rem; color: var(--muted); margin-top: 10px; font-style: italic; }
+  .bridge { background: #FFF4E8; border-left: 4px solid var(--secondary); border-radius: 10px; padding: 14px 18px; margin-top: 14px; font-size: .93rem; line-height: 1.85; }
+  .bridge b { color: #C05621; }
+
+  /* ── รูปอธิบายในพิสูจน์ ── */
+  .proof-fig { background: var(--bg); border: 1px dashed var(--border); border-radius: 10px; padding: 10px 10px 8px; margin: 10px 0 12px; }
+  .proof-fig svg { display: block; width: 100%; height: auto; }
+  .proof-fig .cap { font-size: .8rem; color: var(--muted); line-height: 1.65; margin-top: 6px; }
+  .proof-fig .cap b { color: var(--primary); }
+  .fig-controls { display: flex; align-items: center; gap: .6rem; flex-wrap: wrap; margin-top: 8px; }
+  .fig-controls .lbl { font-size: .86rem; font-weight: 700; color: var(--primary); }
+  .fig-controls input[type="range"] { -webkit-appearance: none; appearance: none; flex: 1 1 8rem; height: 5px; border-radius: 3px; background: var(--border); outline: none; cursor: pointer; }
+  .fig-controls input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 16px; height: 16px; border-radius: 50%; background: var(--primary); border: 2px solid #fff; box-shadow: 0 0 0 1px var(--primary); }
+  .fig-controls input[type="range"]::-moz-range-thumb { width: 14px; height: 14px; border-radius: 50%; border: 2px solid #fff; background: var(--primary); box-shadow: 0 0 0 1px var(--primary); }
+  .squeeze { margin-top: 8px; font-size: .86rem; line-height: 1.9; text-align: center; }
+  .squeeze .m { color: #2F855A; font-weight: 800; }
+  .squeeze .q { background: #E3F3D8; color: var(--primary); font-weight: 800; padding: .05em .45em; border-radius: 6px; }
+  .squeeze .M { color: #C05621; font-weight: 800; }
+  .squeeze .gap { display: block; color: var(--muted); font-size: .82rem; }
+  .squeeze .case { display: block; margin-top: 4px; font-size: .82rem; font-weight: 700; color: #C05621; }
+  .squeeze .case.ends { color: #2F855A; }
+
+  .fig-axis { stroke: var(--muted); stroke-width: 1.2; }
+  .fig-curve { fill: none; stroke: var(--primary); stroke-width: 2.2; stroke-linecap: round; }
+  .fig-area { fill: rgba(28,59,34,.16); stroke: none; }
+  .fig-strip { fill: rgba(255,138,61,.38); stroke: none; }
+  .fig-drop { stroke: var(--muted); stroke-width: 1; stroke-dasharray: 3 3; opacity: .8; }
+  .fig-rect-m { fill: none; stroke: #2F855A; stroke-width: 1.5; stroke-dasharray: 5 3; }
+  .fig-rect-M { fill: none; stroke: #C05621; stroke-width: 1.5; stroke-dasharray: 5 3; }
+  .fig-rect-f { fill: none; stroke: var(--secondary); stroke-width: 1.5; stroke-dasharray: 5 3; }
+  .fig-t { font-size: 10.5px; fill: var(--text); font-weight: 700; }
+  .fig-t.dim { fill: var(--muted); font-weight: 600; }
+  .fig-t.gm { fill: #2F855A; }
+  .fig-t.gM { fill: #C05621; }
+  .fig-dot-m { fill: #2F855A; stroke: #fff; stroke-width: 1.6; }
+  .fig-dot-M { fill: #C05621; stroke: #fff; stroke-width: 1.6; }
+
+  @media (max-width: 600px) { header h1 { font-size: 1.2rem; } .card { padding: 16px 14px; } .tab-btn { font-size: .82rem; padding: 8px 12px; } }
+</style>
+</head>
+<body>
+
+<header>
+  <a href="./index.html" class="back-link" data-th="← กลับหน้าปริพันธ์" data-en="← Back to Integrals">← กลับหน้าปริพันธ์</a>
+  <button id="langToggle" class="lang-toggle" onclick="toggleLang()">EN</button>
+  <h1 data-th="▦ ปริพันธ์จำกัดเขตและทฤษฎีบทหลักมูล" data-en="▦ Definite Integrals & the FTC">▦ ปริพันธ์จำกัดเขตและทฤษฎีบทหลักมูล</h1>
+  <p data-th="ผลรวมรีมันน์ • ทฤษฎีบทหลักมูลของแคลคูลัส • การประมาณค่าเชิงตัวเลข" data-en="Riemann sums • The Fundamental Theorem of Calculus • Numerical integration">ผลรวมรีมันน์ • ทฤษฎีบทหลักมูลของแคลคูลัส • การประมาณค่าเชิงตัวเลข</p>
+</header>
+
+<nav>
+  <button class="tab-btn active" data-tab="riemann" onclick="showTab('riemann', this)" data-th="▦ ผลรวมรีมันน์" data-en="▦ Riemann Sums">▦ ผลรวมรีมันน์</button>
+  <button class="tab-btn" data-tab="ftc" onclick="showTab('ftc', this)" data-th="🔗 ทฤษฎีบทหลักมูล" data-en="🔗 Fundamental Theorem">🔗 ทฤษฎีบทหลักมูล</button>
+  <button class="tab-btn" data-tab="proof" onclick="showTab('proof', this)" data-th="📜 พิสูจน์ทฤษฎีบท" data-en="📜 The Proofs">📜 พิสูจน์ทฤษฎีบท</button>
+</nav>
+
+<main>
+
+<section id="tab-riemann" class="tab-panel active">
+  <div class="card">
+    <div class="card-title"><span class="icon">▦</span><span data-th="ผลรวมรีมันน์: พื้นที่จากแท่งสี่เหลี่ยมย่อย" data-en="Riemann Sums: Area from Tiny Rectangles">ผลรวมรีมันน์: พื้นที่จากแท่งสี่เหลี่ยมย่อย</span></div>
+    <p class="desc-text" data-th="แบ่ง [a,b] เป็น n ช่องเท่าๆ กัน สร้างแท่งสี่เหลี่ยมสูง f(xᵢ) แล้วรวมพื้นที่ทั้งหมด — เมื่อ n → ∞ ผลรวมนี้เข้าใกล้พื้นที่จริงใต้กราฟ นิยามว่าเป็นปริพันธ์จำกัดเขต" data-en="Divide [a,b] into n equal pieces, build rectangles of height f(xᵢ), and sum their areas — as n → ∞, this sum approaches the true area under the curve, defined as the definite integral.">แบ่ง [a,b] เป็น n ช่องเท่าๆ กัน สร้างแท่งสี่เหลี่ยมสูง f(xᵢ) แล้วรวมพื้นที่ทั้งหมด — เมื่อ n → ∞ ผลรวมนี้เข้าใกล้พื้นที่จริงใต้กราฟ นิยามว่าเป็นปริพันธ์จำกัดเขต</p>
+    <div class="formula small">∫<sub>a</sub><sup>b</sup> f(x) dx &nbsp;=&nbsp; lim<sub>n→∞</sub> Σ f(xᵢ)·Δx</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="icon">🎚️</span><span data-th="เพิ่ม n ดูแท่งสี่เหลี่ยมแคบลงจนเข้าใกล้พื้นที่จริง — f(x) = x²+1 บน [0,1]" data-en="Increase n and watch the rectangles narrow toward the true area — f(x) = x²+1 on [0,1]">เพิ่ม n ดูแท่งสี่เหลี่ยมแคบลงจนเข้าใกล้พื้นที่จริง — f(x) = x²+1 บน [0,1]</span></div>
+    <div class="plot-wrap"><svg id="plotRiemann" viewBox="0 0 460 300" xmlns="http://www.w3.org/2000/svg"></svg></div>
+    <div class="sim-controls" style="margin-top:1rem;">
+      <div class="round-limit">
+        <span class="mode-label">n</span>
+        <input type="range" id="nSlider" min="2" max="80" step="1" value="6">
+        <input type="number" class="x0-input" id="nNumInput" min="2" max="80" step="1" value="6">
+      </div>
+      <button class="btn btn-play" id="riemannPlay" data-th-title="เล่นอัตโนมัติ" data-en-title="Play" aria-label="Play">
+        <svg id="riemannPlayIcon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+      </button>
+    </div>
+    <div class="formula-live" id="riemannFormula"></div>
+  </div>
+</section>
+
+<section id="tab-ftc" class="tab-panel">
+  <div class="card">
+    <div class="card-title"><span class="icon">🔗</span><span data-th="ทฤษฎีบทหลักมูลของแคลคูลัส" data-en="The Fundamental Theorem of Calculus">ทฤษฎีบทหลักมูลของแคลคูลัส</span></div>
+    <p class="desc-text" data-th="ภาค 1: ถ้า F(x) = ∫ₐˣ f(t)dt แล้ว F′(x) = f(x) — การหาอนุพันธ์และหาปริพันธ์เป็นการดำเนินการที่ 'ย้อนกลับ' กัน &nbsp;•&nbsp; ภาค 2: ∫ₐᵇ f(x)dx = F(b) − F(a) เมื่อ F เป็นปฏิยานุพันธ์ใดๆ ของ f" data-en="Part 1: If F(x) = ∫ₐˣ f(t)dt then F′(x) = f(x) — differentiation and integration are inverse operations &nbsp;•&nbsp; Part 2: ∫ₐᵇ f(x)dx = F(b) − F(a) for any antiderivative F of f.">ภาค 1: ถ้า F(x) = ∫ₐˣ f(t)dt แล้ว F′(x) = f(x) — การหาอนุพันธ์และหาปริพันธ์เป็นการดำเนินการที่ "ย้อนกลับ" กัน &nbsp;•&nbsp; ภาค 2: ∫ₐᵇ f(x)dx = F(b) − F(a) เมื่อ F เป็นปฏิยานุพันธ์ใดๆ ของ f</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="icon">🖱️</span><span data-th="ลาก x ดู F(x) = ∫₀ˣ t dt สะสมพื้นที่ (F′(x) = f(x) เสมอ)" data-en="Drag x to see F(x) = ∫₀ˣ t dt accumulate area (F′(x) = f(x) always)">ลาก x ดู F(x) = ∫₀ˣ t dt สะสมพื้นที่ (F′(x) = f(x) เสมอ)</span></div>
+    <div class="two-col">
+      <div>
+        <div class="plot-wrap"><svg id="plotAccumF" viewBox="0 0 220 220" xmlns="http://www.w3.org/2000/svg"></svg></div>
+        <div class="fn-tag" style="text-align:center;margin-top:.4rem;font-size:.85rem;color:var(--muted);">f(t) = t</div>
+      </div>
+      <div>
+        <div class="plot-wrap"><svg id="plotAccumBig" viewBox="0 0 220 220" xmlns="http://www.w3.org/2000/svg"></svg></div>
+        <div class="fn-tag" style="text-align:center;margin-top:.4rem;font-size:.85rem;color:var(--muted);">F(x) = <span class='frac'><span class='num'>x²</span><span class='den'>2</span></span></div>
+      </div>
+    </div>
+    <div class="sim-controls" style="margin-top:1rem;">
+      <div class="round-limit">
+        <span class="mode-label">x</span>
+        <input type="range" id="accumSlider" min="0" max="400" step="1" value="200">
+        <input type="number" class="x0-input" id="accumNumInput" min="0" max="4" step="0.01" value="2">
+      </div>
+    </div>
+    <div class="formula-live" id="accumFormula"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="icon">🧮</span><span data-th="ตัวอย่างการคำนวณ — ภาค 1 (ดิฟตัดอินทิเกรต)" data-en="Worked Examples — Part 1 (differentiating an integral)">ตัวอย่างการคำนวณ — ภาค 1 (ดิฟตัดอินทิเกรต)</span></div>
+
+    <p class="ex-q" data-th="ตัวอย่าง (ก) &nbsp; หา F′(x) เมื่อ F(x) = ∫<sub>1</sub><sup>x</sup> (t² + 1) dt" data-en="Example (a) &nbsp; Find F′(x) when F(x) = ∫<sub>1</sub><sup>x</sup> (t² + 1) dt">ตัวอย่าง (ก) &nbsp; หา F′(x) เมื่อ F(x) = ∫<sub>1</sub><sup>x</sup> (t² + 1) dt</p>
+    <div class="example-box">
+      <div class="step" data-th="① ภาค 1 บอกว่า <span class='frac'><span class='num'>d</span><span class='den'>dx</span></span> ∫<sub>a</sub><sup>x</sup> f(t) dt = f(x) — อนุพันธ์ “ตัด” ปริพันธ์ทิ้ง" data-en="① Part 1 says <span class='frac'><span class='num'>d</span><span class='den'>dx</span></span> ∫<sub>a</sub><sup>x</sup> f(t) dt = f(x) — the derivative “cancels” the integral">① ภาค 1 บอกว่า <span class="frac"><span class="num">d</span><span class="den">dx</span></span> ∫<sub>a</sub><sup>x</sup> f(t) dt = f(x) — อนุพันธ์ “ตัด” ปริพันธ์ทิ้ง</div>
+      <div class="step" data-th="② ในที่นี้ f(t) = t² + 1 และขอบล่าง a = 1 — ขอบล่างเป็นค่าคงที่ จึงไม่มีผลต่อคำตอบ" data-en="② Here f(t) = t² + 1 and the lower bound a = 1 — a constant bound does not affect the answer">② ในที่นี้ f(t) = t² + 1 และขอบล่าง a = 1 — ขอบล่างเป็นค่าคงที่ จึงไม่มีผลต่อคำตอบ</div>
+      <div class="step" data-th="③ แทน t ด้วย x ในตัวฟังก์ชันได้เลย ไม่ต้องหาปฏิยานุพันธ์ก่อน" data-en="③ Just replace t by x in the integrand — no antiderivative needed">③ แทน t ด้วย x ในตัวฟังก์ชันได้เลย ไม่ต้องหาปฏิยานุพันธ์ก่อน</div>
+      <div class="step" data-th="<b>④ ผลลัพธ์: F′(x) = x² + 1</b> &nbsp; <span class='why'>(ลองเช็ก: F(x) = <span class='frac'><span class='num'>x³</span><span class='den'>3</span></span> + x − <span class='frac'><span class='num'>4</span><span class='den'>3</span></span> ดิฟแล้วได้ x² + 1 จริง)</span>" data-en="<b>④ Result: F′(x) = x² + 1</b> &nbsp; <span class='why'>(check: F(x) = <span class='frac'><span class='num'>x³</span><span class='den'>3</span></span> + x − <span class='frac'><span class='num'>4</span><span class='den'>3</span></span>, and differentiating really does give x² + 1)</span>"><b>④ ผลลัพธ์: F′(x) = x² + 1</b> &nbsp; <span class="why">(ลองเช็ก: F(x) = <span class="frac"><span class="num">x³</span><span class="den">3</span></span> + x − <span class="frac"><span class="num">4</span><span class="den">3</span></span> ดิฟแล้วได้ x² + 1 จริง)</span></div>
+    </div>
+
+    <p class="ex-q" data-th="ตัวอย่าง (ข) &nbsp; ขอบบนเป็นฟังก์ชัน — หา F′(x) เมื่อ F(x) = ∫<sub>0</sub><sup>x²</sup> sin t dt" data-en="Example (b) &nbsp; A function as the upper bound — find F′(x) when F(x) = ∫<sub>0</sub><sup>x²</sup> sin t dt">ตัวอย่าง (ข) &nbsp; ขอบบนเป็นฟังก์ชัน — หา F′(x) เมื่อ F(x) = ∫<sub>0</sub><sup>x²</sup> sin t dt</p>
+    <div class="example-box">
+      <div class="step" data-th="① ขอบบนไม่ใช่ x เฉยๆ แต่เป็น g(x) = x² — ใช้ภาค 1 ตรงๆ ไม่ได้ ต้องพ่วงกฎลูกโซ่" data-en="① The upper bound is not plain x but g(x) = x² — Part 1 alone is not enough, the chain rule is needed too">① ขอบบนไม่ใช่ x เฉยๆ แต่เป็น g(x) = x² — ใช้ภาค 1 ตรงๆ ไม่ได้ ต้องพ่วงกฎลูกโซ่</div>
+      <div class="step" data-th="② ตั้ง H(u) = ∫<sub>0</sub><sup>u</sup> sin t dt จะได้ F(x) = H(g(x))" data-en="② Set H(u) = ∫<sub>0</sub><sup>u</sup> sin t dt, so that F(x) = H(g(x))">② ตั้ง H(u) = ∫<sub>0</sub><sup>u</sup> sin t dt จะได้ F(x) = H(g(x))</div>
+      <div class="step" data-th="③ จากภาค 1: H′(u) = sin u &nbsp;และ&nbsp; g′(x) = 2x" data-en="③ By Part 1: H′(u) = sin u &nbsp;and&nbsp; g′(x) = 2x">③ จากภาค 1: H′(u) = sin u &nbsp;และ&nbsp; g′(x) = 2x</div>
+      <div class="step" data-th="④ กฎลูกโซ่: F′(x) = H′(g(x))·g′(x) = sin(x²)·2x" data-en="④ Chain rule: F′(x) = H′(g(x))·g′(x) = sin(x²)·2x">④ กฎลูกโซ่: F′(x) = H′(g(x))·g′(x) = sin(x²)·2x</div>
+      <div class="step" data-th="<b>⑤ ผลลัพธ์: F′(x) = 2x·sin(x²)</b>" data-en="<b>⑤ Result: F′(x) = 2x·sin(x²)</b>"><b>⑤ ผลลัพธ์: F′(x) = 2x·sin(x²)</b></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="icon">🧮</span><span data-th="ตัวอย่างการคำนวณ — ภาค 2 (สูตรคำนวณ F(b) − F(a))" data-en="Worked Examples — Part 2 (the F(b) − F(a) formula)">ตัวอย่างการคำนวณ — ภาค 2 (สูตรคำนวณ F(b) − F(a))</span></div>
+
+    <p class="ex-q" data-th="ตัวอย่าง (ก) &nbsp; หา ∫<sub>1</sub><sup>3</sup> (x² + 1) dx" data-en="Example (a) &nbsp; Evaluate ∫<sub>1</sub><sup>3</sup> (x² + 1) dx">ตัวอย่าง (ก) &nbsp; หา ∫<sub>1</sub><sup>3</sup> (x² + 1) dx</p>
+    <div class="example-box">
+      <div class="step" data-th="① หาปฏิยานุพันธ์ F ของ f(x) = x² + 1 ก่อน: F(x) = <span class='frac'><span class='num'>x³</span><span class='den'>3</span></span> + x &nbsp; <span class='why'>(ไม่ต้องใส่ +C เพราะเดี๋ยวก็ตัดกันตอนลบ)</span>" data-en="① First find an antiderivative F of f(x) = x² + 1: F(x) = <span class='frac'><span class='num'>x³</span><span class='den'>3</span></span> + x &nbsp; <span class='why'>(no need for +C — it cancels in the subtraction)</span>">① หาปฏิยานุพันธ์ F ของ f(x) = x² + 1 ก่อน: F(x) = <span class="frac"><span class="num">x³</span><span class="den">3</span></span> + x &nbsp; <span class="why">(ไม่ต้องใส่ +C เพราะเดี๋ยวก็ตัดกันตอนลบ)</span></div>
+      <div class="step" data-th="② ภาค 2: ∫<sub>a</sub><sup>b</sup> f(x) dx = F(b) − F(a) — เขียนย่อเป็น [F(x)]<sub>a</sub><sup>b</sup>" data-en="② Part 2: ∫<sub>a</sub><sup>b</sup> f(x) dx = F(b) − F(a) — written [F(x)]<sub>a</sub><sup>b</sup>">② ภาค 2: ∫<sub>a</sub><sup>b</sup> f(x) dx = F(b) − F(a) — เขียนย่อเป็น [F(x)]<sub>a</sub><sup>b</sup></div>
+      <div class="step" data-th="③ F(3) = <span class='frac'><span class='num'>27</span><span class='den'>3</span></span> + 3 = 12 &nbsp;,&nbsp; F(1) = <span class='frac'><span class='num'>1</span><span class='den'>3</span></span> + 1 = <span class='frac'><span class='num'>4</span><span class='den'>3</span></span>" data-en="③ F(3) = <span class='frac'><span class='num'>27</span><span class='den'>3</span></span> + 3 = 12 &nbsp;,&nbsp; F(1) = <span class='frac'><span class='num'>1</span><span class='den'>3</span></span> + 1 = <span class='frac'><span class='num'>4</span><span class='den'>3</span></span>">③ F(3) = <span class="frac"><span class="num">27</span><span class="den">3</span></span> + 3 = 12 &nbsp;,&nbsp; F(1) = <span class="frac"><span class="num">1</span><span class="den">3</span></span> + 1 = <span class="frac"><span class="num">4</span><span class="den">3</span></span></div>
+      <div class="step" data-th="<b>④ ผลลัพธ์: ∫<sub>1</sub><sup>3</sup> (x² + 1) dx = 12 − <span class='frac'><span class='num'>4</span><span class='den'>3</span></span> = <span class='frac'><span class='num'>32</span><span class='den'>3</span></span></b>" data-en="<b>④ Result: ∫<sub>1</sub><sup>3</sup> (x² + 1) dx = 12 − <span class='frac'><span class='num'>4</span><span class='den'>3</span></span> = <span class='frac'><span class='num'>32</span><span class='den'>3</span></span></b>"><b>④ ผลลัพธ์: ∫<sub>1</sub><sup>3</sup> (x² + 1) dx = 12 − <span class="frac"><span class="num">4</span><span class="den">3</span></span> = <span class="frac"><span class="num">32</span><span class="den">3</span></span></b></div>
+    </div>
+
+    <p class="ex-q" data-th="ตัวอย่าง (ข) &nbsp; หา ∫<sub>0</sub><sup><span class='frac'><span class='num'>π</span><span class='den'>2</span></span></sup> cos x dx" data-en="Example (b) &nbsp; Evaluate ∫<sub>0</sub><sup><span class='frac'><span class='num'>π</span><span class='den'>2</span></span></sup> cos x dx">ตัวอย่าง (ข) &nbsp; หา ∫<sub>0</sub><sup><span class='frac'><span class='num'>π</span><span class='den'>2</span></span></sup> cos x dx</p>
+    <div class="example-box">
+      <div class="step" data-th="① ปฏิยานุพันธ์ของ cos x คือ sin x" data-en="① An antiderivative of cos x is sin x">① ปฏิยานุพันธ์ของ cos x คือ sin x</div>
+      <div class="step" data-th="② ∫<sub>0</sub><sup><span class='frac'><span class='num'>π</span><span class='den'>2</span></span></sup> cos x dx = [sin x]<sub>0</sub><sup><span class='frac'><span class='num'>π</span><span class='den'>2</span></span></sup>" data-en="② ∫<sub>0</sub><sup><span class='frac'><span class='num'>π</span><span class='den'>2</span></span></sup> cos x dx = [sin x]<sub>0</sub><sup><span class='frac'><span class='num'>π</span><span class='den'>2</span></span></sup>">② ∫<sub>0</sub><sup><span class='frac'><span class='num'>π</span><span class='den'>2</span></span></sup> cos x dx = [sin x]<sub>0</sub><sup><span class='frac'><span class='num'>π</span><span class='den'>2</span></span></sup></div>
+      <div class="step" data-th="③ = sin(<span class='frac'><span class='num'>π</span><span class='den'>2</span></span>) − sin(0) = 1 − 0" data-en="③ = sin(<span class='frac'><span class='num'>π</span><span class='den'>2</span></span>) − sin(0) = 1 − 0">③ = sin(<span class="frac"><span class="num">π</span><span class="den">2</span></span>) − sin(0) = 1 − 0</div>
+      <div class="step" data-th="<b>④ ผลลัพธ์: ∫<sub>0</sub><sup><span class='frac'><span class='num'>π</span><span class='den'>2</span></span></sup> cos x dx = 1</b>" data-en="<b>④ Result: ∫<sub>0</sub><sup><span class='frac'><span class='num'>π</span><span class='den'>2</span></span></sup> cos x dx = 1</b>"><b>④ ผลลัพธ์: ∫<sub>0</sub><sup><span class='frac'><span class='num'>π</span><span class='den'>2</span></span></sup> cos x dx = 1</b></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="icon">📏</span><span data-th="การประมาณค่าเชิงตัวเลข" data-en="Numerical Integration">การประมาณค่าเชิงตัวเลข</span></div>
+    <p class="desc-text" data-th="เมื่อหาปฏิยานุพันธ์ไม่ได้ ใช้สูตรประมาณค่าแทน:" data-en="When an antiderivative can't be found, approximate instead:">เมื่อหาปฏิยานุพันธ์ไม่ได้ ใช้สูตรประมาณค่าแทน:</p>
+    <div class="formula small">Trapezoidal: <span class="frac"><span class="num">Δx</span><span class="den">2</span></span> · [y₀+2y₁+⋯+2yₙ₋₁+yₙ]</div>
+    <div class="formula small">Simpson's: <span class="frac"><span class="num">Δx</span><span class="den">3</span></span> · [y₀+4y₁+2y₂+4y₃+⋯+yₙ]</div>
+  </div>
+</section>
+
+<!-- ══════════════ TAB: พิสูจน์ทฤษฎีบท ══════════════ -->
+<section id="tab-proof" class="tab-panel">
+  <div class="card">
+    <div class="card-title"><span class="icon">📜</span><span data-th="พิสูจน์ทฤษฎีบทหลักมูลของแคลคูลัส ทั้งสองภาค" data-en="Proofs of Both Parts of the Fundamental Theorem">พิสูจน์ทฤษฎีบทหลักมูลของแคลคูลัส ทั้งสองภาค</span></div>
+    <p class="desc-text" style="font-size:.93rem;color:var(--muted);" data-th="อ่านคู่กันซ้าย–ขวา: ภาค 1 อธิบายว่าทำไม “ดิฟถึงตัดอินทิเกรตได้” ส่วนภาค 2 ต่อยอดจากตรงนั้นไปเป็นสูตรคำนวณ F(b) − F(a)" data-en="Read the two columns side by side: Part 1 explains why differentiation cancels integration; Part 2 builds on that to reach the computing formula F(b) − F(a).">อ่านคู่กันซ้าย–ขวา: ภาค 1 อธิบายว่าทำไม “ดิฟถึงตัดอินทิเกรตได้” ส่วนภาค 2 ต่อยอดจากตรงนั้นไปเป็นสูตรคำนวณ F(b) − F(a)</p>
+
+    <div class="two-col" style="margin-top:14px;">
+
+      <!-- ── คอลัมน์ซ้าย: ภาค 1 ── -->
+      <div class="proof-col part1">
+        <div class="proof-head" data-th="ภาค 1 — ดิฟตัดอินทิเกรต" data-en="Part 1 — differentiation cancels integration">ภาค 1 — ดิฟตัดอินทิเกรต</div>
+        <div class="proof-claim" data-th="<b>ข้ออ้าง:</b> ถ้า f ต่อเนื่องบน [a,b] และ F(x) = ∫<sub>a</sub><sup>x</sup> f(t) dt แล้ว F′(x) = f(x) ทุก x ใน (a,b)" data-en="<b>Claim:</b> if f is continuous on [a,b] and F(x) = ∫<sub>a</sub><sup>x</sup> f(t) dt, then F′(x) = f(x) for every x in (a,b)."><b>ข้ออ้าง:</b> ถ้า f ต่อเนื่องบน [a,b] และ F(x) = ∫<sub>a</sub><sup>x</sup> f(t) dt แล้ว F′(x) = f(x) ทุก x ใน (a,b)</div>
+
+        <div class="proof-line" data-th="<span class='no'>①</span> เริ่มจากนิยามอนุพันธ์ของ F: &nbsp; F′(x) = lim<sub>h→0</sub> <span class='frac'><span class='num'>F(x+h) − F(x)</span><span class='den'>h</span></span>" data-en="<span class='no'>①</span> Start from the definition of the derivative of F: &nbsp; F′(x) = lim<sub>h→0</sub> <span class='frac'><span class='num'>F(x+h) − F(x)</span><span class='den'>h</span></span>"><span class="no">①</span> เริ่มจากนิยามอนุพันธ์ของ F: &nbsp; F′(x) = lim<sub>h→0</sub> <span class="frac"><span class="num">F(x+h) − F(x)</span><span class="den">h</span></span></div>
+        <div class="proof-line" data-th="<span class='no'>②</span> สมบัติการบวกช่วงของปริพันธ์: &nbsp; F(x+h) − F(x) = ∫<sub>x</sub><sup>x+h</sup> f(t) dt &nbsp; <span class='why'>(พื้นที่ถึง x+h ลบพื้นที่ถึง x เหลือเฉพาะแถบ [x, x+h])</span>" data-en="<span class='no'>②</span> Additivity of the integral: &nbsp; F(x+h) − F(x) = ∫<sub>x</sub><sup>x+h</sup> f(t) dt &nbsp; <span class='why'>(the area up to x+h minus the area up to x leaves exactly the strip [x, x+h])</span>"><span class="no">②</span> สมบัติการบวกช่วงของปริพันธ์: &nbsp; F(x+h) − F(x) = ∫<sub>x</sub><sup>x+h</sup> f(t) dt &nbsp; <span class="why">(พื้นที่ถึง x+h ลบพื้นที่ถึง x เหลือเฉพาะแถบ [x, x+h])</span></div>
+        <div class="proof-line" data-th="<span class='no'>③</span> ให้ h &gt; 0 และให้ m, M เป็นค่าต่ำสุดและค่าสูงสุดของ f บนช่วงปิด [x, x+h] &nbsp; <span class='why'>(มีจริงเสมอ เพราะ f ต่อเนื่องบนช่วงปิด — ทฤษฎีบทค่าสุดขีด)</span>" data-en="<span class='no'>③</span> Take h &gt; 0 and let m, M be the minimum and maximum of f on the closed interval [x, x+h] &nbsp; <span class='why'>(they always exist since f is continuous on a closed interval — the Extreme Value Theorem)</span>"><span class="no">③</span> ให้ h &gt; 0 และให้ m, M เป็นค่าต่ำสุดและค่าสูงสุดของ f บนช่วงปิด [x, x+h] &nbsp; <span class="why">(มีจริงเสมอ เพราะ f ต่อเนื่องบนช่วงปิด — ทฤษฎีบทค่าสุดขีด)</span></div>
+        <div class="proof-line" data-th="<span class='no'>④</span> ตีกรอบแถบนั้นด้วยสี่เหลี่ยมสองอัน สูง m กับสูง M กว้าง h เท่ากัน: &nbsp; <b>m·h ≤ ∫<sub>x</sub><sup>x+h</sup> f(t) dt ≤ M·h</b>" data-en="<span class='no'>④</span> Trap the strip between two rectangles of width h and heights m and M: &nbsp; <b>m·h ≤ ∫<sub>x</sub><sup>x+h</sup> f(t) dt ≤ M·h</b>"><span class="no">④</span> ตีกรอบแถบนั้นด้วยสี่เหลี่ยมสองอัน สูง m กับสูง M กว้าง h เท่ากัน: &nbsp; <b>m·h ≤ ∫<sub>x</sub><sup>x+h</sup> f(t) dt ≤ M·h</b></div>
+        <div class="proof-fig">
+          <svg id="figPart1" viewBox="0 0 340 220" xmlns="http://www.w3.org/2000/svg"></svg>
+          <div class="fig-controls">
+            <span class="lbl">h</span>
+            <input type="range" id="figH" min="6" max="170" step="1" value="170" aria-label="h">
+            <span class="lbl" id="figHVal">h = 1.70</span>
+          </div>
+          <div class="squeeze" id="figSqueeze"></div>
+          <p class="cap" data-th="ลาก h เพื่อย่อแถบ <b>[x, x+h]</b> ให้แคบลง — สี่เหลี่ยมเขียว (สูง m) และสี่เหลี่ยมส้ม (สูง M) หนีบพื้นที่ของแถบไว้เสมอ และเมื่อ h → 0 ทั้ง m และ M ต่างวิ่งเข้าหา f(x) ค่าเดียวกัน ผลหารเชิงผลต่างตรงกลางจึงไม่มีที่ไป นอกจากลู่เข้า f(x) ด้วย" data-en="Drag h to narrow the strip <b>[x, x+h]</b> — the green rectangle (height m) and the orange one (height M) always trap the strip's area, and as h → 0 both m and M run toward the same value f(x). The difference quotient in the middle has nowhere else to go but f(x) too.<br><b>Careful here:</b> m and M are the minimum and maximum of f over the <u>whole</u> interval [x, x+h], not necessarily its endpoint values — the green and orange dots on the curve mark where each actually occurs (in this picture the maximum sits in the middle of the interval, not at x+h). You only get m = f(x) and M = f(x+h) when f is increasing throughout the interval; if f is decreasing they swap.">ลาก h เพื่อย่อแถบ <b>[x, x+h]</b> ให้แคบลง — สี่เหลี่ยมเขียว (สูง m) และสี่เหลี่ยมส้ม (สูง M) หนีบพื้นที่ของแถบไว้เสมอ และเมื่อ h → 0 ทั้ง m และ M ต่างวิ่งเข้าหา f(x) ค่าเดียวกัน ผลหารเชิงผลต่างตรงกลางจึงไม่มีที่ไป นอกจากลู่เข้า f(x) ด้วย</p>
+        </div>
+        <div class="proof-line" data-th="<span class='no'>⑤</span> หารทุกข้างด้วย h &nbsp;(h &gt; 0 เครื่องหมายไม่กลับ): &nbsp; m ≤ <span class='frac'><span class='num'>F(x+h) − F(x)</span><span class='den'>h</span></span> ≤ M" data-en="<span class='no'>⑤</span> Divide through by h &nbsp;(h &gt; 0, so the inequalities keep direction): &nbsp; m ≤ <span class='frac'><span class='num'>F(x+h) − F(x)</span><span class='den'>h</span></span> ≤ M"><span class="no">⑤</span> หารทุกข้างด้วย h &nbsp;(h &gt; 0 เครื่องหมายไม่กลับ): &nbsp; m ≤ <span class="frac"><span class="num">F(x+h) − F(x)</span><span class="den">h</span></span> ≤ M</div>
+        <div class="proof-line" data-th="<span class='no'>⑥</span> เมื่อ h → 0 ช่วง [x, x+h] หดลงเหลือจุด x เดียว และเพราะ f ต่อเนื่อง จึงได้ m → f(x) และ M → f(x)" data-en="<span class='no'>⑥</span> As h → 0 the interval [x, x+h] shrinks to the single point x, and since f is continuous, m → f(x) and M → f(x)"><span class="no">⑥</span> เมื่อ h → 0 ช่วง [x, x+h] หดลงเหลือจุด x เดียว และเพราะ f ต่อเนื่อง จึงได้ m → f(x) และ M → f(x)</div>
+        <div class="proof-line" data-th="<span class='no'>⑦</span> ตัวกลางถูกขนาบด้วยสองข้างที่ลู่เข้าค่าเดียวกัน — <b>ทฤษฎีบทแซนด์วิช</b> บังคับให้ตัวกลางลู่เข้า f(x) ด้วย" data-en="<span class='no'>⑦</span> The middle term is squeezed between two quantities converging to the same value — the <b>Squeeze Theorem</b> forces it to converge to f(x) as well"><span class="no">⑦</span> ตัวกลางถูกขนาบด้วยสองข้างที่ลู่เข้าค่าเดียวกัน — <b>ทฤษฎีบทแซนด์วิช</b> บังคับให้ตัวกลางลู่เข้า f(x) ด้วย</div>
+        <div class="proof-line" data-th="<span class='no'>⑧</span> กรณี h &amp;lt; 0 ทำอย่างเดียวกันบนช่วง [x+h, x] ได้ผลเท่ากัน จึงเป็นลิมิตสองข้างจริง" data-en="<span class='no'>⑧</span> For h &amp;lt; 0 the same argument on [x+h, x] gives the same value, so this really is a two-sided limit"><span class="no">⑧</span> กรณี h &lt; 0 ทำอย่างเดียวกันบนช่วง [x+h, x] ได้ผลเท่ากัน จึงเป็นลิมิตสองข้างจริง</div>
+        <div class="proof-line" data-th="<span class='no'>⑨</span> ด้านซ้ายของ ⑤ คือนิยามของ F′(x) พอดี &nbsp;⇒&nbsp; <b>F′(x) = f(x)</b> &nbsp;นั่นคือ <span class='frac'><span class='num'>d</span><span class='den'>dx</span></span> ∫<sub>a</sub><sup>x</sup> f(t) dt = f(x)" data-en="<span class='no'>⑨</span> The middle term of ⑤ is exactly the definition of F′(x) &nbsp;⇒&nbsp; <b>F′(x) = f(x)</b>, that is <span class='frac'><span class='num'>d</span><span class='den'>dx</span></span> ∫<sub>a</sub><sup>x</sup> f(t) dt = f(x)"><span class="no">⑨</span> ด้านซ้ายของ ⑤ คือนิยามของ F′(x) พอดี &nbsp;⇒&nbsp; <b>F′(x) = f(x)</b> &nbsp;นั่นคือ <span class="frac"><span class="num">d</span><span class="den">dx</span></span> ∫<sub>a</sub><sup>x</sup> f(t) dt = f(x)</div>
+        <div class="qed">∎</div>
+        <div class="proof-src" data-th="พิสูจน์นี้ไม่ใช้เครื่องหมาย ≈ เลย — แทนที่การประมาณด้วยการตีกรอบ m·h ≤ … ≤ M·h แล้วบีบด้วยแซนด์วิช" data-en="This proof never uses ≈ — the approximation is replaced by the bound m·h ≤ … ≤ M·h and then squeezed.">พิสูจน์นี้ไม่ใช้เครื่องหมาย ≈ เลย — แทนที่การประมาณด้วยการตีกรอบ m·h ≤ … ≤ M·h แล้วบีบด้วยแซนด์วิช</div>
+      </div>
+
+      <!-- ── คอลัมน์ขวา: ภาค 2 ── -->
+      <div class="proof-col part2">
+        <div class="proof-head" data-th="ภาค 2 — สูตรคำนวณ F(b) − F(a)" data-en="Part 2 — the computing formula F(b) − F(a)">ภาค 2 — สูตรคำนวณ F(b) − F(a)</div>
+        <div class="proof-claim" data-th="<b>ข้ออ้าง:</b> ถ้า f ต่อเนื่องบน [a,b] และ f(x) ≥ 0 ทุก x ∈ [a,b] และ F เป็นปฏิยานุพันธ์ใดๆ ของ f แล้ว ∫<sub>a</sub><sup>b</sup> f(x) dx = F(b) − F(a)" data-en="<b>Claim:</b> if f is continuous on [a,b] with f(x) ≥ 0 for every x ∈ [a,b], and F is any antiderivative of f, then ∫<sub>a</sub><sup>b</sup> f(x) dx = F(b) − F(a)."><b>ข้ออ้าง:</b> ถ้า f ต่อเนื่องบน [a,b] และ f(x) ≥ 0 ทุก x ∈ [a,b] และ F เป็นปฏิยานุพันธ์ใดๆ ของ f แล้ว ∫<sub>a</sub><sup>b</sup> f(x) dx = F(b) − F(a)</div>
+
+        <div class="proof-line" data-th="<span class='no'>①</span> ให้ y = f(x) ต่อเนื่องบนช่วง [a,b] และ f(x) ≥ 0 สำหรับทุก x ∈ [a,b]" data-en="<span class='no'>①</span> Let y = f(x) be continuous on [a,b] with f(x) ≥ 0 for every x ∈ [a,b]"><span class="no">①</span> ให้ y = f(x) ต่อเนื่องบนช่วง [a,b] และ f(x) ≥ 0 สำหรับทุก x ∈ [a,b]</div>
+        <div class="proof-line" data-th="<span class='no'>②</span> ให้ <b>R</b> เป็นพื้นที่ปิดล้อมด้วยเส้นโค้ง y = f(x) กับแกน x จากเส้นตรง x = a ถึง x = b" data-en="<span class='no'>②</span> Let <b>R</b> be the area enclosed by y = f(x), the x-axis, and the lines x = a and x = b"><span class="no">②</span> ให้ <b>R</b> เป็นพื้นที่ปิดล้อมด้วยเส้นโค้ง y = f(x) กับแกน x จากเส้นตรง x = a ถึง x = b</div>
+        <div class="proof-fig">
+          <svg id="figR" viewBox="0 0 340 190" xmlns="http://www.w3.org/2000/svg"></svg>
+          <p class="cap" data-th="<b>R</b> คือพื้นที่ทั้งผืนที่ปิดล้อมด้วยเส้นโค้ง y = f(x) แกน x และเส้นตรง x = a กับ x = b" data-en="<b>R</b> is the whole region enclosed by y = f(x), the x-axis, and the lines x = a and x = b."><b>R</b> คือพื้นที่ทั้งผืนที่ปิดล้อมด้วยเส้นโค้ง y = f(x) แกน x และเส้นตรง x = a กับ x = b</p>
+        </div>
+        <div class="proof-line" data-th="<span class='no'>③</span> ให้ <b>A(x)</b> แทนพื้นที่ปิดล้อมด้วย y = f(x) กับแกน x จาก a ถึง x เมื่อ a ≤ x ≤ b &nbsp;⇒&nbsp; ∫<sub>a</sub><sup>x</sup> f(x) dx = A(x)" data-en="<span class='no'>③</span> Let <b>A(x)</b> be the area enclosed by y = f(x) and the x-axis from a to x, for a ≤ x ≤ b &nbsp;⇒&nbsp; ∫<sub>a</sub><sup>x</sup> f(x) dx = A(x)"><span class="no">③</span> ให้ <b>A(x)</b> แทนพื้นที่ปิดล้อมด้วย y = f(x) กับแกน x จาก a ถึง x เมื่อ a ≤ x ≤ b &nbsp;⇒&nbsp; ∫<sub>a</sub><sup>x</sup> f(x) dx = A(x)</div>
+        <div class="proof-fig">
+          <svg id="figA" viewBox="0 0 340 190" xmlns="http://www.w3.org/2000/svg"></svg>
+          <p class="cap" data-th="<b>A(x)</b> คือพื้นที่เท่าที่สะสมมาถึง x — ขยับ x ไปทางขวา พื้นที่ก็โตขึ้น ที่ x = a ยังไม่มีพื้นที่เลย (A(a) = 0) และที่ x = b ได้พื้นที่เต็มผืน (A(b) = R)" data-en="<b>A(x)</b> is the area accumulated so far, up to x — push x to the right and the area grows. At x = a there is no area yet (A(a) = 0); at x = b it is the whole region (A(b) = R)."><b>A(x)</b> คือพื้นที่เท่าที่สะสมมาถึง x — ขยับ x ไปทางขวา พื้นที่ก็โตขึ้น ที่ x = a ยังไม่มีพื้นที่เลย (A(a) = 0) และที่ x = b ได้พื้นที่เต็มผืน (A(b) = R)</p>
+        </div>
+        <div class="proof-line" data-th="<span class='no'>④</span> ที่ขอบซ้าย: &nbsp; A(a) = ∫<sub>a</sub><sup>a</sup> f(x) dx = <b>0</b> &nbsp; <span class='why'>(ช่วงกว้างศูนย์ ไม่เหลือพื้นที่)</span>" data-en="<span class='no'>④</span> At the left endpoint: &nbsp; A(a) = ∫<sub>a</sub><sup>a</sup> f(x) dx = <b>0</b> &nbsp; <span class='why'>(an interval of zero width encloses no area)</span>"><span class="no">④</span> ที่ขอบซ้าย: &nbsp; A(a) = ∫<sub>a</sub><sup>a</sup> f(x) dx = <b>0</b> &nbsp; <span class="why">(ช่วงกว้างศูนย์ ไม่เหลือพื้นที่)</span></div>
+        <div class="proof-line" data-th="<span class='no'>⑤</span> ที่ขอบขวา: &nbsp; A(b) = ∫<sub>a</sub><sup>b</sup> f(x) dx = <b>R</b>" data-en="<span class='no'>⑤</span> At the right endpoint: &nbsp; A(b) = ∫<sub>a</sub><sup>b</sup> f(x) dx = <b>R</b>"><span class="no">⑤</span> ที่ขอบขวา: &nbsp; A(b) = ∫<sub>a</sub><sup>b</sup> f(x) dx = <b>R</b></div>
+        <div class="proof-line" data-th="<span class='no'>⑥</span> พิจารณาแถบบางกว้าง h ที่ x: &nbsp; A(x+h) − A(x) ≈ f(x)·h &nbsp; <span class='why'>(แถบเกือบเป็นสี่เหลี่ยมสูง f(x) กว้าง h)</span>" data-en="<span class='no'>⑥</span> Consider the thin strip of width h at x: &nbsp; A(x+h) − A(x) ≈ f(x)·h &nbsp; <span class='why'>(the strip is nearly a rectangle of height f(x) and width h)</span>"><span class="no">⑥</span> พิจารณาแถบบางกว้าง h ที่ x: &nbsp; A(x+h) − A(x) ≈ f(x)·h &nbsp; <span class="why">(แถบเกือบเป็นสี่เหลี่ยมสูง f(x) กว้าง h)</span></div>
+        <div class="proof-fig">
+          <svg id="figStrip" viewBox="0 0 340 200" xmlns="http://www.w3.org/2000/svg"></svg>
+          <div class="fig-controls">
+            <span class="lbl">h</span>
+            <input type="range" id="figStripH" min="4" max="120" step="1" value="75" aria-label="h">
+            <span class="lbl" id="figStripHVal">h = 0.75</span>
+          </div>
+          <div class="squeeze" id="figStripOut"></div>
+          <p class="cap" data-th="แถบสีส้มคือ <b>A(x+h) − A(x)</b> ซึ่งเกือบเป็นสี่เหลี่ยมสูง f(x) กว้าง h (กรอบเส้นประ) — ยิ่ง h เล็ก ส่วนที่เกินออกมาจากกรอบยิ่งน้อยลง จึงเขียนได้ว่า A(x+h) − A(x) ≈ f(x)·h" data-en="The orange strip is <b>A(x+h) − A(x)</b>, which is nearly a rectangle of height f(x) and width h (dashed outline) — the smaller h gets, the less sticks out beyond the outline, so A(x+h) − A(x) ≈ f(x)·h.">แถบสีส้มคือ <b>A(x+h) − A(x)</b> ซึ่งเกือบเป็นสี่เหลี่ยมสูง f(x) กว้าง h (กรอบเส้นประ) — ยิ่ง h เล็ก ส่วนที่เกินออกมาจากกรอบยิ่งน้อยลง จึงเขียนได้ว่า A(x+h) − A(x) ≈ f(x)·h</p>
+        </div>
+        <div class="proof-line" data-th="<span class='no'>⑦</span> หารด้วย h ทั้งสองข้าง: &nbsp; f(x) ≈ <span class='frac'><span class='num'>A(x+h) − A(x)</span><span class='den'>h</span></span> &nbsp; <span class='why'>(ยังเป็น ≈ เพราะ h ยังไม่เข้าใกล้ 0)</span>" data-en="<span class='no'>⑦</span> Divide both sides by h: &nbsp; f(x) ≈ <span class='frac'><span class='num'>A(x+h) − A(x)</span><span class='den'>h</span></span> &nbsp; <span class='why'>(still ≈, because h has not yet approached 0)</span>"><span class="no">⑦</span> หารด้วย h ทั้งสองข้าง: &nbsp; f(x) ≈ <span class="frac"><span class="num">A(x+h) − A(x)</span><span class="den">h</span></span> &nbsp; <span class="why">(ยังเป็น ≈ เพราะ h ยังไม่เข้าใกล้ 0)</span></div>
+        <div class="proof-line" data-th="<span class='no'>⑧</span> ให้ h → 0: &nbsp; f(x) = lim<sub>h→0</sub> <span class='frac'><span class='num'>A(x+h) − A(x)</span><span class='den'>h</span></span> = <b>A′(x)</b>" data-en="<span class='no'>⑧</span> Let h → 0: &nbsp; f(x) = lim<sub>h→0</sub> <span class='frac'><span class='num'>A(x+h) − A(x)</span><span class='den'>h</span></span> = <b>A′(x)</b>"><span class="no">⑧</span> ให้ h → 0: &nbsp; f(x) = lim<sub>h→0</sub> <span class="frac"><span class="num">A(x+h) − A(x)</span><span class="den">h</span></span> = <b>A′(x)</b></div>
+        <div class="proof-line" data-th="<span class='no'>⑨</span> จะได้ A(x) เป็นปฏิยานุพันธ์ของ f(x) &nbsp;นั่นคือ&nbsp; <b>F(x) = A(x) + C</b>" data-en="<span class='no'>⑨</span> So A(x) is an antiderivative of f(x), that is &nbsp;<b>F(x) = A(x) + C</b>"><span class="no">⑨</span> จะได้ A(x) เป็นปฏิยานุพันธ์ของ f(x) &nbsp;นั่นคือ&nbsp; <b>F(x) = A(x) + C</b></div>
+        <div class="proof-line" data-th="<span class='no'>⑩</span> แทน x = a: &nbsp; F(a) = A(a) + C = 0 + C &nbsp;⇒&nbsp; <b>F(a) = C</b> &nbsp; <span class='why'>(ใช้ ④)</span>" data-en="<span class='no'>⑩</span> Put x = a: &nbsp; F(a) = A(a) + C = 0 + C &nbsp;⇒&nbsp; <b>F(a) = C</b> &nbsp; <span class='why'>(using ④)</span>"><span class="no">⑩</span> แทน x = a: &nbsp; F(a) = A(a) + C = 0 + C &nbsp;⇒&nbsp; <b>F(a) = C</b> &nbsp; <span class="why">(ใช้ ④)</span></div>
+        <div class="proof-line" data-th="<span class='no'>⑪</span> แทน x = b: &nbsp; F(b) = A(b) + C = A(b) + F(a)" data-en="<span class='no'>⑪</span> Put x = b: &nbsp; F(b) = A(b) + C = A(b) + F(a)"><span class="no">⑪</span> แทน x = b: &nbsp; F(b) = A(b) + C = A(b) + F(a)</div>
+        <div class="proof-line" data-th="<span class='no'>⑫</span> ย้ายข้าง: &nbsp; F(b) − F(a) = A(b) = R &nbsp; <span class='why'>(ใช้ ⑤)</span>" data-en="<span class='no'>⑫</span> Rearranging: &nbsp; F(b) − F(a) = A(b) = R &nbsp; <span class='why'>(using ⑤)</span>"><span class="no">⑫</span> ย้ายข้าง: &nbsp; F(b) − F(a) = A(b) = R &nbsp; <span class="why">(ใช้ ⑤)</span></div>
+        <div class="proof-line" data-th="<span class='no'>⑬</span> ดังนั้น &nbsp; <b>R = ∫<sub>a</sub><sup>b</sup> f(x) dx = F(b) − F(a)</b>" data-en="<span class='no'>⑬</span> Therefore &nbsp; <b>R = ∫<sub>a</sub><sup>b</sup> f(x) dx = F(b) − F(a)</b>"><span class="no">⑬</span> ดังนั้น &nbsp; <b>R = ∫<sub>a</sub><sup>b</sup> f(x) dx = F(b) − F(a)</b></div>
+        <div class="qed">∎</div>
+        <div class="proof-src" data-th="เรียบเรียงตามเอกสาร “พิสูจน์ทฤษฎีบทหลักมูล แคลคูลัส บทที่ 2” แนวพื้นที่ปิดล้อม" data-en="Adapted from the handwritten proof “Fundamental Theorem, Part 2” using the enclosed-area approach.">เรียบเรียงตามเอกสาร “พิสูจน์ทฤษฎีบทหลักมูล แคลคูลัส บทที่ 2” แนวพื้นที่ปิดล้อม</div>
+      </div>
+
+    </div>
+
+    <div class="bridge" data-th="<b>สองพิสูจน์นี้ซ้อนกันตรงไหน:</b> ขั้น ⑥–⑧ ของภาค 2 (A(x+h) − A(x) ≈ f(x)·h จนได้ A′(x) = f(x)) คือใจความเดียวกับภาค 1 เป๊ะๆ ต่างกันที่ภาค 2 ใช้เครื่องหมาย ≈ ซึ่งยังไม่ได้พิสูจน์ว่าส่วนที่เหลือหายไปจริงเมื่อ h → 0 — คอลัมน์ซ้ายจึงเป็นการทำสามขั้นนั้นให้รัดกุม โดยแทน ≈ ด้วยการตีกรอบ m·h ≤ … ≤ M·h แล้วบีบด้วยทฤษฎีบทแซนด์วิช ส่วนที่เป็นของภาค 2 จริงๆ คือขั้น ⑨–⑬ ที่ต่อยอดด้วย F = A + C จนค่าคงที่ C ตัดกันหายไป" data-en="<b>Where the two proofs overlap:</b> steps ⑥–⑧ of Part 2 (A(x+h) − A(x) ≈ f(x)·h leading to A′(x) = f(x)) are exactly the content of Part 1. The difference is that Part 2 uses ≈, which never proves that the leftover really vanishes as h → 0 — the left column makes those three steps airtight by replacing ≈ with the bound m·h ≤ … ≤ M·h and then squeezing. What is genuinely Part 2's own is steps ⑨–⑬, where F = A + C makes the constant C cancel."><b>สองพิสูจน์นี้ซ้อนกันตรงไหน:</b> ขั้น ⑥–⑧ ของภาค 2 (A(x+h) − A(x) ≈ f(x)·h จนได้ A′(x) = f(x)) คือใจความเดียวกับภาค 1 เป๊ะๆ ต่างกันที่ภาค 2 ใช้เครื่องหมาย ≈ ซึ่งยังไม่ได้พิสูจน์ว่าส่วนที่เหลือหายไปจริงเมื่อ h → 0 — คอลัมน์ซ้ายจึงเป็นการทำสามขั้นนั้นให้รัดกุม โดยแทน ≈ ด้วยการตีกรอบ m·h ≤ … ≤ M·h แล้วบีบด้วยทฤษฎีบทแซนด์วิช ส่วนที่เป็นของภาค 2 จริงๆ คือขั้น ⑨–⑬ ที่ต่อยอดด้วย F = A + C จนค่าคงที่ C ตัดกันหายไป</div>
+
+    <div class="box-info" data-th="<b>ข้อควรระวังกับเงื่อนไข f(x) ≥ 0:</b> คอลัมน์ขวาตั้งเงื่อนไขนี้ไว้เพื่อให้พูดถึง “พื้นที่” ได้ตรงๆ แต่ตัวทฤษฎีบทภาค 2 ใช้ได้แม้ f ติดลบ — เพียงเปลี่ยนจากการอ้างพื้นที่ ไปนิยาม A(x) = ∫<sub>a</sub><sup>x</sup> f(t) dt แล้วอ้างภาค 1 ว่า A′(x) = f(x) แทน ขั้น ⑨–⑬ ที่เหลือใช้ได้เหมือนเดิมทุกบรรทัด" data-en="<b>A caveat about the condition f(x) ≥ 0:</b> the right column assumes it so that “area” can be spoken of directly, but Part 2 holds even when f is negative — simply define A(x) = ∫<sub>a</sub><sup>x</sup> f(t) dt instead of appealing to area, and invoke Part 1 for A′(x) = f(x). Steps ⑨–⑬ then go through unchanged."><b>ข้อควรระวังกับเงื่อนไข f(x) ≥ 0:</b> คอลัมน์ขวาตั้งเงื่อนไขนี้ไว้เพื่อให้พูดถึง “พื้นที่” ได้ตรงๆ แต่ตัวทฤษฎีบทภาค 2 ใช้ได้แม้ f ติดลบ — เพียงเปลี่ยนจากการอ้างพื้นที่ ไปนิยาม A(x) = ∫<sub>a</sub><sup>x</sup> f(t) dt แล้วอ้างภาค 1 ว่า A′(x) = f(x) แทน ขั้น ⑨–⑬ ที่เหลือใช้ได้เหมือนเดิมทุกบรรทัด</div>
+  </div>
+</section>
+
+</main>
+
+<script>
+const PAGE_TITLE = { th: 'สื่อการสอน : ปริพันธ์จำกัดเขตและทฤษฎีบทหลักมูล', en: 'Teaching Aid: Definite Integrals & the FTC' };
+let langMemory = 'th';
+function getLang() { try { return localStorage.getItem('siteLang') || 'th'; } catch(e){ return langMemory; } }
+function applyLang(lang) {
+  document.documentElement.lang = lang;
+  document.title = PAGE_TITLE[lang];
+  // ค่าใน data-th / data-en ถือเป็น HTML (ดู docs/adr/0002) เพื่อให้ใส่เศษส่วนบน/ล่างในประโยคที่แปลภาษาได้
+  document.querySelectorAll('[data-th]').forEach(el => { el.innerHTML = (lang==='en'&&el.dataset.en)?el.dataset.en:el.dataset.th; });
+  document.querySelectorAll('[data-th-title]').forEach(el => { el.title = (lang==='en'&&el.dataset.enTitle)?el.dataset.enTitle:el.dataset.thTitle; });
+  const btn = document.getElementById('langToggle');
+  if (btn) btn.textContent = lang==='en'?'ไทย':'EN';
+  if (typeof onLangChange==='function') onLangChange(lang);
+}
+function toggleLang() { const next = getLang()==='en'?'th':'en'; langMemory=next; try{localStorage.setItem('siteLang',next);}catch(e){} applyLang(next); }
+function onLangChange(lang) { if (typeof renderRiemann==='function') renderRiemann(); if (typeof renderAccum==='function') renderAccum(); if (typeof renderProofFig1==='function') renderProofFig1(); if (typeof renderProofFigStrip==='function') renderProofFigStrip(); }
+
+function showTab(id, btnEl) {
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('nav .tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+  const btn = btnEl || document.querySelector('.tab-btn[data-tab="'+id+'"]');
+  if (btn) btn.classList.add('active');
+}
+function fmt(n, d) { if (d===undefined) d=3; if (!isFinite(n)) return '—'; var s=n.toFixed(d); if (s.indexOf('.')>-1){ s=s.replace(/0+$/,'').replace(/\.$/,''); } if (s==='-0') s='0'; return s; }
+function frac(numHTML, denHTML) { return '<span class="frac"><span class="num">' + numHTML + '</span><span class="den">' + denHTML + '</span></span>'; }
+
+function Plot(opts) {
+  var xmin=opts.xmin, xmax=opts.xmax, ymin=opts.ymin, ymax=opts.ymax, w=opts.w, h=opts.h, pad=opts.pad||34;
+  function px(x){ return pad+(x-xmin)/(xmax-xmin)*(w-2*pad); }
+  function py(y){ return h-pad-(y-ymin)/(ymax-ymin)*(h-2*pad); }
+  function invX(pxVal){ return xmin+(pxVal-pad)/(w-2*pad)*(xmax-xmin); }
+  function axesSVG() {
+    var parts=[]; var x0=Math.ceil(xmin), x1=Math.floor(xmax), y0=Math.ceil(ymin), y1=Math.floor(ymax), gx, gy;
+    for (gx=x0; gx<=x1; gx++) parts.push('<line class="grid-line" x1="'+px(gx)+'" y1="'+py(ymin)+'" x2="'+px(gx)+'" y2="'+py(ymax)+'"/>');
+    for (gy=y0; gy<=y1; gy++) parts.push('<line class="grid-line" x1="'+px(xmin)+'" y1="'+py(gy)+'" x2="'+px(xmax)+'" y2="'+py(gy)+'"/>');
+    parts.push('<line class="axis-line" x1="'+px(xmin)+'" y1="'+py(0)+'" x2="'+(px(xmax)+8)+'" y2="'+py(0)+'"/>');
+    parts.push('<line class="axis-line" x1="'+px(0)+'" y1="'+py(ymin)+'" x2="'+px(0)+'" y2="'+(py(ymax)-8)+'"/>');
+    parts.push('<polygon class="axis-arrow" points="'+(px(xmax)+8)+','+py(0)+' '+(px(xmax)-1)+','+(py(0)-3.5)+' '+(px(xmax)-1)+','+(py(0)+3.5)+'"/>');
+    parts.push('<polygon class="axis-arrow" points="'+px(0)+','+(py(ymax)-8)+' '+(px(0)-3.5)+','+(py(ymax)+1)+' '+(px(0)+3.5)+','+(py(ymax)+1)+'"/>');
+    parts.push('<text class="axis-letter" x="'+(px(xmax)+10)+'" y="'+(py(0)+4)+'">X</text>');
+    parts.push('<text class="axis-letter" x="'+(px(0)+6)+'" y="'+(py(ymax)-9)+'">Y</text>');
+    for (gx=x0; gx<=x1; gx++){ if(gx===0) continue; parts.push('<text class="tick-label" text-anchor="middle" x="'+px(gx)+'" y="'+(py(0)+13)+'">'+gx+'</text>'); }
+    for (gy=y0; gy<=y1; gy++){ if(gy===0) continue; parts.push('<text class="tick-label" text-anchor="end" x="'+(px(0)-6)+'" y="'+(py(gy)+3)+'">'+gy+'</text>'); }
+    return parts.join('');
+  }
+  function pathFor(fn, x0, x1, steps) {
+    var d='', started=false, i, x, y;
+    for (i=0; i<=steps; i++){ x=x0+(x1-x0)*i/steps; y=fn(x); if(y===null||y===undefined||!isFinite(y)){started=false;continue;} d+=(started?' L ':'M ')+px(x).toFixed(2)+' '+py(y).toFixed(2); started=true; }
+    return d;
+  }
+  function circle(x,y,r,cls){ return '<circle class="pt '+cls+'" cx="'+px(x).toFixed(2)+'" cy="'+py(y).toFixed(2)+'" r="'+r+'"/>'; }
+  function pathD(dStr,cls){ return '<path class="'+cls+'" d="'+dStr+'"/>'; }
+  return {px:px,py:py,invX:invX,w:w,h:h,xmin:xmin,xmax:xmax,ymin:ymin,ymax:ymax,axesSVG:axesSVG,pathFor:pathFor,circle:circle,pathD:pathD};
+}
+
+// ══════════════ ผลรวมรีมันน์: f(x)=x²+1 บน [0,1] ══════════════
+var renderRiemann;
+(function () {
+  var svg = document.getElementById('plotRiemann');
+  var slider = document.getElementById('nSlider');
+  var nInput = document.getElementById('nNumInput');
+  var formulaLive = document.getElementById('riemannFormula');
+  var playBtn = document.getElementById('riemannPlay');
+  var playIcon = document.getElementById('riemannPlayIcon');
+  var P = Plot({ xmin: -0.2, xmax: 1.3, ymin: -0.2, ymax: 2.3, w: 460, h: 300, pad: 36 });
+  var f = function (x) { return x*x + 1; };
+  var exact = 4/3;
+  var playing = false, timer = null;
+
+  renderRiemann = function render() {
+    var lang = getLang()==='en' ? 'en':'th';
+    var n = parseInt(slider.value, 10);
+    var dx = 1/n, sum = 0;
+    var parts = [P.axesSVG()];
+    for (var i=0; i<n; i++) {
+      var xi = (i+1)*dx; // right endpoint
+      var yi = f(xi);
+      sum += yi*dx;
+      var x0p = P.px(i*dx), x1p = P.px(xi);
+      var y0p = P.py(0), y1p = P.py(yi);
+      parts.push('<rect class="rect-bar" x="'+x0p.toFixed(2)+'" y="'+y1p.toFixed(2)+'" width="'+(x1p-x0p).toFixed(2)+'" height="'+(y0p-y1p).toFixed(2)+'"/>');
+    }
+    parts.push(P.pathD(P.pathFor(f, 0, 1, 80), 'curve-base'));
+    svg.innerHTML = parts.join('');
+
+    if (document.activeElement !== nInput) nInput.value = n;
+    formulaLive.innerHTML =
+      'Σ f(xᵢ)Δx = <span class="hl">'+fmt(sum,5)+'</span> &nbsp;&nbsp;(' + (lang==='en'?'exact value':'ค่าจริง') + ' = <span class="frac"><span class="num">4</span><span class="den">3</span></span> ≈ <span class="hlA">'+fmt(exact,5)+'</span>)';
+  };
+  slider.addEventListener('input', function () { stopPlaying(); renderRiemann(); });
+  nInput.addEventListener('change', function () {
+    var v = parseInt(nInput.value, 10);
+    if (!isFinite(v)) return;
+    if (v < 2) v = 2; if (v > 80) v = 80;
+    stopPlaying();
+    slider.value = v;
+    renderRiemann();
+  });
+  function stopPlaying() { playing = false; if (timer) clearInterval(timer); playIcon.innerHTML = '<path d="M8 5v14l11-7z"/>'; }
+  function startPlaying() {
+    playing = true; playIcon.innerHTML = '<rect x="6" y="5" width="4" height="14"/><rect x="14" y="5" width="4" height="14"/>';
+    slider.value = 2;
+    timer = setInterval(function () {
+      var v = parseInt(slider.value,10) + 1;
+      if (v > 80) { stopPlaying(); return; }
+      slider.value = v;
+      renderRiemann();
+    }, 140);
+  }
+  playBtn.addEventListener('click', function () { if (playing) stopPlaying(); else startPlaying(); });
+  renderRiemann();
+})();
+
+// ══════════════ FTC: ฟังก์ชันสะสม F(x) = ∫₀ˣ t dt ══════════════
+var renderAccum;
+(function () {
+  var svgF = document.getElementById('plotAccumF');
+  var svgBig = document.getElementById('plotAccumBig');
+  var slider = document.getElementById('accumSlider');
+  var accumInput = document.getElementById('accumNumInput');
+  var formulaLive = document.getElementById('accumFormula');
+  var Pf = Plot({ xmin: 0, xmax: 4.3, ymin: -0.3, ymax: 4.3, w: 220, h: 220, pad: 28 });
+  var Pbig = Plot({ xmin: 0, xmax: 4.3, ymin: -0.3, ymax: 9, w: 220, h: 220, pad: 28 });
+  var f = function (t) { return t; };
+  var F = function (x) { return x*x/2; };
+
+  renderAccum = function render() {
+    var lang = getLang()==='en' ? 'en':'th';
+    var x = parseFloat(slider.value)/100;
+
+    var partsF = [Pf.axesSVG()];
+    var x0p = Pf.px(0), x1p = Pf.px(x);
+    // shaded triangle area under f(t)=t from 0 to x
+    partsF.push('<polygon class="area-fill" points="'+x0p+','+Pf.py(0)+' '+x1p+','+Pf.py(0)+' '+x1p+','+Pf.py(f(x))+'"/>');
+    partsF.push(Pf.pathD(Pf.pathFor(f, 0, 4.2, 2), 'curve-base'));
+    // requested: label the shaded area's numeric value right inside the shaded region
+    if (x > 0.5) {
+      partsF.push('<text class="plot-caption" style="font-size:.68rem;" text-anchor="middle" x="'+(x0p+ (x1p-x0p)*0.4)+'" y="'+(Pf.py(0)-10)+'">'+(lang==='en'?'Area = ':'พื้นที่ = ')+fmt(F(x),3)+'</text>');
+    }
+    partsF.push(Pf.circle(x, f(x), 4, 'pt-fillP'));
+    // requested: also label f(x) — the height — right at the point, so it's visually
+    // obvious f(x) (a length) and the shaded Area = F(x) (a region) are different things
+    partsF.push('<text class="plot-caption" style="font-size:.68rem;fill:var(--secondary);" x="'+(Pf.px(x)+8)+'" y="'+(Pf.py(f(x))-6)+'">f(x) = '+fmt(f(x),2)+'</text>');
+    svgF.innerHTML = partsF.join('');
+
+    var partsBig = [Pbig.axesSVG()];
+    partsBig.push(Pbig.pathD(Pbig.pathFor(F, 0, 4.2, 60), 'curve-base'));
+    partsBig.push(Pbig.circle(x, F(x), 4.4, 'pt-fillP'));
+    partsBig.push('<text class="plot-caption" style="font-size:.68rem;" x="'+(Pbig.px(x)+8)+'" y="'+(Pbig.py(F(x))-6)+'">F(x) = '+fmt(F(x),2)+'</text>');
+    svgBig.innerHTML = partsBig.join('');
+
+    if (document.activeElement !== accumInput) accumInput.value = fmt(x, 2);
+    formulaLive.innerHTML =
+      'x = <span class="hl">'+fmt(x,2)+'</span> &nbsp;→&nbsp; F(x) = ∫₀ˣ t dt = <span class="hlA">'+fmt(F(x),3)+'</span> &nbsp;&nbsp;' +
+      (lang==='en' ? '(shaded area on the left = the height on the right)' : '(พื้นที่แรเงาด้านซ้าย = ความสูงของจุดด้านขวา)');
+  };
+  slider.addEventListener('input', renderAccum);
+  accumInput.addEventListener('change', function () {
+    var v = parseFloat(accumInput.value);
+    if (!isFinite(v)) return;
+    if (v < 0) v = 0; if (v > 4) v = 4;
+    slider.value = Math.round(v*100);
+    renderAccum();
+  });
+  renderAccum();
+})();
+
+/* ══════════════ รูปอธิบายในแท็บพิสูจน์ทฤษฎีบท ══════════════
+   ภาค 1: ลาก h ได้ — โชว์ m·h ≤ พื้นที่แถบ ≤ M·h แล้วบีบเข้า f(x)
+          m กับ M คือค่าต่ำสุด/สูงสุดของ f บนทั้งช่วง [x, x+h] ไม่ใช่ค่าที่ปลายช่วงเสมอไป
+          จึงมีจุดทำเครื่องหมายบนเส้นโค้งว่าค่าทั้งสองเกิดที่ไหน
+   ภาค 2: 2 รูปนิ่ง (R, A(x)) + 1 รูปลาก h ได้ (แถบ A(x+h) − A(x) กับกรอบ f(x)·h)
+   ══════════════════════════════════════════════════════════════ */
+var renderProofFig1, renderProofFigStrip;
+(function () {
+
+  // ── เครื่องมือวาดร่วมกันของทุกรูป ──
+  function Fig(svg, opts) {
+    var xmin = opts.xmin, xmax = opts.xmax, ymax = opts.ymax;
+    var w = opts.w, h = opts.h, padL = 22, padR = 16, padB = 30, padT = 14;
+    function px(x) { return padL + (x - xmin) / (xmax - xmin) * (w - padL - padR); }
+    function py(y) { return h - padB - (y / ymax) * (h - padB - padT); }
+    var f = opts.f;
+
+    function axes() {
+      return '<line class="fig-axis" x1="' + px(xmin) + '" y1="' + py(0) + '" x2="' + (px(xmax) + 6) + '" y2="' + py(0) + '"/>' +
+        '<polygon class="fig-axis" fill="currentColor" points="' + (px(xmax) + 10) + ',' + py(0) + ' ' + (px(xmax) + 3) + ',' + (py(0) - 3) + ' ' + (px(xmax) + 3) + ',' + (py(0) + 3) + '"/>' +
+        '<line class="fig-axis" x1="' + px(xmin) + '" y1="' + py(0) + '" x2="' + px(xmin) + '" y2="' + (py(ymax) - 4) + '"/>' +
+        '<text class="fig-t dim" x="' + (px(xmax) + 4) + '" y="' + (py(0) + 15) + '">X</text>' +
+        '<text class="fig-t dim" x="' + (px(xmin) - 4) + '" y="' + (py(ymax) - 6) + '">Y</text>';
+    }
+    function curve(x0, x1) {
+      var d = '', i, t;
+      for (i = 0; i <= 90; i++) { t = x0 + (x1 - x0) * i / 90; d += (i ? ' L ' : 'M ') + px(t).toFixed(2) + ' ' + py(f(t)).toFixed(2); }
+      return '<path class="fig-curve" d="' + d + '"/>';
+    }
+    function area(x0, x1, cls) {
+      var d = 'M ' + px(x0).toFixed(2) + ' ' + py(0).toFixed(2), i, t;
+      for (i = 0; i <= 60; i++) { t = x0 + (x1 - x0) * i / 60; d += ' L ' + px(t).toFixed(2) + ' ' + py(f(t)).toFixed(2); }
+      d += ' L ' + px(x1).toFixed(2) + ' ' + py(0).toFixed(2) + ' Z';
+      return '<path class="' + cls + '" d="' + d + '"/>';
+    }
+    function drop(x, yTop) {
+      return '<line class="fig-drop" x1="' + px(x).toFixed(2) + '" y1="' + py(0) + '" x2="' + px(x).toFixed(2) + '" y2="' + py(yTop).toFixed(2) + '"/>';
+    }
+    function box(x0, x1, yTop, cls) {
+      var X = px(x0), Y = py(yTop), W = px(x1) - px(x0), H = py(0) - py(yTop);
+      return '<rect class="' + cls + '" x="' + X.toFixed(2) + '" y="' + Y.toFixed(2) + '" width="' + Math.max(W, 0.6).toFixed(2) + '" height="' + H.toFixed(2) + '"/>';
+    }
+    function dot(x, y, cls) {
+      return '<circle class="' + cls + '" cx="' + px(x).toFixed(2) + '" cy="' + py(y).toFixed(2) + '" r="3.4"/>';
+    }
+    function tick(x, label) {
+      return '<text class="fig-t" text-anchor="middle" x="' + px(x).toFixed(2) + '" y="' + (py(0) + 15) + '">' + label + '</text>';
+    }
+    // tick ที่กันชนกันเองเมื่อ x กับ x+h ชิดกัน
+    function tickPair(xa, xb, la, lb) {
+      if (px(xb) - px(xa) >= 30) return tick(xa, la) + tick(xb, lb);
+      return '<text class="fig-t" text-anchor="end" x="' + (px(xa) - 2) + '" y="' + (py(0) + 15) + '">' + la + '</text>' +
+        '<text class="fig-t" text-anchor="start" x="' + (px(xb) + 2) + '" y="' + (py(0) + 15) + '">' + lb + '</text>';
+    }
+    function label(x, y, s, cls, anchor) {
+      return '<text class="fig-t ' + (cls || '') + '" text-anchor="' + (anchor || 'middle') + '" x="' + px(x).toFixed(2) + '" y="' + py(y).toFixed(2) + '">' + s + '</text>';
+    }
+    // ป้ายกำกับที่ไม่ยอมให้ล้นขอบซ้าย/ขวาของกรอบ
+    // ป้ายที่เลื่อนจากจุดบนกราฟเป็นหน่วยพิกเซล (สองแกนสเกลไม่เท่ากัน จึงเลื่อนเป็นข้อมูลไม่ได้)
+    function labelPx(x, y, dx, dy, s, cls, anchor) {
+      return '<text class="fig-t ' + (cls || '') + '" text-anchor="' + (anchor || 'middle') + '" x="' + (px(x) + dx).toFixed(2) + '" y="' + (py(y) + dy).toFixed(2) + '">' + s + '</text>';
+    }
+    function labelClamped(x, y, s, cls, halfWidth) {
+      var X = Math.min(Math.max(px(x), padL + halfWidth), w - padR - halfWidth);
+      return '<text class="fig-t ' + (cls || '') + '" text-anchor="middle" x="' + X.toFixed(2) + '" y="' + py(y).toFixed(2) + '">' + s + '</text>';
+    }
+    function paint(parts) { svg.innerHTML = parts.join(''); }
+    return { px: px, py: py, w: w, axes: axes, curve: curve, area: area, drop: drop, box: box, dot: dot, tick: tick, tickPair: tickPair, label: label, labelClamped: labelClamped, labelPx: labelPx, paint: paint };
+  }
+
+  /* ── ภาค 1: แถบ [x, x+h] ถูกหนีบด้วยสี่เหลี่ยม m·h และ M·h ── */
+  (function () {
+    var svg = document.getElementById('figPart1');
+    if (!svg) return;
+    var slider = document.getElementById('figH');
+    var hOut = document.getElementById('figHVal');
+    var out = document.getElementById('figSqueeze');
+
+    var a = 0.25, x0 = 1.15, XMAX = 4.2, YMAX = 2.5;
+    // เลือกแอมพลิจูดให้ f(x) = 2 พอดี ตัวเลขในบรรทัดสรุปจะได้อ่านง่าย
+    var AMP = 1 / Math.sin(x0);
+    var f = function (t) { return 1 + AMP * Math.sin(t); };
+    var Fint = function (t) { return t - AMP * Math.cos(t); };   // ปฏิยานุพันธ์แม่นตรงของ f
+    var G = Fig(svg, { xmin: 0, xmax: XMAX, ymax: YMAX, w: 340, h: 220, f: f });
+
+    // ค่าต่ำสุด/สูงสุดของ f บนช่วงปิด [t0, t1] พร้อมตำแหน่งที่มันเกิด
+    function minMaxOn(t0, t1) {
+      var lo = Infinity, hi = -Infinity, at_lo = t0, at_hi = t0, i, t, v;
+      for (i = 0; i <= 400; i++) {
+        t = t0 + (t1 - t0) * i / 400; v = f(t);
+        if (v < lo) { lo = v; at_lo = t; }
+        if (v > hi) { hi = v; at_hi = t; }
+      }
+      return { m: lo, M: hi, atM: at_lo, atX: at_hi };
+    }
+
+    renderProofFig1 = function () {
+      var lang = getLang() === 'en' ? 'en' : 'th';
+      var h = parseFloat(slider.value) / 100;
+      var mm = minMaxOn(x0, x0 + h);
+      var q = (Fint(x0 + h) - Fint(x0)) / h;      // ผลหารเชิงผลต่างของ F
+      var fx = f(x0);
+      // ตอนนี้อยู่กรณีไหน: f เพิ่ม/ลดตลอดช่วง (m, M อยู่ปลายช่วง) หรือมียอด/ท้องอยู่ข้างใน
+      var fL = f(x0), fR = f(x0 + h), tol = 1e-6;
+      var mLeft = Math.abs(mm.m - fL) < tol, mRight = Math.abs(mm.m - fR) < tol;
+      var MLeft = Math.abs(mm.M - fL) < tol, MRight = Math.abs(mm.M - fR) < tol;
+
+      var parts = [];
+      parts.push(G.box(x0, x0 + h, mm.M, 'fig-rect-M'));           // กรอบสูง M
+      parts.push(G.area(a, x0, 'fig-area'));                       // F(x)
+      parts.push(G.area(x0, x0 + h, 'fig-strip'));                 // แถบ
+      parts.push(G.box(x0, x0 + h, mm.m, 'fig-rect-m'));           // กรอบสูง m
+      parts.push(G.axes());
+      parts.push(G.curve(0.05, XMAX - 0.05));
+      parts.push(G.drop(a, f(a)));
+      parts.push(G.drop(x0, Math.max(f(x0), mm.M)));
+      parts.push(G.drop(x0 + h, Math.max(f(x0 + h), mm.M)));
+      parts.push(G.tick(a, 'a'));
+      parts.push(G.tickPair(x0, x0 + h, 'x', 'x+h'));
+      // จุดบนเส้นโค้งที่ค่าต่ำสุดและค่าสูงสุดเกิดขึ้นจริง
+      parts.push(G.dot(mm.atM, mm.m, 'fig-dot-m'));
+      parts.push(G.dot(mm.atX, mm.M, 'fig-dot-M'));
+      // ถ้าจุดต่ำสุด/สูงสุดตรงกับปลายช่วงพอดี ให้บอกไปเลยว่ามันคือ f(x) หรือ f(x+h)
+      if (mLeft) parts.push(G.labelPx(mm.atM, mm.m, -8, -10, 'f(x)', 'gm', 'end'));
+      else if (mRight) parts.push(G.labelPx(mm.atM, mm.m, 6, 15, 'f(x+h)', 'gm', 'start'));
+      else parts.push(G.labelPx(mm.atM, mm.m, 6, 15, 'm', 'gm', 'start'));
+      if (MLeft) parts.push(G.labelPx(mm.atX, mm.M, -6, -15, 'f(x)', 'gM', 'end'));
+      else if (MRight) parts.push(G.labelPx(mm.atX, mm.M, 6, -15, 'f(x+h)', 'gM', 'start'));
+      else parts.push(G.labelPx(mm.atX, mm.M, 6, -15, 'M', 'gM', 'start'));
+      parts.push(G.label((a + x0) / 2, f((a + x0) / 2) * 0.36, 'F(x)', 'dim'));
+      G.paint(parts);
+
+      hOut.textContent = 'h = ' + fmt(h, 2);
+      var caseTxt;
+      if (mLeft && MRight) caseTxt = (lang === 'en'
+        ? 'f increases across this whole strip → here m = f(x) and M = f(x+h) exactly'
+        : 'ช่วงนี้ f เพิ่มขึ้นตลอด → ตรงนี้ m = f(x) และ M = f(x+h) พอดี');
+      else if (MLeft && mRight) caseTxt = (lang === 'en'
+        ? 'f decreases across this whole strip → m = f(x+h) and M = f(x), the other way round'
+        : 'ช่วงนี้ f ลดลงตลอด → m = f(x+h) และ M = f(x) สลับกัน');
+      else caseTxt = (lang === 'en'
+        ? 'f turns around inside this strip → m or M is NOT an endpoint value'
+        : 'ช่วงนี้ f มียอดหรือท้องอยู่ข้างใน → m หรือ M ไม่ได้อยู่ที่ปลายช่วง');
+      var atMinTxt = (lang === 'en' ? 'min at t = ' : 'ต่ำสุดที่ t = ') + fmt(mm.atM, 2);
+      var atMaxTxt = (lang === 'en' ? 'max at t = ' : 'สูงสุดที่ t = ') + fmt(mm.atX, 2);
+      var mName = mLeft ? ' = f(x)' : (mRight ? ' = f(x+h)' : '');
+      var MName = MLeft ? ' = f(x)' : (MRight ? ' = f(x+h)' : '');
+      out.innerHTML =
+        '<span class="m">m' + mName + ' = ' + fmt(mm.m, 3) + '</span> &nbsp;≤&nbsp; ' +
+        '<span class="q">' + frac('F(x+h) − F(x)', 'h') + ' = ' + fmt(q, 3) + '</span>' +
+        ' &nbsp;≤&nbsp; <span class="M">M' + MName + ' = ' + fmt(mm.M, 3) + '</span>' +
+        '<span class="case' + ((mLeft && MRight) || (MLeft && mRight) ? ' ends' : '') + '">' + caseTxt + '</span>' +
+        '<span class="gap">' + atMinTxt + ' &nbsp;•&nbsp; ' + atMaxTxt + ' &nbsp;•&nbsp; x = ' + fmt(x0, 2) + '</span>' +
+        '<span class="gap">' + (lang === 'en'
+          ? 'gap M − m = ' + fmt(mm.M - mm.m, 3) + ' &nbsp;•&nbsp; target f(x) = ' + fmt(fx, 3)
+          : 'ช่องว่าง M − m = ' + fmt(mm.M - mm.m, 3) + ' &nbsp;•&nbsp; เป้าหมาย f(x) = ' + fmt(fx, 3)) + '</span>';
+    };
+
+    slider.addEventListener('input', renderProofFig1);
+    renderProofFig1();
+  })();
+
+  /* ── ภาค 2 ── */
+  (function () {
+    var f = function (t) { return 0.7 + 0.28 * t + 0.35 * Math.sin(1.4 * t); };
+    var Aint = function (t) { return 0.7 * t + 0.14 * t * t - 0.25 * Math.cos(1.4 * t); };  // ปฏิยานุพันธ์แม่นตรงของ f
+    var a = 0.5, b = 3.9, x0 = 1.9, XMAX = 4.5, YMAX = 2.6;
+
+    function mkStatic(id, draw) {
+      var svg = document.getElementById(id);
+      if (!svg) return;
+      var G = Fig(svg, { xmin: 0, xmax: XMAX, ymax: YMAX, w: 340, h: 190, f: f });
+      G.paint(draw(G));
+    }
+
+    // (i) R — พื้นที่ทั้งผืนจาก a ถึง b
+    mkStatic('figR', function (G) {
+      return [
+        G.area(a, b, 'fig-area'),
+        G.axes(),
+        G.curve(0.05, XMAX - 0.05),
+        G.drop(a, f(a)), G.drop(b, f(b)),
+        G.tick(a, 'a'), G.tick(b, 'b'),
+        G.label((a + b) / 2, 0.42, 'R', ''),
+        G.label(b - 0.35, f(b) + 0.42, 'y = f(x)', 'dim', 'end')
+      ];
+    });
+
+    // (ii) A(x) — พื้นที่สะสมถึง x
+    mkStatic('figA', function (G) {
+      return [
+        G.area(a, x0, 'fig-area'),
+        G.axes(),
+        G.curve(0.05, XMAX - 0.05),
+        G.drop(a, f(a)), G.drop(x0, f(x0)), G.drop(b, f(b)),
+        G.tick(a, 'a'), G.tick(x0, 'x'), G.tick(b, 'b'),
+        G.label((a + x0) / 2, 0.42, 'A(x)', ''),
+        G.label(b - 0.35, f(b) + 0.42, 'y = f(x)', 'dim', 'end')
+      ];
+    });
+
+    // (iii) แถบ A(x+h) − A(x) กับกรอบสี่เหลี่ยมสูง f(x) กว้าง h — ลาก h ได้
+    (function () {
+      var svg = document.getElementById('figStrip');
+      if (!svg) return;
+      var slider = document.getElementById('figStripH');
+      var hOut = document.getElementById('figStripHVal');
+      var out = document.getElementById('figStripOut');
+      var G = Fig(svg, { xmin: 0, xmax: XMAX, ymax: YMAX, w: 340, h: 200, f: f });
+
+      renderProofFigStrip = function () {
+        var lang = getLang() === 'en' ? 'en' : 'th';
+        var h = parseFloat(slider.value) / 100;
+        var exact = Aint(x0 + h) - Aint(x0);      // A(x+h) − A(x) ค่าจริง
+        var approx = f(x0) * h;                    // f(x)·h
+        var err = Math.abs(exact - approx);
+
+        G.paint([
+          G.area(a, x0, 'fig-area'),
+          G.area(x0, x0 + h, 'fig-strip'),
+          G.box(x0, x0 + h, f(x0), 'fig-rect-f'),
+          G.axes(),
+          G.curve(0.05, XMAX - 0.05),
+          G.drop(a, f(a)), G.drop(x0, f(x0)), G.drop(x0 + h, f(x0 + h)),
+          G.tick(a, 'a'),
+          G.tickPair(x0, x0 + h, 'x', 'x+h'),
+          G.label((a + x0) / 2, 0.42, 'A(x)', 'dim'),
+          G.labelClamped(x0 + h / 2, f(x0) + 0.55, 'A(x+h) − A(x)', 'gM', 44),
+          G.label(x0 + h + 0.1, f(x0) * 0.5, 'f(x)·h', 'gM', 'start')
+        ]);
+
+        hOut.textContent = 'h = ' + fmt(h, 2);
+        out.innerHTML =
+          '<span class="M">A(x+h) − A(x) = ' + fmt(exact, 4) + '</span> &nbsp;' + (lang === 'en' ? 'vs.' : 'เทียบกับ') + '&nbsp; ' +
+          '<span class="q">f(x)·h = ' + fmt(approx, 4) + '</span>' +
+          '<span class="gap">' + (lang === 'en'
+            ? 'difference = ' + fmt(err, 4) + ' &nbsp;•&nbsp; difference ÷ h = ' + fmt(err / h, 4) + ' → 0 as h → 0, which is why the ≈ becomes exact in the limit'
+            : 'ต่างกัน = ' + fmt(err, 4) + ' &nbsp;•&nbsp; ต่าง ÷ h = ' + fmt(err / h, 4) + ' → 0 เมื่อ h → 0 นี่คือเหตุผลที่ ≈ กลายเป็น = ตอนเข้าลิมิต') +
+          '</span>';
+      };
+
+      slider.addEventListener('input', renderProofFigStrip);
+      renderProofFigStrip();
+    })();
+  })();
+
+})();
+
+applyLang(getLang());
+</script>
+
+</body>
+</html>

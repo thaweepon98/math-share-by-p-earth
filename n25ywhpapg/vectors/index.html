@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>เวกเตอร์ — รวมสื่อการสอน by P'Earth</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800&display=swap');
+
+:root {
+  --primary: #1C3B22;
+  --secondary: #FF8A3D;
+  --accent: #68EF3F;
+  --bg: #F3F7EC;
+  --card: #FFFFFF;
+  --text: #2D3748;
+  --muted: #718096;
+  --border: #E2E8F0;
+  --shadow: 0 4px 24px rgba(28,59,34,0.10);
+  --radius: 16px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Sarabun', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+}
+
+header {
+  background: linear-gradient(135deg, #1C3B22 0%, #2E5936 100%);
+  color: white;
+  padding: 32px 24px 28px;
+  text-align: center;
+  position: relative;
+}
+
+header h1 { font-size: 1.6rem; font-weight: 700; margin-bottom: 6px; }
+header p { font-size: 0.95rem; opacity: 0.9; }
+.lang-toggle {
+  position: absolute;
+  top: 12px; right: 20px;
+  background: rgba(255,255,255,.15);
+  color: white;
+  border: 1.5px solid rgba(255,255,255,.5);
+  border-radius: 20px;
+  padding: 5px 14px;
+  font-family: 'Sarabun', sans-serif;
+  font-size: .8rem;
+  font-weight: 700;
+  cursor: pointer;
+  z-index: 2;
+}
+.lang-toggle:hover { background: rgba(255,255,255,.28); }
+
+.crumb {
+  max-width: 1000px;
+  margin: 20px auto 0;
+  padding: 0 24px;
+}
+.crumb a {
+  color: var(--primary);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+.crumb a:hover { text-decoration: underline; }
+
+main {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 18px;
+  margin-top: 20px;
+}
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 24px 20px;
+  text-decoration: none;
+  color: var(--text);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.card-wrap {
+  position: relative;
+  display: flex;
+  transition: transform 0.15s ease;
+}
+.card-wrap > .card { flex: 1; }
+.card-wrap:hover { transform: translateY(-3px); }
+.card-wrap:hover > .card { box-shadow: 0 8px 28px rgba(28,59,34,0.18); }
+
+/* ปุ่มคัดลอกลิงก์ของการ์ด — ลิงก์ชี้ไปที่เว็บจริงเสมอ แม้เปิดไฟล์จากเครื่อง */
+.copy-link {
+  position: absolute;
+  top: 14px; right: 14px;
+  background: #F3F7EC;
+  color: var(--primary);
+  border: 1px solid #CFE3C3;
+  border-radius: 999px;
+  padding: 4px 11px;
+  font-family: 'Sarabun', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+.copy-link:hover { background: #E3F3D8; }
+.copy-link.done { background: var(--primary); color: white; border-color: var(--primary); }
+.copy-link.missing { background: #FFF1E6; color: #B4531A; border-color: #FFC9A3; }
+
+.card .icon { font-size: 2.2rem; }
+.card .title { font-size: 1.1rem; font-weight: 700; }
+.card .desc { font-size: 0.85rem; color: var(--muted); line-height: 1.5; }
+.card .tags { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 4px; }
+.card .tag {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--primary);
+  background: #E3F3D8;
+  border-radius: 999px;
+  padding: 3px 10px;
+}
+
+.empty-note {
+  color: var(--muted);
+  font-size: 0.9rem;
+  margin-top: 16px;
+}
+</style>
+</head>
+<body>
+
+<header>
+  <button id="langToggle" class="lang-toggle" onclick="toggleLang()">EN</button>
+  <h1 data-th="➡️ เวกเตอร์" data-en="➡️ Vectors">➡️ เวกเตอร์</h1>
+  <p data-th="สื่อการสอนเรื่องเวกเตอร์ ม.5" data-en="Vector Teaching Materials (Grade 11)">สื่อการสอนเรื่องเวกเตอร์ ม.5</p>
+</header>
+
+<div class="crumb"><a href="../index.html" data-th="← กลับหน้า ม.5" data-en="← Back to Grade 11 (M.5)">← กลับหน้า ม.5</a></div>
+
+<main>
+  <div id="topicGrid" class="grid"></div>
+  <p id="emptyNote" class="empty-note" style="display:none;" data-th="ยังไม่มีสื่อ" data-en="No materials yet">ยังไม่มีสื่อ</p>
+</main>
+
+<script>
+// ── ปุ่มสลับภาษาไทย/อังกฤษ (โค้ดชุดนี้ฝังซ้ำในทุกหน้าของเว็บ) ──
+const PAGE_TITLE = { th: "เวกเตอร์ — รวมสื่อการสอน by P'Earth", en: "Vectors — Teaching Materials by P'Earth" };
+
+let langMemory = 'th';
+function getLang() {
+  try { return localStorage.getItem('siteLang') || 'th'; }
+  catch (e) { return langMemory; }
+}
+function applyLang(lang) {
+  document.documentElement.lang = lang;
+  document.title = PAGE_TITLE[lang];
+  document.querySelectorAll('[data-th]').forEach(el => {
+    el.textContent = (lang === 'en' && el.dataset.en) ? el.dataset.en : el.dataset.th;
+  });
+  const btn = document.getElementById('langToggle');
+  if (btn) btn.textContent = lang === 'en' ? 'ไทย' : 'EN';
+  if (typeof onLangChange === 'function') onLangChange(lang);
+}
+function toggleLang() {
+  const next = getLang() === 'en' ? 'th' : 'en';
+  langMemory = next;
+  try { localStorage.setItem('siteLang', next); } catch (e) {}
+  applyLang(next);
+}
+function onLangChange(lang) { renderTopics(); }
+
+// เพิ่มสื่อใหม่ในหมวดเวกเตอร์: copy ไฟล์ html เข้าโฟลเดอร์นี้ (math/vectors/) แล้วเพิ่ม object ในนี้ (ใส่ทั้ง _th และ _en)
+const TOPICS = [
+  { file: "vectors-geometric.html", title_th: "เวกเตอร์แบบรูปภาพ", title_en: "Vectors as Pictures", desc_th: "สเกลาร์ vs เวกเตอร์ เท่ากัน ขนาน นิเสธ บวก-ลบแบบลาก บวกแบบพิเศษ คูณสเกลาร์ และสูตรจุดแบ่งด้านสามเหลี่ยม", desc_en: "Scalar vs vector, equal/parallel/opposite, head-to-tail and parallelogram addition, scalar multiples, and the dividing-point formula", icon: "🏹", tags_th: ["เวกเตอร์", "ม.5"], tags_en: ["Vectors", "Grade 11"] },
+  { file: "vectors-2d.html", title_th: "เวกเตอร์ในพิกัดฉาก 2 มิติ", title_en: "Vectors in 2D Coordinates", desc_th: "ai+bj มาได้ยังไง (แอนิเมชัน 5 ขั้น) ปลาย−ต้น การดำเนินการ ขนาน ขนาด เวกเตอร์หนึ่งหน่วย และ dot พร้อมทริกมือ", desc_en: "Where ai+bj comes from (5-step animation), tip−tail, operations, parallel, magnitude, unit vector, and dot product with the hand trick", icon: "📐", tags_th: ["เวกเตอร์", "ม.5"], tags_en: ["Vectors", "Grade 11"] },
+  { file: "coordinates-3d.html", title_th: "ระบบพิกัดฉาก 3 มิติ", title_en: "3D Coordinate System", desc_th: "กฎมือขวา ระนาบอ้างอิง พล็อตจุดด้วยกล่อง ภาพฉายของจุด และระยะห่างสองจุด (ภาพ 3 มิติลากหมุนได้)", desc_en: "Right-hand rule, reference planes, plotting with a box, projections of a point, and distance between two points (rotatable 3D views)", icon: "🧊", tags_th: ["เวกเตอร์", "พิกัด 3 มิติ"], tags_en: ["Vectors", "3D Coordinates"] },
+  { file: "vectors-3d.html", title_th: "เวกเตอร์ 3 มิติ dot และ cross", title_en: "3D Vectors, Dot and Cross", desc_th: "ai+bj+ck dot 3 มิติ cross ด้วยวิธีปิดหลักที่หา และการหาพื้นที่กับปริมาตร", desc_en: "ai+bj+ck, the 3D dot product, cross product by covering columns, and area and volume applications", icon: "🚀", tags_th: ["เวกเตอร์", "cross"], tags_en: ["Vectors", "Cross Product"] }
+];
+
+function renderTopics() {
+  const lang = getLang();
+  const grid = document.getElementById("topicGrid");
+  if (TOPICS.length === 0) {
+    document.getElementById("emptyNote").style.display = "block";
+  } else {
+    grid.innerHTML = TOPICS.map(t => `
+      <div class="card-wrap">
+      <a class="card" href="./${t.file}">
+        <div class="icon">${t.icon}</div>
+        <div class="title">${lang === 'en' ? t.title_en : t.title_th}</div>
+        <div class="desc">${lang === 'en' ? t.desc_en : t.desc_th}</div>
+        <div class="tags">${(lang === 'en' ? t.tags_en : t.tags_th).map(tag => `<span class="tag">${tag}</span>`).join("")}</div>
+      </a>
+      </div>
+    `).join("");
+  }
+}
+
+renderTopics();
+applyLang(getLang());
+</script>
+
+</body>
+</html>

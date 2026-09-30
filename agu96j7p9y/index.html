@@ -1,0 +1,933 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>สื่อการสอน : เลขยกกำลัง ม.1</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800&display=swap');
+
+  :root {
+    --primary: #1C3B22; --secondary: #FF8A3D; --accent: #68EF3F; --accent-2: #3FA82E; --warning: #FFB347;
+    --bg: #F3F7EC; --card: #FFFFFF; --text: #2D3748; --muted: #718096; --border: #E2E8F0;
+    --shadow: 0 4px 24px rgba(28,59,34,0.10); --radius: 16px;
+    --pos: #047857; --pos-bg: #ECFDF5; --neg: #BE185D; --neg-bg: #FFF4EC;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Sarabun', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+  sup { font-size: .68em; line-height: 0; vertical-align: super; font-weight: 800; }
+  sup sup { font-size: .8em; }
+
+  header { background: linear-gradient(135deg, #1C3B22 0%, #2E5936 100%); color: white; padding: 28px 40px 20px; text-align: center; position: relative; overflow: hidden; }
+  header::before { content: ''; position: absolute; top: -60px; right: -60px; width: 200px; height: 200px; background: rgba(255,255,255,0.07); border-radius: 50%; }
+  header h1 { font-size: 2rem; font-weight: 800; letter-spacing: .5px; }
+  header p { font-size: 1rem; opacity: .85; margin-top: 4px; }
+  .back-link { position: absolute; top: 14px; left: 20px; color: white; text-decoration: none; font-size: .85rem; font-weight: 600; opacity: .9; z-index: 2; }
+  .back-link:hover { opacity: 1; text-decoration: underline; }
+  .lang-toggle { position: absolute; top: 14px; right: 20px; background: rgba(255,255,255,.15); color: white; border: 1.5px solid rgba(255,255,255,.5); border-radius: 20px; padding: 5px 14px; font-family: 'Sarabun', sans-serif; font-size: .8rem; font-weight: 700; cursor: pointer; z-index: 2; }
+  .lang-toggle:hover { background: rgba(255,255,255,.28); }
+
+  nav { display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; padding: 20px 24px 0; background: white; border-bottom: 3px solid var(--border); }
+  .tab-btn { padding: 10px 18px; border: none; background: transparent; border-radius: 10px 10px 0 0; font-family: 'Sarabun', sans-serif; font-size: 0.95rem; font-weight: 600; color: var(--muted); cursor: pointer; transition: all .25s; border-bottom: 3px solid transparent; margin-bottom: -3px; }
+  .tab-btn:hover { color: var(--primary); background: #E3F3D8; }
+  .tab-btn.active { color: var(--primary); border-bottom-color: var(--primary); background: #E3F3D8; }
+
+  main { max-width: 980px; margin: 0 auto; padding: 32px 20px 60px; }
+  .tab-panel { display: none; animation: fadeIn .35s ease; }
+  .tab-panel.active { display: block; }
+  @keyframes fadeIn { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
+  @keyframes rowIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+
+  .card { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); padding: 28px 32px; margin-bottom: 24px; }
+  .card-title { font-size: 1.25rem; font-weight: 700; color: var(--primary); margin-bottom: 12px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .card-title .icon { font-size: 1.5rem; }
+  .intro { font-size: 1.02rem; line-height: 1.8; margin-bottom: 14px; }
+  .box-info { background: #EEF7E6; border-left: 4px solid var(--primary); border-radius: 10px; padding: 14px 18px; margin: 14px 0; line-height: 1.8; }
+  .box-warn { background: #FFF7ED; border-left: 4px solid var(--warning); border-radius: 10px; padding: 14px 18px; margin: 14px 0; line-height: 1.8; }
+  .box-ok   { background: #ECFDF5; border-left: 4px solid var(--accent);  border-radius: 10px; padding: 14px 18px; margin: 14px 0; line-height: 1.8; }
+  .formula { background: linear-gradient(135deg,#1C3B22,#2E5936); color: white; border-radius: 12px; padding: 14px 24px; text-align: center; font-size: 1.3rem; font-weight: 700; margin: 14px 0; letter-spacing: .5px; display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 4px 18px; }
+
+  .btn { padding: 10px 24px; background: var(--primary); color: white; border: none; border-radius: 30px; font-family: 'Sarabun', sans-serif; font-size: 1rem; font-weight: 700; cursor: pointer; transition: background .2s, opacity .2s; }
+  .btn:hover:not(:disabled) { background: #2E5936; }
+  .btn:disabled { opacity: .4; cursor: not-allowed; }
+  .btn.ghost { background: white; color: var(--primary); border: 2px solid var(--primary); }
+  .btn.ghost:hover:not(:disabled) { background: #E3F3D8; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 6px 0; align-items: center; }
+  .chips .chips-label { font-weight: 700; color: var(--muted); font-size: .95rem; margin-right: 2px; }
+  .chip { padding: 7px 16px; border: 2px solid var(--border); border-radius: 30px; background: #fff; font-family: 'Sarabun', sans-serif; font-weight: 700; font-size: 1rem; cursor: pointer; color: var(--text); display: inline-flex; align-items: center; gap: 4px; }
+  .chip:hover { border-color: var(--primary); }
+  .chip.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+
+  .frac { display: inline-flex; flex-direction: column; align-items: center; font-weight: 700; line-height: 1.15; vertical-align: middle; margin: 0 4px; }
+  .frac .num { font-size: 1em; border-bottom: 2.5px solid currentColor; padding: 0 3px 2px; min-width: 18px; text-align: center; white-space: nowrap; }
+  .frac .den { font-size: 1em; padding: 3px 3px 0; min-width: 18px; text-align: center; white-space: nowrap; }
+
+  .slider-row { display: flex; align-items: center; gap: 12px; margin: 6px 0; }
+  .slider-row b { min-width: 30px; font-size: 1.05rem; }
+  input[type=range] { accent-color: var(--primary); flex: 1; max-width: 260px; min-width: 100px; }
+  .slider-val { font-weight: 800; color: var(--primary); font-size: 1.1rem; min-width: 26px; }
+
+  /* ─── ตัวแสดงแผ่นฐาน (stage): แผ่นจัดตำแหน่งแบบ absolute แล้วให้ CSS transition เลื่อนเอง ─── */
+  .stage-outer { position: relative; width: 100%; max-width: 680px; margin: 10px auto 6px; overflow: hidden; background: #FBFDF8; border: 1.5px dashed var(--border); border-radius: 14px; transition: height .45s ease; }
+  .stage-inner { position: absolute; left: 0; top: 0; width: 680px; transform-origin: 0 0; }
+  .st { position: absolute; transition: left .85s ease, top .85s ease, width .85s ease, height .85s ease, opacity .6s ease, background .5s, border-color .5s, color .5s, box-shadow .5s; }
+  .st-t { width: 38px; height: 38px; border-radius: 9px; border: 2.5px solid; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1.05rem; white-space: nowrap; }
+  .st-t[data-n]::after { content: attr(data-n); position: absolute; bottom: -17px; left: 0; right: 0; text-align: center; font-size: .74rem; font-weight: 700; color: var(--muted); }
+  .t-a { background: #DBEAFE; border-color: #2563EB; color: #1E40AF; }
+  .t-b { background: #FEF3C7; border-color: #D97706; color: #92400E; }
+  .t-neg { background: #FFE4E6; border-color: #E11D48; color: #9F1239; }
+  .t-pos { background: #DCFCE7; border-color: #16A34A; color: #166534; }
+  .t-c { background: #FFEDD5; border-color: #F97316; color: #9A3412; }
+  .t-ghost { background: #F1F5F9; border-color: #94A3B8; color: #64748B; border-style: dashed; }
+  .t-pair { box-shadow: 0 0 0 4px rgba(249,115,22,.6); }
+  .t-big { width: 78px; font-size: 1.15rem; }
+  .st-x { border: 2.5px solid; border-radius: 10px; background: transparent; }
+  .x-g { border-color: #94A3B8; }
+  .x-p1 { border-color: #2563EB; background: rgba(37,99,235,.06); }
+  .x-line { height: 3px !important; border: none; background: var(--text); border-radius: 2px; }
+  .st-s { font-weight: 800; color: var(--text); text-align: center; white-space: nowrap; font-size: 1.1rem; line-height: 1.2; }
+  .l-red { color: #DC2626; }
+  .l-mut { color: var(--muted); font-size: .95rem; font-weight: 700; }
+  .l-big { font-size: 3rem; color: var(--primary); }
+  .l-paren { font-size: 2.2rem; font-weight: 400; color: var(--muted); line-height: 1; }
+  .l-neg { color: #E11D48; font-size: 1.7rem; }
+
+  .wg-params { margin-bottom: 4px; }
+  .wg-eq { text-align: center; font-size: 1.35rem; font-weight: 800; color: var(--primary); min-height: 3.1em; display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+  .wg-cap { background: #EEF7E6; border-left: 4px solid var(--primary); border-radius: 10px; padding: 12px 16px; line-height: 1.75; min-height: 3.7em; margin-top: 6px; }
+  .wg-res:not(:empty) { margin-top: 10px; background: #fff; border: 2px solid var(--border); border-radius: 12px; padding: 12px 16px; line-height: 1.9; font-weight: 700; animation: rowIn .5s ease; }
+  .wg-nav { display: flex; justify-content: center; align-items: center; gap: 14px; margin-top: 12px; flex-wrap: wrap; }
+  .wg-nav .btn { padding: 9px 22px; }
+  .wg-cnt { font-weight: 700; color: var(--muted); min-width: 92px; text-align: center; }
+
+  /* ป้ายสมบัติ ①–⑨ (สีประจำแต่ละข้อ) */
+  .pbadge { display: inline-flex; align-items: center; justify-content: center; width: 26px; height: 26px; border-radius: 50%; background: var(--pc); color: #fff; font-weight: 800; font-size: .85rem; vertical-align: middle; flex: none; }
+  .hl { border-radius: 5px; padding: 0 3px; }
+  .ans { background: #ECFDF5; border: 2px solid var(--accent-2); border-radius: 8px; padding: 2px 10px; color: #047857; font-weight: 800; }
+  .ptag { display: inline-block; background: #F1F5F9; border-radius: 20px; padding: 2px 12px; font-size: .88rem; font-weight: 700; color: #475569; }
+
+  .wk-cell { position: relative; background: #fff; border: 2px solid var(--border); border-radius: 14px; padding: 12px 16px 12px 56px; margin-bottom: 12px; line-height: 1.8; }
+  .wk-cell.fresh { animation: rowIn .5s ease; }
+  .wk-cell.q { background: #F8FAFC; }
+  .wk-cell.plain { padding-left: 16px; }
+  .wk-cell.final { border-color: var(--accent-2); }
+  .wk-cell .stepno { position: absolute; left: 14px; top: 14px; width: 28px; height: 28px; border-radius: 50%; background: var(--primary); color: #fff; font-size: .85rem; font-weight: 800; display: flex; align-items: center; justify-content: center; }
+  .wk-cell.q .stepno { background: var(--muted); }
+  .wk-eq { font-size: 1.2rem; font-weight: 700; overflow-x: auto; padding: 2px 0; }
+  .wk-tags { display: flex; flex-wrap: wrap; gap: 6px 14px; align-items: center; margin-top: 4px; font-size: .92rem; font-weight: 600; color: #475569; }
+  .wk-tags span.tg { display: inline-flex; align-items: center; gap: 6px; }
+
+  .lad { max-width: 460px; margin: 10px auto; }
+  .lad-op { text-align: center; color: var(--muted); font-weight: 700; font-size: .95rem; margin: 2px 0; animation: rowIn .4s ease; }
+  .plegend { display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 8px 16px; margin: 10px 0 6px; }
+  .plegend > div { display: flex; align-items: center; gap: 10px; font-weight: 600; font-size: .98rem; }
+
+  .rv { border: 2px solid var(--border); border-radius: 12px; padding: 10px 14px; margin-bottom: 10px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .rv .rv-q { font-size: 1.2rem; font-weight: 800; min-width: 130px; }
+  .rv .rv-steps { font-size: 1.2rem; font-weight: 800; color: var(--primary); display: flex; gap: 12px; flex-wrap: wrap; flex: 1; }
+  .rv .rv-steps span { animation: rowIn .4s ease; }
+  .rv .rv-steps span.last { color: #047857; }
+  .rv button { padding: 5px 14px; font-size: .88rem; }
+
+  @media (max-width: 700px) {
+    header h1 { font-size: 1.4rem; }
+    header { padding: 34px 16px 16px; }
+    .card { padding: 20px 14px; }
+    .tab-btn { font-size: .85rem; padding: 8px 10px; }
+    .wk-cell { padding-left: 48px; }
+    .wg-eq { font-size: 1.15rem; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <button id="langToggle" class="lang-toggle" onclick="toggleLang()">EN</button>
+  <h1 data-th="🧱 เลขยกกำลัง" data-en="🧱 Exponents">🧱 เลขยกกำลัง</h1>
+  <p data-th="ที่มาของเลขยกกำลัง • สมบัติ 9 ข้อ ด้วยแผ่นฐาน • โจทย์ยาก • ม.1" data-en="Where exponents come from • the 9 properties with base tiles • hard problems">ที่มาของเลขยกกำลัง • สมบัติ 9 ข้อ ด้วยแผ่นฐาน • โจทย์ยาก • ม.1</p>
+</header>
+
+<nav>
+  <button class="tab-btn active" onclick="showTab('origin', this)" data-th="🧱 ที่มา" data-en="🧱 Origin">🧱 ที่มา</button>
+  <button class="tab-btn" onclick="showTab('muldiv', this)" data-th="✖️➗ คูณ / หาร" data-en="✖️➗ Multiply / Divide">✖️➗ คูณ / หาร</button>
+  <button class="tab-btn" onclick="showTab('nest', this)" data-th="🔁 ยกกำลังซ้อน & กระจาย" data-en="🔁 Power of a Power & Distributing">🔁 ยกกำลังซ้อน & กระจาย</button>
+  <button class="tab-btn" onclick="showTab('neg', this)" data-th="➖ ฐานติดลบ" data-en="➖ Negative Bases">➖ ฐานติดลบ</button>
+  <button class="tab-btn" onclick="showTab('trap', this)" data-th="⚠️ กับดัก" data-en="⚠️ Traps">⚠️ กับดัก</button>
+  <button class="tab-btn" onclick="showTab('ex', this)" data-th="📝 โจทย์ยาก" data-en="📝 Hard Problems">📝 โจทย์ยาก</button>
+</nav>
+
+<main>
+  <section id="tab-origin" class="tab-panel active"></section>
+  <section id="tab-muldiv" class="tab-panel"></section>
+  <section id="tab-nest" class="tab-panel"></section>
+  <section id="tab-neg" class="tab-panel"></section>
+  <section id="tab-trap" class="tab-panel"></section>
+  <section id="tab-ex" class="tab-panel"></section>
+</main>
+
+<script>
+// ══════════════ ภาษาไทย/อังกฤษ (ค่าใน data-th/data-en ถือเป็น HTML — ดู docs/adr/0002) ══════════════
+const PAGE_TITLE = { th: "สื่อการสอน : เลขยกกำลัง ม.1", en: "Teaching Aid: Exponents" };
+let langMemory = 'th';
+function getLang() { try { return localStorage.getItem('siteLang') || 'th'; } catch (e) { return langMemory; } }
+function applyLang(lang) {
+  document.documentElement.lang = lang;
+  document.title = PAGE_TITLE[lang];
+  document.querySelectorAll('[data-th]').forEach(el => { el.innerHTML = (lang === 'en' && el.dataset.en) ? el.dataset.en : el.dataset.th; });
+  const btn = document.getElementById('langToggle');
+  if (btn) btn.textContent = lang === 'en' ? 'ไทย' : 'EN';
+  if (typeof onLangChange === 'function') onLangChange(lang);
+}
+function toggleLang() {
+  const next = getLang() === 'en' ? 'th' : 'en';
+  langMemory = next;
+  try { localStorage.setItem('siteLang', next); } catch (e) {}
+  applyLang(next);
+}
+function onLangChange() { ALL.forEach(w => w.langRefresh()); }
+
+// ══════════════ ตัวช่วย ══════════════
+const EN = () => getLang() === 'en';
+const T = (th, en) => ({ th, en });
+const tx = v => (v == null ? '' : typeof v === 'string' ? v : v[getLang()]);
+const esc = s => s.replace(/&/g, '&amp;').replace(/"/g, '&quot;');
+const d = (th, en) => `<span data-th="${esc(th)}" data-en="${esc(en)}">${th}</span>`;
+const frac = (n, dd) => `<span class="frac"><span class="num">${n}</span><span class="den">${dd}</span></span>`;
+const P = (b, e) => `${b}<sup>${e}</sup>`;
+const mn = v => String(v).replace('-', '−');
+const rep = (b, c, sep) => Array(c).fill(b).join(sep === undefined ? '×' : sep);
+const isNum = b => /^\d+$/.test(String(b));
+const gcd = (a, b) => b ? gcd(b, a % b) : a;
+
+// สีประจำสมบัติ ①–⑨ (ใช้ทั้งในแท็บของมันและป้ายในโจทย์ยาก)
+const PC = { 1: '#2563EB', 2: '#EA580C', 3: '#9333EA', 4: '#0D9488', 5: '#4D7C0F', 6: '#DB2777', 7: '#64748B', 8: '#A16207', 9: '#0E7490' };
+const PN = {
+  1: T('คูณฐานเดียวกัน → บวกเลขชี้กำลัง', 'Multiply same base → add exponents'),
+  2: T('หารฐานเดียวกัน → ลบเลขชี้กำลัง', 'Divide same base → subtract exponents'),
+  3: T('ยกกำลังซ้อน → คูณเลขชี้กำลัง', 'Power of a power → multiply exponents'),
+  4: T('a⁰ = 1', 'a⁰ = 1'),
+  5: T('a¹ = a', 'a¹ = a'),
+  6: T('เลขชี้กำลังลบ → กลับบน–ล่าง', 'Negative exponent → flip top/bottom'),
+  7: T('กับดัก: + ไม่รวมเลขชี้กำลัง', 'Trap: + never adds exponents'),
+  8: T('กระจายเลขชี้กำลังเข้าวงเล็บ (× ÷ เท่านั้น)', 'Distribute into brackets (× ÷ only)'),
+  9: T('ฐานติดลบ: คู่ = +  คี่ = −', 'Negative base: even = +, odd = −')
+};
+const pb = n => `<span class="pbadge" style="--pc:${PC[n]}">${n}</span>`;
+const hl = (n, html) => `<span class="hl" style="background:${PC[n]}26;border-bottom:2px solid ${PC[n]}">${html}</span>`;
+const ans = html => `<span class="ans">${html}</span>`;
+const card = (icon, title, inner) => `<div class="card"><div class="card-title"><span class="icon">${icon}</span><span>${title}</span></div>${inner}</div>`;
+
+// ══════════════ ตัวแสดงแผ่นฐาน (Stage) ══════════════
+// แผ่นทุกชิ้นมี id คงที่ ทุกครั้งที่ set() ถ้า id เดิมตำแหน่งใหม่ CSS จะเลื่อนให้เอง
+const W = 680, PITCH = 44;
+const tl = (id, x, y, txt, cls, o) => Object.assign({ k: 't', id, x, y, txt, cls }, o || {});
+const lb = (id, x, y, html, cls, w, o) => Object.assign({ k: 's', id, x, y, html, cls: cls || '', w: w || 80 }, o || {});
+const bx = (id, x, y, w, h, cls, o) => Object.assign({ k: 'x', id, x, y, w, h, cls: cls || 'x-g' }, o || {});
+// label กึ่งกลางที่ cx
+const lbc = (id, cx, y, html, cls, w, o) => lb(id, cx - (w || 80) / 2, y, html, cls, w, o);
+
+class Stage {
+  constructor(host) {
+    this.outer = host; host.classList.add('stage-outer');
+    this.inner = document.createElement('div'); this.inner.className = 'stage-inner';
+    host.appendChild(this.inner);
+    this.els = new Map(); this.h = 160;
+  }
+  fit() {
+    const w = this.outer.clientWidth; if (!w) return;
+    const s = Math.min(1, w / W);
+    this.inner.style.transform = 'scale(' + s + ')';
+    this.inner.style.height = this.h + 'px';
+    this.outer.style.height = (this.h * s) + 'px';
+  }
+  place(el, it) {
+    const kind = { t: 'st-t', x: 'st-x', s: 'st-s' }[it.k];
+    el.className = 'st ' + kind + ' ' + (it.cls || '');
+    el.style.left = it.x + 'px'; el.style.top = it.y + 'px';
+    if (it.k === 'x') { el.style.width = it.w + 'px'; el.style.height = it.h + 'px'; }
+    if (it.k === 's') el.style.width = (it.w || 80) + 'px';
+    el.style.opacity = it.op === undefined ? 1 : it.op;
+    const html = it.k === 't' ? it.txt : (it.html || '');
+    if (el._h !== html) { el.innerHTML = html; el._h = html; }
+    if (it.n != null) el.setAttribute('data-n', it.n); else el.removeAttribute('data-n');
+  }
+  set(items, h) {
+    this.h = h; const seen = new Set();
+    items.forEach(it => {
+      seen.add(it.id);
+      let el = this.els.get(it.id);
+      if (!el) {
+        el = document.createElement('div'); this.inner.appendChild(el); this.els.set(it.id, el);
+        const from = it.from || it;
+        el.style.transition = 'none';
+        this.place(el, Object.assign({}, it, { x: from.x, y: from.y, op: 0 }));
+        void el.offsetWidth; el.style.transition = '';
+      }
+      this.place(el, it);
+    });
+    [...this.els].forEach(([id, el]) => {
+      if (!seen.has(id)) { this.els.delete(id); el.style.opacity = 0; setTimeout(() => el.remove(), 700); }
+    });
+    this.fit();
+  }
+}
+
+const ALL = [];
+// ══════════════ Widget: พารามิเตอร์ (สไลเดอร์/ชิป) + Stage + ปุ่ม ◀ ▶ ══════════════
+function makeWidget(host, cfg) {
+  const w = { cfg, p: {}, k: 0 };
+  cfg.params.forEach(q => { w.p[q.key] = q.val; });
+  host.classList.add('wg');
+  host.innerHTML = '<div class="wg-params"></div><div class="wg-stage"></div><div class="wg-eq"></div><div class="wg-cap"></div><div class="wg-res"></div><div class="wg-nav"><button class="btn ghost prev"></button><span class="wg-cnt"></span><button class="btn next"></button></div>';
+  const q = s => host.querySelector(s);
+  const stage = new Stage(q('.wg-stage'));
+  const prev = q('.prev'), next = q('.next'), cnt = q('.wg-cnt');
+  const nSteps = () => cfg.nSteps(w.p);
+
+  w.buildParams = () => {
+    const box = q('.wg-params'); box.innerHTML = '';
+    cfg.params.forEach(pr => {
+      if (pr.kind === 'range') {
+        const row = document.createElement('label'); row.className = 'slider-row';
+        row.innerHTML = `<b>${tx(pr.label)}</b><input type="range" min="${pr.min}" max="${pr.max}" value="${w.p[pr.key]}"><span class="slider-val">${w.p[pr.key]}</span>`;
+        const inp = row.querySelector('input'), val = row.querySelector('.slider-val');
+        inp.addEventListener('input', () => { w.p[pr.key] = +inp.value; val.textContent = inp.value; w.k = 0; w.render(); });
+        box.appendChild(row);
+      } else {
+        const row = document.createElement('div'); row.className = 'chips';
+        row.innerHTML = `<span class="chips-label">${tx(pr.label)}</span>` + pr.opts.map(o => `<button class="chip${String(o[0]) === String(w.p[pr.key]) ? ' active' : ''}" data-v="${o[0]}">${tx(o[1])}</button>`).join('');
+        row.querySelectorAll('.chip').forEach(c => c.addEventListener('click', () => {
+          const v = pr.opts.find(o => String(o[0]) === c.dataset.v)[0];
+          w.p[pr.key] = v; w.k = 0;
+          row.querySelectorAll('.chip').forEach(x => x.classList.toggle('active', x === c));
+          w.render();
+        }));
+        box.appendChild(row);
+      }
+    });
+    prev.textContent = EN() ? '◀ Back' : '◀ ย้อน';
+    next.textContent = EN() ? 'Next ▶' : 'ถัดไป ▶';
+  };
+  w.render = () => {
+    const N = nSteps(); if (w.k >= N) w.k = N - 1;
+    const r = cfg.build(w.p, w.k);
+    stage.set(r.items, r.h);
+    q('.wg-eq').innerHTML = r.eq ? '<span>' + r.eq + '</span>' : '';
+    q('.wg-cap').innerHTML = tx(r.cap);
+    q('.wg-res').innerHTML = r.res || '';
+    cnt.textContent = (EN() ? 'Step ' : 'ขั้นที่ ') + (w.k + 1) + ' / ' + N;
+    prev.disabled = w.k === 0; next.disabled = w.k >= N - 1;
+    if (N <= 1) q('.wg-nav').style.display = 'none';
+  };
+  w.langRefresh = () => { w.buildParams(); w.render(); };
+  w.fit = () => stage.fit();
+  prev.addEventListener('click', () => { if (w.k > 0) { w.k--; w.render(); } });
+  next.addEventListener('click', () => { if (w.k < nSteps() - 1) { w.k++; w.render(); } });
+  w.buildParams(); w.render();
+  ALL.push(w);
+  return w;
+}
+
+// ══════════════ Stepper ข้อความ (บันได / กับดัก / ตัวอย่างการคำนวณ): เผยทีละแถว สะสมเรื่อยๆ ══════════════
+function makeSteps(host, getRows) {
+  const w = { k: 0, rows: getRows };
+  host.classList.add('wg');
+  host.innerHTML = '<div class="wk-list"></div><div class="wg-nav"><button class="btn ghost prev"></button><span class="wg-cnt"></span><button class="btn next"></button></div>';
+  const list = host.querySelector('.wk-list');
+  const prev = host.querySelector('.prev'), next = host.querySelector('.next'), cnt = host.querySelector('.wg-cnt');
+  w.render = (fresh) => {
+    const rows = w.rows(); if (w.k >= rows.length) w.k = rows.length - 1;
+    list.innerHTML = rows.slice(0, w.k + 1).map((r, i) => {
+      const isLast = i === rows.length - 1;
+      const tags = (r.props || []).map(n => `<span class="tg">${pb(n)} ${tx(PN[n])}</span>`).concat((r.tags || []).map(t => `<span class="ptag">${tx(t)}</span>`)).join('');
+      const no = r.q ? '?' : i;
+      const plain = !!r.plain;
+      return `<div class="wk-cell${r.q ? ' q' : ''}${plain ? ' plain' : ''}${isLast && !r.q && !plain ? ' final' : ''}${i === w.k && fresh ? ' fresh' : ''}">${plain ? '' : `<span class="stepno">${no}</span>`}<div class="wk-eq">${r.html}</div>${tags ? `<div class="wk-tags">${tags}</div>` : ''}${r.note ? `<div class="wk-tags">${tx(r.note)}</div>` : ''}</div>`;
+    }).join('');
+    cnt.textContent = (EN() ? 'Step ' : 'ขั้นที่ ') + (w.k + 1) + ' / ' + rows.length;
+    prev.disabled = w.k === 0; next.disabled = w.k >= rows.length - 1;
+    prev.textContent = EN() ? '◀ Back' : '◀ ย้อน';
+    next.textContent = EN() ? 'Next ▶' : 'ถัดไป ▶';
+  };
+  w.reset = () => { w.k = 0; w.render(false); };
+  w.langRefresh = () => w.render(false);
+  w.fit = () => {};
+  prev.addEventListener('click', () => { if (w.k > 0) { w.k--; w.render(false); } });
+  next.addEventListener('click', () => { if (w.k < w.rows().length - 1) { w.k++; w.render(true); } });
+  w.render(false);
+  ALL.push(w);
+  return w;
+}
+
+function showTab(id, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  if (btn) btn.classList.add('active');
+  requestAnimationFrame(() => ALL.forEach(w => w.fit()));
+}
+let _rsT;
+window.addEventListener('resize', () => { clearTimeout(_rsT); _rsT = setTimeout(() => ALL.forEach(w => w.fit()), 120); });
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => ALL.forEach(w => w.fit()));
+
+// เลขฐานตัวเลข → ค่าจริง + เศษส่วนย่อ
+const nf = (a, b) => { const g = gcd(a, b); return [a / g, b / g]; };
+const BASES = [['a', 'a'], ['2', '2'], ['3', '3']];
+const BASE_LABEL = T('ฐาน', 'Base');
+
+// ═══════════════════════ แท็บ 1 · ที่มา ═══════════════════════
+// (ก) ฮุก: 2 คูณกัน 20 ตัวยาวเกินไป → ต้องมีตัวย่อ
+const HOOK = {
+  params: [],
+  nSteps: () => 2,
+  build(p, k) {
+    const S = 60, ox = (W - (10 * S - 22)) / 2, it = [];
+    for (let i = 0; i < 20; i++) {
+      const row = Math.floor(i / 10), col = i % 10;
+      it.push(tl('h' + i, k ? (W - 38) / 2 : ox + col * S, k ? 60 : 16 + row * 60, '2', 't-a', { op: k ? 0 : 1 }));
+      if (col < 9) it.push(lb('hx' + i, ox + col * S + 38, (k ? 60 : 16 + row * 60) + 8, '×', 'l-mut', 22, { op: k ? 0 : 1 }));
+    }
+    it.push(lbc('big', W / 2, 24, P('2', 20), 'l-big', 260, { op: k ? 1 : 0 }));
+    it.push(lbc('t1', W / 2 - 22, 104, tx(T('↑ ฐาน<br>(ตัวที่ถูกคูณซ้ำ)', '↑ Base<br>(the repeated factor)')), 'l-mut', 150, { op: k ? 1 : 0 }));
+    it.push(lbc('t2', W / 2 + 96, 6, tx(T('เลขชี้กำลัง = 20 ↙<br>(คูณกันกี่ตัว)', 'Exponent = 20 ↙<br>(how many factors)')), 'l-mut', 170, { op: k ? 1 : 0 }));
+    return {
+      items: it, h: 150,
+      eq: `2 × 2 × 2 × … × 2 <span class="l-mut" style="font-size:1rem">${EN() ? '(20 twos)' : '(2 จำนวน 20 ตัว)'}</span>${k ? ` = ${P(2, 20)}` : ''}`,
+      cap: k ? T('ตัวย่อ: เขียน 2 ครั้งเดียว แล้วเขียนเลขเล็กๆ ข้างบนบอกว่าคูณกันกี่ตัว', 'Shorthand: write 2 once, with a small number on top for how many are multiplied.')
+             : T('อยากเขียน 2 คูณกัน 20 ตัว ยาวเกินจอ และนับพลาดง่ายมาก… ต้องมีตัวย่อ', 'Writing 2 multiplied 20 times is too long and easy to miscount… we need a shorthand.')
+    };
+  }
+};
+
+// (ข) แผ่นฐาน: aⁿ = แผ่น n แผ่นเรียงแถว
+const TILES = {
+  params: [
+    { key: 'base', kind: 'chips', val: 'a', opts: BASES, label: BASE_LABEL },
+    { key: 'n', kind: 'range', min: 1, max: 8, val: 5, label: 'n' }
+  ],
+  nSteps: () => 1,
+  build(p) {
+    const { base, n } = p, S = 60, ox = (W - (n * S - 22)) / 2, y = 30, it = [];
+    for (let i = 0; i < n; i++) it.push(tl('t' + i, ox + i * S, y, base, 't-a'));
+    for (let i = 0; i < n - 1; i++) it.push(lb('x' + i, ox + i * S + 38, y + 8, '×', 'l-mut', 22));
+    it.push(bx('br', ox, y + 52, n * S - 22, 3, 'x-line'));
+    it.push(lbc('bl', W / 2, y + 62, `${n} ${EN() ? 'tiles' : 'แผ่น'}`, 'l-mut', 260));
+    const v = isNum(base) ? Math.pow(+base, n) : null;
+    return {
+      items: it, h: 130,
+      eq: `${P(base, n)} = ${n === 1 ? base : rep(base, n)}${v ? ` = ${v}` : ''}`,
+      cap: T('เลขชี้กำลัง n = จำนวนแผ่นฐาน (จำนวนตัวที่คูณกัน) — เลื่อน n ดูว่าแผ่นเพิ่มขึ้นทีละแผ่น', 'The exponent n = the number of base tiles (how many factors). Slide n and watch tiles appear one by one.')
+    };
+  }
+};
+
+// ═══════════════════════ แท็บ 2 · คูณ / หาร ═══════════════════════
+// ① aᵐ · aⁿ = aᵐ⁺ⁿ
+const MUL = {
+  params: [
+    { key: 'base', kind: 'chips', val: 'a', opts: BASES, label: BASE_LABEL },
+    { key: 'm', kind: 'range', min: 1, max: 6, val: 3, label: 'm' },
+    { key: 'n', kind: 'range', min: 1, max: 6, val: 2, label: 'n' }
+  ],
+  nSteps: () => 3,
+  build(p, k) {
+    const { base, m, n } = p, gap = k === 0 ? 60 : 0, y = 34;
+    const ox = (W - ((m + n) * PITCH - 6 + gap)) / 2, g1w = m * PITCH - 6, g2x = ox + m * PITCH + gap, g2w = n * PITCH - 6;
+    const it = [];
+    for (let i = 0; i < m; i++) it.push(tl('a' + i, ox + i * PITCH, y, base, 't-a', { n: k === 2 ? i + 1 : null }));
+    for (let j = 0; j < n; j++) it.push(tl('b' + j, g2x + j * PITCH, y, base, 't-b', { n: k === 2 ? m + j + 1 : null }));
+    it.push(lb('op', ox + g1w + gap / 2 - 15, y + 6, '×', '', 30, { op: k === 0 ? 1 : 0 }));
+    it.push(bx('bx1', ox - 6, y - 6, g1w + 12, 50, 'x-g', { op: k === 0 ? 1 : 0 }));
+    it.push(bx('bx2', g2x - 6, y - 6, g2w + 12, 50, 'x-g', { op: k === 0 ? 1 : 0 }));
+    it.push(bx('bxa', ox - 8, y - 8, (m + n) * PITCH - 6 + 16, k === 2 ? 76 : 54, 'x-p1', { op: k >= 1 ? 1 : 0 }));
+    it.push(lbc('l1', k === 0 ? ox + g1w / 2 : W / 2, k === 2 ? 116 : 102, k === 0 ? P(base, m) : k === 1 ? P(base, `${m}+${n}`) : `${m} + ${n} = ${m + n} ${EN() ? 'tiles' : 'แผ่น'}`, 'l-mut', 260));
+    it.push(lbc('l2', g2x + g2w / 2, 102, P(base, n), 'l-mut', 120, { op: k === 0 ? 1 : 0 }));
+    const eqs = [
+      `${P(base, m)} × ${P(base, n)}`,
+      `${P(base, m)} × ${P(base, n)} = (${rep(base, m)}) × (${rep(base, n)})`,
+      `${P(base, m)} × ${P(base, n)} = ${P(base, `${m}+${n}`)} = ${P(base, m + n)}`
+    ];
+    let res = '';
+    if (k === 2 && isNum(base)) res = `${pb(1)} ${P(base, m)} × ${P(base, n)} = ${Math.pow(+base, m)} × ${Math.pow(+base, n)} = ${Math.pow(+base, m + n)} = ${P(base, m + n)} ✓`;
+    else if (k === 2) res = `${pb(1)} ${tx(PN[1])}`;
+    return {
+      items: it, h: 150, eq: eqs[k], res,
+      cap: [
+        T('สองก้อน: แผ่น m แผ่น กับแผ่น n แผ่น คั่นด้วย × — ฐานเหมือนกัน แผ่นจึงหน้าตาเหมือนกัน', 'Two blocks: m tiles and n tiles joined by × — same base, so the tiles look alike.'),
+        T('× แปลว่าแค่ต่อแถวกัน — ดันสองก้อนชนกันเป็นแถวเดียว (สีฟ้า/ส้มยังบอกว่าแผ่นมาจากก้อนไหน)', '× just means “put them in one line” — push both blocks together into one row (blue/orange still show where each tile came from).'),
+        T('นับแผ่นทั้งแถว ได้ m + n แผ่น — เลขชี้กำลังมาบวกกันเพราะเรานับแผ่นสองก้อนรวมกัน', 'Count the whole row: m + n tiles — exponents add because we are counting the tiles of both blocks together.')
+      ][k]
+    };
+  }
+};
+
+// ② ④ ⑥ หารฐานเดียวกัน: จับคู่บน-ล่างตัดกัน
+const DIV = {
+  params: [
+    { key: 'base', kind: 'chips', val: 'a', opts: BASES, label: BASE_LABEL },
+    { key: 'm', kind: 'range', min: 1, max: 6, val: 5, label: T('m (บน)', 'm (top)') },
+    { key: 'n', kind: 'range', min: 1, max: 6, val: 2, label: T('n (ล่าง)', 'n (bottom)') }
+  ],
+  nSteps: () => 3,
+  build(p, k) {
+    const { base, m, n } = p, c = Math.min(m, n), remT = m - c, remB = n - c, mx = Math.max(m, n);
+    const ox = (W - mx * PITCH) / 2, ox2 = (W - Math.max(remT, remB, 1) * PITCH) / 2;
+    const yT = 14, yL = 62, yB = 74, it = [];
+    for (let i = 0; i < m; i++) {
+      const paired = i < c;
+      it.push(tl('T' + i, k === 2 ? (paired ? ox + i * PITCH : ox2 + (i - c) * PITCH) : ox + i * PITCH, yT, base, 't-a' + (k === 1 && paired ? ' t-pair' : ''), { op: k === 2 && paired ? 0 : 1 }));
+    }
+    for (let i = 0; i < n; i++) {
+      const paired = i < c;
+      it.push(tl('B' + i, k === 2 ? (paired ? ox + i * PITCH : ox2 + (i - c) * PITCH) : ox + i * PITCH, yB, base, 't-b' + (k === 1 && paired ? ' t-pair' : ''), { op: k === 2 && paired ? 0 : 1 }));
+    }
+    const lw = (k === 2 ? Math.max(remT, remB, 1) : mx) * PITCH - 6 + 16, lx = (k === 2 ? ox2 : ox) - 8;
+    it.push(bx('line', lx, yL, lw, 3, 'x-line'));
+    it.push(lbc('oneT', ox2 + Math.max(remT, remB, 1) * PITCH / 2 - 3, yT + 6, '1', '', 38, { op: k === 2 && remT === 0 ? 1 : 0 }));
+    it.push(lbc('oneB', ox2 + Math.max(remT, remB, 1) * PITCH / 2 - 3, yB + 6, '1', '', 38, { op: k === 2 && remB === 0 ? 1 : 0 }));
+    const fr0 = frac(P(base, m), P(base, n));
+    let eq, cap, res = '', prop = m > n ? 2 : m === n ? 4 : 6;
+    if (k === 0) {
+      eq = fr0;
+      cap = T('การหารคือเศษส่วน: แผ่นก้อนแรกอยู่บน ก้อนที่สองอยู่ล่าง — ลองเลื่อน m, n ให้ m > n, m = n และ m < n', 'Division is a fraction: first block on top, second below. Try m > n, m = n and m < n.');
+    } else if (k === 1) {
+      eq = fr0;
+      cap = T(`จับคู่แผ่นบน–ล่างที่อยู่คอลัมน์เดียวกัน ได้ ${c} คู่ (= ตัวที่น้อยกว่าระหว่าง m กับ n) — คู่หนึ่ง = ตัวเองหารตัวเอง = 1`, `Pair up the top and bottom tiles in the same column: ${c} pair(s) (the smaller of m and n). Each pair is a number divided by itself = 1.`);
+    } else {
+      const same = P(base, `${m}−${n}`);
+      if (prop === 2) {
+        eq = `${fr0} = ${same} = ${P(base, m - n)}`;
+        cap = T(`ตัดคู่ออกหมด เหลือแผ่นบน ${m - n} แผ่น ล่างว่าง (= 1) จึงได้ ${m} − ${n} = ${m - n} แผ่น`, `All pairs cancel; ${m - n} tile(s) stay on top and the bottom is empty (= 1), so ${m} − ${n} = ${m - n}.`);
+      } else if (prop === 4) {
+        eq = `${fr0} = ${same} = ${P(base, 0)} = 1`;
+        cap = T('ตัดกันหมดทั้งบนและล่าง — เหลือ 1 ไม่ใช่ 0! (หารตัวเองได้ 1) จึงได้ a⁰ = 1', 'Everything cancels — what is left is 1, not 0! (something divided by itself is 1), so a⁰ = 1.');
+      } else {
+        eq = `${fr0} = ${same} = ${P(base, mn(m - n))} = ${frac(1, P(base, n - m))}`;
+        cap = T(`บนหมดก่อน เหลือแผ่นล่าง ${n - m} แผ่น อยู่ใต้ 1 → ได้ 1 ส่วน ${n - m} แผ่น ส่วนสูตรให้ ${m} − ${n} = −${n - m} จึงได้ a⁻ᵏ = 1/aᵏ`, `The top runs out first; ${n - m} tile(s) remain below 1 → 1 over ${n - m} tiles. The formula gives ${m} − ${n} = −${n - m}, so a⁻ᵏ = 1/aᵏ.`);
+      }
+      let num = '';
+      if (isNum(base)) {
+        const a = Math.pow(+base, m), b = Math.pow(+base, n), [r1, r2] = nf(a, b);
+        num = ` &nbsp; <span style="color:var(--muted)">${frac(a, b)} = ${r2 === 1 ? r1 : frac(r1, r2)}</span>`;
+      }
+      res = `${pb(prop)} ${tx(PN[prop])}${num}`;
+    }
+    return { items: it, h: 130, eq, cap, res };
+  }
+};
+
+// บันได: ลดเลขชี้กำลังทีละ 1 = หารด้วย 2 ทุกครั้ง → เห็น ④ และ ⑥
+const LADDER = [
+  { e: 3, v: '8' }, { e: 2, v: '4' }, { e: 1, v: '2' }, { e: 0, v: '1', p: 4 },
+  { e: -1, v: frac(1, 2), p: 6 }, { e: -2, v: frac(1, 4), p: 6 }
+];
+const ladderRows = () => LADDER.map((r, i) => ({
+  plain: true, html: `${i ? `<div class="lad-op">↓ ${EN() ? 'divide by' : 'หารด้วย'} 2</div>` : ''}<div style="text-align:center;font-size:1.5rem">${P(2, mn(r.e))} = ${r.v} ${r.p ? pb(r.p) : ''}</div>`
+}));
+
+// ═══════════════════════ แท็บ 3 · ยกกำลังซ้อน & กระจาย ═══════════════════════
+// ③ (aᵐ)ⁿ = aᵐ×ⁿ : ก๊อปกล่อง m แผ่น ไป n กล่อง
+const POW = {
+  params: [
+    { key: 'base', kind: 'chips', val: 'a', opts: BASES, label: BASE_LABEL },
+    { key: 'm', kind: 'range', min: 1, max: 6, val: 3, label: 'm' },
+    { key: 'n', kind: 'range', min: 1, max: 6, val: 3, label: 'n' }
+  ],
+  nSteps: () => 3,
+  build(p, k) {
+    const { base, m, n } = p, RH = 58, y0 = 22, ox = (W - m * PITCH) / 2 + 10, it = [];
+    for (let r = 0; r < n; r++) {
+      const y = y0 + (k === 0 ? 0 : r * RH), vis = !(k === 0 && r > 0);
+      for (let i = 0; i < m; i++) it.push(tl(`p${r}_${i}`, ox + i * PITCH, y, base, 't-a', { op: vis ? 1 : 0, n: k === 2 ? r * m + i + 1 : null }));
+      it.push(bx('bx' + r, ox - 6, y - 6, m * PITCH + 6, 50, 'x-p1', { op: vis && k < 2 ? 1 : 0 }));
+      it.push(lb('rl' + r, ox + m * PITCH + 14, y + 8, P(base, m), 'l-mut', 90, { op: vis && k < 2 ? 1 : 0 }));
+      if (r > 0) it.push(lb('mul' + r, ox - 36, y + 8, '×', '', 26, { op: k === 1 ? 1 : 0 }));
+    }
+    it.push(lb('tot', ox + m * PITCH + 14, y0 + (n - 1) * RH / 2 + 8, `${EN() ? 'Total' : 'รวม'}<br>${m} × ${n} = ${m * n} ${EN() ? 'tiles' : 'แผ่น'}`, '', 150, { op: k === 2 ? 1 : 0 }));
+    const box = P(base, m);
+    return {
+      items: it, h: y0 + n * RH + 12,
+      eq: [
+        `(${box})<sup>${n}</sup>`,
+        `(${box})<sup>${n}</sup> = ${rep(box, n, ' × ')}`,
+        `(${box})<sup>${n}</sup> = ${P(base, rep(m, n, '+'))} = ${P(base, `${m}×${n}`)} = ${P(base, m * n)}`
+      ][k],
+      cap: [
+        T(`กล่องเดียว: ${P(base, m)} คือแผ่น ${m} แผ่น — วงเล็บ (…)ⁿ หมายถึงเอากล่องนี้ไปคูณตัวเอง n รอบ`, 'One box: a block of m tiles. The (…)ⁿ means multiply this whole box by itself n times.'),
+        T(`ก๊อปกล่องมา ${n} กล่อง คูณกัน — ยังเห็นเป็นกล่อง ${m} แผ่นเรียงซ้อน ${n} ชั้น`, `Copy the box ${n} times and multiply them — n stacked boxes of m tiles each.`),
+        T(`เอากรอบออก แล้วนับ: ${m} แผ่น × ${n} แถว = ${m * n} แผ่น (ก็คือบวก ${m} ซ้ำ ${n} ครั้ง — ใช้ ① ซ้ำ)`, `Remove the frames and count: m tiles × n rows = ${m * n} tiles (adding m, n times — property ① repeated).`)
+      ][k],
+      res: k === 2 ? `${pb(3)} ${tx(PN[3])}` : ''
+    };
+  }
+};
+
+// ⑧ (ab)ⁿ = aⁿbⁿ  และ (a/b)ⁿ = aⁿ/bⁿ
+const DIST = {
+  params: [
+    { key: 'form', kind: 'chips', val: 'mul', opts: [['mul', '(a × b)ⁿ'], ['div', '(a ÷ b)ⁿ']], label: T('รูป', 'Form') },
+    { key: 'vals', kind: 'chips', val: 'ab', opts: [['ab', 'a , b'], ['32', '3 , 2']], label: T('ค่า', 'Values') },
+    { key: 'n', kind: 'range', min: 1, max: 5, val: 3, label: 'n' }
+  ],
+  nSteps: () => 3,
+  build(p, k) {
+    const A = p.vals === 'ab' ? 'a' : '3', B = p.vals === 'ab' ? 'b' : '2', n = p.n, it = [];
+    const isMul = p.form === 'mul';
+    if (isMul) {
+      const cw = 2 * PITCH - 6 + 12, gap = 34, tot = n * cw + (n - 1) * gap, ox = (W - tot) / 2;
+      const tox = (W - (n * PITCH - 6)) / 2;
+      for (let i = 0; i < n; i++) {
+        const cx = ox + i * (cw + gap) + 6;
+        it.push(tl('A' + i, k === 0 ? cx : tox + i * PITCH, k === 0 ? 30 : 16, A, 't-a', { n: k === 2 ? i + 1 : null }));
+        it.push(tl('B' + i, k === 0 ? cx + PITCH : tox + i * PITCH, k === 0 ? 30 : 116, B, 't-b', { n: k === 2 ? i + 1 : null }));
+        it.push(bx('bx' + i, ox + i * (cw + gap), 24, cw, 50, 'x-g', { op: k === 0 ? 1 : 0 }));
+        if (i < n - 1) it.push(lb('op' + i, ox + i * (cw + gap) + cw + gap / 2 - 13, 36, '×', '', 26, { op: k === 0 ? 1 : 0 }));
+      }
+      it.push(lbc('mid', W / 2, 84, '×', '', 30, { op: k >= 1 ? 1 : 0 }));
+      it.push(bx('rowA', tox - 8, 8, n * PITCH - 6 + 16, 72, 'x-p1', { op: k >= 1 ? 1 : 0 }));
+      it.push(bx('rowB', tox - 8, 108, n * PITCH - 6 + 16, 72, 'x-g', { op: k >= 1 ? 1 : 0 }));
+      it.push(lb('lA', tox + n * PITCH + 14, 26, P(A, n), 'l-mut', 80, { op: k >= 1 ? 1 : 0 }));
+      it.push(lb('lB', tox + n * PITCH + 14, 126, P(B, n), 'l-mut', 80, { op: k >= 1 ? 1 : 0 }));
+    } else {
+      const gap = 44, S = PITCH + gap, tot = n * S - gap, ox = (W - tot) / 2 + 0, tox = (W - (n * PITCH - 6)) / 2;
+      for (let i = 0; i < n; i++) {
+        it.push(tl('A' + i, k === 0 ? ox + i * S : tox + i * PITCH, 16, A, 't-a', { n: null }));
+        it.push(tl('B' + i, k === 0 ? ox + i * S : tox + i * PITCH, 76, B, 't-b', { n: null }));
+        it.push(bx('fl' + i, k === 0 ? ox + i * S - 4 : tox - 4, 62, k === 0 ? 46 : n * PITCH - 6 + 8, 3, 'x-line', { op: k === 0 || i === 0 ? 1 : 0 }));
+        if (i < n - 1) it.push(lb('op' + i, ox + i * S + PITCH + (gap - 26) / 2 - 2, 38, '×', '', 26, { op: k === 0 ? 1 : 0 }));
+      }
+      it.push(lb('lA', tox + n * PITCH + 14, 26, P(A, n), 'l-mut', 80, { op: k >= 1 ? 1 : 0 }));
+      it.push(lb('lB', tox + n * PITCH + 14, 86, P(B, n), 'l-mut', 80, { op: k >= 1 ? 1 : 0 }));
+    }
+    const unit = isMul ? `(${A} × ${B})` : `(${frac(A, B)})`;
+    const eq = [
+      isMul ? `(${A} × ${B})<sup>${n}</sup>` : `(${frac(A, B)})<sup>${n}</sup>`,
+      `${isMul ? `(${A} × ${B})` : `(${frac(A, B)})`}<sup>${n}</sup> = ${rep(unit, n, ' × ')}`,
+      `${isMul ? `(${A} × ${B})` : `(${frac(A, B)})`}<sup>${n}</sup> = ${isMul ? `${P(A, n)} × ${P(B, n)}` : frac(P(A, n), P(B, n))}`
+    ][k];
+    let res = '';
+    if (k === 2) {
+      res = `${pb(8)} ${tx(PN[8])}`;
+      if (p.vals === '32') {
+        const a = Math.pow(3, n), b = Math.pow(2, n);
+        res += isMul ? `<br><span style="color:var(--muted)">${P('(3×2)', n)} = ${P(6, n)} = ${Math.pow(6, n)} &nbsp;|&nbsp; ${P(3, n)} × ${P(2, n)} = ${a} × ${b} = ${a * b} ✓</span>`
+                     : `<br><span style="color:var(--muted)">${P(`(${frac(3, 2)})`, n)} = ${frac(a, b)} ✓</span>`;
+      }
+    }
+    return {
+      items: it, h: isMul ? (k === 0 ? 120 : 190) : 130, eq, res,
+      cap: [
+        T(isMul ? `${n} กล่อง กล่องละ 1 คู่ (a กับ b) คูณกัน` : `${n} ก้อนเศษส่วน (a อยู่บน b อยู่ล่าง) คูณกัน`, isMul ? `${n} boxes of one (a, b) pair, multiplied together.` : `${n} fractions (a on top, b below), multiplied together.`),
+        T(isMul ? 'คูณกันหมด สลับที่ได้ — แผ่น a ทุกตัวไปรวมแถวบน แผ่น b ทุกตัวไปรวมแถวล่าง' : 'คูณกัน: ตัวเศษทุกตัวไปรวมกันข้างบน ตัวส่วนทุกตัวไปรวมกันข้างล่าง', isMul ? 'It is all multiplication, so order does not matter — every a goes to the top row, every b to the bottom row.' : 'Multiplying fractions: all numerators gather on top, all denominators below.'),
+        T(`นับ: a มี ${n} แผ่น b มี ${n} แผ่น → เลขชี้กำลังเท่ากันติดไปทั้งคู่ (ใช้ได้เพราะในวงเล็บเป็น × หรือ ÷ เท่านั้น ถ้าเป็น + ไม่ได้ ดูแท็บกับดัก)`, `Count: ${n} a-tiles and ${n} b-tiles → the exponent goes to both (this works because the bracket holds only × or ÷ — with + it fails, see the Traps tab).`)
+      ][k]
+    };
+  }
+};
+
+// ═══════════════════════ แท็บ 4 · ฐานติดลบ ═══════════════════════
+const NEG = {
+  params: [
+    { key: 'base', kind: 'chips', val: '−3', opts: [['−3', '(−3)'], ['−2', '(−2)'], ['−a', '(−a)']], label: BASE_LABEL },
+    { key: 'n', kind: 'range', min: 1, max: 6, val: 5, label: 'n' }
+  ],
+  nSteps: () => 4,
+  build(p, k) {
+    const { base, n } = p, sym = base === '−a', mag = base.slice(1), pairs = Math.floor(n / 2), left = n % 2, cnt = pairs + left, S = 52, y = 38;
+    const pairVal = sym ? P('a', 2) : String(mag * mag);
+    const finPos = n % 2 === 0;
+    const finTxt = sym ? (finPos ? '' : '−') + (n === 1 ? 'a' : P('a', n)) : mn((finPos ? 1 : -1) * Math.pow(+mag, n));
+    const ox0 = (W - (n * S - 14)) / 2, ox2 = (W - (cnt * S - 14)) / 2, cxb = (W - 78) / 2, it = [];
+    for (let i = 0; i < n; i++) {
+      let x = ox0 + i * S, txt = base, cls = 't-neg', op = 1;
+      if (k === 1 && i < 2 * pairs) cls += ' t-pair';
+      if (k >= 2) {
+        if (i < 2 * pairs) { x = ox2 + Math.floor(i / 2) * S; txt = pairVal; cls = 't-pos'; if (i % 2) op = 0; }
+        else x = ox2 + pairs * S;
+      }
+      if (k === 3) { if (i === 0) { x = cxb; txt = finTxt; cls = (finPos ? 't-pos' : 't-neg') + ' t-big'; } else { x = cxb + 20; op = 0; } }
+      it.push(tl('n' + i, x, y, txt, cls, { op }));
+    }
+    for (let i = 0; i < n - 1; i++) {
+      const x = k < 2 ? ox0 + i * S + 38 : ox2 + i * S + 38;
+      it.push(lb('x' + i, x, y + 9, '×', 'l-mut', 14, { op: (k < 2 || (k === 2 && i < cnt - 1)) ? 1 : 0 }));
+    }
+    const bs = `(${base})`;
+    const eq = [
+      `${bs}<sup>${n}</sup>`,
+      `${bs}<sup>${n}</sup> = ${rep(bs, n, '')}`,
+      `${bs}<sup>${n}</sup> = ${pairs ? rep(pairVal, pairs, ' × ') : ''}${pairs && left ? ' × ' : ''}${left ? bs : ''}`,
+      `${bs}<sup>${n}</sup> = ${finTxt}`
+    ][k];
+    const cap = [
+      T(`${bs}ⁿ คือเอา ${bs} มาคูณกัน n ตัว — ตอนนี้ n = ${n} แผ่นสีแดง (แดง = ติดลบ)`, `${bs}ⁿ means ${bs} multiplied n times — here n = ${n} red tiles (red = negative).`),
+      T(pairs ? `จับคู่ติดกัน: (−) × (−) = (+) ได้ ${pairs} คู่` : 'n = 1 มีแผ่นเดียว ไม่มีคู่ให้จับ', pairs ? `Pair neighbours: (−) × (−) = (+) — ${pairs} pair(s).` : 'n = 1: only one tile, nothing to pair.'),
+      T(`แต่ละคู่กลายเป็นค่าบวก (สีเขียว)${left ? ' แต่ยังเหลือแผ่นแดง 1 แผ่นที่ไม่มีคู่' : ' และไม่เหลือแผ่นแดงเลย'}`, `Every pair becomes positive (green)${left ? ', but one red tile is left without a partner.' : ' and no red tile is left.'}`),
+      T(finPos ? `n = ${n} เป็นเลขคู่ → จับคู่ครบทุกแผ่น → ผลเป็น บวก` : `n = ${n} เป็นเลขคี่ → เหลือแผ่นลบ 1 แผ่นเสมอ → ผลเป็น ลบ`, finPos ? `n = ${n} is even → everything pairs up → the result is positive.` : `n = ${n} is odd → one negative tile is always left → the result is negative.`)
+    ][k];
+    return { items: it, h: 108, eq, cap, res: k === 3 ? `${pb(9)} ${tx(PN[9])}` : '' };
+  }
+};
+
+// −5ⁿ  เทียบกับ  (−5)ⁿ : เลขชี้กำลังจับแค่ตัวที่ติดมัน
+const CMP = {
+  params: [{ key: 'n', kind: 'chips', val: 2, opts: [[2, '2'], [3, '3'], [4, '4']], label: T('เลขชี้กำลัง n', 'Exponent n') }],
+  nSteps: () => 4,
+  build(p, k) {
+    const n = p.n, y = 46, tot = n * PITCH - 6, ox = (W - tot) / 2 + 22, val = Math.pow(5, n), posFin = n % 2 === 0, it = [];
+    const cx1 = (W - 78) / 2 + 22, single = k === 1 || k === 3;
+    for (let i = 0; i < n; i++) {
+      let x = single ? cx1 : ox + i * PITCH, txt = k >= 2 ? '−5' : '5', cls = k >= 2 ? 't-neg' : 't-a', op = 1;
+      if (single) { if (i === 0) { txt = k === 1 ? String(val) : mn(posFin ? val : -val); cls = (k === 1 ? 't-a' : posFin ? 't-pos' : 't-neg') + ' t-big'; } else op = 0; }
+      it.push(tl('q' + i, x, y, txt, cls, { op }));
+    }
+    it.push(lbc('mnus', (single ? cx1 : ox) - 40, y - 4, '−', 'l-neg', 40, { op: k < 2 ? 1 : 0 }));
+    it.push(bx('bx', single ? cx1 - 8 : ox - 8, y - 8, single ? 78 + 16 : tot + 16, 54, k >= 2 ? 'x-g' : 'x-p1'));
+    it.push(lbc('lp', ox - 26, y - 14, '(', 'l-paren', 24, { op: k >= 2 && !single ? 1 : 0 }));
+    it.push(lbc('rp', ox + tot + 26, y - 14, ')', 'l-paren', 24, { op: k >= 2 && !single ? 1 : 0 }));
+    it.push(lbc('lbl', W / 2, 116, k < 2 ? tx(T('เลขชี้กำลังคลุมแค่ 5 (ลบอยู่นอกกรอบ)', 'The exponent covers only 5 (the minus is outside the frame)')) : tx(T('วงเล็บทำให้ −5 เป็นแผ่นเดียวกัน — ลบอยู่ในกรอบ', 'The bracket makes −5 one tile — the minus is inside')), 'l-mut', 460));
+    const eq = [
+      `−5<sup>${n}</sup>`,
+      `−5<sup>${n}</sup> = −(${rep('5', n)}) = −${val}`,
+      `(−5)<sup>${n}</sup> = ${rep('(−5)', n, '')}`,
+      `(−5)<sup>${n}</sup> = ${mn(posFin ? val : -val)}`
+    ][k];
+    const cap = [
+      T(`${'−5'}ⁿ: เลขชี้กำลังจับแค่ตัวที่ติดมัน คือ 5 เท่านั้น — เครื่องหมายลบอยู่นอก เหมือน −(5ⁿ)`, 'The exponent grabs only the number stuck to it — the 5. The minus is outside, like −(5ⁿ).'),
+      T(`คำนวณ 5ⁿ ก่อน = ${val} แล้วค่อยใส่ลบข้างนอก → −${val}`, `Work out 5ⁿ first = ${val}, then put the minus outside → −${val}.`),
+      T('ใส่วงเล็บ (−5)ⁿ: ตอนนี้ −5 เป็นแผ่นเดียว (สีแดง) เลขชี้กำลังจึงยกทั้ง −5', 'With brackets, (−5)ⁿ: −5 is now one red tile, so the exponent raises the whole −5.'),
+      T(posFin ? `n = ${n} เป็นเลขคู่ → ผลบวก ${val} — ต่างจาก −5ⁿ = −${val} คนละคำตอบ` : `n = ${n} เป็นเลขคี่ → ผลลบ ${mn(-val)} ซึ่งบังเอิญเท่ากับ −5ⁿ แต่เหตุผลต่างกัน (ลบข้างนอก vs ลบสามตัวเหลือหนึ่ง)`, posFin ? `n = ${n} is even → +${val} — different from −5ⁿ = −${val}.` : `n = ${n} is odd → ${mn(-val)}, which happens to equal −5ⁿ, but for a different reason (minus outside vs three minuses leaving one).`)
+    ][k];
+    return { items: it, h: 140, eq, cap };
+  }
+};
+
+// ชุดตัวอย่างจากสรุป: กดเผยทีละขั้น
+const REVEAL = [
+  ['−5<sup>2</sup>', ['= −(5×5)', '= −25']],
+  ['−5<sup>3</sup>', ['= −(5×5×5)', '= −125']],
+  ['−(−7<sup>2</sup>)', ['= −(−(7×7))', '= 49']],
+  ['−(−5<sup>3</sup>)', ['= −(−(5×5×5))', '= 125']],
+  ['−((−3)<sup>4</sup>)', ['= −((−3)(−3)(−3)(−3))', '= −(81)', '= −81']],
+  ['−((−4)<sup>3</sup>)', ['= −((−4)(−4)(−4))', '= −(−64)', '= 64']],
+  ['(−a)<sup>3</sup>', ['= (−a)(−a)(−a)', '= −a<sup>3</sup>']],
+  ['(−a)<sup>4</sup>', ['= (−a)(−a)(−a)(−a)', '= a<sup>4</sup>']],
+  ['−a<sup>6</sup>', ['= −(a·a·a·a·a·a)', '= −a<sup>6</sup> ' + d('(ลบอยู่นอก ไม่ถูกยกกำลัง)', '(the minus stays outside)')]]
+];
+function initReveal(host) {
+  host.innerHTML = REVEAL.map((r, i) => `<div class="rv" data-i="${i}"><span class="rv-q">${r[0]}</span><span class="rv-steps"></span><button class="btn ghost"></button></div>`).join('');
+  const label = b => { b.textContent = EN() ? 'Show next ▶' : 'ดูขั้นถัดไป ▶'; };
+  host.querySelectorAll('.rv').forEach(row => {
+    const steps = REVEAL[+row.dataset.i][1], out = row.querySelector('.rv-steps'), btn = row.querySelector('button');
+    let k = 0; label(btn);
+    btn.addEventListener('click', () => {
+      if (k >= steps.length) { k = 0; out.innerHTML = ''; label(btn); return; }
+      out.insertAdjacentHTML('beforeend', `<span${k === steps.length - 1 ? ' class="last"' : ''}>${steps[k]}</span>`);
+      k++;
+      btn.textContent = k >= steps.length ? (EN() ? '↺ Reset' : '↺ ซ่อน') : (EN() ? 'Show next ▶' : 'ดูขั้นถัดไป ▶');
+    });
+  });
+  return { langRefresh() { host.querySelectorAll('.rv button').forEach(b => { b.textContent = b.textContent.startsWith('↺') ? (EN() ? '↺ Reset' : '↺ ซ่อน') : (EN() ? 'Show next ▶' : 'ดูขั้นถัดไป ▶'); }); }, fit() {} };
+}
+
+// ═══════════════════════ แท็บ 5 · กับดัก ═══════════════════════
+// ⑦ a + a + a³ ≠ a⁵ : เครื่องหมาย + ไม่ต่อแถวแผ่น ได้แค่ดึงตัวร่วม
+const TRAP7 = {
+  params: [],
+  nSteps: () => 3,
+  build(p, k) {
+    const y = 34, gap = 44, tot = 38 + gap + 38 + gap + 3 * PITCH - 6, ox = (W - tot) / 2;
+    const x1 = ox, x2 = ox + 38 + gap, x3 = x2 + 38 + gap, it = [];
+    const x0 = (W - 296) / 2;
+    const at = (a, b) => (k === 2 ? b : a);
+    it.push(tl('t1', at(x1, x0), y, 'a', k === 2 ? 't-c' : 't-a'));
+    it.push(tl('t2', at(x2, x0), y, 'a', k === 2 ? 't-c' : 't-a', { op: k === 2 ? 0 : 1 }));
+    it.push(tl('t3a', at(x3, x0), y, 'a', k === 2 ? 't-c' : 't-a', { op: k === 2 ? 0 : 1 }));
+    it.push(tl('t3b', at(x3 + PITCH, x0 + 186), y, 'a', 't-a'));
+    it.push(tl('t3c', at(x3 + 2 * PITCH, x0 + 230), y, 'a', 't-a'));
+    it.push(bx('b1', x1 - 6, y - 6, 50, 50, 'x-g', { op: k < 2 ? 1 : 0 }));
+    it.push(bx('b2', x2 - 6, y - 6, 50, 50, 'x-g', { op: k < 2 ? 1 : 0 }));
+    it.push(bx('b3', x3 - 6, y - 6, 3 * PITCH + 6, 50, 'x-g', { op: k < 2 ? 1 : 0 }));
+    const plusCls = k === 1 ? 'l-red' : '';
+    it.push(lbc('p1', at((x1 + 38 + x2) / 2, x0 + 114), y + 6, '+', plusCls, 30));
+    it.push(lbc('p2', at((x2 + 38 + x3) / 2, x0 + 168), y + 6, '+', plusCls, 30));
+    it.push(lbc('lp', x0 + 62, y - 8, '(', 'l-paren', 24, { op: k === 2 ? 1 : 0 }));
+    it.push(lbc('one1', x0 + 88, y + 6, '1', '', 24, { op: k === 2 ? 1 : 0 }));
+    it.push(lbc('one2', x0 + 142, y + 6, '1', '', 24, { op: k === 2 ? 1 : 0 }));
+    it.push(lbc('rp', x0 + 286, y - 8, ')', 'l-paren', 24, { op: k === 2 ? 1 : 0 }));
+    const gox = (W - (5 * 60 - 22)) / 2;
+    for (let i = 0; i < 5; i++) {
+      it.push(tl('g' + i, gox + i * 60, 118, 'a', 't-ghost', { op: k === 1 ? 1 : 0 }));
+      if (i < 4) it.push(lb('gx' + i, gox + i * 60 + 38, 126, '×', 'l-mut', 22, { op: k === 1 ? 1 : 0 }));
+    }
+    it.push(lbc('gl', W / 2, 168, `a⁵ = a × a × a × a × a &nbsp;(${EN() ? 'needs × between every tile' : 'ต้องมี × คั่นทุกแผ่น'})`, 'l-mut', 520, { op: k === 1 ? 1 : 0 }));
+    const eq = [
+      `a + a + ${P('a', 3)} = ${P('a', 5)} ?`,
+      `2 + 2 + ${P(2, 3)} = 12 &nbsp;≠&nbsp; ${P(2, 5)} = 32`,
+      `a + a + ${P('a', 3)} = a(1 + 1 + ${P('a', 2)})`
+    ][k];
+    const cap = [
+      T('นักเรียนมักเห็น a, a, a³ แล้วบวกเลขชี้กำลังเป็น a⁵ — แต่ระหว่างก้อนเป็นเครื่องหมาย + ไม่ใช่ ×', 'Students often see a, a, a³ and add the exponents to get a⁵ — but the blocks are joined by +, not ×.'),
+      T('เครื่องหมาย + ไม่ต่อแถวแผ่น! a⁵ ต้องมี × คั่นทุกแผ่น (แถวเทา) — ลองแทน a = 2: บวกได้ 12 แต่ 2⁵ = 32', 'A + does not join tiles into a row! a⁵ needs × between every tile (grey row). Try a = 2: the sum is 12 but 2⁵ = 32.'),
+      T('สิ่งที่ทำได้จริง: ทุกก้อนมี a อยู่หนึ่งแผ่นเหมือนกัน (สีส้ม) → ดึงตัวร่วม a ออกมา เหลือ (1 + 1 + a²)', 'What you can do: every block has one common a (orange) → pull it out, leaving (1 + 1 + a²).')
+    ][k];
+    return { items: it, h: k === 1 ? 196 : 112, eq, cap, res: k === 2 ? `${pb(7)} 2 + 2 + 8 = 12 = 2(1 + 1 + 4) ✓` : '' };
+  }
+};
+const trapPowSum = () => [
+  { q: true, html: `(3 + 2)<sup>5</sup> = 3<sup>5</sup> + 2<sup>5</sup> &nbsp;?`, note: T('คิดว่ากระจายเลขชี้กำลังเข้าวงเล็บที่เป็นการบวกได้', 'Thinking the exponent can be distributed over a sum.') },
+  { html: `${EN() ? 'Left' : 'ซ้าย'}: (3 + 2)<sup>5</sup> = 5<sup>5</sup> = 3125` },
+  { html: `${EN() ? 'Right' : 'ขวา'}: 3<sup>5</sup> + 2<sup>5</sup> = 243 + 32 = 275` },
+  { html: `3125 ≠ 275 ✗`, props: [7], note: T('วงเล็บ (3+2) เป็นก้อนเดียวที่ถูกคูณตัวเอง 5 รอบ — กระจายได้เฉพาะ × ÷ (สมบัติ ⑧) ไม่ใช่ +', 'The bracket (3+2) is one block multiplied by itself 5 times — you can distribute only over × ÷ (property 8), never +.') }
+];
+const trapTimes = () => [
+  { q: true, html: `3 × 2<sup>4</sup> = 3<sup>4</sup> × 2<sup>4</sup> &nbsp;?`, note: T('คิดว่าเลขชี้กำลังตัวเดียวคลุมทั้ง 3 และ 2', 'Thinking one exponent covers both 3 and 2.') },
+  { html: `${EN() ? 'Left' : 'ซ้าย'}: 3 × 2<sup>4</sup> = 3 × 16 = 48`, note: T('เลขชี้กำลัง 4 เกาะแค่ 2 ตัวที่ติดมัน', 'The exponent 4 clings only to the 2 next to it.') },
+  { html: `${EN() ? 'Right' : 'ขวา'}: 3<sup>4</sup> × 2<sup>4</sup> = 81 × 16 = 1296` },
+  { html: `48 ≠ 1296 ✗`, props: [8], note: T('อยากกระจายต้องมีวงเล็บครอบก่อน: (3 × 2)⁴ = 3⁴ × 2⁴ จึงจะถูก', 'To distribute you need the bracket first: (3 × 2)⁴ = 3⁴ × 2⁴ is correct.') }
+];
+
+// ═══════════════════════ แท็บ 6 · โจทย์ยาก (จากแบบทดสอบ หน้า 56–57 ของสรุป) ═══════════════════════
+const PREP = (th, en) => [T(th, en)];
+const EXS = {
+  5: () => [
+    { q: true, html: frac(`${P(3, 4)}·${P('a', 2)}·${P(5, 4)}·${P(3, 5)}`, `${P(3, 8)}·a·${P(5, 3)}`) },
+    { props: [1, 2], html: `= ${hl(1, P(3, '4+5−8'))}·${hl(2, P('a', '2−1'))}·${hl(2, P(5, '4−3'))}`, note: T('ฐาน 3 มีทั้งคูณ (บวกเลขชี้กำลัง 4+5) และหาร (ลบ 8) รวมในขั้นเดียว', 'Base 3 has both a product (add 4+5) and a division (subtract 8) — done in one step.') },
+    { tags: PREP('คำนวณเลขชี้กำลังแต่ละตัว', 'Work out each exponent'), html: `= ${P(3, 1)}·${P('a', 1)}·${P(5, 1)}` },
+    { props: [5], html: `= 3·a·5 = ${ans('15a')}` }
+  ],
+  10: () => [
+    { q: true, html: frac(`${P(4, '−9')}·${P(9, 3)}`, P(2, '−7')) },
+    { tags: PREP('ทำฐานให้เหมือนกันก่อน: 4 = 2²', 'Make the bases match first: 4 = 2²'), html: `= ${frac(`(${hl(3, P(2, 2))})<sup>−9</sup>·${P(9, 3)}`, P(2, '−7'))}` },
+    { props: [3], html: `= ${frac(`${hl(3, P(2, '−18'))}·${P(9, 3)}`, P(2, '−7'))}`, note: T('(2²)⁻⁹ → คูณเลขชี้กำลัง 2 × (−9) = −18', '(2²)⁻⁹ → multiply exponents 2 × (−9) = −18') },
+    { props: [2], html: `= ${hl(2, P(2, '−18−(−7)'))}·${P(9, 3)} = ${P(2, '−11')}·${P(9, 3)}` },
+    { props: [6], html: `= ${ans(frac(P(9, 3), P(2, 11)))}` }
+  ],
+  14: () => [
+    { q: true, html: `(${P(4, '−2')}·${P(3, 4)})<sup>−3</sup>` },
+    { props: [8], html: `= ${hl(8, `(${P(4, '−2')})<sup>−3</sup>·(${P(3, 4)})<sup>−3</sup>`)}`, note: T('ในวงเล็บเป็นการคูณ กระจายเลขชี้กำลัง −3 เข้าไปทั้งสองตัว', 'The bracket holds a product, so distribute −3 to both factors.') },
+    { props: [3], html: `= ${P(4, 6)}·${P(3, '−12')}`, note: T('(−2)×(−3) = 6 และ 4×(−3) = −12', '(−2)×(−3) = 6 and 4×(−3) = −12') },
+    { props: [6], html: `= ${ans(frac(P(4, 6), P(3, 12)))}` }
+  ],
+  16: () => [
+    { q: true, html: frac(`(${P(3, 3)})<sup>−3</sup> × (${P(5, '−7')})<sup>−3</sup>`, `3 × ${P(5, 4)} × ${P(9, 2)}`) },
+    { props: [3], html: `= ${frac(`${hl(3, P(3, '−9'))} × ${hl(3, P(5, 21))}`, `3 × ${P(5, 4)} × ${P(9, 2)}`)}`, note: T('ยกกำลังซ้อนบน: 3×(−3) = −9 และ (−7)×(−3) = 21', 'Top powers: 3×(−3) = −9 and (−7)×(−3) = 21') },
+    { tags: PREP('ทำฐานให้เหมือนกัน: 9 = 3²', 'Make the bases match: 9 = 3²'), html: `= ${frac(`${P(3, '−9')} × ${P(5, 21)}`, `3 × ${P(5, 4)} × (${hl(3, P(3, 2))})<sup>2</sup>`)}` },
+    { props: [3], html: `= ${frac(`${P(3, '−9')} × ${P(5, 21)}`, `3 × ${P(5, 4)} × ${hl(3, P(3, 4))}`)}` },
+    { props: [1], html: `= ${frac(`${P(3, '−9')} × ${P(5, 21)}`, `${hl(1, P(3, '1+4'))} × ${P(5, 4)}`)} = ${frac(`${P(3, '−9')} × ${P(5, 21)}`, `${P(3, 5)} × ${P(5, 4)}`)}` },
+    { props: [2], html: `= ${hl(2, P(3, '−9−5'))} × ${hl(2, P(5, '21−4'))} = ${P(3, '−14')} × ${P(5, 17)}` },
+    { props: [6], html: `= ${ans(frac(P(5, 17), P(3, 14)))}` }
+  ],
+  18: () => [
+    { q: true, html: `[${frac(`${P(2, 4)}×${P(3, 2)}`, `3×${P(2, 2)}`)}]<sup>5</sup> × [${frac(`${P(2, 7)}×${P(3, 4)}`, P(2, 3))}]<sup>2</sup>` },
+    { props: [2], html: `= [${hl(2, P(2, 2))}·${hl(2, 3)}]<sup>5</sup> × [${hl(2, P(2, 4))}·${P(3, 4)}]<sup>2</sup>`, note: T('จัดการในวงเล็บก่อน: 2⁴÷2² = 2², 3²÷3 = 3, 2⁷÷2³ = 2⁴', 'Do the brackets first: 2⁴÷2² = 2², 3²÷3 = 3, 2⁷÷2³ = 2⁴') },
+    { props: [8, 3], html: `= ${P(2, 10)}·${P(3, 5)} × ${P(2, 8)}·${P(3, 8)}`, note: T('ยกกำลัง 5 และ 2 เข้าไปทั้งสองตัวในวงเล็บ แล้วคูณเลขชี้กำลัง', 'Distribute the powers 5 and 2 into each factor, then multiply the exponents.') },
+    { props: [1], html: `= ${hl(1, P(2, '10+8'))}·${hl(1, P(3, '5+8'))} = ${ans(`${P(2, 18)}·${P(3, 13)}`)}` }
+  ],
+  20: () => [
+    { q: true, html: `[${frac(`18·${P('x', '−15')}·${P('y', 10)}`, `12·${P('x', '−6')}·${P('y', 9)}`)}]<sup>−2</sup>` },
+    { props: [2], tags: PREP('ตัดเลข 18 ÷ 12 = 3 ⁄ 2', 'Reduce 18 ÷ 12 = 3 ⁄ 2'), html: `= [${frac(3, 2)}·${hl(2, P('x', '−15−(−6)'))}·${hl(2, P('y', '10−9'))}]<sup>−2</sup> = [${frac(3, 2)}·${P('x', '−9')}·y]<sup>−2</sup>` },
+    { props: [8, 3], html: `= (${frac(3, 2)})<sup>−2</sup>·${P('x', 18)}·${P('y', '−2')}`, note: T('กระจาย −2 เข้าทุกตัว: (−9)×(−2) = 18 และ 1×(−2) = −2', 'Distribute −2 to every factor: (−9)×(−2) = 18 and 1×(−2) = −2') },
+    { props: [6, 8], html: `= (${frac(2, 3)})<sup>2</sup>·${P('x', 18)}·${frac(1, P('y', 2))} = ${frac(4, 9)}·${P('x', 18)}·${frac(1, P('y', 2))} = ${ans(frac(`4${P('x', 18)}`, `9${P('y', 2)}`))}`, note: T('(3/2)⁻² กลับบน–ล่างเป็น (2/3)² แล้วกระจาย 2 เข้าเศษและส่วน', '(3/2)⁻² flips to (2/3)², then the 2 goes to top and bottom.') }
+  ]
+};
+
+// ═══════════════════════ สร้างหน้าทั้งหมด ═══════════════════════
+const miniTile = (t, c) => `<span class="st-t ${c || 't-a'}" style="position:relative;display:inline-flex;vertical-align:middle;margin:0 3px">${t}</span>`;
+const legendItems = [
+  [1, `${P('a', 'm')} × ${P('a', 'n')} = ${P('a', 'm+n')}`],
+  [2, `${P('a', 'm')} ÷ ${P('a', 'n')} = ${P('a', 'm−n')}`],
+  [3, `(${P('a', 'm')})<sup>n</sup> = ${P('a', 'm×n')}`],
+  [4, `${P('a', 0)} = 1`],
+  [5, `${P('a', 1)} = a`],
+  [6, `${P('a', '−m')} = ${frac(1, P('a', 'm'))}`],
+  [7, d('กับดัก: a + a + a³ ≠ a⁵', 'Trap: a + a + a³ ≠ a⁵')],
+  [8, `(ab)<sup>n</sup> = ${P('a', 'n')}${P('b', 'n')} &nbsp;,&nbsp; (${frac('a', 'b')})<sup>n</sup> = ${frac(P('a', 'n'), P('b', 'n'))}`],
+  [9, d('(−a)ⁿ : n คู่ → +   n คี่ → −', '(−a)ⁿ : n even → +, n odd → −')]
+];
+
+function buildTabs() {
+  document.getElementById('tab-origin').innerHTML =
+    card('🧱', d('ทำไมต้องมีเลขยกกำลัง', 'Why do we need exponents?'),
+      `<p class="intro">${d('เลขยกกำลังคือ <b>ตัวย่อ</b> ของการคูณตัวเดิมซ้ำๆ — กดปุ่ม ถัดไป ▶ เพื่อดู', 'An exponent is a <b>shorthand</b> for multiplying the same number again and again — press Next ▶.')}</p><div id="w-hook"></div>`) +
+    card('🧱', d('แผ่นฐาน — เลขชี้กำลังคือจำนวนแผ่น', 'Base tiles — the exponent is the number of tiles'),
+      `<p class="intro">${d('ตลอดทั้งสื่อนี้ เราจะให้ <b>แผ่น 1 แผ่น = ตัวคูณ 1 ตัว</b> เช่น 2<sup>5</sup> คือแผ่น “2” เรียง 5 แผ่น', 'Throughout this page, <b>1 tile = 1 factor</b>, so 2<sup>5</sup> is five “2” tiles in a row.')}</p><div id="w-tiles"></div>
+       <div class="box-info"><div class="formula" style="font-size:1.6rem"><span>${P(3, 'n')}</span></div>
+       ${d('ทั้งก้อน <b>3<sup>n</sup></b> = <b>เลขยกกำลัง</b> &nbsp;•&nbsp; <b>3</b> = <b>ฐาน</b> (แผ่นที่ถูกเรียง) &nbsp;•&nbsp; <b>n</b> = <b>เลขชี้กำลัง</b> (จำนวนแผ่น)', 'The whole <b>3<sup>n</sup></b> = the <b>power</b> &nbsp;•&nbsp; <b>3</b> = the <b>base</b> (the tile) &nbsp;•&nbsp; <b>n</b> = the <b>exponent</b> (how many tiles)')}</div>`) +
+    `<div class="card"><div class="box-ok" style="margin:0"><b>${d('ทุกสมบัติ = นับแผ่น', 'Every property = counting tiles')}</b><br>${d('ถ้าลืมสูตร ให้กางเป็นแผ่นแล้วนับ 🧱 — สมบัติ 9 ข้อในแท็บถัดไปมาจากการนับแผ่นทั้งหมด ไม่ต้องท่อง', 'If you forget a rule, spread it out into tiles and count 🧱 — all 9 properties in the next tabs come from counting tiles. No memorising needed.')}</div></div>`;
+
+  document.getElementById('tab-muldiv').innerHTML =
+    card('✖️', `${pb(1)} ${d('คูณฐานเดียวกัน — เลขชี้กำลังบวกกัน', 'Multiply the same base — exponents add')}`,
+      `<p class="intro">${d('ปรับ m, n แล้วกด ถัดไป ▶ ทีละขั้น', 'Set m and n, then press Next ▶ step by step.')}</p><div id="w-mul"></div>`) +
+    card('➗', `${pb(2)}${pb(4)}${pb(6)} ${d('หารฐานเดียวกัน — ตัวเดียวอธิบายสามสมบัติ', 'Divide the same base — one picture, three properties')}`,
+      `<p class="intro">${d('จับคู่แผ่นบน–ล่างตัดกัน แล้วดูว่าอะไรเหลือ — ลองเลื่อนให้ <b>m > n</b>, <b>m = n</b>, <b>m &lt; n</b> จะได้ ② ④ ⑥ ตามลำดับ (ป้ายสมบัติเปลี่ยนเองตอนขั้นสุดท้าย)', 'Pair top and bottom tiles and see what is left. Slide to <b>m > n</b>, <b>m = n</b>, <b>m &lt; n</b> to get 2, 4, 6 (the badge changes by itself on the last step).')}</p><div id="w-div"></div>`) +
+    card('1️⃣', `${pb(5)} ${d('a¹ = a', 'a¹ = a')}`,
+      `<div class="formula"><span>${P('a', 1)} = a</span></div><p class="intro">${miniTile('a')} ${d('แผ่นเดียว — ไม่ต้องเขียน 1 ก็รู้ว่ามีแผ่นเดียว', 'One tile — you do not need to write the 1 to know there is one tile.')}</p>`) +
+    card('🪜', `${pb(4)}${pb(6)} ${d('ยืนยันด้วยบันได — ลดเลขชี้กำลังทีละ 1', 'Check with a ladder — lower the exponent by 1 each time')}`,
+      `<p class="intro">${d('ลดเลขชี้กำลังลงทีละ 1 = หารด้วย 2 ทุกครั้ง — ดูว่าไปต่อแล้วจะเจออะไร', 'Lowering the exponent by 1 means dividing by 2 each time — see where it leads.')}</p><div id="w-ladder"></div>`) +
+    card('🔄', `${pb(6)} ${d('เลขชี้กำลังติดลบ — ย้ายบน ↔ ล่าง แล้วเปลี่ยนเครื่องหมาย', 'Negative exponent — move top ↔ bottom and flip the sign')}`,
+      `<div class="formula"><span>${P('a', '−m')} = ${frac(1, P('a', 'm'))}</span><span>${frac(1, P('a', '−m'))} = ${P('a', 'm')}</span></div>
+       <div class="box-info">${d(`ตัวอย่าง: ${P(2, '−3')} = ${frac(1, P(2, 3))} = ${frac(1, 8)} &nbsp;•&nbsp; ${frac(1, P(2, '−3'))} = ${P(2, 3)} = 8 &nbsp;•&nbsp; (${frac(3, 5)})<sup>−4</sup> = (${frac(5, 3)})<sup>4</sup> (กลับเศษส่วน แล้วเลขชี้กำลังเป็นบวก)`, `Examples: ${P(2, '−3')} = ${frac(1, P(2, 3))} = ${frac(1, 8)} &nbsp;•&nbsp; ${frac(1, P(2, '−3'))} = ${P(2, 3)} = 8 &nbsp;•&nbsp; (${frac(3, 5)})<sup>−4</sup> = (${frac(5, 3)})<sup>4</sup> (flip the fraction, exponent becomes positive)`)}</div>`);
+
+  document.getElementById('tab-nest').innerHTML =
+    card('🔁', `${pb(3)} ${d('ยกกำลังซ้อน — เลขชี้กำลังคูณกัน', 'Power of a power — exponents multiply')}`,
+      `<p class="intro">${d('วงเล็บ (…)ⁿ คือเอากล่องทั้งใบไปคูณตัวเอง n รอบ', 'The (…)ⁿ means multiply the whole box by itself n times.')}</p><div id="w-pow"></div>`) +
+    card('📦', `${pb(8)} ${d('กระจายเลขชี้กำลังเข้าวงเล็บ — ได้เฉพาะ × และ ÷', 'Distributing into brackets — only × and ÷')}`,
+      `<p class="intro">${d('เลือกรูป × หรือ ÷ แล้วปรับ n — แผ่น a รวมกับ a แผ่น b รวมกับ b', 'Pick × or ÷, set n — the a-tiles gather with a-tiles, the b-tiles with b-tiles.')}</p><div id="w-dist"></div>`) +
+    `<div class="card"><div class="box-warn" style="margin:0"><b>${d('แล้ว (3 + 2)⁵ ล่ะ?', 'And what about (3 + 2)⁵?')}</b><br>${d('ในวงเล็บเป็นเครื่องหมาย + ไม่ใช่ × — สูตรนี้ใช้ไม่ได้!', 'The bracket holds a + not a × — this rule fails!')} <button class="btn ghost" style="padding:5px 16px;font-size:.9rem;margin-left:8px" onclick="showTab('trap', document.querySelectorAll('.tab-btn')[4])">${d('ไปแท็บกับดัก ▶', 'Go to Traps ▶')}</button></div></div>`;
+
+  document.getElementById('tab-neg').innerHTML =
+    card('➖', `${pb(9)} ${d('ฐานติดลบ — จับคู่ (−)(−) = (+)', 'Negative bases — pair up (−)(−) = (+)')}`,
+      `<p class="intro">${d('แผ่นสีแดง = ติดลบ จับคู่ติดกันทีละคู่ให้เป็นบวก — เหลือแผ่นแดงเดี่ยวหรือไม่ บอกเครื่องหมายของคำตอบ', 'A red tile is negative; pair neighbours to make positives — whether a red tile is left tells you the sign.')}</p><div id="w-neg"></div>`) +
+    card('🔍', `${pb(9)} ${d('−5ⁿ กับ (−5)ⁿ ไม่เหมือนกัน', '−5ⁿ and (−5)ⁿ are not the same')}`,
+      `<p class="intro">${d('เลขชี้กำลังจับแค่ <b>ตัวที่ติดมัน</b> — วงเล็บคือสิ่งที่บอกว่าลบเป็นส่วนหนึ่งของฐานหรือไม่', 'The exponent grabs only <b>the thing stuck to it</b> — the bracket decides whether the minus is part of the base.')}</p><div id="w-cmp"></div>`) +
+    card('📝', d('ตัวอย่างจากสรุป — กดเผยทีละขั้น', 'Examples from the summary — tap to reveal'), '<div id="w-reveal"></div>');
+
+  document.getElementById('tab-trap').innerHTML =
+    card('⚠️', `${pb(7)} ${d('a + a + a³ ≠ a⁵ — เครื่องหมาย + ไม่รวมเลขชี้กำลัง', 'a + a + a³ ≠ a⁵ — a + never adds exponents')}`,
+      `<p class="intro">${d('สมบัติคูณ-หารใช้กับ <b>×</b> และ <b>÷</b> เท่านั้น ถ้าเจอ <b>+</b> ต้องหยุดคิดก่อน', 'The multiply/divide rules work only with <b>×</b> and <b>÷</b>. When you see a <b>+</b>, stop and think.')}</p><div id="w-trap7"></div>`) +
+    card('⚠️', `${pb(7)} ${d('(3 + 2)⁵ ≠ 3⁵ + 2⁵', '(3 + 2)⁵ ≠ 3⁵ + 2⁵')}`, '<div id="w-t2"></div>') +
+    card('⚠️', `${pb(8)} ${d('3 × 2⁴ ≠ 3⁴ × 2⁴', '3 × 2⁴ ≠ 3⁴ × 2⁴')}`, '<div id="w-t3"></div>');
+
+  document.getElementById('tab-ex').innerHTML =
+    card('🎨', d('สมบัติทั้ง 9 ข้อ — ป้ายสีที่จะเห็นในแต่ละขั้น', 'The 9 properties — the coloured badges you will see in every step'),
+      `<div class="plegend">${legendItems.map(l => `<div>${pb(l[0])}<span>${l[1]}</span></div>`).join('')}</div>`) +
+    card('📝', d('โจทย์ยาก = สมบัติพื้นฐานต่อกันหลายขั้น', 'Hard problems = basic properties chained together'),
+      `<p class="intro">${d('เลือกข้อจากแบบทดสอบ แล้วกด ถัดไป ▶ — ดูว่าแต่ละขั้นใช้สมบัติข้อไหน (ส่วนที่เปลี่ยนในขั้นนั้นไฮไลต์สีเดียวกับป้าย)', 'Pick a problem from the practice test and press Next ▶ — see which property each step uses (what changed is highlighted in the badge colour).')}</p>
+       <div class="chips" id="exChips"></div><div id="w-ex"></div>
+       <div class="box-ok"><b>${d('โจทย์ยาก = สมบัติ ①–⑨ ต่อกันหลายขั้น', 'A hard problem = properties 1–9 chained')}</b> — ${d('ติดขั้นไหนให้กลับไปกางแผ่น', 'stuck on a step? go back and spread it into tiles.')}</div>`);
+}
+
+let exId = 5;
+function initAllWidgets() {
+  makeWidget(document.getElementById('w-hook'), HOOK);
+  makeWidget(document.getElementById('w-tiles'), TILES);
+  makeWidget(document.getElementById('w-mul'), MUL);
+  makeWidget(document.getElementById('w-div'), DIV);
+  makeSteps(document.getElementById('w-ladder'), ladderRows);
+  makeWidget(document.getElementById('w-pow'), POW);
+  makeWidget(document.getElementById('w-dist'), DIST);
+  makeWidget(document.getElementById('w-neg'), NEG);
+  makeWidget(document.getElementById('w-cmp'), CMP);
+  ALL.push(initReveal(document.getElementById('w-reveal')));
+  makeWidget(document.getElementById('w-trap7'), TRAP7);
+  makeSteps(document.getElementById('w-t2'), trapPowSum);
+  makeSteps(document.getElementById('w-t3'), trapTimes);
+  const ex = makeSteps(document.getElementById('w-ex'), () => EXS[exId]());
+  const chips = document.getElementById('exChips');
+  const paint = () => {
+    chips.innerHTML = `<span class="chips-label">${EN() ? 'Problem' : 'ข้อ'}</span>` + [5, 10, 14, 16, 18, 20].map(n => `<button class="chip${n === exId ? ' active' : ''}" data-n="${n}">${EN() ? '#' : ''}${n}</button>`).join('');
+    chips.querySelectorAll('.chip').forEach(c => c.addEventListener('click', () => { exId = +c.dataset.n; ex.reset(); paint(); }));
+  };
+  paint();
+  ALL.push({ langRefresh: paint, fit() {} });
+}
+
+window.addEventListener('load', () => {
+  buildTabs();
+  initAllWidgets();
+  applyLang(getLang());
+});
+</script>
+</body>
+</html>

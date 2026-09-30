@@ -1,0 +1,1362 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>สื่อการสอน : จำนวนสมาชิกของเซตจำกัด (Inclusion-Exclusion)</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800&display=swap');
+
+  :root {
+    --primary: #1C3B22;
+    --secondary: #FF8A3D;
+    --accent: #68EF3F;
+    --warning: #FFB347;
+    --bg: #F3F7EC;
+    --card: #FFFFFF;
+    --text: #2D3748;
+    --muted: #718096;
+    --border: #E2E8F0;
+    --shadow: 0 4px 24px rgba(28,59,34,0.10);
+    --radius: 16px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Sarabun', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* ── Header ── */
+  header {
+    background: linear-gradient(135deg, #1C3B22 0%, #2E5936 100%);
+    color: white;
+    padding: 16px 40px 12px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 200px; height: 200px;
+    background: rgba(255,255,255,0.07);
+    border-radius: 50%;
+  }
+  header h1 { font-size: 1.6rem; font-weight: 800; letter-spacing: 1px; }
+  header p  { font-size: .9rem; opacity: .85; margin-top: 2px; }
+  .back-link {
+    position: absolute;
+    top: 12px; left: 20px;
+    color: white;
+    text-decoration: none;
+    font-size: .85rem;
+    font-weight: 600;
+    opacity: .9;
+    z-index: 2;
+  }
+  .back-link:hover { opacity: 1; text-decoration: underline; }
+  .lang-toggle {
+    position: absolute;
+    top: 12px; right: 20px;
+    background: rgba(255,255,255,.15);
+    color: white;
+    border: 1.5px solid rgba(255,255,255,.5);
+    border-radius: 20px;
+    padding: 5px 14px;
+    font-family: 'Sarabun', sans-serif;
+    font-size: .8rem;
+    font-weight: 700;
+    cursor: pointer;
+    z-index: 2;
+  }
+  .lang-toggle:hover { background: rgba(255,255,255,.28); }
+
+  /* ── Tab Nav ── */
+  nav {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 10px 24px 0;
+    background: white;
+    border-bottom: 3px solid var(--border);
+  }
+  .tab-btn {
+    padding: 10px 20px;
+    border: none;
+    background: transparent;
+    border-radius: 10px 10px 0 0;
+    font-family: 'Sarabun', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--muted);
+    cursor: pointer;
+    transition: all .25s;
+    border-bottom: 3px solid transparent;
+    margin-bottom: -3px;
+  }
+  .tab-btn:hover { color: var(--primary); background: #E3F3D8; }
+  .tab-btn.active { color: var(--primary); border-bottom-color: var(--primary); background: #E3F3D8; }
+
+  /* ── Main ── */
+  main { max-width: 1100px; margin: 0 auto; padding: 14px 20px 16px; }
+
+  .tab-panel { display: none; animation: fadeIn .35s ease; }
+  .tab-panel.active { display: block; }
+  @keyframes fadeIn { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
+
+  /* ── Cards ── */
+  .card {
+    background: var(--card);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 16px 22px;
+    margin-bottom: 12px;
+  }
+  .card-title {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--primary);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .card-title .icon { font-size: 1.5rem; }
+
+  /* ── Step box ── */
+  .steps { counter-reset: step; }
+  .step {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    margin-bottom: 16px;
+  }
+  .step-num {
+    min-width: 36px; height: 36px;
+    background: var(--primary);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1rem;
+    flex-shrink: 0;
+  }
+  .step-body { flex: 1; padding-top: 6px; font-size: 1.05rem; line-height: 1.7; }
+
+  /* ── Highlight boxes ── */
+  .box-info  { background: #EEF7E6; border-left: 4px solid var(--primary); border-radius: 10px; padding: 14px 18px; margin: 14px 0; }
+  .box-warn  { background: #FFF7ED; border-left: 4px solid var(--warning); border-radius: 10px; padding: 14px 18px; margin: 14px 0; }
+  .box-ok    { background: #ECFDF5; border-left: 4px solid var(--accent);  border-radius: 10px; padding: 14px 18px; margin: 14px 0; }
+  .box-pink  { background: #FFF0F3; border-left: 4px solid var(--secondary); border-radius: 10px; padding: 14px 18px; margin: 14px 0; }
+
+  /* ── Formula ── */
+  .formula {
+    background: linear-gradient(135deg,#1C3B22,#2E5936);
+    color: white;
+    border-radius: 12px;
+    padding: 16px 24px;
+    text-align: center;
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin: 16px 0;
+    letter-spacing: .5px;
+  }
+
+  /* ── Mode toggle ── */
+  .mode-toggle { display: flex; gap: 10px; flex-wrap: wrap; }
+  .mode-btn {
+    padding: 12px 24px;
+    border: 2px solid var(--border);
+    border-radius: 30px;
+    cursor: pointer;
+    font-family: 'Sarabun', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    background: white;
+    color: var(--muted);
+    transition: all .2s;
+  }
+  .mode-btn:hover { border-color: var(--primary); color: var(--primary); }
+  .mode-btn.active { border-color: var(--primary); background: var(--primary); color: white; }
+
+  /* ── Numeric inputs ── */
+  .num-row { display: flex; flex-wrap: wrap; gap: 8px; margin: 6px 0 4px; }
+  .num-field { text-align: center; }
+  .num-field label { display: block; font-weight: 700; font-size: .74rem; color: var(--muted); margin-bottom: 3px; }
+  .num-box {
+    width: 52px; padding: 5px; border: 2px solid var(--primary);
+    border-radius: 7px; font-size: .9rem; text-align: center;
+    font-family: 'Sarabun', sans-serif; font-weight: 700; color: var(--primary);
+  }
+
+  /* ── Formula term toggle buttons ── */
+  .term-row { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0; }
+  .term-btn {
+    padding: 7px 14px;
+    border: 2px solid var(--border);
+    border-radius: 30px;
+    cursor: pointer;
+    font-family: 'Sarabun', sans-serif;
+    font-size: .9rem;
+    font-weight: 700;
+    transition: all .2s;
+    background: white;
+    color: var(--text);
+  }
+  .term-btn:hover { border-color: var(--primary); }
+  .term-btn.plus.active  { border-color: var(--accent); background: #ECFDF5; color: #047857; }
+  .term-btn.minus.active { border-color: var(--secondary); background: #FFF0F3; color: #BE185D; }
+
+  /* ── Live formula readout ── */
+  .formula-live { font-size: .95rem; line-height: 1.9; margin: 8px 0; }
+  .term-disp { font-weight: 800; padding: 2px 6px; border-radius: 6px; transition: all .2s; }
+  .term-disp.inactive { opacity: .3; }
+  .term-disp.plus  { color: #047857; background: #ECFDF5; }
+  .term-disp.minus { color: #BE185D; background: #FFF0F3; }
+
+  .total-row { display: flex; flex-wrap: wrap; gap: 16px; margin-top: 8px; font-size: .95rem; }
+  .total-row strong { font-size: 1.1rem; }
+
+  /* ── SVG venn ── */
+  .venn-wrap { text-align: center; }
+  .venn-wrap svg { width: 100%; max-width: 600px; height: auto; }
+
+  /* ── Legend ── */
+  .legend-row { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 10px; justify-content: center; }
+  .legend-item { display: flex; align-items: center; gap: 6px; font-size: .8rem; font-weight: 600; }
+  .legend-swatch { width: 18px; height: 18px; border-radius: 50%; flex-shrink: 0; border: 1px solid var(--border); }
+
+  /* ── Stacked layout for the interactive venn tab: controls on top, diagram below ── */
+  .venn-layout { display: flex; flex-direction: column; gap: 16px; }
+  .subhead { font-weight: 700; font-size: .95rem; color: var(--primary); margin: 4px 0 8px; display: flex; align-items: center; gap: 6px; }
+  .mini-divider { border-top: 1px solid var(--border); margin: 14px 0; }
+
+  /* ── ขั้นนำ: กำหนดโจทย์เอง ── */
+  .text-box, .text-area {
+    width: 100%; padding: 8px 10px; border: 2px solid var(--border);
+    border-radius: 8px; font-family: 'Sarabun', sans-serif; font-size: .95rem; color: var(--text);
+  }
+  .text-area { resize: vertical; }
+
+  /* ── ขั้นนำ: ลาก-วางชื่อเพื่อน ── */
+  .chip-pool {
+    display: flex; flex-wrap: wrap; gap: 10px; padding: 14px; margin: 10px 0;
+    background: #F7F9FC; border: 2px dashed var(--border); border-radius: 12px; min-height: 56px;
+  }
+  .chip {
+    padding: 8px 16px; background: white; border: 2px solid var(--primary); border-radius: 30px;
+    font-family: 'Sarabun', sans-serif; font-weight: 700; font-size: .9rem; color: var(--primary);
+    cursor: grab; user-select: none; touch-action: none;
+    box-shadow: 0 2px 6px rgba(0,0,0,.08);
+  }
+  .chip.dragging { opacity: .5; }
+  /* touch-action:auto (ไม่ใช่ none) เพราะคำที่วางถูกแล้วไม่ต้องลากอีก — ปล่อยให้นิ้วบนไอแพต
+     เลื่อนดู .drop-zone (overflow:auto) ผ่านตัวคำเองได้ ไม่งั้นคำที่เต็มโซนจะบังไม่ให้เลื่อน */
+  .chip.correct { border-color: var(--accent); background: #ECFDF5; color: #047857; cursor: default; touch-action: auto; }
+  .chip.wrong-shake { animation: shakeChip .4s; border-color: var(--secondary); }
+  @keyframes shakeChip { 0%,100% { transform: translateX(0); } 25% { transform: translateX(-6px); } 75% { transform: translateX(6px); } }
+
+  .groups-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  @media (max-width: 600px) {
+    .groups-grid { grid-template-columns: 1fr; }
+  }
+
+  /* ── ขั้นนำ: จอ 2 คอลัมน์ (ซ้าย = รายชื่อ+สังเกตของซ้ำ, ขวา = ลากวางใส่วงเวนน์) ── */
+  .intro-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-items: start; }
+  .intro-left .groups-grid { grid-template-columns: 1fr; }
+  @media (max-width: 800px) {
+    .intro-layout { grid-template-columns: 1fr; }
+  }
+
+  /* ── ขั้นนำ: คลิกเลือกของที่คิดว่าซ้ำกัน ── */
+  .click-list li {
+    cursor: pointer; user-select: none; border-radius: 8px;
+    border: 2px solid transparent; padding: 2px 6px; transition: all .15s;
+  }
+  .click-list li:hover { background: #F7F9FC; }
+  .click-list li.dup-selected { border-color: var(--primary); background: #E3F3D8; font-weight: 700; }
+  .click-list li.dup-correct { border-color: var(--accent); background: #ECFDF5; color: #047857; font-weight: 700; }
+  .click-list li.dup-wrong { border-color: var(--secondary); background: #FFF0F3; color: #BE185D; }
+  .click-list li.dup-missed { border-color: var(--warning); background: #FFF7ED; }
+
+  .intro-venn-wrap { position: relative; max-width: 600px; margin: 16px auto 0; }
+  .intro-venn-wrap svg { display: block; width: 100%; height: auto; }
+  .drop-zone {
+    position: absolute; top: 28%; bottom: 28%;
+    border-radius: 14px; border: 2px dashed transparent;
+    display: flex; flex-wrap: wrap; align-content: flex-start; gap: 6px;
+    padding: 6px; overflow: auto; -webkit-overflow-scrolling: touch;
+  }
+  .drop-zone.drag-over { background: rgba(28,59,34,.12); border-color: var(--primary); }
+
+  @media (max-width: 600px) {
+    header h1 { font-size: 1.3rem; }
+    .card { padding: 16px 14px; }
+    .tab-btn { font-size: .85rem; padding: 8px 12px; }
+    .num-box { width: 60px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <a href="./index.html" class="back-link" data-th="← กลับหน้าเซต" data-en="← Back to Sets">← กลับหน้าเซต</a>
+  <button id="langToggle" class="lang-toggle" onclick="toggleLang()">EN</button>
+  <h1 data-th="🔀 จำนวนสมาชิกของเซตจำกัด" data-en="🔀 Cardinality of Finite Sets">🔀 จำนวนสมาชิกของเซตจำกัด</h1>
+  <p data-th="Inclusion-Exclusion Principle • สื่อการสอนแบบโต้ตอบ" data-en="Inclusion-Exclusion Principle • Interactive Teaching Aid">Inclusion-Exclusion Principle • สื่อการสอนแบบโต้ตอบ</p>
+</header>
+
+<nav>
+  <button class="tab-btn active" onclick="showTab('intro')" data-th="🎬 ขั้นนำ: โจทย์ปัญหา" data-en="🎬 Warm-up: Scenario">🎬 ขั้นนำ: โจทย์ปัญหา</button>
+  <button class="tab-btn" onclick="showTab('venn')" data-th="🎯 แผนภาพเวนน์เชิงโต้ตอบ" data-en="🎯 Interactive Venn Diagram">🎯 แผนภาพเวนน์เชิงโต้ตอบ</button>
+  <button class="tab-btn" onclick="showTab('concept')" data-th="📖 หลักการ" data-en="📖 Concept">📖 หลักการ</button>
+</nav>
+
+<main>
+
+<!-- ══════════════ TAB 0: ขั้นนำ โจทย์ปัญหา ══════════════ -->
+<section id="tab-intro" class="tab-panel active">
+
+  <div class="card">
+    <div class="card-title"><span class="icon">🍩</span><span data-th="สถานการณ์: จัดหมวดหมู่ของกินยอดฮิต" data-en="Scenario: Categorize Popular Foods">สถานการณ์: จัดหมวดหมู่ของกินยอดฮิต</span></div>
+    <p style="font-size:1.05rem; line-height:1.8;" data-th="วันนี้ครูรวบรวมรายการของกินยอดฮิต แล้วแบ่งตามประเภทของกินออกเป็น 2 กลุ่ม ดังนี้" data-en="Today the teacher gathered a list of popular foods and divided them into 2 groups by category, as follows:">
+      วันนี้ครูรวบรวมรายการของกินยอดฮิต แล้วแบ่งตามประเภทของกินออกเป็น 2 กลุ่ม ดังนี้
+    </p>
+  </div>
+
+  <div class="intro-layout">
+    <div class="intro-left">
+      <div class="groups-grid">
+        <div class="card">
+          <div class="card-title"><span class="icon">🍟</span><span id="groupTitleA">กลุ่ม A : ของทอด (8 อย่าง)</span></div>
+          <ol id="groupListA" class="click-list" style="padding-left:1.4rem; line-height:1.9; font-size:1rem;"></ol>
+        </div>
+
+        <div class="card">
+          <div class="card-title"><span class="icon">🍰</span><span id="groupTitleB">กลุ่ม B : ของหวาน (7 อย่าง)</span></div>
+          <ol id="groupListB" class="click-list" style="padding-left:1.4rem; line-height:1.9; font-size:1rem;"></ol>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><span class="icon">🔍</span><span data-th="สังเกตหน่อย: อันไหนซ้ำกันในสองรายการบ้าง?" data-en="Take a look: which items appear in both lists?">สังเกตหน่อย: อันไหนซ้ำกันในสองรายการบ้าง?</span></div>
+        <p class="i18n-th" style="font-size:.95rem; line-height:1.7; color:var(--muted);">คลิกเลือกชื่อในรายการกลุ่ม A และกลุ่ม B ด้านบนที่คิดว่า<strong>ซ้ำกัน</strong> (ปรากฏอยู่ทั้งสองกลุ่ม) แล้วกดตรวจคำตอบ ก่อนไปลองลากใส่วงเวนน์ด้านขวา</p>
+        <p class="i18n-en" hidden style="font-size:.95rem; line-height:1.7; color:var(--muted);">Click the names in the Group A and Group B lists above that you think are <strong>duplicated</strong> (appear in both groups), then check your answer — before trying the drag-and-drop on the right.</p>
+        <button class="mode-btn active" onclick="checkDuplicates()" data-th="✅ ตรวจคำตอบ" data-en="✅ Check Answer">✅ ตรวจคำตอบ</button>
+        <div id="dupResult" style="margin-top:10px;"></div>
+      </div>
+    </div>
+
+    <div class="intro-right">
+      <div class="card">
+        <div class="card-title"><span class="icon">🖐️</span><span data-th="ลากชื่อของกินไปวางในกลุ่มให้ถูกต้อง" data-en="Drag each food name into the correct group">ลากชื่อของกินไปวางในกลุ่มให้ถูกต้อง</span></div>
+        <div class="total-row">
+          <div><span data-th="จัดถูกแล้ว" data-en="Placed">จัดถูกแล้ว</span> <strong id="introProgress">0</strong> / <strong id="introTotal">12</strong> <span data-th="อย่าง" data-en="items">อย่าง</span></div>
+        </div>
+        <div id="introPool" class="chip-pool"></div>
+
+        <div class="intro-venn-wrap">
+          <svg viewBox="0 0 400 320" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="150" cy="160" r="110" fill="none" stroke="var(--primary)" stroke-width="2.5"/>
+            <circle cx="250" cy="160" r="110" fill="none" stroke="var(--primary)" stroke-width="2.5"/>
+            <text id="introLabelASvg" x="90" y="28" text-anchor="middle" font-size="22" font-weight="800" fill="var(--primary)">ของทอด</text>
+            <text id="introLabelBSvg" x="310" y="28" text-anchor="middle" font-size="22" font-weight="800" fill="var(--primary)">ของหวาน</text>
+          </svg>
+          <div class="drop-zone" id="introZoneAonly" data-zone="Aonly" style="left:10%; width:25%;"></div>
+          <div class="drop-zone" id="introZoneAB" data-zone="AB" style="left:35%; width:30%;"></div>
+          <div class="drop-zone" id="introZoneBonly" data-zone="Bonly" style="left:65%; width:25%;"></div>
+        </div>
+        <div id="introMatch"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="icon">✏️</span><span data-th="กำหนดโจทย์เอง (เปลี่ยนชื่อเซต/รายชื่อได้)" data-en="Customize the Scenario (change set names/items)">กำหนดโจทย์เอง (เปลี่ยนชื่อเซต/รายชื่อได้)</span></div>
+    <div class="num-row" style="align-items:flex-start;">
+      <div style="flex:1; min-width:220px;">
+        <label style="display:block; font-weight:700; font-size:.85rem; color:var(--muted); margin-bottom:4px;" data-th="ชื่อเซต A" data-en="Set A name">ชื่อเซต A</label>
+        <input type="text" id="introLabelA" class="text-box" value="ของทอด" oninput="renderIntroLabels()">
+        <label style="display:block; font-weight:700; font-size:.85rem; color:var(--muted); margin:8px 0 4px;" data-th="รายชื่อสมาชิกเซต A (บรรทัดละ 1 ชื่อ)" data-en="Set A members (one per line)">รายชื่อสมาชิกเซต A (บรรทัดละ 1 ชื่อ)</label>
+        <textarea id="introMembersA" class="text-area" rows="8">ไก่ทอด
+เฟรนช์ฟรายส์
+นักเก็ตไก่
+เกี๊ยวทอด
+ปอเปี๊ยะ
+กล้วยทอด
+ปาท่องโก๋ทอดจิ้มนมข้นหวาน
+ไอศกรีมทอด</textarea>
+      </div>
+      <div style="flex:1; min-width:220px;">
+        <label style="display:block; font-weight:700; font-size:.85rem; color:var(--muted); margin-bottom:4px;" data-th="ชื่อเซต B" data-en="Set B name">ชื่อเซต B</label>
+        <input type="text" id="introLabelB" class="text-box" value="ของหวาน" oninput="renderIntroLabels()">
+        <label style="display:block; font-weight:700; font-size:.85rem; color:var(--muted); margin:8px 0 4px;" data-th="รายชื่อสมาชิกเซต B (บรรทัดละ 1 ชื่อ)" data-en="Set B members (one per line)">รายชื่อสมาชิกเซต B (บรรทัดละ 1 ชื่อ)</label>
+        <textarea id="introMembersB" class="text-area" rows="7">โดนัท
+เครปเย็น
+วาฟเฟิล
+บราวนี่
+กล้วยทอด
+ปาท่องโก๋ทอดจิ้มนมข้นหวาน
+ไอศกรีมทอด</textarea>
+      </div>
+    </div>
+    <button class="mode-btn active" style="margin-top:12px;" onclick="generateIntroPuzzle()" data-th="🔄 สร้างโจทย์ / เริ่มใหม่" data-en="🔄 Generate / Restart">🔄 สร้างโจทย์ / เริ่มใหม่</button>
+  </div>
+
+</section>
+
+<!-- ══════════════ TAB 1: แผนภาพเวนน์เชิงโต้ตอบ ══════════════ -->
+<section id="tab-venn" class="tab-panel">
+
+  <div class="card">
+    <div class="card-title"><span class="icon">🔀</span><span data-th="เลือกโหมด" data-en="Select Mode">เลือกโหมด</span></div>
+    <div class="mode-toggle">
+      <button class="mode-btn active" id="modeBtn2" onclick="showVennMode(2)" data-th="2 เซต (A, B)" data-en="2 Sets (A, B)">2 เซต (A, B)</button>
+      <button class="mode-btn" id="modeBtn3" onclick="showVennMode(3)" data-th="3 เซต (A, B, C)" data-en="3 Sets (A, B, C)">3 เซต (A, B, C)</button>
+      <button class="mode-btn" id="modeBtnD" onclick="showVennMode('D')" data-th="✏️ กรอกจำนวนเอง" data-en="✏️ Enter Numbers Manually">✏️ กรอกจำนวนเอง</button>
+    </div>
+  </div>
+
+  <!-- ═══ 2-SET PANEL ═══ -->
+  <div id="venn2">
+  <div class="venn-layout">
+
+    <div class="card">
+      <div class="card-title"><span class="icon">🎛️</span><span data-th="ที่มาของสูตร — กดปุ่มตามพจน์ (กดลำดับใดก็ได้)" data-en="Where the Formula Comes From — Click Each Term (any order)">ที่มาของสูตร — กดปุ่มตามพจน์ (กดลำดับใดก็ได้)</span></div>
+      <div class="term-row">
+        <button class="term-btn plus"  id="term2-A"  onclick="toggleTerm(2,'A')">+ |A|</button>
+        <button class="term-btn plus"  id="term2-B"  onclick="toggleTerm(2,'B')">+ |B|</button>
+        <button class="term-btn minus" id="term2-AB" onclick="toggleTerm(2,'AB')">− |A∩B|</button>
+      </div>
+
+      <div class="formula-live">
+        n(A∪B) =
+        <span class="term-disp plus inactive"  id="disp2-A">|A|</span> +
+        <span class="term-disp plus inactive"  id="disp2-B">|B|</span> −
+        <span class="term-disp minus inactive" id="disp2-AB">|A∩B|</span>
+      </div>
+
+      <div id="match2"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="icon">⭕</span><span data-th="แผนภาพเวนน์" data-en="Venn Diagram">แผนภาพเวนน์</span></div>
+      <div class="venn-wrap">
+        <svg viewBox="0 0 400 320" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <clipPath id="clipA2"><circle cx="150" cy="160" r="110"/></clipPath>
+            <clipPath id="clipB2"><circle cx="250" cy="160" r="110"/></clipPath>
+            <mask id="mask2NotB" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="320">
+              <rect x="0" y="0" width="400" height="320" fill="white"/>
+              <circle cx="250" cy="160" r="110" fill="black"/>
+            </mask>
+            <mask id="mask2NotA" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="320">
+              <rect x="0" y="0" width="400" height="320" fill="white"/>
+              <circle cx="150" cy="160" r="110" fill="black"/>
+            </mask>
+          </defs>
+
+          <g clip-path="url(#clipA2)"><rect id="rect-2-Aonly" x="0" y="0" width="400" height="320" mask="url(#mask2NotB)" fill="#E2E8F0" fill-opacity=".25"/></g>
+          <g clip-path="url(#clipB2)"><rect id="rect-2-Bonly" x="0" y="0" width="400" height="320" mask="url(#mask2NotA)" fill="#E2E8F0" fill-opacity=".25"/></g>
+          <g clip-path="url(#clipA2)"><g clip-path="url(#clipB2)"><rect id="rect-2-AB" x="0" y="0" width="400" height="320" fill="#E2E8F0" fill-opacity=".25"/></g></g>
+
+          <circle cx="150" cy="160" r="110" fill="none" stroke="var(--primary)" stroke-width="2.5"/>
+          <circle cx="250" cy="160" r="110" fill="none" stroke="var(--primary)" stroke-width="2.5"/>
+
+          <text x="90" y="55" text-anchor="middle" font-size="26" font-weight="800" fill="var(--primary)">A</text>
+          <text x="310" y="55" text-anchor="middle" font-size="26" font-weight="800" fill="var(--primary)">B</text>
+
+          <g id="badge-2-Aonly" transform="translate(110,160)">
+            <circle r="16" fill="#E2E8F0" stroke="white" stroke-width="1.5"/>
+            <text text-anchor="middle" dy="5" font-size="13" font-weight="800" fill="#718096">0</text>
+          </g>
+          <g id="badge-2-Bonly" transform="translate(290,160)">
+            <circle r="16" fill="#E2E8F0" stroke="white" stroke-width="1.5"/>
+            <text text-anchor="middle" dy="5" font-size="13" font-weight="800" fill="#718096">0</text>
+          </g>
+          <g id="badge-2-AB" transform="translate(200,160)">
+            <circle r="16" fill="#E2E8F0" stroke="white" stroke-width="1.5"/>
+            <text text-anchor="middle" dy="5" font-size="13" font-weight="800" fill="#718096">0</text>
+          </g>
+        </svg>
+      </div>
+
+      <div class="legend-row" id="legend"></div>
+    </div>
+
+  </div>
+  </div>
+
+  <!-- ═══ 3-SET PANEL ═══ -->
+  <div id="venn3" style="display:none;">
+  <div class="venn-layout">
+
+    <div class="card">
+      <div class="card-title"><span class="icon">🎛️</span><span data-th="ที่มาของสูตร — กดปุ่มตามพจน์ (กดลำดับใดก็ได้)" data-en="Where the Formula Comes From — Click Each Term (any order)">ที่มาของสูตร — กดปุ่มตามพจน์ (กดลำดับใดก็ได้)</span></div>
+      <div class="term-row">
+        <button class="term-btn plus"  id="term3-A"   onclick="toggleTerm(3,'A')">+ |A|</button>
+        <button class="term-btn plus"  id="term3-B"   onclick="toggleTerm(3,'B')">+ |B|</button>
+        <button class="term-btn plus"  id="term3-C"   onclick="toggleTerm(3,'C')">+ |C|</button>
+        <button class="term-btn minus" id="term3-AB"  onclick="toggleTerm(3,'AB')">− |A∩B|</button>
+        <button class="term-btn minus" id="term3-AC"  onclick="toggleTerm(3,'AC')">− |A∩C|</button>
+        <button class="term-btn minus" id="term3-BC"  onclick="toggleTerm(3,'BC')">− |B∩C|</button>
+        <button class="term-btn plus"  id="term3-ABC" onclick="toggleTerm(3,'ABC')">+ |A∩B∩C|</button>
+      </div>
+
+      <div class="formula-live">
+        n(A∪B∪C) =
+        <span class="term-disp plus inactive"  id="disp3-A">|A|</span> +
+        <span class="term-disp plus inactive"  id="disp3-B">|B|</span> +
+        <span class="term-disp plus inactive"  id="disp3-C">|C|</span> −
+        <span class="term-disp minus inactive" id="disp3-AB">|A∩B|</span> −
+        <span class="term-disp minus inactive" id="disp3-AC">|A∩C|</span> −
+        <span class="term-disp minus inactive" id="disp3-BC">|B∩C|</span> +
+        <span class="term-disp plus inactive"  id="disp3-ABC">|A∩B∩C|</span>
+      </div>
+
+      <div id="match3"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="icon">⭕</span><span data-th="แผนภาพเวนน์" data-en="Venn Diagram">แผนภาพเวนน์</span></div>
+      <div class="venn-wrap">
+        <svg viewBox="0 0 400 345" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <clipPath id="clipA3"><circle cx="150" cy="132" r="110"/></clipPath>
+            <clipPath id="clipB3"><circle cx="250" cy="132" r="110"/></clipPath>
+            <clipPath id="clipC3"><circle cx="200" cy="219" r="110"/></clipPath>
+
+            <mask id="mask3NotBC" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="380">
+              <rect x="0" y="0" width="400" height="380" fill="white"/>
+              <circle cx="250" cy="132" r="110" fill="black"/>
+              <circle cx="200" cy="219" r="110" fill="black"/>
+            </mask>
+            <mask id="mask3NotAC" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="380">
+              <rect x="0" y="0" width="400" height="380" fill="white"/>
+              <circle cx="150" cy="132" r="110" fill="black"/>
+              <circle cx="200" cy="219" r="110" fill="black"/>
+            </mask>
+            <mask id="mask3NotAB" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="380">
+              <rect x="0" y="0" width="400" height="380" fill="white"/>
+              <circle cx="150" cy="132" r="110" fill="black"/>
+              <circle cx="250" cy="132" r="110" fill="black"/>
+            </mask>
+            <mask id="mask3NotC" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="380">
+              <rect x="0" y="0" width="400" height="380" fill="white"/>
+              <circle cx="200" cy="219" r="110" fill="black"/>
+            </mask>
+            <mask id="mask3NotB" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="380">
+              <rect x="0" y="0" width="400" height="380" fill="white"/>
+              <circle cx="250" cy="132" r="110" fill="black"/>
+            </mask>
+            <mask id="mask3NotA" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="380">
+              <rect x="0" y="0" width="400" height="380" fill="white"/>
+              <circle cx="150" cy="132" r="110" fill="black"/>
+            </mask>
+          </defs>
+
+          <g clip-path="url(#clipA3)"><rect id="rect-3-Aonly" x="0" y="0" width="400" height="380" mask="url(#mask3NotBC)" fill="#E2E8F0" fill-opacity=".25"/></g>
+          <g clip-path="url(#clipB3)"><rect id="rect-3-Bonly" x="0" y="0" width="400" height="380" mask="url(#mask3NotAC)" fill="#E2E8F0" fill-opacity=".25"/></g>
+          <g clip-path="url(#clipC3)"><rect id="rect-3-Conly" x="0" y="0" width="400" height="380" mask="url(#mask3NotAB)" fill="#E2E8F0" fill-opacity=".25"/></g>
+          <g clip-path="url(#clipA3)"><g clip-path="url(#clipB3)"><rect id="rect-3-ABonly" x="0" y="0" width="400" height="380" mask="url(#mask3NotC)" fill="#E2E8F0" fill-opacity=".25"/></g></g>
+          <g clip-path="url(#clipA3)"><g clip-path="url(#clipC3)"><rect id="rect-3-AConly" x="0" y="0" width="400" height="380" mask="url(#mask3NotB)" fill="#E2E8F0" fill-opacity=".25"/></g></g>
+          <g clip-path="url(#clipB3)"><g clip-path="url(#clipC3)"><rect id="rect-3-BConly" x="0" y="0" width="400" height="380" mask="url(#mask3NotA)" fill="#E2E8F0" fill-opacity=".25"/></g></g>
+          <g clip-path="url(#clipA3)"><g clip-path="url(#clipB3)"><g clip-path="url(#clipC3)"><rect id="rect-3-ABC" x="0" y="0" width="400" height="380" fill="#E2E8F0" fill-opacity=".25"/></g></g></g>
+
+          <circle cx="150" cy="132" r="110" fill="none" stroke="var(--primary)" stroke-width="2.5"/>
+          <circle cx="250" cy="132" r="110" fill="none" stroke="var(--primary)" stroke-width="2.5"/>
+          <circle cx="200" cy="219" r="110" fill="none" stroke="var(--primary)" stroke-width="2.5"/>
+
+          <text x="70" y="36" text-anchor="middle" font-size="24" font-weight="800" fill="var(--primary)">A</text>
+          <text x="330" y="36" text-anchor="middle" font-size="24" font-weight="800" fill="var(--primary)">B</text>
+          <text x="200" y="316" text-anchor="middle" font-size="24" font-weight="800" fill="var(--primary)">C</text>
+
+          <g id="badge-3-Aonly" transform="translate(101,104)">
+            <circle r="13" fill="#E2E8F0" stroke="white" stroke-width="1.5"/>
+            <text text-anchor="middle" dy="4" font-size="11" font-weight="800" fill="#718096">0</text>
+          </g>
+          <g id="badge-3-Bonly" transform="translate(299,104)">
+            <circle r="13" fill="#E2E8F0" stroke="white" stroke-width="1.5"/>
+            <text text-anchor="middle" dy="4" font-size="11" font-weight="800" fill="#718096">0</text>
+          </g>
+          <g id="badge-3-Conly" transform="translate(200,275)">
+            <circle r="13" fill="#E2E8F0" stroke="white" stroke-width="1.5"/>
+            <text text-anchor="middle" dy="4" font-size="11" font-weight="800" fill="#718096">0</text>
+          </g>
+          <g id="badge-3-ABonly" transform="translate(200,84)">
+            <circle r="13" fill="#E2E8F0" stroke="white" stroke-width="1.5"/>
+            <text text-anchor="middle" dy="4" font-size="11" font-weight="800" fill="#718096">0</text>
+          </g>
+          <g id="badge-3-AConly" transform="translate(133,200)">
+            <circle r="13" fill="#E2E8F0" stroke="white" stroke-width="1.5"/>
+            <text text-anchor="middle" dy="4" font-size="11" font-weight="800" fill="#718096">0</text>
+          </g>
+          <g id="badge-3-BConly" transform="translate(267,200)">
+            <circle r="13" fill="#E2E8F0" stroke="white" stroke-width="1.5"/>
+            <text text-anchor="middle" dy="4" font-size="11" font-weight="800" fill="#718096">0</text>
+          </g>
+          <g id="badge-3-ABC" transform="translate(200,161)">
+            <circle r="13" fill="#E2E8F0" stroke="white" stroke-width="1.5"/>
+            <text text-anchor="middle" dy="4" font-size="11" font-weight="800" fill="#718096">0</text>
+          </g>
+        </svg>
+      </div>
+
+      <div class="legend-row" id="legend3"></div>
+    </div>
+
+  </div>
+  </div>
+
+  <!-- ═══ กรอกจำนวนเอง PANEL ═══ -->
+  <div id="vennD" style="display:none;">
+
+  <div class="card">
+    <div class="card-title"><span class="icon">🔀</span><span data-th="เลือกจำนวนเซต" data-en="Select Number of Sets">เลือกจำนวนเซต</span></div>
+    <div class="mode-toggle">
+      <button class="mode-btn active" id="modeBtnD2" onclick="showDirectMode(2)" data-th="2 เซต (A, B)" data-en="2 Sets (A, B)">2 เซต (A, B)</button>
+      <button class="mode-btn" id="modeBtnD3" onclick="showDirectMode(3)" data-th="3 เซต (A, B, C)" data-en="3 Sets (A, B, C)">3 เซต (A, B, C)</button>
+    </div>
+  </div>
+
+  <!-- 2-SET DIRECT -->
+  <div id="vennD2">
+  <div class="venn-layout">
+
+    <div class="card">
+      <div class="card-title"><span class="icon">🔢</span><span data-th="กรอกจำนวนสมาชิก แล้วดูตัวเลขในแผนภาพทันที" data-en="Enter Member Counts — See the Diagram Update Instantly">กรอกจำนวนสมาชิก แล้วดูตัวเลขในแผนภาพทันที</span></div>
+      <div class="num-row">
+        <div class="num-field"><label>n(A)</label><input type="number" class="num-box" id="inD2-A" value="30" oninput="renderDirect2()"></div>
+        <div class="num-field"><label>n(B)</label><input type="number" class="num-box" id="inD2-B" value="25" oninput="renderDirect2()"></div>
+        <div class="num-field"><label>n(A∩B)</label><input type="number" class="num-box" id="inD2-AB" value="10" oninput="renderDirect2()"></div>
+      </div>
+      <div class="mini-divider"></div>
+      <div class="subhead"><span class="icon">👁️</span><span data-th="เลือกว่าจะโชว์ตัวเลขส่วนไหนในแผนภาพ" data-en="Choose Which Numbers to Show on the Diagram">เลือกว่าจะโชว์ตัวเลขส่วนไหนในแผนภาพ</span></div>
+      <div class="term-row">
+        <button class="term-btn plus active" id="visD2-Aonly" onclick="toggleVisD2('Aonly')" data-th="เฉพาะ A" data-en="A only">เฉพาะ A</button>
+        <button class="term-btn plus active" id="visD2-AB" onclick="toggleVisD2('AB')">A∩B</button>
+        <button class="term-btn plus active" id="visD2-Bonly" onclick="toggleVisD2('Bonly')" data-th="เฉพาะ B" data-en="B only">เฉพาะ B</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="icon">⭕</span><span data-th="แผนภาพเวนน์" data-en="Venn Diagram">แผนภาพเวนน์</span></div>
+      <div class="venn-wrap">
+        <svg viewBox="0 0 400 320" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="150" cy="160" r="110" fill="none" stroke="var(--primary)" stroke-width="2.5"/>
+          <circle cx="250" cy="160" r="110" fill="none" stroke="var(--primary)" stroke-width="2.5"/>
+
+          <text x="90" y="30" text-anchor="middle" font-size="26" font-weight="800" fill="var(--primary)">A</text>
+          <text x="310" y="30" text-anchor="middle" font-size="26" font-weight="800" fill="var(--primary)">B</text>
+
+          <g id="badgeD2-Aonly-g" transform="translate(110,160)">
+            <circle r="22" fill="var(--primary)" stroke="white" stroke-width="1.5"/>
+            <text id="badgeD2-Aonly" text-anchor="middle" dy="6" font-size="18" font-weight="800" fill="white">0</text>
+          </g>
+          <g id="badgeD2-AB-g" transform="translate(200,160)">
+            <circle r="22" fill="var(--primary)" stroke="white" stroke-width="1.5"/>
+            <text id="badgeD2-AB" text-anchor="middle" dy="6" font-size="18" font-weight="800" fill="white">0</text>
+          </g>
+          <g id="badgeD2-Bonly-g" transform="translate(290,160)">
+            <circle r="22" fill="var(--primary)" stroke="white" stroke-width="1.5"/>
+            <text id="badgeD2-Bonly" text-anchor="middle" dy="6" font-size="18" font-weight="800" fill="white">0</text>
+          </g>
+        </svg>
+      </div>
+      <div class="total-row">
+        <div>n(A∪B) = <strong id="badgeD2-Total">0</strong></div>
+      </div>
+    </div>
+
+  </div>
+  </div>
+
+  <!-- 3-SET DIRECT -->
+  <div id="vennD3" style="display:none;">
+  <div class="venn-layout">
+
+    <div class="card">
+      <div class="card-title"><span class="icon">🔢</span><span data-th="กรอกจำนวนสมาชิก แล้วดูตัวเลขในแผนภาพทันที" data-en="Enter Member Counts — See the Diagram Update Instantly">กรอกจำนวนสมาชิก แล้วดูตัวเลขในแผนภาพทันที</span></div>
+      <div class="num-row">
+        <div class="num-field"><label>n(A)</label><input type="number" class="num-box" id="inD3-A" value="40" oninput="renderDirect3()"></div>
+        <div class="num-field"><label>n(B)</label><input type="number" class="num-box" id="inD3-B" value="35" oninput="renderDirect3()"></div>
+        <div class="num-field"><label>n(C)</label><input type="number" class="num-box" id="inD3-C" value="30" oninput="renderDirect3()"></div>
+        <div class="num-field"><label>n(A∩B)</label><input type="number" class="num-box" id="inD3-AB" value="15" oninput="renderDirect3()"></div>
+        <div class="num-field"><label>n(A∩C)</label><input type="number" class="num-box" id="inD3-AC" value="12" oninput="renderDirect3()"></div>
+        <div class="num-field"><label>n(B∩C)</label><input type="number" class="num-box" id="inD3-BC" value="10" oninput="renderDirect3()"></div>
+        <div class="num-field"><label>n(A∩B∩C)</label><input type="number" class="num-box" id="inD3-ABC" value="5" oninput="renderDirect3()"></div>
+      </div>
+      <div class="mini-divider"></div>
+      <div class="subhead"><span class="icon">👁️</span><span data-th="เลือกว่าจะโชว์ตัวเลขส่วนไหนในแผนภาพ" data-en="Choose Which Numbers to Show on the Diagram">เลือกว่าจะโชว์ตัวเลขส่วนไหนในแผนภาพ</span></div>
+      <div class="term-row">
+        <button class="term-btn plus active" id="visD3-Aonly" onclick="toggleVisD3('Aonly')" data-th="เฉพาะ A" data-en="A only">เฉพาะ A</button>
+        <button class="term-btn plus active" id="visD3-Bonly" onclick="toggleVisD3('Bonly')" data-th="เฉพาะ B" data-en="B only">เฉพาะ B</button>
+        <button class="term-btn plus active" id="visD3-Conly" onclick="toggleVisD3('Conly')" data-th="เฉพาะ C" data-en="C only">เฉพาะ C</button>
+        <button class="term-btn plus active" id="visD3-ABonly" onclick="toggleVisD3('ABonly')" data-th="A∩B เท่านั้น" data-en="A∩B only">A∩B เท่านั้น</button>
+        <button class="term-btn plus active" id="visD3-AConly" onclick="toggleVisD3('AConly')" data-th="A∩C เท่านั้น" data-en="A∩C only">A∩C เท่านั้น</button>
+        <button class="term-btn plus active" id="visD3-BConly" onclick="toggleVisD3('BConly')" data-th="B∩C เท่านั้น" data-en="B∩C only">B∩C เท่านั้น</button>
+        <button class="term-btn plus active" id="visD3-ABC" onclick="toggleVisD3('ABC')">A∩B∩C</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="icon">⭕</span><span data-th="แผนภาพเวนน์" data-en="Venn Diagram">แผนภาพเวนน์</span></div>
+      <div class="venn-wrap">
+        <svg viewBox="0 0 400 345" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="150" cy="132" r="110" fill="none" stroke="var(--primary)" stroke-width="2.5"/>
+          <circle cx="250" cy="132" r="110" fill="none" stroke="var(--primary)" stroke-width="2.5"/>
+          <circle cx="200" cy="219" r="110" fill="none" stroke="var(--primary)" stroke-width="2.5"/>
+
+          <text x="55" y="36" text-anchor="middle" font-size="24" font-weight="800" fill="var(--primary)">A</text>
+          <text x="345" y="36" text-anchor="middle" font-size="24" font-weight="800" fill="var(--primary)">B</text>
+          <text x="200" y="321" text-anchor="middle" font-size="24" font-weight="800" fill="var(--primary)">C</text>
+
+          <g id="badgeD3-Aonly-g" transform="translate(101,104)">
+            <circle r="17" fill="var(--primary)" stroke="white" stroke-width="1.5"/>
+            <text id="badgeD3-Aonly" text-anchor="middle" dy="5" font-size="14" font-weight="800" fill="white">0</text>
+          </g>
+          <g id="badgeD3-Bonly-g" transform="translate(299,104)">
+            <circle r="17" fill="var(--primary)" stroke="white" stroke-width="1.5"/>
+            <text id="badgeD3-Bonly" text-anchor="middle" dy="5" font-size="14" font-weight="800" fill="white">0</text>
+          </g>
+          <g id="badgeD3-Conly-g" transform="translate(200,275)">
+            <circle r="17" fill="var(--primary)" stroke="white" stroke-width="1.5"/>
+            <text id="badgeD3-Conly" text-anchor="middle" dy="5" font-size="14" font-weight="800" fill="white">0</text>
+          </g>
+          <g id="badgeD3-ABonly-g" transform="translate(200,84)">
+            <circle r="17" fill="var(--primary)" stroke="white" stroke-width="1.5"/>
+            <text id="badgeD3-ABonly" text-anchor="middle" dy="5" font-size="14" font-weight="800" fill="white">0</text>
+          </g>
+          <g id="badgeD3-AConly-g" transform="translate(133,200)">
+            <circle r="17" fill="var(--primary)" stroke="white" stroke-width="1.5"/>
+            <text id="badgeD3-AConly" text-anchor="middle" dy="5" font-size="14" font-weight="800" fill="white">0</text>
+          </g>
+          <g id="badgeD3-BConly-g" transform="translate(267,200)">
+            <circle r="17" fill="var(--primary)" stroke="white" stroke-width="1.5"/>
+            <text id="badgeD3-BConly" text-anchor="middle" dy="5" font-size="14" font-weight="800" fill="white">0</text>
+          </g>
+          <g id="badgeD3-ABC-g" transform="translate(200,161)">
+            <circle r="17" fill="var(--primary)" stroke="white" stroke-width="1.5"/>
+            <text id="badgeD3-ABC" text-anchor="middle" dy="5" font-size="14" font-weight="800" fill="white">0</text>
+          </g>
+        </svg>
+      </div>
+      <div class="total-row">
+        <div>n(A∪B∪C) = <strong id="badgeD3-Total">0</strong></div>
+      </div>
+    </div>
+
+  </div>
+  </div>
+
+  </div>
+
+</section>
+
+<!-- ══════════════ TAB 2: หลักการ ══════════════ -->
+<section id="tab-concept" class="tab-panel">
+
+  <div class="card">
+    <div class="card-title"><span class="icon">❓</span><span data-th="ปัญหา: การนับซ้ำ" data-en="The Problem: Double-Counting">ปัญหา: การนับซ้ำ</span></div>
+    <p class="i18n-th" style="font-size:1.05rem; line-height:1.8;">
+      ถ้าเราอยากรู้ว่า A กับ B รวมกันมีสมาชิกกี่ตัว แล้วลองเอา <strong>n(A) + n(B)</strong> ตรงๆ
+      สมาชิกที่อยู่ใน <strong>ทั้ง A และ B</strong> (คือ A∩B) จะถูกนับไป <strong>2 ครั้ง</strong> —
+      ครั้งหนึ่งตอนนับ A อีกครั้งตอนนับ B จึงต้อง <strong>ลบส่วนที่นับซ้ำออก 1 ครั้ง</strong>
+    </p>
+    <p class="i18n-en" hidden style="font-size:1.05rem; line-height:1.8;">
+      If we want to know how many elements A and B have together, and simply add <strong>n(A) + n(B)</strong> directly —
+      elements that are in <strong>both A and B</strong> (that is, A∩B) get counted <strong>twice</strong> —
+      once when counting A, again when counting B — so we must <strong>subtract the double-counted part once</strong>
+    </p>
+    <div class="formula">n(A∪B) = n(A) + n(B) − n(A∩B)</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="icon">🧩</span><span data-th="เมื่อมี 3 เซต ยิ่งซับซ้อนขึ้น" data-en="With 3 Sets, It Gets More Complex">เมื่อมี 3 เซต ยิ่งซับซ้อนขึ้น</span></div>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body i18n-th">บวก <strong>n(A) + n(B) + n(C)</strong> ก่อน — แต่สมาชิกที่อยู่ในคู่ที่ซ้อนกัน (A∩B, A∩C, B∩C) จะถูกนับ 2 ครั้ง</div>
+        <div class="step-body i18n-en" hidden>First add <strong>n(A) + n(B) + n(C)</strong> — but elements in an overlapping pair (A∩B, A∩C, B∩C) get counted twice</div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body i18n-th">ลบ <strong>n(A∩B) + n(A∩C) + n(B∩C)</strong> ออก เพื่อแก้การนับซ้ำของคู่ — แต่สมาชิกที่อยู่ใน <strong>ทั้งสามเซตพร้อมกัน</strong> (A∩B∩C) ถูกบวกไป 3 ครั้ง (ตอนนับ A, B, C) แล้วถูกลบไป 3 ครั้ง (ตอนลบ A∩B, A∩C, B∩C) จึงกลายเป็น <strong>0 ครั้ง</strong> — หายไปเลย!</div>
+        <div class="step-body i18n-en" hidden>Subtract <strong>n(A∩B) + n(A∩C) + n(B∩C)</strong> to fix the pairwise double-counting — but elements in <strong>all three sets at once</strong> (A∩B∩C) were added 3 times (while counting A, B, C) then subtracted 3 times (while subtracting A∩B, A∩C, B∩C), leaving <strong>0 times</strong> — they vanish!</div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body i18n-th">จึงต้อง <strong>บวก n(A∩B∩C) กลับเข้ามา 1 ครั้ง</strong> เพื่อให้สมาชิกกลุ่มนี้ถูกนับพอดี 1 ครั้ง</div>
+        <div class="step-body i18n-en" hidden>So we must <strong>add n(A∩B∩C) back once</strong> so this group of elements ends up counted exactly once</div>
+      </div>
+    </div>
+    <div class="formula">n(A∪B∪C) = n(A)+n(B)+n(C) − n(A∩B) − n(A∩C) − n(B∩C) + n(A∩B∩C)</div>
+    <div class="box-info i18n-th">
+      <strong>💡 ย้อนทวนสิ่งที่เพิ่งลอง:</strong> ตอนอยู่แท็บ "แผนภาพเวนน์เชิงโต้ตอบ" ที่กดปุ่มแต่ละพจน์ของสูตรเมื่อครู่นี้
+      สังเกตตัวเลขกำกับกลางแต่ละชิ้นส่วนของวงกลม — มันขึ้นๆ ลงๆ ตามพจน์ที่กด และจะ<strong>นิ่งที่ 1 ทุกชิ้นส่วน</strong> ก็ต่อเมื่อกดครบสูตรที่ถูกต้องเท่านั้น — นั่นแหละคือที่มาของสูตรด้านบน
+    </div>
+    <div class="box-info i18n-en" hidden>
+      <strong>💡 Recall what you just tried:</strong> back on the "Interactive Venn Diagram" tab, when you clicked each term of the formula —
+      notice the number in the middle of each piece of the circles — it goes up and down as you click terms, and it <strong>settles at 1 in every piece</strong> only once you've clicked the complete, correct formula — that's exactly where the formula above comes from.
+    </div>
+  </div>
+
+</section>
+
+</main>
+
+<script>
+// ══════════════ ปุ่มสลับภาษาไทย/อังกฤษ (โค้ดชุดนี้ฝังซ้ำในทุกหน้าของเว็บ) ══════════════
+const PAGE_TITLE = { th: 'สื่อการสอน : จำนวนสมาชิกของเซตจำกัด (Inclusion-Exclusion)', en: 'Teaching Aid: Cardinality of Finite Sets (Inclusion-Exclusion)' };
+
+let langMemory = 'th'; // fallback เมื่อ localStorage ใช้ไม่ได้ (เช่น private mode / sandbox บางประเภท)
+function getLang() {
+  try { return localStorage.getItem('siteLang') || 'th'; }
+  catch (e) { return langMemory; }
+}
+
+function applyLang(lang) {
+  document.documentElement.lang = lang;
+  document.title = PAGE_TITLE[lang];
+  document.querySelectorAll('[data-th]').forEach(el => {
+    el.textContent = (lang === 'en' && el.dataset.en) ? el.dataset.en : el.dataset.th;
+  });
+  document.querySelectorAll('.i18n-th').forEach(el => { el.hidden = lang !== 'th'; });
+  document.querySelectorAll('.i18n-en').forEach(el => { el.hidden = lang !== 'en'; });
+  const btn = document.getElementById('langToggle');
+  if (btn) btn.textContent = lang === 'en' ? 'ไทย' : 'EN';
+  if (typeof onLangChange === 'function') onLangChange(lang);
+}
+
+function toggleLang() {
+  const prev = getLang();
+  const next = prev === 'en' ? 'th' : 'en';
+  langMemory = next;
+  try { localStorage.setItem('siteLang', next); } catch (e) {}
+  // ถ้าโจทย์ตัวอย่าง (ชื่อกลุ่ม/รายชื่อ) ยังเป็นค่าเริ่มต้นของภาษาเดิมอยู่ (ครูยังไม่ได้แก้เอง)
+  // ให้สลับเป็นค่าเริ่มต้นของภาษาใหม่ไปด้วย — ถ้าครูแก้เองแล้วจะไม่แตะต้อง
+  if (isUsingIntroDefaults(prev)) {
+    setIntroDefaults(next);
+    generateIntroPuzzle();
+  }
+  applyLang(next);
+}
+
+function onLangChange(lang) {
+  // รีเฟรชส่วนที่ข้อความถูกสร้างจาก JS ให้ตรงภาษาปัจจุบันทันที (ไม่แตะ introLabelA/B หรือ textarea ที่ครูพิมพ์เอง)
+  buildLegend('legend');
+  buildLegend('legend3');
+  render(2);
+  render(3);
+  updateGroupTitles();
+}
+
+// ── ข้อความที่ JS สร้างขึ้นเอง (สองภาษา) ──
+const I18N = {
+  th: {
+    matchAllTerms: '✅ กดครบทุกพจน์ของสูตรแล้ว — ทุกชิ้นส่วนถูกนับพอดี 1 ครั้ง!',
+    legend0: '0 = ยังไม่ถูกนับ',
+    legend1: '1 = นับถูกต้อง ✓',
+    legend2: '2 = นับซ้ำ ⚠',
+    legend3plus: '≥3 = นับซ้ำมาก ⚠',
+    legendNeg: 'ติดลบ = ลบเกิน ▼ (ขอบตัวเลขกำกับเป็นสีชมพู)',
+    dupAllCaught: n => `✅ เก่งมาก! เจอของที่ซ้ำกันครบทั้ง ${n} อย่าง — ลองไปลากใส่วงเวนน์ด้านขวาต่อได้เลย`,
+    dupPartial: (caught, total) => `เจอถูก ${caught} / ${total} อย่าง — สีส้ม = ของที่ซ้ำแต่ยังไม่ได้เลือก, สีชมพู = เลือกผิด ลองแก้แล้วกด "ตรวจคำตอบ" ใหม่ได้`,
+    introDone: '✅ เก่งมาก! จัดของกินครบทุกอย่างถูกตำแหน่งแล้ว',
+    groupTitle: (letter, label, count) => `กลุ่ม ${letter} : ${label} (${count} อย่าง)`
+  },
+  en: {
+    matchAllTerms: '✅ All terms clicked — every piece is counted exactly once!',
+    legend0: '0 = not counted yet',
+    legend1: '1 = counted correctly ✓',
+    legend2: '2 = double-counted ⚠',
+    legend3plus: '≥3 = heavily double-counted ⚠',
+    legendNeg: 'Negative = subtracted too much ▼ (number badge outlined in pink)',
+    dupAllCaught: n => `✅ Great job! You found all ${n} duplicated items — try dragging them into the Venn diagram on the right`,
+    dupPartial: (caught, total) => `Found ${caught} / ${total} — orange = duplicated but not yet selected, pink = wrong pick. Adjust and click "Check Answer" again`,
+    introDone: '✅ Great job! Every item is placed correctly.',
+    groupTitle: (letter, label, count) => `Group ${letter}: ${label} (${count} items)`
+  }
+};
+function t(key) { return I18N[getLang()][key]; }
+
+// ══════════════ Tab switching ══════════════
+function showTab(id) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('nav .tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  event.target.classList.add('active');
+}
+
+function showVennMode(modeNum) {
+  document.getElementById('venn2').style.display = modeNum === 2 ? 'block' : 'none';
+  document.getElementById('venn3').style.display = modeNum === 3 ? 'block' : 'none';
+  document.getElementById('vennD').style.display = modeNum === 'D' ? 'block' : 'none';
+  document.getElementById('modeBtn2').classList.toggle('active', modeNum === 2);
+  document.getElementById('modeBtn3').classList.toggle('active', modeNum === 3);
+  document.getElementById('modeBtnD').classList.toggle('active', modeNum === 'D');
+}
+
+// ══════════════ กรอกจำนวนเอง: แสดงตัวเลขบนแผนภาพทันที ══════════════
+function showDirectMode(modeNum) {
+  document.getElementById('vennD2').style.display = modeNum === 2 ? 'block' : 'none';
+  document.getElementById('vennD3').style.display = modeNum === 3 ? 'block' : 'none';
+  document.getElementById('modeBtnD2').classList.toggle('active', modeNum === 2);
+  document.getElementById('modeBtnD3').classList.toggle('active', modeNum === 3);
+}
+
+function setBadge(prefix, key, value, visible) {
+  const g = document.getElementById('badge' + prefix + '-' + key + '-g');
+  const text = document.getElementById('badge' + prefix + '-' + key);
+  g.querySelector('circle').setAttribute('fill', visible ? 'var(--primary)' : '#E2E8F0');
+  text.textContent = visible ? value : '';
+}
+
+const visD2 = { Aonly: true, AB: true, Bonly: true };
+function toggleVisD2(key) {
+  visD2[key] = !visD2[key];
+  document.getElementById('visD2-' + key).classList.toggle('active', visD2[key]);
+  renderDirect2();
+}
+function renderDirect2() {
+  const nA = Number(document.getElementById('inD2-A').value) || 0;
+  const nB = Number(document.getElementById('inD2-B').value) || 0;
+  const nAB = Number(document.getElementById('inD2-AB').value) || 0;
+  const aOnly = nA - nAB;
+  const bOnly = nB - nAB;
+  setBadge('D2', 'Aonly', aOnly, visD2.Aonly);
+  setBadge('D2', 'AB', nAB, visD2.AB);
+  setBadge('D2', 'Bonly', bOnly, visD2.Bonly);
+  document.getElementById('badgeD2-Total').textContent = aOnly + bOnly + nAB;
+}
+
+const visD3 = { Aonly: true, Bonly: true, Conly: true, ABonly: true, AConly: true, BConly: true, ABC: true };
+function toggleVisD3(key) {
+  visD3[key] = !visD3[key];
+  document.getElementById('visD3-' + key).classList.toggle('active', visD3[key]);
+  renderDirect3();
+}
+function renderDirect3() {
+  const nA = Number(document.getElementById('inD3-A').value) || 0;
+  const nB = Number(document.getElementById('inD3-B').value) || 0;
+  const nC = Number(document.getElementById('inD3-C').value) || 0;
+  const nAB = Number(document.getElementById('inD3-AB').value) || 0;
+  const nAC = Number(document.getElementById('inD3-AC').value) || 0;
+  const nBC = Number(document.getElementById('inD3-BC').value) || 0;
+  const nABC = Number(document.getElementById('inD3-ABC').value) || 0;
+
+  const regions = {
+    Aonly: nA - nAB - nAC + nABC,
+    Bonly: nB - nAB - nBC + nABC,
+    Conly: nC - nAC - nBC + nABC,
+    ABonly: nAB - nABC,
+    AConly: nAC - nABC,
+    BConly: nBC - nABC,
+    ABC: nABC
+  };
+  Object.keys(regions).forEach(key => setBadge('D3', key, regions[key], visD3[key]));
+  const total = Object.values(regions).reduce((a, b) => a + b, 0);
+  document.getElementById('badgeD3-Total').textContent = total;
+}
+
+// ══════════════ Inclusion-Exclusion state ══════════════
+const coverage2 = {
+  A:  { sign: 1,  regions: ['Aonly', 'AB'] },
+  B:  { sign: 1,  regions: ['Bonly', 'AB'] },
+  AB: { sign: -1, regions: ['AB'] }
+};
+const coverage3 = {
+  A:   { sign: 1,  regions: ['Aonly', 'ABonly', 'AConly', 'ABC'] },
+  B:   { sign: 1,  regions: ['Bonly', 'ABonly', 'BConly', 'ABC'] },
+  C:   { sign: 1,  regions: ['Conly', 'AConly', 'BConly', 'ABC'] },
+  AB:  { sign: -1, regions: ['ABonly', 'ABC'] },
+  AC:  { sign: -1, regions: ['AConly', 'ABC'] },
+  BC:  { sign: -1, regions: ['BConly', 'ABC'] },
+  ABC: { sign: 1,  regions: ['ABC'] }
+};
+const regions2 = ['Aonly', 'Bonly', 'AB'];
+const regions3 = ['Aonly', 'Bonly', 'Conly', 'ABonly', 'AConly', 'BConly', 'ABC'];
+
+const state = {
+  active2: { A: false, B: false, AB: false },
+  active3: { A: false, B: false, C: false, AB: false, AC: false, BC: false, ABC: false }
+};
+
+const REGION_HUE = '#6C63FF';
+
+function opacityForBadge(v) {
+  const a = Math.abs(v);
+  if (a === 0) return 0.06;
+  if (a === 1) return 0.30;
+  if (a === 2) return 0.55;
+  return 0.85;
+}
+function iconForBadge(v) {
+  if (v < 0)   return '▼';
+  if (v === 0) return '';
+  if (v === 1) return '✓';
+  return '⚠';
+}
+
+function toggleTerm(modeNum, key) {
+  const active = modeNum === 2 ? state.active2 : state.active3;
+  active[key] = !active[key];
+  render(modeNum);
+}
+
+function computeBadges(modeNum) {
+  const cov = modeNum === 2 ? coverage2 : coverage3;
+  const active = modeNum === 2 ? state.active2 : state.active3;
+  const regionList = modeNum === 2 ? regions2 : regions3;
+  const badges = {};
+  regionList.forEach(r => badges[r] = 0);
+  Object.keys(cov).forEach(termKey => {
+    if (!active[termKey]) return;
+    const { sign, regions } = cov[termKey];
+    regions.forEach(r => badges[r] += sign);
+  });
+  return badges;
+}
+
+function allTermsActive(modeNum) {
+  const active = modeNum === 2 ? state.active2 : state.active3;
+  return Object.keys(active).every(k => active[k]);
+}
+
+function render(modeNum) {
+  const badges = computeBadges(modeNum);
+  Object.keys(badges).forEach(r => {
+    const val = badges[r];
+    const icon = iconForBadge(val);
+    const g = document.getElementById(`badge-${modeNum}-${r}`);
+    const rectRegion = document.getElementById(`rect-${modeNum}-${r}`);
+    if (g) {
+      const marker = g.querySelector('circle');
+      marker.setAttribute('fill', REGION_HUE);
+      marker.setAttribute('stroke', val < 0 ? '#FF8A3D' : '#ffffff');
+      const label = (val > 0 ? '+' : '') + val + (icon ? ' ' + icon : '');
+      g.querySelector('text').textContent = label;
+      g.querySelector('text').setAttribute('fill', '#ffffff');
+    }
+    if (rectRegion) {
+      rectRegion.setAttribute('fill', REGION_HUE);
+      rectRegion.setAttribute('fill-opacity', opacityForBadge(val));
+    }
+  });
+
+  const active = modeNum === 2 ? state.active2 : state.active3;
+  Object.keys(active).forEach(k => {
+    const btn = document.getElementById(`term${modeNum}-${k}`);
+    const disp = document.getElementById(`disp${modeNum}-${k}`);
+    if (btn) btn.classList.toggle('active', active[k]);
+    if (disp) disp.classList.toggle('inactive', !active[k]);
+  });
+
+  const matchEl = document.getElementById(`match${modeNum}`);
+  if (allTermsActive(modeNum)) {
+    matchEl.className = 'box-ok';
+    matchEl.textContent = t('matchAllTerms');
+  } else {
+    matchEl.className = '';
+    matchEl.textContent = '';
+  }
+}
+
+function buildLegend(elId) {
+  const items = [
+    { opacity: 0.06, label: t('legend0') },
+    { opacity: 0.30, label: t('legend1') },
+    { opacity: 0.55, label: t('legend2') },
+    { opacity: 0.85, label: t('legend3plus') }
+  ];
+  const wrap = document.getElementById(elId);
+  wrap.innerHTML = items.map(it =>
+    `<div class="legend-item"><span class="legend-swatch" style="background:rgba(28,59,34,${it.opacity})"></span>${it.label}</div>`
+  ).join('') +
+  `<div class="legend-item"><span class="legend-swatch" style="background:#6C63FF; border-color:#FF8A3D; border-width:2px;"></span>${t('legendNeg')}</div>`;
+}
+
+window.addEventListener('load', () => {
+  buildLegend('legend');
+  buildLegend('legend3');
+  render(2);
+  render(3);
+  renderDirect2();
+  renderDirect3();
+  const savedIntro = loadIntroCustom();
+  if (savedIntro) {
+    document.getElementById('introLabelA').value = savedIntro.labelA;
+    document.getElementById('introLabelB').value = savedIntro.labelB;
+    document.getElementById('introMembersA').value = savedIntro.membersA;
+    document.getElementById('introMembersB').value = savedIntro.membersB;
+  } else {
+    setIntroDefaults(getLang());
+  }
+  generateIntroPuzzle();
+  applyLang(getLang());
+});
+
+// ══════════════ ขั้นนำ: โจทย์ปัญหา (ลาก-วางชื่อเพื่อน) ══════════════
+let introData = {};      // ชื่อ -> โซนที่ถูกต้อง ('Aonly' | 'Bonly' | 'AB')
+let introPlacedCount = 0;
+let dragState = null;
+
+// ค่าเริ่มต้นของโจทย์ตัวอย่าง 2 ภาษา (รายชื่อที่ซ้ำกัน 3 อย่างต้องสะกดตรงกันทุกตัวอักษรระหว่าง A กับ B
+// เพื่อให้ระบบตรวจจับ A∩B ได้ถูกต้อง)
+const INTRO_DEFAULTS = {
+  th: {
+    labelA: 'ของทอด',
+    labelB: 'ของหวาน',
+    membersA: 'ไก่ทอด\nเฟรนช์ฟรายส์\nนักเก็ตไก่\nเกี๊ยวทอด\nปอเปี๊ยะ\nกล้วยทอด\nปาท่องโก๋ทอดจิ้มนมข้นหวาน\nไอศกรีมทอด',
+    membersB: 'โดนัท\nเครปเย็น\nวาฟเฟิล\nบราวนี่\nกล้วยทอด\nปาท่องโก๋ทอดจิ้มนมข้นหวาน\nไอศกรีมทอด'
+  },
+  en: {
+    labelA: 'Fried Foods',
+    labelB: 'Desserts',
+    membersA: 'Fried Chicken\nFrench Fries\nChicken Nuggets\nFried Wonton\nSpring Rolls\nFried Banana\nPatongko with sweetened condensed milk\nFried Ice Cream',
+    membersB: 'Donut\nIced Crepe\nWaffle\nBrownie\nFried Banana\nPatongko with sweetened condensed milk\nFried Ice Cream'
+  }
+};
+
+function setIntroDefaults(lang) {
+  const d = INTRO_DEFAULTS[lang];
+  document.getElementById('introLabelA').value = d.labelA;
+  document.getElementById('introLabelB').value = d.labelB;
+  document.getElementById('introMembersA').value = d.membersA;
+  document.getElementById('introMembersB').value = d.membersB;
+}
+
+// ── จำโจทย์ที่ครูกำหนดเอง ไว้ข้ามการรีเฟรชหน้า (คนละ key กับ siteLang) ──
+const INTRO_CUSTOM_KEY = 'inclExclIntroCustom';
+
+function saveIntroCustom() {
+  try {
+    localStorage.setItem(INTRO_CUSTOM_KEY, JSON.stringify({
+      labelA: document.getElementById('introLabelA').value,
+      labelB: document.getElementById('introLabelB').value,
+      membersA: document.getElementById('introMembersA').value,
+      membersB: document.getElementById('introMembersB').value
+    }));
+  } catch (e) {}
+}
+
+function loadIntroCustom() {
+  try {
+    const raw = localStorage.getItem(INTRO_CUSTOM_KEY);
+    return raw ? JSON.parse(raw) : null;
+  } catch (e) { return null; }
+}
+
+function isUsingIntroDefaults(lang) {
+  const d = INTRO_DEFAULTS[lang];
+  return document.getElementById('introLabelA').value === d.labelA
+    && document.getElementById('introLabelB').value === d.labelB
+    && document.getElementById('introMembersA').value === d.membersA
+    && document.getElementById('introMembersB').value === d.membersB;
+}
+
+function parseLines(text) {
+  return text.split('\n').map(s => s.trim()).filter(Boolean);
+}
+
+function shuffle(arr) {
+  const a = arr.slice();
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function renderIntroLabels() {
+  const labelA = document.getElementById('introLabelA').value.trim() || 'A';
+  const labelB = document.getElementById('introLabelB').value.trim() || 'B';
+  document.getElementById('introLabelASvg').textContent = labelA;
+  document.getElementById('introLabelBSvg').textContent = labelB;
+}
+
+function fillGroupList(elId, list) {
+  const ol = document.getElementById(elId);
+  ol.innerHTML = '';
+  list.forEach(name => {
+    const li = document.createElement('li');
+    li.textContent = name;
+    li.dataset.name = name;
+    li.addEventListener('click', () => toggleDup(li));
+    ol.appendChild(li);
+  });
+}
+
+function updateGroupTitles() {
+  const labelA = document.getElementById('introLabelA').value.trim() || 'A';
+  const labelB = document.getElementById('introLabelB').value.trim() || 'B';
+  const countA = document.querySelectorAll('#groupListA li').length;
+  const countB = document.querySelectorAll('#groupListB li').length;
+  document.getElementById('groupTitleA').textContent = t('groupTitle')('A', labelA, countA);
+  document.getElementById('groupTitleB').textContent = t('groupTitle')('B', labelB, countB);
+}
+
+function renderGroupLists(listA, listB) {
+  fillGroupList('groupListA', listA);
+  fillGroupList('groupListB', listB);
+  updateGroupTitles();
+  document.getElementById('dupResult').className = '';
+  document.getElementById('dupResult').textContent = '';
+}
+
+function toggleDup(li) {
+  li.classList.remove('dup-correct', 'dup-wrong', 'dup-missed');
+  li.classList.toggle('dup-selected');
+}
+
+function checkDuplicates() {
+  const items = document.querySelectorAll('#groupListA li, #groupListB li');
+  const totalDup = Object.values(introData).filter(z => z === 'AB').length;
+  const caughtNames = new Set();
+  let anyWrong = false;
+  items.forEach(li => {
+    li.classList.remove('dup-correct', 'dup-wrong', 'dup-missed');
+    const name = li.dataset.name;
+    const isDup = introData[name] === 'AB';
+    const selected = li.classList.contains('dup-selected');
+    if (isDup && selected) { li.classList.add('dup-correct'); caughtNames.add(name); }
+    else if (!isDup && selected) { li.classList.add('dup-wrong'); anyWrong = true; }
+    else if (isDup && !selected) { li.classList.add('dup-missed'); }
+  });
+  const caught = caughtNames.size;
+  const resultEl = document.getElementById('dupResult');
+  if (caught === totalDup && !anyWrong) {
+    resultEl.className = 'box-ok';
+    resultEl.textContent = t('dupAllCaught')(totalDup);
+  } else {
+    resultEl.className = 'box-warn';
+    resultEl.textContent = t('dupPartial')(caught, totalDup);
+  }
+}
+
+function generateIntroPuzzle() {
+  saveIntroCustom(); // จำโจทย์ปัจจุบัน (ค่าเริ่มต้นหรือที่ครูแก้เอง) ไว้ข้ามการรีเฟรชหน้า
+  const listA = parseLines(document.getElementById('introMembersA').value);
+  const listB = parseLines(document.getElementById('introMembersB').value);
+  const setA = new Set(listA);
+  const setB = new Set(listB);
+  const union = Array.from(new Set([...listA, ...listB]));
+
+  introData = {};
+  union.forEach(name => {
+    const inA = setA.has(name);
+    const inB = setB.has(name);
+    introData[name] = inA && inB ? 'AB' : (inA ? 'Aonly' : 'Bonly');
+  });
+
+  renderIntroLabels();
+  renderGroupLists(listA, listB);
+
+  ['Aonly', 'AB', 'Bonly'].forEach(z => {
+    document.getElementById('introZone' + z).innerHTML = '';
+  });
+
+  introPlacedCount = 0;
+  document.getElementById('introProgress').textContent = '0';
+  document.getElementById('introTotal').textContent = union.length;
+  const matchEl = document.getElementById('introMatch');
+  matchEl.className = '';
+  matchEl.textContent = '';
+
+  const pool = document.getElementById('introPool');
+  pool.innerHTML = '';
+  shuffle(union).forEach(name => {
+    const chip = document.createElement('div');
+    chip.className = 'chip';
+    chip.textContent = name;
+    chip.dataset.name = name;
+    chip.addEventListener('pointerdown', onChipPointerDown);
+    pool.appendChild(chip);
+  });
+}
+
+function onChipPointerDown(e) {
+  const chip = e.currentTarget;
+  if (chip.classList.contains('correct')) return;
+  e.preventDefault();
+
+  const rect = chip.getBoundingClientRect();
+  dragState = { chip, offsetX: e.clientX - rect.left, offsetY: e.clientY - rect.top };
+
+  chip.classList.add('dragging');
+  document.body.appendChild(chip);
+  chip.style.position = 'fixed';
+  chip.style.zIndex = 1000;
+  chip.style.left = (e.clientX - dragState.offsetX) + 'px';
+  chip.style.top = (e.clientY - dragState.offsetY) + 'px';
+  chip.style.pointerEvents = 'none';
+
+  document.addEventListener('pointermove', onChipPointerMove);
+  document.addEventListener('pointerup', onChipPointerUp);
+  document.addEventListener('pointercancel', onChipPointerUp);
+}
+
+function onChipPointerMove(e) {
+  if (!dragState) return;
+  const chip = dragState.chip;
+  chip.style.left = (e.clientX - dragState.offsetX) + 'px';
+  chip.style.top = (e.clientY - dragState.offsetY) + 'px';
+
+  const target = document.elementFromPoint(e.clientX, e.clientY);
+  document.querySelectorAll('.drop-zone').forEach(z => z.classList.remove('drag-over'));
+  const zoneEl = target && target.closest ? target.closest('.drop-zone') : null;
+  if (zoneEl) zoneEl.classList.add('drag-over');
+}
+
+function onChipPointerUp(e) {
+  if (!dragState) return;
+  const chip = dragState.chip;
+  document.removeEventListener('pointermove', onChipPointerMove);
+  document.removeEventListener('pointerup', onChipPointerUp);
+  document.removeEventListener('pointercancel', onChipPointerUp);
+  document.querySelectorAll('.drop-zone').forEach(z => z.classList.remove('drag-over'));
+
+  const target = document.elementFromPoint(e.clientX, e.clientY);
+  const zoneEl = target && target.closest ? target.closest('.drop-zone') : null;
+
+  chip.classList.remove('dragging');
+  chip.style.position = '';
+  chip.style.left = '';
+  chip.style.top = '';
+  chip.style.zIndex = '';
+  chip.style.pointerEvents = '';
+
+  const correctZone = introData[chip.dataset.name];
+
+  if (zoneEl && zoneEl.dataset.zone === correctZone) {
+    zoneEl.appendChild(chip);
+    chip.classList.add('correct');
+    introPlacedCount++;
+    document.getElementById('introProgress').textContent = introPlacedCount;
+    if (introPlacedCount === Object.keys(introData).length) {
+      const matchEl = document.getElementById('introMatch');
+      matchEl.className = 'box-ok';
+      matchEl.textContent = t('introDone');
+    }
+  } else {
+    document.getElementById('introPool').appendChild(chip);
+    if (zoneEl) {
+      chip.classList.add('wrong-shake');
+      setTimeout(() => chip.classList.remove('wrong-shake'), 400);
+    }
+  }
+
+  dragState = null;
+}
+</script>
+
+</body>
+</html>
