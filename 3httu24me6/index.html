@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
+<script id="theme-boot">(function(){var t='light';try{t=localStorage.getItem('siteTheme')||'light'}catch(e){}document.documentElement.setAttribute('data-theme',t==='dark'?'dark':'light')})();</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>สื่อการสอน : วงกลม (Circle)</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
 :root{
   --primary:#1C3B22;
@@ -38,7 +39,7 @@
 }
 
 *{ box-sizing:border-box; }
-body{ margin:0; font-family:'Sarabun',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; padding:0 0 40px; }
+body{ margin:0; font-family:'Anuphan',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; padding:0 0 40px; }
 .mono{ font-family:'JetBrains Mono',ui-monospace,monospace; font-variant-numeric:tabular-nums; }
 
 header{
@@ -53,7 +54,7 @@ header p{ font-size:.92rem; opacity:.85; margin-top:4px; }
 .lang-toggle{
   position:absolute; top:12px; right:20px;
   background:rgba(255,255,255,.15); color:white; border:1.5px solid rgba(255,255,255,.5);
-  border-radius:20px; padding:5px 14px; font-family:'Sarabun',sans-serif; font-size:.8rem; font-weight:700; cursor:pointer; z-index:2;
+  border-radius:20px; padding:5px 14px; font-family:'Anuphan',sans-serif; font-size:.8rem; font-weight:700; cursor:pointer; z-index:2;
 }
 .lang-toggle:hover{ background:rgba(255,255,255,.28); }
 
@@ -65,7 +66,7 @@ nav{
 }
 .tab-btn{
   padding:9px 15px; border:none; background:transparent; border-radius:10px 10px 0 0;
-  font-family:'Sarabun',sans-serif; font-size:.85rem; font-weight:700; color:var(--muted); cursor:pointer;
+  font-family:'Anuphan',sans-serif; font-size:.85rem; font-weight:700; color:var(--muted); cursor:pointer;
   transition:all .2s; border-bottom:3px solid transparent; margin-bottom:-3px; white-space:nowrap;
 }
 .tab-btn:hover{ color:var(--primary); background:var(--bg); }
@@ -115,7 +116,7 @@ main{ max-width:760px; margin:0 auto; padding:16px 18px 0; }
 .mode-toggle{ display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px; }
 .mode-btn{
   padding:9px 18px; border:2px solid var(--border); border-radius:30px; cursor:pointer;
-  font-family:'Sarabun',sans-serif; font-size:.88rem; font-weight:700; background:var(--card); color:var(--muted); transition:all .18s;
+  font-family:'Anuphan',sans-serif; font-size:.88rem; font-weight:700; background:var(--card); color:var(--muted); transition:all .18s;
 }
 .mode-btn:hover{ border-color:var(--primary); color:var(--primary); }
 .mode-btn.active{ border-color:var(--primary); background:var(--primary); color:#fff; }
@@ -144,7 +145,7 @@ main{ max-width:760px; margin:0 auto; padding:16px 18px 0; }
 .beta-row .val{ min-width:44px; text-align:right; font-weight:700; }
 .conic-badge{
   display:inline-block; padding:5px 16px; border-radius:999px; font-weight:800; font-size:.9rem;
-  background:#FF7F00; color:#3A1D00; margin-left:auto;
+  background:var(--g-curve, #FF7F00); color:#2A1300; margin-left:auto;
 }
 .rotate-hint{ text-align:center; font-size:.8rem; color:var(--muted); margin-top:8px; }
 
@@ -157,7 +158,7 @@ main{ max-width:760px; margin:0 auto; padding:16px 18px 0; }
 
 /* ── Practice quiz ── */
 .btn-action{
-  font-family:'Sarabun',sans-serif; border:none; cursor:pointer; border-radius:999px;
+  font-family:'Anuphan',sans-serif; border:none; cursor:pointer; border-radius:999px;
   padding:10px 22px; font-size:.88rem; font-weight:700; background:var(--primary); color:#fff;
   transition:opacity .15s ease, transform .12s ease;
 }
@@ -193,13 +194,108 @@ main{ max-width:760px; margin:0 auto; padding:16px 18px 0; }
   .card{ padding:14px 16px; }
   .tab-btn{ font-size:.78rem; padding:7px 11px; }
 }
+/* ── theme:start — สร้างโดย tools/build_lessons.py ห้ามแก้มือ (แก้ที่สคริปต์แล้วรันใหม่) ── */
+:root{ --page:#C42A78; }
+:root[data-theme="light"]{
+  --bg:#F4F4F1; --card:#FFFFFF; --text:#16181A; --muted:#5E6166; --border:#DEDED8;
+  --primary:color-mix(in srgb, var(--page) 86%, #000); --primary-2:color-mix(in srgb, var(--page) 62%, #000);
+  --secondary:#D9620B; --secondary-light:#F2A15F; --accent:#68EF3F; --accent-2:#2E9E3F;
+  --shadow:0 2px 10px rgba(0,0,0,.07);
+  --strong:color-mix(in srgb, var(--page) 76%, #000); --chip:#E8E8E3; --chip-hover:#DCDCD5;
+  --hero:color-mix(in srgb, var(--page) 82%, #000);
+  --g-x:#E53935; --g-y:#2E9E4F; --g-z:#3949AB; --g-curve:#F07400; --g-curve-fill:rgba(240,116,0,.12);
+  --g-pink:#D81B60; --g-plane:rgba(60,190,200,.28); --g-cone:rgba(153,51,0,.20); --g-cone-line:rgba(153,51,0,.35);
+  --g-blue:#1E66D0; --g-red:#D32F2F; --g-green:#2E9E4F; --g-purple:#7B3FC4; --g-orange:#E8710A; --g-teal:#0F8A80;
+  --g-ring:#FFFFFF;
+}
+:root[data-theme="dark"]{
+  --bg:#121212; --card:#1C1C1C; --text:#FFFFFF; --muted:#B3B3B3; --border:#333333;
+  --primary:color-mix(in srgb, var(--page) 55%, #fff); --primary-2:color-mix(in srgb, var(--page) 70%, #fff);
+  --secondary:#FFB37A; --secondary-light:#FFD0A8; --accent:#8AF25E; --accent-2:#5BD27E;
+  --shadow:0 8px 24px rgba(0,0,0,.5);
+  --strong:color-mix(in srgb, var(--page) 48%, #1C1C1C); --chip:#2A2A2A; --chip-hover:#353535;
+  --hero:color-mix(in srgb, var(--page) 62%, #000);
+  --g-x:#FF6B6B; --g-y:#5BD27E; --g-z:#8C9BFF; --g-curve:#FFA040; --g-curve-fill:rgba(255,160,64,.16);
+  --g-pink:#FF5C9A; --g-plane:rgba(90,220,230,.26); --g-cone:rgba(255,170,110,.18); --g-cone-line:rgba(255,170,110,.45);
+  --g-blue:#6AA8FF; --g-red:#FF6B6B; --g-green:#5BD27E; --g-purple:#B48CFF; --g-orange:#FFA040; --g-teal:#4FD1C5;
+  --g-ring:#1C1C1C;
+}
+html{ background:var(--bg); }
+html[data-theme="dark"]{ color-scheme:dark; }
+body{ font-family:'Anuphan',system-ui,sans-serif; background:var(--bg); color:var(--text); line-height:1.6; -webkit-font-smoothing:antialiased; }
+
+/* หัวหน้า: สีปกของเรื่อง + ปก */
+header{
+  background:var(--hero); color:#fff; text-align:left;
+  display:grid; grid-template-columns:auto 1fr; column-gap:22px; align-items:end;
+  padding:62px 32px 26px;
+}
+header::before, header::after{ display:none !important; }
+header > *:not(.lesson-cover):not(.back-link):not(.lang-toggle):not(.theme-toggle){ grid-column:2; }
+.lesson-cover{ grid-column:1; grid-row:1 / span 6; align-self:end; width:120px; aspect-ratio:1; border-radius:6px; overflow:hidden; box-shadow:0 8px 24px rgba(0,0,0,.45); }
+.lesson-cover svg{ display:block; width:100%; height:100%; }
+header h1{ font-size:clamp(1.8rem, 4.2vw, 2.9rem); font-weight:700; letter-spacing:-.01em; line-height:1.25; margin:0; }
+header p{ font-size:1rem; opacity:.85; margin:6px 0 0; }
+.back-link{
+  top:14px; left:20px; display:inline-flex; align-items:center; gap:6px;
+  padding:6px 14px; border-radius:999px; background:rgba(0,0,0,.32); color:#fff;
+  font-size:.88rem; font-weight:600; opacity:1; text-decoration:none;
+}
+.back-link:hover{ background:rgba(0,0,0,.55); text-decoration:none; }
+.lang-toggle, .theme-toggle{
+  position:absolute; top:14px; height:34px; background:transparent; color:#fff;
+  border:1px solid rgba(255,255,255,.55); border-radius:999px; font-family:inherit; font-weight:700; font-size:.85rem; cursor:pointer; z-index:2;
+}
+.lang-toggle{ right:20px; padding:0 16px; }
+.theme-toggle{ right:86px; width:34px; padding:0; display:grid; place-items:center; }
+.theme-toggle svg{ width:18px; height:18px; }
+.lang-toggle:hover, .theme-toggle:hover{ background:rgba(255,255,255,.14); border-color:#fff; }
+
+/* แถบแท็บ: ชิปทรงแคปซูล */
+nav{ background:var(--bg); border-bottom:1px solid var(--border); padding:10px 16px; gap:8px; }
+.tab-btn{
+  font-family:inherit; border:0; margin:0; border-radius:999px; padding:8px 16px;
+  background:var(--chip); color:var(--text); font-weight:600; font-size:.9rem;
+}
+.tab-btn:hover{ background:var(--chip-hover); color:var(--text); }
+.tab-btn.active{ background:var(--text); color:var(--bg); border-bottom-color:transparent; }
+
+/* การ์ดและกล่อง */
+.card{ background:var(--card); border:1px solid var(--border); border-radius:8px; box-shadow:var(--shadow); }
+.card-title{ color:var(--text); font-size:1.2rem; }
+.card-title .icon{ display:none; }
+.desc-text{ color:var(--text); font-size:1rem; }
+.formula, .step.result, .stats{ background:var(--strong) !important; color:#fff; border-radius:8px; letter-spacing:0; }
+.stat .k, .step-tag{ text-transform:none; letter-spacing:0; }
+
+/* ปุ่ม */
+.btn-action{ font-family:inherit; background:var(--text); color:var(--bg); }
+.btn-action.secondary{ background:transparent; color:var(--text); border:1px solid var(--muted); }
+.mode-btn{ font-family:inherit; border:1px solid var(--border); background:var(--card); color:var(--text); }
+.mode-btn:hover{ border-color:var(--text); color:var(--text); }
+.mode-btn.active{ background:var(--text); border-color:var(--text); color:var(--bg); }
+.quiz-opt{ border-radius:8px; }
+input[type=range]{ accent-color:var(--primary); }
+
+@media (max-width:600px){
+  header{ padding:58px 16px 20px; column-gap:14px; }
+  .lesson-cover{ width:76px; }
+  .back-link{ left:12px; max-width:calc(100% - 150px); overflow:hidden; white-space:nowrap; text-overflow:ellipsis; display:block; }
+  .lang-toggle{ right:12px; }
+  .theme-toggle{ right:74px; }
+  nav{ flex-wrap:nowrap; overflow-x:auto; justify-content:flex-start; scrollbar-width:none; }
+  nav::-webkit-scrollbar{ display:none; }
+}
+/* ── theme:end ── */
 </style>
 </head>
 <body>
 
 <header>
+  <div class="lesson-cover" aria-hidden="true"><svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"><rect width="120" height="120" fill="#C42A78"/><circle cx="108" cy="14" r="46" fill="#000" fill-opacity=".14"/><g fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 60 L112 60 M60 8 L60 112" stroke-opacity=".45" stroke-width="2"/><circle cx="60" cy="60" r="34" stroke-width="4"/><path d="M60 60 L86.8 39.1"/><circle cx="60.0" cy="60.0" r="5" fill="#fff" stroke="none"/><circle cx="86.8" cy="39.1" r="5" fill="#fff" stroke="none"/></g></svg></div>
+  <button id="themeToggle" class="theme-toggle" type="button" onclick="toggleTheme()" title="สลับโหมดสว่าง/มืด" aria-label="สลับโหมดสว่าง/มืด"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6"/></svg></button>
   <button id="langToggle" class="lang-toggle" onclick="toggleLang()">EN</button>
-  <h1 data-th="⭕ วงกลม" data-en="⭕ Circle">⭕ วงกลม</h1>
+  <h1 data-th="วงกลม" data-en="Circle">วงกลม</h1>
   <p data-th="ภาคตัดกรวยที่ระนาบตัดตั้งฉากกับแกนกรวยพอดี" data-en="The conic section where the cutting plane is exactly perpendicular to the cone's axis">ภาคตัดกรวยที่ระนาบตัดตั้งฉากกับแกนกรวยพอดี</p>
 </header>
 
@@ -482,16 +578,16 @@ function render3D(svgId, betaDeg, view) {
 
   const parts = [];
   quads.forEach(function (q) {
-    const fill = q.kind === 'plane' ? 'rgba(99,219,219,0.28)' : 'rgba(153,51,0,0.22)';
+    const fill = q.kind === 'plane' ? 'var(--g-plane)' : 'var(--g-cone)';
     const pointsStr = q.pts.map(function (p) { return p.px + ',' + p.py; }).join(' ');
     parts.push('<polygon points="' + pointsStr + '" fill="' + fill + '" stroke="none"/>');
   });
 
   // Coordinate axes (x/y/z) for spatial reference — drawn on top of the translucent cone fill.
   const AX_LEN = CONE_TMAX + 0.5;
-  parts.push(axisSVG({ x: 1, y: 0, z: 0 }, AX_LEN, '#E53935', 'x', view, cx, cy, scale, 'axisX'));
-  parts.push(axisSVG({ x: 0, y: 1, z: 0 }, AX_LEN, '#2E9E4F', 'y', view, cx, cy, scale, 'axisY'));
-  parts.push(axisSVG({ x: 0, y: 0, z: 1 }, AX_LEN, '#3949AB', 'z', view, cx, cy, scale, 'axisZ'));
+  parts.push(axisSVG({ x: 1, y: 0, z: 0 }, AX_LEN, 'var(--g-x)', 'x', view, cx, cy, scale, 'axisX'));
+  parts.push(axisSVG({ x: 0, y: 1, z: 0 }, AX_LEN, 'var(--g-y)', 'y', view, cx, cy, scale, 'axisY'));
+  parts.push(axisSVG({ x: 0, y: 0, z: 1 }, AX_LEN, 'var(--g-z)', 'z', view, cx, cy, scale, 'axisZ'));
 
   const genCount = 16;
   for (let gi = 0; gi < genCount; gi++) {
@@ -499,7 +595,7 @@ function render3D(svgId, betaDeg, view) {
     const d = coneDir(u);
     const p1 = project3({ x: -CONE_TMAX * d.x, y: -CONE_TMAX * d.y, z: -CONE_TMAX * d.z }, view, cx, cy, scale);
     const p2 = project3({ x: CONE_TMAX * d.x, y: CONE_TMAX * d.y, z: CONE_TMAX * d.z }, view, cx, cy, scale);
-    parts.push('<line x1="' + p1.px + '" y1="' + p1.py + '" x2="' + p2.px + '" y2="' + p2.py + '" stroke="rgba(153,51,0,0.35)" stroke-width="1"/>');
+    parts.push('<line x1="' + p1.px + '" y1="' + p1.py + '" x2="' + p2.px + '" y2="' + p2.py + '" stroke="var(--g-cone-line)" stroke-width="1"/>');
   }
 
   const axP1 = project3({ x: 0, y: 0, z: -CONE_TMAX }, view, cx, cy, scale);
@@ -513,20 +609,20 @@ function render3D(svgId, betaDeg, view) {
   const gd = coneDir(0);
   const genP1 = project3({ x: -CONE_TMAX * gd.x, y: -CONE_TMAX * gd.y, z: -CONE_TMAX * gd.z }, view, cx, cy, scale);
   const genP2 = project3({ x: CONE_TMAX * gd.x, y: CONE_TMAX * gd.y, z: CONE_TMAX * gd.z }, view, cx, cy, scale);
-  parts.push('<line x1="' + genP1.px + '" y1="' + genP1.py + '" x2="' + genP2.px + '" y2="' + genP2.py + '" stroke="#D81B60" stroke-width="2" stroke-dasharray="8 5"/>');
+  parts.push('<line x1="' + genP1.px + '" y1="' + genP1.py + '" x2="' + genP2.px + '" y2="' + genP2.py + '" stroke="var(--g-pink)" stroke-width="2" stroke-dasharray="8 5"/>');
   const genLbl = project3({ x: CONE_TMAX * 1.06 * gd.x, y: CONE_TMAX * 1.06 * gd.y, z: CONE_TMAX * 1.06 * gd.z }, view, cx, cy, scale);
-  parts.push('<text x="' + genLbl.px + '" y="' + genLbl.py + '" font-size="12" font-weight="700" fill="#D81B60" text-anchor="middle">' + (lang === 'en' ? 'Generator' : 'ตัวก่อกำเนิด') + '</text>');
+  parts.push('<text x="' + genLbl.px + '" y="' + genLbl.py + '" font-size="12" font-weight="700" fill="var(--g-pink)" text-anchor="middle">' + (lang === 'en' ? 'Generator' : 'ตัวก่อกำเนิด') + '</text>');
 
   // Vertex (apex) marker + label
   const vPt = project3({ x: 0, y: 0, z: 0 }, view, cx, cy, scale);
-  parts.push('<circle cx="' + vPt.px + '" cy="' + vPt.py + '" r="4" fill="var(--text)" stroke="white" stroke-width="1.5"/>');
+  parts.push('<circle cx="' + vPt.px + '" cy="' + vPt.py + '" r="4" fill="var(--text)" stroke="var(--g-ring)" stroke-width="1.5"/>');
   parts.push('<text x="' + (vPt.px + 8) + '" y="' + (vPt.py - 8) + '" font-size="13" font-weight="800" font-style="italic" fill="var(--text)">V</text>');
 
   const segments = coneIntersectionSegments(betaDeg);
   segments.forEach(function (seg) {
     const projPts = seg.map(function (p) { return project3(p, view, cx, cy, scale); });
     const d = 'M' + projPts.map(function (p) { return p.px + ',' + p.py; }).join(' L');
-    parts.push('<path d="' + d + '" fill="none" stroke="#FF7F00" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>');
+    parts.push('<path d="' + d + '" fill="none" stroke="var(--g-curve)" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>');
   });
 
   svg.innerHTML = parts.join('');
@@ -611,7 +707,7 @@ function pointSVG(plane, id, pt, color, label) {
   const p = plane.toPx(pt.x, pt.y);
   return '<g data-point="' + id + '" class="drag-point">' +
     '<circle cx="' + p.px + '" cy="' + p.py + '" r="16" fill="transparent"/>' +
-    '<circle cx="' + p.px + '" cy="' + p.py + '" r="6.5" fill="' + color + '" stroke="white" stroke-width="2"/>' +
+    '<circle cx="' + p.px + '" cy="' + p.py + '" r="6.5" fill="' + color + '" stroke="var(--g-ring)" stroke-width="2"/>' +
     '<text x="' + (p.px + 11) + '" y="' + (p.py - 9) + '" font-size="12.5" font-weight="800" fill="' + color + '">' + label + '(' + pt.x.toFixed(1) + ', ' + pt.y.toFixed(1) + ')</text>' +
     '</g>';
 }
@@ -702,7 +798,7 @@ function renderCircle() {
   const cPx = circlePlane.toPx(C.x, C.y);
   const rPx = r * circlePlane.scale;
   const parts = [gridSVG(circlePlane)];
-  parts.push('<circle cx="' + cPx.px + '" cy="' + cPx.py + '" r="' + rPx + '" fill="rgba(255,127,0,0.12)" stroke="#FF7F00" stroke-width="2.5"/>');
+  parts.push('<circle cx="' + cPx.px + '" cy="' + cPx.py + '" r="' + rPx + '" fill="var(--g-curve-fill)" stroke="var(--g-curve)" stroke-width="2.5"/>');
   parts.push('<line x1="' + cPx.px + '" y1="' + cPx.py + '" x2="' + circlePlane.toPx(P.x, P.y).px + '" y2="' + circlePlane.toPx(P.x, P.y).py + '" stroke="var(--secondary)" stroke-width="2" stroke-dasharray="6 4"/>');
   parts.push(labelAt(circlePlane, C, P, 'r = ' + fmt(r), 'var(--secondary)', 14));
   parts.push(pointSVG(circlePlane, 'C', C, 'var(--primary)', 'C'));
@@ -813,5 +909,28 @@ newQuiz();
 applyLang(getLang());
 </script>
 
+<script id="theme-js">
+// ── ปุ่มสลับโหมดสว่าง/มืด (สร้างโดย tools/build_lessons.py) — จำค่าไว้ใน localStorage 'siteTheme' ──
+// สื่อที่วาดด้วย canvas หรือเก็บสีไว้ในตัวแปร ให้ฟัง window 'themechange' แล้ววาดใหม่
+function currentTheme() { return document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light'; }
+function syncThemeButton() {
+  const b = document.getElementById('themeToggle');
+  if (!b) return;
+  const dark = currentTheme() === 'dark';
+  b.innerHTML = dark ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6"/></svg>' : '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.5 14.6A8.5 8.5 0 0 1 9.4 3.5a8.5 8.5 0 1 0 11.1 11.1z"/></svg>';
+  const en = document.documentElement.lang === 'en';
+  b.title = dark ? (en ? 'Switch to light mode' : 'เปลี่ยนเป็นโหมดสว่าง') : (en ? 'Switch to dark mode' : 'เปลี่ยนเป็นโหมดมืด');
+  b.setAttribute('aria-label', b.title);
+}
+function toggleTheme() {
+  const next = currentTheme() === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', next);
+  try { localStorage.setItem('siteTheme', next); } catch (e) {}
+  syncThemeButton();
+  window.dispatchEvent(new CustomEvent('themechange', { detail: next }));
+}
+syncThemeButton();
+new MutationObserver(syncThemeButton).observe(document.documentElement, { attributes: true, attributeFilter: ['lang'] });
+</script>
 </body>
 </html>
