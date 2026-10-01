@@ -3,159 +3,249 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#121212">
+<link rel="icon" href="data:image/svg+xml,%3Csvg viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='40' height='40' rx='11' fill='%2368EF3F'/%3E%3Cg fill='none' stroke='%23000' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M11.5 30.5 V9.5 H18.5 C27 9.5 27 21.5 18.5 21.5 H11.5' stroke-width='4.4'/%3E%3Cpath d='M31 8 L28.2 16' stroke-width='3.6'/%3E%3C/g%3E%3C/svg%3E">
 <title>จำนวนจริง — รวมสื่อการสอน by P'Earth</title>
+<!-- หน้านี้สร้างจาก tools/build_index.py — แก้ธีม/เลย์เอาต์ที่สคริปต์ แล้วรันใหม่ (แก้ TOPICS ในไฟล์นี้ได้ตามปกติ) -->
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Anuphan:wght@400;500;600;700&display=swap');
 
 :root {
-  --primary: #1C3B22;
-  --secondary: #FF8A3D;
+  --bg: #121212;
+  --surface: #181818;
+  --raise: #1f1f1f;
+  --hover: #282828;
+  --text: #ffffff;
+  --muted: #b3b3b3;
+  --dim: #7c7c7c;
   --accent: #68EF3F;
-  --bg: #F3F7EC;
-  --card: #FFFFFF;
-  --text: #2D3748;
-  --muted: #718096;
-  --border: #E2E8F0;
-  --shadow: 0 4px 24px rgba(28,59,34,0.10);
-  --radius: 16px;
+  --toast: #539df5;
+  --shadow: 0 8px 24px rgba(0,0,0,.5);
+  --tb-h: 68px;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
-
+html { background: var(--bg); color-scheme: dark; }
 body {
-  font-family: 'Sarabun', sans-serif;
+  font-family: 'Anuphan', system-ui, sans-serif;
   background: var(--bg);
   color: var(--text);
+  line-height: 1.5;
   min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
 }
+a { color: inherit; text-decoration: none; }
+:focus-visible { outline: 2px solid #fff; outline-offset: 2px; border-radius: 6px; }
 
-header {
-  background: linear-gradient(135deg, #1C3B22 0%, #2E5936 100%);
-  color: white;
-  padding: 32px 24px 28px;
-  text-align: center;
-  position: relative;
-}
+.shell { display: flex; align-items: flex-start; gap: 8px; padding: 8px; min-height: 100vh; }
 
-header h1 { font-size: 1.6rem; font-weight: 700; margin-bottom: 6px; }
-header p { font-size: 0.95rem; opacity: 0.9; }
-.lang-toggle {
-  position: absolute;
-  top: 12px; right: 20px;
-  background: rgba(255,255,255,.15);
-  color: white;
-  border: 1.5px solid rgba(255,255,255,.5);
-  border-radius: 20px;
-  padding: 5px 14px;
-  font-family: 'Sarabun', sans-serif;
-  font-size: .8rem;
-  font-weight: 700;
-  cursor: pointer;
-  z-index: 2;
+/* ── แถบคลังสื่อด้านซ้าย ── */
+.lib {
+  flex: 0 0 300px;
+  position: sticky; top: 8px;
+  height: calc(100vh - 16px);
+  overflow-y: auto;
+  background: var(--surface);
+  border-radius: 8px;
+  padding: 12px 8px;
+  display: flex; flex-direction: column; gap: 2px;
 }
-.lang-toggle:hover { background: rgba(255,255,255,.28); }
+.brand { display: flex; align-items: center; gap: 12px; padding: 6px 12px 14px; font-weight: 700; font-size: 1.3rem; line-height: 1.15; }
+.brand-mark { width: 38px; height: 38px; flex: 0 0 38px; }
+.brand small { display: block; font-size: .78rem; font-weight: 500; color: var(--muted); }
+.lib-home, .lib-head { display: flex; align-items: center; gap: 16px; padding: 10px 12px; font-weight: 700; font-size: 1rem; color: var(--muted); }
+.lib-home:hover, .lib-home.active { color: #fff; }
+.lib-home svg, .lib-head svg { width: 24px; height: 24px; flex: 0 0 24px; }
+.lib-head { margin-top: 4px; }
+.lib-list { display: flex; flex-direction: column; gap: 2px; }
+.lib-item { display: grid; grid-template-columns: 48px 1fr; gap: 12px; align-items: center; padding: 8px; border-radius: 6px; transition: background .15s; }
+.lib-item:hover { background: var(--raise); }
+.lib-item.active { background: #232323; }
+.lib-cover svg { display: block; width: 48px; height: 48px; border-radius: 4px; }
+.lib-text { min-width: 0; }
+.lib-title { display: block; font-weight: 600; font-size: 1rem; }
+.lib-item.active .lib-title { color: var(--accent); }
+.lib-sub { display: block; font-size: .82rem; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-.crumb {
-  max-width: 1000px;
-  margin: 20px auto 0;
-  padding: 0 24px;
-}
-.crumb a {
-  color: var(--primary);
-  text-decoration: none;
-  font-weight: 600;
-  font-size: 0.9rem;
-}
-.crumb a:hover { text-decoration: underline; }
+/* ── พื้นที่หลัก ── */
+.main { flex: 1; min-width: 0; min-height: calc(100vh - 16px); background: var(--surface); border-radius: 8px; overflow: clip; }
 
-main {
-  max-width: 1000px;
-  margin: 0 auto;
-  padding: 24px;
+.topbar { position: sticky; top: 0; z-index: 5; display: flex; align-items: center; gap: 12px; padding: 12px 24px; transition: background .25s; }
+.topbar.solid { background: color-mix(in srgb, var(--page) 45%, #0b0b0b); }
+.crumb { min-width: 0; }
+.back { display: inline-flex; align-items: center; gap: 10px; max-width: 100%; font-weight: 700; font-size: .95rem; }
+.back svg { width: 34px; height: 34px; flex: 0 0 34px; padding: 7px; border-radius: 50%; background: rgba(0,0,0,.6); }
+.back:hover svg { background: rgba(0,0,0,.9); }
+.back span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.search {
+  flex: 0 1 360px; margin-left: auto;
+  display: flex; align-items: center; gap: 10px;
+  height: 46px; padding: 0 18px;
+  background: #242424; border-radius: 500px;
+  box-shadow: inset 0 0 0 1px transparent;
+  transition: background .15s, box-shadow .15s;
+  cursor: text;
 }
+.search:hover { background: #2a2a2a; box-shadow: inset 0 0 0 1px #4d4d4d; }
+.search:focus-within { box-shadow: inset 0 0 0 2px #fff; }
+.search svg { width: 20px; height: 20px; flex: 0 0 20px; color: var(--muted); }
+.search input { flex: 1; min-width: 0; background: none; border: 0; outline: 0; color: #fff; font: inherit; font-size: 1rem; }
+.search input::placeholder { color: var(--muted); }
+.search input::-webkit-search-cancel-button { filter: invert(1); }
+.lang-toggle { flex: 0 0 auto; background: transparent; color: #fff; border: 1px solid var(--dim); border-radius: 9999px; padding: 6px 16px; font: inherit; font-weight: 700; font-size: .88rem; cursor: pointer; transition: transform .1s, border-color .1s; }
+.lang-toggle:hover { border-color: #fff; transform: scale(1.04); }
 
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 18px;
-  margin-top: 20px;
+/* ── หัวหน้า (ปก + ชื่อ) ── */
+.hero {
+  display: flex; align-items: flex-end; gap: 28px;
+  margin-top: calc(-1 * var(--tb-h));
+  padding: calc(var(--tb-h) + 28px) 24px 28px;
+  background: linear-gradient(180deg, color-mix(in srgb, var(--page) 82%, #000) 0%, color-mix(in srgb, var(--page) 45%, #181818) 100%);
 }
+.hero-cover { flex: 0 0 auto; width: clamp(160px, 19vw, 232px); aspect-ratio: 1; border-radius: 6px; overflow: hidden; box-shadow: var(--shadow); }
+.hero-cover svg { display: block; width: 100%; height: 100%; }
+.hero-text { min-width: 0; display: flex; flex-direction: column; gap: 8px; }
+.kind { font-size: .95rem; font-weight: 600; }
+.hero h1 { font-size: clamp(2.6rem, 6.5vw, 5.4rem); font-weight: 700; line-height: 1.22; letter-spacing: -.02em; }
+.hero h1.long { font-size: clamp(1.9rem, 4vw, 3.3rem); }
+.hero .sub { max-width: 64ch; font-size: 1.02rem; color: rgba(255,255,255,.82); }
+.meta-line { font-size: .95rem; color: rgba(255,255,255,.82); }
+.meta-line b { color: #fff; }
+.hero-home { padding-top: calc(var(--tb-h) + 56px); }
+.hero-home .kind { font-size: 1.1rem; font-weight: 700; }
 
-.card {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
-  padding: 24px 20px;
-  text-decoration: none;
-  color: var(--text);
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
+.content { padding: 28px 24px 56px; background: linear-gradient(180deg, color-mix(in srgb, var(--page) 20%, #181818) 0, #181818 280px); }
+.section-title { font-size: 1.55rem; font-weight: 700; margin-bottom: 14px; }
+
+/* ── การ์ดแบบอัลบั้ม ── */
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 12px; }
+.card-wrap { position: relative; display: flex; }
+.card { flex: 1; display: flex; flex-direction: column; gap: 6px; padding: 12px; border-radius: 8px; transition: background .2s; }
+.card:hover { background: var(--hover); }
+.cover { position: relative; margin-bottom: 6px; border-radius: 6px; box-shadow: var(--shadow); }
+.cover svg { display: block; width: 100%; height: auto; border-radius: 6px; }
+.play {
+  position: absolute; right: 8px; bottom: 8px;
+  width: 50px; height: 50px; border-radius: 50%;
+  display: grid; place-items: center;
+  background: var(--accent); box-shadow: 0 8px 8px rgba(0,0,0,.3);
+  opacity: 0; transform: translateY(8px);
+  transition: opacity .2s, transform .2s;
 }
+.play svg { width: 20px; height: 20px; margin-left: 3px; fill: #000; }
+.card:hover .play, .card:focus-visible .play { opacity: 1; transform: none; }
+.card .title { font-weight: 700; font-size: 1.04rem; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.card .desc { font-size: .92rem; line-height: 1.55; color: var(--muted); display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.card .meta { margin-top: auto; padding-top: 2px; font-size: .8rem; font-weight: 600; color: var(--muted); }
 
-.card-wrap {
-  position: relative;
-  display: flex;
-  transition: transform 0.15s ease;
-}
-.card-wrap > .card { flex: 1; }
-.card-wrap:hover { transform: translateY(-3px); }
-.card-wrap:hover > .card { box-shadow: 0 8px 28px rgba(28,59,34,0.18); }
-
-/* ปุ่มคัดลอกลิงก์ของการ์ด — ลิงก์ชี้ไปที่เว็บจริงเสมอ แม้เปิดไฟล์จากเครื่อง */
 .copy-link {
-  position: absolute;
-  top: 14px; right: 14px;
-  background: #F3F7EC;
-  color: var(--primary);
-  border: 1px solid #CFE3C3;
-  border-radius: 999px;
-  padding: 4px 11px;
-  font-family: 'Sarabun', sans-serif;
-  font-size: 0.75rem;
-  font-weight: 700;
-  cursor: pointer;
-  transition: background 0.15s ease;
+  position: absolute; top: 20px; right: 20px;
+  width: 36px; height: 36px; border: 0; border-radius: 50%;
+  display: grid; place-items: center;
+  background: rgba(0,0,0,.72); color: #fff;
+  cursor: pointer; opacity: 0;
+  transition: opacity .2s, transform .12s, background .12s;
 }
-.copy-link:hover { background: #E3F3D8; }
-.copy-link.done { background: var(--primary); color: white; border-color: var(--primary); }
-.copy-link.missing { background: #FFF1E6; color: #B4531A; border-color: #FFC9A3; }
+.copy-link svg { width: 18px; height: 18px; }
+.card-wrap:hover .copy-link, .copy-link:focus-visible { opacity: 1; }
+.copy-link:hover { background: #000; transform: scale(1.08); }
+.copy-link.done { opacity: 1; background: var(--accent); color: #000; }
+.copy-link.missing { opacity: 1; background: #f3727f; color: #000; }
+@media (hover: none) { .copy-link { opacity: 1; } }
 
-.card .icon { font-size: 2.2rem; }
-.card .title { font-size: 1.1rem; font-weight: 700; }
-.card .desc { font-size: 0.85rem; color: var(--muted); line-height: 1.5; }
-.card .tags { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 4px; }
-.card .tag {
-  font-size: 0.72rem;
-  font-weight: 600;
-  color: var(--primary);
-  background: #E3F3D8;
-  border-radius: 999px;
-  padding: 3px 10px;
+.card.soon { opacity: .5; cursor: default; }
+.card.soon:hover { background: transparent; }
+.badge-soon { align-self: flex-start; font-size: .75rem; font-weight: 700; color: var(--muted); background: #2a2a2a; border-radius: 9999px; padding: 3px 12px; }
+.empty-note { color: var(--muted); padding: 24px 0; font-size: 1rem; }
+
+/* ── การ์ดแนวนอน (หน้าแรก แบบทางลัดในหน้า Home) ── */
+.tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 12px; }
+.tiles .card { position: relative; flex-direction: row; align-items: stretch; gap: 0; padding: 0; min-height: 104px; border-radius: 6px; overflow: hidden; background: rgba(255,255,255,.08); }
+.tiles .card:hover { background: rgba(255,255,255,.17); }
+.tiles .cover { position: static; flex: 0 0 104px; margin: 0; border-radius: 0; box-shadow: 0 8px 24px rgba(0,0,0,.5); }
+.tiles .cover svg { height: 100%; border-radius: 0; }
+.tiles .t-body { min-width: 0; display: flex; flex-direction: column; justify-content: center; gap: 2px; padding: 12px 64px 12px 16px; }
+.tiles .title { font-size: 1.25rem; }
+.tiles .desc { -webkit-line-clamp: 2; font-size: .88rem; }
+.tiles .play { right: 12px; bottom: 12px; width: 44px; height: 44px; }
+.tiles .play svg { width: 18px; height: 18px; }
+.tiles .card-wrap .copy-link { top: 8px; right: 12px; width: 32px; height: 32px; }
+
+.toast {
+  position: fixed; left: 50%; bottom: 32px; z-index: 20;
+  transform: translate(-50%, 16px);
+  background: var(--toast); color: #000;
+  font-weight: 600; font-size: .95rem;
+  padding: 10px 18px; border-radius: 8px;
+  box-shadow: var(--shadow);
+  opacity: 0; pointer-events: none;
+  transition: opacity .2s, transform .2s;
 }
+.toast.show { opacity: 1; transform: translate(-50%, 0); }
 
-.empty-note {
-  color: var(--muted);
-  font-size: 0.9rem;
-  margin-top: 16px;
+/* ── จอแคบ: แถบคลังกลายเป็นชิปเลื่อนแนวนอนด้านบน ── */
+@media (max-width: 820px) {
+  .shell { flex-direction: column; align-items: stretch; gap: 0; padding: 0; }
+  .lib {
+    position: static; flex: none; height: auto; width: 100%;
+    flex-direction: row; align-items: center; gap: 8px;
+    padding: 10px 16px; border-radius: 0; background: var(--bg);
+    overflow-x: auto; scrollbar-width: none;
+  }
+  .lib::-webkit-scrollbar { display: none; }
+  .brand { padding: 0 6px 0 0; font-size: 1.05rem; }
+  .brand-mark { width: 30px; height: 30px; flex-basis: 30px; }
+  .brand small, .lib-head, .lib-cover, .lib-sub, .lib-home svg { display: none; }
+  .lib-list { flex-direction: row; gap: 8px; }
+  .lib-home, .lib-item { display: block; flex: 0 0 auto; padding: 6px 14px; border-radius: 9999px; background: #2a2a2a; color: #fff; font-size: .9rem; font-weight: 600; white-space: nowrap; }
+  .lib-title { font-size: .9rem; }
+  .lib-home.active, .lib-item.active { background: var(--accent); color: #000; }
+  .lib-item.active .lib-title { color: #000; }
+  .main { border-radius: 0; min-height: auto; }
+  .topbar { flex-wrap: wrap; padding: 10px 16px; }
+  .search { order: 3; flex: 1 0 100%; margin-left: 0; height: 42px; }
+  .lang-toggle { margin-left: auto; }
+  .hero { flex-direction: column; align-items: flex-start; gap: 18px; padding: calc(var(--tb-h) + 16px) 16px 22px; }
+  .hero-cover { width: min(58vw, 220px); align-self: center; }
+  .hero h1 { font-size: clamp(2.1rem, 10vw, 3rem); }
+  .hero h1.long { font-size: clamp(1.6rem, 7vw, 2.2rem); }
+  .content { padding: 18px 16px 40px; }
+  .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
+  .card { padding: 8px; }
+  .copy-link { top: 14px; right: 14px; }
+  .tiles { grid-template-columns: 1fr; }
 }
 </style>
 </head>
-<body>
+<body style="--page: #1E3264">
 
-<header>
-  <button id="langToggle" class="lang-toggle" onclick="toggleLang()">EN</button>
-  <h1 data-th="🔢 จำนวนจริง" data-en="🔢 Real Numbers">🔢 จำนวนจริง</h1>
-  <p data-th="สื่อการสอนเรื่องจำนวนจริง" data-en="Real Number System Teaching Materials">สื่อการสอนเรื่องจำนวนจริง</p>
+<div class="shell">
+
+<div class="main">
+  <div class="topbar" id="topbar">
+    <label class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5 21 21"/></svg><input id="q" type="search" autocomplete="off" placeholder="ค้นหาในหน้านี้" aria-label="ค้นหาในหน้านี้"></label>
+    <button id="langToggle" class="lang-toggle" onclick="toggleLang()">EN</button>
+  </div>
+
+<header class="hero">
+  <div class="hero-cover"><svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"><rect width="120" height="120" fill="#1E3264"/><circle cx="104" cy="108" r="46" fill="#000" fill-opacity=".14"/><g fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.0 62.0 L112.0 62.0"/><path d="M103.9 65.9 L112.0 62.0 L103.9 58.1"/><path d="M8 62 L14 62"/><path d="M20 56 L20 68" stroke-width="2.5"/><path d="M36 56 L36 68" stroke-width="2.5"/><path d="M52 56 L52 68" stroke-width="2.5"/><path d="M68 56 L68 68" stroke-width="2.5"/><path d="M84 56 L84 68" stroke-width="2.5"/><path d="M100 56 L100 68" stroke-width="2.5"/><circle cx="70.3" cy="62.0" r="6" fill="#fff" stroke="none"/><text x="70.3" y="44" font-size="24" font-weight="700" fill="#fff" stroke="none" text-anchor="middle" font-family="Anuphan, system-ui, sans-serif">π</text><circle cx="42.6" cy="62.0" r="4" fill="#fff" stroke="none"/><text x="42.6" y="88" font-size="16" font-weight="700" fill="#fff" stroke="none" text-anchor="middle" font-family="Anuphan, system-ui, sans-serif">√2</text></g></svg></div>
+  <div class="hero-text">
+    <span class="kind" data-th="หัวข้อ" data-en="Topic">หัวข้อ</span>
+    <h1 data-th="จำนวนจริง" data-en="Real Numbers">จำนวนจริง</h1>
+    <p class="sub" data-th="สื่อการสอนเรื่องจำนวนจริง" data-en="Real Number System Teaching Materials">สื่อการสอนเรื่องจำนวนจริง</p>
+    <p class="meta-line"><b>P'Earth</b> • <span id="count"></span></p>
+  </div>
 </header>
 
+  <main class="content">
+    <h2 class="section-title" data-th="สื่อทั้งหมด" data-en="All materials">สื่อทั้งหมด</h2>
+    <div id="topicGrid" class="grid"></div>
+    <p id="emptyNote" class="empty-note" style="display:none;"></p>
+  </main>
+</div>
+</div>
 
-<main>
-  <div id="topicGrid" class="grid"></div>
-  <p id="emptyNote" class="empty-note" style="display:none;" data-th="ยังไม่มีสื่อ" data-en="No materials yet">ยังไม่มีสื่อ</p>
-</main>
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
 
 <script>
 // ── ปุ่มสลับภาษาไทย/อังกฤษ (โค้ดชุดนี้ฝังซ้ำในทุกหน้าของเว็บ) ──
@@ -170,7 +260,8 @@ function applyLang(lang) {
   document.documentElement.lang = lang;
   document.title = PAGE_TITLE[lang];
   document.querySelectorAll('[data-th]').forEach(el => {
-    el.textContent = (lang === 'en' && el.dataset.en) ? el.dataset.en : el.dataset.th;
+    // ค่าใน data-th / data-en ถือเป็น HTML (ดู docs/adr/0002)
+    el.innerHTML = (lang === 'en' && el.dataset.en) ? el.dataset.en : el.dataset.th;
   });
   const btn = document.getElementById('langToggle');
   if (btn) btn.textContent = lang === 'en' ? 'ไทย' : 'EN';
@@ -182,9 +273,14 @@ function toggleLang() {
   try { localStorage.setItem('siteLang', next); } catch (e) {}
   applyLang(next);
 }
-function onLangChange(lang) { renderTopics(); }
 
-// เพิ่มสื่อใหม่ในหมวดจำนวนจริง: copy ไฟล์ html เข้าโฟลเดอร์นี้ (math/real-numbers/) แล้วเพิ่ม object ในนี้ (ใส่ทั้ง _th และ _en)
+const HERE = "m4/real-numbers/";  // path ของหน้านี้เทียบกับ root เว็บ (ใช้หาปกการ์ด)
+const UNIT = { th: "รายการ", en: "items" };
+let QUERY = "";
+
+// เพิ่มสื่อใหม่: copy ไฟล์ html เข้าโฟลเดอร์นี้ แล้วเพิ่ม object ในนี้ (ใส่ทั้ง _th และ _en)
+// comingSoon: true = การ์ดจางๆ คลิกไม่ได้ ไว้แสดงหัวข้อที่ยังไม่ได้ทำ
+// ปกการ์ด: วาดใน tools/covers.py แล้วรัน tools/build_index.py — ถ้ายังไม่วาด หน้าเว็บสร้างปกสีจากชื่อให้เอง
 const TOPICS = [
   { file: "inequality-sign-chart.html", title_th: "ทำไมต้อง + − + (อสมการพหุนาม)", title_en: "Why It's + − + (Polynomial Inequalities)", desc_th: "ลองแทนค่าเพื่อดูว่าทำไมต้องสลับเครื่องหมาย พร้อมเครื่องมือสร้างแผนภาพเครื่องหมายเอง", desc_en: "Try substituting to see why signs flip, plus a builder tool that draws your own sign chart", icon: "🔀", tags_th: ["จำนวนจริง", "อสมการ"], tags_en: ["Real Numbers", "Inequalities"] },
   { file: "compare-problems.html", title_th: "เทียบความต่างของโจทย์ (สมการ vs อสมการ)", title_en: "Equation vs Inequality — Spot the Difference", desc_th: "5 คู่โจทย์ที่หน้าตาคล้ายกันแต่วิธีทำต่างกัน เปิดขั้นตอนทีละขั้นทั้งสองฝั่งพร้อมกัน พร้อมตัวทดสอบ \"ห้ามคูณไขว้\"", desc_en: "5 look-alike pairs solved side by side step by step, plus a \"never cross-multiply\" tester", icon: "🆚", tags_th: ["จำนวนจริง", "อสมการ"], tags_en: ["Real Numbers", "Inequalities"] },
@@ -193,23 +289,101 @@ const TOPICS = [
   { file: "factoring.html", title_th: "พหุนามและการแยกตัวประกอบ", title_en: "Polynomials & Factoring", desc_th: "บวก ลบ คูณพหุนาม ดึงตัวร่วม แยกตัวประกอบไขว้ กำลังสองสมบูรณ์ด้วยแผ่นพีชคณิต และสูตรแยกตัวประกอบ 4 สูตร", desc_en: "Polynomial add/subtract/multiply, common factor, cross-method, completing the square with algebra tiles, and the 4 factoring formulas", icon: "🧮", tags_th: ["จำนวนจริง", "การแยกตัวประกอบ"], tags_en: ["Real Numbers", "Factoring"] }
 ];
 
+// ปกการ์ด (สร้างจาก tools/covers.py — ห้ามแก้มือ)
+const COVERS = {
+"m4/real-numbers/inequality-sign-chart.html": "<svg viewBox=\"0 0 120 120\" xmlns=\"http://www.w3.org/2000/svg\" aria-hidden=\"true\" focusable=\"false\"><rect width=\"120\" height=\"120\" fill=\"#2D46B9\"/><circle cx=\"12\" cy=\"110\" r=\"46\" fill=\"#000\" fill-opacity=\".14\"/><g fill=\"none\" stroke=\"#fff\" stroke-width=\"3.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M14.0,130.0 L15.2,126.7 L16.3,123.6 L17.4,120.5 L18.6,117.4 L19.8,114.5 L20.9,111.7 L22.1,108.9 L23.2,106.2 L24.4,103.6 L25.5,101.1 L26.6,98.6 L27.8,96.3 L28.9,94.0 L30.1,91.8 L31.2,89.7 L32.4,87.7 L33.5,85.7 L34.7,83.9 L35.9,82.1 L37.0,80.4 L38.1,78.8 L39.3,77.3 L40.5,75.8 L41.6,74.5 L42.8,73.2 L43.9,72.0 L45.0,70.9 L46.2,69.8 L47.4,68.9 L48.5,68.0 L49.6,67.2 L50.8,66.5 L52.0,65.9 L53.1,65.4 L54.2,64.9 L55.4,64.5 L56.5,64.2 L57.7,64.0 L58.9,63.9 L60.0,63.9 L61.1,63.9 L62.3,64.0 L63.5,64.2 L64.6,64.5 L65.8,64.9 L66.9,65.4 L68.0,65.9 L69.2,66.5 L70.3,67.2 L71.5,68.0 L72.7,68.9 L73.8,69.8 L75.0,70.9 L76.1,72.0 L77.2,73.2 L78.4,74.5 L79.5,75.8 L80.7,77.3 L81.8,78.8 L83.0,80.4 L84.2,82.1 L85.3,83.9 L86.5,85.7 L87.6,87.7 L88.8,89.7 L89.9,91.8 L91.0,94.0 L92.2,96.3 L93.3,98.6 L94.5,101.1 L95.7,103.6 L96.8,106.2 L98.0,108.9 L99.1,111.7 L100.2,114.5 L101.4,117.4 L102.5,120.5 L103.7,123.6 L104.8,126.7 L106.0,130.0\" stroke-opacity=\".55\" stroke-width=\"2.5\"/><path d=\"M8 74 L112 74\"/><circle cx=\"42\" cy=\"74\" r=\"6\" fill=\"#2D46B9\"/><circle cx=\"78\" cy=\"74\" r=\"6\" fill=\"#2D46B9\"/><text x=\"22\" y=\"50\" font-size=\"30\" font-weight=\"700\" fill=\"#fff\" stroke=\"none\" text-anchor=\"middle\" font-family=\"Anuphan, system-ui, sans-serif\">+</text><text x=\"60\" y=\"104\" font-size=\"30\" font-weight=\"700\" fill=\"#fff\" stroke=\"none\" text-anchor=\"middle\" font-family=\"Anuphan, system-ui, sans-serif\">−</text><text x=\"98\" y=\"50\" font-size=\"30\" font-weight=\"700\" fill=\"#fff\" stroke=\"none\" text-anchor=\"middle\" font-family=\"Anuphan, system-ui, sans-serif\">+</text></g></svg>",
+"m4/real-numbers/compare-problems.html": "<svg viewBox=\"0 0 120 120\" xmlns=\"http://www.w3.org/2000/svg\" aria-hidden=\"true\" focusable=\"false\"><rect width=\"120\" height=\"120\" fill=\"#3F6E86\"/><circle cx=\"14\" cy=\"16\" r=\"46\" fill=\"#000\" fill-opacity=\".14\"/><g fill=\"none\" stroke=\"#fff\" stroke-width=\"3.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M108 12 L12 108\" stroke-opacity=\".45\" stroke-width=\"2\"/><path d=\"M18 40 L50 40 M18 54 L50 54\" stroke-width=\"5\"/><path d=\"M100 66 L72 80 L100 94\" stroke-width=\"5\"/></g></svg>",
+"m4/real-numbers/absolute-value.html": "<svg viewBox=\"0 0 120 120\" xmlns=\"http://www.w3.org/2000/svg\" aria-hidden=\"true\" focusable=\"false\"><rect width=\"120\" height=\"120\" fill=\"#0B5DBF\"/><circle cx=\"104\" cy=\"108\" r=\"46\" fill=\"#000\" fill-opacity=\".14\"/><g fill=\"none\" stroke=\"#fff\" stroke-width=\"3.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M8 92 L112 92 M60 14 L60 106\" stroke-opacity=\".45\" stroke-width=\"2\"/><path d=\"M14 46 L60 92 L106 46\" stroke-width=\"4\"/><path d=\"M38 70 L82 70\" stroke-dasharray=\"4 5\"/><circle cx=\"38.0\" cy=\"70.0\" r=\"4.5\" fill=\"#fff\" stroke=\"none\"/><circle cx=\"82.0\" cy=\"70.0\" r=\"4.5\" fill=\"#fff\" stroke=\"none\"/></g></svg>",
+"m4/real-numbers/equations.html": "<svg viewBox=\"0 0 120 120\" xmlns=\"http://www.w3.org/2000/svg\" aria-hidden=\"true\" focusable=\"false\"><rect width=\"120\" height=\"120\" fill=\"#2F6FD0\"/><circle cx=\"104\" cy=\"108\" r=\"46\" fill=\"#000\" fill-opacity=\".14\"/><g fill=\"none\" stroke=\"#fff\" stroke-width=\"3.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M18 46 L102 46 M60 46 L60 98 M46 100 L74 100\"/><circle cx=\"60.0\" cy=\"44.0\" r=\"5\" fill=\"#fff\" stroke=\"none\"/><path d=\"M24 46 L15 74 M24 46 L33 74\" stroke-width=\"2\"/><path d=\"M10 74 Q24 86 38 74 Z\" fill=\"#fff\" fill-opacity=\".25\"/><path d=\"M96 46 L87 74 M96 46 L105 74\" stroke-width=\"2\"/><path d=\"M82 74 Q96 86 110 74 Z\" fill=\"#fff\" fill-opacity=\".25\"/><rect x=\"16\" y=\"58\" width=\"16\" height=\"15\" fill=\"#fff\" stroke=\"none\"/><text x=\"24\" y=\"70\" font-size=\"13\" font-weight=\"700\" fill=\"#2F6FD0\" stroke=\"none\" text-anchor=\"middle\" font-family=\"Anuphan, system-ui, sans-serif\" font-style=\"italic\">x</text><circle cx=\"91.0\" cy=\"68.0\" r=\"4.5\" fill=\"#fff\" stroke=\"none\"/><circle cx=\"101.0\" cy=\"68.0\" r=\"4.5\" fill=\"#fff\" stroke=\"none\"/><circle cx=\"96.0\" cy=\"60.0\" r=\"4.5\" fill=\"#fff\" stroke=\"none\"/></g></svg>",
+"m4/real-numbers/factoring.html": "<svg viewBox=\"0 0 120 120\" xmlns=\"http://www.w3.org/2000/svg\" aria-hidden=\"true\" focusable=\"false\"><rect width=\"120\" height=\"120\" fill=\"#2E4A8C\"/><circle cx=\"104\" cy=\"108\" r=\"46\" fill=\"#000\" fill-opacity=\".14\"/><g fill=\"none\" stroke=\"#fff\" stroke-width=\"3.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect x=\"26\" y=\"32\" width=\"46\" height=\"46\" fill=\"#fff\" fill-opacity=\".9\" stroke-width=\"2\"/><rect x=\"72\" y=\"32\" width=\"13\" height=\"46\" fill=\"#fff\" fill-opacity=\".5\" stroke-width=\"2\"/><rect x=\"85\" y=\"32\" width=\"13\" height=\"46\" fill=\"#fff\" fill-opacity=\".5\" stroke-width=\"2\"/><rect x=\"26\" y=\"78\" width=\"46\" height=\"13\" fill=\"#fff\" fill-opacity=\".5\" stroke-width=\"2\"/><rect x=\"72\" y=\"78\" width=\"13\" height=\"13\" fill=\"#fff\" fill-opacity=\".25\" stroke-width=\"2\"/><rect x=\"85\" y=\"78\" width=\"13\" height=\"13\" fill=\"#fff\" fill-opacity=\".25\" stroke-width=\"2\"/><text x=\"62.0\" y=\"24\" font-size=\"13\" font-weight=\"700\" fill=\"#fff\" stroke=\"none\" text-anchor=\"middle\" font-family=\"Anuphan, system-ui, sans-serif\">x+2</text><text x=\"15\" y=\"65.5\" font-size=\"13\" font-weight=\"700\" fill=\"#fff\" stroke=\"none\" text-anchor=\"middle\" font-family=\"Anuphan, system-ui, sans-serif\">x+1</text></g></svg>"
+};
+
+const PLAY_SVG = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4.5v15a.6.6 0 0 0 .9.5l12.2-7.5a.6.6 0 0 0 0-1L7.9 4a.6.6 0 0 0-.9.5z"/></svg>';
+const LINK_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M10 14a4.5 4.5 0 0 0 6.4 0l3.2-3.2a4.5 4.5 0 0 0-6.4-6.4L12 5.6"/><path d="M14 10a4.5 4.5 0 0 0-6.4 0l-3.2 3.2a4.5 4.5 0 0 0 6.4 6.4l1.2-1.2"/></svg>';
+
+function plain(s) { return String(s || "").replace(/<[^>]*>/g, ""); }
+function autoCover(title) {
+  let h = 0;
+  for (const ch of title) h = (h * 31 + ch.charCodeAt(0)) % 360;
+  return '<svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">'
+    + '<rect width="120" height="120" fill="hsl(' + h + ' 55% 36%)"/>'
+    + '<circle cx="104" cy="108" r="46" fill="#000" fill-opacity=".14"/>'
+    + '<text x="16" y="100" font-size="56" font-weight="700" fill="#fff" font-family="Anuphan, system-ui, sans-serif">'
+    + plain(title).slice(0, 2).replace(/[&<>]/g, "") + '</text></svg>';
+}
+function coverFor(t) {
+  return COVERS[(HERE + t.file).replace(/index\.html$/, "")] || autoCover(t.title_th);
+}
+
 function renderTopics() {
-  const lang = getLang();
+  const en = getLang() === 'en';
   const grid = document.getElementById("topicGrid");
-  if (TOPICS.length === 0) {
-    document.getElementById("emptyNote").style.display = "block";
-  } else {
-    grid.innerHTML = TOPICS.map(t => `
+  const tiles = grid.classList.contains("tiles");
+  const q = QUERY.trim().toLowerCase();
+  const list = TOPICS.filter(t => !q || [t.title_th, t.title_en, t.desc_th, t.desc_en, ...(t.tags_th || []), ...(t.tags_en || [])]
+    .some(s => plain(s).toLowerCase().includes(q)));
+  const note = document.getElementById("emptyNote");
+  note.style.display = list.length ? "none" : "block";
+  note.textContent = TOPICS.length === 0 ? (en ? "No materials yet" : "ยังไม่มีสื่อ")
+    : (en ? `Nothing matches “${QUERY.trim()}”` : `ไม่พบ “${QUERY.trim()}” ในหน้านี้`);
+  grid.innerHTML = list.map(t => {
+    const title = en ? t.title_en : t.title_th;
+    const desc = en ? t.desc_en : t.desc_th;
+    const meta = ((en ? t.tags_en : t.tags_th) || []).join(" • ");
+    const label = en ? 'Copy link' : 'คัดลอกลิงก์';
+    if (t.comingSoon) {
+      return `
+      <div class="card-wrap"><div class="card soon">
+        <div class="cover">${coverFor(t)}</div>
+        <div class="title">${title}</div>
+        <div class="desc">${desc}</div>
+        <span class="badge-soon">${en ? 'Coming soon' : 'เร็วๆ นี้'}</span>
+      </div></div>`;
+    }
+    const body = tiles
+      ? `<div class="cover">${coverFor(t)}</div><div class="t-body"><div class="title">${title}</div><div class="desc">${desc}</div></div><span class="play" aria-hidden="true">${PLAY_SVG}</span>`
+      : `<div class="cover">${coverFor(t)}<span class="play" aria-hidden="true">${PLAY_SVG}</span></div><div class="title">${title}</div><div class="desc">${desc}</div><div class="meta">${meta}</div>`;
+    return `
       <div class="card-wrap">
-      <a class="card" href="./${t.file}">
-        <div class="icon">${t.icon}</div>
-        <div class="title">${lang === 'en' ? t.title_en : t.title_th}</div>
-        <div class="desc">${lang === 'en' ? t.desc_en : t.desc_th}</div>
-        <div class="tags">${(lang === 'en' ? t.tags_en : t.tags_th).map(tag => `<span class="tag">${tag}</span>`).join("")}</div>
-      </a>
-      </div>
-    `).join("");
-  }
+      <a class="card" href="./${t.file}" title="${plain(desc).replace(/"/g, '&quot;')}">${body}</a>
+      </div>`;
+  }).join("");
+}
+
+function greeting(en) {
+  const h = new Date().getHours();
+  if (h < 12) return en ? 'Good morning' : 'สวัสดีตอนเช้า';
+  if (h < 17) return en ? 'Good afternoon' : 'สวัสดีตอนบ่าย';
+  return en ? 'Good evening' : 'สวัสดีตอนเย็น';
+}
+function onLangChange(lang) {
+  const en = lang === 'en';
+  renderTopics();
+  const q = document.getElementById('q');
+  q.placeholder = en ? 'Search this page' : 'ค้นหาในหน้านี้';
+  q.setAttribute('aria-label', q.placeholder);
+  const g = document.getElementById('greet');
+  if (g) g.textContent = greeting(en);
+  const c = document.getElementById('count');
+  if (c) c.textContent = TOPICS.filter(t => !t.comingSoon).length + ' ' + UNIT[lang];
+}
+
+document.getElementById('q').addEventListener('input', e => { QUERY = e.target.value; renderTopics(); });
+
+// แถบบนทึบขึ้นเมื่อเลื่อนลง + ความสูงแถบบนให้หัวหน้าซ้อนใต้ได้พอดี
+const topbar = document.getElementById('topbar');
+function syncTopbar() {
+  document.documentElement.style.setProperty('--tb-h', topbar.offsetHeight + 'px');
+  topbar.classList.toggle('solid', window.scrollY > 120);
+}
+window.addEventListener('scroll', syncTopbar, { passive: true });
+window.addEventListener('resize', syncTopbar);
+syncTopbar();
+
+// จอแคบ: เลื่อนชิปของชั้นปัจจุบันให้อยู่ในจอ (แถบคลังเลื่อนแนวนอน)
+const lib = document.querySelector('.lib'), activeChip = document.querySelector('.lib-item.active');
+if (lib && activeChip && lib.scrollWidth > lib.clientWidth) {
+  lib.scrollLeft = activeChip.offsetLeft - (lib.clientWidth - activeChip.offsetWidth) / 2;
 }
 
 renderTopics();
