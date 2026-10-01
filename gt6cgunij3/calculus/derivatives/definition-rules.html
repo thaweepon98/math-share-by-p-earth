@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
+<script id="theme-boot">(function(){var t='light';try{t=localStorage.getItem('siteTheme')||'light'}catch(e){}document.documentElement.setAttribute('data-theme',t==='dark'?'dark':'light')})();</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>สื่อการสอน : นิยามและกฎอนุพันธ์ (Definition &amp; Rules)</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Anuphan:wght@300;400;500;600;700&display=swap');
 
   :root {
     --primary: #1C3B22; --secondary: #FF8A3D; --accent: #68EF3F; --warning: #FFB347;
@@ -13,7 +14,7 @@
     --shadow: 0 4px 24px rgba(28,59,34,0.10); --radius: 16px;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: 'Sarabun', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+  body { font-family: 'Anuphan', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
 
   header { background: linear-gradient(135deg, #1C3B22 0%, #2E5936 100%); color: white; padding: 16px 40px 12px; text-align: center; position: relative; overflow: hidden; }
   header::before { content: ''; position: absolute; top: -60px; right: -60px; width: 200px; height: 200px; background: rgba(255,255,255,0.07); border-radius: 50%; }
@@ -21,11 +22,11 @@
   header p { font-size: .88rem; opacity: .85; margin-top: 2px; }
   .back-link { position: absolute; top: 12px; left: 20px; color: white; text-decoration: none; font-size: .85rem; font-weight: 600; opacity: .9; z-index: 2; }
   .back-link:hover { opacity: 1; text-decoration: underline; }
-  .lang-toggle { position: absolute; top: 12px; right: 20px; background: rgba(255,255,255,.15); color: white; border: 1.5px solid rgba(255,255,255,.5); border-radius: 20px; padding: 5px 14px; font-family: 'Sarabun', sans-serif; font-size: .8rem; font-weight: 700; cursor: pointer; z-index: 2; }
+  .lang-toggle { position: absolute; top: 12px; right: 20px; background: rgba(255,255,255,.15); color: white; border: 1.5px solid rgba(255,255,255,.5); border-radius: 20px; padding: 5px 14px; font-family: 'Anuphan', sans-serif; font-size: .8rem; font-weight: 700; cursor: pointer; z-index: 2; }
   .lang-toggle:hover { background: rgba(255,255,255,.28); }
 
   nav { display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; padding: 10px 24px 0; background: white; border-bottom: 3px solid var(--border); }
-  .tab-btn { padding: 10px 20px; border: none; background: transparent; border-radius: 10px 10px 0 0; font-family: 'Sarabun', sans-serif; font-size: 0.92rem; font-weight: 600; color: var(--muted); cursor: pointer; transition: all .25s; border-bottom: 3px solid transparent; margin-bottom: -3px; }
+  .tab-btn { padding: 10px 20px; border: none; background: transparent; border-radius: 10px 10px 0 0; font-family: 'Anuphan', sans-serif; font-size: 0.92rem; font-weight: 600; color: var(--muted); cursor: pointer; transition: all .25s; border-bottom: 3px solid transparent; margin-bottom: -3px; }
   .tab-btn:hover { color: var(--primary); background: #E3F3D8; }
   .tab-btn.active { color: var(--primary); border-bottom-color: var(--primary); background: #E3F3D8; }
 
@@ -76,10 +77,10 @@
   .round-limit input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 17px; height: 17px; border-radius: 50%; background: var(--primary); border: 2px solid #fff; box-shadow: 0 0 0 1px var(--primary); }
   .round-limit input[type="range"]::-moz-range-thumb { width: 15px; height: 15px; border-radius: 50%; border: 2px solid #fff; background: var(--primary); box-shadow: 0 0 0 1px var(--primary); }
   .round-limit .val { font-weight: 700; color: var(--primary); min-width: 2.6em; text-align: right; }
-  .x0-input { width: 4.6em; padding: 5px 7px; border: 1.5px solid var(--border); border-radius: 8px; font-family: 'Sarabun', sans-serif; font-size: .92rem; font-weight: 700; color: var(--primary); text-align: center; }
+  .x0-input { width: 4.6em; padding: 5px 7px; border: 1.5px solid var(--border); border-radius: 8px; font-family: 'Anuphan', sans-serif; font-size: .92rem; font-weight: 700; color: var(--primary); text-align: center; }
   .x0-input:focus { outline: none; border-color: var(--primary); }
 
-  .btn { font-family: 'Sarabun', sans-serif; border: none; cursor: pointer; border-radius: 999px; width: 2.5rem; height: 2.5rem; display: inline-flex; align-items: center; justify-content: center; background: var(--card); color: var(--text); border: 1px solid var(--border); transition: transform .15s ease, border-color .15s ease; }
+  .btn { font-family: 'Anuphan', sans-serif; border: none; cursor: pointer; border-radius: 999px; width: 2.5rem; height: 2.5rem; display: inline-flex; align-items: center; justify-content: center; background: var(--card); color: var(--text); border: 1px solid var(--border); transition: transform .15s ease, border-color .15s ease; }
   .btn:hover:not(:disabled) { border-color: var(--primary); color: var(--primary); }
   .btn:active:not(:disabled) { transform: translateY(1px); }
   .btn:disabled { opacity: .35; cursor: not-allowed; }
@@ -100,7 +101,7 @@
 
   .mode-toggle { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
   .mode-label { font-size: .88rem; font-weight: 600; color: var(--muted); margin-right: 4px; }
-  .mode-btn { padding: 8px 16px; border: 2px solid var(--border); border-radius: 30px; cursor: pointer; font-family: 'Sarabun', sans-serif; font-size: .88rem; font-weight: 700; background: white; color: var(--muted); transition: all .2s; }
+  .mode-btn { padding: 8px 16px; border: 2px solid var(--border); border-radius: 30px; cursor: pointer; font-family: 'Anuphan', sans-serif; font-size: .88rem; font-weight: 700; background: white; color: var(--muted); transition: all .2s; }
   .mode-btn:hover:not(:disabled) { border-color: var(--primary); color: var(--primary); }
   .mode-btn.active { border-color: var(--primary); background: var(--primary); color: white; }
 
@@ -118,7 +119,7 @@
   .ex-panel { margin-top: 14px; }
   .ex-panel .ex-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; margin-bottom: 8px; }
   .ex-panel .ex-title { font-size: 1rem; font-weight: 700; color: var(--primary); }
-  .ex-close { background: none; border: none; font-family: 'Sarabun', sans-serif; font-size: .84rem; font-weight: 700; color: var(--muted); cursor: pointer; padding: 4px 8px; border-radius: 8px; }
+  .ex-close { background: none; border: none; font-family: 'Anuphan', sans-serif; font-size: .84rem; font-weight: 700; color: var(--muted); cursor: pointer; padding: 4px 8px; border-radius: 8px; }
   .ex-close:hover { color: var(--primary); background: #E3F3D8; }
 
   .example-box { background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 14px 18px; margin-top: 10px; }
@@ -131,22 +132,130 @@
     .tab-btn { font-size: .82rem; padding: 8px 12px; }
     .formula { font-size: 1rem; padding: 12px 16px; }
   }
+/* ── theme:start — สร้างโดย tools/build_lessons.py ห้ามแก้มือ (แก้ที่สคริปต์แล้วรันใหม่) ── */
+:root{ --page:#D01226; }
+:root[data-theme="light"]{
+  --bg:#F4F4F1; --card:#FFFFFF; --text:#16181A; --muted:#5E6166; --border:#DEDED8;
+  --primary:color-mix(in srgb, var(--page) 86%, #000); --primary-2:color-mix(in srgb, var(--page) 62%, #000);
+  --secondary:#C2540A; --secondary-light:#F2A15F; --accent:#68EF3F; --accent-2:#2E9E3F;
+  --shadow:0 2px 10px rgba(0,0,0,.07);
+  --strong:color-mix(in srgb, var(--page) 76%, #000); --chip:#E8E8E3; --chip-hover:#DCDCD5;
+  --hero:color-mix(in srgb, var(--page) 82%, #000);
+  --g-x:#E53935; --g-y:#2E9E4F; --g-z:#3949AB; --g-curve:#F07400; --g-curve-fill:rgba(240,116,0,.12);
+  --g-pink:#D81B60; --g-plane:rgba(60,190,200,.28); --g-cone:rgba(153,51,0,.20); --g-cone-line:rgba(153,51,0,.35);
+  --g-blue:#1E66D0; --g-red:#D32F2F; --g-green:#2E9E4F; --g-purple:#7B3FC4; --g-orange:#E8710A; --g-teal:#0F8A80;
+  --g-ring:#FFFFFF;
+}
+:root[data-theme="dark"]{
+  --bg:#121212; --card:#1C1C1C; --text:#FFFFFF; --muted:#B3B3B3; --border:#333333;
+  --primary:#ec7985; --primary-2:#f19da6;
+  --secondary:#FFB37A; --secondary-light:#FFD0A8; --accent:#8AF25E; --accent-2:#5BD27E;
+  --shadow:0 8px 24px rgba(0,0,0,.5);
+  --strong:color-mix(in srgb, var(--page) 48%, #1C1C1C); --chip:#2A2A2A; --chip-hover:#353535;
+  --hero:color-mix(in srgb, var(--page) 62%, #000);
+  --g-x:#FF6B6B; --g-y:#5BD27E; --g-z:#8C9BFF; --g-curve:#FFA040; --g-curve-fill:rgba(255,160,64,.16);
+  --g-pink:#FF5C9A; --g-plane:rgba(90,220,230,.26); --g-cone:rgba(255,170,110,.18); --g-cone-line:rgba(255,170,110,.45);
+  --g-blue:#6AA8FF; --g-red:#FF6B6B; --g-green:#5BD27E; --g-purple:#B48CFF; --g-orange:#FFA040; --g-teal:#4FD1C5;
+  --g-ring:#1C1C1C;
+}
+html{ background:var(--bg); }
+html[data-theme="dark"]{ color-scheme:dark; }
+body{ font-family:'Anuphan',system-ui,sans-serif; background:var(--bg); color:var(--text); line-height:1.6; -webkit-font-smoothing:antialiased; }
+
+/* หัวหน้า: สีปกของเรื่อง + ปก */
+header{
+  background:var(--hero); color:#fff; text-align:left;
+  display:grid; grid-template-columns:auto 1fr; column-gap:22px; align-items:end;
+  padding:62px 32px 26px;
+}
+header::before, header::after{ display:none !important; }
+header > *:not(.lesson-cover):not(.back-link):not(.lang-toggle):not(.theme-toggle){ grid-column:2; }
+.lesson-cover{ grid-column:1; grid-row:1 / span 6; align-self:end; width:120px; aspect-ratio:1; border-radius:6px; overflow:hidden; box-shadow:0 8px 24px rgba(0,0,0,.45); }
+.lesson-cover svg{ display:block; width:100%; height:100%; }
+header h1{ font-size:clamp(1.8rem, 4.2vw, 2.9rem); font-weight:700; letter-spacing:-.01em; line-height:1.25; margin:0; color:#fff; }
+header p{ font-size:1rem; opacity:.85; margin:6px 0 0; color:#fff; }
+.back-link{
+  top:14px; left:20px; display:inline-flex; align-items:center; gap:6px;
+  padding:6px 14px; border-radius:999px; background:rgba(0,0,0,.32); color:#fff;
+  font-size:.88rem; font-weight:600; opacity:1; text-decoration:none;
+}
+.back-link:hover{ background:rgba(0,0,0,.55); text-decoration:none; }
+.lang-toggle, .theme-toggle{
+  position:absolute; top:14px; height:34px; background:transparent; color:#fff;
+  border:1px solid rgba(255,255,255,.55); border-radius:999px; font-family:inherit; font-weight:700; font-size:.85rem; cursor:pointer; z-index:2;
+}
+.lang-toggle{ right:20px; padding:0 16px; }
+.theme-toggle{ right:86px; width:34px; padding:0; display:grid; place-items:center; }
+.theme-toggle svg{ width:18px; height:18px; }
+.lang-toggle:hover, .theme-toggle:hover{ background:rgba(255,255,255,.14); border-color:#fff; }
+body > .lang-toggle, body > .theme-toggle{ position:fixed; top:14px; z-index:50; background:var(--card); color:var(--text); border-color:var(--border); box-shadow:var(--shadow); }
+body > .lang-toggle{ right:14px; } body > .theme-toggle{ right:80px; }
+body > .lang-toggle:hover, body > .theme-toggle:hover{ background:var(--chip); border-color:var(--text); }
+header:not(:has(.back-link)):not(:has(.lang-toggle)){ padding-top:28px; border-radius:8px; }
+
+/* แถบแท็บ: ชิปทรงแคปซูล */
+nav{ background:var(--bg); border-bottom:1px solid var(--border); padding:10px 16px; gap:8px; }
+.tab-btn{
+  font-family:inherit; border:0; margin:0; border-radius:999px; padding:8px 16px;
+  background:var(--chip); color:var(--text); font-weight:600; font-size:.9rem;
+}
+.tab-btn:hover{ background:var(--chip-hover); color:var(--text); }
+.tab-btn.active{ background:var(--text); color:var(--bg); border-bottom-color:transparent; }
+
+/* การ์ดและกล่อง */
+.card{ background:var(--card); border:1px solid var(--border); border-radius:8px; box-shadow:var(--shadow); }
+.card-title{ color:var(--text); font-size:1.2rem; }
+.card-title .icon{ display:none; }
+.desc-text{ color:var(--text); font-size:1rem; }
+.formula, .step.result, .stats{ background:var(--strong) !important; color:#fff; border-radius:8px; letter-spacing:0; }
+.stat .k, .step-tag{ text-transform:none; letter-spacing:0; }
+
+/* ปุ่ม */
+.btn-action{ font-family:inherit; background:var(--text); color:var(--bg); }
+.btn-action.secondary{ background:transparent; color:var(--text); border:1px solid var(--muted); }
+.mode-btn{ font-family:inherit; border:1px solid var(--border); background:var(--card); color:var(--text); }
+.mode-btn:hover{ border-color:var(--text); color:var(--text); }
+.mode-btn.active{ background:var(--text); border-color:var(--text); color:var(--bg); }
+.quiz-opt{ border-radius:8px; }
+input[type=range]{ accent-color:var(--primary); }
+
+@media (max-width:600px){
+  header{ padding:58px 16px 20px; column-gap:14px; }
+  .lesson-cover{ width:76px; }
+  .back-link{ left:12px; max-width:calc(100% - 150px); overflow:hidden; white-space:nowrap; text-overflow:ellipsis; display:block; }
+  .lang-toggle{ right:12px; }
+  .theme-toggle{ right:74px; }
+  nav{ flex-wrap:nowrap; overflow-x:auto; justify-content:flex-start; scrollbar-width:none; }
+  nav::-webkit-scrollbar{ display:none; }
+}
+/* โหมดมืด: สีที่หน้านี้ฝังไว้เอง (สร้างอัตโนมัติ) */
+:root[data-theme="dark"] .box-info{background:#1f2e12}
+:root[data-theme="dark"] .round-limit input[type="range"]::-webkit-slider-thumb{background:var(--strong);border:2px solid #333333}
+:root[data-theme="dark"] .round-limit input[type="range"]::-moz-range-thumb{border:2px solid #333333;background:var(--strong)}
+:root[data-theme="dark"] .btn-play{background:var(--strong)}
+:root[data-theme="dark"] .formula-live .hl{background:#2c1117}
+:root[data-theme="dark"] .formula-live .hlA{background:#123024;color:#a5f2db}
+:root[data-theme="dark"] .rule-card.pickable.picked{background:#223614}
+:root[data-theme="dark"] .ex-close:hover{background:#223614}
+/* ── theme:end ── */
 </style>
 </head>
 <body>
 
 <header>
+  <div class="lesson-cover" aria-hidden="true"><svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"><rect width="120" height="120" fill="#D01226"/><circle cx="108" cy="14" r="46" fill="#000" fill-opacity=".14"/><g fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.0,104.0 L9.2,104.0 L10.5,103.9 L11.8,103.9 L13.0,103.8 L14.2,103.6 L15.5,103.5 L16.8,103.3 L18.0,103.0 L19.2,102.8 L20.5,102.5 L21.8,102.2 L23.0,101.9 L24.2,101.5 L25.5,101.1 L26.8,100.7 L28.0,100.2 L29.2,99.7 L30.5,99.2 L31.8,98.6 L33.0,98.0 L34.2,97.4 L35.5,96.8 L36.8,96.1 L38.0,95.4 L39.2,94.7 L40.5,93.9 L41.8,93.2 L43.0,92.3 L44.2,91.5 L45.5,90.6 L46.8,89.7 L48.0,88.8 L49.2,87.8 L50.5,86.8 L51.8,85.8 L53.0,84.7 L54.2,83.6 L55.5,82.5 L56.8,81.4 L58.0,80.2 L59.2,79.0 L60.5,77.8 L61.8,76.5 L63.0,75.2 L64.2,73.9 L65.5,72.5 L66.8,71.1 L68.0,69.7 L69.2,68.3 L70.5,66.8 L71.8,65.3 L73.0,63.8 L74.2,62.2 L75.5,60.6 L76.8,59.0 L78.0,57.3 L79.2,55.7 L80.5,53.9 L81.8,52.2 L83.0,50.4 L84.2,48.6 L85.5,46.8 L86.8,44.9 L88.0,43.0 L89.2,41.1 L90.5,39.2 L91.8,37.2 L93.0,35.2 L94.2,33.2 L95.5,31.1 L96.8,29.0 L98.0,26.9 L99.2,24.7 L100.5,22.5 L101.8,20.3 L103.0,18.0 L104.2,15.8 L105.5,13.5 L106.8,11.1 L108.0,8.8" stroke-width="4"/><path d="M12 122.3 L108 14.4" stroke-opacity=".3" stroke-width="2"/><circle cx="100.0" cy="23.4" r="3.2" fill="#fff" stroke="none"/><path d="M12 118.1 L88 47.2" stroke-opacity=".5" stroke-width="2"/><circle cx="80.0" cy="54.6" r="3.2" fill="#fff" stroke="none"/><path d="M12 113.9 L68 72.3" stroke-opacity=".75" stroke-width="2"/><circle cx="60.0" cy="78.2" r="3.2" fill="#fff" stroke="none"/><path d="M10 109.4 L110 59.9" stroke-width="3"/><circle cx="34.0" cy="97.6" r="5.5" fill="#fff" stroke="none"/></g></svg></div>
   <a href="./index.html" class="back-link" data-th="← กลับหน้าอนุพันธ์" data-en="← Back to Derivatives">← กลับหน้าอนุพันธ์</a>
+  <button id="themeToggle" class="theme-toggle" type="button" onclick="toggleTheme()" title="สลับโหมดสว่าง/มืด" aria-label="สลับโหมดสว่าง/มืด"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6"/></svg></button>
   <button id="langToggle" class="lang-toggle" onclick="toggleLang()">EN</button>
-  <h1 data-th="📏 นิยามและกฎอนุพันธ์" data-en="📏 Definition & Differentiation Rules">📏 นิยามและกฎอนุพันธ์</h1>
+  <h1 data-th="นิยามและกฎอนุพันธ์" data-en="Definition & Differentiation Rules">นิยามและกฎอนุพันธ์</h1>
   <p data-th="จากเส้นตัดสู่เส้นสัมผัส • กฎพื้นฐาน • ตรีโกณ • โดยปริยาย" data-en="From secant to tangent • Basic rules • Trig • Implicit">จากเส้นตัดสู่เส้นสัมผัส • กฎพื้นฐาน • ตรีโกณ • โดยปริยาย</p>
 </header>
 
 <nav>
-  <button class="tab-btn active" data-tab="origin" onclick="showTab('origin', this)" data-th="📏 นิยามอนุพันธ์" data-en="📏 Definition">📏 นิยามอนุพันธ์</button>
-  <button class="tab-btn" data-tab="rules" onclick="showTab('rules', this)" data-th="🧮 กฎพื้นฐาน" data-en="🧮 Basic Rules">🧮 กฎพื้นฐาน</button>
-  <button class="tab-btn" data-tab="trig" onclick="showTab('trig', this)" data-th="🌊 อนุพันธ์ตรีโกณ" data-en="🌊 Trig Derivatives">🌊 อนุพันธ์ตรีโกณ</button>
-  <button class="tab-btn" data-tab="implicit" onclick="showTab('implicit', this)" data-th="⭕ โดยปริยาย" data-en="⭕ Implicit">⭕ โดยปริยาย</button>
+  <button class="tab-btn active" data-tab="origin" onclick="showTab('origin', this)" data-th="นิยามอนุพันธ์" data-en="Definition">นิยามอนุพันธ์</button>
+  <button class="tab-btn" data-tab="rules" onclick="showTab('rules', this)" data-th="กฎพื้นฐาน" data-en="Basic Rules">กฎพื้นฐาน</button>
+  <button class="tab-btn" data-tab="trig" onclick="showTab('trig', this)" data-th="อนุพันธ์ตรีโกณ" data-en="Trig Derivatives">อนุพันธ์ตรีโกณ</button>
+  <button class="tab-btn" data-tab="implicit" onclick="showTab('implicit', this)" data-th="โดยปริยาย" data-en="Implicit">โดยปริยาย</button>
 </nav>
 
 <main>
@@ -852,5 +961,151 @@ var renderRuleExample;
 applyLang(getLang());
 </script>
 
+<script id="theme-js">
+// ── ปุ่มสลับโหมดสว่าง/มืด (สร้างโดย tools/build_lessons.py) — จำค่าไว้ใน localStorage 'siteTheme' ──
+// สื่อที่วาดด้วย canvas หรือเก็บสีไว้ในตัวแปร ให้ฟัง window 'themechange' แล้ววาดใหม่
+function currentTheme() { return document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light'; }
+function syncThemeButton() {
+  const b = document.getElementById('themeToggle');
+  if (!b) return;
+  const dark = currentTheme() === 'dark';
+  b.innerHTML = dark ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6"/></svg>' : '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.5 14.6A8.5 8.5 0 0 1 9.4 3.5a8.5 8.5 0 1 0 11.1 11.1z"/></svg>';
+  const en = document.documentElement.lang === 'en';
+  b.title = dark ? (en ? 'Switch to light mode' : 'เปลี่ยนเป็นโหมดสว่าง') : (en ? 'Switch to dark mode' : 'เปลี่ยนเป็นโหมดมืด');
+  b.setAttribute('aria-label', b.title);
+}
+function toggleTheme() {
+  const next = currentTheme() === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', next);
+  try { localStorage.setItem('siteTheme', next); } catch (e) {}
+  syncThemeButton();
+  window.dispatchEvent(new CustomEvent('themechange', { detail: next }));
+}
+// ── ตัวปรับสีโหมดมืดตอนรัน: สีที่ JS เขียนตรงๆ ลงกราฟ SVG (fill/stroke) หรือ style="" ──
+// โหมดมืด: สีเข้ม → สว่าง (คงเฉดเดิม), พื้นอ่อน → เข้ม, สีสดกลางๆ คงไว้ — กลับโหมดสว่างจะคืนค่าเดิม
+(function () {
+  function parse(c) {
+    c = String(c).trim().toLowerCase();
+    if (c === 'white') c = '#ffffff'; else if (c === 'black') c = '#000000';
+    let m = c.match(/^#([0-9a-f]{3}|[0-9a-f]{6})$/);
+    if (m) { let h = m[1]; if (h.length === 3) h = h.replace(/./g, x => x + x); return [parseInt(h.slice(0, 2), 16) / 255, parseInt(h.slice(2, 4), 16) / 255, parseInt(h.slice(4, 6), 16) / 255, 1]; }
+    m = c.match(/^rgba?\(([^)]+)\)$/);
+    if (m) { const p = m[1].split(/[ ,/]+/).filter(Boolean).map(Number); return [p[0] / 255, p[1] / 255, p[2] / 255, p.length > 3 ? p[3] : 1]; }
+    m = c.match(/^color\(srgb ([^)]+)\)$/);
+    if (m) { const p = m[1].split(/[ /]+/).filter(Boolean).map(Number); return [p[0], p[1], p[2], p.length > 3 ? p[3] : 1]; }
+    return null;
+  }
+  function toHsl(r, g, b) { const mx = Math.max(r, g, b), mn = Math.min(r, g, b), l = (mx + mn) / 2; let h = 0, s = 0; if (mx !== mn) { const d = mx - mn; s = l > .5 ? d / (2 - mx - mn) : d / (mx + mn); h = mx === r ? (g - b) / d + (g < b ? 6 : 0) : mx === g ? (b - r) / d + 2 : (r - g) / d + 4; h /= 6; } return [h, s, l]; }
+  function hue(p, q, t) { if (t < 0) t += 1; if (t > 1) t -= 1; if (t < 1 / 6) return p + (q - p) * 6 * t; if (t < 1 / 2) return q; if (t < 2 / 3) return p + (q - p) * (2 / 3 - t) * 6; return p; }
+  function toRgb(h, s, l) { if (!s) return [l, l, l]; const q = l < .5 ? l * (1 + s) : l + s - l * s, p = 2 * l - q; return [hue(p, q, h + 1 / 3), hue(p, q, h), hue(p, q, h - 1 / 3)]; }
+  function fmt(rgb, a) { const v = rgb.map(x => Math.round(Math.max(0, Math.min(1, x)) * 255)); return a < 1 ? 'rgba(' + v.join(',') + ',' + a + ')' : '#' + v.map(x => x.toString(16).padStart(2, '0')).join(''); }
+  // role: 'fg' ตัวหนังสือ, 'bg' พื้น, 'shape' พื้นของรูปใน SVG, 'stroke' เส้นใน SVG
+  function remap(c, role) {
+    const p = parse(c); if (!p) return null;
+    const hsl = toHsl(p[0], p[1], p[2]), h = hsl[0], s = hsl[1], l = hsl[2];
+    if (role === 'fg' && l >= .6) return null;
+    if ((role === 'fg' && l < .6) || ((role === 'shape' || role === 'stroke') && l < .5)) { return fmt(toRgb(h, Math.min(s, .85), .9 - l * .35), p[3]); }
+    if (role === 'stroke') { if (l <= .82) return null; return l > .97 && s < .1 ? 'var(--card)' : fmt(toRgb(h, Math.min(s, .3), .2 + (1 - l) * .5), p[3]); }
+    if (l <= .72) return null;
+    if (p[3] < 1) return fmt(toRgb(h, Math.min(s, .6), .55), p[3]);
+    return fmt(toRgb(h, Math.min(s, .45), .09 + (1 - l) * .55), 1);
+  }
+  const SKIP = 'header, header *, .lesson-cover, .lesson-cover *';
+  function adapt() {
+    const dark = document.documentElement.getAttribute('data-theme') === 'dark';
+    for (const el of document.querySelectorAll('svg [fill], svg [stroke]')) {
+      if (el.matches(SKIP)) continue;
+      for (const prop of ['fill', 'stroke']) {
+        const flag = 'data-dk-' + prop;
+        if (!dark) { if (el.hasAttribute(flag)) { el.style.removeProperty(prop); el.removeAttribute(flag); } continue; }
+        const v = el.getAttribute(prop);
+        if (!v || v.includes('var(')) continue;
+        const tag = el.tagName.toLowerCase();
+        const role = prop === 'stroke' ? 'stroke' : (tag === 'text' || tag === 'tspan') ? 'fg' : 'shape';
+        const m = remap(v, role);
+        if (m && el.style.getPropertyValue(prop) !== m) { el.style.setProperty(prop, m); el.setAttribute(flag, ''); }
+      }
+    }
+    for (const el of document.querySelectorAll('body [style]')) {
+      if (el.matches(SKIP) || el.closest('svg')) continue;
+      if (!dark) { if (el.hasAttribute('data-dk-style')) { el.style.cssText = el.getAttribute('data-dk-style'); el.removeAttribute('data-dk-style'); } continue; }
+      if (el.hasAttribute('data-dk-style')) continue;
+      const st = el.style, orig = st.cssText;
+      let changed = false;
+      const bgKept = st.backgroundColor && !remap(st.backgroundColor, 'bg');
+      for (const pr of [['background-color', 'bg'], ['color', 'fg'], ['border-color', 'stroke']]) {
+        const v = st.getPropertyValue(pr[0]);
+        if (!v || v.includes('var(') || (pr[1] === 'fg' && bgKept)) continue;
+        let m = remap(v, pr[1]);
+        // แถบสีเล็กๆ (ตัวอย่างสีในคำอธิบายกราฟ) ที่เป็นสีเข้ม → ทำแบบเส้น: ยกให้สว่าง
+        if (!m && pr[1] === 'bg' && el.offsetWidth * el.offsetHeight < 1500) m = remap(v, 'stroke');
+        if (m) { st.setProperty(pr[0], m); changed = true; }
+      }
+      if (changed) el.setAttribute('data-dk-style', orig);
+    }
+    clearTimeout(fcTimer);
+    fcTimer = setTimeout(() => { mo.disconnect(); fixContrast(); watch(); }, 300);
+  }
+  let fcTimer = 0;
+  function rgbOf(c) { const p = parse(c); return p ? p : null; }
+  function lum(p) { const f = v => v <= .03928 ? v / 12.92 : Math.pow((v + .055) / 1.055, 2.4); return .2126 * f(p[0]) + .7152 * f(p[1]) + .0722 * f(p[2]); }
+  function contrast(a, b) { const x = lum(a), y = lum(b); return (Math.max(x, y) + .05) / (Math.min(x, y) + .05); }
+  function bgBehind(el) {
+    for (let e = el; e && e.nodeType === 1; e = e.parentElement) {
+      const cs = getComputedStyle(e);
+      if (cs.backgroundImage !== 'none') return null;
+      const c = rgbOf(cs.backgroundColor);
+      if (!c) return null;
+      if (c[3] >= .9) return c;
+    }
+    return rgbOf(getComputedStyle(document.body).backgroundColor);
+  }
+  function readable(fg, bg) {
+    const hsl = toHsl(fg[0], fg[1], fg[2]), darker = lum(bg) > .4;
+    for (let l = hsl[2], i = 0; i < 25; i++) {
+      l = darker ? l - .035 : l + .035;
+      if (l < .05 || l > .97) break;
+      const c = toRgb(hsl[0], Math.min(hsl[1], .9), l);
+      if (contrast([c[0], c[1], c[2], 1], bg) >= 3.6) return fmt(c, 1);
+    }
+    return darker ? '#121212' : '#ffffff';
+  }
+  function fixContrast() {
+    for (const el of document.querySelectorAll('[data-dk-c]')) { el.style.color = el.getAttribute('data-dk-c'); el.removeAttribute('data-dk-c'); }
+    for (const el of document.querySelectorAll('body *')) {
+      if (el.closest('svg, header, script, style')) continue;
+      let own = false;
+      for (const n of el.childNodes) if (n.nodeType === 3 && n.textContent.trim()) { own = true; break; }
+      if (!own) continue;
+      const fg = rgbOf(getComputedStyle(el).color), bg = bgBehind(el);
+      if (!fg || !bg || fg[3] < .5) continue;
+      if (contrast(fg, bg) >= 3) continue;
+      el.setAttribute('data-dk-c', el.style.color || '');
+      el.style.color = readable(fg, bg);
+    }
+    // ตัวเลขแกน/ป้ายสีเทากลางๆ ในกราฟ (#94A3B8 บนพื้นขาว) — ปรับเฉพาะสีเทา ไม่แตะตัวหนังสือขาวบนป้ายสี
+    for (const el of document.querySelectorAll('[data-dk-sf]')) { el.style.fill = el.getAttribute('data-dk-sf'); el.removeAttribute('data-dk-sf'); }
+    for (const el of document.querySelectorAll('svg text')) {
+      if (el.closest('header, .lesson-cover')) continue;
+      const fg = rgbOf(getComputedStyle(el).fill);
+      if (!fg) continue;
+      const hsl = toHsl(fg[0], fg[1], fg[2]);
+      if (hsl[1] > .3 || hsl[2] < .3 || hsl[2] > .8) continue;
+      const bg = bgBehind(el.ownerSVGElement || el);
+      if (!bg || contrast(fg, bg) >= 3.2) continue;
+      el.setAttribute('data-dk-sf', el.style.fill || '');
+      el.style.fill = readable(fg, bg);
+    }
+  }
+  let queued = false;
+  const mo = new MutationObserver(schedule);
+  function watch() { mo.observe(document.body, { subtree: true, childList: true, attributes: true, attributeFilter: ['fill', 'stroke', 'style'] }); }
+  function schedule() { if (queued) return; queued = true; setTimeout(() => { queued = false; mo.disconnect(); adapt(); watch(); }, 30); }
+  new MutationObserver(schedule).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+  watch(); schedule();
+})();
+syncThemeButton();
+new MutationObserver(syncThemeButton).observe(document.documentElement, { attributes: true, attributeFilter: ['lang'] });
+</script>
 </body>
 </html>
