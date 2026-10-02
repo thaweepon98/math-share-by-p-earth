@@ -1,0 +1,1727 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<script id="theme-boot">(function(){var t='light';try{t=localStorage.getItem('siteTheme')||'light'}catch(e){}document.documentElement.setAttribute('data-theme',t==='dark'?'dark':'light')})();</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>สื่อการสอน : กราฟของฟังก์ชัน ม.4</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Anuphan:wght@300;400;500;600;700&display=swap');
+
+  :root {
+    --primary: #1C3B22; --secondary: #FF8A3D; --accent: #68EF3F; --accent-2: #3FA82E; --warning: #FFB347;
+    --bg: #F3F7EC; --card: #FFFFFF; --text: #2D3748; --muted: #718096; --border: #E2E8F0;
+    --shadow: 0 4px 24px rgba(28,59,34,0.10); --radius: 16px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Anuphan', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+  sup { font-size: .68em; line-height: 0; vertical-align: super; font-weight: 800; }
+  sub { font-size: .68em; line-height: 0; vertical-align: sub; font-weight: 800; }
+  sup sup { font-size: .8em; }
+
+  header { background: linear-gradient(135deg, #1C3B22 0%, #2E5936 100%); color: white; padding: 28px 40px 20px; text-align: center; position: relative; overflow: hidden; }
+  header::before { content: ''; position: absolute; top: -60px; right: -60px; width: 200px; height: 200px; background: rgba(255,255,255,0.07); border-radius: 50%; }
+  header h1 { font-size: 2rem; font-weight: 800; letter-spacing: .5px; }
+  header p { font-size: 1rem; opacity: .85; margin-top: 4px; }
+  .back-link { position: absolute; top: 14px; left: 20px; color: white; text-decoration: none; font-size: .85rem; font-weight: 600; opacity: .9; z-index: 2; }
+  .back-link:hover { opacity: 1; text-decoration: underline; }
+  .lang-toggle { position: absolute; top: 14px; right: 20px; background: rgba(255,255,255,.15); color: white; border: 1.5px solid rgba(255,255,255,.5); border-radius: 20px; padding: 5px 14px; font-family: 'Anuphan', sans-serif; font-size: .8rem; font-weight: 700; cursor: pointer; z-index: 2; }
+  .lang-toggle:hover { background: rgba(255,255,255,.28); }
+
+  nav { display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; padding: 20px 24px 0; background: white; border-bottom: 3px solid var(--border); }
+  .tab-btn { padding: 10px 18px; border: none; background: transparent; border-radius: 10px 10px 0 0; font-family: 'Anuphan', sans-serif; font-size: 0.95rem; font-weight: 600; color: var(--muted); cursor: pointer; transition: all .25s; border-bottom: 3px solid transparent; margin-bottom: -3px; }
+  .tab-btn:hover { color: var(--primary); background: #E3F3D8; }
+  .tab-btn.active { color: var(--primary); border-bottom-color: var(--primary); background: #E3F3D8; }
+
+  main { max-width: 980px; margin: 0 auto; padding: 32px 20px 60px; }
+  .tab-panel { display: none; animation: fadeIn .35s ease; }
+  .tab-panel.active { display: block; }
+  @keyframes fadeIn { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
+  @keyframes rowIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+
+  .card { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); padding: 28px 32px; margin-bottom: 24px; }
+  .card-title { font-size: 1.25rem; font-weight: 700; color: var(--primary); margin-bottom: 12px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .card-title .icon { font-size: 1.5rem; }
+  .intro { font-size: 1.02rem; line-height: 1.8; margin-bottom: 14px; }
+  .box-info { background: #EEF7E6; border-left: 4px solid var(--primary); border-radius: 10px; padding: 14px 18px; margin: 14px 0; line-height: 1.8; }
+  .box-warn { background: #FFF7ED; border-left: 4px solid var(--warning); border-radius: 10px; padding: 14px 18px; margin: 14px 0; line-height: 1.8; }
+  .box-ok   { background: #ECFDF5; border-left: 4px solid var(--accent);  border-radius: 10px; padding: 14px 18px; margin: 14px 0; line-height: 1.8; }
+  .formula { background: linear-gradient(135deg,#1C3B22,#2E5936); color: white; border-radius: 12px; padding: 14px 24px; text-align: center; font-size: 1.3rem; font-weight: 700; margin: 14px 0; letter-spacing: .5px; display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 4px 18px; }
+
+  .btn { padding: 10px 24px; background: var(--primary); color: white; border: none; border-radius: 30px; font-family: 'Anuphan', sans-serif; font-size: 1rem; font-weight: 700; cursor: pointer; transition: background .2s, opacity .2s; }
+  .btn:hover:not(:disabled) { background: #2E5936; }
+  .btn:disabled { opacity: .4; cursor: not-allowed; }
+  .btn.ghost { background: white; color: var(--primary); border: 2px solid var(--primary); }
+  .btn.ghost:hover:not(:disabled) { background: #E3F3D8; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 6px 0; align-items: center; }
+  .chips .chips-label { font-weight: 700; color: var(--muted); font-size: .95rem; margin-right: 2px; }
+  .chip { padding: 7px 16px; border: 2px solid var(--border); border-radius: 30px; background: #fff; font-family: 'Anuphan', sans-serif; font-weight: 700; font-size: 1rem; cursor: pointer; color: var(--text); display: inline-block; text-align: center; vertical-align: middle; line-height: 1.5; max-width: 100%; }  /* ไม่ใช้ flex: ตัวยกในชิปจะได้ไม่แยกเป็นก้อน */
+  .chip:hover { border-color: var(--primary); }
+  .chip.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+
+  .frac { display: inline-flex; flex-direction: column; align-items: center; font-weight: 700; line-height: 1.15; vertical-align: middle; margin: 0 4px; }
+  .frac .num { font-size: 1em; border-bottom: 2.5px solid currentColor; padding: 0 3px 2px; min-width: 18px; text-align: center; white-space: nowrap; }
+  .frac .den { font-size: 1em; padding: 3px 3px 0; min-width: 18px; text-align: center; white-space: nowrap; }
+  .rt { display: inline-flex; align-items: stretch; vertical-align: middle; font-weight: 700; }
+  .rt .rt-s { font-size: 1.15em; line-height: 1; padding-right: 1px; align-self: flex-end; }
+  .rt .rt-in { border-top: 2px solid currentColor; padding: 0 2px 0 3px; margin-top: 2px; }
+
+  .slider-row { display: flex; align-items: center; gap: 12px; margin: 6px 0; flex-wrap: wrap; }
+  .slider-row b { min-width: 30px; font-size: 1.05rem; }
+  input[type=range] { accent-color: var(--primary); flex: 1; max-width: 300px; min-width: 120px; }
+  .slider-val { font-weight: 800; color: var(--primary); font-size: 1.1rem; min-width: 46px; }
+
+  /* กล่องสมการ: เนื้อหาไหลเป็นข้อความบรรทัดปกติ (ตัวยก/ตัวเอียงต้องติดกับตัวหน้า — ห้ามใช้ flex+gap ที่นี่ จะแยกเป็นก้อน)
+     .col = หลายบรรทัดซ้อนกัน ห่อแต่ละบรรทัดด้วย <div> · .row = เรียงเป็นก้อนๆ ห่างเท่ากัน (เช่น สายพานกล่อง → กล่อง) */
+  .wg-eq { text-align: center; font-size: 1.3rem; font-weight: 800; color: var(--primary); margin-top: 8px; line-height: 1.9; }
+  .wg-eq.col { display: flex; flex-direction: column; align-items: flex-start; text-align: left; }
+  .wg-eq.row { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 6px 14px; }
+  .wg-cap { background: #EEF7E6; border-left: 4px solid var(--primary); border-radius: 10px; padding: 12px 16px; line-height: 1.75; margin-top: 8px; }
+  .wg-nav { display: flex; justify-content: center; align-items: center; gap: 14px; margin-top: 12px; flex-wrap: wrap; }
+  .wg-nav .btn { padding: 9px 22px; }
+  .wg-cnt { font-weight: 700; color: var(--muted); min-width: 92px; text-align: center; }
+  .two { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; align-items: start; }
+  .tile { border: 2px solid var(--border); border-radius: 12px; padding: 10px 14px; background: #fff; }
+  .tile h4 { font-size: .95rem; color: var(--muted); margin-bottom: 6px; font-weight: 700; }
+  .ans { background: #ECFDF5; border: 2px solid var(--accent-2); border-radius: 8px; padding: 2px 10px; color: #047857; font-weight: 800; white-space: nowrap; }
+  .bad { background: #FFF1F2; border: 2px solid #E11D48; border-radius: 8px; padding: 2px 10px; color: #9F1239; font-weight: 800; white-space: nowrap; }
+  .hl { border-radius: 5px; padding: 0 3px; background: #FEF3C7; border-bottom: 2px solid #D97706; }
+  .hlb { border-radius: 5px; padding: 0 3px; background: #DBEAFE; border-bottom: 2px solid #2563EB; }
+  .hlg { border-radius: 5px; padding: 0 3px; background: #DCFCE7; border-bottom: 2px solid #16A34A; }
+  .hlp { border-radius: 5px; padding: 0 3px; background: #FCE7F3; border-bottom: 2px solid #DB2777; }
+  .ptag { display: inline-block; background: #F1F5F9; border-radius: 20px; padding: 2px 12px; font-size: .88rem; font-weight: 700; color: #475569; }
+  .verdict { border-radius: 12px; padding: 12px 16px; line-height: 1.75; border: 2px solid; font-weight: 600; margin-top: 10px; display: flex; gap: 12px; align-items: flex-start; }
+  .verdict.ok { background: #ECFDF5; border-color: #16A34A; }
+  .verdict.no { background: #FFF1F2; border-color: #E11D48; }
+  .verdict .mk { font-size: 1.6rem; font-weight: 800; line-height: 1.2; }
+  .verdict.ok .mk { color: #16A34A; }
+  .verdict.no .mk { color: #E11D48; }
+  .mono { font-weight: 700; font-size: 1.1rem; }
+  .setrow { font-size: 1.15rem; font-weight: 700; line-height: 2; }
+  .tbl { border-collapse: collapse; margin: 8px auto; font-weight: 700; }
+  .tbl th, .tbl td { border: 2px solid var(--border); padding: 6px 14px; text-align: center; }
+  .tbl th { background: #EEF7E6; color: var(--primary); }
+  .tbl td.cur { background: #FEF3C7; }
+  .tbl-scroll { overflow-x: auto; }
+
+  .wk-cell { position: relative; background: #fff; border: 2px solid var(--border); border-radius: 14px; padding: 12px 16px 12px 56px; margin-bottom: 12px; line-height: 1.9; }
+  .wk-cell.fresh { animation: rowIn .5s ease; }
+  .wk-cell.final { border-color: var(--accent-2); }
+  .wk-cell .stepno { position: absolute; left: 14px; top: 14px; width: 28px; height: 28px; border-radius: 50%; background: var(--primary); color: #fff; font-size: .85rem; font-weight: 800; display: flex; align-items: center; justify-content: center; }
+  .wk-eq { font-size: 1.15rem; font-weight: 700; overflow-x: auto; padding: 2px 0; }
+  .wk-note { font-size: .95rem; font-weight: 600; color: #475569; margin-top: 2px; }
+
+  .quiz-q { font-size: 1.1rem; font-weight: 600; margin-bottom: 12px; line-height: 1.8; }
+  .quiz-opts { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 10px; }
+  .quiz-opt { padding: 10px 20px; border: 2px solid var(--border); border-radius: 30px; cursor: pointer; font-family: 'Anuphan', sans-serif; font-size: 1rem; font-weight: 600; transition: all .2s; background: white; display: inline-flex; align-items: center; min-height: 48px; color: var(--text); }
+  .quiz-opt:hover { border-color: var(--primary); color: var(--primary); }
+  .quiz-opt.correct { border-color: var(--accent); background: #ECFDF5; color: #047857; }
+  .quiz-opt.wrong { border-color: var(--secondary); background: #FFF4EC; color: #BE185D; }
+  .quiz-feedback { font-weight: 600; font-size: 1rem; min-height: 24px; line-height: 1.75; }
+  .quiz-feedback.ok { color: #047857; }
+  .quiz-feedback.err { color: #BE185D; }
+  .btn-next { margin-top: 10px; padding: 10px 28px; background: var(--primary); color: white; border: none; border-radius: 30px; font-family: 'Anuphan', sans-serif; font-size: 1rem; font-weight: 700; cursor: pointer; transition: background .2s; }
+  .btn-next:hover { background: #142B1A; }
+  .score-badge { display: inline-block; background: linear-gradient(135deg,#68EF3F,#1C3B22); color: white; border-radius: 30px; padding: 6px 20px; font-weight: 700; font-size: 1rem; }
+  .score-card { margin-top: 20px; background: linear-gradient(135deg,#1C3B22,#2E5936); color: white; border-radius: 16px; padding: 24px; text-align: center; }
+
+  /* ─── กราฟ SVG (สีใช้ชุด --g-* ของธีม จึงเปลี่ยนตามโหมดสว่าง/มืด) ─── */
+  .plot { width: 100%; max-width: 560px; height: auto; display: block; margin: 8px auto; background: var(--card); border: 1.5px solid var(--border); border-radius: 12px; }
+  .plot text { fill: var(--text); font-family: 'Anuphan', sans-serif; font-weight: 700; }
+  .pl-grid { stroke: var(--border); stroke-width: 1; }
+  .pl-axis { stroke: var(--muted); stroke-width: 1.8; }
+  .pl-tick { fill: var(--muted) !important; font-size: 11px; font-weight: 600; }
+  .pl-c { fill: none; stroke-width: 3.2; stroke-linecap: round; stroke-linejoin: round; }
+  .s-blue { stroke: var(--g-blue); } .s-orange { stroke: var(--g-curve); } .s-green { stroke: var(--g-green); }
+  .s-pink { stroke: var(--g-pink); } .s-purple { stroke: var(--g-purple); } .s-red { stroke: var(--g-red); } .s-teal { stroke: var(--g-teal); }
+  .s-muted { stroke: var(--muted); }
+  .f-blue { fill: var(--g-blue); } .f-orange { fill: var(--g-curve); } .f-green { fill: var(--g-green); }
+  .f-pink { fill: var(--g-pink); } .f-purple { fill: var(--g-purple); } .f-red { fill: var(--g-red); } .f-teal { fill: var(--g-teal); }
+  .fa-blue { fill: var(--g-blue); fill-opacity: .16; stroke: none; } .fa-orange { fill: var(--g-curve); fill-opacity: .18; stroke: none; }
+  .fa-red { fill: var(--g-red); fill-opacity: .16; stroke: none; } .fa-green { fill: var(--g-green); fill-opacity: .16; stroke: none; } .fa-pink { fill: var(--g-pink); fill-opacity: .16; stroke: none; }
+  .pl-dash { stroke-dasharray: 6 5; stroke-width: 2; fill: none; }
+  .pl-thick { stroke-width: 7; stroke-linecap: butt; fill: none; }
+  .pl-dot { stroke: var(--g-ring); stroke-width: 2; }
+  .pl-open { fill: var(--card); stroke-width: 2.6; }
+  .pl-lbl { font-size: 13px; }
+  .pl-lbl.b { fill: color-mix(in srgb, var(--g-blue) 75%, var(--text)) !important; } .pl-lbl.o { fill: color-mix(in srgb, var(--g-curve) 68%, var(--text)) !important; } .pl-lbl.g { fill: color-mix(in srgb, var(--g-green) 72%, var(--text)) !important; }
+  .pl-lbl.p { fill: color-mix(in srgb, var(--g-pink) 75%, var(--text)) !important; } .pl-lbl.r { fill: color-mix(in srgb, var(--g-red) 75%, var(--text)) !important; }
+
+  /* ─── แผนภาพลูกศร (mapping diagram) ─── */
+  .md { width: 100%; max-width: 440px; height: auto; display: block; margin: 6px auto; }
+  .md text { fill: var(--text); font-family: 'Anuphan', sans-serif; font-weight: 700; font-size: 17px; }
+  .md .md-set { fill: none; stroke: var(--muted); stroke-width: 2; }
+  .md .md-cap { font-size: 15px; fill: var(--muted); }
+  .md .md-arr { stroke: var(--g-blue); stroke-width: 2.4; fill: none; }
+  .md .md-arr.bad { stroke: var(--g-red); }
+  .md .md-arr.g2 { stroke: var(--g-green); }
+  .md .md-arr.o { stroke: var(--g-curve); }
+  .md .md-head { fill: var(--g-blue); }
+  .md .md-head.bad { fill: var(--g-red); }
+  .md .md-head.g2 { fill: var(--g-green); }
+  .md .md-head.o { fill: var(--g-curve); }
+  .md .md-pt { fill: var(--card); stroke: var(--muted); stroke-width: 2; }
+  .md .md-pt.hit { stroke: var(--g-blue); fill: var(--g-blue); fill-opacity: .15; }
+  .md .md-pt.miss { stroke: var(--g-red); stroke-dasharray: 3 3; }
+  .md .md-pt.multi { stroke: var(--g-red); fill: var(--g-red); fill-opacity: .15; }
+  .md .md-pt.ok { stroke: var(--g-green); fill: var(--g-green); fill-opacity: .15; }
+  .mark-b { fill: var(--g-blue); } .mark-r { fill: var(--g-red); }
+
+  /* ตารางคู่อันดับ A×B */
+  .pg { display: inline-grid; gap: 6px; margin: 6px 0; }
+  .pg .pgh { font-weight: 800; text-align: center; padding: 4px 8px; color: var(--primary); min-width: 54px; }
+  .pg button { font-family: 'Anuphan', sans-serif; font-weight: 700; font-size: 1rem; padding: 7px 10px; min-width: 72px; border: 2px solid var(--border); border-radius: 30px; background: var(--card); color: var(--text); cursor: pointer; transition: border-color .15s, background .15s; }
+  .pg button:hover { border-color: var(--g-blue); }
+  .pg button.on { background: color-mix(in srgb, var(--g-blue) 18%, var(--card)); border-color: var(--g-blue); border-width: 2.6px; }
+
+  .tool-row { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin: 10px 0; }
+  .tool-inp { font-family: 'Anuphan', sans-serif; font-size: 1.15rem; font-weight: 700; padding: 6px 12px; border: 2px solid var(--border); border-radius: 12px; width: 120px; max-width: 100%; color: var(--text); background: #fff; }
+  .tool-inp:focus { outline: none; border-color: var(--primary); }
+  .nl { width: 100%; max-width: 560px; height: auto; display: block; margin: 6px auto; }
+  .nl text { fill: var(--text); font-family: 'Anuphan', sans-serif; font-weight: 700; }
+
+  /* ─── ตัวเล่นฉาก / ทายก่อนเฉลย (makeScenes, makePredict ใน base.js) ─── */
+  .sc-prompt { font-weight: 700; color: var(--muted); margin: 2px 0 6px; font-size: 1rem; }
+  .sc-stage, .pr-stage { min-height: 40px; }
+  .sc-svg { width: 100%; max-width: 560px; height: auto; display: block; margin: 4px auto; background: var(--card); border: 1.5px solid var(--border); border-radius: 12px; touch-action: manipulation; }
+  .sc-svg text { fill: var(--text); font-family: 'Anuphan', sans-serif; font-weight: 700; font-size: 17px; }
+  .sc-svg .sc-small { font-size: 13px; fill: var(--muted); }
+  .sc-svg .sc-big { font-size: 20px; }
+  .sc-svg .sc-set { fill: none; stroke: var(--muted); stroke-width: 2; }
+  .sc-svg .sc-node circle { fill: var(--card); stroke: var(--muted); stroke-width: 2; }
+  .sc-svg .sc-node.hit circle { stroke: var(--g-blue); fill: color-mix(in srgb, var(--g-blue) 14%, var(--card)); }
+  .sc-svg .sc-node.bad circle { stroke: var(--g-red); fill: color-mix(in srgb, var(--g-red) 16%, var(--card)); }
+  .sc-svg .sc-node.good circle { stroke: var(--g-green); fill: color-mix(in srgb, var(--g-green) 16%, var(--card)); }
+  .sc-svg .sc-node circle.sc-hit { fill: transparent; stroke: none; pointer-events: all; }
+  .sc-svg .sc-halo { fill: var(--g-red); stroke: none; pointer-events: none; }
+  .sc-svg .sc-arr line { stroke: var(--g-blue); stroke-width: 2.6; stroke-linecap: round; }
+  .sc-svg .sc-arr polygon { fill: var(--g-blue); }
+  .sc-svg .sc-arr.red line { stroke: var(--g-red); } .sc-svg .sc-arr.red polygon { fill: var(--g-red); }
+  .sc-svg .sc-arr.green line { stroke: var(--g-green); } .sc-svg .sc-arr.green polygon { fill: var(--g-green); }
+  .sc-svg .sc-arr.muted line { stroke: var(--muted); stroke-width: 1.8; stroke-dasharray: 5 4; } .sc-svg .sc-arr.muted polygon { fill: var(--muted); }
+  .sc-svg .sc-chip rect { fill: var(--card); stroke: var(--g-blue); stroke-width: 2; }
+  .sc-svg .sc-chip.sel rect { fill: color-mix(in srgb, var(--g-blue) 20%, var(--card)); stroke-width: 2.8; }
+  .sc-svg .sc-chip text { font-size: 16px; }
+  .sc-svg .sc-badge rect { stroke-width: 2; fill: var(--card); stroke: var(--muted); }
+  .sc-svg .sc-badge.bad rect { stroke: var(--g-red); fill: color-mix(in srgb, var(--g-red) 14%, var(--card)); }
+  .sc-svg .sc-badge.good rect { stroke: var(--g-green); fill: color-mix(in srgb, var(--g-green) 16%, var(--card)); }
+  .sc-svg .sc-badge text { font-size: 16px; }
+  .sc-svg .sc-clk { cursor: pointer; }
+  .sc-svg .sc-grid { stroke: var(--border); stroke-width: 1; } .sc-svg .sc-axis { stroke: var(--muted); stroke-width: 1.6; fill: none; }
+  .sc-svg .sc-tick { font-size: 11px; fill: var(--muted); font-weight: 600; }
+  .sc-svg .sc-dot { fill: var(--g-blue); stroke: var(--g-ring); stroke-width: 2; }
+  .sc-svg .sc-guide { fill: none; stroke: var(--g-blue); stroke-width: 2; stroke-dasharray: 6 5; }
+  .sc-svg .sc-lab { font-size: 13px; fill: color-mix(in srgb, var(--g-blue) 70%, var(--text)); }
+  .formula .fm-n { color: var(--accent); }
+  .sc-cap { min-height: 3.6em; }
+  .sc-cap.fresh { animation: rowIn .45s ease; }
+  .sc-nav .btn { min-width: 108px; }
+  .pr-qs { margin-top: 10px; }
+  .pr-q { margin-bottom: 10px; }
+  .pr-q .quiz-q { margin-bottom: 8px; }
+  .pr-res:empty { display: none; }
+  .pr-stage .setrow { text-align: center; }
+  .pr-q + .pr-q { border-top: 1.5px dashed var(--border); padding-top: 10px; }
+
+  @media (max-width: 700px) {
+    header h1 { font-size: 1.4rem; }
+    header { padding: 34px 16px 16px; }
+    .card { padding: 20px 14px; }
+    .tab-btn { font-size: .85rem; padding: 8px 10px; }
+    .wk-cell { padding-left: 48px; }
+    .wg-eq { font-size: 1.1rem; }
+    .sc-nav { gap: 8px; }
+    .sc-nav .btn { min-width: 0; padding: 9px 12px; }
+    .sc-nav .wg-cnt { order: -1; width: 100%; }
+  }
+/* ── theme:start — สร้างโดย tools/build_lessons.py ห้ามแก้มือ (แก้ที่สคริปต์แล้วรันใหม่) ── */
+:root{ --page:#1D4ED8; }
+:root[data-theme="light"]{
+  --bg:#F4F4F1; --card:#FFFFFF; --text:#16181A; --muted:#5E6166; --border:#DEDED8;
+  --primary:color-mix(in srgb, var(--page) 86%, #000); --primary-2:color-mix(in srgb, var(--page) 62%, #000);
+  --secondary:#C2540A; --secondary-light:#F2A15F; --accent:#68EF3F; --accent-2:#2E9E3F;
+  --shadow:0 2px 10px rgba(0,0,0,.07);
+  --strong:color-mix(in srgb, var(--page) 76%, #000); --chip:#E8E8E3; --chip-hover:#DCDCD5;
+  --hero:color-mix(in srgb, var(--page) 82%, #000);
+  --g-x:#E53935; --g-y:#2E9E4F; --g-z:#3949AB; --g-curve:#F07400; --g-curve-fill:rgba(240,116,0,.12);
+  --g-pink:#D81B60; --g-plane:rgba(60,190,200,.28); --g-cone:rgba(153,51,0,.20); --g-cone-line:rgba(153,51,0,.35);
+  --g-blue:#1E66D0; --g-red:#D32F2F; --g-green:#2E9E4F; --g-purple:#7B3FC4; --g-orange:#E8710A; --g-teal:#0F8A80;
+  --g-ring:#FFFFFF;
+}
+:root[data-theme="dark"]{
+  --bg:#121212; --card:#1C1C1C; --text:#FFFFFF; --muted:#B3B3B3; --border:#333333;
+  --primary:#7997ec; --primary-2:#9db3f1;
+  --secondary:#FFB37A; --secondary-light:#FFD0A8; --accent:#8AF25E; --accent-2:#5BD27E;
+  --shadow:0 8px 24px rgba(0,0,0,.5);
+  --strong:color-mix(in srgb, var(--page) 48%, #1C1C1C); --chip:#2A2A2A; --chip-hover:#353535;
+  --hero:color-mix(in srgb, var(--page) 62%, #000);
+  --g-x:#FF6B6B; --g-y:#5BD27E; --g-z:#8C9BFF; --g-curve:#FFA040; --g-curve-fill:rgba(255,160,64,.16);
+  --g-pink:#FF5C9A; --g-plane:rgba(90,220,230,.26); --g-cone:rgba(255,170,110,.18); --g-cone-line:rgba(255,170,110,.45);
+  --g-blue:#6AA8FF; --g-red:#FF6B6B; --g-green:#5BD27E; --g-purple:#B48CFF; --g-orange:#FFA040; --g-teal:#4FD1C5;
+  --g-ring:#1C1C1C;
+}
+html{ background:var(--bg); }
+html[data-theme="dark"]{ color-scheme:dark; }
+body{ font-family:'Anuphan',system-ui,sans-serif; background:var(--bg); color:var(--text); line-height:1.6; -webkit-font-smoothing:antialiased; }
+
+/* หัวหน้า: สีปกของเรื่อง + ปก */
+header{
+  background:var(--hero); color:#fff; text-align:left;
+  display:grid; grid-template-columns:auto 1fr; column-gap:22px; align-items:end;
+  padding:62px 32px 26px;
+}
+header::before, header::after{ display:none !important; }
+header > *:not(.lesson-cover):not(.back-link):not(.lang-toggle):not(.theme-toggle){ grid-column:2; }
+.lesson-cover{ grid-column:1; grid-row:1 / span 6; align-self:end; width:120px; aspect-ratio:1; border-radius:6px; overflow:hidden; box-shadow:0 8px 24px rgba(0,0,0,.45); }
+.lesson-cover svg{ display:block; width:100%; height:100%; }
+header h1{ font-size:clamp(1.8rem, 4.2vw, 2.9rem); font-weight:700; letter-spacing:-.01em; line-height:1.25; margin:0; color:#fff; }
+header p{ font-size:1rem; opacity:.85; margin:6px 0 0; color:#fff; }
+.back-link{
+  top:14px; left:20px; display:inline-flex; align-items:center; gap:6px;
+  padding:6px 14px; border-radius:999px; background:rgba(0,0,0,.32); color:#fff;
+  font-size:.88rem; font-weight:600; opacity:1; text-decoration:none;
+}
+.back-link:hover{ background:rgba(0,0,0,.55); text-decoration:none; }
+.lang-toggle, .theme-toggle{
+  position:absolute; top:14px; height:34px; background:transparent; color:#fff;
+  border:1px solid rgba(255,255,255,.55); border-radius:999px; font-family:inherit; font-weight:700; font-size:.85rem; cursor:pointer; z-index:2;
+}
+.lang-toggle{ right:20px; padding:0 16px; }
+.theme-toggle{ right:86px; width:34px; padding:0; display:grid; place-items:center; }
+.theme-toggle svg{ width:18px; height:18px; }
+.lang-toggle:hover, .theme-toggle:hover{ background:rgba(255,255,255,.14); border-color:#fff; }
+body > .lang-toggle, body > .theme-toggle{ position:fixed; top:14px; z-index:50; background:var(--card); color:var(--text); border-color:var(--border); box-shadow:var(--shadow); }
+body > .lang-toggle{ right:14px; } body > .theme-toggle{ right:80px; }
+body > .lang-toggle:hover, body > .theme-toggle:hover{ background:var(--chip); border-color:var(--text); }
+header:not(:has(.back-link)):not(:has(.lang-toggle)){ padding-top:28px; border-radius:8px; }
+
+/* แถบแท็บ: ชิปทรงแคปซูล */
+nav{ background:var(--bg); border-bottom:1px solid var(--border); padding:10px 16px; gap:8px; }
+.tab-btn{
+  font-family:inherit; border:0; margin:0; border-radius:999px; padding:8px 16px;
+  background:var(--chip); color:var(--text); font-weight:600; font-size:.9rem;
+}
+.tab-btn:hover{ background:var(--chip-hover); color:var(--text); }
+.tab-btn.active{ background:var(--text); color:var(--bg); border-bottom-color:transparent; }
+
+/* การ์ดและกล่อง */
+.card{ background:var(--card); border:1px solid var(--border); border-radius:8px; box-shadow:var(--shadow); }
+.card-title{ color:var(--text); font-size:1.2rem; }
+.card-title .icon{ display:none; }
+.desc-text{ color:var(--text); font-size:1rem; }
+.formula, .step.result, .stats{ background:var(--strong) !important; color:#fff; border-radius:8px; letter-spacing:0; }
+.stat .k, .step-tag{ text-transform:none; letter-spacing:0; }
+
+/* ปุ่ม */
+.btn-action{ font-family:inherit; background:var(--text); color:var(--bg); }
+.btn-action.secondary{ background:transparent; color:var(--text); border:1px solid var(--muted); }
+.mode-btn{ font-family:inherit; border:1px solid var(--border); background:var(--card); color:var(--text); }
+.mode-btn:hover{ border-color:var(--text); color:var(--text); }
+.mode-btn.active{ background:var(--text); border-color:var(--text); color:var(--bg); }
+.quiz-opt{ border-radius:8px; }
+input[type=range]{ accent-color:var(--primary); }
+
+@media (max-width:600px){
+  header{ padding:58px 16px 20px; column-gap:14px; }
+  .lesson-cover{ width:76px; }
+  .back-link{ left:12px; max-width:calc(100% - 150px); overflow:hidden; white-space:nowrap; text-overflow:ellipsis; display:block; }
+  .lang-toggle{ right:12px; }
+  .theme-toggle{ right:74px; }
+  nav{ flex-wrap:nowrap; overflow-x:auto; justify-content:flex-start; scrollbar-width:none; }
+  nav::-webkit-scrollbar{ display:none; }
+}
+/* โหมดมืด: สีที่หน้านี้ฝังไว้เอง (สร้างอัตโนมัติ) */
+:root[data-theme="dark"] .box-info{background:#1f2e12}
+:root[data-theme="dark"] .box-warn{background:#281d0f}
+:root[data-theme="dark"] .box-ok{background:#102a1d}
+:root[data-theme="dark"] .btn{background:var(--strong)}
+:root[data-theme="dark"] .btn.ghost{background:#171717}
+:root[data-theme="dark"] .btn.ghost:hover:not(:disabled){background:#223614}
+:root[data-theme="dark"] .chip{background:#171717}
+:root[data-theme="dark"] .chip.active{background:var(--strong)}
+:root[data-theme="dark"] .wg-cap{background:#1f2e12}
+:root[data-theme="dark"] .tile{background:#171717}
+:root[data-theme="dark"] .ans{background:#102a1d;color:#a8f8e1}
+:root[data-theme="dark"] .bad{background:#270f10;color:#f49ab2}
+:root[data-theme="dark"] .hl{background:#383115}
+:root[data-theme="dark"] .hlb{background:#121f30}
+:root[data-theme="dark"] .hlg{background:#12301d}
+:root[data-theme="dark"] .hlp{background:#2c1120}
+:root[data-theme="dark"] .ptag{background:#111c28;color:#bcc5d2}
+:root[data-theme="dark"] .verdict.ok{background:#102a1d}
+:root[data-theme="dark"] .verdict.no{background:#270f10}
+:root[data-theme="dark"] .verdict.ok .mk{color:#99f1ba}
+:root[data-theme="dark"] .verdict.no .mk{color:#ef839b}
+:root[data-theme="dark"] .tbl th{background:#1f2e12}
+:root[data-theme="dark"] .tbl td.cur{background:#383115}
+:root[data-theme="dark"] .wk-cell{background:#171717}
+:root[data-theme="dark"] .wk-cell .stepno{background:var(--strong)}
+:root[data-theme="dark"] .wk-note{color:#bcc5d2}
+:root[data-theme="dark"] .quiz-opt{background:#171717}
+:root[data-theme="dark"] .quiz-opt.correct{background:#102a1d;color:#a8f8e1}
+:root[data-theme="dark"] .quiz-opt.wrong{background:#291a0f;color:#f18fb8}
+:root[data-theme="dark"] .quiz-feedback.ok{color:#a8f8e1}
+:root[data-theme="dark"] .quiz-feedback.err{color:#f18fb8}
+:root[data-theme="dark"] .btn-next{background:var(--strong)}
+:root[data-theme="dark"] .tool-inp{background:#171717}
+/* ── theme:end ── */
+</style>
+</head>
+<body>
+
+<header>
+  <div class="lesson-cover" aria-hidden="true"><svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"><rect width="120" height="120" fill="#1D4ED8"/><circle cx="104" cy="108" r="46" fill="#000" fill-opacity=".14"/><g fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 96 L112 96 M18 106 L18 12" stroke-opacity=".45" stroke-width="2"/><path d="M14.0,74.1 L15.1,71.9 L16.1,69.7 L17.2,67.6 L18.3,65.6 L19.4,63.6 L20.4,61.7 L21.5,59.8 L22.6,58.1 L23.7,56.4 L24.8,54.8 L25.8,53.2 L26.9,51.7 L28.0,50.3 L29.1,48.9 L30.1,47.6 L31.2,46.4 L32.3,45.2 L33.4,44.2 L34.4,43.1 L35.5,42.2 L36.6,41.3 L37.6,40.5 L38.7,39.7 L39.8,39.1 L40.9,38.4 L42.0,37.9 L43.0,37.4 L44.1,37.0 L45.2,36.7 L46.2,36.4 L47.3,36.2 L48.4,36.1 L49.5,36.0 L50.5,36.0 L51.6,36.1 L52.7,36.2 L53.8,36.4 L54.9,36.7 L55.9,37.0 L57.0,37.4 L58.1,37.9 L59.1,38.5 L60.2,39.1 L61.3,39.8 L62.4,40.5 L63.5,41.3 L64.5,42.2 L65.6,43.2 L66.7,44.2 L67.8,45.3 L68.8,46.4 L69.9,47.6 L71.0,48.9 L72.0,50.3 L73.1,51.7 L74.2,53.2 L75.3,54.8 L76.3,56.4 L77.4,58.1 L78.5,59.9 L79.6,61.7 L80.7,63.6 L81.7,65.6 L82.8,67.6 L83.9,69.8 L85.0,71.9 L86.0,74.2 L87.1,76.5 L88.2,78.9 L89.2,81.3 L90.3,83.8 L91.4,86.4 L92.5,89.1 L93.5,91.8 L94.6,94.6 L95.7,97.4 L96.8,100.4 L97.8,103.3 L98.9,106.4 L100.0,109.5" stroke-width="4"/><path d="M24 92 L108 40" stroke-width="3" stroke-opacity=".6"/><circle cx="50.0" cy="36.0" r="5" fill="#fff" stroke="none"/></g></svg></div>
+  <button id="themeToggle" class="theme-toggle" type="button" onclick="toggleTheme()" title="สลับโหมดสว่าง/มืด" aria-label="สลับโหมดสว่าง/มืด"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6"/></svg></button>
+  <button id="langToggle" class="lang-toggle" onclick="toggleLang()">EN</button>
+  <h1 data-th="กราฟของฟังก์ชัน" data-en="Graphs of Functions">กราฟของฟังก์ชัน</h1>
+  <p data-th="เส้นตรง • พาราโบลา h = −b/2a • ค่าสัมบูรณ์และขั้นบันได • เลื่อน-สะท้อนกราฟ • อสมการด้วยกราฟ 4 ขั้น • ม.4" data-en="Lines • parabolas h = −b/2a • absolute value and step functions • shifting and reflecting • inequalities by graph in 4 steps">เส้นตรง • พาราโบลา h = −b/2a • ค่าสัมบูรณ์และขั้นบันได • เลื่อน-สะท้อนกราฟ • อสมการด้วยกราฟ 4 ขั้น • ม.4</p>
+</header>
+
+<nav>
+  <button class="tab-btn active" onclick="showTab('line', this)" data-th="เส้นตรง" data-en="Straight Lines">เส้นตรง</button>
+  <button class="tab-btn" onclick="showTab('para', this)" data-th="พาราโบลา" data-en="Parabolas">พาราโบลา</button>
+  <button class="tab-btn" onclick="showTab('abs', this)" data-th="ค่าสัมบูรณ์ / ขั้นบันได" data-en="Absolute Value / Step">ค่าสัมบูรณ์ / ขั้นบันได</button>
+  <button class="tab-btn" onclick="showTab('shift', this)" data-th="เลื่อน-สะท้อน" data-en="Shift and Reflect">เลื่อน-สะท้อน</button>
+  <button class="tab-btn" onclick="showTab('ineq', this)" data-th="อสมการด้วยกราฟ" data-en="Inequalities by Graph">อสมการด้วยกราฟ</button>
+  <button class="tab-btn" onclick="showTab('quiz', this)" data-th="แบบฝึกหัด" data-en="Quiz">แบบฝึกหัด</button>
+</nav>
+
+<main>
+  <section id="tab-line" class="tab-panel active"></section>
+  <section id="tab-para" class="tab-panel"></section>
+  <section id="tab-abs" class="tab-panel"></section>
+  <section id="tab-shift" class="tab-panel"></section>
+  <section id="tab-ineq" class="tab-panel"></section>
+  <section id="tab-quiz" class="tab-panel"></section>
+</main>
+
+<script>
+const PAGE_TITLE = { th: "สื่อการสอน : กราฟของฟังก์ชัน ม.4", en: "Teaching Aid: Graphs of Functions" };
+// ══════════════ ภาษาไทย/อังกฤษ (ค่าใน data-th/data-en ถือเป็น HTML — ดู docs/adr/0002) ══════════════
+let langMemory = 'th';
+function getLang() { try { return localStorage.getItem('siteLang') || 'th'; } catch (e) { return langMemory; } }
+function applyLang(lang) {
+  document.documentElement.lang = lang;
+  document.title = PAGE_TITLE[lang];
+  document.querySelectorAll('[data-th]').forEach(el => { el.innerHTML = (lang === 'en' && el.dataset.en) ? el.dataset.en : el.dataset.th; });
+  const btn = document.getElementById('langToggle');
+  if (btn) btn.textContent = lang === 'en' ? 'ไทย' : 'EN';
+  LIVE.forEach(w => w.refresh && w.refresh());
+}
+function toggleLang() {
+  const next = getLang() === 'en' ? 'th' : 'en';
+  langMemory = next;
+  try { localStorage.setItem('siteLang', next); } catch (e) {}
+  applyLang(next);
+}
+const LIVE = [];
+
+// ══════════════ ตัวช่วย ══════════════
+const EN = () => getLang() === 'en';
+const T = (th, en) => ({ th, en });
+const tx = v => (v == null ? '' : typeof v === 'string' ? v : v[getLang()]);
+const esc = s => s.replace(/&/g, '&amp;').replace(/"/g, '&quot;');
+const d = (th, en) => `<span data-th="${esc(th)}" data-en="${esc(en)}">${th}</span>`;
+const frac = (n, dd) => `<span class="frac"><span class="num">${n}</span><span class="den">${dd}</span></span>`;
+const rt = s => `<span class="rt"><span class="rt-s">√</span><span class="rt-in">${s}</span></span>`;
+const P = (b, e) => `${b}<sup>${e}</sup>`;
+const mn = v => String(v).replace(/-/g, '−');
+const num = x => { if (!isFinite(x)) return x > 0 ? '∞' : '−∞'; let s = (Math.round(x * 100) / 100).toString(); return mn(s === '-0' ? '0' : s); };
+const ans = h => `<span class="ans">${h}</span>`;
+const bad = h => `<span class="bad">${h}</span>`;
+const card = (icon, title, inner) => `<div class="card"><div class="card-title"><span class="icon">${icon}</span><span>${title}</span></div>${inner}</div>`;
+const gcd = (a, b) => b ? gcd(b, a % b) : Math.abs(a);
+const fn = h => `<i>f</i>(<i>x</i>)`;
+// สัมประสิทธิ์พหุนามเป็น HTML เช่น poly([2,-3,1]) = 2x² − 3x + 1 (ดีกรีสูง→ต่ำ ระบุเป็น [c0,c1,c2,...] จากต่ำไปสูง)
+function polyHtml(c, v) {
+  v = v || '<i>x</i>';
+  let s = '';
+  for (let k = c.length - 1; k >= 0; k--) {
+    const a = c[k]; if (a === 0) continue;
+    const abs = Math.abs(a), sign = a < 0 ? '−' : '+';
+    let body = k === 0 ? String(abs) : (abs === 1 ? '' : String(abs)) + v + (k > 1 ? `<sup>${k}</sup>` : '');
+    if (!s) s = (a < 0 ? '−' : '') + body; else s += ` ${sign} ${body}`;
+  }
+  return s || '0';
+}
+const pAdd = (a, b) => { const n = Math.max(a.length, b.length), r = []; for (let i = 0; i < n; i++) r.push((a[i] || 0) + (b[i] || 0)); return r; };
+const pMul = (a, b) => { const r = Array(a.length + b.length - 1).fill(0); a.forEach((x, i) => b.forEach((y, j) => { r[i + j] += x * y; })); return r; };
+const pComp = (f, g) => { let r = [0], pw = [1]; f.forEach(c => { r = pAdd(r, pMul([c], pw)); pw = pMul(pw, g); }); return r; };
+const pEval = (c, x) => c.reduceRight((s, a) => s * x + a, 0);
+const pTrim = c => { c = c.slice(); while (c.length > 1 && c[c.length - 1] === 0) c.pop(); return c; };
+
+// ══════════════ แท็บ ══════════════
+function showTab(id, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  if (!btn) btn = [...document.querySelectorAll('.tab-btn')].find(b => b.getAttribute('onclick').includes("'" + id + "'"));
+  if (btn) btn.classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+const goTab = (id, label) => `<button class="btn ghost" onclick="showTab('${id}')">${label}</button>`;
+
+// ══════════════ ขั้นตอนทีละแถว (ตัวอย่างการคำนวณ: โจทย์คงที่ เผยทีละขั้น) ══════════════
+// rows: () => [{ h: 'html สมการ', n: 'หมายเหตุ' }]  — สมการเขียนเต็มฝั่งซ้ายทุกขั้น
+function makeSteps(host, rows) {
+  const w = { k: 0 };
+  host.innerHTML = '<div class="wk-list"></div><div class="wg-nav"><button class="btn ghost prev"></button><span class="wg-cnt"></span><button class="btn next"></button></div>';
+  const list = host.querySelector('.wk-list'), prev = host.querySelector('.prev'), next = host.querySelector('.next'), cnt = host.querySelector('.wg-cnt');
+  w.render = fresh => {
+    const rs = rows(); if (w.k >= rs.length) w.k = rs.length - 1;
+    list.innerHTML = rs.slice(0, w.k + 1).map((r, i) => `<div class="wk-cell${i === rs.length - 1 ? ' final' : ''}${i === w.k && fresh ? ' fresh' : ''}"><span class="stepno">${i + 1}</span><div class="wk-eq">${tx(r.h)}</div>${r.n ? `<div class="wk-note">${tx(r.n)}</div>` : ''}</div>`).join('');
+    cnt.textContent = (EN() ? 'Step ' : 'ขั้นที่ ') + (w.k + 1) + ' / ' + rs.length;
+    prev.disabled = w.k === 0; next.disabled = w.k >= rs.length - 1;
+    prev.textContent = EN() ? '◀ Back' : '◀ ย้อน'; next.textContent = EN() ? 'Next ▶' : 'ถัดไป ▶';
+  };
+  w.reset = () => { w.k = 0; w.render(false); };
+  w.refresh = () => w.render(false);
+  prev.onclick = () => { if (w.k > 0) { w.k--; w.render(false); } };
+  next.onclick = () => { w.k++; w.render(true); };
+  LIVE.push(w); w.render(false);
+  return w;
+}
+// ตัวเลือกโจทย์ (ชิป) + stepper: items = [{ id, label, rows }]
+function makeProblemSteps(host, label, items) {
+  host.innerHTML = '<div class="chips"></div><div class="ps-body"></div>';
+  const chips = host.querySelector('.chips'), body = host.querySelector('.ps-body');
+  let cur = 0, st = null;
+  const paint = () => {
+    chips.innerHTML = `<span class="chips-label">${tx(label)}</span>` + items.map((it, i) => `<button class="chip${i === cur ? ' active' : ''}" data-i="${i}">${tx(it.label)}</button>`).join('');
+    chips.querySelectorAll('.chip').forEach(c => c.onclick = () => { cur = +c.dataset.i; st = null; start(); paint(); });
+  };
+  const start = () => { body.innerHTML = ''; const h = document.createElement('div'); body.appendChild(h); st = makeSteps(h, () => items[cur].rows()); LIVE.splice(LIVE.indexOf(st), 1); };
+  start(); paint();
+  const w = { refresh() { paint(); st.render(false); } };
+  LIVE.push(w);
+  return w;
+}
+
+// ══════════════ แบบฝึกหัดปรนัย ══════════════
+// items: [{ q: T|html, o: [html...], a: index, e: T|html }]
+function makeQuiz(host, items) {
+  // สลับลำดับตัวเลือกแบบคงที่ (seed ตามข้อ) ไม่ให้คำตอบถูกกองอยู่ตำแหน่งเดิม — คำอธิบายห้ามอ้าง "ข้อ 1/2/3/4" ของตัวเลือก
+  items = items.map((it, n) => {
+    // ตำแหน่งที่คำตอบถูกจะไปอยู่: วนตามลำดับคงที่ให้กระจายทุกตำแหน่ง ส่วนตัวหลอกสลับด้วย seed ตามข้อ
+    const target = [2, 0, 3, 1, 3, 2, 0, 1, 2, 3, 1, 0][n % 12] % it.o.length;
+    let seed = (n + 1) * 0x9E3779B1 >>> 0;
+    const rnd = () => { seed = (seed + 0x6D2B79F5) >>> 0; let t = seed; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
+    const others = it.o.map((_, k) => k).filter(k => k !== it.a);
+    for (let k = others.length - 1; k > 0; k--) { const m = Math.floor(rnd() * (k + 1)); [others[k], others[m]] = [others[m], others[k]]; }
+    const order = others.slice(); order.splice(target, 0, it.a);
+    return Object.assign({}, it, { o: order.map(k => it.o[k]), a: target });
+  });
+  const w = { i: 0, score: 0, done: false, picked: null };
+  host.innerHTML = '<div class="quiz-head" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:12px"><span class="qprog" style="color:var(--muted)"></span><span class="score-badge"></span></div><div class="qbox"></div><div class="qctl"></div>';
+  const prog = host.querySelector('.qprog'), badge = host.querySelector('.score-badge'), box = host.querySelector('.qbox'), ctl = host.querySelector('.qctl');
+  const bt = (th, en) => EN() ? en : th;
+  w.render = () => {
+    badge.innerHTML = `${bt('คะแนน', 'Score')} ${w.score} / ${items.length}`;
+    if (w.i >= items.length) {
+      prog.textContent = '';
+      const r = w.score / items.length;
+      const msg = r === 1 ? bt('ยอดเยี่ยม! ครบทุกข้อ', 'Perfect!') : r >= .7 ? bt('เก่งมาก ไปต่อได้เลย', 'Great — keep going') : bt('ลองทบทวนแท็บด้านบนแล้วเล่นใหม่อีกรอบ', 'Review the tabs above and try again');
+      box.innerHTML = `<div class="score-card"><div style="font-size:2.4rem">🎉</div><div style="font-size:1.4rem;font-weight:800;margin:6px 0">${bt('จบแบบฝึกหัด', 'Quiz finished')}</div><div style="font-size:2.6rem;font-weight:800">${w.score} / ${items.length}</div><div style="margin-top:6px">${msg}</div></div>`;
+      ctl.innerHTML = `<button class="btn-next retry">${bt('เล่นใหม่ 🔄', 'Play again 🔄')}</button>`;
+      ctl.querySelector('.retry').onclick = () => { w.i = 0; w.score = 0; w.picked = null; w.render(); };
+      return;
+    }
+    const it = items[w.i];
+    prog.textContent = bt(`ข้อที่ ${w.i + 1} / ${items.length}`, `Question ${w.i + 1} / ${items.length}`);
+    box.innerHTML = `<div class="quiz-q">${w.i + 1}. ${tx(it.q)}</div><div class="quiz-opts">${it.o.map((o, k) => `<button class="quiz-opt" data-k="${k}">${tx(o)}</button>`).join('')}</div><div class="quiz-feedback"></div>`;
+    ctl.innerHTML = '';
+    box.querySelectorAll('.quiz-opt').forEach(b => b.onclick = () => pick(+b.dataset.k));
+    if (w.picked !== null) mark(w.picked);
+  };
+  function mark(k) {
+    const it = items[w.i], fb = box.querySelector('.quiz-feedback');
+    box.querySelectorAll('.quiz-opt').forEach((b, idx) => { if (idx === it.a) b.classList.add('correct'); else if (idx === k) b.classList.add('wrong'); b.style.pointerEvents = 'none'; });
+    const ok = k === it.a;
+    fb.className = 'quiz-feedback ' + (ok ? 'ok' : 'err');
+    fb.innerHTML = (ok ? '✅ ' + bt('ถูกต้อง! ', 'Correct! ') : '❌ ' + bt('ยังไม่ใช่ — ', 'Not quite — ')) + tx(it.e);
+    ctl.innerHTML = `<button class="btn-next nx">${w.i < items.length - 1 ? bt('ข้อถัดไป ▶', 'Next ▶') : bt('ดูคะแนน 🏁', 'See score 🏁')}</button>`;
+    ctl.querySelector('.nx').onclick = () => { w.i++; w.picked = null; w.render(); };
+  }
+  function pick(k) { if (w.picked !== null) return; w.picked = k; if (k === items[w.i].a) w.score++; badge.innerHTML = `${bt('คะแนน', 'Score')} ${w.score} / ${items.length}`; mark(k); }
+  w.refresh = () => w.render();
+  LIVE.push(w); w.render();
+  return w;
+}
+
+// ══════════════ ตัวเลื่อน ══════════════
+function sliderRow(label, id, min, max, step, val) {
+  return `<div class="slider-row"><b>${label}</b><input type="range" id="${id}" min="${min}" max="${max}" step="${step}" value="${val}"><span class="slider-val" id="${id}v"></span></div>`;
+}
+
+// ══════════════ กราฟ SVG ══════════════
+let PLOT_N = 0;
+class Plot {
+  constructor(o) {
+    Object.assign(this, { w: 520, h: 400, xmin: -5, xmax: 5, ymin: -5, ymax: 5, pad: 30, gx: 1, gy: 1, lx: 1, ly: 1, grid: true }, o);
+    this.id = 'pc' + (++PLOT_N); this.back = []; this.front = [];
+    this.sx = (this.w - 2 * this.pad) / (this.xmax - this.xmin);
+    this.sy = (this.h - 2 * this.pad) / (this.ymax - this.ymin);
+  }
+  X(x) { return +(this.pad + (x - this.xmin) * this.sx).toFixed(2); }
+  Y(y) { return +(this.h - this.pad - (y - this.ymin) * this.sy).toFixed(2); }
+  ix(px) { return this.xmin + (px - this.pad) / this.sx; }   // พิกัดจอ(SVG) → พิกัดกราฟ
+  iy(py) { return this.ymin + (this.h - this.pad - py) / this.sy; }
+  put(s, front) { (front ? this.front : this.back).push(s); return this; }
+  path(f, cls, o) {
+    o = o || {};
+    const x0 = o.x0 !== undefined ? o.x0 : this.xmin, x1 = o.x1 !== undefined ? o.x1 : this.xmax, n = o.n || 400;
+    let dstr = '', pen = false, py = null;
+    for (let i = 0; i <= n; i++) {
+      const x = x0 + (x1 - x0) * i / n; let y = f(x);
+      if (y === null || y === undefined || !isFinite(y) || Math.abs(y) > 1e4) { pen = false; py = null; continue; }
+      const Y = this.Y(y);
+      // ตัดเส้นที่เส้นกำกับแนวตั้ง (กระโดดเกินครึ่งจอ) — เฉพาะตอนสุ่มจุดถี่ เส้นตรงที่ใช้ n น้อยจึงไม่ถูกตัดทิ้ง
+      if (pen && n >= 50 && Math.abs(Y - py) > this.h * 0.55) pen = false;
+      dstr += (pen ? 'L' : 'M') + this.X(x) + ' ' + Y; pen = true; py = Y;
+    }
+    return this.put(`<path class="pl-c ${cls}" d="${dstr}" clip-path="url(#${this.id})"${o.dash ? ' stroke-dasharray="7 6"' : ''}/>`, o.front);
+  }
+  // y เป็นฟังก์ชันของ t (เส้นโค้งพารามิเตอร์)
+  param(fx, fy, t0, t1, cls, n) {
+    n = n || 300; let dstr = '';
+    for (let i = 0; i <= n; i++) { const t = t0 + (t1 - t0) * i / n; dstr += (i ? 'L' : 'M') + this.X(fx(t)) + ' ' + this.Y(fy(t)); }
+    return this.put(`<path class="pl-c ${cls}" d="${dstr}" clip-path="url(#${this.id})"/>`);
+  }
+  line(x1, y1, x2, y2, cls, extra) { return this.put(`<line class="${cls}" x1="${this.X(x1)}" y1="${this.Y(y1)}" x2="${this.X(x2)}" y2="${this.Y(y2)}" ${extra || ''} clip-path="url(#${this.id})"/>`); }
+  dash(x1, y1, x2, y2, cls) { return this.line(x1, y1, x2, y2, 'pl-dash ' + cls); }
+  thick(x1, y1, x2, y2, cls) { return this.line(x1, y1, x2, y2, 'pl-thick ' + cls); }
+  dot(x, y, cls, open, r) { return this.put(`<circle class="${open ? 'pl-open ' + cls.replace('f-', 's-') : 'pl-dot ' + cls}" cx="${this.X(x)}" cy="${this.Y(y)}" r="${r || 5.5}"/>`, true); }
+  text(x, y, html, cls, anchor, dx, dy) { return this.put(`<text class="pl-lbl ${cls || ''}" x="${this.X(x) + (dx || 0)}" y="${this.Y(y) + (dy || 0)}" text-anchor="${anchor || 'start'}">${html}</text>`, true); }
+  poly(pts, cls) { return this.put(`<polygon class="${cls}" points="${pts.map(p => this.X(p[0]) + ',' + this.Y(p[1])).join(' ')}" clip-path="url(#${this.id})"/>`); }
+  raw(s, front) { return this.put(s, front); }
+  svg() {
+    const w = this.w, h = this.h, p = this.pad, g = [];
+    if (this.grid) {
+      for (let x = Math.ceil(this.xmin / this.gx) * this.gx; x <= this.xmax + 1e-9; x += this.gx) g.push(`<line class="pl-grid" x1="${this.X(x)}" y1="${p}" x2="${this.X(x)}" y2="${h - p}"/>`);
+      for (let y = Math.ceil(this.ymin / this.gy) * this.gy; y <= this.ymax + 1e-9; y += this.gy) g.push(`<line class="pl-grid" x1="${p}" y1="${this.Y(y)}" x2="${w - p}" y2="${this.Y(y)}"/>`);
+    }
+    const ax = [];
+    const x0 = Math.min(Math.max(0, this.xmin), this.xmax), y0 = Math.min(Math.max(0, this.ymin), this.ymax);
+    ax.push(`<line class="pl-axis" x1="${p - 8}" y1="${this.Y(y0)}" x2="${w - p + 8}" y2="${this.Y(y0)}"/><line class="pl-axis" x1="${this.X(x0)}" y1="${h - p + 8}" x2="${this.X(x0)}" y2="${p - 8}"/>`);
+    ax.push(`<path class="pl-axis" d="M${w - p + 8} ${this.Y(y0)} l-7 -4 m7 4 l-7 4 M${this.X(x0)} ${p - 8} l-4 7 m4 -7 l4 7" fill="none"/>`);
+    ax.push(`<text class="pl-tick" x="${w - p + 4}" y="${this.Y(y0) + 18}" style="font-size:14px;font-style:italic">x</text><text class="pl-tick" x="${this.X(x0) + 8}" y="${p - 2}" style="font-size:14px;font-style:italic">y</text>`);
+    for (let x = Math.ceil(this.xmin / this.lx) * this.lx; x <= this.xmax + 1e-9; x += this.lx) if (Math.abs(x) > 1e-9) ax.push(`<text class="pl-tick" x="${this.X(x)}" y="${this.Y(y0) + 15}" text-anchor="middle">${mn(Math.round(x * 100) / 100)}</text>`);
+    for (let y = Math.ceil(this.ymin / this.ly) * this.ly; y <= this.ymax + 1e-9; y += this.ly) if (Math.abs(y) > 1e-9) ax.push(`<text class="pl-tick" x="${this.X(x0) - 6}" y="${this.Y(y) + 4}" text-anchor="end">${mn(Math.round(y * 100) / 100)}</text>`);
+    return `<svg class="plot" viewBox="0 0 ${w} ${h}" xmlns="http://www.w3.org/2000/svg"><defs><clipPath id="${this.id}"><rect x="${p - 8}" y="${p - 8}" width="${w - 2 * p + 16}" height="${h - 2 * p + 16}"/></clipPath></defs>${g.join('')}${this.back.join('')}${ax.join('')}${this.front.join('')}</svg>`;
+  }
+}
+
+// ══════════════ แผนภาพลูกศร (mapping diagram) ══════════════
+// A, B = ป้ายสมาชิก; pairs = [[i, j]]; o.flag = ระบายสีสมาชิก A ที่ผิดปกติ (ลูกศรออกหลายเส้น = แดง); o.capA/capB = หัวเซต
+// o.flagY: true = ระบายสีสมาชิก B ทั้ง 3 แบบ (ไม่ถูกชี้=ประ / ถูกชี้ซ้ำ=แดง) · 'one' = ไฮไลต์เรื่อง 1-1 (ถูกชี้ซ้ำ=แดง, ชี้ 1 เส้น=ฟ้า) · 'onto' = ไฮไลต์เรื่องทั่วถึง (ไม่ถูกชี้=ประ, ถูกชี้=ฟ้า) · o.okY = ถูกชี้ซ้ำ ระบายเขียว (y ซ้ำได้)
+let MD_N = 0;
+function mapDiagram(A, B, pairs, o) {
+  o = o || {};
+  const n = Math.max(A.length, B.length), H = 46 + n * 40, xa = 96, xb = 324, mid = H / 2 + 6;
+  const ya = i => mid + (i - (A.length - 1) / 2) * 40, yb = j => mid + (j - (B.length - 1) / 2) * 40;
+  const outc = A.map((_, i) => pairs.filter(p => p[0] === i).length), inc = B.map((_, j) => pairs.filter(p => p[1] === j).length);
+  let s = `<svg class="md" viewBox="0 0 420 ${H}" xmlns="http://www.w3.org/2000/svg">`;
+  s += `<ellipse class="md-set" cx="${xa}" cy="${mid}" rx="52" ry="${n * 20 + 14}"/><ellipse class="md-set" cx="${xb}" cy="${mid}" rx="52" ry="${n * 20 + 14}"/>`;
+  s += `<text class="md-cap" x="${xa}" y="16" text-anchor="middle">${o.capA || 'A'}</text><text class="md-cap" x="${xb}" y="16" text-anchor="middle">${o.capB || 'B'}</text>`;
+  pairs.forEach(p => {
+    const cls = o.flag && outc[p[0]] > 1 ? 'bad' : (o.cls ? (o.cls[p[0] + ',' + p[1]] || '') : '');
+    const x1 = xa + 15, y1 = ya(p[0]), x2 = xb - 17, y2 = yb(p[1]), ang = Math.atan2(y2 - y1, x2 - x1), hx = x2 - 9 * Math.cos(ang), hy = y2 - 9 * Math.sin(ang);
+    s += `<line class="md-arr ${cls}" x1="${x1}" y1="${y1}" x2="${hx.toFixed(1)}" y2="${hy.toFixed(1)}"/>`;
+    s += `<polygon class="md-head ${cls}" points="${x2},${y2} ${(x2 - 10 * Math.cos(ang - .4)).toFixed(1)},${(y2 - 10 * Math.sin(ang - .4)).toFixed(1)} ${(x2 - 10 * Math.cos(ang + .4)).toFixed(1)},${(y2 - 10 * Math.sin(ang + .4)).toFixed(1)}"/>`;
+  });
+  A.forEach((a, i) => { const c = o.flag ? (outc[i] === 0 ? 'miss' : outc[i] > 1 ? 'multi' : 'hit') : ''; s += `<circle class="md-pt ${c}" cx="${xa}" cy="${ya(i)}" r="15"/><text x="${xa}" y="${ya(i) + 6}" text-anchor="middle">${a}</text>`; });
+  B.forEach((b, j) => { const f = o.flagY, c = f === true ? (inc[j] === 0 ? 'miss' : inc[j] > 1 ? 'multi' : 'hit') : f === 'one' ? (inc[j] > 1 ? 'multi' : inc[j] === 1 ? 'hit' : '') : f === 'onto' ? (inc[j] === 0 ? 'miss' : 'hit') : (o.okY && inc[j] > 1 ? 'ok' : ''); s += `<circle class="md-pt ${c}" cx="${xb}" cy="${yb(j)}" r="15"/><text x="${xb}" y="${yb(j) + 6}" text-anchor="middle">${b}</text>`; });
+  return s + '</svg>';
+}
+
+// ══════════════ ช่วงจำนวนจริง ══════════════
+// ช่วง = { lo, hi, lc, hc } (lc/hc = ปิดปลายซ้าย/ขวา) ; ชุดช่วง = array เรียงจากซ้ายไปขวา
+const IV = (lo, hi, lc, hc) => ({ lo, hi, lc: lc === undefined ? isFinite(lo) : lc, hc: hc === undefined ? isFinite(hi) : hc });
+const ALLR = () => [IV(-Infinity, Infinity, false, false)];
+function ivIntersect(A, B) {
+  const out = [];
+  A.forEach(a => B.forEach(b => {
+    let lo, lc, hi, hc;
+    if (a.lo > b.lo) { lo = a.lo; lc = a.lc; } else if (a.lo < b.lo) { lo = b.lo; lc = b.lc; } else { lo = a.lo; lc = a.lc && b.lc; }
+    if (a.hi < b.hi) { hi = a.hi; hc = a.hc; } else if (a.hi > b.hi) { hi = b.hi; hc = b.hc; } else { hi = a.hi; hc = a.hc && b.hc; }
+    if (lo < hi || (lo === hi && lc && hc)) out.push({ lo, hi, lc, hc });
+  }));
+  return out.sort((p, q) => p.lo - q.lo);
+}
+function ivRemovePoint(A, p) {
+  const out = [];
+  A.forEach(a => {
+    const inside = (a.lo < p || (a.lo === p && a.lc)) && (p < a.hi || (p === a.hi && a.hc));
+    if (!inside) { out.push(a); return; }
+    if (a.lo < p) out.push({ lo: a.lo, hi: p, lc: a.lc, hc: false });
+    if (p < a.hi) out.push({ lo: p, hi: a.hi, lc: false, hc: a.hc });
+  });
+  return out;
+}
+const ivHas = (A, x) => A.some(a => (x > a.lo || (x === a.lo && a.lc)) && (x < a.hi || (x === a.hi && a.hc)));
+function ivText(A) {
+  if (!A.length) return '∅';
+  if (A.length === 1 && A[0].lo === -Infinity && A[0].hi === Infinity) return 'ℝ';
+  // ℝ − {จุดที่ถูกเจาะ}
+  const holes = []; let whole = A[0].lo === -Infinity && A[A.length - 1].hi === Infinity;
+  for (let i = 0; i + 1 < A.length && whole; i++) { if (A[i].hi === A[i + 1].lo && !A[i].hc && !A[i + 1].lc) holes.push(A[i].hi); else whole = false; }
+  if (whole && holes.length && A.length === holes.length + 1) return 'ℝ − {' + holes.map(num).join(', ') + '}';
+  return A.map(a => (a.lc ? '[' : '(') + num(a.lo) + ', ' + num(a.hi) + (a.hc ? ']' : ')')).join(' ∪ ');
+}
+// เส้นจำนวนพร้อมแถบช่วง
+function numLine(A, o) {
+  o = o || {};
+  const lo = o.min !== undefined ? o.min : -6, hi = o.max !== undefined ? o.max : 6, W = 520, pad = 28, sx = x => pad + (x - lo) / (hi - lo) * (W - 2 * pad), y = 38;
+  let s = `<svg class="nl" viewBox="0 0 ${W} 76" xmlns="http://www.w3.org/2000/svg"><line class="pl-axis" x1="8" y1="${y}" x2="${W - 8}" y2="${y}"/><path class="pl-axis" d="M${W - 8} ${y} l-7 -4 m7 4 l-7 4" fill="none"/>`;
+  for (let t = Math.ceil(lo); t <= hi; t++) s += `<line class="pl-axis" x1="${sx(t)}" y1="${y - 4}" x2="${sx(t)}" y2="${y + 4}"/><text class="pl-tick" x="${sx(t)}" y="${y + 20}" text-anchor="middle">${mn(t)}</text>`;
+  const col = o.cls || 's-blue', fcol = col.replace('s-', 'f-');
+  A.forEach(a => {
+    const x1 = a.lo === -Infinity ? 8 : sx(a.lo), x2 = a.hi === Infinity ? W - 8 : sx(a.hi);
+    s += `<line class="pl-c ${col}" style="stroke-width:7" x1="${x1}" y1="${y - 14}" x2="${x2}" y2="${y - 14}"/>`;
+    if (a.lo !== -Infinity) s += `<circle class="${a.lc ? 'pl-dot ' + fcol : 'pl-open ' + col}" cx="${x1}" cy="${y - 14}" r="6"/>`;
+    if (a.hi !== Infinity) s += `<circle class="${a.hc ? 'pl-dot ' + fcol : 'pl-open ' + col}" cx="${x2}" cy="${y - 14}" r="6"/>`;
+  });
+  return s + '</svg>';
+}
+
+// ════════════════════════════════════════════════════════════════════════════
+//  ชุดของกลางสำหรับสื่อ "เห็นภาพ + ได้ลองทำ" (docs/media-design-guide.md) — ใช้ร่วมทั้ง 5 ชิ้น
+//  ไม่มีไลบรารีภายนอก: SVG + requestAnimationFrame + Promise (เปิดจาก file:// ได้)
+//
+//  1) makeAnimator()        ตัวคุมแอนิเมชัน: await A.run(ms, t => …) · await A.wait(ms) · A.kill()
+//  2) sv / svArrow / svChip ตัวช่วยสร้างองค์ประกอบ SVG (ลูกศรที่ยืด/เลื่อนปลายได้, "ชิปคู่อันดับ")
+//  3) makeScenes()          ตัวเล่นฉาก  ◀ ↻ ▶ + "ฉากที่ k / n"
+//  4) makePredict()         ทายก่อนเฉลย (เลือกข้อ → ภาพ → ทาย → ผล + เฉลยบนภาพ)
+//  5) plotPointer()         คลิก/ลากบน Plot ในพิกัดกราฟ (ดูดเข้าจุดจำนวนเต็ม)
+// ════════════════════════════════════════════════════════════════════════════
+
+// ───────── 1) แอนิเมชัน ─────────
+const EASE = {
+  lin: t => t,
+  out: t => 1 - Math.pow(1 - t, 3),
+  inOut: t => t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2,
+  back: t => { const c = 1.70158; return 1 + (c + 1) * Math.pow(t - 1, 3) + c * Math.pow(t - 1, 2); }   // เกินนิดแล้วเด้งกลับ (ใช้ "เด้งขึ้น")
+};
+const lerp = (a, b, t) => a + (b - a) * t;
+const reducedMotion = () => { try { return window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) { return false; } };
+// makeAnimator() → A  (ใช้ 1 ตัวต่อ 1 การเล่น พอ A.kill() ทุกอย่างที่ค้างอยู่หยุดทันทีและ Promise ที่รอไม่คืนค่าอีก)
+//   await A.run(ms, t => {…}, ease?)   เรียก fn(t) ทุกเฟรม t = 0→1 (ผ่าน ease, ค่าเริ่ม inOut) ; เฟรมสุดท้ายได้ t = 1 พอดี
+//   await A.wait(ms)                   หน่วงเวลา
+//   await Promise.all([A.run(…), A.run(…)])   เล่นพร้อมกัน
+function makeAnimator() {
+  const A = { dead: false };
+  A.run = (ms, fn, ease) => new Promise(res => {
+    if (A.dead) return;
+    const e = ease || EASE.inOut, t0 = performance.now();
+    const step = now => { if (A.dead) return; const t = Math.max(0, Math.min(1, (now - t0) / ms)); fn(Math.max(0, e(t))); if (t < 1) requestAnimationFrame(step); else res(); };   // (now ของ rAF อาจน้อยกว่า t0 นิดหน่อย → ตรึง t และค่า ease ไม่ให้ติดลบ)
+    requestAnimationFrame(step);
+  });
+  A.wait = ms => new Promise(res => setTimeout(() => { if (!A.dead) res(); }, ms));
+  A.kill = () => { A.dead = true; };
+  return A;
+}
+
+// ───────── 2) ตัวช่วย SVG ─────────
+const SVGNS = 'http://www.w3.org/2000/svg';
+// sv('rect', {x:1, …, text:'ข้อความ'}, parent?) — attrs.text = textContent
+function sv(tag, attrs, parent) {
+  const e = document.createElementNS(SVGNS, tag);
+  for (const k in (attrs || {})) { if (k === 'text') e.textContent = attrs[k]; else e.setAttribute(k, attrs[k]); }
+  if (parent) parent.appendChild(e);
+  return e;
+}
+// ลูกศรที่ "ยืด" ได้: a = svArrow(parent, 'red'?) ; a.set(x1, y1, x2, y2, p) วาดลูกศรไปถึง p ของความยาว (p 0→1 = เส้นพุ่งออก, p<0.04 = ซ่อน)
+//   เปลี่ยนสี: a.cls('red' | 'green' | 'muted' | '') · เลื่อนปลายลูกศร = เรียก set ซ้ำด้วย y2 ที่ค่อยๆ เปลี่ยน
+function svArrow(parent, cls) {
+  const g = sv('g', { class: 'sc-arr ' + (cls || '') }, parent), line = sv('line', {}, g), head = sv('polygon', {}, g);
+  const a = { g, line, head };
+  a.cls = c => { g.setAttribute('class', 'sc-arr ' + (c || '')); return a; };
+  a.set = (x1, y1, x2, y2, p) => {
+    p = p === undefined ? 1 : p;
+    const dx = x2 - x1, dy = y2 - y1, L = Math.hypot(dx, dy) || 1, ux = dx / L, uy = dy / L, tx = x1 + dx * p, ty = y1 + dy * p, hl = Math.min(11, L * p);
+    g.style.display = p < 0.04 ? 'none' : '';
+    line.setAttribute('x1', x1); line.setAttribute('y1', y1);
+    line.setAttribute('x2', (tx - ux * hl * .8).toFixed(2)); line.setAttribute('y2', (ty - uy * hl * .8).toFixed(2));
+    const bx = tx - ux * hl, by = ty - uy * hl, nx = -uy * hl * .42, ny = ux * hl * .42;
+    head.setAttribute('points', `${tx.toFixed(2)},${ty.toFixed(2)} ${(bx + nx).toFixed(2)},${(by + ny).toFixed(2)} ${(bx - nx).toFixed(2)},${(by - ny).toFixed(2)}`);
+    return a;
+  };
+  return a;
+}
+// "ชิปคู่อันดับ" ใน SVG: c = svChip(parent, '(1, a)', 'sel'?) ; c.at(x, y, scale, opacity) วางที่จุดกึ่งกลาง ; c.cls('sel' | 'dim' | '')
+function svChip(parent, text, cls, w, h) {
+  w = w || 70; h = h || 30;
+  const g = sv('g', { class: 'sc-chip ' + (cls || '') }, parent);
+  sv('rect', { x: -w / 2, y: -h / 2, width: w, height: h, rx: h / 2 }, g);
+  sv('text', { x: 0, y: 6, 'text-anchor': 'middle', text }, g);
+  const c = { g, w, h };
+  c.at = (x, y, s, o) => { g.setAttribute('transform', `translate(${(+x).toFixed(2)} ${(+y).toFixed(2)}) scale(${s === undefined ? 1 : s})`); g.style.opacity = o === undefined ? 1 : o; g.style.display = o === 0 ? 'none' : ''; return c; };
+  c.cls = k => { g.setAttribute('class', 'sc-chip ' + (k || '')); return c; };
+  return c;
+}
+
+// ───────── 3) ตัวเล่นฉาก ─────────
+// makeScenes(host, scenes, o) → w            o = { prompt: T|html  (คำโปรย ≤ 1 บรรทัด เหนือภาพ) }
+//   scene = {
+//     cap:  T(th, en) | html | () => html     คำบรรยาย/เหตุผล — ขึ้นใต้ปุ่มทันทีที่กด ▶ ของฉากนี้ (เหตุผลยาวอยู่ที่นี่เท่านั้น)
+//     end:  S => {}                           วาด "สภาพจบฉาก" ลง S.el (ที่ว่างเปล่า) ทันที ไม่มีแอนิเมชัน — ใช้ตอนย้อน/ข้าม/เปลี่ยนภาษา/ลดการเคลื่อนไหว
+//     play: async S => {}   (ไม่บังคับ)       เล่นแอนิเมชัน: ตอนเรียก S.el มีภาพ "จบฉากก่อนหน้า" วาดไว้แล้ว (ฉากแรก = ว่าง; อยากเริ่มจากภาพอื่นก็ล้าง S.el แล้ววาดเอง)
+//                                            ใช้ await S.anim.run(ms, t => …) / await S.anim.wait(ms) · จบแล้วผู้เล่นวาด end(S) ซ้ำให้อัตโนมัติ (ต้องหน้าตาเหมือนจุดจบของ play)
+//   }
+//   S = { el, k, anim (makeAnimator), reduced }   แอนิเมชันถูกตัดด้วย anim.kill() เสมอเมื่อ ▶ / ◀ / ↻ / เปลี่ยนภาษา — end() ต้องวาดจากศูนย์ได้เองโดยไม่พึ่งผลของ play
+//   พฤติกรรม: เปิดมาที่ฉาก 1 ในสภาพจบ (ภาพมาก่อน) · ↻ เล่นฉากนี้ซ้ำ · ◀ วาดจบฉากก่อนหน้าทันที ·
+//             ▶ ระหว่างแอนิเมชัน = กระโดดไปจบฉากนั้นก่อน (กดอีกครั้งถึงไปฉากถัดไป) · prefers-reduced-motion = ไม่เล่น แสดงภาพจบทันที
+//   w.k = ฉากปัจจุบัน (0-based) · w.go(k, play) · w.refresh() (ลงทะเบียนใน LIVE แล้ว — เปลี่ยนภาษากลางฉากไม่รีเซ็ต)
+function makeScenes(host, scenes, o) {
+  o = o || {};
+  const w = { k: 0, playing: false, anim: null };
+  host.innerHTML = '<div class="sc-prompt"></div><div class="sc-stage"></div><div class="wg-nav sc-nav"><button class="btn ghost sc-prev"></button><button class="btn ghost sc-rep"></button><span class="wg-cnt"></span><button class="btn sc-next"></button></div><div class="wg-cap sc-cap"></div>';
+  const q = s => host.querySelector(s), stage = q('.sc-stage'), cap = q('.sc-cap'), prev = q('.sc-prev'), rep = q('.sc-rep'), next = q('.sc-next'), cnt = q('.wg-cnt'), pr = q('.sc-prompt');
+  const mkS = (k, anim) => ({ el: stage, k, anim, reduced: reducedMotion() });
+  const drawEnd = k => { stage.innerHTML = ''; scenes[k].end(mkS(k, null)); };
+  const capOf = sc => typeof sc.cap === 'function' ? sc.cap() : tx(sc.cap);
+  const paint = fresh => {
+    pr.innerHTML = o.prompt ? tx(o.prompt) : ''; pr.style.display = o.prompt ? '' : 'none';
+    cap.innerHTML = capOf(scenes[w.k]);
+    if (fresh) { cap.classList.remove('fresh'); void cap.offsetWidth; cap.classList.add('fresh'); }
+    cnt.textContent = (EN() ? 'Scene ' : 'ฉากที่ ') + (w.k + 1) + ' / ' + scenes.length;
+    prev.textContent = '◀ ' + (EN() ? 'Back' : 'ย้อน'); rep.textContent = '↻ ' + (EN() ? 'Replay' : 'เล่นซ้ำ'); next.textContent = (EN() ? 'Next' : 'ถัดไป') + ' ▶';
+    prev.disabled = w.k === 0; next.disabled = w.k >= scenes.length - 1 && !w.playing;
+  };
+  const stop = () => { if (w.anim) w.anim.kill(); w.anim = null; w.playing = false; };
+  w.go = (k, play) => {
+    stop(); w.k = Math.max(0, Math.min(scenes.length - 1, k));
+    const sc = scenes[w.k];
+    if (play && sc.play && !reducedMotion()) {
+      const anim = makeAnimator(), kk = w.k; w.anim = anim; w.playing = true;
+      stage.innerHTML = ''; if (kk > 0) scenes[kk - 1].end(mkS(kk, anim));
+      paint(true);
+      Promise.resolve().then(() => sc.play(mkS(kk, anim))).catch(e => console.error(e)).then(() => { if (w.anim === anim && !anim.dead) { stop(); drawEnd(kk); paint(false); } });
+    } else { drawEnd(w.k); paint(!!play); }
+  };
+  const finish = () => { stop(); drawEnd(w.k); paint(false); };
+  prev.onclick = () => w.go(w.k - 1, false);
+  rep.onclick = () => w.go(w.k, true);
+  next.onclick = () => { if (w.playing) finish(); else w.go(w.k + 1, true); };
+  w.refresh = () => { if (w.playing) finish(); else { drawEnd(w.k); paint(false); } };
+  LIVE.push(w); w.go(0, false);
+  return w;
+}
+
+// ───────── 4) ทายก่อนเฉลย ─────────
+// makePredict(host, items, o) → w           o = { label: T (หัวแถวชิป), prompt: T|html (คำโปรย ≤ 1 บรรทัดเหนือภาพ) }
+//   item = {
+//     chip: T|html                            ข้อความบนชิปเลือกข้อ (ห้ามบอกคำตอบ)
+//     draw: (el, ctx) => {}                   วาด "ภาพ" ลง el (ล้างแล้วก่อนเรียก) — เรียกตอนเลือกข้อ (ยังไม่มีคำตัดสิน) และเรียกซ้ำทุกครั้งที่มีการทาย/เปลี่ยนภาษา
+//                                             ภาพเป็นฟังก์ชันของสถานะ: อ่าน ctx.done[i] (ข้อ i ถูกทายแล้ว) ctx.ok[i] (ทายถูก) ctx.picks[i] แล้วไฮไลต์เหตุผลเฉพาะข้อที่ทายแล้ว
+//                                             ctx.animate = true เมื่อเรียกเพราะ "เพิ่งทายข้อ ctx.last" (เล่นแอนิเมชันเฉลยได้ด้วย await ctx.anim.run(…)) · false = วาดนิ่งๆ (เปลี่ยนภาษา/รีเฟรช)
+//                                             ctx.data = วัตถุว่างที่เก็บสถานะภายในของภาพ (เช่น ตำแหน่งตัวเลื่อน) คงอยู่ตลอดข้อนี้ · ctx.anim = makeAnimator ของการวาดรอบนี้ (ถูก kill เมื่อวาดรอบถัดไป)
+//     qs: [{ q: T|html (คำถาม), o: [T|html…] ตัวเลือก (เรียงตามที่ต้องการ), a: index คำตอบถูก, why: T|html|(ctx)=>… เหตุผล (ขึ้นหลังทายเท่านั้น) }]   ← ถามได้หลายข้อต่อภาพ
+//   }
+//   ไม่นับคะแนน · กดชิปข้อเดิมซ้ำ = ล้างคำตอบเริ่มใหม่ · ลงทะเบียน LIVE แล้ว (เปลี่ยนภาษาแล้วคำตอบยังอยู่)
+function makePredict(host, items, o) {
+  o = o || {};
+  const w = { cur: 0, st: null, anim: null };
+  host.innerHTML = '<div class="chips pr-chips"></div><div class="sc-prompt"></div><div class="pr-stage"></div><div class="pr-qs"></div>';
+  const chips = host.querySelector('.pr-chips'), pr = host.querySelector('.sc-prompt'), stage = host.querySelector('.pr-stage'), qbox = host.querySelector('.pr-qs');
+  const fresh = i => ({ i, picks: items[i].qs.map(() => null), data: {} });
+  const ctxOf = last => {
+    const st = w.st, it = items[st.i];
+    return { picks: st.picks.slice(), done: st.picks.map(p => p !== null), ok: st.picks.map((p, k) => p !== null && p === it.qs[k].a), last, animate: last !== undefined && !reducedMotion(), anim: w.anim, data: st.data, item: st.i };
+  };
+  const drawStage = last => {
+    if (w.anim) w.anim.kill(); w.anim = makeAnimator();
+    stage.innerHTML = '';
+    const ctx = ctxOf(last);
+    Promise.resolve().then(() => items[w.st.i].draw(stage, ctx)).catch(e => console.error(e));
+  };
+  const paintQs = () => {
+    const st = w.st, it = items[st.i];
+    qbox.innerHTML = it.qs.map((qq, k) => `<div class="pr-q" data-k="${k}"><div class="quiz-q">${tx(qq.q)}</div><div class="quiz-opts">${qq.o.map((op, j) => `<button class="quiz-opt" data-j="${j}">${tx(op)}</button>`).join('')}</div><div class="pr-res"></div></div>`).join('');
+    it.qs.forEach((qq, k) => {
+      const box = qbox.children[k], p = st.picks[k];
+      box.querySelectorAll('.quiz-opt').forEach(b => { b.onclick = () => answer(k, +b.dataset.j); });
+      if (p === null) return;
+      box.querySelectorAll('.quiz-opt').forEach((b, j) => { if (j === qq.a) b.classList.add('correct'); else if (j === p) b.classList.add('wrong'); b.style.pointerEvents = 'none'; });
+      const ok = p === qq.a, why = typeof qq.why === 'function' ? qq.why(ctxOf()) : tx(qq.why);
+      box.querySelector('.pr-res').innerHTML = `<div class="verdict ${ok ? 'ok' : 'no'}"><span class="mk">${ok ? '✓' : '✗'}</span><div>${ok ? (EN() ? 'Correct! ' : 'ทายถูก! ') : (EN() ? 'Not quite — ' : 'ยังไม่ใช่ — ')}${why}</div></div>`;
+    });
+  };
+  const answer = (k, j) => { if (w.st.picks[k] !== null) return; w.st.picks[k] = j; paintQs(); drawStage(k); };
+  const paint = () => {
+    chips.innerHTML = (o.label ? `<span class="chips-label">${tx(o.label)}</span>` : '') + items.map((it, i) => `<button class="chip${i === w.cur ? ' active' : ''}" data-i="${i}">${tx(it.chip)}</button>`).join('');
+    chips.querySelectorAll('.chip').forEach(c => c.onclick = () => select(+c.dataset.i));
+    pr.innerHTML = o.prompt ? tx(o.prompt) : ''; pr.style.display = o.prompt ? '' : 'none';
+  };
+  const select = i => { w.cur = i; w.st = fresh(i); paint(); paintQs(); drawStage(); };
+  w.refresh = () => { paint(); paintQs(); drawStage(); };
+  LIVE.push(w); select(0);
+  return w;
+}
+
+// ───────── 5) คลิก/ลากบน Plot ─────────
+// plotPointer(svgEl, plot, o) → { toPt }       เรียกหลังใส่ plot.svg() ลง DOM ทุกครั้ง (svg ถูกสร้างใหม่ทุกครั้งที่วาดซ้ำ)
+//   o = { snap: 1 (ระยะดูดเป็นหน่วยกราฟ · 0 = ไม่ดูด) , clamp: true (ตรึงให้อยู่ในกราฟ) ,
+//         onDown(pt, e), onDrag(pt, e) (ระหว่างกดค้างลาก), onUp(pt, e), onClick(pt, e) (กด-ปล่อยโดยแทบไม่ขยับ = คลิก), onHover(pt, e) (เมาส์เคลื่อนโดยไม่กด),
+//         onLeave(e) (เมาส์ออกจากกราฟ), touchAction: 'none' (ค่าเริ่ม ใช้กับการลาก) | 'pan-y' (แตะอย่างเดียว ให้นิ้วเลื่อนหน้าผ่านกราฟได้) }
+//   ⚠️ ถ้าต้องลากต่อเนื่อง อย่าสร้าง svg ใหม่ระหว่างลาก (pointer capture จะหลุด) — วาดส่วนที่ขยับลงใน <g> ภายใน svg เดิม
+//   pt = { x, y (พิกัดกราฟที่ดูดแล้ว), rx, ry (ก่อนดูด), px, py (พิกัด SVG), inside (อยู่ในกรอบกราฟไหม) }
+//   ใช้ Pointer Events (เมาส์ + นิ้ว), svg.style.touchAction = 'none', แปลงพิกัดจอ→กราฟด้วย getScreenCTM
+function plotPointer(svg, plot, o) {
+  o = o || {};
+  const snap = o.snap === undefined ? 1 : o.snap;
+  svg.style.touchAction = o.touchAction || 'none';
+  svg.style.userSelect = 'none'; svg.style.webkitUserSelect = 'none';   // ลากแล้วไม่ให้ตัวหนังสือในกราฟถูกเลือก
+  const toPt = e => {
+    const m = svg.getScreenCTM(); if (!m) return null;
+    const p = svg.createSVGPoint(); p.x = e.clientX; p.y = e.clientY;
+    const s = p.matrixTransform(m.inverse());
+    const rx = plot.ix(s.x), ry = plot.iy(s.y), sn = v => snap ? Math.round(v / snap) * snap : v;
+    let x = sn(rx), y = sn(ry);
+    const inside = rx >= plot.xmin - .01 && rx <= plot.xmax + .01 && ry >= plot.ymin - .01 && ry <= plot.ymax + .01;
+    if (o.clamp !== false) { x = Math.min(plot.xmax, Math.max(plot.xmin, x)); y = Math.min(plot.ymax, Math.max(plot.ymin, y)); }
+    return { x: +x.toFixed(6) + 0, y: +y.toFixed(6) + 0, rx, ry, px: s.x, py: s.y, inside };
+  };
+  let down = null;
+  svg.addEventListener('pointerdown', e => {
+    if (e.pointerType === 'mouse' && e.button !== 0) return;
+    down = { x: e.clientX, y: e.clientY, moved: false };
+    try { svg.setPointerCapture(e.pointerId); } catch (err) {}
+    const p = toPt(e); if (p && o.onDown) o.onDown(p, e);
+  });
+  svg.addEventListener('pointermove', e => {
+    const p = toPt(e); if (!p) return;
+    if (down) { if (Math.hypot(e.clientX - down.x, e.clientY - down.y) > 6) down.moved = true; if (o.onDrag) o.onDrag(p, e); }
+    else if (o.onHover) o.onHover(p, e);
+  });
+  svg.addEventListener('pointerup', e => {
+    if (!down) return; const was = down; down = null;
+    const p = toPt(e); if (!p) return;
+    if (o.onUp) o.onUp(p, e);
+    if (!was.moved && o.onClick) o.onClick(p, e);
+  });
+  svg.addEventListener('pointercancel', () => { down = null; });
+  svg.addEventListener('pointerleave', e => { if (!down && o.onLeave) o.onLeave(e); });
+  return { toPt };
+}
+
+
+// ══════════════ กราฟของฟังก์ชัน ══════════════
+// ภาพมาก่อน · ลากจุดบนกราฟ (plotPointer) · ฉากเล่าเรื่อง (makeScenes) · ทายก่อนเฉลย (makePredict) · เกม — ดู docs/media-design-guide.md §3 ⑤
+const I = s => `<i>${s}</i>`;
+const X = I('x'), Y = I('y');
+const INF = Infinity, iv = (lo, hi, lc, hc) => IV(lo, hi, lc, hc);
+// เศษส่วนอย่างต่ำ
+function fr(n, dd) {
+  if (dd < 0) { n = -n; dd = -dd; }
+  const g = gcd(Math.abs(n), dd) || 1; n /= g; dd /= g;
+  return dd === 1 ? mn(n) : (n < 0 ? '−' : '') + frac(Math.abs(n), dd);
+}
+const par = v => v < 0 ? '(' + mn(v) + ')' : String(v);          // ใส่วงเล็บเมื่อเป็นลบ
+const brk = v => '(' + mn(v) + ')';                               // ใส่วงเล็บเสมอ (ใช้แทน x ในสูตร)
+const r1 = v => Math.round(v * 10) / 10;
+
+// ───────── ตัวช่วยกราฟที่ลาก/คลิกได้ ─────────
+// plotPointer ผูกกับ <svg> ตัวเดียว — ถ้าสร้าง svg ใหม่ระหว่างลากจะหลุดการจับเมาส์ จึงแยกเป็น "ชั้นนิ่ง" (ตาข่าย/เส้นโค้ง) กับ "ชั้นขยับ" (dyn)
+// ตอนลากแก้เฉพาะชั้น dyn (innerHTML ของ <g>) ไม่แตะ svg
+function mkPlot(o) { const p = new Plot(o); p.opt = o; return p; }
+// สร้างองค์ประกอบของชั้น dyn ด้วย Plot ตัวชั่วคราวที่พิกัดเท่าเดิม (ใช้ id คลิปเดียวกัน)
+function dynSvg(plot, fn) { const p2 = new Plot(plot.opt); p2.id = plot.id; fn(p2); return p2.back.join('') + p2.front.join(''); }
+function mountPlot(host, plot) {
+  host.innerHTML = plot.svg();
+  const svg = host.querySelector('svg'), g = document.createElementNS(SVGNS, 'g');
+  svg.appendChild(g); svg.style.userSelect = 'none'; svg.style.webkitUserSelect = 'none';
+  return { svg, dyn: g };
+}
+// จุดที่จับลากได้ (เคอร์เซอร์มือ) — วางในชั้น dyn
+const handle = (p, x, y, cls, r) => p.raw(`<circle class="pl-dot ${cls}" cx="${p.X(x)}" cy="${p.Y(y)}" r="${r || 8}" style="cursor:grab"/>`, true);
+const plabel = (p, x, y, cls, txt) => { const right = p.X(x) > p.w * 0.62; p.text(x, y, txt, cls, right ? 'end' : 'start', right ? -11 : 11, -10); };
+
+// ───────── แท็บ 1: เส้นตรง ─────────
+// (ก) y = mx + c — ตัวเลื่อน m, c (ภาพขึ้นก่อน)
+function makeLine1(host) {
+  const w = { m: 2, c: -1 };
+  host.innerHTML = '<div class="sc-prompt"></div><div class="plhost"></div><div class="wg-eq le"></div><div class="two"><div>' + sliderRow('m =', 'lm', -4, 4, 0.5, 2) + sliderRow('c =', 'lc', -6, 6, 1, -1) + '</div></div><div class="wg-cap"></div>';
+  const sm = host.querySelector('#lm'), sc = host.querySelector('#lc');
+  w.render = () => {
+    const { m, c } = w;
+    host.querySelector('.sc-prompt').innerHTML = tx(T('ลากแถบ m และ c — ดูเส้นตรงเปลี่ยนตาม', 'Drag the m and c bars — watch the line follow'));
+    host.querySelector('#lmv').textContent = mn(m); host.querySelector('#lcv').textContent = mn(c);
+    host.querySelector('.le').innerHTML = `${Y} = ${m === 0 ? '' : (m === 1 ? '' : m === -1 ? '−' : mn(m)) + X}${m === 0 ? mn(c) : c === 0 ? '' : c > 0 ? ' + ' + c : ' − ' + (-c)}`;
+    const pl = mkPlot({ w: 460, h: 400, xmin: -8, xmax: 8, ymin: -8, ymax: 8, pad: 28, lx: 2, ly: 2 });
+    pl.path(x => m * x + c, 's-blue', { n: 160 });
+    pl.dot(0, c, 'f-pink', false, 6);
+    pl.dash(0, c, 1, c, 's-green'); pl.dash(1, c, 1, c + m, 's-green');
+    if (m !== 0) pl.dot(-c / m, 0, 'f-orange', false, 6);
+    pl.text(0.5, c, '1', 'g', 'middle', 0, 16); pl.text(1, c + m / 2, num(m), 'g', 'start', 8, 4);
+    host.querySelector('.plhost').innerHTML = pl.svg();
+    host.querySelector('.wg-cap').innerHTML = tx(T(`<b>m = ความชัน</b> = ${num(m)} (${m === 0 ? 'กราฟราบเป็นเส้นนอน' : `ไปทางขวา 1 หน่วย กราฟ${m > 0 ? 'ขึ้น' : 'ลง'} ${num(Math.abs(m))} หน่วย`}) · <b>จุดตัดแกน y</b> = (0, ${num(c)}) (จุดชมพู) · <b>จุดตัดแกน x</b> = ${m === 0 ? (c === 0 ? 'ทับแกน x ทั้งเส้น' : 'ไม่มี (ขนานแกน x)') : `(${num(-c / m)}, 0) (จุดส้ม แก้ mx + c = 0)`}`,
+      `<b>m = slope</b> = ${num(m)} (${m === 0 ? 'the graph is level, a horizontal line' : `1 unit right, the graph ${m > 0 ? 'rises' : 'falls'} ${num(Math.abs(m))}`}) · <b>y-intercept</b> = (0, ${num(c)}) (pink) · <b>x-intercept</b> = ${m === 0 ? (c === 0 ? 'the whole line lies on the x-axis' : 'none (parallel to the x-axis)') : `(${num(-c / m)}, 0) (orange, from mx + c = 0)`}`));
+  };
+  sm.oninput = () => { w.m = +sm.value; w.render(); }; sc.oninput = () => { w.c = +sc.value; w.render(); };
+  w.refresh = () => w.render();
+  LIVE.push(w); w.render();
+}
+
+// (ข) ทายความชันก่อน แล้วค่อยเปิดสามเหลี่ยมความชัน
+const SLOPES = [
+  { p: [0, -1], q: [2, 2], o: [fr(3, 2), fr(2, 3), '3', fr(-3, 2)], a: 0 },
+  { p: [-2, 3], q: [2, 1], o: [fr(1, 2), fr(-1, 2), '2', '−2'], a: 1 },
+  { p: [-1, -3], q: [1, 3], o: ['−3', '2', '3', fr(1, 3)], a: 2 },
+  { p: [-3, 2], q: [3, 2], o: ['2', '0', '1', T('ไม่มีความชัน', 'No slope')], a: 1 },
+  { p: [2, -2], q: [2, 3], o: ['0', '5', '1', T('ไม่มีความชัน', 'No slope')], a: 3 }
+];
+function slopeItem(s, n) {
+  const [x1, y1] = s.p, [x2, y2] = s.q, dx = x2 - x1, dy = y2 - y1, vert = dx === 0;
+  const m = vert ? 0 : dy / dx, c = y1 - m * x1;
+  const draw = async (el, ctx) => {
+    const done = ctx.done[0];
+    const paint = t => {
+      const pl = mkPlot({ w: 460, h: 360, xmin: -6, xmax: 6, ymin: -6, ymax: 6, pad: 28, lx: 2, ly: 2 });
+      if (vert) pl.line(x1, -20, x1, 20, 's-blue pl-c'); else pl.path(x => m * x + c, 's-blue', { n: 160 });
+      if (done) {
+        const th = Math.min(1, t * 2), tv = Math.max(0, t * 2 - 1);
+        pl.dash(x1, y1, x1 + dx * th, y1, 's-green'); pl.dash(x2, y1, x2, y1 + dy * tv, 's-orange');
+        if (t > 0.98) {
+          pl.text((x1 + x2) / 2, y1, `Δx = ${mn(dx)}`, 'g', 'middle', 0, dy >= 0 ? 18 : -8);
+          pl.text(x2, (y1 + y2) / 2, `Δy = ${mn(dy)}`, 'o', 'start', 8, 4);
+        }
+      }
+      pl.dot(x1, y1, 'f-pink', false, 6.5); pl.dot(x2, y2, 'f-orange', false, 6.5);
+      pl.text(x1, y1, `(${mn(x1)}, ${mn(y1)})`, 'p', 'end', -10, -10); pl.text(x2, y2, `(${mn(x2)}, ${mn(y2)})`, 'o', 'start', 10, -10);
+      el.innerHTML = pl.svg();
+    };
+    if (done && ctx.animate) await ctx.anim.run(1100, paint, EASE.lin); else paint(1);
+  };
+  const eq = vert ? '' : `m = ${frac('y₂ − y₁', 'x₂ − x₁')} = ${frac(`${par(y2)} − ${par(y1)}`, `${par(x2)} − ${par(x1)}`)} = ${frac(mn(dy), mn(dx))} = ${ans(fr(dy, dx))}`;
+  const why = vert
+    ? T('สามเหลี่ยมไม่มีด้านนอน: <b>Δx = 0</b> → m = Δy/0 หารด้วย 0 ไม่ได้ จึง<b>ไม่มีความชัน</b> (เส้นตั้ง)', 'The triangle has no run: <b>Δx = 0</b> → m = Δy/0 cannot be divided, so there is <b>no slope</b> (a vertical line).')
+    : T(`เดินไปทางขวา ${dx} หน่วย (ประเขียว) แล้ว${dy > 0 ? 'ขึ้น' : dy < 0 ? 'ลง' : 'ไม่ขึ้นไม่ลง'}${dy !== 0 ? ' ' + Math.abs(dy) + ' หน่วย (ประส้ม)' : ''}<br>${eq}`, `Go ${dx} right (green dashes), then ${dy > 0 ? 'up ' + dy : dy < 0 ? 'down ' + Math.abs(dy) : 'no rise or fall'}${dy !== 0 ? ' (orange dashes)' : ''}<br>${eq}`);
+  return { chip: T('เส้นที่ ' + n, 'Line ' + n), draw, qs: [{ q: T('เส้นตรงนี้มีความชัน m เท่าไร?', 'What is the slope m of this line?'), o: s.o, a: s.a, why }] };
+}
+
+// (ค) ลากจุดสองจุดบนกราฟ (แทนตัวเลื่อน 4 ตัว) — สามเหลี่ยมความชันขยับสด
+function makeLine2(host) {
+  const w = { x1: -2, y1: -3, x2: 2, y2: 3, last: 2 };
+  host.innerHTML = '<div class="sc-prompt"></div><div class="plhost"></div><div class="formula lf"></div><div class="wk-list"></div>';
+  const q = s => host.querySelector(s);
+  let pl = null, dyn = null;
+  const rowsHtml = () => {
+    const { x1, y1, x2, y2 } = w, rows = [];
+    if (x1 === x2 && y1 === y2) rows.push(tx(T('จุดสองจุดเป็นจุดเดียวกัน — มีเส้นตรงผ่านได้หลายเส้น ลากจุดหนึ่งออกไป', 'The two points coincide — many lines pass through. Drag one away.')));
+    else if (x1 === x2) {
+      rows.push(`${tx(T('เส้นตั้ง', 'Vertical line'))}: ${X} = ${mn(x1)}`);
+      rows.push(`<span class="bad">${tx(T('ความชันหาไม่ได้ (หารด้วย 0) และ <b>ไม่เป็นฟังก์ชัน</b> เพราะ x เดียวได้หลาย y', 'Slope undefined (division by 0) and it is <b>not a function</b>: one x gives many y.'))}</span>`);
+    } else {
+      const dm = x2 - x1, nm = y2 - y1, m = nm / dm, cn = y1 * dm - nm * x1;
+      rows.push(`${Y} − ${par(y1)} = ${fr(nm, dm)}(${X} − ${par(x1)})`);
+      rows.push(`${Y} = ${m === 0 ? '' : (Math.abs(m) === 1 ? (m < 0 ? '−' : '') : fr(nm, dm)) + X}${m === 0 ? fr(cn, dm) : cn === 0 ? '' : (cn > 0 ? ' + ' : ' − ') + fr(Math.abs(cn), dm)}`);
+    }
+    return rows.map((r, i) => `<div class="wk-cell${i === rows.length - 1 ? ' final' : ''}">${rows.length > 1 || (w.x1 !== w.x2) ? `<span class="stepno">${i + 1}</span>` : ''}<div class="wk-eq">${r}</div></div>`).join('');
+  };
+  const upd = () => {
+    const { x1, y1, x2, y2 } = w;
+    dyn.innerHTML = dynSvg(pl, p => {
+      if (x1 === x2 && y1 !== y2) p.line(x1, -20, x1, 20, 's-red pl-c');
+      else if (x1 !== x2) {
+        const m = (y2 - y1) / (x2 - x1), c = y1 - m * x1;
+        p.path(x => m * x + c, 's-blue', { n: 160 });
+        p.dash(x1, y1, x2, y1, 's-green'); p.dash(x2, y1, x2, y2, 's-orange');
+        p.text((x1 + x2) / 2, y1, `Δx = ${mn(x2 - x1)}`, 'g', 'middle', 0, y2 >= y1 ? 18 : -8);
+        p.text(x2, (y1 + y2) / 2, `Δy = ${mn(y2 - y1)}`, 'o', x1 < x2 ? 'start' : 'end', x1 < x2 ? 9 : -9, 4);
+      }
+      handle(p, x1, y1, 'f-pink'); handle(p, x2, y2, 'f-orange');
+      plabel(p, x1, y1, 'p', `(${mn(x1)}, ${mn(y1)})`); plabel(p, x2, y2, 'o', `(${mn(x2)}, ${mn(y2)})`);
+    });
+    const vert = x1 === x2, same = vert && y1 === y2, base = `m = ${frac('y₂ − y₁', 'x₂ − x₁')}`;
+    q('.lf').innerHTML = same ? `<span>${base}</span>` : vert
+      ? `<span>${base} = ${frac(mn(y2 - y1), 0)} = <span class="fm-n">${tx(T('หาไม่ได้', 'undefined'))}</span></span>`
+      : `<span>${base} = ${frac(`${par(y2)} − ${par(y1)}`, `${par(x2)} − ${par(x1)}`)} = ${frac(mn(y2 - y1), mn(x2 - x1))} = <span class="fm-n">${fr(y2 - y1, x2 - x1)}</span></span>`;
+    q('.wk-list').innerHTML = rowsHtml();
+  };
+  const move = pt => { const k = w.drag; if (!k) return; w['x' + k] = pt.x; w['y' + k] = pt.y; w.last = k; upd(); };
+  w.render = () => {
+    q('.sc-prompt').innerHTML = tx(T('ลากจุดชมพูและจุดส้มบนกราฟ — สามเหลี่ยมความชันขยับตาม', 'Drag the pink and orange points on the graph — the slope triangle follows'));
+    pl = mkPlot({ w: 460, h: 380, xmin: -8, xmax: 8, ymin: -8, ymax: 8, pad: 28, lx: 2, ly: 2 });
+    const m = mountPlot(q('.plhost'), pl); dyn = m.dyn;
+    plotPointer(m.svg, pl, {
+      snap: 1,
+      onDown: pt => { const d1 = Math.hypot(pt.px - pl.X(w.x1), pt.py - pl.Y(w.y1)), d2 = Math.hypot(pt.px - pl.X(w.x2), pt.py - pl.Y(w.y2)); w.drag = d1 < d2 ? 1 : d2 < d1 ? 2 : w.last; move(pt); },
+      onDrag: move, onUp: () => { w.drag = 0; }
+    });
+    upd();
+  };
+  w.refresh = () => w.render();
+  LIVE.push(w); w.render();
+}
+
+// ───────── แท็บ 2: พาราโบลา ─────────
+// (ก) เกมจิ้มจุดยอด — โจทย์ y = ax² + bx + c → คลิกจุดยอดที่คิด → ฉากเฉลย h → k → กราฟวาดตัวเอง
+const PARQ = [[1, -4, 1], [-1, 6, -5], [2, -8, 3], [1, 2, -3], [-2, -4, 1], [-1, -6, -4]].map(([a, b, c]) => ({ a, b, c, h: -b / (2 * a), k: (4 * a * c - b * b) / (4 * a) }));
+const vgPlot = () => mkPlot({ w: 480, h: 420, xmin: -8, xmax: 8, ymin: -10, ymax: 10, pad: 28, lx: 2, ly: 2 });
+function vgFrame(q, g, o) {
+  const pl = vgPlot(), f = x => q.a * x * x + q.b * x + q.c;
+  if (o.ax > 0) pl.dash(q.h, pl.ymax, q.h, pl.ymax - o.ax * (pl.ymax - pl.ymin), 's-muted');
+  if (o.curve > 0) { const sp = 16 * o.curve; pl.path(f, 's-blue', { x0: Math.max(pl.xmin, q.h - sp), x1: Math.min(pl.xmax, q.h + sp), n: 400 }); }
+  if (o.link && g && (g[0] !== q.h || g[1] !== q.k)) pl.dash(g[0], g[1], q.h, q.k, 's-red');
+  if (g) { pl.dot(g[0], g[1], 'f-pink', false, 6.5); pl.text(pl.xmin + 0.3, pl.ymax - 0.8, '● ' + tx(T('จุดที่คุณจิ้ม', 'your tap')), 'p', 'start'); }
+  if (o.vy > 0) {
+    pl.dot(q.h, lerp(pl.ymax, q.k, o.vy), 'f-red', false, 7);
+    if (o.vy >= 1) pl.text(q.h, q.k, `(${num(q.h)}, ${num(q.k)})`, 'r', 'start', 10, q.a > 0 ? 20 : -10);
+  }
+  return pl.svg();
+}
+function makeVertexGame(host) {
+  const w = { cur: 0, s: PARQ.map(() => ({ g: null, done: false })) };
+  host.innerHTML = '<div class="chips vg-chips"></div><div class="sc-prompt"></div><div class="wg-eq vg-eq"></div><div class="vg-play"><div class="plhost"></div><div class="vg-stat" style="text-align:center;font-weight:700;min-height:1.7em"></div><div class="wg-nav"><button class="btn vg-ok"></button></div></div><div class="vg-rev"><div class="vg-vd"></div><div class="vg-sc"></div><div class="wg-nav"><button class="btn ghost vg-again"></button></div></div>';
+  const q = s => host.querySelector(s), Q = () => PARQ[w.cur], S = () => w.s[w.cur];
+  let pl = null, dyn = null;
+  const sw = makeScenes(q('.vg-sc'), [
+    { cap: () => { const Z = Q(); return tx(T(`<b>① หา h</b> (แกนสมมาตร): h = ${frac('−b', '2a')} = ${frac(`−${par(Z.b)}`, `2(${par(Z.a)})`)} = ${frac(num(-Z.b), num(2 * Z.a))} = ${ans(num(Z.h))} → จุดยอดอยู่บนเส้นประ <i>x</i> = ${num(Z.h)}`, `<b>① Find h</b> (the axis): h = ${frac('−b', '2a')} = ${frac(`−${par(Z.b)}`, `2(${par(Z.a)})`)} = ${frac(num(-Z.b), num(2 * Z.a))} = ${ans(num(Z.h))} → the vertex lies on the dashed line <i>x</i> = ${num(Z.h)}`)); },
+      end: S => { S.el.innerHTML = vgFrame(Q(), S_g(), { ax: 1 }); },
+      play: async S => { await S.anim.run(900, t => { S.el.innerHTML = vgFrame(Q(), S_g(), { ax: t }); }, EASE.out); } },
+    { cap: () => { const Z = Q(); return tx(T(`<b>② หา k</b>: k = ${frac('4ac − b²', '4a')} = ${frac(`4(${par(Z.a)})(${par(Z.c)}) − ${brk(Z.b)}²`, `4(${par(Z.a)})`)} = ${frac(num(4 * Z.a * Z.c - Z.b * Z.b), num(4 * Z.a))} = ${ans(num(Z.k))} → จุดยอด (${num(Z.h)}, ${num(Z.k)})`, `<b>② Find k</b>: k = ${frac('4ac − b²', '4a')} = ${frac(`4(${par(Z.a)})(${par(Z.c)}) − ${brk(Z.b)}²`, `4(${par(Z.a)})`)} = ${frac(num(4 * Z.a * Z.c - Z.b * Z.b), num(4 * Z.a))} = ${ans(num(Z.k))} → vertex (${num(Z.h)}, ${num(Z.k)})`)); },
+      end: S => { S.el.innerHTML = vgFrame(Q(), S_g(), { ax: 1, vy: 1 }); },
+      play: async S => { await S.anim.run(1000, t => { S.el.innerHTML = vgFrame(Q(), S_g(), { ax: 1, vy: t }); }, EASE.inOut); } },
+    { cap: () => { const Z = Q(); return tx(T(`<b>③ กราฟวาดตัวเอง</b>: รูปมาตรฐาน ${Y} − ${par(Z.k)} = ${num(Z.a)}(${X} − ${par(Z.h)})² · เปิด${Z.a > 0 ? 'ขึ้น' : 'ลง'} (a ${Z.a > 0 ? '> 0' : '< 0'}) จึงมีค่า${Z.a > 0 ? 'ต่ำ' : 'สูง'}สุด ${Y} = ${num(Z.k)}`, `<b>③ The curve draws itself</b>: standard form ${Y} − ${par(Z.k)} = ${num(Z.a)}(${X} − ${par(Z.h)})² · opens ${Z.a > 0 ? 'upward' : 'downward'} (a ${Z.a > 0 ? '> 0' : '< 0'}) so the ${Z.a > 0 ? 'minimum' : 'maximum'} is ${Y} = ${num(Z.k)}`)); },
+      end: S => { S.el.innerHTML = vgFrame(Q(), S_g(), { ax: 1, vy: 1, curve: 1, link: true }); },
+      play: async S => { await S.anim.run(1600, t => { S.el.innerHTML = vgFrame(Q(), S_g(), { ax: 1, vy: 1, curve: t, link: t === 1 }); }, EASE.inOut); } }
+  ], { prompt: T('กด ▶ ทีละฉาก — ดูว่าจุดยอดหาได้อย่างไร', 'Press ▶ scene by scene — see how the vertex is found') });
+  function S_g() { return S().g; }
+  const verdict = () => {
+    const Z = Q(), g = S().g, hx = g[0] === Z.h, ky = g[1] === Z.k;
+    const [kind, th, en] = hx && ky ? ['ok', 'ตรงเป๊ะ! คุณจิ้มโดนจุดยอดพอดี', 'Spot on! You tapped exactly the vertex.']
+      : hx ? ['no', 'ได้ x ถูกแล้ว แต่ y ยังไม่ใช่ — ดูฉากเฉลยด้านล่าง', 'The x is right but the y is not — see the reveal below.']
+      : ky ? ['no', 'ได้ y ถูกแล้ว แต่ x ยังไม่ใช่ — ดูฉากเฉลยด้านล่าง', 'The y is right but the x is not — see the reveal below.']
+      : ['no', 'ยังไม่ตรง — ดูฉากเฉลยด้านล่างว่าหาจุดยอดอย่างไร', 'Not yet — see the reveal below for how to find the vertex.'];
+    q('.vg-vd').innerHTML = `<div class="verdict ${kind}"><span class="mk">${kind === 'ok' ? '✓' : '✗'}</span><div>${tx(T(th, en))}</div></div>`;
+  };
+  const updStat = () => {
+    const g = S().g;
+    q('.vg-stat').innerHTML = g ? tx(T(`จุดที่เลือก: (${mn(g[0])}, ${mn(g[1])})`, `Chosen point: (${mn(g[0])}, ${mn(g[1])})`)) : `<span style="color:var(--muted)">${tx(T('ยังไม่ได้เลือกจุด', 'No point chosen yet'))}</span>`;
+    q('.vg-ok').disabled = !g;
+  };
+  const updDyn = () => { const g = S().g; dyn.innerHTML = g ? dynSvg(pl, p => { handle(p, g[0], g[1], 'f-pink', 7.5); plabel(p, g[0], g[1], 'p', `(${mn(g[0])}, ${mn(g[1])})`); }) : ''; updStat(); };
+  const setG = pt => { if (!pt.inside) return; S().g = [pt.x, pt.y]; updDyn(); };
+  const view = () => {
+    const st = S();
+    q('.vg-play').style.display = st.done ? 'none' : ''; q('.vg-rev').style.display = st.done ? '' : 'none';
+    if (st.done) { verdict(); updStat(); } else { pl = vgPlot(); const m = mountPlot(q('.plhost'), pl); dyn = m.dyn; plotPointer(m.svg, pl, { snap: 1, onDown: setG, onDrag: setG }); updDyn(); }
+  };
+  w.render = () => {
+    q('.vg-chips').innerHTML = `<span class="chips-label">${tx(T('โจทย์', 'Problem'))}</span>` + PARQ.map((_, i) => `<button class="chip${i === w.cur ? ' active' : ''}" data-i="${i}">${tx(T('ข้อ ', 'Q'))}${i + 1}${w.s[i].done ? (w.s[i].g[0] === PARQ[i].h && w.s[i].g[1] === PARQ[i].k ? ' ✓' : ' ·') : ''}</button>`).join('');
+    q('.vg-chips').querySelectorAll('.chip').forEach(c => c.onclick = () => { w.cur = +c.dataset.i; w.render(); if (S().done) sw.go(2, false); });
+    q('.sc-prompt').innerHTML = tx(T('ดูสมการ แล้วแตะกราฟตรงที่คิดว่าเป็นจุดยอด (ลากปรับได้)', 'Read the equation, then tap the graph where you think the vertex is (drag to adjust)'));
+    const Z = Q();
+    q('.vg-eq').innerHTML = `${Y} = ${polyHtml([Z.c, Z.b, Z.a])}`;
+    q('.vg-ok').textContent = tx(T('ตกลง — ดูเฉลย ▶', 'Check — show the reveal ▶'));
+    q('.vg-again').textContent = tx(T('↺ ลองข้อนี้ใหม่', '↺ Try this one again'));
+    view();
+  };
+  q('.vg-ok').onclick = () => { if (!S().g) return; S().done = true; w.render(); sw.go(0, true); };
+  q('.vg-again').onclick = () => { w.s[w.cur] = { g: null, done: false }; w.render(); };
+  w.refresh = () => w.render();
+  LIVE.push(w); w.render();
+}
+
+// (ข) โหมดสำรวจ — ตัวเลื่อน a, b, c
+function makePara(host) {
+  const w = { a: 1, b: -4, c: 1 };
+  host.innerHTML = '<div class="sc-prompt"></div><div class="plhost"></div><div class="two"><div>' + sliderRow('a =', 'pa', -3, 3, 0.5, 1) + sliderRow('b =', 'pb', -8, 8, 1, -4) + sliderRow('c =', 'pc', -8, 8, 1, 1) + '</div><div class="wg-eq col pe"></div></div><div class="wg-cap"></div>';
+  const ids = ['a', 'b', 'c'];
+  w.render = () => {
+    host.querySelector('.sc-prompt').innerHTML = tx(T('ลากแถบ a, b, c — ดูจุดยอด (แดง) เคลื่อนตาม', 'Drag a, b, c — watch the vertex (red) move'));
+    ids.forEach(k => { host.querySelector('#p' + k + 'v').textContent = mn(w[k]); });
+    const { a, b, c } = w, h = -b / (2 * a), k = (4 * a * c - b * b) / (4 * a), D = b * b - 4 * a * c;
+    host.querySelector('.pe').innerHTML = `<div>${Y} = ${num(a) === '1' ? '' : num(a) === '−1' ? '−' : num(a)}${X}<sup>2</sup>${b === 0 ? '' : (b > 0 ? ' + ' : ' − ') + (Math.abs(b) === 1 ? '' : Math.abs(b)) + X}${c === 0 ? '' : (c > 0 ? ' + ' : ' − ') + Math.abs(c)}</div>`;
+    const pl = mkPlot({ w: 480, h: 420, xmin: -8, xmax: 8, ymin: -10, ymax: 10, pad: 28, lx: 2, ly: 2 });
+    pl.dash(h, -30, h, 30, 's-muted');
+    pl.path(x => a * x * x + b * x + c, 's-blue', { n: 500 });
+    pl.dot(h, k, 'f-red', false, 7); pl.dot(0, c, 'f-pink', false, 5.5);
+    if (D >= 0) { const r = Math.sqrt(D); [(-b + r) / (2 * a), (-b - r) / (2 * a)].forEach(x => pl.dot(x, 0, 'f-orange', false, 5.5)); }
+    pl.text(h, k, `(${num(h)}, ${num(k)})`, 'r', 'start', 10, a > 0 ? 20 : -10);
+    host.querySelector('.plhost').innerHTML = pl.svg();
+    host.querySelector('.wg-cap').innerHTML =
+      `<b>${tx(T('จุดยอด', 'Vertex'))}</b>: h = ${frac('−b', '2a')} = ${frac(num(-b), num(2 * a))} = <b>${num(h)}</b> &nbsp; k = ${frac('4ac − b²', '4a')} = ${frac(num(4 * a * c - b * b), num(4 * a))} = <b>${num(k)}</b><br>` +
+      tx(T(`เปิด${a > 0 ? 'ขึ้น' : 'ลง'} (a ${a > 0 ? '> 0' : '< 0'}) → ${a > 0 ? 'มีค่าต่ำสุด' : 'มีค่าสูงสุด'} y = ${num(k)} ที่ x = ${num(h)} · แกนสมมาตร x = ${num(h)} · เรนจ์ ${a > 0 ? `[${num(k)}, ∞)` : `(−∞, ${num(k)}]`} · จุดตัดแกน y = (0, ${num(c)}) · ` + (D > 0 ? `ตัดแกน x สองจุด (D = b² − 4ac = ${num(D)} > 0)` : D === 0 ? `แตะแกน x จุดเดียว (D = 0)` : `ไม่ตัดแกน x (D = ${num(D)} < 0)`),
+        `opens ${a > 0 ? 'upward' : 'downward'} (a ${a > 0 ? '> 0' : '< 0'}) → ${a > 0 ? 'minimum' : 'maximum'} y = ${num(k)} at x = ${num(h)} · axis of symmetry x = ${num(h)} · range ${a > 0 ? `[${num(k)}, ∞)` : `(−∞, ${num(k)}]`} · y-intercept (0, ${num(c)}) · ` + (D > 0 ? `meets the x-axis twice (D = b² − 4ac = ${num(D)} > 0)` : D === 0 ? `touches the x-axis once (D = 0)` : `misses the x-axis (D = ${num(D)} < 0)`)));
+  };
+  ids.forEach(k => { const s = host.querySelector('#p' + k); s.oninput = () => { let v = +s.value; if (k === 'a' && v === 0) { v = 0.5; s.value = 0.5; } w[k] = v; w.render(); }; });
+  w.refresh = () => w.render();
+  LIVE.push(w); w.render();
+}
+const PAR = [
+  { label: 'y = 2x² − 8x + 3', rows: () => [
+      { h: T(`${Y} = 2x² − 8x + 3 → a = 2, b = −8, c = 3`, `${Y} = 2x² − 8x + 3 → a = 2, b = −8, c = 3`), n: T('อ่านค่า a, b, c จากรูปทั่วไป y = ax² + bx + c', 'read a, b, c from the general form y = ax² + bx + c') },
+      { h: T(`h = ${frac('−b', '2a')} = ${frac('−(−8)', '2(2)')} = ${frac(8, 4)} = ${ans('2')}`, `h = ${frac('−b', '2a')} = ${frac('−(−8)', '2(2)')} = ${frac(8, 4)} = ${ans('2')}`) },
+      { h: T(`k = ${frac('4ac − b²', '4a')} = ${frac('4(2)(3) − (−8)²', '4(2)')} = ${frac('24 − 64', 8)} = ${ans('−5')}`, `k = ${frac('4ac − b²', '4a')} = ${frac('4(2)(3) − (−8)²', '4(2)')} = ${frac('24 − 64', 8)} = ${ans('−5')}`) },
+      { h: T(`รูปมาตรฐาน: ${Y} − (−5) = 2(x − 2)² → ${Y} = 2(x − 2)² − 5 · จุดยอด (2, −5) เปิดขึ้น`, `Standard form: ${Y} − (−5) = 2(x − 2)² → ${Y} = 2(x − 2)² − 5 · vertex (2, −5), opens upward`), n: T('ตรวจด้วยวิธีดิฟ: dy/dx = 4x − 8 = 0 → x = 2, y(2) = 8 − 16 + 3 = −5 ✓', 'check by derivative: dy/dx = 4x − 8 = 0 → x = 2, y(2) = 8 − 16 + 3 = −5 ✓') }] },
+  { label: 'y = −x² + 4x + 1', rows: () => [
+      { h: T(`a = −1, b = 4, c = 1`, `a = −1, b = 4, c = 1`) },
+      { h: T(`h = ${frac('−b', '2a')} = ${frac('−4', '2(−1)')} = ${ans('2')}`, `h = ${frac('−b', '2a')} = ${frac('−4', '2(−1)')} = ${ans('2')}`) },
+      { h: T(`k = ${frac('4ac − b²', '4a')} = ${frac('4(−1)(1) − 4²', '4(−1)')} = ${frac('−4 − 16', '−4')} = ${ans('5')}`, `k = ${frac('4ac − b²', '4a')} = ${frac('4(−1)(1) − 4²', '4(−1)')} = ${frac('−4 − 16', '−4')} = ${ans('5')}`) },
+      { h: T(`จุดยอด (2, 5) เปิดลง → <b>ค่าสูงสุดของ y = 5</b> ที่ x = 2 · เรนจ์ (−∞, 5]`, `Vertex (2, 5), opens downward → <b>maximum y = 5</b> at x = 2 · range (−∞, 5]`), n: T('ตรวจ: y(2) = −4 + 8 + 1 = 5 ✓', 'check: y(2) = −4 + 8 + 1 = 5 ✓') }] }
+];
+
+// ───────── แท็บ 3: ค่าสัมบูรณ์ / ขั้นบันได ─────────
+function makeAbs(host) {
+  const w = { a: 1, h: 1, k: -2 };
+  host.innerHTML = '<div class="sc-prompt"></div><div class="plhost"></div><div class="two"><div>' + sliderRow('a =', 'ba', -3, 3, 0.5, 1) + sliderRow('h =', 'bh', -4, 4, 1, 1) + sliderRow('k =', 'bk', -4, 4, 1, -2) + '</div><div class="wg-eq be"></div></div><div class="wg-cap"></div>';
+  const ids = ['a', 'h', 'k'];
+  w.render = () => {
+    host.querySelector('.sc-prompt').innerHTML = tx(T('ลากแถบ a, h, k — ดูจุดยอดของตัว V ขยับ', 'Drag a, h, k — watch the vertex of the V move'));
+    ids.forEach(k => { host.querySelector('#b' + k + 'v').textContent = mn(w[k]); });
+    const { a, h, k } = w;
+    host.querySelector('.be').innerHTML = `${Y} = ${a === 1 ? '' : a === -1 ? '−' : mn(a)}|${X}${h === 0 ? '' : h > 0 ? ' − ' + h : ' + ' + (-h)}|${k === 0 ? '' : k > 0 ? ' + ' + k : ' − ' + (-k)}`;
+    const pl = mkPlot({ w: 460, h: 400, xmin: -8, xmax: 8, ymin: -8, ymax: 8, pad: 28, lx: 2, ly: 2 });
+    pl.path(x => a * Math.abs(x - h) + k, 's-blue', { n: 400 }); pl.dot(h, k, 'f-red', false, 7);
+    pl.text(h, k, `(${num(h)}, ${num(k)})`, 'r', 'start', 10, a > 0 ? 20 : -10);
+    host.querySelector('.plhost').innerHTML = pl.svg();
+    host.querySelector('.wg-cap').innerHTML = tx(T(`รูปตัว ${a > 0 ? 'V' : 'Λ'} จุดยอด <b>(h, k) = (${num(h)}, ${num(k)})</b> · แกนสมมาตร x = ${num(h)} · ความชันสองข้าง ±${num(Math.abs(a))} · D = ℝ · R = ${a > 0 ? `[${num(k)}, ∞)` : `(−∞, ${num(k)}]`}`,
+      `A ${a > 0 ? 'V' : 'Λ'} shape with vertex <b>(h, k) = (${num(h)}, ${num(k)})</b> · axis x = ${num(h)} · slopes ±${num(Math.abs(a))} · D = ℝ · R = ${a > 0 ? `[${num(k)}, ∞)` : `(−∞, ${num(k)}]`}`));
+  };
+  ids.forEach(k => { const s = host.querySelector('#b' + k); s.oninput = () => { let v = +s.value; if (k === 'a' && v === 0) { v = 0.5; s.value = 0.5; } w[k] = v; w.render(); }; });
+  w.refresh = () => w.render();
+  LIVE.push(w); w.render();
+}
+
+// (ก) จุดเดินขึ้นบันได y = ⌊x⌋ — 3 ฉาก
+const walkPlot = () => mkPlot({ w: 480, h: 380, xmin: -4, xmax: 4, ymin: -4, ymax: 4, pad: 28, lx: 1, ly: 1 });
+const HOPS = [-2, -1, 0, 1, 2, 3];                                         // จำนวนเต็มที่จุดกระโดดผ่าน (ตอนเดินจาก x = −2.5 ถึง 3.5)
+function walkFrame(o) {
+  const pl = walkPlot(), xe = o.xe === undefined ? INF : o.xe;
+  for (let k = -4; k <= 3; k++) {
+    if (xe <= k) break;
+    const end = Math.min(k + 1, xe);
+    pl.line(k, k, end, k, 's-blue pl-c'); pl.dot(k, k, 'f-blue', false, 5);
+    if (end === k + 1) pl.dot(k + 1, k, 'f-blue', true, 5);
+  }
+  (o.hops || []).forEach(x => pl.dash(x, x - 1, x, x, 's-green'));
+  if (o.hop) pl.dash(o.hop[0], o.hop[0] - 1, o.hop[0], o.hop[1], 's-green');
+  if (o.dot) {
+    const [x, y] = o.dot;
+    pl.dash(x, 0, x, y, 's-red'); pl.dot(x, y, 'f-red', false, 7);
+    pl.text(-3.8, 3.5, `x = ${num(r1(x))}  →  ⌊x⌋ = ${num(Math.floor(y + 1e-9))}`, 'r', 'start');
+  }
+  if (o.focus !== undefined) {
+    const r = 8 + 2.5 * o.focus;
+    pl.dot(2, 1, 'f-blue', true, r); pl.dot(2, 2, 'f-blue', false, r);
+    pl.text(2, 1, tx(T('ไม่รวม', 'excluded')), 'r', 'start', 12, 5); pl.text(2, 2, tx(T('รวม', 'included')), 'g', 'start', 12, -10);
+  }
+  return pl.svg();
+}
+const WALK_X0 = -2.5, WALK_X1 = 3.5;
+const WALK_SCENES = [
+  { cap: T('<b>ขั้นบันได</b> y = ⌊x⌋ : ทุก x ในช่วง [k, k + 1) ได้ y = k เท่ากันหมด → เป็นขั้นนอนยาว 1 หน่วย แล้วขึ้นขั้นใหม่ที่จำนวนเต็มถัดไป', '<b>The staircase</b> y = ⌊x⌋ : every x in [k, k + 1) gives y = k → a level step 1 unit long, then a new step at the next integer.'),
+    end: S => { S.el.innerHTML = walkFrame({}); },
+    play: async S => { await S.anim.run(2200, t => { S.el.innerHTML = walkFrame({ xe: -4 + 8 * t }); }, EASE.lin); } },
+  { cap: T('จุดเดินไปทางขวา: y <b>คงที่</b> จนถึงจำนวนเต็มถัดไป แล้ว <b>กระโดดขึ้น 1 ทันที</b> (เส้นประเขียว) — กราฟขั้นบันไดไม่ต่อเนื่องที่จำนวนเต็มทุกตัว', 'The dot walks right: y stays <b>constant</b> until the next integer, then <b>jumps up by 1 at once</b> (green dashes) — the graph breaks at every integer.'),
+    end: S => { S.el.innerHTML = walkFrame({ hops: HOPS, dot: [WALK_X1, 3] }); },
+    play: async S => {
+      const A = S.anim, done = [];
+      let x = WALK_X0, y = -3;
+      for (const hx of HOPS.concat([WALK_X1])) {
+        const from = x;
+        await A.run(380 * (hx - from), t => { S.el.innerHTML = walkFrame({ hops: done, dot: [lerp(from, hx, t), y] }); }, EASE.lin);
+        x = hx;
+        if (hx === WALK_X1) break;
+        await A.run(260, t => { S.el.innerHTML = walkFrame({ hops: done, dot: [hx, lerp(y, y + 1, t)], hop: [hx, lerp(y, y + 1, t)] }); }, EASE.out);
+        y += 1; done.push(hx);
+      }
+    } },
+  { cap: T('ตรงจำนวนเต็ม เช่น x = 2 : <b>วงทึบ</b> (2, 2) = ใช้ค่านี้ · <b>วงโปร่ง</b> (2, 1) = ไม่ใช้ค่านี้ → ⌊2⌋ = 2 (ขั้นใหม่เริ่มที่ x = 2 พอดี)', 'At an integer such as x = 2 : the <b>solid dot</b> (2, 2) is used · the <b>hollow dot</b> (2, 1) is not → ⌊2⌋ = 2 (the new step starts exactly at x = 2).'),
+    end: S => { S.el.innerHTML = walkFrame({ hops: HOPS, focus: 1 }); },
+    play: async S => { await S.anim.run(1800, t => { S.el.innerHTML = walkFrame({ hops: HOPS, focus: Math.sin(t * Math.PI * 4) * .5 + .5 }); }, EASE.lin); } }
+];
+
+// (ข) ทายก่อน ⌊x⌋
+const STEPF = [
+  { eq: 'y = ⌊x⌋', f: x => Math.floor(x + 1e-9), p: 1, R: 'ℤ', rt: T('จำนวนเต็มทุกตัว (ℤ)', 'every integer (ℤ)') },
+  { eq: 'y = ⌊x/2⌋', f: x => Math.floor(x / 2 + 1e-9), p: 2, R: 'ℤ', rt: T('จำนวนเต็มทุกตัว (ℤ)', 'every integer (ℤ)') },
+  { eq: 'y = x − ⌊x⌋', f: x => x - Math.floor(x + 1e-9), p: 1, R: '[0, 1)', rt: T('[0, 1) — ส่วนทศนิยมของ x', '[0, 1) — the fractional part of x') }
+];
+const FLOORQ = [
+  { chip: T('⌊−1.5⌋', '⌊−1.5⌋'), f: 0, x: -1.5, q: T('⌊−1.5⌋ = ?', '⌊−1.5⌋ = ?'), o: ['−1', '−2', '−1.5', '−3'], a: 1 },
+  { chip: T('⌊2.7⌋', '⌊2.7⌋'), f: 0, x: 2.7, q: T('⌊2.7⌋ = ?', '⌊2.7⌋ = ?'), o: ['3', '2.7', '2', '1'], a: 2 },
+  { chip: T('⌊−0.3⌋', '⌊−0.3⌋'), f: 0, x: -0.3, q: T('⌊−0.3⌋ = ?', '⌊−0.3⌋ = ?'), o: ['−1', '0', '−0.3', '1'], a: 0 },
+  { chip: T('⌊2⌋', '⌊2⌋'), f: 0, x: 2, q: T('⌊2⌋ = ?', '⌊2⌋ = ?'), o: ['1', '3', '2', '0'], a: 2 },
+  { chip: T('⌊x/2⌋ ที่ x = −3', '⌊x/2⌋ at x = −3'), f: 1, x: -3, q: T('y = ⌊x/2⌋ ที่ x = −3 ได้ y เท่าไร?', 'For y = ⌊x/2⌋ at x = −3, what is y?'), o: ['−2', '−1', '−1.5', '−3'], a: 0 }
+];
+function floorItem(it) {
+  const g = STEPF[it.f], x = it.x, y = g.f(x), p = g.p, kk = Math.floor(x / p + 1e-9);
+  const draw = async (el, ctx) => {
+    const done = ctx.done[0];
+    const paint = t => {
+      const pl = mkPlot({ w: 480, h: 380, xmin: -5, xmax: 5, ymin: -4, ymax: 4, pad: 28, lx: 1, ly: 1 });
+      for (let k = Math.floor(-5 / p) - 1; k <= Math.ceil(5 / p); k++) {
+        const x0 = k * p, x1 = (k + 1) * p, y0 = g.f(x0), y1 = g.f(x1 - 1e-6);
+        pl.line(x0, y0, x1, y1, 's-blue pl-c'); pl.dot(x0, y0, 'f-blue', false, 5); pl.dot(x1, y1, 'f-blue', true, 5);
+      }
+      pl.dot(x, 0, 'f-pink', false, 6.5); pl.text(x, 0, `x = ${num(x)}`, 'p', 'middle', 0, x < 0 ? -12 : 20);
+      if (done) {
+        pl.line(kk * p, y, (kk + 1) * p, y, 's-orange pl-c');
+        const yy = lerp(4, y, t); pl.dash(x, 0, x, yy, 's-red'); pl.dot(x, yy, 'f-red', false, 7.5);
+        if (t > 0.98) pl.text(x, y, `y = ${num(y)}`, 'r', 'start', 11, -9);
+      }
+      el.innerHTML = pl.svg();
+    };
+    if (done && ctx.animate) await ctx.anim.run(900, paint, EASE.out); else paint(1);
+  };
+  const why = it.f === 0
+    ? T(`⌊x⌋ ปัดลงเสมอ: จำนวนเต็มที่มากที่สุดที่ไม่เกิน ${num(x)} คือ <b>${num(y)}</b> (ขั้นที่ x อยู่ไฮไลต์สีส้ม${Number.isInteger(x) ? ' — x เป็นจำนวนเต็มพอดี จึงเป็นวงทึบของขั้นนี้' : ''})`, `⌊x⌋ always rounds down: the greatest integer not exceeding ${num(x)} is <b>${num(y)}</b> (the step containing x is highlighted orange${Number.isInteger(x) ? ' — x is exactly an integer, so it is the solid dot of this step' : ''}).`)
+    : T(`x/2 = ${num(x / 2)} → ปัดลงเป็น <b>${num(y)}</b> (แต่ละขั้นของ ⌊x/2⌋ ยาว 2 หน่วย และค่าติดลบปัดไปทางซ้ายเสมอ)`, `x/2 = ${num(x / 2)} → rounded down to <b>${num(y)}</b> (each step of ⌊x/2⌋ is 2 units long, and negatives always round toward the left).`);
+  return { chip: it.chip, draw, qs: [{ q: it.q, o: it.o, a: it.a, why }] };
+}
+
+// (ค) สำรวจ — เลือกฟังก์ชันขั้นบันได แล้วเลื่อน x
+function makeStep(host) {
+  const w = { cur: 0, x: 1.5 };
+  host.innerHTML = '<div class="chips"></div><div class="plhost"></div>' + sliderRow('<i>x</i> =', 'sx', -4.5, 4.5, 0.1, 1.5) + '<div class="wg-cap"></div>';
+  const sl = host.querySelector('#sx');
+  w.render = () => {
+    const c = host.querySelector('.chips');
+    c.innerHTML = STEPF.map((g, i) => `<button class="chip${i === w.cur ? ' active' : ''}" data-i="${i}">${g.eq}</button>`).join('');
+    c.querySelectorAll('.chip').forEach(b => b.onclick = () => { w.cur = +b.dataset.i; w.render(); });
+    const g = STEPF[w.cur], x = Math.round(w.x * 10) / 10;
+    const pl = mkPlot({ w: 480, h: 380, xmin: -5, xmax: 5, ymin: -4, ymax: 4, pad: 28, lx: 1, ly: 1 });
+    for (let k = Math.floor(-5 / g.p) - 1; k <= Math.ceil(5 / g.p); k++) {
+      const x0 = k * g.p, x1 = (k + 1) * g.p, y0 = g.f(x0), y1 = g.f(x1 - 1e-6);
+      pl.line(x0, y0, x1, y1, 's-blue pl-c');
+      pl.dot(x0, y0, 'f-blue', false, 5); pl.dot(x1, y1, 'f-blue', true, 5);
+    }
+    pl.dot(x, g.f(x), 'f-red', false, 7); pl.dash(x, 0, x, g.f(x), 's-red');
+    host.querySelector('.plhost').innerHTML = pl.svg();
+    host.querySelector('#sxv').textContent = mn(x);
+    host.querySelector('.wg-cap').innerHTML = tx(T(`ที่ x = ${num(x)} → y = <b>${num(g.f(x))}</b> · วงทึบ = รวมจุดซ้าย · วงโปร่ง = ไม่รวมจุดขวา (ค่าเปลี่ยนขั้นตรงจุดนั้น) · D = ℝ · R = ${g.rt.th}`,
+      `at x = ${num(x)} → y = <b>${num(g.f(x))}</b> · solid dot = left end included · hollow dot = right end excluded (the value jumps there) · D = ℝ · R = ${g.rt.en}`));
+  };
+  sl.oninput = () => { w.x = +sl.value; w.render(); };
+  w.refresh = () => w.render();
+  LIVE.push(w); w.render();
+}
+
+// ───────── แท็บ 4: เลื่อน-สะท้อน ─────────
+const BASES = [
+  { n: 'x²', f: x => x * x, D: ALLR(), R: [iv(0, INF)], tpl: v => `(${v})<sup>2</sup>` },
+  { n: '|x|', f: x => Math.abs(x), D: ALLR(), R: [iv(0, INF)], tpl: v => `|${v}|` },
+  { n: '√x', f: x => x >= 0 ? Math.sqrt(x) : null, D: [iv(0, INF)], R: [iv(0, INF)], tpl: v => rt(v) },
+  { n: 'x³', f: x => x * x * x, D: ALLR(), R: ALLR(), tpl: v => `(${v})<sup>3</sup>` },
+  { n: '1/x', f: x => x === 0 ? null : 1 / x, D: ivRemovePoint(ALLR(), 0), R: ivRemovePoint(ALLR(), 0), tpl: v => frac(1, v) }
+];
+function ivMap(A, m, b) {
+  return A.map(a => {
+    let lo = m * a.lo + b, hi = m * a.hi + b, lc = a.lc, hc = a.hc;
+    if (m < 0) { [lo, hi] = [hi, lo]; [lc, hc] = [hc, lc]; }
+    return { lo, hi, lc: isFinite(lo) ? lc : false, hc: isFinite(hi) ? hc : false };
+  }).sort((p, q) => p.lo - q.lo);
+}
+// สมการ y = a·f(x − h) + k เป็น HTML (ใช้ร่วมกันทั้งเกมและโหมดสำรวจ)
+function shiftEq(g, a, h, k) {
+  const inner = polyHtml([-h, 1]), kt = k === 0 ? '' : k > 0 ? ' + ' + k : ' − ' + (-k), at = a === 1 ? '' : a === -1 ? '−' : mn(a);
+  return `${Y} = ${at}${g.tpl(inner)}${kt}`;
+}
+
+// (ก) เกมจับคู่กราฟ — ปรับ a, h, k ให้กราฟส้มทับเส้นประเป้าหมาย 5 ด่าน
+const MLV = [
+  { b: 0, a: 1, h: 2, k: 0 },
+  { b: 0, a: 1, h: -1, k: 3 },
+  { b: 1, a: -1, h: 1, k: 2 },
+  { b: 2, a: 2, h: -3, k: -1 },
+  { b: 4, a: -2, h: 2, k: 1 }
+];
+function makeMatch(host) {
+  const w = { cur: 0, hint: false, v: MLV.map(() => ({ a: 1, h: 0, k: 0, ok: false })) };
+  host.innerHTML = '<div class="chips mg-chips"></div><div class="sc-prompt"></div><div class="plhost"></div><div class="mg-vd"></div><div class="two"><div>' + sliderRow('a =', 'ma', -3, 3, 0.5, 1) + sliderRow('h =', 'mh', -4, 4, 1, 0) + sliderRow('k =', 'mk', -4, 4, 1, 0) + '<div class="chips"><button class="chip mg-hint"></button></div></div><div class="wg-eq col mg-eq"></div></div>';
+  const q = s => host.querySelector(s), ids = ['a', 'h', 'k'], L = () => MLV[w.cur], V = () => w.v[w.cur];
+  const sync = () => ids.forEach(k => { q('#m' + k).value = V()[k]; });
+  const chips = () => {
+    q('.mg-chips').innerHTML = `<span class="chips-label">${tx(T('ด่าน', 'Level'))}</span>` + MLV.map((_, i) => `<button class="chip${i === w.cur ? ' active' : ''}" data-i="${i}">${i + 1}${w.v[i].ok ? ' ✓' : ''}</button>`).join('');
+    q('.mg-chips').querySelectorAll('.chip').forEach(c => c.onclick = () => { w.cur = +c.dataset.i; w.hint = false; sync(); w.render(); });
+  };
+  w.render = () => {
+    const g = BASES[L().b], v = V(), { a, h, k } = v, T0 = L();
+    chips();
+    q('.sc-prompt').innerHTML = tx(T(`ปรับ a, h, k ให้กราฟส้มทับเส้นประ <i>y</i> = ${g.n === '√x' ? '√x' : g.n} ที่ถูกเลื่อน/ยืด/พลิก`, `Tune a, h, k until the orange graph sits on the dashed target (a shifted/stretched/flipped <i>y</i> = ${g.n})`));
+    ids.forEach(kk => { q('#m' + kk + 'v').textContent = mn(v[kk]); });
+    const pl = mkPlot({ w: 480, h: 420, xmin: -8, xmax: 8, ymin: -8, ymax: 8, pad: 28, lx: 2, ly: 2 });
+    pl.path(x => { const y = g.f(x - T0.h); return y === null ? null : T0.a * y + T0.k; }, 's-blue', { n: 800, dash: true });
+    pl.path(x => { const y = g.f(x - h); return y === null ? null : a * y + k; }, v.ok ? 's-green' : 's-orange', { n: 800 });
+    q('.plhost').innerHTML = pl.svg();
+    v.ok = a === T0.a && h === T0.h && k === T0.k;
+    if (v.ok !== (q('.mg-vd').dataset.ok === '1')) chips();
+    q('.mg-vd').dataset.ok = v.ok ? '1' : '0';
+    const eqH = shiftEq(g, a, h, k);
+    q('.mg-eq').innerHTML = `<div>${v.ok ? ans(eqH) : eqH}</div>`;
+    if (v.ok) {
+      const bits = [];
+      if (h !== 0) bits.push(T(`<b>h = ${mn(h)}</b> เลื่อน${h > 0 ? 'ขวา' : 'ซ้าย'} ${Math.abs(h)}`, `<b>h = ${mn(h)}</b> shifts ${h > 0 ? 'right' : 'left'} ${Math.abs(h)}`));
+      if (k !== 0) bits.push(T(`<b>k = ${mn(k)}</b> เลื่อน${k > 0 ? 'ขึ้น' : 'ลง'} ${Math.abs(k)}`, `<b>k = ${mn(k)}</b> shifts ${k > 0 ? 'up' : 'down'} ${Math.abs(k)}`));
+      if (a !== 1) bits.push(T(`<b>a = ${mn(a)}</b> ${a < 0 ? 'พลิกรอบแกน x และ' : ''}ยืด ${Math.abs(a)} เท่าแนวตั้ง`, `<b>a = ${mn(a)}</b> ${a < 0 ? 'flips in the x-axis and ' : ''}stretches ×${Math.abs(a)} vertically`));
+      q('.mg-vd').innerHTML = `<div class="verdict ok"><span class="mk">✓</span><div><b>${tx(T('ตรงเป๊ะ!', 'Perfect match!'))}</b> ${bits.map(b => tx(b)).join(' · ')}</div></div>`;
+    } else {
+      const wrong = ['h', 'k', 'a'].find(kk => v[kk] !== T0[kk]);
+      q('.mg-vd').innerHTML = `<div style="text-align:center;margin:6px 0"><span class="ptag">${tx(T('ยังไม่ตรง', 'Not matching yet'))}</span>${w.hint ? ` &nbsp; <b>${tx(T('ลองดูที่', 'Look at'))} ${wrong}</b>` : ''}</div>`;
+    }
+    q('.mg-hint').textContent = tx(T('💡 ขอใบ้', '💡 Hint')); q('.mg-hint').style.display = v.ok ? 'none' : '';
+  };
+  ids.forEach(kk => { const s = q('#m' + kk); s.oninput = () => { V()[kk] = +s.value; w.hint = false; w.render(); }; });
+  q('.mg-hint').onclick = () => { w.hint = true; w.render(); };
+  w.refresh = () => w.render();
+  LIVE.push(w); sync(); w.render();
+}
+
+// (ข) โหมดสำรวจ — เลือกกราฟตั้งต้น + a, h, k + กลับซ้ายขวา
+function makeShift(host) {
+  const w = { cur: 0, a: 1, h: 2, k: -1, s: 1 };
+  host.innerHTML = '<div class="chips base"></div><div class="plhost"></div><div class="two"><div>' + sliderRow('a =', 'ha', -3, 3, 0.5, 1) + sliderRow('h =', 'hh', -4, 4, 1, 2) + sliderRow('k =', 'hk', -4, 4, 1, -1) + '<div class="chips sg"></div></div><div class="wg-eq col he"></div></div><div class="wg-cap"></div>';
+  const ids = ['a', 'h', 'k'];
+  w.render = () => {
+    host.querySelector('.base').innerHTML = `<span class="chips-label">${EN() ? 'Base' : 'กราฟตั้งต้น'}</span>` + BASES.map((g, i) => `<button class="chip${i === w.cur ? ' active' : ''}" data-i="${i}">y = ${g.n}</button>`).join('');
+    host.querySelectorAll('.base .chip').forEach(b => b.onclick = () => { w.cur = +b.dataset.i; w.render(); });
+    host.querySelector('.sg').innerHTML = `<span class="chips-label">${EN() ? 'Left-right' : 'ซ้าย–ขวา'}</span>` + [[1, EN() ? 'as is' : 'ปกติ'], [-1, EN() ? 'mirrored' : 'กลับซ้ายขวา']].map(([v, l]) => `<button class="chip${w.s === v ? ' active' : ''}" data-v="${v}">${l}</button>`).join('');
+    host.querySelectorAll('.sg .chip').forEach(b => b.onclick = () => { w.s = +b.dataset.v; w.render(); });
+    ids.forEach(k => { host.querySelector('#h' + k + 'v').textContent = mn(w[k]); });
+    const g = BASES[w.cur], { a, h, k, s } = w;
+    const inner = polyHtml([-s * h, s]);
+    const xh = h === 0 ? 'x' : `x ${h > 0 ? '− ' + h : '+ ' + (-h)}`, arg = s === 1 ? xh : (h === 0 ? '−x' : `−(${xh})`);
+    const kt = k === 0 ? '' : k > 0 ? ' + ' + k : ' − ' + (-k), at = a === 1 ? '' : a === -1 ? '−' : mn(a);
+    host.querySelector('.he').innerHTML = `<div>${Y} = ${a === 1 ? '' : mn(a) + ' · '}<i>f</i>(${arg})${kt}</div><div>${Y} = ${at}${g.tpl(inner)}${kt}</div><div class="wk-note"><i>f</i>(<i>x</i>) = ${g.n.replace('x²', 'x<sup>2</sup>').replace('x³', 'x<sup>3</sup>').replace('√x', rt('x'))}</div>`;
+    const pl = mkPlot({ w: 480, h: 440, xmin: -8, xmax: 8, ymin: -8, ymax: 8, pad: 28, lx: 2, ly: 2 });
+    pl.path(g.f, 's-muted', { n: 600, dash: true });
+    pl.path(x => { const v = g.f(s * (x - h)); return v === null ? null : a * v + k; }, 's-orange', { n: 800 });
+    host.querySelector('.plhost').innerHTML = pl.svg();
+    const Dn = ivMap(g.D, s, h), Rn = ivMap(g.R, a, k);
+    host.querySelector('.wg-cap').innerHTML = tx(T(`เส้นประ = กราฟตั้งต้น · ส้ม = กราฟใหม่<br><b>h</b> เลื่อน${h >= 0 ? 'ขวา' : 'ซ้าย'} ${Math.abs(h)} · <b>k</b> เลื่อน${k >= 0 ? 'ขึ้น' : 'ลง'} ${Math.abs(k)} · <b>a</b> ${a < 0 ? 'พลิกรอบแกน x และ' : ''}ยืด ${Math.abs(a)} เท่าแนวตั้ง${s === -1 ? ' · พลิกซ้ายขวารอบเส้น x = h' : ''}<br><span class="hlg">D ใหม่ = ${ivText(Dn)}</span> &nbsp; <span class="hl">R ใหม่ = ${ivText(Rn)}</span>`,
+      `Dashed = the base graph · orange = the new graph<br><b>h</b> shifts ${h >= 0 ? 'right' : 'left'} ${Math.abs(h)} · <b>k</b> shifts ${k >= 0 ? 'up' : 'down'} ${Math.abs(k)} · <b>a</b> ${a < 0 ? 'flips in the x-axis and ' : ''}stretches ×${Math.abs(a)} vertically${s === -1 ? ' · mirrored left-right about x = h' : ''}<br><span class="hlg">new D = ${ivText(Dn)}</span> &nbsp; <span class="hl">new R = ${ivText(Rn)}</span>`));
+  };
+  ids.forEach(k => { const s = host.querySelector('#h' + k); s.oninput = () => { let v = +s.value; if (k === 'a' && v === 0) { v = 0.5; s.value = 0.5; } w[k] = v; w.render(); }; });
+  w.refresh = () => w.render();
+  LIVE.push(w); w.render();
+}
+
+// ───────── แท็บ 5: อสมการด้วยกราฟ 4 ขั้น ─────────
+const INQ = [
+  { l: 'y > 2x − 1', cons: [{ g: x => 2 * x - 1, op: '>', gt: '2x − 1' }] },
+  { l: 'y ≤ −x + 3', cons: [{ g: x => -x + 3, op: '≤', gt: '−x + 3' }] },
+  { l: 'y ≥ x² − 2', cons: [{ g: x => x * x - 2, op: '≥', gt: 'x² − 2' }] },
+  { l: 'y > x + 3', cons: [{ g: x => x + 3, op: '>', gt: 'x + 3' }] },
+  { l: T('ระบบ: y ≥ x² − 2 และ y ≤ x + 2', 'System: y ≥ x² − 2 and y ≤ x + 2'), cons: [{ g: x => x * x - 2, op: '≥', gt: 'x² − 2' }, { g: x => x + 2, op: '≤', gt: 'x + 2' }] }
+];
+const opHolds = (op, y, g) => op === '>' ? y > g : op === '≥' ? y >= g : op === '<' ? y < g : y <= g;
+const strict = op => op === '>' || op === '<';
+const above = op => op === '>' || op === '≥';
+function shadeRegion(pl, cons, cls) {
+  const N = 240, lo = [], hi = [];
+  for (let i = 0; i <= N; i++) {
+    const x = pl.xmin + (pl.xmax - pl.xmin) * i / N; let l = pl.ymin, h = pl.ymax;
+    cons.forEach(c => { const g = c.g(x); if (above(c.op)) l = Math.max(l, g); else h = Math.min(h, g); });
+    lo.push([x, Math.min(Math.max(l, pl.ymin), pl.ymax)]); hi.push([x, Math.min(Math.max(h, pl.ymin), pl.ymax)]);
+  }
+  let run = [];
+  const flush = () => { if (run.length > 1) { const up = run.map(i => lo[i]), dn = run.map(i => hi[i]).reverse(); pl.poly(up.concat(dn), cls); } run = []; };
+  for (let i = 0; i <= N; i++) { if (lo[i][1] < hi[i][1] - 1e-9) run.push(i); else flush(); }
+  flush();
+}
+function makeIneq(host) {
+  const w = { cur: 0, k: 0, tp: null, pick: [null, null] };
+  host.innerHTML = '<div class="chips"></div><div class="sc-prompt"></div><div class="two"><div class="plhost"></div><div><div class="wk-list"></div><div class="wg-nav"><button class="btn ghost prev"></button><span class="wg-cnt"></span><button class="btn next"></button></div></div></div>';
+  const q = s => host.querySelector(s), prev = q('.prev'), next = q('.next'), cnt = q('.wg-cnt');
+  const cur = () => INQ[w.cur];
+  let pl = null, dyn = null, freshRow = false;
+  const tpOk = () => !!w.tp && cur().cons.every(cn => Math.abs(w.tp[1] - cn.g(w.tp[0])) > 1e-9);
+  const tpTrue = () => cur().cons.every(cn => opHolds(cn.op, w.tp[1], cn.g(w.tp[0])));
+  const sub = (cn, px) => cn.gt.replace(/x/g, brk(px));
+  const upDyn = () => {
+    dyn.innerHTML = w.k >= 2 && w.tp ? dynSvg(pl, p => {
+      const [px, py] = w.tp;
+      if (tpOk()) { const ok = tpTrue(); p.dot(px, py, ok ? 'f-green' : 'f-red', false, 7.5); p.text(px, py, ok ? '✓' : '✗', ok ? 'g' : 'r', 'start', 11, -9); }
+      else p.dot(px, py, 'f-orange', false, 7.5);
+      p.text(px, py, `(${mn(px)}, ${mn(py)})`, 'b', px > 2 ? 'end' : 'start', px > 2 ? -11 : 11, 17);
+    }) : '';
+  };
+  const rowsHtml = () => {
+    const { cons } = cur(), rows = [], k = w.k;
+    const eqs = cons.map(cn => `${Y} = ${cn.gt}`).join(' &nbsp;,&nbsp; ');
+    rows.push(`<div class="wk-eq" style="font-weight:600;font-size:1rem">${tx(T(`<b>① ทำเหมือนสมการ</b> : เปลี่ยนเครื่องหมายอสมการเป็น "=" → ${eqs}`, `<b>① Treat it as an equation</b> : change the inequality sign to "=" → ${eqs}`))}</div>`);
+    rows.push(`<div class="wk-eq" style="font-weight:600;font-size:1rem">${tx(T(`<b>② วาดกราฟ</b> : ` + cons.map(cn => `${Y} = ${cn.gt} เป็น<b>เส้น${strict(cn.op) ? 'ประ (ไม่รวมเส้น เพราะเป็น ' + cn.op + ')' : 'ทึบ (รวมเส้น เพราะเป็น ' + cn.op + ')'}</b>`).join(' · '),
+      `<b>② Draw the graph</b> : ` + cons.map(cn => `${Y} = ${cn.gt} is a <b>${strict(cn.op) ? 'dashed line (boundary excluded, ' + cn.op + ')' : 'solid line (boundary included, ' + cn.op + ')'}</b>`).join(' · ')))}</div>`);
+    let r3;
+    if (!w.tp) r3 = `<span style="color:var(--muted)">${tx(T('<b>③ เลือกจุดมาแทนให้จริง</b> : ยังไม่ได้เลือกจุด — คลิกบนกราฟ', '<b>③ Test a point</b> : no point yet — click on the graph'))}</span>`;
+    else if (!tpOk()) r3 = `<span class="bad">${tx(T(`จุด (${mn(w.tp[0])}, ${mn(w.tp[1])}) อยู่บนเส้นขอบ แทนแล้วไม่ช่วยตัดสิน — เลือกจุดอื่น`, `The point (${mn(w.tp[0])}, ${mn(w.tp[1])}) lies on a boundary and cannot decide — pick another.`))}</span>`;
+    else {
+      const [px, py] = w.tp;
+      const lines = cons.map(cn => { const g = cn.g(px), ok = opHolds(cn.op, py, g); return `${mn(py)} ${cn.op} ${sub(cn, px)} → ${mn(py)} ${cn.op} ${num(g)} → ${ok ? '<b style="color:var(--g-green)">✓ ' + tx(T('จริง', 'true')) : '<b style="color:var(--g-red)">✗ ' + tx(T('ไม่จริง', 'false'))}</b>`; });
+      r3 = `<b>${tx(T('③ เลือกจุดมาแทนให้จริง', '③ Test a point'))}</b> : ${tx(T('จุด', 'point'))} (${mn(px)}, ${mn(py)})<br>${lines.join('<br>')}`;
+    }
+    rows.push(`<div class="wk-eq" style="font-weight:600;font-size:1rem">${r3}</div>`);
+    // ④ ทายฝั่งเงา (ทีละอสมการ) แล้วค่อยระบาย
+    const T4 = tx(T('<b>④ ระบายเงา</b> : ทายก่อนว่าต้องระบายฝั่งไหนของเส้นขอบ', '<b>④ Shade</b> : guess which side of the boundary to shade'));
+    const blocks = cons.map((cn, i) => {
+      const p = w.pick[i], corr = above(cn.op) ? 0 : 1;
+      const label = `${Y} ${cn.op} ${cn.gt}`;
+      let res = '';
+      if (p !== null && w.tp && tpOk()) {
+        const ok = tpTrue1(cn), same = tx(ok ? T('จริง → ระบาย<b>ฝั่งเดียวกับจุด</b>', 'true → shade <b>the same side as the point</b>') : T('ไม่จริง → ระบาย<b>ฝั่งตรงข้ามจุด</b>', 'false → shade <b>the opposite side</b>'));
+        const sideTxt = tx(corr === 0 ? T('ฝั่งเหนือเส้นขอบ', 'above the boundary') : T('ฝั่งใต้เส้นขอบ', 'below the boundary'));
+        res = `<div class="verdict ${p === corr ? 'ok' : 'no'}"><span class="mk">${p === corr ? '✓' : '✗'}</span><div>${p === corr ? tx(T('ทายถูก! ', 'Correct! ')) : tx(T('ยังไม่ใช่ — ', 'Not quite — '))}${tx(T('จุดทดสอบ', 'the test point'))} ${same} = <b>${sideTxt}</b></div></div>`;
+      }
+      return `<div class="pq" data-i="${i}" style="margin-top:8px"><div>${label}</div><div class="quiz-opts">${[T('เหนือเส้นขอบ', 'Above the boundary'), T('ใต้เส้นขอบ', 'Below the boundary')].map((o, j) => `<button class="quiz-opt${p !== null ? (j === corr ? ' correct' : j === p ? ' wrong' : '') : ''}" data-j="${j}"${p !== null ? ' style="pointer-events:none"' : ''}>${tx(o)}</button>`).join('')}</div>${res}</div>`;
+    }).join('');
+    rows.push(`<div class="wk-eq" style="font-weight:600;font-size:1rem">${T4}${blocks}</div>`);
+    return rows.slice(0, k + 1).map((r, i) => `<div class="wk-cell${i === k ? ' final' : ''}${i === k && freshRow ? ' fresh' : ''}"><span class="stepno">${i + 1}</span>${r}</div>`).join('');
+  };
+  function tpTrue1(cn) { return opHolds(cn.op, w.tp[1], cn.g(w.tp[0])); }
+  const renderRows = () => {
+    q('.wk-list').innerHTML = rowsHtml(); freshRow = false;
+    q('.wk-list').querySelectorAll('.pq').forEach(b => b.querySelectorAll('.quiz-opt').forEach(btn => { btn.onclick = () => { w.pick[+b.dataset.i] = +btn.dataset.j; renderPlot(); renderRows(); }; }));
+    cnt.textContent = (EN() ? 'Step ' : 'ขั้นที่ ') + (w.k + 1) + ' / 4'; prev.disabled = w.k === 0; next.disabled = w.k >= 3 || (w.k === 2 && !tpOk());
+    prev.textContent = EN() ? '◀ Back' : '◀ ย้อน'; next.textContent = EN() ? 'Next ▶' : 'ถัดไป ▶';
+  };
+  const setTp = pt => { if (w.k !== 2 || !pt.inside) return; w.tp = [pt.x, pt.y]; upDyn(); renderRows(); };
+  const renderPlot = () => {
+    const { cons } = cur(), k = w.k;
+    pl = mkPlot({ w: 440, h: 400, xmin: -6, xmax: 6, ymin: -6, ymax: 6, pad: 26, lx: 2, ly: 2 });
+    if (k >= 3) {
+      cons.forEach((cn, i) => { if (w.pick[i] !== null) shadeRegion(pl, [cn], cons.length > 1 ? 'fa-blue' : 'fa-orange'); });
+      if (cons.length > 1 && w.pick.every(p => p !== null)) shadeRegion(pl, cons, 'fa-pink');
+    }
+    if (k >= 1) cons.forEach((cn, i) => pl.path(cn.g, i ? 's-orange' : 's-blue', { n: 400, dash: strict(cn.op) }));
+    const m = mountPlot(q('.plhost'), pl); dyn = m.dyn;
+    plotPointer(m.svg, pl, { snap: 1, onDown: setTp, onDrag: setTp });
+    upDyn();
+  };
+  const render = () => {
+    const c = q('.chips');
+    c.innerHTML = `<span class="chips-label">${EN() ? 'Inequality' : 'อสมการ'}</span>` + INQ.map((g, i) => `<button class="chip${i === w.cur ? ' active' : ''}" data-i="${i}">${tx(g.l)}</button>`).join('');
+    c.querySelectorAll('.chip').forEach(b => b.onclick = () => { w.cur = +b.dataset.i; w.k = 0; w.tp = null; w.pick = [null, null]; freshRow = true; render(); });
+    q('.sc-prompt').innerHTML = tx([T('กด ถัดไป ▶ ทีละขั้น', 'Press Next ▶ one step at a time'), T('กด ถัดไป ▶ ทีละขั้น', 'Press Next ▶ one step at a time'), T('คลิกจุดใดก็ได้บนกราฟ (ไม่อยู่บนเส้น) เพื่อทดสอบ', 'Click any point on the graph (not on a line) to test it'), T('ทายว่าต้องระบายฝั่งไหน แล้วค่อยดูเงา', 'Guess which side to shade, then watch the shading appear')][w.k]);
+    renderPlot(); renderRows();
+  };
+  const go = d2 => { w.k += d2; freshRow = true; render(); };
+  prev.onclick = () => { if (w.k > 0) go(-1); }; next.onclick = () => { if (w.k < 3 && (w.k !== 2 || tpOk())) go(1); };
+  w.render = render; w.refresh = render;
+  LIVE.push(w); freshRow = true; render();
+}
+
+// ───────── แบบฝึกหัด ─────────
+const QUIZ = [
+  { q: T('เส้นตรงผ่านจุด (1, 3) และ (3, 7) มีสมการเป็น', 'The line through (1, 3) and (3, 7) has equation'), o: ['y = 2x + 1', 'y = 2x + 3', 'y = 4x − 1', 'y = x + 2'], a: 0, e: T('m = (7 − 3)/(3 − 1) = 2 → y − 3 = 2(x − 1) → y = 2x + 1', 'm = (7 − 3)/(3 − 1) = 2 → y − 3 = 2(x − 1) → y = 2x + 1') },
+  { q: T('เส้นตรง y = 2x + 1 ตั้งฉากกับเส้น y = mx − 4 เมื่อ m เท่ากับ', 'The line y = 2x + 1 is perpendicular to y = mx − 4 when m equals'), o: ['2', '−2', '1/2', '−1/2'], a: 3, e: T('ตั้งฉาก → m₁·m₂ = −1 → 2m = −1 → m = −1/2', 'Perpendicular → m₁·m₂ = −1 → 2m = −1 → m = −1/2.') },
+  { q: T('จุดยอดของพาราโบลา y = x² − 6x + 5 คือ', 'The vertex of y = x² − 6x + 5 is'), o: ['(3, −4)', '(−3, −4)', '(3, 4)', '(6, 5)'], a: 0, e: T('h = −b/2a = 6/2 = 3, k = (4ac − b²)/4a = (20 − 36)/4 = −4', 'h = −b/2a = 6/2 = 3, k = (4ac − b²)/4a = (20 − 36)/4 = −4.') },
+  { q: T('y = −2x² + 8x − 3 มีค่าสูงสุดเท่าใด', 'What is the maximum value of y = −2x² + 8x − 3?'), o: ['5', '2', '−3', '8'], a: 0, e: T('a < 0 เปิดลง มีค่าสูงสุด k = (4ac − b²)/4a = (24 − 64)/(−8) = 5 (ตรวจ y(2) = −8 + 16 − 3 = 5)', 'a < 0 opens downward; maximum k = (4ac − b²)/4a = (24 − 64)/(−8) = 5 (check y(2) = −8 + 16 − 3 = 5).') },
+  { q: T('กราฟ y = x² − 4x + 7 ตัดแกน x กี่จุด', 'How many times does y = x² − 4x + 7 meet the x-axis?'), o: ['0', '1', '2', '3'], a: 0, e: T('จุดต่ำสุด k = (28 − 16)/4 = 3 > 0 เปิดขึ้น จึงอยู่เหนือแกน x ทั้งหมด (หรือ D = 16 − 28 < 0)', 'The minimum k = (28 − 16)/4 = 3 > 0 and it opens upward, so it stays above the x-axis (or D = 16 − 28 < 0).') },
+  { q: T('กราฟ y = |x − 3| + 2 มีจุดยอดและเรนจ์เป็น', 'The graph of y = |x − 3| + 2 has vertex and range'), o: ['(3, 2) , [2, ∞)', '(−3, 2) , [2, ∞)', '(3, 2) , [3, ∞)', '(3, −2) , (−∞, −2]'], a: 0, e: T('จุดยอดที่ x − 3 = 0 → (3, 2) เปิดขึ้น → y ≥ 2', 'The vertex is where x − 3 = 0 → (3, 2), opening upward → y ≥ 2.') },
+  { q: T('ถ้า f(x) = ⌊x⌋ แล้ว f(−1.5) เท่ากับ', 'If f(x) = ⌊x⌋, then f(−1.5) equals'), o: ['−1', '−2', '−1.5', '1'], a: 1, e: T('⌊x⌋ ปัดลงเสมอ → จำนวนเต็มที่มากที่สุดที่ไม่เกิน −1.5 คือ −2', '⌊x⌋ always rounds down → the greatest integer not exceeding −1.5 is −2.') },
+  { q: T('กราฟ y = (x + 2)² − 1 ได้จากกราฟ y = x² โดย', 'The graph of y = (x + 2)² − 1 comes from y = x² by'), o: [T('เลื่อนขวา 2 ลง 1', 'right 2, down 1'), T('เลื่อนซ้าย 2 ลง 1', 'left 2, down 1'), T('เลื่อนซ้าย 2 ขึ้น 1', 'left 2, up 1'), T('เลื่อนขวา 2 ขึ้น 1', 'right 2, up 1')], a: 1, e: T('(x − h) กับ h = −2 → เลื่อนซ้าย 2 และ k = −1 → เลื่อนลง 1', '(x − h) with h = −2 → left 2, and k = −1 → down 1.') },
+  { q: T('กราฟ y = √(−x) ได้จากกราฟ y = √x โดย', 'The graph of y = √(−x) comes from y = √x by'), o: [T('สะท้อนรอบแกน x', 'reflecting in the x-axis'), T('สะท้อนรอบแกน y', 'reflecting in the y-axis'), T('เลื่อนซ้าย 1', 'shifting left 1'), T('หมุนรอบจุดกำเนิด', 'rotating about the origin')], a: 1, e: T('เปลี่ยน x เป็น −x คือพลิกซ้ายขวารอบแกน y (โดเมนกลายเป็น (−∞, 0])', 'Replacing x by −x flips left-right in the y-axis (the domain becomes (−∞, 0]).') },
+  { q: T('จุดใดอยู่ในอาณาเขตที่ y > 2x − 3 และ y < 5 − x พร้อมกัน', 'Which point lies in the region y > 2x − 3 and y < 5 − x?'), o: ['(1, 2)', '(3, 2)', '(0, 6)', '(4, 1)'], a: 0, e: T('(1, 2): 2 > −1 ✓ และ 2 < 4 ✓ · (3, 2): 2 > 3 ✗ · (0, 6): 6 < 5 ✗ · (4, 1): 1 > 5 ✗', '(1, 2): 2 > −1 ✓ and 2 < 4 ✓ · (3, 2): 2 > 3 ✗ · (0, 6): 6 < 5 ✗ · (4, 1): 1 > 5 ✗.') }
+];
+
+function build() {
+  document.getElementById('tab-line').innerHTML =
+    card('📈', d('เส้นตรง y = mx + c', 'Straight lines y = mx + c'), '<div id="w-l1"></div>') +
+    card('🎯', d('ทายความชันก่อน', 'Guess the slope first'),
+      `<div id="w-sl"></div><div class="formula" style="font-size:1.15rem"><span>m = ${frac('Δy', 'Δx')} = ${frac('y₂ − y₁', 'x₂ − x₁')}</span></div>`) +
+    card('📍', d('สร้างเส้นตรงจากสองจุด', 'Building a line from two points'),
+      `<div id="w-l2"></div>
+       <div class="box-info">${d('ขนานกัน → ความชันเท่ากัน (m₁ = m₂) · ตั้งฉากกัน → m₁ · m₂ = −1 · เรื่องระยะ จุด–เส้น และเส้นตรงเพิ่มเติม ดูสื่อ <a href="../analytic-geometry-conics/analytic-geometry.html">เรขาคณิตวิเคราะห์</a>', 'Parallel → equal slopes (m₁ = m₂) · perpendicular → m₁ · m₂ = −1 · for point–line distance and more on lines see the <a href="../analytic-geometry-conics/analytic-geometry.html">Analytic Geometry</a> medium.')}</div>`);
+  makeLine1(document.getElementById('w-l1'));
+  makePredict(document.getElementById('w-sl'), SLOPES.map((s, i) => slopeItem(s, i + 1)), { label: T('เส้นตรง', 'Line'), prompt: T('ดูเส้นตรงกับสองจุด แล้วทายความชัน — สามเหลี่ยมจะเปิดทีหลัง', 'Look at the line and its two points, then guess the slope — the triangle opens afterwards') });
+  makeLine2(document.getElementById('w-l2'));
+
+  document.getElementById('tab-para').innerHTML =
+    card('🎯', d('เกมจิ้มจุดยอดพาราโบลา', 'Tap-the-vertex game'),
+      `<div id="w-vg"></div>
+       <div class="formula" style="font-size:1.1rem"><span>h = ${frac('−b', '2a')}</span><span>k = ${frac('4ac − b²', '4a')}</span><span>${Y} − k = a(${X} − h)<sup>2</sup></span></div>
+       <div class="box-ok"><b>${d('ทริกเสริม (ม.6)', 'Extra trick (Grade 12)')}</b><br>${d('ถ้าเรียนอนุพันธ์แล้ว หา (h, k) ได้จาก <b>ดิฟ = 0</b>: dy/dx = 2ax + b = 0 → x = −b/2a แล้วแทนใน y หา k', 'If you know derivatives, get (h, k) from <b>derivative = 0</b>: dy/dx = 2ax + b = 0 → x = −b/2a, then substitute into y for k.')}</div>`) +
+    card('🥏', d('สำรวจ y = ax² + bx + c', 'Explore y = ax² + bx + c'), '<div id="w-para"></div>') +
+    card('📝', d('ตัวอย่างการหาจุดยอด', 'Worked vertex examples'), '<div id="w-parex"></div>');
+  makeVertexGame(document.getElementById('w-vg'));
+  makePara(document.getElementById('w-para'));
+  makeProblemSteps(document.getElementById('w-parex'), T('โจทย์', 'Problem'), PAR);
+
+  document.getElementById('tab-abs').innerHTML =
+    card('✌️', d('ค่าสัมบูรณ์ y = a|x − h| + k', 'Absolute value y = a|x − h| + k'), '<div id="w-abs"></div>') +
+    card('🪜', d('ขั้นบันได: จุดเดินขึ้นบันได y = ⌊x⌋', 'Step function: a dot climbs y = ⌊x⌋'),
+      `<div id="w-walk"></div><div class="box-warn">${d('<b>⌊x⌋ = จำนวนเต็มที่มากที่สุดที่ไม่เกิน x</b> — ปัดลงเสมอ เช่น ⌊−1.5⌋ = −2 (ไม่ใช่ −1)', '<b>⌊x⌋ = the greatest integer not exceeding x</b> — always rounds down, e.g. ⌊−1.5⌋ = −2 (not −1)')}</div>`) +
+    card('🎯', d('ทายก่อน: ⌊x⌋ ได้เท่าไร', 'Guess first: what is ⌊x⌋?'), '<div id="w-fl"></div>') +
+    card('🪜', d('สำรวจฟังก์ชันขั้นบันได', 'Explore step functions'), '<div id="w-step"></div>');
+  makeAbs(document.getElementById('w-abs'));
+  makeScenes(document.getElementById('w-walk'), WALK_SCENES, { prompt: T('กด ▶ ทีละฉาก — ดูจุดเดินขึ้นบันได', 'Press ▶ scene by scene — watch the dot climb the staircase') });
+  makePredict(document.getElementById('w-fl'), FLOORQ.map(floorItem), { label: T('โจทย์', 'Problem'), prompt: T('ดูกราฟขั้นบันไดกับตำแหน่ง x แล้วทายค่า y', 'Look at the staircase and the position of x, then guess y') });
+  makeStep(document.getElementById('w-step'));
+
+  document.getElementById('tab-shift').innerHTML =
+    card('🎮', d('เกมจับคู่กราฟ', 'Match-the-graph game'),
+      `<div id="w-mg"></div>
+       <div class="formula" style="font-size:1.1rem"><span>${Y} = a · <i>f</i>(${X} − h) + k</span></div>
+       <div class="box-info">${d('<b>h</b> เลื่อนขวา (ถ้า h เป็นลบ = เลื่อนซ้าย) · <b>k</b> เลื่อนขึ้น · <b>a</b> ยืดแนวตั้ง และถ้า a ติดลบ = พลิกรอบแกน x', '<b>h</b> shifts right (negative h = left) · <b>k</b> shifts up · <b>a</b> stretches vertically, and a negative a flips in the x-axis')}</div>`) +
+    card('🎛️', d('เลื่อนและสะท้อนกราฟ (โหมดสำรวจ)', 'Shifting and reflecting (explore mode)'), '<div id="w-sh"></div>');
+  makeMatch(document.getElementById('w-mg'));
+  makeShift(document.getElementById('w-sh'));
+
+  document.getElementById('tab-ineq').innerHTML =
+    card('🎨', d('อสมการด้วยกราฟ 4 ขั้น', 'Inequalities by graph in 4 steps'),
+      `<div id="w-ineq"></div>
+       <div class="formula" style="font-size:1.02rem;gap:6px 10px"><span>${d('① ทำเหมือนสมการ', '① equation')}</span><span>→</span><span>${d('② วาดกราฟ ทึบ/ประ', '② draw solid/dashed')}</span><span>→</span><span>${d('③ แทนจุดให้จริง', '③ test a point')}</span><span>→</span><span>${d('④ ระบายเงา', '④ shade')}</span></div>
+       <div class="box-warn">${d('<b>ต้องลองแทนว่าเงาอยู่ไหน</b> — ห้ามเดาจากเครื่องหมาย > < เพราะรูปของเส้นอาจทำให้เดาผิดฝั่ง', '<b>Always substitute to find which side to shade</b> — never guess from > or <, the shape of the boundary can fool you.')}</div>`);
+  makeIneq(document.getElementById('w-ineq'));
+
+  document.getElementById('tab-quiz').innerHTML = card('🎯', d('แบบฝึกหัด — ทดสอบความเข้าใจ', 'Quiz — test your understanding'), '<div id="w-quiz"></div>');
+  makeQuiz(document.getElementById('w-quiz'), QUIZ);
+}
+
+
+window.addEventListener('load', () => {
+  build();
+  applyLang(getLang());
+});
+</script>
+<script id="theme-js">
+// ── ปุ่มสลับโหมดสว่าง/มืด (สร้างโดย tools/build_lessons.py) — จำค่าไว้ใน localStorage 'siteTheme' ──
+// สื่อที่วาดด้วย canvas หรือเก็บสีไว้ในตัวแปร ให้ฟัง window 'themechange' แล้ววาดใหม่
+function currentTheme() { return document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light'; }
+function syncThemeButton() {
+  const b = document.getElementById('themeToggle');
+  if (!b) return;
+  const dark = currentTheme() === 'dark';
+  b.innerHTML = dark ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6"/></svg>' : '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.5 14.6A8.5 8.5 0 0 1 9.4 3.5a8.5 8.5 0 1 0 11.1 11.1z"/></svg>';
+  const en = document.documentElement.lang === 'en';
+  b.title = dark ? (en ? 'Switch to light mode' : 'เปลี่ยนเป็นโหมดสว่าง') : (en ? 'Switch to dark mode' : 'เปลี่ยนเป็นโหมดมืด');
+  b.setAttribute('aria-label', b.title);
+}
+function toggleTheme() {
+  const next = currentTheme() === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', next);
+  try { localStorage.setItem('siteTheme', next); } catch (e) {}
+  syncThemeButton();
+  window.dispatchEvent(new CustomEvent('themechange', { detail: next }));
+}
+// ── ตัวปรับสีโหมดมืดตอนรัน: สีที่ JS เขียนตรงๆ ลงกราฟ SVG (fill/stroke) หรือ style="" ──
+// โหมดมืด: สีเข้ม → สว่าง (คงเฉดเดิม), พื้นอ่อน → เข้ม, สีสดกลางๆ คงไว้ — กลับโหมดสว่างจะคืนค่าเดิม
+(function () {
+  function parse(c) {
+    c = String(c).trim().toLowerCase();
+    if (c === 'white') c = '#ffffff'; else if (c === 'black') c = '#000000';
+    let m = c.match(/^#([0-9a-f]{3}|[0-9a-f]{6})$/);
+    if (m) { let h = m[1]; if (h.length === 3) h = h.replace(/./g, x => x + x); return [parseInt(h.slice(0, 2), 16) / 255, parseInt(h.slice(2, 4), 16) / 255, parseInt(h.slice(4, 6), 16) / 255, 1]; }
+    m = c.match(/^rgba?\(([^)]+)\)$/);
+    if (m) { const p = m[1].split(/[ ,/]+/).filter(Boolean).map(Number); return [p[0] / 255, p[1] / 255, p[2] / 255, p.length > 3 ? p[3] : 1]; }
+    m = c.match(/^color\(srgb ([^)]+)\)$/);
+    if (m) { const p = m[1].split(/[ /]+/).filter(Boolean).map(Number); return [p[0], p[1], p[2], p.length > 3 ? p[3] : 1]; }
+    return null;
+  }
+  function toHsl(r, g, b) { const mx = Math.max(r, g, b), mn = Math.min(r, g, b), l = (mx + mn) / 2; let h = 0, s = 0; if (mx !== mn) { const d = mx - mn; s = l > .5 ? d / (2 - mx - mn) : d / (mx + mn); h = mx === r ? (g - b) / d + (g < b ? 6 : 0) : mx === g ? (b - r) / d + 2 : (r - g) / d + 4; h /= 6; } return [h, s, l]; }
+  function hue(p, q, t) { if (t < 0) t += 1; if (t > 1) t -= 1; if (t < 1 / 6) return p + (q - p) * 6 * t; if (t < 1 / 2) return q; if (t < 2 / 3) return p + (q - p) * (2 / 3 - t) * 6; return p; }
+  function toRgb(h, s, l) { if (!s) return [l, l, l]; const q = l < .5 ? l * (1 + s) : l + s - l * s, p = 2 * l - q; return [hue(p, q, h + 1 / 3), hue(p, q, h), hue(p, q, h - 1 / 3)]; }
+  function fmt(rgb, a) { const v = rgb.map(x => Math.round(Math.max(0, Math.min(1, x)) * 255)); return a < 1 ? 'rgba(' + v.join(',') + ',' + a + ')' : '#' + v.map(x => x.toString(16).padStart(2, '0')).join(''); }
+  // role: 'fg' ตัวหนังสือ, 'bg' พื้น, 'shape' พื้นของรูปใน SVG, 'stroke' เส้นใน SVG
+  function remap(c, role) {
+    const p = parse(c); if (!p) return null;
+    const hsl = toHsl(p[0], p[1], p[2]), h = hsl[0], s = hsl[1], l = hsl[2];
+    if (role === 'fg' && l >= .6) return null;
+    if ((role === 'fg' && l < .6) || ((role === 'shape' || role === 'stroke') && l < .5)) { return fmt(toRgb(h, Math.min(s, .85), .9 - l * .35), p[3]); }
+    if (role === 'stroke') { if (l <= .82) return null; return l > .97 && s < .1 ? 'var(--card)' : fmt(toRgb(h, Math.min(s, .3), .2 + (1 - l) * .5), p[3]); }
+    if (l <= .72) return null;
+    if (p[3] < 1) return fmt(toRgb(h, Math.min(s, .6), .55), p[3]);
+    return fmt(toRgb(h, Math.min(s, .45), .09 + (1 - l) * .55), 1);
+  }
+  const SKIP = 'header, header *, .lesson-cover, .lesson-cover *';
+  function adapt() {
+    const dark = document.documentElement.getAttribute('data-theme') === 'dark';
+    for (const el of document.querySelectorAll('svg [fill], svg [stroke]')) {
+      if (el.matches(SKIP)) continue;
+      for (const prop of ['fill', 'stroke']) {
+        const flag = 'data-dk-' + prop;
+        if (!dark) { if (el.hasAttribute(flag)) { el.style.removeProperty(prop); el.removeAttribute(flag); } continue; }
+        const v = el.getAttribute(prop);
+        if (!v || v.includes('var(')) continue;
+        const tag = el.tagName.toLowerCase();
+        const role = prop === 'stroke' ? 'stroke' : (tag === 'text' || tag === 'tspan') ? 'fg' : 'shape';
+        const m = remap(v, role);
+        if (m && el.style.getPropertyValue(prop) !== m) { el.style.setProperty(prop, m); el.setAttribute(flag, ''); }
+      }
+    }
+    for (const el of document.querySelectorAll('body [style]')) {
+      if (el.matches(SKIP) || el.closest('svg')) continue;
+      if (!dark) { if (el.hasAttribute('data-dk-style')) { el.style.cssText = el.getAttribute('data-dk-style'); el.removeAttribute('data-dk-style'); } continue; }
+      if (el.hasAttribute('data-dk-style')) continue;
+      const st = el.style, orig = st.cssText;
+      let changed = false;
+      const bgKept = st.backgroundColor && !remap(st.backgroundColor, 'bg');
+      for (const pr of [['background-color', 'bg'], ['color', 'fg'], ['border-color', 'stroke']]) {
+        const v = st.getPropertyValue(pr[0]);
+        if (!v || v.includes('var(') || (pr[1] === 'fg' && bgKept)) continue;
+        let m = remap(v, pr[1]);
+        // แถบสีเล็กๆ (ตัวอย่างสีในคำอธิบายกราฟ) ที่เป็นสีเข้ม → ทำแบบเส้น: ยกให้สว่าง
+        if (!m && pr[1] === 'bg' && el.offsetWidth * el.offsetHeight < 1500) m = remap(v, 'stroke');
+        if (m) { st.setProperty(pr[0], m); changed = true; }
+      }
+      if (changed) el.setAttribute('data-dk-style', orig);
+    }
+    clearTimeout(fcTimer);
+    fcTimer = setTimeout(() => { mo.disconnect(); fixContrast(); watch(); }, 300);
+  }
+  let fcTimer = 0;
+  function rgbOf(c) { const p = parse(c); return p ? p : null; }
+  function lum(p) { const f = v => v <= .03928 ? v / 12.92 : Math.pow((v + .055) / 1.055, 2.4); return .2126 * f(p[0]) + .7152 * f(p[1]) + .0722 * f(p[2]); }
+  function contrast(a, b) { const x = lum(a), y = lum(b); return (Math.max(x, y) + .05) / (Math.min(x, y) + .05); }
+  function bgBehind(el) {
+    for (let e = el; e && e.nodeType === 1; e = e.parentElement) {
+      const cs = getComputedStyle(e);
+      if (cs.backgroundImage !== 'none') return null;
+      const c = rgbOf(cs.backgroundColor);
+      if (!c) return null;
+      if (c[3] >= .9) return c;
+    }
+    return rgbOf(getComputedStyle(document.body).backgroundColor);
+  }
+  function readable(fg, bg) {
+    const hsl = toHsl(fg[0], fg[1], fg[2]), darker = lum(bg) > .4;
+    for (let l = hsl[2], i = 0; i < 25; i++) {
+      l = darker ? l - .035 : l + .035;
+      if (l < .05 || l > .97) break;
+      const c = toRgb(hsl[0], Math.min(hsl[1], .9), l);
+      if (contrast([c[0], c[1], c[2], 1], bg) >= 3.6) return fmt(c, 1);
+    }
+    return darker ? '#121212' : '#ffffff';
+  }
+  function fixContrast() {
+    for (const el of document.querySelectorAll('[data-dk-c]')) { el.style.color = el.getAttribute('data-dk-c'); el.removeAttribute('data-dk-c'); }
+    for (const el of document.querySelectorAll('body *')) {
+      if (el.closest('svg, header, script, style')) continue;
+      let own = false;
+      for (const n of el.childNodes) if (n.nodeType === 3 && n.textContent.trim()) { own = true; break; }
+      if (!own) continue;
+      const fg = rgbOf(getComputedStyle(el).color), bg = bgBehind(el);
+      if (!fg || !bg || fg[3] < .5) continue;
+      if (contrast(fg, bg) >= 3) continue;
+      el.setAttribute('data-dk-c', el.style.color || '');
+      el.style.color = readable(fg, bg);
+    }
+    // ตัวเลขแกน/ป้ายสีเทากลางๆ ในกราฟ (#94A3B8 บนพื้นขาว) — ปรับเฉพาะสีเทา ไม่แตะตัวหนังสือขาวบนป้ายสี
+    for (const el of document.querySelectorAll('[data-dk-sf]')) { el.style.fill = el.getAttribute('data-dk-sf'); el.removeAttribute('data-dk-sf'); }
+    for (const el of document.querySelectorAll('svg text')) {
+      if (el.closest('header, .lesson-cover')) continue;
+      const fg = rgbOf(getComputedStyle(el).fill);
+      if (!fg) continue;
+      const hsl = toHsl(fg[0], fg[1], fg[2]);
+      if (hsl[1] > .3 || hsl[2] < .3 || hsl[2] > .8) continue;
+      const bg = bgBehind(el.ownerSVGElement || el);
+      if (!bg || contrast(fg, bg) >= 3.2) continue;
+      el.setAttribute('data-dk-sf', el.style.fill || '');
+      el.style.fill = readable(fg, bg);
+    }
+  }
+  let queued = false;
+  const mo = new MutationObserver(schedule);
+  function watch() { mo.observe(document.body, { subtree: true, childList: true, attributes: true, attributeFilter: ['fill', 'stroke', 'style'] }); }
+  function schedule() { if (queued) return; queued = true; setTimeout(() => { queued = false; mo.disconnect(); adapt(); watch(); }, 30); }
+  new MutationObserver(schedule).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+  watch(); schedule();
+})();
+syncThemeButton();
+new MutationObserver(syncThemeButton).observe(document.documentElement, { attributes: true, attributeFilter: ['lang'] });
+</script>
+</body>
+</html>

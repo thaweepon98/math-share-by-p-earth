@@ -1,0 +1,1680 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<script id="theme-boot">(function(){var t='light';try{t=localStorage.getItem('siteTheme')||'light'}catch(e){}document.documentElement.setAttribute('data-theme',t==='dark'?'dark':'light')})();</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>สื่อการสอน : ฟังก์ชันผกผัน ม.4</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Anuphan:wght@300;400;500;600;700&display=swap');
+
+  :root {
+    --primary: #1C3B22; --secondary: #FF8A3D; --accent: #68EF3F; --accent-2: #3FA82E; --warning: #FFB347;
+    --bg: #F3F7EC; --card: #FFFFFF; --text: #2D3748; --muted: #718096; --border: #E2E8F0;
+    --shadow: 0 4px 24px rgba(28,59,34,0.10); --radius: 16px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Anuphan', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+  sup { font-size: .68em; line-height: 0; vertical-align: super; font-weight: 800; }
+  sub { font-size: .68em; line-height: 0; vertical-align: sub; font-weight: 800; }
+  sup sup { font-size: .8em; }
+
+  header { background: linear-gradient(135deg, #1C3B22 0%, #2E5936 100%); color: white; padding: 28px 40px 20px; text-align: center; position: relative; overflow: hidden; }
+  header::before { content: ''; position: absolute; top: -60px; right: -60px; width: 200px; height: 200px; background: rgba(255,255,255,0.07); border-radius: 50%; }
+  header h1 { font-size: 2rem; font-weight: 800; letter-spacing: .5px; }
+  header p { font-size: 1rem; opacity: .85; margin-top: 4px; }
+  .back-link { position: absolute; top: 14px; left: 20px; color: white; text-decoration: none; font-size: .85rem; font-weight: 600; opacity: .9; z-index: 2; }
+  .back-link:hover { opacity: 1; text-decoration: underline; }
+  .lang-toggle { position: absolute; top: 14px; right: 20px; background: rgba(255,255,255,.15); color: white; border: 1.5px solid rgba(255,255,255,.5); border-radius: 20px; padding: 5px 14px; font-family: 'Anuphan', sans-serif; font-size: .8rem; font-weight: 700; cursor: pointer; z-index: 2; }
+  .lang-toggle:hover { background: rgba(255,255,255,.28); }
+
+  nav { display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; padding: 20px 24px 0; background: white; border-bottom: 3px solid var(--border); }
+  .tab-btn { padding: 10px 18px; border: none; background: transparent; border-radius: 10px 10px 0 0; font-family: 'Anuphan', sans-serif; font-size: 0.95rem; font-weight: 600; color: var(--muted); cursor: pointer; transition: all .25s; border-bottom: 3px solid transparent; margin-bottom: -3px; }
+  .tab-btn:hover { color: var(--primary); background: #E3F3D8; }
+  .tab-btn.active { color: var(--primary); border-bottom-color: var(--primary); background: #E3F3D8; }
+
+  main { max-width: 980px; margin: 0 auto; padding: 32px 20px 60px; }
+  .tab-panel { display: none; animation: fadeIn .35s ease; }
+  .tab-panel.active { display: block; }
+  @keyframes fadeIn { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
+  @keyframes rowIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+
+  .card { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); padding: 28px 32px; margin-bottom: 24px; }
+  .card-title { font-size: 1.25rem; font-weight: 700; color: var(--primary); margin-bottom: 12px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .card-title .icon { font-size: 1.5rem; }
+  .intro { font-size: 1.02rem; line-height: 1.8; margin-bottom: 14px; }
+  .box-info { background: #EEF7E6; border-left: 4px solid var(--primary); border-radius: 10px; padding: 14px 18px; margin: 14px 0; line-height: 1.8; }
+  .box-warn { background: #FFF7ED; border-left: 4px solid var(--warning); border-radius: 10px; padding: 14px 18px; margin: 14px 0; line-height: 1.8; }
+  .box-ok   { background: #ECFDF5; border-left: 4px solid var(--accent);  border-radius: 10px; padding: 14px 18px; margin: 14px 0; line-height: 1.8; }
+  .formula { background: linear-gradient(135deg,#1C3B22,#2E5936); color: white; border-radius: 12px; padding: 14px 24px; text-align: center; font-size: 1.3rem; font-weight: 700; margin: 14px 0; letter-spacing: .5px; display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 4px 18px; }
+
+  .btn { padding: 10px 24px; background: var(--primary); color: white; border: none; border-radius: 30px; font-family: 'Anuphan', sans-serif; font-size: 1rem; font-weight: 700; cursor: pointer; transition: background .2s, opacity .2s; }
+  .btn:hover:not(:disabled) { background: #2E5936; }
+  .btn:disabled { opacity: .4; cursor: not-allowed; }
+  .btn.ghost { background: white; color: var(--primary); border: 2px solid var(--primary); }
+  .btn.ghost:hover:not(:disabled) { background: #E3F3D8; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 6px 0; align-items: center; }
+  .chips .chips-label { font-weight: 700; color: var(--muted); font-size: .95rem; margin-right: 2px; }
+  .chip { padding: 7px 16px; border: 2px solid var(--border); border-radius: 30px; background: #fff; font-family: 'Anuphan', sans-serif; font-weight: 700; font-size: 1rem; cursor: pointer; color: var(--text); display: inline-block; text-align: center; vertical-align: middle; line-height: 1.5; max-width: 100%; }  /* ไม่ใช้ flex: ตัวยกในชิปจะได้ไม่แยกเป็นก้อน */
+  .chip:hover { border-color: var(--primary); }
+  .chip.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+
+  .frac { display: inline-flex; flex-direction: column; align-items: center; font-weight: 700; line-height: 1.15; vertical-align: middle; margin: 0 4px; }
+  .frac .num { font-size: 1em; border-bottom: 2.5px solid currentColor; padding: 0 3px 2px; min-width: 18px; text-align: center; white-space: nowrap; }
+  .frac .den { font-size: 1em; padding: 3px 3px 0; min-width: 18px; text-align: center; white-space: nowrap; }
+  .rt { display: inline-flex; align-items: stretch; vertical-align: middle; font-weight: 700; }
+  .rt .rt-s { font-size: 1.15em; line-height: 1; padding-right: 1px; align-self: flex-end; }
+  .rt .rt-in { border-top: 2px solid currentColor; padding: 0 2px 0 3px; margin-top: 2px; }
+
+  .slider-row { display: flex; align-items: center; gap: 12px; margin: 6px 0; flex-wrap: wrap; }
+  .slider-row b { min-width: 30px; font-size: 1.05rem; }
+  input[type=range] { accent-color: var(--primary); flex: 1; max-width: 300px; min-width: 120px; }
+  .slider-val { font-weight: 800; color: var(--primary); font-size: 1.1rem; min-width: 46px; }
+
+  /* กล่องสมการ: เนื้อหาไหลเป็นข้อความบรรทัดปกติ (ตัวยก/ตัวเอียงต้องติดกับตัวหน้า — ห้ามใช้ flex+gap ที่นี่ จะแยกเป็นก้อน)
+     .col = หลายบรรทัดซ้อนกัน ห่อแต่ละบรรทัดด้วย <div> · .row = เรียงเป็นก้อนๆ ห่างเท่ากัน (เช่น สายพานกล่อง → กล่อง) */
+  .wg-eq { text-align: center; font-size: 1.3rem; font-weight: 800; color: var(--primary); margin-top: 8px; line-height: 1.9; }
+  .wg-eq.col { display: flex; flex-direction: column; align-items: flex-start; text-align: left; }
+  .wg-eq.row { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 6px 14px; }
+  .wg-cap { background: #EEF7E6; border-left: 4px solid var(--primary); border-radius: 10px; padding: 12px 16px; line-height: 1.75; margin-top: 8px; }
+  .wg-nav { display: flex; justify-content: center; align-items: center; gap: 14px; margin-top: 12px; flex-wrap: wrap; }
+  .wg-nav .btn { padding: 9px 22px; }
+  .wg-cnt { font-weight: 700; color: var(--muted); min-width: 92px; text-align: center; }
+  .two { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; align-items: start; }
+  .tile { border: 2px solid var(--border); border-radius: 12px; padding: 10px 14px; background: #fff; }
+  .tile h4 { font-size: .95rem; color: var(--muted); margin-bottom: 6px; font-weight: 700; }
+  .ans { background: #ECFDF5; border: 2px solid var(--accent-2); border-radius: 8px; padding: 2px 10px; color: #047857; font-weight: 800; white-space: nowrap; }
+  .bad { background: #FFF1F2; border: 2px solid #E11D48; border-radius: 8px; padding: 2px 10px; color: #9F1239; font-weight: 800; white-space: nowrap; }
+  .hl { border-radius: 5px; padding: 0 3px; background: #FEF3C7; border-bottom: 2px solid #D97706; }
+  .hlb { border-radius: 5px; padding: 0 3px; background: #DBEAFE; border-bottom: 2px solid #2563EB; }
+  .hlg { border-radius: 5px; padding: 0 3px; background: #DCFCE7; border-bottom: 2px solid #16A34A; }
+  .hlp { border-radius: 5px; padding: 0 3px; background: #FCE7F3; border-bottom: 2px solid #DB2777; }
+  .ptag { display: inline-block; background: #F1F5F9; border-radius: 20px; padding: 2px 12px; font-size: .88rem; font-weight: 700; color: #475569; }
+  .verdict { border-radius: 12px; padding: 12px 16px; line-height: 1.75; border: 2px solid; font-weight: 600; margin-top: 10px; display: flex; gap: 12px; align-items: flex-start; }
+  .verdict.ok { background: #ECFDF5; border-color: #16A34A; }
+  .verdict.no { background: #FFF1F2; border-color: #E11D48; }
+  .verdict .mk { font-size: 1.6rem; font-weight: 800; line-height: 1.2; }
+  .verdict.ok .mk { color: #16A34A; }
+  .verdict.no .mk { color: #E11D48; }
+  .mono { font-weight: 700; font-size: 1.1rem; }
+  .setrow { font-size: 1.15rem; font-weight: 700; line-height: 2; }
+  .tbl { border-collapse: collapse; margin: 8px auto; font-weight: 700; }
+  .tbl th, .tbl td { border: 2px solid var(--border); padding: 6px 14px; text-align: center; }
+  .tbl th { background: #EEF7E6; color: var(--primary); }
+  .tbl td.cur { background: #FEF3C7; }
+  .tbl-scroll { overflow-x: auto; }
+
+  .wk-cell { position: relative; background: #fff; border: 2px solid var(--border); border-radius: 14px; padding: 12px 16px 12px 56px; margin-bottom: 12px; line-height: 1.9; }
+  .wk-cell.fresh { animation: rowIn .5s ease; }
+  .wk-cell.final { border-color: var(--accent-2); }
+  .wk-cell .stepno { position: absolute; left: 14px; top: 14px; width: 28px; height: 28px; border-radius: 50%; background: var(--primary); color: #fff; font-size: .85rem; font-weight: 800; display: flex; align-items: center; justify-content: center; }
+  .wk-eq { font-size: 1.15rem; font-weight: 700; overflow-x: auto; padding: 2px 0; }
+  .wk-note { font-size: .95rem; font-weight: 600; color: #475569; margin-top: 2px; }
+
+  .quiz-q { font-size: 1.1rem; font-weight: 600; margin-bottom: 12px; line-height: 1.8; }
+  .quiz-opts { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 10px; }
+  .quiz-opt { padding: 10px 20px; border: 2px solid var(--border); border-radius: 30px; cursor: pointer; font-family: 'Anuphan', sans-serif; font-size: 1rem; font-weight: 600; transition: all .2s; background: white; display: inline-flex; align-items: center; min-height: 48px; color: var(--text); }
+  .quiz-opt:hover { border-color: var(--primary); color: var(--primary); }
+  .quiz-opt.correct { border-color: var(--accent); background: #ECFDF5; color: #047857; }
+  .quiz-opt.wrong { border-color: var(--secondary); background: #FFF4EC; color: #BE185D; }
+  .quiz-feedback { font-weight: 600; font-size: 1rem; min-height: 24px; line-height: 1.75; }
+  .quiz-feedback.ok { color: #047857; }
+  .quiz-feedback.err { color: #BE185D; }
+  .btn-next { margin-top: 10px; padding: 10px 28px; background: var(--primary); color: white; border: none; border-radius: 30px; font-family: 'Anuphan', sans-serif; font-size: 1rem; font-weight: 700; cursor: pointer; transition: background .2s; }
+  .btn-next:hover { background: #142B1A; }
+  .score-badge { display: inline-block; background: linear-gradient(135deg,#68EF3F,#1C3B22); color: white; border-radius: 30px; padding: 6px 20px; font-weight: 700; font-size: 1rem; }
+  .score-card { margin-top: 20px; background: linear-gradient(135deg,#1C3B22,#2E5936); color: white; border-radius: 16px; padding: 24px; text-align: center; }
+
+  /* ─── กราฟ SVG (สีใช้ชุด --g-* ของธีม จึงเปลี่ยนตามโหมดสว่าง/มืด) ─── */
+  .plot { width: 100%; max-width: 560px; height: auto; display: block; margin: 8px auto; background: var(--card); border: 1.5px solid var(--border); border-radius: 12px; }
+  .plot text { fill: var(--text); font-family: 'Anuphan', sans-serif; font-weight: 700; }
+  .pl-grid { stroke: var(--border); stroke-width: 1; }
+  .pl-axis { stroke: var(--muted); stroke-width: 1.8; }
+  .pl-tick { fill: var(--muted) !important; font-size: 11px; font-weight: 600; }
+  .pl-c { fill: none; stroke-width: 3.2; stroke-linecap: round; stroke-linejoin: round; }
+  .s-blue { stroke: var(--g-blue); } .s-orange { stroke: var(--g-curve); } .s-green { stroke: var(--g-green); }
+  .s-pink { stroke: var(--g-pink); } .s-purple { stroke: var(--g-purple); } .s-red { stroke: var(--g-red); } .s-teal { stroke: var(--g-teal); }
+  .s-muted { stroke: var(--muted); }
+  .f-blue { fill: var(--g-blue); } .f-orange { fill: var(--g-curve); } .f-green { fill: var(--g-green); }
+  .f-pink { fill: var(--g-pink); } .f-purple { fill: var(--g-purple); } .f-red { fill: var(--g-red); } .f-teal { fill: var(--g-teal); }
+  .fa-blue { fill: var(--g-blue); fill-opacity: .16; stroke: none; } .fa-orange { fill: var(--g-curve); fill-opacity: .18; stroke: none; }
+  .fa-red { fill: var(--g-red); fill-opacity: .16; stroke: none; } .fa-green { fill: var(--g-green); fill-opacity: .16; stroke: none; } .fa-pink { fill: var(--g-pink); fill-opacity: .16; stroke: none; }
+  .pl-dash { stroke-dasharray: 6 5; stroke-width: 2; fill: none; }
+  .pl-thick { stroke-width: 7; stroke-linecap: butt; fill: none; }
+  .pl-dot { stroke: var(--g-ring); stroke-width: 2; }
+  .pl-open { fill: var(--card); stroke-width: 2.6; }
+  .pl-lbl { font-size: 13px; }
+  .pl-lbl.b { fill: color-mix(in srgb, var(--g-blue) 75%, var(--text)) !important; } .pl-lbl.o { fill: color-mix(in srgb, var(--g-curve) 68%, var(--text)) !important; } .pl-lbl.g { fill: color-mix(in srgb, var(--g-green) 72%, var(--text)) !important; }
+  .pl-lbl.p { fill: color-mix(in srgb, var(--g-pink) 75%, var(--text)) !important; } .pl-lbl.r { fill: color-mix(in srgb, var(--g-red) 75%, var(--text)) !important; }
+
+  /* ─── แผนภาพลูกศร (mapping diagram) ─── */
+  .md { width: 100%; max-width: 440px; height: auto; display: block; margin: 6px auto; }
+  .md text { fill: var(--text); font-family: 'Anuphan', sans-serif; font-weight: 700; font-size: 17px; }
+  .md .md-set { fill: none; stroke: var(--muted); stroke-width: 2; }
+  .md .md-cap { font-size: 15px; fill: var(--muted); }
+  .md .md-arr { stroke: var(--g-blue); stroke-width: 2.4; fill: none; }
+  .md .md-arr.bad { stroke: var(--g-red); }
+  .md .md-arr.g2 { stroke: var(--g-green); }
+  .md .md-arr.o { stroke: var(--g-curve); }
+  .md .md-head { fill: var(--g-blue); }
+  .md .md-head.bad { fill: var(--g-red); }
+  .md .md-head.g2 { fill: var(--g-green); }
+  .md .md-head.o { fill: var(--g-curve); }
+  .md .md-pt { fill: var(--card); stroke: var(--muted); stroke-width: 2; }
+  .md .md-pt.hit { stroke: var(--g-blue); fill: var(--g-blue); fill-opacity: .15; }
+  .md .md-pt.miss { stroke: var(--g-red); stroke-dasharray: 3 3; }
+  .md .md-pt.multi { stroke: var(--g-red); fill: var(--g-red); fill-opacity: .15; }
+  .md .md-pt.ok { stroke: var(--g-green); fill: var(--g-green); fill-opacity: .15; }
+  .mark-b { fill: var(--g-blue); } .mark-r { fill: var(--g-red); }
+
+  /* ตารางคู่อันดับ A×B */
+  .pg { display: inline-grid; gap: 6px; margin: 6px 0; }
+  .pg .pgh { font-weight: 800; text-align: center; padding: 4px 8px; color: var(--primary); min-width: 54px; }
+  .pg button { font-family: 'Anuphan', sans-serif; font-weight: 700; font-size: 1rem; padding: 7px 10px; min-width: 72px; border: 2px solid var(--border); border-radius: 30px; background: var(--card); color: var(--text); cursor: pointer; transition: border-color .15s, background .15s; }
+  .pg button:hover { border-color: var(--g-blue); }
+  .pg button.on { background: color-mix(in srgb, var(--g-blue) 18%, var(--card)); border-color: var(--g-blue); border-width: 2.6px; }
+
+  .tool-row { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin: 10px 0; }
+  .tool-inp { font-family: 'Anuphan', sans-serif; font-size: 1.15rem; font-weight: 700; padding: 6px 12px; border: 2px solid var(--border); border-radius: 12px; width: 120px; max-width: 100%; color: var(--text); background: #fff; }
+  .tool-inp:focus { outline: none; border-color: var(--primary); }
+  .nl { width: 100%; max-width: 560px; height: auto; display: block; margin: 6px auto; }
+  .nl text { fill: var(--text); font-family: 'Anuphan', sans-serif; font-weight: 700; }
+
+  /* ─── ตัวเล่นฉาก / ทายก่อนเฉลย (makeScenes, makePredict ใน base.js) ─── */
+  .sc-prompt { font-weight: 700; color: var(--muted); margin: 2px 0 6px; font-size: 1rem; }
+  .sc-stage, .pr-stage { min-height: 40px; }
+  .sc-svg { width: 100%; max-width: 560px; height: auto; display: block; margin: 4px auto; background: var(--card); border: 1.5px solid var(--border); border-radius: 12px; touch-action: manipulation; }
+  .sc-svg text { fill: var(--text); font-family: 'Anuphan', sans-serif; font-weight: 700; font-size: 17px; }
+  .sc-svg .sc-small { font-size: 13px; fill: var(--muted); }
+  .sc-svg .sc-big { font-size: 20px; }
+  .sc-svg .sc-set { fill: none; stroke: var(--muted); stroke-width: 2; }
+  .sc-svg .sc-node circle { fill: var(--card); stroke: var(--muted); stroke-width: 2; }
+  .sc-svg .sc-node.hit circle { stroke: var(--g-blue); fill: color-mix(in srgb, var(--g-blue) 14%, var(--card)); }
+  .sc-svg .sc-node.bad circle { stroke: var(--g-red); fill: color-mix(in srgb, var(--g-red) 16%, var(--card)); }
+  .sc-svg .sc-node.good circle { stroke: var(--g-green); fill: color-mix(in srgb, var(--g-green) 16%, var(--card)); }
+  .sc-svg .sc-node circle.sc-hit { fill: transparent; stroke: none; pointer-events: all; }
+  .sc-svg .sc-halo { fill: var(--g-red); stroke: none; pointer-events: none; }
+  .sc-svg .sc-arr line { stroke: var(--g-blue); stroke-width: 2.6; stroke-linecap: round; }
+  .sc-svg .sc-arr polygon { fill: var(--g-blue); }
+  .sc-svg .sc-arr.red line { stroke: var(--g-red); } .sc-svg .sc-arr.red polygon { fill: var(--g-red); }
+  .sc-svg .sc-arr.green line { stroke: var(--g-green); } .sc-svg .sc-arr.green polygon { fill: var(--g-green); }
+  .sc-svg .sc-arr.muted line { stroke: var(--muted); stroke-width: 1.8; stroke-dasharray: 5 4; } .sc-svg .sc-arr.muted polygon { fill: var(--muted); }
+  .sc-svg .sc-chip rect { fill: var(--card); stroke: var(--g-blue); stroke-width: 2; }
+  .sc-svg .sc-chip.sel rect { fill: color-mix(in srgb, var(--g-blue) 20%, var(--card)); stroke-width: 2.8; }
+  .sc-svg .sc-chip text { font-size: 16px; }
+  .sc-svg .sc-badge rect { stroke-width: 2; fill: var(--card); stroke: var(--muted); }
+  .sc-svg .sc-badge.bad rect { stroke: var(--g-red); fill: color-mix(in srgb, var(--g-red) 14%, var(--card)); }
+  .sc-svg .sc-badge.good rect { stroke: var(--g-green); fill: color-mix(in srgb, var(--g-green) 16%, var(--card)); }
+  .sc-svg .sc-badge text { font-size: 16px; }
+  .sc-svg .sc-clk { cursor: pointer; }
+  .sc-svg .sc-grid { stroke: var(--border); stroke-width: 1; } .sc-svg .sc-axis { stroke: var(--muted); stroke-width: 1.6; fill: none; }
+  .sc-svg .sc-tick { font-size: 11px; fill: var(--muted); font-weight: 600; }
+  .sc-svg .sc-dot { fill: var(--g-blue); stroke: var(--g-ring); stroke-width: 2; }
+  .sc-svg .sc-guide { fill: none; stroke: var(--g-blue); stroke-width: 2; stroke-dasharray: 6 5; }
+  .sc-svg .sc-lab { font-size: 13px; fill: color-mix(in srgb, var(--g-blue) 70%, var(--text)); }
+  .formula .fm-n { color: var(--accent); }
+  .sc-cap { min-height: 3.6em; }
+  .sc-cap.fresh { animation: rowIn .45s ease; }
+  .sc-nav .btn { min-width: 108px; }
+  .pr-qs { margin-top: 10px; }
+  .pr-q { margin-bottom: 10px; }
+  .pr-q .quiz-q { margin-bottom: 8px; }
+  .pr-res:empty { display: none; }
+  .pr-stage .setrow { text-align: center; }
+  .pr-q + .pr-q { border-top: 1.5px dashed var(--border); padding-top: 10px; }
+
+  @media (max-width: 700px) {
+    header h1 { font-size: 1.4rem; }
+    header { padding: 34px 16px 16px; }
+    .card { padding: 20px 14px; }
+    .tab-btn { font-size: .85rem; padding: 8px 10px; }
+    .wk-cell { padding-left: 48px; }
+    .wg-eq { font-size: 1.1rem; }
+    .sc-nav { gap: 8px; }
+    .sc-nav .btn { min-width: 0; padding: 9px 12px; }
+    .sc-nav .wg-cnt { order: -1; width: 100%; }
+  }
+/* ── theme:start — สร้างโดย tools/build_lessons.py ห้ามแก้มือ (แก้ที่สคริปต์แล้วรันใหม่) ── */
+:root{ --page:#BE185D; }
+:root[data-theme="light"]{
+  --bg:#F4F4F1; --card:#FFFFFF; --text:#16181A; --muted:#5E6166; --border:#DEDED8;
+  --primary:color-mix(in srgb, var(--page) 86%, #000); --primary-2:color-mix(in srgb, var(--page) 62%, #000);
+  --secondary:#C2540A; --secondary-light:#F2A15F; --accent:#68EF3F; --accent-2:#2E9E3F;
+  --shadow:0 2px 10px rgba(0,0,0,.07);
+  --strong:color-mix(in srgb, var(--page) 76%, #000); --chip:#E8E8E3; --chip-hover:#DCDCD5;
+  --hero:color-mix(in srgb, var(--page) 82%, #000);
+  --g-x:#E53935; --g-y:#2E9E4F; --g-z:#3949AB; --g-curve:#F07400; --g-curve-fill:rgba(240,116,0,.12);
+  --g-pink:#D81B60; --g-plane:rgba(60,190,200,.28); --g-cone:rgba(153,51,0,.20); --g-cone-line:rgba(153,51,0,.35);
+  --g-blue:#1E66D0; --g-red:#D32F2F; --g-green:#2E9E4F; --g-purple:#7B3FC4; --g-orange:#E8710A; --g-teal:#0F8A80;
+  --g-ring:#FFFFFF;
+}
+:root[data-theme="dark"]{
+  --bg:#121212; --card:#1C1C1C; --text:#FFFFFF; --muted:#B3B3B3; --border:#333333;
+  --primary:#ec79a9; --primary-2:#f19dc0;
+  --secondary:#FFB37A; --secondary-light:#FFD0A8; --accent:#8AF25E; --accent-2:#5BD27E;
+  --shadow:0 8px 24px rgba(0,0,0,.5);
+  --strong:color-mix(in srgb, var(--page) 48%, #1C1C1C); --chip:#2A2A2A; --chip-hover:#353535;
+  --hero:color-mix(in srgb, var(--page) 62%, #000);
+  --g-x:#FF6B6B; --g-y:#5BD27E; --g-z:#8C9BFF; --g-curve:#FFA040; --g-curve-fill:rgba(255,160,64,.16);
+  --g-pink:#FF5C9A; --g-plane:rgba(90,220,230,.26); --g-cone:rgba(255,170,110,.18); --g-cone-line:rgba(255,170,110,.45);
+  --g-blue:#6AA8FF; --g-red:#FF6B6B; --g-green:#5BD27E; --g-purple:#B48CFF; --g-orange:#FFA040; --g-teal:#4FD1C5;
+  --g-ring:#1C1C1C;
+}
+html{ background:var(--bg); }
+html[data-theme="dark"]{ color-scheme:dark; }
+body{ font-family:'Anuphan',system-ui,sans-serif; background:var(--bg); color:var(--text); line-height:1.6; -webkit-font-smoothing:antialiased; }
+
+/* หัวหน้า: สีปกของเรื่อง + ปก */
+header{
+  background:var(--hero); color:#fff; text-align:left;
+  display:grid; grid-template-columns:auto 1fr; column-gap:22px; align-items:end;
+  padding:62px 32px 26px;
+}
+header::before, header::after{ display:none !important; }
+header > *:not(.lesson-cover):not(.back-link):not(.lang-toggle):not(.theme-toggle){ grid-column:2; }
+.lesson-cover{ grid-column:1; grid-row:1 / span 6; align-self:end; width:120px; aspect-ratio:1; border-radius:6px; overflow:hidden; box-shadow:0 8px 24px rgba(0,0,0,.45); }
+.lesson-cover svg{ display:block; width:100%; height:100%; }
+header h1{ font-size:clamp(1.8rem, 4.2vw, 2.9rem); font-weight:700; letter-spacing:-.01em; line-height:1.25; margin:0; color:#fff; }
+header p{ font-size:1rem; opacity:.85; margin:6px 0 0; color:#fff; }
+.back-link{
+  top:14px; left:20px; display:inline-flex; align-items:center; gap:6px;
+  padding:6px 14px; border-radius:999px; background:rgba(0,0,0,.32); color:#fff;
+  font-size:.88rem; font-weight:600; opacity:1; text-decoration:none;
+}
+.back-link:hover{ background:rgba(0,0,0,.55); text-decoration:none; }
+.lang-toggle, .theme-toggle{
+  position:absolute; top:14px; height:34px; background:transparent; color:#fff;
+  border:1px solid rgba(255,255,255,.55); border-radius:999px; font-family:inherit; font-weight:700; font-size:.85rem; cursor:pointer; z-index:2;
+}
+.lang-toggle{ right:20px; padding:0 16px; }
+.theme-toggle{ right:86px; width:34px; padding:0; display:grid; place-items:center; }
+.theme-toggle svg{ width:18px; height:18px; }
+.lang-toggle:hover, .theme-toggle:hover{ background:rgba(255,255,255,.14); border-color:#fff; }
+body > .lang-toggle, body > .theme-toggle{ position:fixed; top:14px; z-index:50; background:var(--card); color:var(--text); border-color:var(--border); box-shadow:var(--shadow); }
+body > .lang-toggle{ right:14px; } body > .theme-toggle{ right:80px; }
+body > .lang-toggle:hover, body > .theme-toggle:hover{ background:var(--chip); border-color:var(--text); }
+header:not(:has(.back-link)):not(:has(.lang-toggle)){ padding-top:28px; border-radius:8px; }
+
+/* แถบแท็บ: ชิปทรงแคปซูล */
+nav{ background:var(--bg); border-bottom:1px solid var(--border); padding:10px 16px; gap:8px; }
+.tab-btn{
+  font-family:inherit; border:0; margin:0; border-radius:999px; padding:8px 16px;
+  background:var(--chip); color:var(--text); font-weight:600; font-size:.9rem;
+}
+.tab-btn:hover{ background:var(--chip-hover); color:var(--text); }
+.tab-btn.active{ background:var(--text); color:var(--bg); border-bottom-color:transparent; }
+
+/* การ์ดและกล่อง */
+.card{ background:var(--card); border:1px solid var(--border); border-radius:8px; box-shadow:var(--shadow); }
+.card-title{ color:var(--text); font-size:1.2rem; }
+.card-title .icon{ display:none; }
+.desc-text{ color:var(--text); font-size:1rem; }
+.formula, .step.result, .stats{ background:var(--strong) !important; color:#fff; border-radius:8px; letter-spacing:0; }
+.stat .k, .step-tag{ text-transform:none; letter-spacing:0; }
+
+/* ปุ่ม */
+.btn-action{ font-family:inherit; background:var(--text); color:var(--bg); }
+.btn-action.secondary{ background:transparent; color:var(--text); border:1px solid var(--muted); }
+.mode-btn{ font-family:inherit; border:1px solid var(--border); background:var(--card); color:var(--text); }
+.mode-btn:hover{ border-color:var(--text); color:var(--text); }
+.mode-btn.active{ background:var(--text); border-color:var(--text); color:var(--bg); }
+.quiz-opt{ border-radius:8px; }
+input[type=range]{ accent-color:var(--primary); }
+
+@media (max-width:600px){
+  header{ padding:58px 16px 20px; column-gap:14px; }
+  .lesson-cover{ width:76px; }
+  .back-link{ left:12px; max-width:calc(100% - 150px); overflow:hidden; white-space:nowrap; text-overflow:ellipsis; display:block; }
+  .lang-toggle{ right:12px; }
+  .theme-toggle{ right:74px; }
+  nav{ flex-wrap:nowrap; overflow-x:auto; justify-content:flex-start; scrollbar-width:none; }
+  nav::-webkit-scrollbar{ display:none; }
+}
+/* โหมดมืด: สีที่หน้านี้ฝังไว้เอง (สร้างอัตโนมัติ) */
+:root[data-theme="dark"] .box-info{background:#1f2e12}
+:root[data-theme="dark"] .box-warn{background:#281d0f}
+:root[data-theme="dark"] .box-ok{background:#102a1d}
+:root[data-theme="dark"] .btn{background:var(--strong)}
+:root[data-theme="dark"] .btn.ghost{background:#171717}
+:root[data-theme="dark"] .btn.ghost:hover:not(:disabled){background:#223614}
+:root[data-theme="dark"] .chip{background:#171717}
+:root[data-theme="dark"] .chip.active{background:var(--strong)}
+:root[data-theme="dark"] .wg-cap{background:#1f2e12}
+:root[data-theme="dark"] .tile{background:#171717}
+:root[data-theme="dark"] .ans{background:#102a1d;color:#a8f8e1}
+:root[data-theme="dark"] .bad{background:#270f10;color:#f49ab2}
+:root[data-theme="dark"] .hl{background:#383115}
+:root[data-theme="dark"] .hlb{background:#121f30}
+:root[data-theme="dark"] .hlg{background:#12301d}
+:root[data-theme="dark"] .hlp{background:#2c1120}
+:root[data-theme="dark"] .ptag{background:#111c28;color:#bcc5d2}
+:root[data-theme="dark"] .verdict.ok{background:#102a1d}
+:root[data-theme="dark"] .verdict.no{background:#270f10}
+:root[data-theme="dark"] .verdict.ok .mk{color:#99f1ba}
+:root[data-theme="dark"] .verdict.no .mk{color:#ef839b}
+:root[data-theme="dark"] .tbl th{background:#1f2e12}
+:root[data-theme="dark"] .tbl td.cur{background:#383115}
+:root[data-theme="dark"] .wk-cell{background:#171717}
+:root[data-theme="dark"] .wk-cell .stepno{background:var(--strong)}
+:root[data-theme="dark"] .wk-note{color:#bcc5d2}
+:root[data-theme="dark"] .quiz-opt{background:#171717}
+:root[data-theme="dark"] .quiz-opt.correct{background:#102a1d;color:#a8f8e1}
+:root[data-theme="dark"] .quiz-opt.wrong{background:#291a0f;color:#f18fb8}
+:root[data-theme="dark"] .quiz-feedback.ok{color:#a8f8e1}
+:root[data-theme="dark"] .quiz-feedback.err{color:#f18fb8}
+:root[data-theme="dark"] .btn-next{background:var(--strong)}
+:root[data-theme="dark"] .tool-inp{background:#171717}
+/* ── theme:end ── */
+</style>
+</head>
+<body>
+
+<header>
+  <div class="lesson-cover" aria-hidden="true"><svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"><rect width="120" height="120" fill="#BE185D"/><circle cx="14" cy="16" r="46" fill="#000" fill-opacity=".14"/><g fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 100 L100 20" stroke-dasharray="4 5" stroke-opacity=".45" stroke-width="2"/><path d="M20.0,100.0 L21.0,100.0 L22.0,100.0 L23.0,99.9 L24.0,99.8 L25.0,99.7 L26.0,99.5 L27.0,99.4 L28.0,99.2 L29.0,99.0 L30.0,98.8 L31.0,98.5 L32.0,98.2 L33.0,97.9 L34.0,97.5 L35.0,97.2 L36.0,96.8 L37.0,96.4 L38.0,96.0 L39.0,95.5 L40.0,95.0 L41.0,94.5 L42.0,94.0 L43.0,93.4 L44.0,92.8 L45.0,92.2 L46.0,91.5 L47.0,90.9 L48.0,90.2 L49.0,89.5 L50.0,88.8 L51.0,88.0 L52.0,87.2 L53.0,86.4 L54.0,85.5 L55.0,84.7 L56.0,83.8 L57.0,82.9 L58.0,82.0 L59.0,81.0 L60.0,80.0 L61.0,79.0 L62.0,78.0 L63.0,76.9 L64.0,75.8 L65.0,74.7 L66.0,73.6 L67.0,72.4 L68.0,71.2 L69.0,70.0 L70.0,68.8 L71.0,67.5 L72.0,66.2 L73.0,64.9 L74.0,63.5 L75.0,62.2 L76.0,60.8 L77.0,59.4 L78.0,58.0 L79.0,56.5 L80.0,55.0 L81.0,53.5 L82.0,51.9 L83.0,50.4 L84.0,48.8 L85.0,47.2 L86.0,45.6 L87.0,43.9 L88.0,42.2 L89.0,40.5 L90.0,38.8 L91.0,37.0 L92.0,35.2 L93.0,33.4 L94.0,31.5 L95.0,29.7 L96.0,27.8 L97.0,25.9 L98.0,24.0 L99.0,22.0 L100.0,20.0" stroke-width="3.8"/><path d="M20.0,100.0 L20.0,99.0 L20.1,98.0 L20.1,97.0 L20.2,96.0 L20.3,95.0 L20.4,94.0 L20.6,93.0 L20.8,92.0 L21.0,91.0 L21.2,90.0 L21.5,89.0 L21.8,88.0 L22.1,87.0 L22.4,86.0 L22.8,85.0 L23.2,84.0 L23.6,83.0 L24.1,82.0 L24.5,81.0 L25.0,80.0 L25.5,79.0 L26.1,78.0 L26.6,77.0 L27.2,76.0 L27.8,75.0 L28.5,74.0 L29.1,73.0 L29.8,72.0 L30.5,71.0 L31.2,70.0 L32.0,69.0 L32.8,68.0 L33.6,67.0 L34.5,66.0 L35.3,65.0 L36.2,64.0 L37.1,63.0 L38.0,62.0 L39.0,61.0 L40.0,60.0 L41.0,59.0 L42.0,58.0 L43.1,57.0 L44.2,56.0 L45.3,55.0 L46.4,54.0 L47.6,53.0 L48.8,52.0 L50.0,51.0 L51.2,50.0 L52.5,49.0 L53.8,48.0 L55.1,47.0 L56.5,46.0 L57.8,45.0 L59.2,44.0 L60.6,43.0 L62.0,42.0 L63.5,41.0 L65.0,40.0 L66.5,39.0 L68.1,38.0 L69.6,37.0 L71.2,36.0 L72.8,35.0 L74.4,34.0 L76.1,33.0 L77.8,32.0 L79.5,31.0 L81.2,30.0 L83.0,29.0 L84.8,28.0 L86.6,27.0 L88.5,26.0 L90.3,25.0 L92.2,24.0 L94.1,23.0 L96.0,22.0 L98.0,21.0 L100.0,20.0" stroke-width="3.8" stroke-opacity=".6"/><circle cx="76.0" cy="60.8" r="4.5" fill="#fff" stroke="none"/><circle cx="59.2" cy="44.0" r="4.5" fill="#fff" stroke="none"/></g></svg></div>
+  <a href="./index.html" class="back-link" data-th="← กลับหน้าฟังก์ชัน" data-en="← Back to Functions">← กลับหน้าฟังก์ชัน</a>
+  <button id="themeToggle" class="theme-toggle" type="button" onclick="toggleTheme()" title="สลับโหมดสว่าง/มืด" aria-label="สลับโหมดสว่าง/มืด"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6"/></svg></button>
+  <button id="langToggle" class="lang-toggle" onclick="toggleLang()">EN</button>
+  <h1 data-th="ฟังก์ชันผกผัน" data-en="Inverse Functions">ฟังก์ชันผกผัน</h1>
+  <p data-th="สลับ x, y แล้วจัดรูป • กราฟสะท้อนรอบเส้น y = x • มีอินเวอร์สเมื่อ f เป็นหนึ่งต่อหนึ่ง • ทริก f(ax+b) • ม.4" data-en="Swap x, y and solve • graphs mirror in y = x • exists exactly when f is one-to-one • the f(ax+b) trick">สลับ x, y แล้วจัดรูป • กราฟสะท้อนรอบเส้น y = x • มีอินเวอร์สเมื่อ f เป็นหนึ่งต่อหนึ่ง • ทริก f(ax+b) • ม.4</p>
+</header>
+
+<nav>
+  <button class="tab-btn active" onclick="showTab('idea', this)" data-th="แนวคิดและวิธีหา" data-en="Idea and Method">แนวคิดและวิธีหา</button>
+  <button class="tab-btn" onclick="showTab('graph', this)" data-th="กราฟสะท้อน" data-en="Mirror Graph">กราฟสะท้อน</button>
+  <button class="tab-btn" onclick="showTab('exist', this)" data-th="เมื่อไรมีอินเวอร์ส" data-en="When It Exists">เมื่อไรมีอินเวอร์ส</button>
+  <button class="tab-btn" onclick="showTab('dr', this)" data-th="D และ R สลับกัน" data-en="D and R Swap">D และ R สลับกัน</button>
+  <button class="tab-btn" onclick="showTab('trick', this)" data-th="ทริก f(ax+b)" data-en="The f(ax+b) Trick">ทริก f(ax+b)</button>
+  <button class="tab-btn" onclick="showTab('quiz', this)" data-th="แบบฝึกหัด" data-en="Quiz">แบบฝึกหัด</button>
+</nav>
+
+<main>
+  <section id="tab-idea" class="tab-panel active"></section>
+  <section id="tab-graph" class="tab-panel"></section>
+  <section id="tab-exist" class="tab-panel"></section>
+  <section id="tab-dr" class="tab-panel"></section>
+  <section id="tab-trick" class="tab-panel"></section>
+  <section id="tab-quiz" class="tab-panel"></section>
+</main>
+
+<script>
+const PAGE_TITLE = { th: "สื่อการสอน : ฟังก์ชันผกผัน ม.4", en: "Teaching Aid: Inverse Functions" };
+// ══════════════ ภาษาไทย/อังกฤษ (ค่าใน data-th/data-en ถือเป็น HTML — ดู docs/adr/0002) ══════════════
+let langMemory = 'th';
+function getLang() { try { return localStorage.getItem('siteLang') || 'th'; } catch (e) { return langMemory; } }
+function applyLang(lang) {
+  document.documentElement.lang = lang;
+  document.title = PAGE_TITLE[lang];
+  document.querySelectorAll('[data-th]').forEach(el => { el.innerHTML = (lang === 'en' && el.dataset.en) ? el.dataset.en : el.dataset.th; });
+  const btn = document.getElementById('langToggle');
+  if (btn) btn.textContent = lang === 'en' ? 'ไทย' : 'EN';
+  LIVE.forEach(w => w.refresh && w.refresh());
+}
+function toggleLang() {
+  const next = getLang() === 'en' ? 'th' : 'en';
+  langMemory = next;
+  try { localStorage.setItem('siteLang', next); } catch (e) {}
+  applyLang(next);
+}
+const LIVE = [];
+
+// ══════════════ ตัวช่วย ══════════════
+const EN = () => getLang() === 'en';
+const T = (th, en) => ({ th, en });
+const tx = v => (v == null ? '' : typeof v === 'string' ? v : v[getLang()]);
+const esc = s => s.replace(/&/g, '&amp;').replace(/"/g, '&quot;');
+const d = (th, en) => `<span data-th="${esc(th)}" data-en="${esc(en)}">${th}</span>`;
+const frac = (n, dd) => `<span class="frac"><span class="num">${n}</span><span class="den">${dd}</span></span>`;
+const rt = s => `<span class="rt"><span class="rt-s">√</span><span class="rt-in">${s}</span></span>`;
+const P = (b, e) => `${b}<sup>${e}</sup>`;
+const mn = v => String(v).replace(/-/g, '−');
+const num = x => { if (!isFinite(x)) return x > 0 ? '∞' : '−∞'; let s = (Math.round(x * 100) / 100).toString(); return mn(s === '-0' ? '0' : s); };
+const ans = h => `<span class="ans">${h}</span>`;
+const bad = h => `<span class="bad">${h}</span>`;
+const card = (icon, title, inner) => `<div class="card"><div class="card-title"><span class="icon">${icon}</span><span>${title}</span></div>${inner}</div>`;
+const gcd = (a, b) => b ? gcd(b, a % b) : Math.abs(a);
+const fn = h => `<i>f</i>(<i>x</i>)`;
+// สัมประสิทธิ์พหุนามเป็น HTML เช่น poly([2,-3,1]) = 2x² − 3x + 1 (ดีกรีสูง→ต่ำ ระบุเป็น [c0,c1,c2,...] จากต่ำไปสูง)
+function polyHtml(c, v) {
+  v = v || '<i>x</i>';
+  let s = '';
+  for (let k = c.length - 1; k >= 0; k--) {
+    const a = c[k]; if (a === 0) continue;
+    const abs = Math.abs(a), sign = a < 0 ? '−' : '+';
+    let body = k === 0 ? String(abs) : (abs === 1 ? '' : String(abs)) + v + (k > 1 ? `<sup>${k}</sup>` : '');
+    if (!s) s = (a < 0 ? '−' : '') + body; else s += ` ${sign} ${body}`;
+  }
+  return s || '0';
+}
+const pAdd = (a, b) => { const n = Math.max(a.length, b.length), r = []; for (let i = 0; i < n; i++) r.push((a[i] || 0) + (b[i] || 0)); return r; };
+const pMul = (a, b) => { const r = Array(a.length + b.length - 1).fill(0); a.forEach((x, i) => b.forEach((y, j) => { r[i + j] += x * y; })); return r; };
+const pComp = (f, g) => { let r = [0], pw = [1]; f.forEach(c => { r = pAdd(r, pMul([c], pw)); pw = pMul(pw, g); }); return r; };
+const pEval = (c, x) => c.reduceRight((s, a) => s * x + a, 0);
+const pTrim = c => { c = c.slice(); while (c.length > 1 && c[c.length - 1] === 0) c.pop(); return c; };
+
+// ══════════════ แท็บ ══════════════
+function showTab(id, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  if (!btn) btn = [...document.querySelectorAll('.tab-btn')].find(b => b.getAttribute('onclick').includes("'" + id + "'"));
+  if (btn) btn.classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+const goTab = (id, label) => `<button class="btn ghost" onclick="showTab('${id}')">${label}</button>`;
+
+// ══════════════ ขั้นตอนทีละแถว (ตัวอย่างการคำนวณ: โจทย์คงที่ เผยทีละขั้น) ══════════════
+// rows: () => [{ h: 'html สมการ', n: 'หมายเหตุ' }]  — สมการเขียนเต็มฝั่งซ้ายทุกขั้น
+function makeSteps(host, rows) {
+  const w = { k: 0 };
+  host.innerHTML = '<div class="wk-list"></div><div class="wg-nav"><button class="btn ghost prev"></button><span class="wg-cnt"></span><button class="btn next"></button></div>';
+  const list = host.querySelector('.wk-list'), prev = host.querySelector('.prev'), next = host.querySelector('.next'), cnt = host.querySelector('.wg-cnt');
+  w.render = fresh => {
+    const rs = rows(); if (w.k >= rs.length) w.k = rs.length - 1;
+    list.innerHTML = rs.slice(0, w.k + 1).map((r, i) => `<div class="wk-cell${i === rs.length - 1 ? ' final' : ''}${i === w.k && fresh ? ' fresh' : ''}"><span class="stepno">${i + 1}</span><div class="wk-eq">${tx(r.h)}</div>${r.n ? `<div class="wk-note">${tx(r.n)}</div>` : ''}</div>`).join('');
+    cnt.textContent = (EN() ? 'Step ' : 'ขั้นที่ ') + (w.k + 1) + ' / ' + rs.length;
+    prev.disabled = w.k === 0; next.disabled = w.k >= rs.length - 1;
+    prev.textContent = EN() ? '◀ Back' : '◀ ย้อน'; next.textContent = EN() ? 'Next ▶' : 'ถัดไป ▶';
+  };
+  w.reset = () => { w.k = 0; w.render(false); };
+  w.refresh = () => w.render(false);
+  prev.onclick = () => { if (w.k > 0) { w.k--; w.render(false); } };
+  next.onclick = () => { w.k++; w.render(true); };
+  LIVE.push(w); w.render(false);
+  return w;
+}
+// ตัวเลือกโจทย์ (ชิป) + stepper: items = [{ id, label, rows }]
+function makeProblemSteps(host, label, items) {
+  host.innerHTML = '<div class="chips"></div><div class="ps-body"></div>';
+  const chips = host.querySelector('.chips'), body = host.querySelector('.ps-body');
+  let cur = 0, st = null;
+  const paint = () => {
+    chips.innerHTML = `<span class="chips-label">${tx(label)}</span>` + items.map((it, i) => `<button class="chip${i === cur ? ' active' : ''}" data-i="${i}">${tx(it.label)}</button>`).join('');
+    chips.querySelectorAll('.chip').forEach(c => c.onclick = () => { cur = +c.dataset.i; st = null; start(); paint(); });
+  };
+  const start = () => { body.innerHTML = ''; const h = document.createElement('div'); body.appendChild(h); st = makeSteps(h, () => items[cur].rows()); LIVE.splice(LIVE.indexOf(st), 1); };
+  start(); paint();
+  const w = { refresh() { paint(); st.render(false); } };
+  LIVE.push(w);
+  return w;
+}
+
+// ══════════════ แบบฝึกหัดปรนัย ══════════════
+// items: [{ q: T|html, o: [html...], a: index, e: T|html }]
+function makeQuiz(host, items) {
+  // สลับลำดับตัวเลือกแบบคงที่ (seed ตามข้อ) ไม่ให้คำตอบถูกกองอยู่ตำแหน่งเดิม — คำอธิบายห้ามอ้าง "ข้อ 1/2/3/4" ของตัวเลือก
+  items = items.map((it, n) => {
+    // ตำแหน่งที่คำตอบถูกจะไปอยู่: วนตามลำดับคงที่ให้กระจายทุกตำแหน่ง ส่วนตัวหลอกสลับด้วย seed ตามข้อ
+    const target = [2, 0, 3, 1, 3, 2, 0, 1, 2, 3, 1, 0][n % 12] % it.o.length;
+    let seed = (n + 1) * 0x9E3779B1 >>> 0;
+    const rnd = () => { seed = (seed + 0x6D2B79F5) >>> 0; let t = seed; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
+    const others = it.o.map((_, k) => k).filter(k => k !== it.a);
+    for (let k = others.length - 1; k > 0; k--) { const m = Math.floor(rnd() * (k + 1)); [others[k], others[m]] = [others[m], others[k]]; }
+    const order = others.slice(); order.splice(target, 0, it.a);
+    return Object.assign({}, it, { o: order.map(k => it.o[k]), a: target });
+  });
+  const w = { i: 0, score: 0, done: false, picked: null };
+  host.innerHTML = '<div class="quiz-head" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:12px"><span class="qprog" style="color:var(--muted)"></span><span class="score-badge"></span></div><div class="qbox"></div><div class="qctl"></div>';
+  const prog = host.querySelector('.qprog'), badge = host.querySelector('.score-badge'), box = host.querySelector('.qbox'), ctl = host.querySelector('.qctl');
+  const bt = (th, en) => EN() ? en : th;
+  w.render = () => {
+    badge.innerHTML = `${bt('คะแนน', 'Score')} ${w.score} / ${items.length}`;
+    if (w.i >= items.length) {
+      prog.textContent = '';
+      const r = w.score / items.length;
+      const msg = r === 1 ? bt('ยอดเยี่ยม! ครบทุกข้อ', 'Perfect!') : r >= .7 ? bt('เก่งมาก ไปต่อได้เลย', 'Great — keep going') : bt('ลองทบทวนแท็บด้านบนแล้วเล่นใหม่อีกรอบ', 'Review the tabs above and try again');
+      box.innerHTML = `<div class="score-card"><div style="font-size:2.4rem">🎉</div><div style="font-size:1.4rem;font-weight:800;margin:6px 0">${bt('จบแบบฝึกหัด', 'Quiz finished')}</div><div style="font-size:2.6rem;font-weight:800">${w.score} / ${items.length}</div><div style="margin-top:6px">${msg}</div></div>`;
+      ctl.innerHTML = `<button class="btn-next retry">${bt('เล่นใหม่ 🔄', 'Play again 🔄')}</button>`;
+      ctl.querySelector('.retry').onclick = () => { w.i = 0; w.score = 0; w.picked = null; w.render(); };
+      return;
+    }
+    const it = items[w.i];
+    prog.textContent = bt(`ข้อที่ ${w.i + 1} / ${items.length}`, `Question ${w.i + 1} / ${items.length}`);
+    box.innerHTML = `<div class="quiz-q">${w.i + 1}. ${tx(it.q)}</div><div class="quiz-opts">${it.o.map((o, k) => `<button class="quiz-opt" data-k="${k}">${tx(o)}</button>`).join('')}</div><div class="quiz-feedback"></div>`;
+    ctl.innerHTML = '';
+    box.querySelectorAll('.quiz-opt').forEach(b => b.onclick = () => pick(+b.dataset.k));
+    if (w.picked !== null) mark(w.picked);
+  };
+  function mark(k) {
+    const it = items[w.i], fb = box.querySelector('.quiz-feedback');
+    box.querySelectorAll('.quiz-opt').forEach((b, idx) => { if (idx === it.a) b.classList.add('correct'); else if (idx === k) b.classList.add('wrong'); b.style.pointerEvents = 'none'; });
+    const ok = k === it.a;
+    fb.className = 'quiz-feedback ' + (ok ? 'ok' : 'err');
+    fb.innerHTML = (ok ? '✅ ' + bt('ถูกต้อง! ', 'Correct! ') : '❌ ' + bt('ยังไม่ใช่ — ', 'Not quite — ')) + tx(it.e);
+    ctl.innerHTML = `<button class="btn-next nx">${w.i < items.length - 1 ? bt('ข้อถัดไป ▶', 'Next ▶') : bt('ดูคะแนน 🏁', 'See score 🏁')}</button>`;
+    ctl.querySelector('.nx').onclick = () => { w.i++; w.picked = null; w.render(); };
+  }
+  function pick(k) { if (w.picked !== null) return; w.picked = k; if (k === items[w.i].a) w.score++; badge.innerHTML = `${bt('คะแนน', 'Score')} ${w.score} / ${items.length}`; mark(k); }
+  w.refresh = () => w.render();
+  LIVE.push(w); w.render();
+  return w;
+}
+
+// ══════════════ ตัวเลื่อน ══════════════
+function sliderRow(label, id, min, max, step, val) {
+  return `<div class="slider-row"><b>${label}</b><input type="range" id="${id}" min="${min}" max="${max}" step="${step}" value="${val}"><span class="slider-val" id="${id}v"></span></div>`;
+}
+
+// ══════════════ กราฟ SVG ══════════════
+let PLOT_N = 0;
+class Plot {
+  constructor(o) {
+    Object.assign(this, { w: 520, h: 400, xmin: -5, xmax: 5, ymin: -5, ymax: 5, pad: 30, gx: 1, gy: 1, lx: 1, ly: 1, grid: true }, o);
+    this.id = 'pc' + (++PLOT_N); this.back = []; this.front = [];
+    this.sx = (this.w - 2 * this.pad) / (this.xmax - this.xmin);
+    this.sy = (this.h - 2 * this.pad) / (this.ymax - this.ymin);
+  }
+  X(x) { return +(this.pad + (x - this.xmin) * this.sx).toFixed(2); }
+  Y(y) { return +(this.h - this.pad - (y - this.ymin) * this.sy).toFixed(2); }
+  ix(px) { return this.xmin + (px - this.pad) / this.sx; }   // พิกัดจอ(SVG) → พิกัดกราฟ
+  iy(py) { return this.ymin + (this.h - this.pad - py) / this.sy; }
+  put(s, front) { (front ? this.front : this.back).push(s); return this; }
+  path(f, cls, o) {
+    o = o || {};
+    const x0 = o.x0 !== undefined ? o.x0 : this.xmin, x1 = o.x1 !== undefined ? o.x1 : this.xmax, n = o.n || 400;
+    let dstr = '', pen = false, py = null;
+    for (let i = 0; i <= n; i++) {
+      const x = x0 + (x1 - x0) * i / n; let y = f(x);
+      if (y === null || y === undefined || !isFinite(y) || Math.abs(y) > 1e4) { pen = false; py = null; continue; }
+      const Y = this.Y(y);
+      // ตัดเส้นที่เส้นกำกับแนวตั้ง (กระโดดเกินครึ่งจอ) — เฉพาะตอนสุ่มจุดถี่ เส้นตรงที่ใช้ n น้อยจึงไม่ถูกตัดทิ้ง
+      if (pen && n >= 50 && Math.abs(Y - py) > this.h * 0.55) pen = false;
+      dstr += (pen ? 'L' : 'M') + this.X(x) + ' ' + Y; pen = true; py = Y;
+    }
+    return this.put(`<path class="pl-c ${cls}" d="${dstr}" clip-path="url(#${this.id})"${o.dash ? ' stroke-dasharray="7 6"' : ''}/>`, o.front);
+  }
+  // y เป็นฟังก์ชันของ t (เส้นโค้งพารามิเตอร์)
+  param(fx, fy, t0, t1, cls, n) {
+    n = n || 300; let dstr = '';
+    for (let i = 0; i <= n; i++) { const t = t0 + (t1 - t0) * i / n; dstr += (i ? 'L' : 'M') + this.X(fx(t)) + ' ' + this.Y(fy(t)); }
+    return this.put(`<path class="pl-c ${cls}" d="${dstr}" clip-path="url(#${this.id})"/>`);
+  }
+  line(x1, y1, x2, y2, cls, extra) { return this.put(`<line class="${cls}" x1="${this.X(x1)}" y1="${this.Y(y1)}" x2="${this.X(x2)}" y2="${this.Y(y2)}" ${extra || ''} clip-path="url(#${this.id})"/>`); }
+  dash(x1, y1, x2, y2, cls) { return this.line(x1, y1, x2, y2, 'pl-dash ' + cls); }
+  thick(x1, y1, x2, y2, cls) { return this.line(x1, y1, x2, y2, 'pl-thick ' + cls); }
+  dot(x, y, cls, open, r) { return this.put(`<circle class="${open ? 'pl-open ' + cls.replace('f-', 's-') : 'pl-dot ' + cls}" cx="${this.X(x)}" cy="${this.Y(y)}" r="${r || 5.5}"/>`, true); }
+  text(x, y, html, cls, anchor, dx, dy) { return this.put(`<text class="pl-lbl ${cls || ''}" x="${this.X(x) + (dx || 0)}" y="${this.Y(y) + (dy || 0)}" text-anchor="${anchor || 'start'}">${html}</text>`, true); }
+  poly(pts, cls) { return this.put(`<polygon class="${cls}" points="${pts.map(p => this.X(p[0]) + ',' + this.Y(p[1])).join(' ')}" clip-path="url(#${this.id})"/>`); }
+  raw(s, front) { return this.put(s, front); }
+  svg() {
+    const w = this.w, h = this.h, p = this.pad, g = [];
+    if (this.grid) {
+      for (let x = Math.ceil(this.xmin / this.gx) * this.gx; x <= this.xmax + 1e-9; x += this.gx) g.push(`<line class="pl-grid" x1="${this.X(x)}" y1="${p}" x2="${this.X(x)}" y2="${h - p}"/>`);
+      for (let y = Math.ceil(this.ymin / this.gy) * this.gy; y <= this.ymax + 1e-9; y += this.gy) g.push(`<line class="pl-grid" x1="${p}" y1="${this.Y(y)}" x2="${w - p}" y2="${this.Y(y)}"/>`);
+    }
+    const ax = [];
+    const x0 = Math.min(Math.max(0, this.xmin), this.xmax), y0 = Math.min(Math.max(0, this.ymin), this.ymax);
+    ax.push(`<line class="pl-axis" x1="${p - 8}" y1="${this.Y(y0)}" x2="${w - p + 8}" y2="${this.Y(y0)}"/><line class="pl-axis" x1="${this.X(x0)}" y1="${h - p + 8}" x2="${this.X(x0)}" y2="${p - 8}"/>`);
+    ax.push(`<path class="pl-axis" d="M${w - p + 8} ${this.Y(y0)} l-7 -4 m7 4 l-7 4 M${this.X(x0)} ${p - 8} l-4 7 m4 -7 l4 7" fill="none"/>`);
+    ax.push(`<text class="pl-tick" x="${w - p + 4}" y="${this.Y(y0) + 18}" style="font-size:14px;font-style:italic">x</text><text class="pl-tick" x="${this.X(x0) + 8}" y="${p - 2}" style="font-size:14px;font-style:italic">y</text>`);
+    for (let x = Math.ceil(this.xmin / this.lx) * this.lx; x <= this.xmax + 1e-9; x += this.lx) if (Math.abs(x) > 1e-9) ax.push(`<text class="pl-tick" x="${this.X(x)}" y="${this.Y(y0) + 15}" text-anchor="middle">${mn(Math.round(x * 100) / 100)}</text>`);
+    for (let y = Math.ceil(this.ymin / this.ly) * this.ly; y <= this.ymax + 1e-9; y += this.ly) if (Math.abs(y) > 1e-9) ax.push(`<text class="pl-tick" x="${this.X(x0) - 6}" y="${this.Y(y) + 4}" text-anchor="end">${mn(Math.round(y * 100) / 100)}</text>`);
+    return `<svg class="plot" viewBox="0 0 ${w} ${h}" xmlns="http://www.w3.org/2000/svg"><defs><clipPath id="${this.id}"><rect x="${p - 8}" y="${p - 8}" width="${w - 2 * p + 16}" height="${h - 2 * p + 16}"/></clipPath></defs>${g.join('')}${this.back.join('')}${ax.join('')}${this.front.join('')}</svg>`;
+  }
+}
+
+// ══════════════ แผนภาพลูกศร (mapping diagram) ══════════════
+// A, B = ป้ายสมาชิก; pairs = [[i, j]]; o.flag = ระบายสีสมาชิก A ที่ผิดปกติ (ลูกศรออกหลายเส้น = แดง); o.capA/capB = หัวเซต
+// o.flagY: true = ระบายสีสมาชิก B ทั้ง 3 แบบ (ไม่ถูกชี้=ประ / ถูกชี้ซ้ำ=แดง) · 'one' = ไฮไลต์เรื่อง 1-1 (ถูกชี้ซ้ำ=แดง, ชี้ 1 เส้น=ฟ้า) · 'onto' = ไฮไลต์เรื่องทั่วถึง (ไม่ถูกชี้=ประ, ถูกชี้=ฟ้า) · o.okY = ถูกชี้ซ้ำ ระบายเขียว (y ซ้ำได้)
+let MD_N = 0;
+function mapDiagram(A, B, pairs, o) {
+  o = o || {};
+  const n = Math.max(A.length, B.length), H = 46 + n * 40, xa = 96, xb = 324, mid = H / 2 + 6;
+  const ya = i => mid + (i - (A.length - 1) / 2) * 40, yb = j => mid + (j - (B.length - 1) / 2) * 40;
+  const outc = A.map((_, i) => pairs.filter(p => p[0] === i).length), inc = B.map((_, j) => pairs.filter(p => p[1] === j).length);
+  let s = `<svg class="md" viewBox="0 0 420 ${H}" xmlns="http://www.w3.org/2000/svg">`;
+  s += `<ellipse class="md-set" cx="${xa}" cy="${mid}" rx="52" ry="${n * 20 + 14}"/><ellipse class="md-set" cx="${xb}" cy="${mid}" rx="52" ry="${n * 20 + 14}"/>`;
+  s += `<text class="md-cap" x="${xa}" y="16" text-anchor="middle">${o.capA || 'A'}</text><text class="md-cap" x="${xb}" y="16" text-anchor="middle">${o.capB || 'B'}</text>`;
+  pairs.forEach(p => {
+    const cls = o.flag && outc[p[0]] > 1 ? 'bad' : (o.cls ? (o.cls[p[0] + ',' + p[1]] || '') : '');
+    const x1 = xa + 15, y1 = ya(p[0]), x2 = xb - 17, y2 = yb(p[1]), ang = Math.atan2(y2 - y1, x2 - x1), hx = x2 - 9 * Math.cos(ang), hy = y2 - 9 * Math.sin(ang);
+    s += `<line class="md-arr ${cls}" x1="${x1}" y1="${y1}" x2="${hx.toFixed(1)}" y2="${hy.toFixed(1)}"/>`;
+    s += `<polygon class="md-head ${cls}" points="${x2},${y2} ${(x2 - 10 * Math.cos(ang - .4)).toFixed(1)},${(y2 - 10 * Math.sin(ang - .4)).toFixed(1)} ${(x2 - 10 * Math.cos(ang + .4)).toFixed(1)},${(y2 - 10 * Math.sin(ang + .4)).toFixed(1)}"/>`;
+  });
+  A.forEach((a, i) => { const c = o.flag ? (outc[i] === 0 ? 'miss' : outc[i] > 1 ? 'multi' : 'hit') : ''; s += `<circle class="md-pt ${c}" cx="${xa}" cy="${ya(i)}" r="15"/><text x="${xa}" y="${ya(i) + 6}" text-anchor="middle">${a}</text>`; });
+  B.forEach((b, j) => { const f = o.flagY, c = f === true ? (inc[j] === 0 ? 'miss' : inc[j] > 1 ? 'multi' : 'hit') : f === 'one' ? (inc[j] > 1 ? 'multi' : inc[j] === 1 ? 'hit' : '') : f === 'onto' ? (inc[j] === 0 ? 'miss' : 'hit') : (o.okY && inc[j] > 1 ? 'ok' : ''); s += `<circle class="md-pt ${c}" cx="${xb}" cy="${yb(j)}" r="15"/><text x="${xb}" y="${yb(j) + 6}" text-anchor="middle">${b}</text>`; });
+  return s + '</svg>';
+}
+
+// ══════════════ ช่วงจำนวนจริง ══════════════
+// ช่วง = { lo, hi, lc, hc } (lc/hc = ปิดปลายซ้าย/ขวา) ; ชุดช่วง = array เรียงจากซ้ายไปขวา
+const IV = (lo, hi, lc, hc) => ({ lo, hi, lc: lc === undefined ? isFinite(lo) : lc, hc: hc === undefined ? isFinite(hi) : hc });
+const ALLR = () => [IV(-Infinity, Infinity, false, false)];
+function ivIntersect(A, B) {
+  const out = [];
+  A.forEach(a => B.forEach(b => {
+    let lo, lc, hi, hc;
+    if (a.lo > b.lo) { lo = a.lo; lc = a.lc; } else if (a.lo < b.lo) { lo = b.lo; lc = b.lc; } else { lo = a.lo; lc = a.lc && b.lc; }
+    if (a.hi < b.hi) { hi = a.hi; hc = a.hc; } else if (a.hi > b.hi) { hi = b.hi; hc = b.hc; } else { hi = a.hi; hc = a.hc && b.hc; }
+    if (lo < hi || (lo === hi && lc && hc)) out.push({ lo, hi, lc, hc });
+  }));
+  return out.sort((p, q) => p.lo - q.lo);
+}
+function ivRemovePoint(A, p) {
+  const out = [];
+  A.forEach(a => {
+    const inside = (a.lo < p || (a.lo === p && a.lc)) && (p < a.hi || (p === a.hi && a.hc));
+    if (!inside) { out.push(a); return; }
+    if (a.lo < p) out.push({ lo: a.lo, hi: p, lc: a.lc, hc: false });
+    if (p < a.hi) out.push({ lo: p, hi: a.hi, lc: false, hc: a.hc });
+  });
+  return out;
+}
+const ivHas = (A, x) => A.some(a => (x > a.lo || (x === a.lo && a.lc)) && (x < a.hi || (x === a.hi && a.hc)));
+function ivText(A) {
+  if (!A.length) return '∅';
+  if (A.length === 1 && A[0].lo === -Infinity && A[0].hi === Infinity) return 'ℝ';
+  // ℝ − {จุดที่ถูกเจาะ}
+  const holes = []; let whole = A[0].lo === -Infinity && A[A.length - 1].hi === Infinity;
+  for (let i = 0; i + 1 < A.length && whole; i++) { if (A[i].hi === A[i + 1].lo && !A[i].hc && !A[i + 1].lc) holes.push(A[i].hi); else whole = false; }
+  if (whole && holes.length && A.length === holes.length + 1) return 'ℝ − {' + holes.map(num).join(', ') + '}';
+  return A.map(a => (a.lc ? '[' : '(') + num(a.lo) + ', ' + num(a.hi) + (a.hc ? ']' : ')')).join(' ∪ ');
+}
+// เส้นจำนวนพร้อมแถบช่วง
+function numLine(A, o) {
+  o = o || {};
+  const lo = o.min !== undefined ? o.min : -6, hi = o.max !== undefined ? o.max : 6, W = 520, pad = 28, sx = x => pad + (x - lo) / (hi - lo) * (W - 2 * pad), y = 38;
+  let s = `<svg class="nl" viewBox="0 0 ${W} 76" xmlns="http://www.w3.org/2000/svg"><line class="pl-axis" x1="8" y1="${y}" x2="${W - 8}" y2="${y}"/><path class="pl-axis" d="M${W - 8} ${y} l-7 -4 m7 4 l-7 4" fill="none"/>`;
+  for (let t = Math.ceil(lo); t <= hi; t++) s += `<line class="pl-axis" x1="${sx(t)}" y1="${y - 4}" x2="${sx(t)}" y2="${y + 4}"/><text class="pl-tick" x="${sx(t)}" y="${y + 20}" text-anchor="middle">${mn(t)}</text>`;
+  const col = o.cls || 's-blue', fcol = col.replace('s-', 'f-');
+  A.forEach(a => {
+    const x1 = a.lo === -Infinity ? 8 : sx(a.lo), x2 = a.hi === Infinity ? W - 8 : sx(a.hi);
+    s += `<line class="pl-c ${col}" style="stroke-width:7" x1="${x1}" y1="${y - 14}" x2="${x2}" y2="${y - 14}"/>`;
+    if (a.lo !== -Infinity) s += `<circle class="${a.lc ? 'pl-dot ' + fcol : 'pl-open ' + col}" cx="${x1}" cy="${y - 14}" r="6"/>`;
+    if (a.hi !== Infinity) s += `<circle class="${a.hc ? 'pl-dot ' + fcol : 'pl-open ' + col}" cx="${x2}" cy="${y - 14}" r="6"/>`;
+  });
+  return s + '</svg>';
+}
+
+// ════════════════════════════════════════════════════════════════════════════
+//  ชุดของกลางสำหรับสื่อ "เห็นภาพ + ได้ลองทำ" (docs/media-design-guide.md) — ใช้ร่วมทั้ง 5 ชิ้น
+//  ไม่มีไลบรารีภายนอก: SVG + requestAnimationFrame + Promise (เปิดจาก file:// ได้)
+//
+//  1) makeAnimator()        ตัวคุมแอนิเมชัน: await A.run(ms, t => …) · await A.wait(ms) · A.kill()
+//  2) sv / svArrow / svChip ตัวช่วยสร้างองค์ประกอบ SVG (ลูกศรที่ยืด/เลื่อนปลายได้, "ชิปคู่อันดับ")
+//  3) makeScenes()          ตัวเล่นฉาก  ◀ ↻ ▶ + "ฉากที่ k / n"
+//  4) makePredict()         ทายก่อนเฉลย (เลือกข้อ → ภาพ → ทาย → ผล + เฉลยบนภาพ)
+//  5) plotPointer()         คลิก/ลากบน Plot ในพิกัดกราฟ (ดูดเข้าจุดจำนวนเต็ม)
+// ════════════════════════════════════════════════════════════════════════════
+
+// ───────── 1) แอนิเมชัน ─────────
+const EASE = {
+  lin: t => t,
+  out: t => 1 - Math.pow(1 - t, 3),
+  inOut: t => t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2,
+  back: t => { const c = 1.70158; return 1 + (c + 1) * Math.pow(t - 1, 3) + c * Math.pow(t - 1, 2); }   // เกินนิดแล้วเด้งกลับ (ใช้ "เด้งขึ้น")
+};
+const lerp = (a, b, t) => a + (b - a) * t;
+const reducedMotion = () => { try { return window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) { return false; } };
+// makeAnimator() → A  (ใช้ 1 ตัวต่อ 1 การเล่น พอ A.kill() ทุกอย่างที่ค้างอยู่หยุดทันทีและ Promise ที่รอไม่คืนค่าอีก)
+//   await A.run(ms, t => {…}, ease?)   เรียก fn(t) ทุกเฟรม t = 0→1 (ผ่าน ease, ค่าเริ่ม inOut) ; เฟรมสุดท้ายได้ t = 1 พอดี
+//   await A.wait(ms)                   หน่วงเวลา
+//   await Promise.all([A.run(…), A.run(…)])   เล่นพร้อมกัน
+function makeAnimator() {
+  const A = { dead: false };
+  A.run = (ms, fn, ease) => new Promise(res => {
+    if (A.dead) return;
+    const e = ease || EASE.inOut, t0 = performance.now();
+    const step = now => { if (A.dead) return; const t = Math.max(0, Math.min(1, (now - t0) / ms)); fn(Math.max(0, e(t))); if (t < 1) requestAnimationFrame(step); else res(); };   // (now ของ rAF อาจน้อยกว่า t0 นิดหน่อย → ตรึง t และค่า ease ไม่ให้ติดลบ)
+    requestAnimationFrame(step);
+  });
+  A.wait = ms => new Promise(res => setTimeout(() => { if (!A.dead) res(); }, ms));
+  A.kill = () => { A.dead = true; };
+  return A;
+}
+
+// ───────── 2) ตัวช่วย SVG ─────────
+const SVGNS = 'http://www.w3.org/2000/svg';
+// sv('rect', {x:1, …, text:'ข้อความ'}, parent?) — attrs.text = textContent
+function sv(tag, attrs, parent) {
+  const e = document.createElementNS(SVGNS, tag);
+  for (const k in (attrs || {})) { if (k === 'text') e.textContent = attrs[k]; else e.setAttribute(k, attrs[k]); }
+  if (parent) parent.appendChild(e);
+  return e;
+}
+// ลูกศรที่ "ยืด" ได้: a = svArrow(parent, 'red'?) ; a.set(x1, y1, x2, y2, p) วาดลูกศรไปถึง p ของความยาว (p 0→1 = เส้นพุ่งออก, p<0.04 = ซ่อน)
+//   เปลี่ยนสี: a.cls('red' | 'green' | 'muted' | '') · เลื่อนปลายลูกศร = เรียก set ซ้ำด้วย y2 ที่ค่อยๆ เปลี่ยน
+function svArrow(parent, cls) {
+  const g = sv('g', { class: 'sc-arr ' + (cls || '') }, parent), line = sv('line', {}, g), head = sv('polygon', {}, g);
+  const a = { g, line, head };
+  a.cls = c => { g.setAttribute('class', 'sc-arr ' + (c || '')); return a; };
+  a.set = (x1, y1, x2, y2, p) => {
+    p = p === undefined ? 1 : p;
+    const dx = x2 - x1, dy = y2 - y1, L = Math.hypot(dx, dy) || 1, ux = dx / L, uy = dy / L, tx = x1 + dx * p, ty = y1 + dy * p, hl = Math.min(11, L * p);
+    g.style.display = p < 0.04 ? 'none' : '';
+    line.setAttribute('x1', x1); line.setAttribute('y1', y1);
+    line.setAttribute('x2', (tx - ux * hl * .8).toFixed(2)); line.setAttribute('y2', (ty - uy * hl * .8).toFixed(2));
+    const bx = tx - ux * hl, by = ty - uy * hl, nx = -uy * hl * .42, ny = ux * hl * .42;
+    head.setAttribute('points', `${tx.toFixed(2)},${ty.toFixed(2)} ${(bx + nx).toFixed(2)},${(by + ny).toFixed(2)} ${(bx - nx).toFixed(2)},${(by - ny).toFixed(2)}`);
+    return a;
+  };
+  return a;
+}
+// "ชิปคู่อันดับ" ใน SVG: c = svChip(parent, '(1, a)', 'sel'?) ; c.at(x, y, scale, opacity) วางที่จุดกึ่งกลาง ; c.cls('sel' | 'dim' | '')
+function svChip(parent, text, cls, w, h) {
+  w = w || 70; h = h || 30;
+  const g = sv('g', { class: 'sc-chip ' + (cls || '') }, parent);
+  sv('rect', { x: -w / 2, y: -h / 2, width: w, height: h, rx: h / 2 }, g);
+  sv('text', { x: 0, y: 6, 'text-anchor': 'middle', text }, g);
+  const c = { g, w, h };
+  c.at = (x, y, s, o) => { g.setAttribute('transform', `translate(${(+x).toFixed(2)} ${(+y).toFixed(2)}) scale(${s === undefined ? 1 : s})`); g.style.opacity = o === undefined ? 1 : o; g.style.display = o === 0 ? 'none' : ''; return c; };
+  c.cls = k => { g.setAttribute('class', 'sc-chip ' + (k || '')); return c; };
+  return c;
+}
+
+// ───────── 3) ตัวเล่นฉาก ─────────
+// makeScenes(host, scenes, o) → w            o = { prompt: T|html  (คำโปรย ≤ 1 บรรทัด เหนือภาพ) }
+//   scene = {
+//     cap:  T(th, en) | html | () => html     คำบรรยาย/เหตุผล — ขึ้นใต้ปุ่มทันทีที่กด ▶ ของฉากนี้ (เหตุผลยาวอยู่ที่นี่เท่านั้น)
+//     end:  S => {}                           วาด "สภาพจบฉาก" ลง S.el (ที่ว่างเปล่า) ทันที ไม่มีแอนิเมชัน — ใช้ตอนย้อน/ข้าม/เปลี่ยนภาษา/ลดการเคลื่อนไหว
+//     play: async S => {}   (ไม่บังคับ)       เล่นแอนิเมชัน: ตอนเรียก S.el มีภาพ "จบฉากก่อนหน้า" วาดไว้แล้ว (ฉากแรก = ว่าง; อยากเริ่มจากภาพอื่นก็ล้าง S.el แล้ววาดเอง)
+//                                            ใช้ await S.anim.run(ms, t => …) / await S.anim.wait(ms) · จบแล้วผู้เล่นวาด end(S) ซ้ำให้อัตโนมัติ (ต้องหน้าตาเหมือนจุดจบของ play)
+//   }
+//   S = { el, k, anim (makeAnimator), reduced }   แอนิเมชันถูกตัดด้วย anim.kill() เสมอเมื่อ ▶ / ◀ / ↻ / เปลี่ยนภาษา — end() ต้องวาดจากศูนย์ได้เองโดยไม่พึ่งผลของ play
+//   พฤติกรรม: เปิดมาที่ฉาก 1 ในสภาพจบ (ภาพมาก่อน) · ↻ เล่นฉากนี้ซ้ำ · ◀ วาดจบฉากก่อนหน้าทันที ·
+//             ▶ ระหว่างแอนิเมชัน = กระโดดไปจบฉากนั้นก่อน (กดอีกครั้งถึงไปฉากถัดไป) · prefers-reduced-motion = ไม่เล่น แสดงภาพจบทันที
+//   w.k = ฉากปัจจุบัน (0-based) · w.go(k, play) · w.refresh() (ลงทะเบียนใน LIVE แล้ว — เปลี่ยนภาษากลางฉากไม่รีเซ็ต)
+function makeScenes(host, scenes, o) {
+  o = o || {};
+  const w = { k: 0, playing: false, anim: null };
+  host.innerHTML = '<div class="sc-prompt"></div><div class="sc-stage"></div><div class="wg-nav sc-nav"><button class="btn ghost sc-prev"></button><button class="btn ghost sc-rep"></button><span class="wg-cnt"></span><button class="btn sc-next"></button></div><div class="wg-cap sc-cap"></div>';
+  const q = s => host.querySelector(s), stage = q('.sc-stage'), cap = q('.sc-cap'), prev = q('.sc-prev'), rep = q('.sc-rep'), next = q('.sc-next'), cnt = q('.wg-cnt'), pr = q('.sc-prompt');
+  const mkS = (k, anim) => ({ el: stage, k, anim, reduced: reducedMotion() });
+  const drawEnd = k => { stage.innerHTML = ''; scenes[k].end(mkS(k, null)); };
+  const capOf = sc => typeof sc.cap === 'function' ? sc.cap() : tx(sc.cap);
+  const paint = fresh => {
+    pr.innerHTML = o.prompt ? tx(o.prompt) : ''; pr.style.display = o.prompt ? '' : 'none';
+    cap.innerHTML = capOf(scenes[w.k]);
+    if (fresh) { cap.classList.remove('fresh'); void cap.offsetWidth; cap.classList.add('fresh'); }
+    cnt.textContent = (EN() ? 'Scene ' : 'ฉากที่ ') + (w.k + 1) + ' / ' + scenes.length;
+    prev.textContent = '◀ ' + (EN() ? 'Back' : 'ย้อน'); rep.textContent = '↻ ' + (EN() ? 'Replay' : 'เล่นซ้ำ'); next.textContent = (EN() ? 'Next' : 'ถัดไป') + ' ▶';
+    prev.disabled = w.k === 0; next.disabled = w.k >= scenes.length - 1 && !w.playing;
+  };
+  const stop = () => { if (w.anim) w.anim.kill(); w.anim = null; w.playing = false; };
+  w.go = (k, play) => {
+    stop(); w.k = Math.max(0, Math.min(scenes.length - 1, k));
+    const sc = scenes[w.k];
+    if (play && sc.play && !reducedMotion()) {
+      const anim = makeAnimator(), kk = w.k; w.anim = anim; w.playing = true;
+      stage.innerHTML = ''; if (kk > 0) scenes[kk - 1].end(mkS(kk, anim));
+      paint(true);
+      Promise.resolve().then(() => sc.play(mkS(kk, anim))).catch(e => console.error(e)).then(() => { if (w.anim === anim && !anim.dead) { stop(); drawEnd(kk); paint(false); } });
+    } else { drawEnd(w.k); paint(!!play); }
+  };
+  const finish = () => { stop(); drawEnd(w.k); paint(false); };
+  prev.onclick = () => w.go(w.k - 1, false);
+  rep.onclick = () => w.go(w.k, true);
+  next.onclick = () => { if (w.playing) finish(); else w.go(w.k + 1, true); };
+  w.refresh = () => { if (w.playing) finish(); else { drawEnd(w.k); paint(false); } };
+  LIVE.push(w); w.go(0, false);
+  return w;
+}
+
+// ───────── 4) ทายก่อนเฉลย ─────────
+// makePredict(host, items, o) → w           o = { label: T (หัวแถวชิป), prompt: T|html (คำโปรย ≤ 1 บรรทัดเหนือภาพ) }
+//   item = {
+//     chip: T|html                            ข้อความบนชิปเลือกข้อ (ห้ามบอกคำตอบ)
+//     draw: (el, ctx) => {}                   วาด "ภาพ" ลง el (ล้างแล้วก่อนเรียก) — เรียกตอนเลือกข้อ (ยังไม่มีคำตัดสิน) และเรียกซ้ำทุกครั้งที่มีการทาย/เปลี่ยนภาษา
+//                                             ภาพเป็นฟังก์ชันของสถานะ: อ่าน ctx.done[i] (ข้อ i ถูกทายแล้ว) ctx.ok[i] (ทายถูก) ctx.picks[i] แล้วไฮไลต์เหตุผลเฉพาะข้อที่ทายแล้ว
+//                                             ctx.animate = true เมื่อเรียกเพราะ "เพิ่งทายข้อ ctx.last" (เล่นแอนิเมชันเฉลยได้ด้วย await ctx.anim.run(…)) · false = วาดนิ่งๆ (เปลี่ยนภาษา/รีเฟรช)
+//                                             ctx.data = วัตถุว่างที่เก็บสถานะภายในของภาพ (เช่น ตำแหน่งตัวเลื่อน) คงอยู่ตลอดข้อนี้ · ctx.anim = makeAnimator ของการวาดรอบนี้ (ถูก kill เมื่อวาดรอบถัดไป)
+//     qs: [{ q: T|html (คำถาม), o: [T|html…] ตัวเลือก (เรียงตามที่ต้องการ), a: index คำตอบถูก, why: T|html|(ctx)=>… เหตุผล (ขึ้นหลังทายเท่านั้น) }]   ← ถามได้หลายข้อต่อภาพ
+//   }
+//   ไม่นับคะแนน · กดชิปข้อเดิมซ้ำ = ล้างคำตอบเริ่มใหม่ · ลงทะเบียน LIVE แล้ว (เปลี่ยนภาษาแล้วคำตอบยังอยู่)
+function makePredict(host, items, o) {
+  o = o || {};
+  const w = { cur: 0, st: null, anim: null };
+  host.innerHTML = '<div class="chips pr-chips"></div><div class="sc-prompt"></div><div class="pr-stage"></div><div class="pr-qs"></div>';
+  const chips = host.querySelector('.pr-chips'), pr = host.querySelector('.sc-prompt'), stage = host.querySelector('.pr-stage'), qbox = host.querySelector('.pr-qs');
+  const fresh = i => ({ i, picks: items[i].qs.map(() => null), data: {} });
+  const ctxOf = last => {
+    const st = w.st, it = items[st.i];
+    return { picks: st.picks.slice(), done: st.picks.map(p => p !== null), ok: st.picks.map((p, k) => p !== null && p === it.qs[k].a), last, animate: last !== undefined && !reducedMotion(), anim: w.anim, data: st.data, item: st.i };
+  };
+  const drawStage = last => {
+    if (w.anim) w.anim.kill(); w.anim = makeAnimator();
+    stage.innerHTML = '';
+    const ctx = ctxOf(last);
+    Promise.resolve().then(() => items[w.st.i].draw(stage, ctx)).catch(e => console.error(e));
+  };
+  const paintQs = () => {
+    const st = w.st, it = items[st.i];
+    qbox.innerHTML = it.qs.map((qq, k) => `<div class="pr-q" data-k="${k}"><div class="quiz-q">${tx(qq.q)}</div><div class="quiz-opts">${qq.o.map((op, j) => `<button class="quiz-opt" data-j="${j}">${tx(op)}</button>`).join('')}</div><div class="pr-res"></div></div>`).join('');
+    it.qs.forEach((qq, k) => {
+      const box = qbox.children[k], p = st.picks[k];
+      box.querySelectorAll('.quiz-opt').forEach(b => { b.onclick = () => answer(k, +b.dataset.j); });
+      if (p === null) return;
+      box.querySelectorAll('.quiz-opt').forEach((b, j) => { if (j === qq.a) b.classList.add('correct'); else if (j === p) b.classList.add('wrong'); b.style.pointerEvents = 'none'; });
+      const ok = p === qq.a, why = typeof qq.why === 'function' ? qq.why(ctxOf()) : tx(qq.why);
+      box.querySelector('.pr-res').innerHTML = `<div class="verdict ${ok ? 'ok' : 'no'}"><span class="mk">${ok ? '✓' : '✗'}</span><div>${ok ? (EN() ? 'Correct! ' : 'ทายถูก! ') : (EN() ? 'Not quite — ' : 'ยังไม่ใช่ — ')}${why}</div></div>`;
+    });
+  };
+  const answer = (k, j) => { if (w.st.picks[k] !== null) return; w.st.picks[k] = j; paintQs(); drawStage(k); };
+  const paint = () => {
+    chips.innerHTML = (o.label ? `<span class="chips-label">${tx(o.label)}</span>` : '') + items.map((it, i) => `<button class="chip${i === w.cur ? ' active' : ''}" data-i="${i}">${tx(it.chip)}</button>`).join('');
+    chips.querySelectorAll('.chip').forEach(c => c.onclick = () => select(+c.dataset.i));
+    pr.innerHTML = o.prompt ? tx(o.prompt) : ''; pr.style.display = o.prompt ? '' : 'none';
+  };
+  const select = i => { w.cur = i; w.st = fresh(i); paint(); paintQs(); drawStage(); };
+  w.refresh = () => { paint(); paintQs(); drawStage(); };
+  LIVE.push(w); select(0);
+  return w;
+}
+
+// ───────── 5) คลิก/ลากบน Plot ─────────
+// plotPointer(svgEl, plot, o) → { toPt }       เรียกหลังใส่ plot.svg() ลง DOM ทุกครั้ง (svg ถูกสร้างใหม่ทุกครั้งที่วาดซ้ำ)
+//   o = { snap: 1 (ระยะดูดเป็นหน่วยกราฟ · 0 = ไม่ดูด) , clamp: true (ตรึงให้อยู่ในกราฟ) ,
+//         onDown(pt, e), onDrag(pt, e) (ระหว่างกดค้างลาก), onUp(pt, e), onClick(pt, e) (กด-ปล่อยโดยแทบไม่ขยับ = คลิก), onHover(pt, e) (เมาส์เคลื่อนโดยไม่กด),
+//         onLeave(e) (เมาส์ออกจากกราฟ), touchAction: 'none' (ค่าเริ่ม ใช้กับการลาก) | 'pan-y' (แตะอย่างเดียว ให้นิ้วเลื่อนหน้าผ่านกราฟได้) }
+//   ⚠️ ถ้าต้องลากต่อเนื่อง อย่าสร้าง svg ใหม่ระหว่างลาก (pointer capture จะหลุด) — วาดส่วนที่ขยับลงใน <g> ภายใน svg เดิม
+//   pt = { x, y (พิกัดกราฟที่ดูดแล้ว), rx, ry (ก่อนดูด), px, py (พิกัด SVG), inside (อยู่ในกรอบกราฟไหม) }
+//   ใช้ Pointer Events (เมาส์ + นิ้ว), svg.style.touchAction = 'none', แปลงพิกัดจอ→กราฟด้วย getScreenCTM
+function plotPointer(svg, plot, o) {
+  o = o || {};
+  const snap = o.snap === undefined ? 1 : o.snap;
+  svg.style.touchAction = o.touchAction || 'none';
+  svg.style.userSelect = 'none'; svg.style.webkitUserSelect = 'none';   // ลากแล้วไม่ให้ตัวหนังสือในกราฟถูกเลือก
+  const toPt = e => {
+    const m = svg.getScreenCTM(); if (!m) return null;
+    const p = svg.createSVGPoint(); p.x = e.clientX; p.y = e.clientY;
+    const s = p.matrixTransform(m.inverse());
+    const rx = plot.ix(s.x), ry = plot.iy(s.y), sn = v => snap ? Math.round(v / snap) * snap : v;
+    let x = sn(rx), y = sn(ry);
+    const inside = rx >= plot.xmin - .01 && rx <= plot.xmax + .01 && ry >= plot.ymin - .01 && ry <= plot.ymax + .01;
+    if (o.clamp !== false) { x = Math.min(plot.xmax, Math.max(plot.xmin, x)); y = Math.min(plot.ymax, Math.max(plot.ymin, y)); }
+    return { x: +x.toFixed(6) + 0, y: +y.toFixed(6) + 0, rx, ry, px: s.x, py: s.y, inside };
+  };
+  let down = null;
+  svg.addEventListener('pointerdown', e => {
+    if (e.pointerType === 'mouse' && e.button !== 0) return;
+    down = { x: e.clientX, y: e.clientY, moved: false };
+    try { svg.setPointerCapture(e.pointerId); } catch (err) {}
+    const p = toPt(e); if (p && o.onDown) o.onDown(p, e);
+  });
+  svg.addEventListener('pointermove', e => {
+    const p = toPt(e); if (!p) return;
+    if (down) { if (Math.hypot(e.clientX - down.x, e.clientY - down.y) > 6) down.moved = true; if (o.onDrag) o.onDrag(p, e); }
+    else if (o.onHover) o.onHover(p, e);
+  });
+  svg.addEventListener('pointerup', e => {
+    if (!down) return; const was = down; down = null;
+    const p = toPt(e); if (!p) return;
+    if (o.onUp) o.onUp(p, e);
+    if (!was.moved && o.onClick) o.onClick(p, e);
+  });
+  svg.addEventListener('pointercancel', () => { down = null; });
+  svg.addEventListener('pointerleave', e => { if (!down && o.onLeave) o.onLeave(e); });
+  return { toPt };
+}
+
+
+// ══════════════ ฟังก์ชันผกผัน ══════════════
+// ภาพมาก่อน · ฉากเล่าเรื่อง (makeScenes) · ทายก่อนเฉลย (makePredict) · คลิกบนกราฟ (plotPointer) — ดู docs/media-design-guide.md §3④
+const I = s => `<i>${s}</i>`;
+const X = I('x'), Y = I('y');
+const INF = Infinity, iv = (lo, hi, lc, hc) => IV(lo, hi, lc, hc);
+const setStr = a => '{' + a.join(', ') + '}';
+const fi = '<i>f</i><sup>−1</sup>';
+const cbrt = s => `<sup>3</sup>${rt(s)}`;
+const YN = [T('✓ ใช่', '✓ Yes'), T('✗ ไม่ใช่', '✗ No')];
+const FN2 = [T('✓ เป็นฟังก์ชัน', '✓ A function'), T('✗ ไม่เป็นฟังก์ชัน', '✗ Not a function')];
+const pr2 = (x, y) => `(${mn(x)}, ${mn(y)})`;
+// รายการ "a, b และ c" — ต้องระบุภาษา l เพราะ T(th, en) ถูกสร้างตอนโหลดหน้า
+const listAnd = (a, l) => { const t = a.map(v => typeof v === 'number' ? num(v) : v), and = l === 'en' ? ' and ' : ' และ '; return t.length < 3 ? t.join(and) : t.slice(0, -1).join(', ') + and + t[t.length - 1]; };
+
+// CSS เฉพาะชิ้นนี้ (ใช้แต่ตัวแปรธีม จึงเปลี่ยนตามโหมดสว่าง/มืดเอง) — ฉีดจาก JS เพราะห้ามแก้ base.css
+function injectCss() {
+  const s = document.createElement('style'); s.id = 'inv-css';
+  s.textContent = `
+  .sw-box { background: var(--card); border: 1.5px solid var(--border); border-radius: 12px; padding: 8px 18px; max-width: 580px; margin: 4px auto; min-height: 250px; overflow-x: auto; }
+  .sw-row { font-size: 1.5rem; font-weight: 800; line-height: 2.4; color: var(--text); text-align: left; white-space: nowrap; }
+  .sw-row.dim { opacity: .5; }
+  .sw-row .ans { font-size: 1.4rem; }
+  .sw-x, .sw-y { display: inline-block; padding: 0 7px; border-radius: 9px; border: 2px solid; line-height: 1.5; }
+  .sw-x { border-color: var(--g-blue); background: color-mix(in srgb, var(--g-blue) 18%, var(--card)); }
+  .sw-y { border-color: var(--g-curve); background: color-mix(in srgb, var(--g-curve) 20%, var(--card)); }
+  .lump { margin: 0 2px; display: inline-block; overflow: hidden; white-space: nowrap; vertical-align: bottom; padding: 0 7px; line-height: 1.5; border-radius: 9px; border: 2px solid var(--g-purple); background: color-mix(in srgb, var(--g-purple) 16%, var(--card)); }
+  .sc-svg .cv-belt { fill: var(--border); stroke: var(--muted); stroke-width: 1.5; }
+  .sc-svg .cv-chev { fill: var(--muted); }
+  .sc-svg .cv-box { fill: color-mix(in srgb, var(--g-teal) 14%, var(--card)); stroke: var(--g-teal); stroke-width: 2.4; }
+  .sc-svg .cv-br { fill: none; stroke: var(--muted); stroke-width: 2; }
+  .sc-svg .cv-ball circle { fill: color-mix(in srgb, var(--g-curve) 28%, var(--card)); stroke: var(--g-curve); stroke-width: 2.6; }
+  .sc-svg .cv-ball text { font-size: 19px; }
+  .sc-svg .dr-cell { fill: var(--card); stroke: var(--muted); stroke-width: 2; }
+  .sc-svg .dr-cell.hot { fill: color-mix(in srgb, var(--g-curve) 24%, var(--card)); stroke: var(--g-curve); }
+  .sc-svg .dr-cell.ok { stroke: var(--g-green); stroke-width: 3; }
+  .plot.pick { cursor: crosshair; }
+  .plot .try-hover { fill: none; stroke: var(--muted); stroke-width: 2; stroke-dasharray: 3 3; pointer-events: none; }
+  .plot .try-hl { pointer-events: none; font-size: 12px; fill: var(--muted); }
+  .rcv { margin-top: 6px; }
+  `;
+  document.head.appendChild(s);
+}
+// เฟดแถว/ก้อน HTML เข้า (ใช้ในฉากที่เป็นสมการ HTML)
+const fadeIn = (A, el, ms) => A.run(ms || 420, t => { el.style.opacity = t; el.style.transform = `translateY(${((1 - t) * 10).toFixed(1)}px)`; }, EASE.out);
+
+// ───────── แท็บ 1 การ์ด 1: สายพานย้อนกลับ ─────────
+// f(x) = 3x − 5 ประกอบด้วยเครื่อง "×3" แล้ว "−5" : ลูกบอล 2 → 6 → 1 ; f⁻¹ ถอดทีละเครื่องจากท้ายไปหน้า "+5" แล้ว "÷3" : 1 → 6 → 2
+const CV = { W: 520, H: 262, S: 50, E: 470, y: 134, bx: [150, 290], bw: 84, bt: 62, bh: 140 };
+function convBuild(root) {
+  const C = CV, m = {};
+  const svg = m.svg = sv('svg', { class: 'sc-svg', viewBox: `0 0 ${C.W} ${C.H}` }, root);
+  sv('text', { x: 18, y: 28, class: 'sc-big', text: 'f(x) = 3x − 5' }, svg);
+  sv('rect', { class: 'cv-belt', x: 16, y: C.y + 26, width: C.W - 32, height: 14, rx: 7 }, svg);
+  const chev = dir => { const g = sv('g', {}, svg); for (let i = 0; i < 11; i++) { const x = 36 + i * 44 + (dir > 0 ? 0 : 22), y = C.y + 33; sv('polygon', { class: 'cv-chev', points: dir > 0 ? `${x - 5},${y - 5} ${x + 5},${y} ${x - 5},${y + 5}` : `${x + 5},${y - 5} ${x - 5},${y} ${x + 5},${y + 5}` }, g); } return g; };
+  m.gR = chev(1); m.gL = chev(-1);
+  m.box = C.bx.map((x, i) => { const g = sv('g', {}, svg); sv('rect', { class: 'cv-box', x: x - C.bw / 2, y: C.bt, width: C.bw, height: C.bh, rx: 12 }, g); return { g, big: sv('text', { x, y: C.bt + 32, 'text-anchor': 'middle', class: 'sc-big', text: '' }, g), small: sv('text', { x, y: C.bt + 56, 'text-anchor': 'middle', class: 'sc-small', text: '' }, g) }; });
+  m.brG = sv('g', {}, svg);
+  sv('path', { class: 'cv-br', d: `M${C.bx[0] - C.bw / 2} ${C.bt - 8} v-8 H${C.bx[1] + C.bw / 2} v8` }, m.brG);
+  m.brT = sv('text', { x: (C.bx[0] + C.bx[1]) / 2, y: C.bt - 24, 'text-anchor': 'middle', class: 'sc-big', text: '' }, m.brG);
+  m.ballG = sv('g', { class: 'cv-ball' }, svg); sv('circle', { cx: 0, cy: 0, r: 21 }, m.ballG); m.ballT = sv('text', { x: 0, y: 7, 'text-anchor': 'middle', text: '' }, m.ballG);
+  m.bot = sv('text', { x: C.W / 2, y: C.H - 14, 'text-anchor': 'middle', class: 'sc-big', text: '' }, svg);
+  m.ball = (x, v, op, s) => { m.ballG.setAttribute('transform', `translate(${(+x).toFixed(1)} ${C.y}) scale(${s || 1})`); m.ballT.textContent = v; m.ballG.style.opacity = op === undefined ? 1 : op; };
+  // mode: 1 = f (ไปหน้า) · −1 = f⁻¹ (ย้อนกลับ) · 0 = ทั้งคู่ (ไปแล้วกลับ)
+  m.mode = md => {
+    const F = ['×3', '−5'], B = ['÷3', '+5'];
+    m.box.forEach((b, i) => { b.big.textContent = md === -1 ? B[i] : F[i]; b.small.textContent = md === 0 ? B[i] : ''; });
+    m.brT.textContent = md === 1 ? 'f' : md === -1 ? 'f⁻¹' : 'f⁻¹ ∘ f';
+    m.gR.style.display = md === -1 ? 'none' : ''; m.gL.style.display = md === 1 ? 'none' : '';
+  };
+  m.pose = k => {
+    m.mode(k === 0 || k === -1 ? 1 : k === 1 ? -1 : 0);
+    if (k === 0) m.ball(C.E, '1'); else m.ball(C.S, '2');
+    m.bot.textContent = k === 0 ? 'f(2) = 1' : k === 1 ? 'f⁻¹(1) = 2' : k === 2 ? 'f⁻¹(f(2)) = f⁻¹(1) = 2' : '';
+  };
+  // วิ่งผ่านสองเครื่อง ทิศ dir (+1 ไป / −1 กลับ) · ms = เวลาต่อช่วง
+  m.run = async (A, dir, ms) => {
+    const pts = dir > 0 ? [C.S, C.bx[0], C.bx[1], C.E] : [C.E, C.bx[1], C.bx[0], C.S], vals = dir > 0 ? ['2', '6', '1'] : ['1', '6', '2'];
+    m.ball(pts[0], vals[0]);
+    for (let i = 1; i <= 3; i++) {
+      const v = vals[i - 1];
+      await A.run(ms, t => m.ball(lerp(pts[i - 1], pts[i], t), v, Math.abs(lerp(pts[i - 1], pts[i], t) - (i < 3 ? pts[i] : 1e9)) < C.bw / 2 ? .6 : 1), EASE.lin);
+      if (i < 3) {
+        await A.run(300, t => m.ball(pts[i], t < .5 ? v : vals[i], .6, 1 + .3 * Math.sin(Math.PI * t)), EASE.lin);
+        await A.wait(120);
+      }
+    }
+    m.ball(pts[3], vals[2]);
+  };
+  return m;
+}
+const convFresh = (S, k) => { S.el.innerHTML = ''; const m = convBuild(S.el); m.pose(k); return m; };
+const CONV_SCENES = [
+  { cap: T(`ลูกบอลเลข <b>2</b> วิ่งเข้าเครื่อง <i>f</i>: เครื่องแรก ×3 ได้ 6 · เครื่องที่สอง −5 ได้ 1 → <i>f</i>(2) = 1`, `Ball <b>2</b> rolls into machine <i>f</i>: the first box ×3 gives 6 · the second −5 gives 1 → <i>f</i>(2) = 1.`),
+    end: S => { convFresh(S, 0); },
+    play: async S => { const m = convFresh(S, -1); m.bot.textContent = ''; await S.anim.wait(250); await m.run(S.anim, 1, 600); m.bot.textContent = 'f(2) = 1'; } },
+  { cap: T(`กลับทิศสายพาน! ลูกบอล 1 วิ่งย้อนกลับ และต้อง<b>ถอดจากเครื่องท้ายไปเครื่องหน้า</b>: +5 ได้ 6 · แล้ว ÷3 ได้ 2 → <i>f</i><sup>−1</sup>(1) = 2 · เครื่องย้อนกลับนี้คือ <i>f</i><sup>−1</sup>(x) = ${frac('x + 5', '3')}`,
+           `Reverse the belt! Ball 1 rolls back and must <b>undo the boxes from the last to the first</b>: +5 gives 6 · then ÷3 gives 2 → <i>f</i><sup>−1</sup>(1) = 2 · this backward machine is <i>f</i><sup>−1</sup>(x) = ${frac('x + 5', '3')}.`),
+    end: S => { convFresh(S, 1); },
+    play: async S => {
+      const m = convFresh(S, 0), A = S.anim; m.bot.textContent = ''; await A.wait(300);
+      await A.run(520, t => { m.gR.style.opacity = 1 - t; m.box.forEach(b => { b.g.style.opacity = 1 - .75 * Math.sin(Math.PI * t); }); m.brG.style.opacity = 1 - Math.sin(Math.PI * t); if (t > .5 && m.brT.textContent === 'f') m.mode(-1); }, EASE.lin);
+      m.gR.style.opacity = 1; m.mode(-1); await A.wait(150);
+      await m.run(A, -1, 600); m.bot.textContent = 'f⁻¹(1) = 2';
+    } },
+  { cap: T(`วิ่งไปแล้วย้อนกลับ ได้เลขเดิมเสมอ: <i>f</i><sup>−1</sup>(<i>f</i>(2)) = 2 · <i>f</i><sup>−1</sup> "ล้าง" สิ่งที่ <i>f</i> ทำไว้`,
+           `Go forward, then come back, and you always get the starting number: <i>f</i><sup>−1</sup>(<i>f</i>(2)) = 2 · <i>f</i><sup>−1</sup> "washes out" what <i>f</i> did.`),
+    end: S => { convFresh(S, 2); },
+    play: async S => {
+      const m = convFresh(S, 1), A = S.anim; m.bot.textContent = ''; m.mode(1); await A.wait(300);
+      await m.run(A, 1, 380); m.mode(-1); await A.wait(150); await m.run(A, -1, 380); m.mode(0); m.bot.textContent = 'f⁻¹(f(2)) = f⁻¹(1) = 2';
+    } }
+];
+
+// ───────── แท็บ 1 การ์ด 2: ป้าย x กับ y ลอยสลับที่ แล้วจัดรูป ─────────
+const Xs = `<span class="sw-x">${X}</span>`, Ys = `<span class="sw-y">${Y}</span>`;
+const SWR = [
+  `<i>f</i>(${X}) = 3${X} − 5`,
+  `${Ys} = 3${Xs} − 5`,
+  `${Xs} = 3${Ys} − 5`,
+  `3${Ys} = ${Xs} + 5`,
+  `${Ys} = ${frac(`${Xs} + 5`, '3')}`,
+  `${fi}(${X}) = ${ans(frac(`${X} + 5`, '3'))}`
+];
+const SWS = [{ rows: [0, 1], dim: [0] }, { rows: [1, 2], dim: [1] }, { rows: [2, 3, 4], dim: [2] }, { rows: [4, 5], dim: [4] }];
+function swDraw(el, sc, hideNew) {
+  el.innerHTML = '<div class="sw-box"></div>'; const box = el.firstChild, out = {};
+  sc.rows.forEach(i => { const r = document.createElement('div'); r.className = 'sw-row' + (sc.dim.includes(i) ? ' dim' : ''); r.innerHTML = SWR[i]; if (hideNew && !sc.dim.includes(i)) r.style.opacity = 0; box.appendChild(r); out[i] = r; });
+  return out;
+}
+const SW_SCENES = [
+  { cap: T(`<i>f</i>(x) คือ "ผลลัพธ์" ของ <i>f</i> ดังนั้นเขียนเป็น <b>y</b> ได้เลย: y = 3x − 5 (x = อินพุต, y = เอาต์พุต)`, `<i>f</i>(x) is the output of <i>f</i>, so just write it as <b>y</b>: y = 3x − 5 (x = input, y = output).`),
+    end: S => { swDraw(S.el, SWS[0]); },
+    play: async S => { const r = swDraw(S.el, SWS[0], true); await fadeIn(S.anim, r[0], 1); r[0].style.opacity = .5; await S.anim.wait(250); await fadeIn(S.anim, r[1]); } },
+  { cap: T(`ย้อนกลับ = อินพุตกับเอาต์พุต<b>สลับบทบาท</b> → ป้าย x กับ y ลอยสลับที่กัน: x = 3y − 5`, `Going backwards = input and output <b>swap roles</b> → the labels x and y float past each other: x = 3y − 5.`),
+    end: S => { swDraw(S.el, SWS[1]); },
+    play: async S => {
+      const r = swDraw(S.el, SWS[1], true), A = S.anim, row = r[2];
+      row.innerHTML = SWR[1]; await fadeIn(A, row, 380); await A.wait(500);
+      const xs = row.querySelector('.sw-x'), ys = row.querySelector('.sw-y'), rx = xs.getBoundingClientRect(), ry = ys.getBoundingClientRect(), dx = (ry.left + ry.width / 2) - (rx.left + rx.width / 2);
+      await A.run(1300, t => { const lift = Math.sin(Math.PI * t) * 26; xs.style.transform = `translate(${(dx * t).toFixed(1)}px, ${(-lift).toFixed(1)}px)`; ys.style.transform = `translate(${(-dx * t).toFixed(1)}px, ${lift.toFixed(1)}px)`; });
+      row.innerHTML = SWR[2];
+    } },
+  { cap: T(`จัดรูปให้ y อยู่คนเดียว: ย้าย −5 ไปบวกอีกฝั่ง → 3y = x + 5 · แล้วหารด้วย 3 → y = ${frac('x + 5', '3')}`, `Solve for y: move −5 across → 3y = x + 5 · then divide by 3 → y = ${frac('x + 5', '3')}.`),
+    end: S => { swDraw(S.el, SWS[2]); },
+    play: async S => { const r = swDraw(S.el, SWS[2], true), A = S.anim; await fadeIn(A, r[3]); await A.wait(450); await fadeIn(A, r[4]); } },
+  { cap: T(`y ตัวนี้คืออินเวอร์สของ f จึงเปลี่ยนชื่อกลับเป็น <i>f</i><sup>−1</sup>(x) = ${frac('x + 5', '3')} · ตรวจ: f(2) = 1 และ <i>f</i><sup>−1</sup>(1) = (1 + 5)/3 = 2 ✓`, `This y is the inverse of f, so rename it <i>f</i><sup>−1</sup>(x) = ${frac('x + 5', '3')} · check: f(2) = 1 and <i>f</i><sup>−1</sup>(1) = (1 + 5)/3 = 2 ✓.`),
+    end: S => { swDraw(S.el, SWS[3]); },
+    play: async S => { const r = swDraw(S.el, SWS[3], true); await fadeIn(S.anim, r[5], 600); } }
+];
+
+// ตัวอย่างวิธีคิด (คงไว้: เป็น "ขั้น" ไม่ใช่ "ฉาก")
+const MET = [
+  { label: 'f(x) = 5 − 2x', rows: () => [
+      { h: T(`${Y} = 5 − 2x`, `${Y} = 5 − 2x`), n: T('เขียน f(x) เป็น y ก่อน', 'write f(x) as y first') },
+      { h: T(`สลับ x ↔ y : &nbsp; x = 5 − 2y`, `Swap x ↔ y : &nbsp; x = 5 − 2y`), n: T('อินพุตกับเอาต์พุตสลับบทบาทกัน', 'input and output swap roles') },
+      { h: T(`จัดรูปให้ y อยู่คนเดียว : &nbsp; 2y = 5 − x → y = ${frac('5 − x', 2)}`, `Solve for y : &nbsp; 2y = 5 − x → y = ${frac('5 − x', 2)}`) },
+      { h: T(`${fi}(x) = ${ans(frac('5 − x', 2))}`, `${fi}(x) = ${ans(frac('5 − x', 2))}`), n: T('ตรวจ: f(f⁻¹(x)) = 5 − 2·(5 − x)/2 = x ✓', 'check: f(f⁻¹(x)) = 5 − 2·(5 − x)/2 = x ✓') }] },
+  { label: 'f(x) = (2x + 1)/(x − 3)', rows: () => [
+      { h: T(`${Y} = ${frac('2x + 1', 'x − 3')} &nbsp; (x ≠ 3)`, `${Y} = ${frac('2x + 1', 'x − 3')} &nbsp; (x ≠ 3)`) },
+      { h: T(`สลับ x ↔ y : &nbsp; x = ${frac('2y + 1', 'y − 3')}`, `Swap x ↔ y : &nbsp; x = ${frac('2y + 1', 'y − 3')}`) },
+      { h: T(`x(y − 3) = 2y + 1 → xy − 3x = 2y + 1 → xy − 2y = 3x + 1`, `x(y − 3) = 2y + 1 → xy − 3x = 2y + 1 → xy − 2y = 3x + 1`), n: T('ย้ายพจน์ที่มี y ไปฝั่งเดียวกัน', 'collect the y-terms on one side') },
+      { h: T(`y(x − 2) = 3x + 1 → y = ${frac('3x + 1', 'x − 2')}`, `y(x − 2) = 3x + 1 → y = ${frac('3x + 1', 'x − 2')}`) },
+      { h: T(`${fi}(x) = ${ans(frac('3x + 1', 'x − 2'))} , &nbsp; x ≠ 2`, `${fi}(x) = ${ans(frac('3x + 1', 'x − 2'))} , &nbsp; x ≠ 2`), n: T('x ≠ 2 ตรงกับ R<sub>f</sub> = ℝ − {2} (ดูแท็บ D และ R สลับกัน)', 'x ≠ 2 matches R<sub>f</sub> = ℝ − {2} (see the "D and R swap" tab)') }] },
+  { label: 'f(x) = x² + 2 , x ≥ 0', rows: () => [
+      { h: T(`${Y} = x² + 2 , &nbsp; D<sub>f</sub> = [0, ∞)`, `${Y} = x² + 2 , &nbsp; D<sub>f</sub> = [0, ∞)`), n: T('โดเมนที่จำกัดไว้ทำให้ f เป็น 1-1 จึงหาอินเวอร์สได้', 'the restricted domain makes f one-to-one, so an inverse exists') },
+      { h: T(`สลับ x ↔ y : &nbsp; x = y² + 2 → y² = x − 2`, `Swap x ↔ y : &nbsp; x = y² + 2 → y² = x − 2`) },
+      { h: T(`y = ±${rt('x − 2')} → ต้องเลือก <b>ตัวเดียว</b>`, `y = ±${rt('x − 2')} → we must pick <b>one</b> sign`), n: T('y ของอินเวอร์ส คือ x ของ f ซึ่ง x ≥ 0 → เลือกค่าบวก (R<sub>f⁻¹</sub> = D<sub>f</sub>)', 'the inverse\'s y is f\'s x, which is ≥ 0 → pick the positive root (R<sub>f⁻¹</sub> = D<sub>f</sub>)') },
+      { h: T(`${fi}(x) = ${ans(rt('x − 2'))} , &nbsp; D<sub>f⁻¹</sub> = R<sub>f</sub> = [2, ∞)`, `${fi}(x) = ${ans(rt('x − 2'))} , &nbsp; D<sub>f⁻¹</sub> = R<sub>f</sub> = [2, ∞)`) }] },
+  { label: 'f(x) = √(x − 1)', rows: () => [
+      { h: T(`${Y} = ${rt('x − 1')} , &nbsp; D<sub>f</sub> = [1, ∞) , R<sub>f</sub> = [0, ∞)`, `${Y} = ${rt('x − 1')} , &nbsp; D<sub>f</sub> = [1, ∞) , R<sub>f</sub> = [0, ∞)`) },
+      { h: T(`สลับ x ↔ y : &nbsp; x = ${rt('y − 1')} → x² = y − 1 → y = x² + 1`, `Swap x ↔ y : &nbsp; x = ${rt('y − 1')} → x² = y − 1 → y = x² + 1`), n: T('ยกกำลังสองทั้งสองข้างเพื่อกำจัดรูท', 'square both sides to remove the root') },
+      { h: T(`${fi}(x) = ${ans('x² + 1')} , &nbsp; แต่ ${ans('x ≥ 0')}`, `${fi}(x) = ${ans('x² + 1')} , &nbsp; but ${ans('x ≥ 0')}`), n: T('ห้ามลืมโดเมน: D<sub>f⁻¹</sub> = R<sub>f</sub> = [0, ∞) — ถ้าไม่ใส่ x² + 1 จะเป็นพาราโบลาเต็มซึ่งไม่ใช่ 1-1', 'never forget the domain: D<sub>f⁻¹</sub> = R<sub>f</sub> = [0, ∞) — without it x² + 1 is a full parabola, which is not one-to-one') }] },
+  { label: 'f(x) = x³ + 1', rows: () => [
+      { h: T(`${Y} = x³ + 1`, `${Y} = x³ + 1`) },
+      { h: T(`สลับ x ↔ y : &nbsp; x = y³ + 1 → y³ = x − 1`, `Swap x ↔ y : &nbsp; x = y³ + 1 → y³ = x − 1`) },
+      { h: T(`${fi}(x) = ${ans(cbrt('x − 1'))}`, `${fi}(x) = ${ans(cbrt('x − 1'))}`), n: T('รากที่ 3 หาได้ทุกจำนวนจริง จึงไม่ต้องจำกัดโดเมน', 'a cube root exists for every real number, so no domain restriction is needed') }] }
+];
+
+// ───────── แท็บ 2: กราฟสะท้อน ─────────
+// f พับตามเส้น y = x : จุด (x, y) → m + cos(πt)·(ส่วนตั้งฉาก) ; t = 0 ที่เดิม, t = 1 ที่ (y, x)  (มองจากด้านบนของกระดาษที่พับ)
+const foldPt = (x, y, c) => { const m = (x + y) / 2, h = (x - y) / 2; return [m + c * h, m - c * h]; };
+const GF = [
+  { eq: 'y = 2x − 1', f: x => 2 * x - 1, segs: [[-2.4, 3.4]], one: true, inv: `${frac('x + 1', '2')}`, pts: [[0, -1], [2, 3], [3, 5]] },
+  { eq: 'y = x³ + 2', f: x => x * x * x + 2, segs: [[-2, 1.58]], one: true, inv: cbrt('x − 2'), pts: [[-1, 1], [0, 2], [1, 3]] },
+  { eq: 'y = x² , x ≥ 0', f: x => x * x, segs: [[0, 2.449]], one: true, inv: rt('x'), pts: [[2, 4]] },
+  { eq: `y = ${rt('x')}`, f: x => Math.sqrt(x), segs: [[0, 6]], one: true, inv: 'x<sup>2</sup> , x ≥ 0', pts: [[4, 2]] },
+  { eq: 'y = x²', f: x => x * x, segs: [[-2.449, 2.449]], one: false, inv: null, pts: [[-2, 4], [2, 4]] }
+];
+const gEq = g => g.eq.replace('x²', 'x<sup>2</sup>').replace('x³', 'x<sup>3</sup>').replace(/√x/, rt('x'));
+const gPlot = () => new Plot({ w: 460, h: 460, xmin: -6, xmax: 6, ymin: -6, ymax: 6, pad: 28, lx: 2, ly: 2 });
+function foldBuild(root, g) {
+  const pl = gPlot(), m = { pl };
+  pl.dash(-9, -9, 9, 9, 's-muted'); pl.text(5.1, 5.6, 'y = x', '', 'middle');
+  root.innerHTML = pl.svg();
+  const svg = m.svg = root.querySelector('svg'), lay = sv('g', { 'clip-path': `url(#${pl.id})` }, svg), top = sv('g', {}, svg);
+  const col = g.one ? 'orange' : 'red';
+  const dpath = c => g.segs.map(sg => { let s = ''; for (let i = 0; i <= 140; i++) { const u = sg[0] + (sg[1] - sg[0]) * i / 140, q = foldPt(u, g.f(u), c); s += (i ? 'L' : 'M') + pl.X(q[0]) + ' ' + pl.Y(q[1]); } return s; }).join('');
+  m.ghost = sv('path', { class: 'pl-c s-' + col, d: dpath(-1) }, lay);
+  sv('path', { class: 'pl-c s-blue', d: dpath(1) }, lay);
+  m.links = g.pts.map(p => sv('line', { class: 'pl-dash s-pink', x1: pl.X(p[0]), y1: pl.Y(p[1]), x2: pl.X(p[1]), y2: pl.Y(p[0]) }, top));
+  m.dB = g.pts.map(p => sv('circle', { class: 'pl-dot f-blue', cx: pl.X(p[0]), cy: pl.Y(p[1]), r: 6.5 }, top));
+  m.dO = g.pts.map(p => sv('circle', { class: 'pl-dot f-' + col, cx: pl.X(p[0]), cy: pl.Y(p[1]), r: 6.5 }, top));
+  m.lbB = g.pts.map(p => sv('text', { class: 'pl-lbl b', x: pl.X(p[0]) + 9, y: pl.Y(p[1]) - 9, text: pr2(p[0], p[1]) }, top));
+  m.lbO = g.pts.map(p => sv('text', { class: 'pl-lbl ' + (g.one ? 'o' : 'r'), x: pl.X(p[1]) + 9, y: pl.Y(p[0]) + 18, text: pr2(p[1], p[0]) }, top));
+  // c: ตัวคูณส่วนตั้งฉาก 1 → −1 · lab: แสดงพิกัด/เส้นเชื่อม
+  m.fold = (c, lab) => {
+    m.ghost.setAttribute('d', dpath(c)); m.ghost.style.display = c > .985 ? 'none' : '';
+    g.pts.forEach((p, i) => { const q = foldPt(p[0], p[1], c); m.dO[i].setAttribute('cx', pl.X(q[0])); m.dO[i].setAttribute('cy', pl.Y(q[1])); m.dO[i].style.display = c > .985 ? 'none' : ''; });
+    m.links.forEach(l => { l.style.display = lab ? '' : 'none'; }); m.lbB.forEach(l => { l.style.display = lab ? '' : 'none'; }); m.lbO.forEach(l => { l.style.display = lab ? '' : 'none'; });
+  };
+  m.pose = k => { m.fold(k === 0 ? 1 : -1, k >= 2); m.dB.forEach(d => { d.style.display = k >= 0 ? '' : 'none'; }); };
+  return m;
+}
+function makeFold(host) {
+  const w = { cur: 0 };
+  host.innerHTML = '<div class="chips"></div><div class="foldsc"></div>';
+  const fresh = (S, k) => { S.el.innerHTML = ''; const m = foldBuild(S.el, GF[w.cur]); m.pose(k); return m; };
+  const g = () => GF[w.cur], p0 = () => g().pts[0];
+  const scenes = [
+    { cap: () => tx(T(`กระดาษแผ่นนี้มีกราฟของ <b><i>f</i></b> (น้ำเงิน) และเส้นประ <b>y = x</b> คือ "รอยพับ"`, `This sheet shows the graph of <b><i>f</i></b> (blue); the dashed line <b>y = x</b> is the "fold".`)),
+      end: S => { fresh(S, 0); }, play: async S => { const m = fresh(S, 0); m.svg.style.opacity = 0; await S.anim.run(500, t => { m.svg.style.opacity = t; }, EASE.lin); } },
+    { cap: () => tx(T(`พับกระดาษตามรอยพับ — กราฟของ <i>f</i> ถูกพับไปทับอีกฝั่ง ได้เส้น${g().one ? 'สีส้ม' : 'สีแดง'}`, `Fold the paper along the crease — the graph of <i>f</i> flips over to the other side and lands as the ${g().one ? 'orange' : 'red'} curve.`)),
+      end: S => { fresh(S, 1); }, play: async S => { const m = fresh(S, 0); await S.anim.wait(250); await S.anim.run(2400, t => m.fold(Math.cos(Math.PI * t), false), EASE.inOut); } },
+    { cap: () => { const p = p0(), a = p[0], b = p[1]; return g().one
+        ? tx(T(`จุด ${pr2(a, b)} บน <i>f</i> ไปตกที่ ${pr2(b, a)} — <b>พิกัดสลับกัน</b> · เส้นประเชื่อมคู่จุดตั้งฉากกับรอยพับเสมอ · เส้นที่พับมาคือกราฟของ <i>f</i><sup>−1</sup>(x) = ${g().inv}`, `The point ${pr2(a, b)} on <i>f</i> lands on ${pr2(b, a)} — <b>the coordinates swap</b> · the dashed segment joining a pair is always perpendicular to the crease · the folded curve is the graph of <i>f</i><sup>−1</sup>(x) = ${g().inv}.`))
+        : tx(T(`ภาพที่พับมา (แดง) ไม่เป็นฟังก์ชัน: เส้นตั้งตัดได้ 2 จุด เช่น ${pr2(4, -2)} กับ ${pr2(4, 2)} → <b>y = x² (ทั้งเส้น) ไม่มีอินเวอร์ส</b> ลองเลือก "x² , x ≥ 0" ที่ครึ่งเดียว`, `The folded image (red) is not a function: a vertical line meets it twice, e.g. ${pr2(4, -2)} and ${pr2(4, 2)} → <b>y = x² (the whole curve) has no inverse</b>; try "x² , x ≥ 0", the half curve.`)); },
+      end: S => { fresh(S, 2); }, play: async S => { const m = fresh(S, 1); m.fold(-1, true); m.links.forEach(l => { l.style.opacity = 0; }); m.lbB.concat(m.lbO).forEach(l => { l.style.opacity = 0; }); await S.anim.run(600, t => { m.links.concat(m.lbB, m.lbO).forEach(l => { l.style.opacity = t; }); }, EASE.lin); } }
+  ];
+  const sc = makeScenes(host.querySelector('.foldsc'), scenes, { prompt: T('เลือกฟังก์ชัน แล้วกด ▶ ดูกระดาษถูกพับตามเส้น y = x', 'Pick a function, then press ▶ to fold the paper along y = x') });
+  w.render = () => {
+    const c = host.querySelector('.chips');
+    c.innerHTML = `<span class="chips-label">f</span>` + GF.map((e, i) => `<button class="chip${i === w.cur ? ' active' : ''}" data-i="${i}">${gEq(e)}</button>`).join('');
+    c.querySelectorAll('.chip').forEach(b => b.onclick = () => { w.cur = +b.dataset.i; w.render(); sc.go(sc.k, false); });
+  };
+  w.refresh = () => w.render();
+  LIVE.push(w); w.render();
+}
+
+// ลองทำ: โชว์จุด (a, b) บน f ให้คลิกจุดสะท้อน (ดูดเข้าจุดจำนวนเต็ม) — ใช้ plotPointer
+const TRY = [
+  { g: 0, a: 2, b: 3 }, { g: 1, a: 1, b: 3 }, { g: 2, a: 2, b: 4 }, { g: 3, a: 4, b: 2 }, { g: 0, a: -1, b: -3 }, { g: 1, a: -1, b: 1 }
+];
+function makeTry(host) {
+  const w = { cur: 0, st: { clicked: null } };
+  host.innerHTML = '<div class="chips"></div><div class="sc-prompt"></div><div class="setrow try-eq" style="text-align:center"></div><div class="try-stage"></div><div class="try-res"></div>';
+  const q = s => host.querySelector(s);
+  const select = i => { w.cur = i; w.st = { clicked: null }; w.render(); };
+  w.render = () => {
+    const it = TRY[w.cur], g = GF[it.g], st = w.st, a = it.a, b = it.b;
+    q('.chips').innerHTML = `<span class="chips-label">${EN() ? 'Point' : 'จุดที่'}</span>` + TRY.map((_, i) => `<button class="chip${i === w.cur ? ' active' : ''}" data-i="${i}">${i + 1}</button>`).join('');
+    q('.chips').querySelectorAll('.chip').forEach(c => c.onclick = () => select(+c.dataset.i));
+    q('.sc-prompt').innerHTML = tx(T(`คลิกบนกราฟ ตรงตำแหน่งของจุดสะท้อนของ ${pr2(a, b)} รอบเส้น y = x`, `Click on the graph where the mirror image of ${pr2(a, b)} in the line y = x lies`));
+    q('.try-eq').innerHTML = `<i>f</i> : ${gEq(g)}`;
+    const pl = gPlot(), cl = st.clicked, ok = cl && cl.x === b && cl.y === a;
+    pl.dash(-9, -9, 9, 9, 's-muted'); pl.text(5.1, 5.6, 'y = x', '', 'middle');
+    g.segs.forEach(sg => pl.param(u => u, u => g.f(u), sg[0], sg[1], 's-blue', 200));
+    if (cl) {
+      g.segs.forEach(sg => pl.param(u => g.f(u), u => u, sg[0], sg[1], 's-orange', 200));
+      pl.dash(a, b, b, a, 's-pink');
+      const f = (a + b) / 2, s = .3, sg = Math.sign(a - b), ux = sg / Math.SQRT2, uy = -sg / Math.SQRT2, vx = 1 / Math.SQRT2, vy = 1 / Math.SQRT2;   // มุมฉากที่ตีนเส้นตั้งฉาก
+      pl.put(`<path class="pl-c s-pink" style="stroke-width:1.8" d="M${pl.X(f + s * ux)} ${pl.Y(f + s * uy)} L${pl.X(f + s * (ux + vx))} ${pl.Y(f + s * (uy + vy))} L${pl.X(f + s * vx)} ${pl.Y(f + s * vy)}" clip-path="url(#${pl.id})"/>`);
+      if (!ok) pl.dot(cl.x, cl.y, 'f-red', true, 7.5);
+      pl.dot(b, a, 'f-green', false, 7); pl.text(b, a, pr2(b, a), 'g', 'start', 9, 20);
+    }
+    pl.dot(a, b, 'f-blue', false, 7); pl.text(a, b, pr2(a, b), 'b', 'start', 9, -9);
+    q('.try-stage').innerHTML = pl.svg();
+    const svg = q('.try-stage svg'), res = q('.try-res');
+    if (!cl) {
+      svg.classList.add('pick');
+      const ring = sv('circle', { class: 'try-hover', r: 8, cx: -50, cy: -50 }, svg), lab = sv('text', { class: 'try-hl', x: -50, y: -50, text: '' }, svg);
+      const hide = () => { ring.setAttribute('cx', -50); lab.setAttribute('x', -50); };
+      const pp = plotPointer(svg, pl, {
+        snap: 1,
+        onHover: pt => { if (!pt.inside) { hide(); return; } ring.setAttribute('cx', pl.X(pt.x)); ring.setAttribute('cy', pl.Y(pt.y)); lab.setAttribute('x', pl.X(pt.x) + 11); lab.setAttribute('y', pl.Y(pt.y) - 9); lab.textContent = pr2(pt.x, pt.y); },
+        onClick: pt => { if (!pt.inside) return; w.st = { clicked: { x: pt.x, y: pt.y } }; w.render(); }
+      });
+      svg.style.touchAction = 'pan-y';   // ต้องการแค่การแตะ — ให้นิ้วเลื่อนหน้าจอผ่านกราฟได้
+      svg.addEventListener('pointerleave', hide);
+      res.innerHTML = '';
+    } else {
+      res.innerHTML = `<div class="verdict ${ok ? 'ok' : 'no'}"><span class="mk">${ok ? '✓' : '✗'}</span><div>` + (ok
+        ? tx(T(`ถูก! ${pr2(a, b)} ↔ ${pr2(b, a)} : พิกัดสลับกัน และสองจุดอยู่ห่างรอยพับ y = x เท่ากัน คนละฝั่ง (เส้นประตั้งฉากกับ y = x)`, `Correct! ${pr2(a, b)} ↔ ${pr2(b, a)}: the coordinates swap, and the two points sit at the same distance from the crease y = x, on opposite sides (the dashed segment is perpendicular to y = x).`))
+        : tx(T(`ยังไม่ใช่ — คุณคลิก ${pr2(cl.x, cl.y)} (วงแดง) แต่จุดสะท้อนคือ ${pr2(b, a)} (จุดเขียว): สลับพิกัด x กับ y · เส้นประตั้งฉากกับ y = x และถูกรอยพับแบ่งครึ่งพอดี`, `Not quite — you clicked ${pr2(cl.x, cl.y)} (red ring) but the mirror image is ${pr2(b, a)} (green dot): swap x and y · the dashed segment is perpendicular to y = x and the crease cuts it exactly in half.`))) + '</div></div>' +
+        (ok ? '' : `<div style="text-align:center;margin-top:8px"><button class="btn ghost tryagain">${EN() ? '↻ Try again' : '↻ ลองอีกครั้ง'}</button></div>`);
+      const ag = res.querySelector('.tryagain'); if (ag) ag.onclick = () => { w.st = { clicked: null }; w.render(); };
+    }
+  };
+  w.refresh = () => w.render();
+  LIVE.push(w); w.render();
+}
+
+// ───────── แท็บ 3: เมื่อไรมีอินเวอร์ส ─────────
+// (ก) ลูกศรหมุนกลับหัว 180° — ทายก่อนว่ายังเป็นฟังก์ชันไหม
+const RV = [
+  { A: ['1', '2', '3'], B: ['a', 'b'], p: [[0, 0], [1, 0], [2, 1]] },
+  { A: ['1', '2', '3', '4'], B: ['a', 'b', 'c', 'd'], p: [[0, 2], [1, 0], [2, 3], [3, 1]] },
+  { A: ['1', '2', '3', '4'], B: ['a', 'b', 'c'], p: [[0, 0], [1, 1], [2, 2], [3, 1]] }
+];
+function revBuild(root, r) {
+  const m = {}, n = Math.max(r.A.length, r.B.length), H = 84 + n * 46, W = 420, xa = 100, xb = 320, mid = H / 2 + 4;
+  const ya = i => mid + (i - (r.A.length - 1) / 2) * 46, yb = j => mid + (j - (r.B.length - 1) / 2) * 46;
+  const svg = m.svg = sv('svg', { class: 'sc-svg', viewBox: `0 0 ${W} ${H}` }, root);
+  [[xa, 'A'], [xb, 'B']].forEach(([cx, nm]) => { sv('ellipse', { class: 'sc-set', cx, cy: mid, rx: 50, ry: n * 23 + 12 }, svg); sv('text', { x: cx, y: 18, 'text-anchor': 'middle', class: 'sc-big', text: nm }, svg); });
+  const inc = r.B.map((_, j) => r.p.filter(p => p[1] === j).length);
+  m.arr = r.p.map(() => svArrow(svg));
+  m.nA = r.A.map((a, i) => { const g = sv('g', { class: 'sc-node' }, svg); sv('circle', { cx: xa, cy: ya(i), r: 16 }, g); sv('text', { x: xa, y: ya(i) + 6, 'text-anchor': 'middle', text: a }, g); return g; });
+  m.nB = r.B.map((b, j) => { const g = sv('g', { class: 'sc-node' }, svg); sv('circle', { cx: xb, cy: yb(j), r: 16 }, g); sv('text', { x: xb, y: yb(j) + 6, 'text-anchor': 'middle', text: b }, g); return g; });
+  m.bot = sv('text', { x: W / 2, y: H - 12, 'text-anchor': 'middle', class: 'sc-big', text: '' }, svg);
+  const P1 = p => [xa + 22, ya(p[0])], P2 = p => [xb - 24, yb(p[1])];
+  m.rot = phi => r.p.forEach((p, i) => {
+    const a = P1(p), b = P2(p), cx = (a[0] + b[0]) / 2, cy = (a[1] + b[1]) / 2, c = Math.cos(phi), s = Math.sin(phi), rr = q => [cx + (q[0] - cx) * c - (q[1] - cy) * s, cy + (q[0] - cx) * s + (q[1] - cy) * c], u = rr(a), v = rr(b);
+    m.arr[i].set(u[0], u[1], v[0], v[1], 1);
+  });
+  m.oneOne = inc.every(c => c <= 1);
+  // rev = false: f ธรรมดา · true: กลับหัวแล้ว ระบายสี (B ที่มีลูกศรออกหลายเส้น = แดง)
+  m.pose = rev => {
+    m.rot(rev ? Math.PI : 0);
+    m.arr.forEach((a, i) => a.cls(!rev ? '' : m.oneOne ? 'green' : inc[r.p[i][1]] > 1 ? 'red' : ''));
+    m.nB.forEach((n2, j) => n2.setAttribute('class', 'sc-node' + (rev ? (inc[j] > 1 ? ' bad' : m.oneOne ? ' good' : '') : '')));
+    m.nA.forEach(n2 => n2.setAttribute('class', 'sc-node' + (rev && m.oneOne ? ' good' : '')));
+    m.bot.textContent = rev ? tx(T('f⁻¹ : ลูกศรทุกเส้นกลับหัว', 'f⁻¹ : every arrow reversed')) : 'f';
+  };
+  return m;
+}
+function revItem(r, n) {
+  const inc = r.B.map((_, j) => r.p.filter(p => p[1] === j).length), multi = r.B.filter((_, j) => inc[j] > 1), one = multi.length === 0;
+  return {
+    chip: T(`รูปที่ ${n}`, `Diagram ${n}`),
+    draw: async (el, ctx) => {
+      const m = revBuild(el, r);
+      if (!ctx.done[0]) { m.pose(false); return; }
+      if (ctx.animate) { m.pose(false); m.bot.textContent = ''; await ctx.anim.run(1300, t => m.rot(Math.PI * t)); }
+      m.pose(true);
+    },
+    qs: [{
+      q: T('ถ้ากลับหัวลูกศรทุกเส้น จะยังเป็นฟังก์ชันไหม?', 'If every arrow is reversed, is it still a function?'), o: YN, a: one ? 0 : 1,
+      why: one ? T('y ทุกตัวถูกลูกศรชี้เส้นเดียว (f เป็น 1-1) → พอกลับหัวทุกตัวยังมีลูกศรออกเส้นเดียว → ยังเป็นฟังก์ชัน → f มีอินเวอร์ส', 'every y receives exactly one arrow (f is one-to-one) → after reversing, each still has one arrow leaving → still a function → f has an inverse.')
+        : T(`${listAnd(multi, 'th')} ถูกลูกศรชี้จาก x สองตัว → พอกลับหัว ${listAnd(multi, 'th')} มีลูกศรออก 2 เส้น (สีแดง) → ไม่เป็นฟังก์ชัน เพราะ f ไม่เป็น 1-1`, `${listAnd(multi, 'en')} receives arrows from two x → after reversing it has two arrows leaving (red) → not a function, because f is not one-to-one.`)
+    }]
+  };
+}
+
+// (ข) จำกัดโดเมน — ทายก่อนว่า c น้อยสุดเท่าไรถึง 1-1 แล้วตัวเลื่อนวิ่งเอง
+const RS = [
+  { chip: '<i>f</i>(x) = (x − 2)<sup>2</sup> − 1', f: x => (x - 2) * (x - 2) - 1, v: 2, win: [-3, 8, -2, 9], sl: [-2, 5], o: [0, 1, 2, 3], a: 2, inv: `2 + ${rt('x + 1')}` },
+  { chip: '<i>f</i>(x) = |x + 1|', f: x => Math.abs(x + 1), v: -1, win: [-6, 6, -1, 8], sl: [-5, 3], o: [-2, -1, 0, 1], a: 1, inv: 'x − 1' },
+  { chip: '<i>f</i>(x) = x<sup>2</sup> − 6x + 5', f: x => x * x - 6 * x + 5, v: 3, win: [-2, 8, -5, 10], sl: [-1, 6], o: [1, 3, 5, 6], a: 1, inv: `3 + ${rt('x + 4')}` }
+];
+function rsItem(e) {
+  return {
+    chip: e.chip,
+    draw: async (el, ctx) => {
+      const D = ctx.data, any = ctx.done[0], [x0, x1, y0, y1] = e.win;
+      el.innerHTML = '<div class="plh"></div><div class="rcc"></div><div class="rcv"></div>';
+      const ph = el.querySelector('.plh'), vh = el.querySelector('.rcv');
+      const upd = c => {
+        const pl = new Plot({ w: 460, h: 400, xmin: x0, xmax: x1, ymin: y0, ymax: y1, pad: 28, lx: 1, ly: 1 });
+        if (!any) { pl.path(e.f, 's-blue', { n: 300 }); ph.innerHTML = pl.svg(); return; }
+        const one = c >= e.v - 1e-9;
+        pl.path(e.f, 's-muted', { x0: x0, x1: c, dash: true, n: 200 }); pl.path(e.f, 's-blue', { x0: c, x1: x1, n: 300 }); pl.dot(c, e.f(c), 'f-blue', false, 6.5);
+        if (!one) { const yy = e.f(c), tw = 2 * e.v - c; pl.dash(x0 - 9, yy, x1 + 9, yy, 's-red'); pl.dot(c, yy, 'f-red', false, 6); if (tw <= x1) pl.dot(tw, yy, 'f-red', false, 6); }
+        ph.innerHTML = pl.svg();
+        vh.innerHTML = `<div class="verdict ${one ? 'ok' : 'no'}"><span class="mk">${one ? '✓' : '✗'}</span><div>` + tx(one
+          ? T(`<i>x</i> ≥ ${num(c)} : เหลือขาเดียว เส้นนอนตัดไม่เกิน 1 จุด → 1-1 มีอินเวอร์ส`, `<i>x</i> ≥ ${num(c)}: one arm only, a horizontal line meets it at most once → one-to-one, so an inverse exists.`)
+          : T(`<i>x</i> ≥ ${num(c)} : ยังคร่อมจุดยอด เส้นนอนสีแดงตัด 2 จุด → ไม่ 1-1`, `<i>x</i> ≥ ${num(c)}: still straddles the vertex, the red horizontal line meets it twice → not one-to-one.`)) + '</div></div>';
+      };
+      if (!any) { upd(0); return; }
+      const lo = e.sl[0];
+      if (ctx.animate) { await ctx.anim.run(2600, t => upd(lerp(lo, e.v, t)), EASE.inOut); D.c = e.v; }
+      const c = D.c === undefined ? e.v : D.c;
+      upd(c);
+      const sc = el.querySelector('.rcc');
+      sc.innerHTML = sliderRow('<i>x</i> ≥', 'rc', e.sl[0], e.sl[1], 0.5, c);
+      const sl = sc.querySelector('#rc'), lab = sc.querySelector('#rcv'); lab.textContent = mn(c);
+      sl.oninput = () => { D.c = +sl.value; lab.textContent = mn(D.c); upd(D.c); };
+    },
+    qs: [{
+      q: T('จำกัดโดเมนเป็น x ≥ c — c น้อยที่สุดเท่าไรที่ทำให้ f เป็น 1-1?', 'Restrict the domain to x ≥ c — what is the smallest c that makes f one-to-one?'),
+      o: e.o.map(v => 'c = ' + mn(v)), a: e.a,
+      why: T(`จุดยอดอยู่ที่ x = ${num(e.v)} — ทางซ้ายกับทางขวาของจุดยอดให้ y ซ้ำกัน (เส้นแดง) ต้องเหลือขาเดียว จึงต้อง c ≥ ${num(e.v)} · ที่ c = ${num(e.v)} พอดีก็ยังได้ · ได้ <i>f</i><sup>−1</sup>(x) = ${e.inv}`, `The vertex is at x = ${num(e.v)} — points left and right of it share the same y (red line), so only one arm may stay: c ≥ ${num(e.v)} · c = ${num(e.v)} exactly is allowed · giving <i>f</i><sup>−1</sup>(x) = ${e.inv}.`)
+    }]
+  };
+}
+
+// ───────── แท็บ 4: D และ R สลับกัน ─────────
+// ตาราง D/R: ช่องของ f ลอยไขว้ไปเป็นช่องของ f⁻¹
+const DRS = [
+  { chip: `<i>f</i>(x) = ${frac('2x + 1', 'x − 3')}`, Df: 'ℝ − {3}', Rf: 'ℝ − {2}', Dfi: 'ℝ − {2}', Rfi: 'ℝ − {3}',
+    c1: T(`<i>f</i>(x) = ${frac('2x + 1', 'x − 3')} · ตัวส่วนห้ามเป็น 0 → D<sub>f</sub> = ℝ − {3} · ค่า y ที่ไปไม่ถึงคือ ${frac('a', 'c')} = 2 → R<sub>f</sub> = ℝ − {2}`, `<i>f</i>(x) = ${frac('2x + 1', 'x − 3')} · the denominator cannot be 0 → D<sub>f</sub> = ℝ − {3} · the unreachable y is ${frac('a', 'c')} = 2 → R<sub>f</sub> = ℝ − {2}.`),
+    c3: T(`ตรวจจากสูตร <i>f</i><sup>−1</sup>(x) = ${frac('3x + 1', 'x − 2')} : ตัวส่วน x − 2 ห้ามเป็น 0 → x ≠ 2 ตรงกับช่อง D<sub>f⁻¹</sub> ✓`, `Check with the formula <i>f</i><sup>−1</sup>(x) = ${frac('3x + 1', 'x − 2')}: the denominator x − 2 cannot be 0 → x ≠ 2, matching the D<sub>f⁻¹</sub> cell ✓.`) },
+  { chip: `<i>f</i>(x) = ${rt('x − 1')} + 2`, Df: '[1, ∞)', Rf: '[2, ∞)', Dfi: '[2, ∞)', Rfi: '[1, ∞)',
+    c1: T(`<i>f</i>(x) = ${rt('x − 1')} + 2 · ในรูท x − 1 ≥ 0 → D<sub>f</sub> = [1, ∞) · รูทให้ค่า ≥ 0 จึง y ≥ 2 → R<sub>f</sub> = [2, ∞)`, `<i>f</i>(x) = ${rt('x − 1')} + 2 · inside the root x − 1 ≥ 0 → D<sub>f</sub> = [1, ∞) · a root is ≥ 0, so y ≥ 2 → R<sub>f</sub> = [2, ∞).`),
+    c3: T(`ตรวจ: <i>f</i><sup>−1</sup>(x) = (x − 2)<sup>2</sup> + 1 ต้องใส่เงื่อนไข x ≥ 2 (= D<sub>f⁻¹</sub>) ไม่งั้นเป็นพาราโบลาเต็มที่ไม่ใช่ 1-1`, `Check: <i>f</i><sup>−1</sup>(x) = (x − 2)<sup>2</sup> + 1 needs the condition x ≥ 2 (= D<sub>f⁻¹</sub>); otherwise it is a full parabola, which is not one-to-one.`) },
+  { chip: `<i>f</i>(x) = x<sup>2</sup> − 1 , x ≥ 0`, Df: '[0, ∞)', Rf: '[−1, ∞)', Dfi: '[−1, ∞)', Rfi: '[0, ∞)',
+    c1: T(`<i>f</i>(x) = x<sup>2</sup> − 1 เมื่อ x ≥ 0 → D<sub>f</sub> = [0, ∞) · x² ≥ 0 จึง y ≥ −1 → R<sub>f</sub> = [−1, ∞)`, `<i>f</i>(x) = x<sup>2</sup> − 1 for x ≥ 0 → D<sub>f</sub> = [0, ∞) · x² ≥ 0, so y ≥ −1 → R<sub>f</sub> = [−1, ∞).`),
+    c3: T(`ตรวจ: <i>f</i><sup>−1</sup>(x) = ${rt('x + 1')} ในรูท x + 1 ≥ 0 → x ≥ −1 ตรงกับ D<sub>f⁻¹</sub> ✓ และค่ารูท ≥ 0 ตรงกับ R<sub>f⁻¹</sub> ✓`, `Check: <i>f</i><sup>−1</sup>(x) = ${rt('x + 1')}: inside the root x + 1 ≥ 0 → x ≥ −1, matching D<sub>f⁻¹</sub> ✓, and a root is ≥ 0, matching R<sub>f⁻¹</sub> ✓.`) }
+];
+const DRG = { W: 520, H: 250, cx: [210, 420], ry: [98, 188], cw: 188, ch: 52 };
+function drBuild(root, e) {
+  const G = DRG, m = {};
+  const svg = m.svg = sv('svg', { class: 'sc-svg', viewBox: `0 0 ${G.W} ${G.H}` }, root);
+  sv('text', { x: G.cx[0], y: 36, 'text-anchor': 'middle', class: 'sc-big', text: 'D' }, svg); sv('text', { x: G.cx[1], y: 36, 'text-anchor': 'middle', class: 'sc-big', text: 'R' }, svg);
+  sv('text', { x: 46, y: G.ry[0] + 7, 'text-anchor': 'middle', class: 'sc-big', text: 'f' }, svg); sv('text', { x: 46, y: G.ry[1] + 7, 'text-anchor': 'middle', class: 'sc-big', text: 'f⁻¹' }, svg);
+  const cell = (c, r, txt) => { const g = sv('g', {}, svg), rc = sv('rect', { class: 'dr-cell', x: G.cx[c] - G.cw / 2, y: G.ry[r] - G.ch / 2, width: G.cw, height: G.ch, rx: 12 }, g), t = sv('text', { x: G.cx[c], y: G.ry[r] + 7, 'text-anchor': 'middle', class: 'sc-big', text: txt }, g); return { rc, t }; };
+  m.f = [cell(0, 0, e.Df), cell(1, 0, e.Rf)];
+  m.fi = [cell(0, 1, e.Dfi), cell(1, 1, e.Rfi)];
+  m.chip = [svChip(svg, e.Df, 'sel', 150, 40), svChip(svg, e.Rf, 'sel', 150, 40)];
+  m.pose = k => {
+    m.fi.forEach(c => { c.t.style.opacity = k >= 1 ? 1 : 0; c.rc.setAttribute('class', 'dr-cell' + (k === 1 ? ' hot' : k >= 2 ? ' ok' : '')); });
+    m.chip.forEach(c => c.at(0, 0, 1, 0));
+  };
+  return m;
+}
+function makeDrSwap(host) {
+  const w = { cur: 0 };
+  host.innerHTML = '<div class="chips"></div><div class="drsc"></div>';
+  const fresh = (S, k) => { S.el.innerHTML = ''; const m = drBuild(S.el, DRS[w.cur]); m.pose(k); return m; };
+  const e = () => DRS[w.cur];
+  const scenes = [
+    { cap: () => tx(e().c1), end: S => { fresh(S, 0); }, play: async S => { const m = fresh(S, 0); m.svg.style.opacity = 0; await S.anim.run(500, t => { m.svg.style.opacity = t; }, EASE.lin); } },
+    { cap: () => tx(T(`ค่าที่ <i>f</i> <b>ส่งออก</b> (R<sub>f</sub>) กลายเป็นค่าที่ <i>f</i><sup>−1</sup> <b>รับเข้า</b> (D<sub>f⁻¹</sub>) และ D<sub>f</sub> ไปเป็น R<sub>f⁻¹</sub> — ช่องลอยไขว้สลับที่กัน`, `The values <i>f</i> <b>sends out</b> (R<sub>f</sub>) become the values <i>f</i><sup>−1</sup> <b>takes in</b> (D<sub>f⁻¹</sub>), and D<sub>f</sub> becomes R<sub>f⁻¹</sub> — the cells float across and trade places.`)),
+      end: S => { fresh(S, 1); },
+      play: async S => {
+        const m = fresh(S, 0), A = S.anim, G = DRG; m.fi.forEach(c => { c.t.style.opacity = 0; });
+        const dst = [1, 0];   // D_f → ช่อง R ของ f⁻¹ ; R_f → ช่อง D ของ f⁻¹
+        await A.wait(300);
+        await A.run(1700, t => m.chip.forEach((c, i) => c.at(lerp(G.cx[i], G.cx[dst[i]], t), lerp(G.ry[0], G.ry[1], t), 1, Math.min(1, t * 6))));
+        m.chip.forEach(c => c.at(0, 0, 1, 0)); m.pose(1);
+      } },
+    { cap: () => tx(e().c3), end: S => { fresh(S, 2); }, play: async S => { const m = fresh(S, 1), A = S.anim; await A.wait(500); m.pose(2); } }
+  ];
+  const sc = makeScenes(host.querySelector('.drsc'), scenes, { prompt: T('เลือกฟังก์ชัน แล้วกด ▶ ดูช่องของ D และ R ลอยสลับที่', 'Pick a function, then press ▶ to watch the D and R cells fly to each other\'s place') });
+  w.render = () => {
+    const c = host.querySelector('.chips');
+    c.innerHTML = `<span class="chips-label">f</span>` + DRS.map((x, i) => `<button class="chip${i === w.cur ? ' active' : ''}" data-i="${i}">${x.chip}</button>`).join('');
+    c.querySelectorAll('.chip').forEach(b => b.onclick = () => { w.cur = +b.dataset.i; w.render(); sc.go(sc.k, false); });
+  };
+  w.refresh = () => w.render();
+  LIVE.push(w); w.render();
+}
+// เครื่องมือเดิม: เศษส่วน (ax + b)/(cx + d) กับอินเวอร์ส
+function makeSwap(host) {
+  const w = { a: 2, b: 1, c: 1, d: -3 };
+  host.innerHTML = '<div class="sc-prompt"></div><div class="two"><div>' + sliderRow('a =', 'sa', -5, 5, 1, 2) + sliderRow('b =', 'sb', -5, 5, 1, 1) + sliderRow('c =', 'sc', -5, 5, 1, 1) + sliderRow('d =', 'sd', -5, 5, 1, -3) + '</div><div class="eqs wg-eq col"></div></div><div class="plhost"></div><div class="tbox"></div>';
+  const ids = ['a', 'b', 'c', 'd'];
+  w.render = () => {
+    host.querySelector('.sc-prompt').textContent = EN() ? 'Move a, b, c, d — watch f and f⁻¹ and their dashed asymptotes together' : 'เลื่อน a, b, c, d — ดู f กับ f⁻¹ และเส้นประของทั้งสองพร้อมกัน';
+    ids.forEach(k => { host.querySelector('#s' + k + 'v').textContent = mn(w[k]); });
+    const { a, b, c, d } = w, lin = (p, q) => polyHtml([q, p]) || '0';
+    const ok = c !== 0 && a * d - b * c !== 0;
+    host.querySelector('.eqs').innerHTML = `<div>${I('f')}(x) = ${frac(lin(a, b), lin(c, d))}</div>` + (ok ? `<div>${fi}(x) = ${frac(lin(-d, b), lin(c, -a))}</div>` : '');
+    const pl = new Plot({ w: 460, h: 460, xmin: -8, xmax: 8, ymin: -8, ymax: 8, pad: 28, lx: 2, ly: 2 });
+    pl.dash(-12, -12, 12, 12, 's-muted');
+    if (ok) {
+      const xa = -d / c, ya = a / c;
+      pl.path(x => (a * x + b) / (c * x + d), 's-blue', { n: 800 }); pl.path(x => (-d * x + b) / (c * x - a), 's-orange', { n: 800 });
+      pl.dash(xa, -20, xa, 20, 's-blue'); pl.dash(-20, ya, 20, ya, 's-blue'); pl.dash(ya, -20, ya, 20, 's-orange'); pl.dash(-20, xa, 20, xa, 's-orange');
+    }
+    host.querySelector('.plhost').innerHTML = pl.svg();
+    if (!ok) { host.querySelector('.tbox').innerHTML = `<div class="box-warn">${tx(T('ต้องให้ c ≠ 0 และ ad − bc ≠ 0 จึงเป็นเศษส่วนที่หาอินเวอร์สได้ (ไม่หักล้างเป็นค่าคงที่/เส้นตรง)', 'We need c ≠ 0 and ad − bc ≠ 0 for a genuine fraction with an inverse (otherwise it collapses to a constant or a line).'))}</div>`; return; }
+    const xa = num(-d / c), ya = num(a / c);
+    host.querySelector('.tbox').innerHTML = `<div class="tbl-scroll"><table class="tbl"><tr><th></th><th>D</th><th>R</th></tr>` +
+      `<tr><th>${I('f')}</th><td class="cur">ℝ − {${xa}}</td><td>ℝ − {${ya}}</td></tr><tr><th>${fi}</th><td>ℝ − {${ya}}</td><td class="cur">ℝ − {${xa}}</td></tr></table></div>` +
+      `<div class="wg-cap">${tx(T(`ช่องสีเหลืองคือค่าเดียวกัน (${xa} กับ ${ya} สลับที่) · เส้นประของ f (น้ำเงิน) x = ${xa}, y = ${ya} กลายเป็นเส้นประของ f⁻¹ (ส้ม) x = ${ya}, y = ${xa}`,
+        `The yellow cells hold the same value (${xa} and ${ya} swap places) · f's dashed lines (blue) x = ${xa}, y = ${ya} become f⁻¹'s (orange) x = ${ya}, y = ${xa}.`))}</div>`;
+  };
+  ids.forEach(k => { const s = host.querySelector('#s' + k); s.oninput = () => { w[k] = +s.value; w.render(); }; });
+  w.refresh = () => w.render();
+  LIVE.push(w); w.render();
+}
+
+// ───────── แท็บ 5: ทริก f(ax+b) ─────────
+// f(ax + b) = cx + d : "ก้อน" (ax + b) เป็นกล่องสีม่วงเดียวกันทุกบรรทัด
+// n = ตัวเลขที่ถามหา f⁻¹(n) ; o = ตัวเลือก (เรียงเอง) ; ia = ตำแหน่งคำตอบ
+const TRP = [
+  { a: 2, b: 3, c: 8, d: 9, n: 17, o: [1, 5, 37, 65], ia: 1 },
+  { a: 3, b: -1, c: 6, d: 4, n: 16, o: [47, 38, 5, 2], ia: 2 },
+  { a: -1, b: 4, c: 3, d: -7, n: 2, o: [2, 3, -1, 1], ia: 3 }
+];
+function trCalc(p) {
+  const k = p.c / p.a, m = p.d - k * p.b, L = polyHtml([p.b, p.a]), lump = s => `<span class="lump">${s}</span>`;
+  const x0 = (p.n - p.d) / p.c, ans0 = p.a * x0 + p.b, kS = k === 1 ? '' : mn(k), mS = m === 0 ? '' : ` ${m < 0 ? '−' : '+'} ${Math.abs(m)}`;
+  return { k, m, L, lump, x0, ans0,
+    r1: `<i>f</i>(${lump(L)}) = ${polyHtml([p.d, p.c])}`,
+    r2: `<i>f</i>(${lump(L)}) = ${kS}(${lump(L)})${mS}`,
+    r3: `<i>f</i>(${X}) = ${ans(polyHtml([m, k]))}`,
+    prob: `<i>f</i>(${L}) = ${polyHtml([p.d, p.c])}` };
+}
+function lumpDraw(el, rows, dim, hideNew) {
+  el.innerHTML = '<div class="sw-box"></div>'; const box = el.firstChild, out = [];
+  rows.forEach((h, i) => { const r = document.createElement('div'); r.className = 'sw-row' + (dim.includes(i) ? ' dim' : ''); r.innerHTML = h; if (hideNew && !dim.includes(i)) r.style.opacity = 0; box.appendChild(r); out.push(r); });
+  return out;
+}
+function makeLump(host) {
+  const w = { cur: 0 };
+  host.innerHTML = '<div class="chips"></div><div class="lumpsc"></div>';
+  const P = () => trCalc(TRP[w.cur]), R = () => { const c = P(); return [c.r1, c.r2, c.r3]; };
+  const scenes = [
+    { cap: () => { const p = TRP[w.cur], c = P(); return tx(T(`โจทย์ <i>f</i>(${c.L}) = ${polyHtml([p.d, p.c])} · มอง (${c.L}) เป็น <b>"ก้อน"</b> เดียว (กล่องสีม่วง) — เป้าหมายคือให้ฝั่งขวาเป็น "ก้อน" ด้วย`, `Problem <i>f</i>(${c.L}) = ${polyHtml([p.d, p.c])} · treat (${c.L}) as a single <b>"lump"</b> (purple box) — the goal is to make the right-hand side a lump too.`)); },
+      end: S => { lumpDraw(S.el, R().slice(0, 1), []); },
+      play: async S => { const r = lumpDraw(S.el, R().slice(0, 1), [], true); await fadeIn(S.anim, r[0], 500); } },
+    { cap: () => { const p = TRP[w.cur], c = P(), kk = polyHtml(pMul([c.k], [p.b, p.a])); return tx(T(`จัดฝั่งขวาให้เป็นก้อนเดียวกัน: ${c.k === 1 ? '' : mn(c.k) + ' × '}(${c.L}) = ${kk}${c.m === 0 ? '' : ' จึงต้อง' + (c.m < 0 ? 'ลบ ' : 'บวก ') + Math.abs(c.m)} → ${polyHtml([p.d, p.c])} = ${c.k === 1 ? '' : mn(c.k)}(${c.L})${c.m === 0 ? '' : (c.m < 0 ? ' − ' : ' + ') + Math.abs(c.m)}`, `Make the right side contain the same lump: ${c.k === 1 ? '' : mn(c.k) + ' × '}(${c.L}) = ${kk}${c.m === 0 ? '' : ', so ' + (c.m < 0 ? 'subtract ' : 'add ') + Math.abs(c.m)} → ${polyHtml([p.d, p.c])} = ${c.k === 1 ? '' : mn(c.k)}(${c.L})${c.m === 0 ? '' : (c.m < 0 ? ' − ' : ' + ') + Math.abs(c.m)}.`)); },
+      end: S => { lumpDraw(S.el, R().slice(0, 2), [0]); },
+      play: async S => { const r = lumpDraw(S.el, R().slice(0, 2), [0], true); await fadeIn(S.anim, r[1], 600); } },
+    { cap: () => tx(T(`ตอนนี้เปลี่ยน "ก้อน" เป็น <b>x</b> ทุกที่ — กล่องยุบเหลือ x → <i>f</i>(x) = ${polyHtml([P().m, P().k])}`, `Now replace the lump by <b>x</b> everywhere — the boxes collapse to x → <i>f</i>(x) = ${polyHtml([P().m, P().k])}.`)),
+      end: S => { lumpDraw(S.el, R(), [1]); },
+      play: async S => {
+        const A = S.anim, r = lumpDraw(S.el, R(), [0, 1], true), rw = r[2];
+        rw.innerHTML = R()[1]; rw.className = 'sw-row'; await fadeIn(A, rw, 350); await A.wait(500);
+        const lumps = [...rw.querySelectorAll('.lump')], ws = lumps.map(l => l.offsetWidth - 0);
+        const tgt = lumps.map(l => { const c = l.cloneNode(true); c.innerHTML = X; c.style.cssText = 'position:absolute;visibility:hidden'; rw.appendChild(c); const v = c.offsetWidth; c.remove(); return v; });
+        lumps.forEach((l, i) => { l.style.width = ws[i] + 'px'; });
+        let swapped = false;
+        await A.run(1100, t => lumps.forEach((l, i) => { l.style.width = lerp(ws[i], tgt[i], t).toFixed(1) + 'px'; if (t > .5 && !swapped) { l.innerHTML = X; if (i === lumps.length - 1) swapped = true; } }), EASE.inOut);
+        await A.wait(350); rw.innerHTML = R()[2];
+      } }
+  ];
+  const sc = makeScenes(host.querySelector('.lumpsc'), scenes, { prompt: T('เลือกโจทย์ แล้วกด ▶ ดู "ก้อน" ถูกจัดแล้วยุบเป็น x', 'Pick a problem, then press ▶ to see the "lump" appear and collapse into x') });
+  w.render = () => {
+    const c = host.querySelector('.chips');
+    c.innerHTML = `<span class="chips-label">${EN() ? 'Problem' : 'โจทย์'}</span>` + TRP.map((p, i) => `<button class="chip${i === w.cur ? ' active' : ''}" data-i="${i}"><i>f</i>(${polyHtml([p.b, p.a])}) = ${polyHtml([p.d, p.c])}</button>`).join('');
+    c.querySelectorAll('.chip').forEach(b => b.onclick = () => { w.cur = +b.dataset.i; w.render(); sc.go(sc.k, false); });
+  };
+  w.refresh = () => w.render();
+  LIVE.push(w); w.render();
+}
+// ทายก่อน f⁻¹(ตัวเลข) แล้วเฉลยทีละขั้น
+function trItem(p, n) {
+  const c = trCalc(p), nn = mn(p.n), xs = mn(c.x0);
+  return {
+    chip: T(`โจทย์ ${n}`, `Problem ${n}`),
+    draw: async (el, ctx) => {
+      const rows = [`<i>f</i>(${c.lump(c.L)}) = ${polyHtml([p.d, p.c])}`, `${fi}(${nn}) = ?`];
+      if (ctx.done[0]) rows.push(
+        `${fi}(${polyHtml([p.d, p.c])}) = ${c.lump(c.L)}`,
+        `${polyHtml([p.d, p.c])} = ${nn} → ${X} = ${xs}`,
+        `${fi}(${nn}) = ${polyHtml([p.b, p.a]).replace(/<i>x<\/i>/g, `(${xs})`)} = ${ans(mn(c.ans0))}`);
+      const r = lumpDraw(el, rows, [], false);
+      if (ctx.done[0] && ctx.animate) { for (let i = 2; i < r.length; i++) r[i].style.opacity = 0; for (let i = 2; i < r.length; i++) { await ctx.anim.wait(450); await fadeIn(ctx.anim, r[i], 500); } }
+    },
+    qs: [{
+      q: T(`ค่าของ ${fi}(${nn}) เป็นเท่าใด?`, `What is ${fi}(${nn})?`), o: p.o.map(mn), a: p.ia,
+      why: T(`<i>f</i>(ก้อน) = ${polyHtml([p.d, p.c])} แปลว่า ก้อน = ${fi}(${polyHtml([p.d, p.c])}) → ตั้ง ${polyHtml([p.d, p.c])} = ${nn} ได้ x = ${xs} แล้วแทนในก้อน ได้ ${mn(c.ans0)} (ดูขั้นด้านบน) · ตัวหลอก: ${mn(c.x0)} คือ x ไม่ใช่คำตอบ`, `<i>f</i>(lump) = ${polyHtml([p.d, p.c])} means lump = ${fi}(${polyHtml([p.d, p.c])}) → set ${polyHtml([p.d, p.c])} = ${nn} to get x = ${xs}, then put it in the lump to get ${mn(c.ans0)} (see the steps above) · the decoy ${mn(c.x0)} is just x, not the answer.`)
+    }]
+  };
+}
+
+// ───────── แบบฝึกหัด ─────────
+const QUIZ = [
+  { q: T('ถ้า f(x) = 2x + 7 แล้ว f⁻¹(x) คือ', 'If f(x) = 2x + 7, then f⁻¹(x) is'), o: [frac('x − 7', '2'), frac('x + 7', '2'), '2x − 7', frac('1', '2x + 7')], a: 0, e: T(`y = 2x + 7 → สลับ: x = 2y + 7 → y = ${frac('x − 7', '2')}`, `y = 2x + 7 → swap: x = 2y + 7 → y = ${frac('x − 7', '2')}.`) },
+  { q: T('ถ้า (2, 5) อยู่บนกราฟของ f แล้วจุดใดอยู่บนกราฟของ f⁻¹', 'If (2, 5) is on the graph of f, which point is on the graph of f⁻¹?'), o: ['(2, 5)', '(5, 2)', '(−2, −5)', '(−5, 2)'], a: 1, e: T('f⁻¹ สลับพิกัดของ f ทุกจุด: (a, b) → (b, a)', 'f⁻¹ swaps the coordinates of every point: (a, b) → (b, a).') },
+  { q: T('ฟังก์ชันใดมีอินเวอร์สที่เป็นฟังก์ชัน (บนโดเมนที่กำหนด)', 'Which function has an inverse that is a function (on its stated domain)?'), o: ['y = x² , x ∈ ℝ', 'y = |x| , x ∈ ℝ', 'y = x³ + 1 , x ∈ ℝ', 'y = 3 , x ∈ ℝ'], a: 2, e: T('ต้อง 1-1: x³ + 1 ผ่านเส้นนอนทดสอบ ส่วน x², |x| ตัด 2 จุด และ y = 3 ทุก x ได้ค่าเดียวกัน', 'It must be one-to-one: x³ + 1 passes the horizontal-line test; x² and |x| meet a line twice; y = 3 gives every x the same value.') },
+  { q: T(`f(x) = ${frac('x − 1', 'x + 2')} แล้ว f⁻¹(x) คือ`, `f(x) = ${frac('x − 1', 'x + 2')}. Then f⁻¹(x) is`), o: [frac('2x + 1', '1 − x'), frac('x + 2', 'x − 1'), frac('2x − 1', 'x + 1'), frac('x + 1', '2 − x')], a: 0, e: T(`x = ${frac('y − 1', 'y + 2')} → xy + 2x = y − 1 → y(x − 1) = −2x − 1 → y = ${frac('2x + 1', '1 − x')} (ตรวจ: f(3) = 2/5, f⁻¹(2/5) = 3 ✓)`, `x = ${frac('y − 1', 'y + 2')} → xy + 2x = y − 1 → y(x − 1) = −2x − 1 → y = ${frac('2x + 1', '1 − x')} (check: f(3) = 2/5, f⁻¹(2/5) = 3 ✓).`) },
+  { q: T('f(x) = x² − 1 เมื่อ x ≥ 0 โดเมนของ f⁻¹ คือ', 'f(x) = x² − 1 for x ≥ 0. The domain of f⁻¹ is'), o: ['[0, ∞)', '[−1, ∞)', 'ℝ', '(−1, ∞)'], a: 1, e: T('D<sub>f⁻¹</sub> = R<sub>f</sub> และ x ≥ 0 → x² − 1 ≥ −1 ได้ทุกค่าตั้งแต่ −1 → [−1, ∞) (f⁻¹(x) = √(x + 1))', 'D<sub>f⁻¹</sub> = R<sub>f</sub>, and x ≥ 0 gives x² − 1 ≥ −1 reaching every value from −1 → [−1, ∞) (f⁻¹(x) = √(x + 1)).') },
+  { q: T('f(x) = x² + 4x เมื่อ x ≥ −2 แล้ว f⁻¹(x) คือ', 'f(x) = x² + 4x for x ≥ −2. Then f⁻¹(x) is'), o: ['−2 + √(x + 4)', '−2 − √(x + 4)', '2 + √(x + 4)', '√(x + 4)'], a: 0, e: T('x = y² + 4y → y² + 4y − x = 0 → y = −2 ± √(x + 4) แล้วเลือก y ≥ −2 (R<sub>f⁻¹</sub> = D<sub>f</sub>) → −2 + √(x + 4)', 'x = y² + 4y → y² + 4y − x = 0 → y = −2 ± √(x + 4), then pick y ≥ −2 (R<sub>f⁻¹</sub> = D<sub>f</sub>) → −2 + √(x + 4).') },
+  { q: T('ถ้า f(2x − 1) = 6x + 3 แล้ว f⁻¹(9) มีค่าเท่าใด', 'If f(2x − 1) = 6x + 3, what is f⁻¹(9)?'), o: ['1', '2', '3', '−1'], a: 0, e: T('ตั้ง 6x + 3 = 9 → x = 1 → f⁻¹(9) = 2(1) − 1 = 1 (ตรวจ: f(x) = 3x + 6, f(1) = 9 ✓)', 'Set 6x + 3 = 9 → x = 1 → f⁻¹(9) = 2(1) − 1 = 1 (check: f(x) = 3x + 6, f(1) = 9 ✓).') },
+  { q: T('f(x) = √(x − 3) แล้วเรนจ์ของ f⁻¹ คือ', 'f(x) = √(x − 3). The range of f⁻¹ is'), o: ['[0, ∞)', '[3, ∞)', 'ℝ', '(−∞, 3]'], a: 1, e: T('R<sub>f⁻¹</sub> = D<sub>f</sub> = [3, ∞) (ในรูท x − 3 ≥ 0)', 'R<sub>f⁻¹</sub> = D<sub>f</sub> = [3, ∞) (inside the root x − 3 ≥ 0).') },
+  { q: T('กราฟของ f และ f⁻¹ สมมาตรกันรอบเส้นใด', 'The graphs of f and f⁻¹ are symmetric about which line?'), o: [T('แกน x', 'the x-axis'), T('แกน y', 'the y-axis'), 'y = x', 'y = −x'], a: 2, e: T('สลับพิกัด (a, b) ↔ (b, a) คือการสะท้อนรอบเส้น y = x', 'Swapping (a, b) ↔ (b, a) is exactly reflection in the line y = x.') },
+  { q: T(`f(x) = ${frac('2x + 3', 'x − 1')} โดเมนของ f⁻¹ คือ`, `f(x) = ${frac('2x + 3', 'x − 1')}. The domain of f⁻¹ is`), o: ['ℝ − {1}', 'ℝ − {2}', 'ℝ − {3}', 'ℝ'], a: 1, e: T('D<sub>f⁻¹</sub> = R<sub>f</sub> = ℝ − {a/c} = ℝ − {2/1} = ℝ − {2}', 'D<sub>f⁻¹</sub> = R<sub>f</sub> = ℝ − {a/c} = ℝ − {2/1} = ℝ − {2}.') }
+];
+
+function build() {
+  injectCss();
+  document.getElementById('tab-idea').innerHTML =
+    card('🛤️', d('สายพานย้อนกลับ: f⁻¹ ถอด f ทีละเครื่อง', 'The reverse conveyor: f⁻¹ undoes f box by box'),
+      `<div id="w-conv"></div>
+       <div class="formula" style="font-size:1.15rem"><span>f(a) = b</span><span>⟺</span><span>f⁻¹(b) = a</span></div>
+       <div class="box-warn">${d('<b>f⁻¹ ไม่ได้แปลว่า 1/f</b> — เลข −1 ตรงนี้เป็นสัญลักษณ์ของ "ฟังก์ชันผกผัน" ไม่ใช่เลขชี้กำลัง', '<b>f⁻¹ does not mean 1/f</b> — the −1 here is notation for "inverse function", not an exponent.')}</div>`) +
+    card('🔀', d('สลับ x ↔ y แล้วจัดรูป', 'Swap x ↔ y, then solve'),
+      `<div id="w-swp"></div>
+       <div class="formula" style="font-size:1.05rem;gap:6px 10px"><span>${d('① เขียน y = f(x)', '① write y = f(x)')}</span><span>→</span><span>${d('② สลับ x ↔ y', '② swap x ↔ y')}</span><span>→</span><span>${d('③ จัดรูปให้ y อยู่คนเดียว', '③ solve for y')}</span></div>`) +
+    card('📌', d('ตัวอย่างวิธีคิด', 'Worked examples'), '<div id="w-met"></div>');
+  makeScenes(document.getElementById('w-conv'), CONV_SCENES, { prompt: T('กด ▶ ทีละฉาก — ดูลูกบอลวิ่งไป แล้ววิ่งย้อนกลับ', 'Press ▶ one scene at a time — watch the ball roll forward, then back') });
+  makeScenes(document.getElementById('w-swp'), SW_SCENES, { prompt: T('กด ▶ ทีละฉาก — ดูป้าย x กับ y ลอยสลับที่', 'Press ▶ one scene at a time — watch the labels x and y swap places') });
+  makeProblemSteps(document.getElementById('w-met'), T('โจทย์', 'Problem'), MET);
+
+  document.getElementById('tab-graph').innerHTML =
+    card('🪞', d('พับกระดาษตามเส้น y = x', 'Fold the paper along y = x'),
+      `<div id="w-fold"></div>
+       <div class="formula" style="font-size:1.15rem"><span>(a, b) ${d('บน', 'on')} f</span><span>⟺</span><span>(b, a) ${d('บน', 'on')} f⁻¹</span></div>`) +
+    card('🎯', d('ลองทำ: จุดสะท้อนอยู่ตรงไหน', 'Try it: where is the mirror point?'), '<div id="w-try"></div>');
+  makeFold(document.getElementById('w-fold'));
+  makeTry(document.getElementById('w-try'));
+
+  document.getElementById('tab-exist').innerHTML =
+    card('↩️', d('กลับหัวลูกศรของ f', 'Reverse the arrows of f'),
+      `<div id="w-flip"></div>
+       <div class="formula" style="font-size:1.1rem"><span>${d('มีอินเวอร์สที่เป็นฟังก์ชัน', 'an inverse that is a function exists')}</span><span>⟺</span><span>${d('f เป็นหนึ่งต่อหนึ่ง (1-1)', 'f is one-to-one (1-1)')}</span></div>`) +
+    card('✂️', d('ทำให้ f เป็น 1-1 ด้วยการจำกัดโดเมน', 'Making f one-to-one by restricting the domain'),
+      `<div id="w-res"></div>
+       <div class="box-info">${d('f ที่ไม่ 1-1 ตลอดทั้งโดเมน ตัดเอาครึ่งหนึ่งที่ <b>ขึ้นอย่างเดียวหรือลงอย่างเดียว</b> ก็หาอินเวอร์สได้ — แต่ต้องบอกโดเมนที่จำกัดไว้ให้ครบ', 'An f that is not 1-1 on its whole domain can get an inverse by keeping one half that <b>only rises or only falls</b> — but always state the restricted domain.')}</div>`);
+  makePredict(document.getElementById('w-flip'), RV.map(revItem), { label: T('แผนภาพ', 'Diagram'), prompt: T('ดูแผนภาพของ f แล้วทายก่อน — จากนั้นลูกศรจะหมุนกลับหัวให้ดู', 'Look at f and guess first — then the arrows turn upside down') });
+  makePredict(document.getElementById('w-res'), RS.map(rsItem), { label: T('ฟังก์ชัน', 'Function'), prompt: T('ดูกราฟ แล้วทายก่อน — จากนั้นตัวเลื่อน c จะวิ่งให้ดูเอง', 'Look at the graph and guess first — then the slider c sweeps by itself') });
+
+  document.getElementById('tab-dr').innerHTML =
+    card('🔄', d('โดเมนกับเรนจ์สลับกัน', 'Domain and range trade places'),
+      `<div id="w-dr"></div>
+       <div class="formula" style="font-size:1.15rem"><span>D<sub>f⁻¹</sub> = R<sub>f</sub></span><span>R<sub>f⁻¹</sub> = D<sub>f</sub></span></div>`) +
+    card('🧮', d('เครื่องมือเศษส่วน: f กับ f⁻¹ พร้อมกัน', 'Fraction tool: f and f⁻¹ together'), '<div id="w-swap"></div>');
+  makeDrSwap(document.getElementById('w-dr'));
+  makeSwap(document.getElementById('w-swap'));
+
+  document.getElementById('tab-trick').innerHTML =
+    card('🧱', d('หา f(x) จาก f(ax + b) = cx + d: ทำ "ก้อน"', 'Finding f(x) from f(ax + b) = cx + d: make the "lump"'),
+      `<div id="w-lump"></div>
+       <div class="formula" style="font-size:1.1rem"><span>${d('จัดให้เห็นก้อน (ax + b)', 'make the lump (ax + b) appear')}</span><span>→</span><span>${d('เปลี่ยนก้อนเป็น x', 'replace the lump by x')}</span></div>`) +
+    card('🪄', d('ทริก f⁻¹(ตัวเลข): ไม่ต้องหา f⁻¹ เต็มสูตร', 'The f⁻¹(number) trick: no full formula needed'),
+      `<div id="w-trq"></div>
+       <div class="formula" style="font-size:1.1rem"><span>f(ax + b) = cx + d</span><span>⇒</span><span>ax + b = f⁻¹(cx + d)</span></div>
+       <div class="box-ok">${d('ตั้ง cx + d ให้เท่ากับตัวเลข หา x แล้วแทนใน ax + b — ประหยัดเวลามากเมื่อโจทย์ถามค่าที่จุดเดียว', 'Set cx + d equal to the number, find x, and put it in ax + b — a big time saver when only one value is asked.')}</div>`);
+  makeLump(document.getElementById('w-lump'));
+  makePredict(document.getElementById('w-trq'), TRP.map(trItem), { label: T('โจทย์', 'Problem'), prompt: T('ดูโจทย์แล้วทายก่อน — จากนั้นเฉลยทีละขั้น', 'Look at the problem and guess first — then the steps appear one by one') });
+
+  document.getElementById('tab-quiz').innerHTML = card('🎯', d('แบบฝึกหัด — ทดสอบความเข้าใจ', 'Quiz — test your understanding'), '<div id="w-quiz"></div>');
+  makeQuiz(document.getElementById('w-quiz'), QUIZ);
+}
+
+
+window.addEventListener('load', () => {
+  build();
+  applyLang(getLang());
+});
+</script>
+<script id="theme-js">
+// ── ปุ่มสลับโหมดสว่าง/มืด (สร้างโดย tools/build_lessons.py) — จำค่าไว้ใน localStorage 'siteTheme' ──
+// สื่อที่วาดด้วย canvas หรือเก็บสีไว้ในตัวแปร ให้ฟัง window 'themechange' แล้ววาดใหม่
+function currentTheme() { return document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light'; }
+function syncThemeButton() {
+  const b = document.getElementById('themeToggle');
+  if (!b) return;
+  const dark = currentTheme() === 'dark';
+  b.innerHTML = dark ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6"/></svg>' : '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.5 14.6A8.5 8.5 0 0 1 9.4 3.5a8.5 8.5 0 1 0 11.1 11.1z"/></svg>';
+  const en = document.documentElement.lang === 'en';
+  b.title = dark ? (en ? 'Switch to light mode' : 'เปลี่ยนเป็นโหมดสว่าง') : (en ? 'Switch to dark mode' : 'เปลี่ยนเป็นโหมดมืด');
+  b.setAttribute('aria-label', b.title);
+}
+function toggleTheme() {
+  const next = currentTheme() === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', next);
+  try { localStorage.setItem('siteTheme', next); } catch (e) {}
+  syncThemeButton();
+  window.dispatchEvent(new CustomEvent('themechange', { detail: next }));
+}
+// ── ตัวปรับสีโหมดมืดตอนรัน: สีที่ JS เขียนตรงๆ ลงกราฟ SVG (fill/stroke) หรือ style="" ──
+// โหมดมืด: สีเข้ม → สว่าง (คงเฉดเดิม), พื้นอ่อน → เข้ม, สีสดกลางๆ คงไว้ — กลับโหมดสว่างจะคืนค่าเดิม
+(function () {
+  function parse(c) {
+    c = String(c).trim().toLowerCase();
+    if (c === 'white') c = '#ffffff'; else if (c === 'black') c = '#000000';
+    let m = c.match(/^#([0-9a-f]{3}|[0-9a-f]{6})$/);
+    if (m) { let h = m[1]; if (h.length === 3) h = h.replace(/./g, x => x + x); return [parseInt(h.slice(0, 2), 16) / 255, parseInt(h.slice(2, 4), 16) / 255, parseInt(h.slice(4, 6), 16) / 255, 1]; }
+    m = c.match(/^rgba?\(([^)]+)\)$/);
+    if (m) { const p = m[1].split(/[ ,/]+/).filter(Boolean).map(Number); return [p[0] / 255, p[1] / 255, p[2] / 255, p.length > 3 ? p[3] : 1]; }
+    m = c.match(/^color\(srgb ([^)]+)\)$/);
+    if (m) { const p = m[1].split(/[ /]+/).filter(Boolean).map(Number); return [p[0], p[1], p[2], p.length > 3 ? p[3] : 1]; }
+    return null;
+  }
+  function toHsl(r, g, b) { const mx = Math.max(r, g, b), mn = Math.min(r, g, b), l = (mx + mn) / 2; let h = 0, s = 0; if (mx !== mn) { const d = mx - mn; s = l > .5 ? d / (2 - mx - mn) : d / (mx + mn); h = mx === r ? (g - b) / d + (g < b ? 6 : 0) : mx === g ? (b - r) / d + 2 : (r - g) / d + 4; h /= 6; } return [h, s, l]; }
+  function hue(p, q, t) { if (t < 0) t += 1; if (t > 1) t -= 1; if (t < 1 / 6) return p + (q - p) * 6 * t; if (t < 1 / 2) return q; if (t < 2 / 3) return p + (q - p) * (2 / 3 - t) * 6; return p; }
+  function toRgb(h, s, l) { if (!s) return [l, l, l]; const q = l < .5 ? l * (1 + s) : l + s - l * s, p = 2 * l - q; return [hue(p, q, h + 1 / 3), hue(p, q, h), hue(p, q, h - 1 / 3)]; }
+  function fmt(rgb, a) { const v = rgb.map(x => Math.round(Math.max(0, Math.min(1, x)) * 255)); return a < 1 ? 'rgba(' + v.join(',') + ',' + a + ')' : '#' + v.map(x => x.toString(16).padStart(2, '0')).join(''); }
+  // role: 'fg' ตัวหนังสือ, 'bg' พื้น, 'shape' พื้นของรูปใน SVG, 'stroke' เส้นใน SVG
+  function remap(c, role) {
+    const p = parse(c); if (!p) return null;
+    const hsl = toHsl(p[0], p[1], p[2]), h = hsl[0], s = hsl[1], l = hsl[2];
+    if (role === 'fg' && l >= .6) return null;
+    if ((role === 'fg' && l < .6) || ((role === 'shape' || role === 'stroke') && l < .5)) { return fmt(toRgb(h, Math.min(s, .85), .9 - l * .35), p[3]); }
+    if (role === 'stroke') { if (l <= .82) return null; return l > .97 && s < .1 ? 'var(--card)' : fmt(toRgb(h, Math.min(s, .3), .2 + (1 - l) * .5), p[3]); }
+    if (l <= .72) return null;
+    if (p[3] < 1) return fmt(toRgb(h, Math.min(s, .6), .55), p[3]);
+    return fmt(toRgb(h, Math.min(s, .45), .09 + (1 - l) * .55), 1);
+  }
+  const SKIP = 'header, header *, .lesson-cover, .lesson-cover *';
+  function adapt() {
+    const dark = document.documentElement.getAttribute('data-theme') === 'dark';
+    for (const el of document.querySelectorAll('svg [fill], svg [stroke]')) {
+      if (el.matches(SKIP)) continue;
+      for (const prop of ['fill', 'stroke']) {
+        const flag = 'data-dk-' + prop;
+        if (!dark) { if (el.hasAttribute(flag)) { el.style.removeProperty(prop); el.removeAttribute(flag); } continue; }
+        const v = el.getAttribute(prop);
+        if (!v || v.includes('var(')) continue;
+        const tag = el.tagName.toLowerCase();
+        const role = prop === 'stroke' ? 'stroke' : (tag === 'text' || tag === 'tspan') ? 'fg' : 'shape';
+        const m = remap(v, role);
+        if (m && el.style.getPropertyValue(prop) !== m) { el.style.setProperty(prop, m); el.setAttribute(flag, ''); }
+      }
+    }
+    for (const el of document.querySelectorAll('body [style]')) {
+      if (el.matches(SKIP) || el.closest('svg')) continue;
+      if (!dark) { if (el.hasAttribute('data-dk-style')) { el.style.cssText = el.getAttribute('data-dk-style'); el.removeAttribute('data-dk-style'); } continue; }
+      if (el.hasAttribute('data-dk-style')) continue;
+      const st = el.style, orig = st.cssText;
+      let changed = false;
+      const bgKept = st.backgroundColor && !remap(st.backgroundColor, 'bg');
+      for (const pr of [['background-color', 'bg'], ['color', 'fg'], ['border-color', 'stroke']]) {
+        const v = st.getPropertyValue(pr[0]);
+        if (!v || v.includes('var(') || (pr[1] === 'fg' && bgKept)) continue;
+        let m = remap(v, pr[1]);
+        // แถบสีเล็กๆ (ตัวอย่างสีในคำอธิบายกราฟ) ที่เป็นสีเข้ม → ทำแบบเส้น: ยกให้สว่าง
+        if (!m && pr[1] === 'bg' && el.offsetWidth * el.offsetHeight < 1500) m = remap(v, 'stroke');
+        if (m) { st.setProperty(pr[0], m); changed = true; }
+      }
+      if (changed) el.setAttribute('data-dk-style', orig);
+    }
+    clearTimeout(fcTimer);
+    fcTimer = setTimeout(() => { mo.disconnect(); fixContrast(); watch(); }, 300);
+  }
+  let fcTimer = 0;
+  function rgbOf(c) { const p = parse(c); return p ? p : null; }
+  function lum(p) { const f = v => v <= .03928 ? v / 12.92 : Math.pow((v + .055) / 1.055, 2.4); return .2126 * f(p[0]) + .7152 * f(p[1]) + .0722 * f(p[2]); }
+  function contrast(a, b) { const x = lum(a), y = lum(b); return (Math.max(x, y) + .05) / (Math.min(x, y) + .05); }
+  function bgBehind(el) {
+    for (let e = el; e && e.nodeType === 1; e = e.parentElement) {
+      const cs = getComputedStyle(e);
+      if (cs.backgroundImage !== 'none') return null;
+      const c = rgbOf(cs.backgroundColor);
+      if (!c) return null;
+      if (c[3] >= .9) return c;
+    }
+    return rgbOf(getComputedStyle(document.body).backgroundColor);
+  }
+  function readable(fg, bg) {
+    const hsl = toHsl(fg[0], fg[1], fg[2]), darker = lum(bg) > .4;
+    for (let l = hsl[2], i = 0; i < 25; i++) {
+      l = darker ? l - .035 : l + .035;
+      if (l < .05 || l > .97) break;
+      const c = toRgb(hsl[0], Math.min(hsl[1], .9), l);
+      if (contrast([c[0], c[1], c[2], 1], bg) >= 3.6) return fmt(c, 1);
+    }
+    return darker ? '#121212' : '#ffffff';
+  }
+  function fixContrast() {
+    for (const el of document.querySelectorAll('[data-dk-c]')) { el.style.color = el.getAttribute('data-dk-c'); el.removeAttribute('data-dk-c'); }
+    for (const el of document.querySelectorAll('body *')) {
+      if (el.closest('svg, header, script, style')) continue;
+      let own = false;
+      for (const n of el.childNodes) if (n.nodeType === 3 && n.textContent.trim()) { own = true; break; }
+      if (!own) continue;
+      const fg = rgbOf(getComputedStyle(el).color), bg = bgBehind(el);
+      if (!fg || !bg || fg[3] < .5) continue;
+      if (contrast(fg, bg) >= 3) continue;
+      el.setAttribute('data-dk-c', el.style.color || '');
+      el.style.color = readable(fg, bg);
+    }
+    // ตัวเลขแกน/ป้ายสีเทากลางๆ ในกราฟ (#94A3B8 บนพื้นขาว) — ปรับเฉพาะสีเทา ไม่แตะตัวหนังสือขาวบนป้ายสี
+    for (const el of document.querySelectorAll('[data-dk-sf]')) { el.style.fill = el.getAttribute('data-dk-sf'); el.removeAttribute('data-dk-sf'); }
+    for (const el of document.querySelectorAll('svg text')) {
+      if (el.closest('header, .lesson-cover')) continue;
+      const fg = rgbOf(getComputedStyle(el).fill);
+      if (!fg) continue;
+      const hsl = toHsl(fg[0], fg[1], fg[2]);
+      if (hsl[1] > .3 || hsl[2] < .3 || hsl[2] > .8) continue;
+      const bg = bgBehind(el.ownerSVGElement || el);
+      if (!bg || contrast(fg, bg) >= 3.2) continue;
+      el.setAttribute('data-dk-sf', el.style.fill || '');
+      el.style.fill = readable(fg, bg);
+    }
+  }
+  let queued = false;
+  const mo = new MutationObserver(schedule);
+  function watch() { mo.observe(document.body, { subtree: true, childList: true, attributes: true, attributeFilter: ['fill', 'stroke', 'style'] }); }
+  function schedule() { if (queued) return; queued = true; setTimeout(() => { queued = false; mo.disconnect(); adapt(); watch(); }, 30); }
+  new MutationObserver(schedule).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+  watch(); schedule();
+})();
+syncThemeButton();
+new MutationObserver(syncThemeButton).observe(document.documentElement, { attributes: true, attributeFilter: ['lang'] });
+</script>
+</body>
+</html>
