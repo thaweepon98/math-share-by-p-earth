@@ -234,6 +234,57 @@
     .sc-nav .btn { min-width: 0; padding: 9px 12px; }
     .sc-nav .wg-cnt { order: -1; width: 100%; }
   }
+
+  /* ─── ของกลางกลุ่มเอกซ์โพเนนเชียล–ลอการิทึม (mx, nrt, makeBaseSlider, makeMatch, makeSort, tileRow ใน base.js) — เพิ่มท้ายไฟล์เท่านั้น ─── */
+  .mx { display: inline-block; white-space: nowrap; }
+  sup.fx { display: inline-block; height: 0; font-size: .68em; vertical-align: baseline; position: relative; top: -1.45em; line-height: 1; margin-left: 1px; }
+  sup.fx .frac { margin: 0; vertical-align: baseline; line-height: 1.05; }
+  sup.fx .frac .num { border-bottom-width: 1.6px; padding: 0 1px 1px; min-width: 0; }
+  sup.fx .frac .den { padding: 1px 1px 0; min-width: 0; }
+  .rt.nrt .rt-n { align-self: flex-start; font-size: .6em; line-height: 1; margin: 0 -2px 0 0; font-weight: 800; }
+  .bs-row .slider-val { min-width: 60px; }
+  .bs-row .slider-val .frac { margin: 0 2px; }
+  .mx sub .frac { margin: 0 1px; font-size: .9em; vertical-align: middle; }
+
+  .cl-blue { --cc: var(--g-blue); } .cl-orange { --cc: var(--g-curve); } .cl-green { --cc: var(--g-green); } .cl-purple { --cc: var(--g-purple); }
+  .cl-pink { --cc: var(--g-pink); } .cl-teal { --cc: var(--g-teal); } .cl-red { --cc: var(--g-red); }
+
+  .mt-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 22px; margin: 8px 0; }
+  .mt-col { display: flex; flex-direction: column; gap: 8px; }
+  .mt-item { display: block; position: relative; width: 100%; text-align: center; font-family: 'Anuphan', sans-serif; font-size: 1.05rem; font-weight: 700; line-height: 1.6; padding: 8px 12px; min-height: 46px; border: 2px solid var(--border); border-radius: 14px; background: var(--card); color: var(--text); cursor: pointer; transition: border-color .15s, background .15s; }
+  .mt-item:hover:not(.done) { border-color: var(--cc, var(--primary)); }
+  .mt-item.sel { border-color: var(--cc, var(--primary)); background: color-mix(in srgb, var(--cc, var(--primary)) 16%, var(--card)); box-shadow: 0 0 0 3px color-mix(in srgb, var(--cc, var(--primary)) 30%, transparent); }
+  .mt-item.done { cursor: default; border-color: var(--cc); background: color-mix(in srgb, var(--cc) 18%, var(--card)); }
+  .mt-badge { position: absolute; left: 8px; top: 50%; transform: translateY(-50%); font-size: 1.15rem; font-weight: 800; color: var(--cc); }
+  .mt-item.bad, .so-card.bad { border-color: var(--g-red) !important; background: color-mix(in srgb, var(--g-red) 16%, var(--card)) !important; color: var(--text) !important; animation: mtShake .45s ease; }
+  @keyframes mtShake { 0%, 100% { transform: translateX(0); } 20% { transform: translateX(-7px); } 40% { transform: translateX(7px); } 60% { transform: translateX(-5px); } 80% { transform: translateX(5px); } }
+  .mt-bar { display: flex; align-items: center; justify-content: center; gap: 14px; flex-wrap: wrap; margin-top: 8px; }
+  .mt-cnt { font-weight: 700; color: var(--muted); }
+  .mt-bar .btn { padding: 7px 18px; }
+  .mt-msg:empty { display: none; }
+
+  .so-pool { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; min-height: 52px; margin: 8px 0; padding: 10px; border: 2px dashed var(--border); border-radius: 14px; }
+  .so-card { font-size: 1.1rem; }
+  .so-empty { color: var(--muted); font-weight: 700; align-self: center; }
+  .so-bins { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 12px; margin: 10px 0; }
+  .so-bin { border: 2.5px solid var(--cc); border-radius: 14px; padding: 8px 10px 10px; min-height: 120px; background: color-mix(in srgb, var(--cc) 9%, var(--card)); cursor: pointer; }
+  .so-bin.ready:hover { background: color-mix(in srgb, var(--cc) 20%, var(--card)); }
+  .so-bin-h { text-align: center; font-weight: 800; color: color-mix(in srgb, var(--cc) 70%, var(--text)); margin-bottom: 6px; line-height: 1.5; }
+  .so-item { margin-top: 6px; line-height: 1.5; }
+  .so-chip { display: inline-block; padding: 2px 12px; border: 2px solid var(--cc); border-radius: 30px; background: var(--card); font-weight: 700; }
+  .so-why { display: block; font-size: .88rem; font-weight: 600; color: var(--muted); margin-top: 2px; }
+
+  .tl-row { --tl: 38px; display: flex; flex-wrap: wrap; align-items: center; gap: 4px; margin: 4px 0; }
+  .tl-tile { display: inline-flex; align-items: center; justify-content: center; min-width: var(--tl); height: calc(var(--tl) * .82); padding: 0 6px; border: 2px solid var(--cc); border-radius: 8px; background: color-mix(in srgb, var(--cc) 20%, var(--card)); font-weight: 800; font-size: calc(var(--tl) * .5); color: var(--text); }
+  .tl-gap { width: calc(var(--tl) * .5); }
+  .tl-label { margin-left: 8px; font-weight: 800; }
+
+  @media (max-width: 700px) {
+    .mt-grid { gap: 8px 10px; }
+    .mt-item { font-size: .95rem; padding: 6px 6px; }
+    .mt-badge { left: 4px; font-size: 1rem; }
+    .so-bins { grid-template-columns: 1fr; }
+  }
 /* ── theme:start — สร้างโดย tools/build_lessons.py ห้ามแก้มือ (แก้ที่สคริปต์แล้วรันใหม่) ── */
 :root{ --page:#BE185D; }
 :root[data-theme="light"]{
@@ -364,6 +415,7 @@ input[type=range]{ accent-color:var(--primary); }
 :root[data-theme="dark"] .quiz-feedback.err{color:#f18fb8}
 :root[data-theme="dark"] .btn-next{background:var(--strong)}
 :root[data-theme="dark"] .tool-inp{background:#171717}
+:root[data-theme="dark"] .mt-item.sel{background:var(--strong)}
 /* ── theme:end ── */
 </style>
 </head>
@@ -797,7 +849,8 @@ function makeScenes(host, scenes, o) {
       const anim = makeAnimator(), kk = w.k; w.anim = anim; w.playing = true;
       stage.innerHTML = ''; if (kk > 0) scenes[kk - 1].end(mkS(kk, anim));
       paint(true);
-      Promise.resolve().then(() => sc.play(mkS(kk, anim))).catch(e => console.error(e)).then(() => { if (w.anim === anim && !anim.dead) { stop(); drawEnd(kk); paint(false); } });
+      // ถูกตัดก่อน play ได้เริ่ม (กด ▶ สองครั้งในเฟรมเดียว) = ห้ามวาดภาพต้นแอนิเมชันทับภาพจบที่ finish() วาดไว้แล้ว
+      Promise.resolve().then(() => { if (!anim.dead) return sc.play(mkS(kk, anim)); }).catch(e => console.error(e)).then(() => { if (w.anim === anim && !anim.dead) { stop(); drawEnd(kk); paint(false); } });
     } else { drawEnd(w.k); paint(!!play); }
   };
   const finish = () => { stop(); drawEnd(w.k); paint(false); };
@@ -905,6 +958,229 @@ function plotPointer(svg, plot, o) {
   svg.addEventListener('pointerleave', e => { if (!down && o.onLeave) o.onLeave(e); });
   return { toPt };
 }
+
+// ════════════════════════════════════════════════════════════════════════════
+//  ชุดของกลางเพิ่มสำหรับกลุ่ม "เอกซ์โพเนนเชียลและลอการิทึม" (docs/design-exponential-log.md §1.2)
+//  ⚠️ เพิ่มท้ายไฟล์เท่านั้น — ห้ามแก้ของเดิมด้านบน (ผลของสื่อกลุ่มฟังก์ชัน 5 ชิ้นต้องไม่เปลี่ยน)
+//  ชื่อ const/function ระดับบนสุดที่เพิ่ม: mx pwr nrt baseLabel lg makeBaseSlider plotExpo plotLog makeMatch makeSort tileRow (+ _XL_UF)
+//  ⚠️ lesson_graphs.js มี makeMatch(host) ของตัวเอง (คนละอย่าง) — ฟังก์ชันของไฟล์ lesson ประกาศทีหลังจึงใช้ของตัวเองในหน้านั้น
+//
+//   6) mx / pwr / nrt / baseLabel / lg     นิพจน์คณิตศาสตร์ (ตัวยก/ตัวห้อย/รากที่ n/ป้ายฐาน/log)
+//   7) makeBaseSlider()                    ตัวเลื่อนฐาน a แบบค่าเป็นรายการ
+//   8) plotExpo() / plotLog()              วาดกราฟ y = a^(x−h) + k  และ  y = log_a(x−h) + k ลง Plot
+//   9) makeMatch()                         เกมจับคู่  ·  10) makeSort() เกมคัดแยก  ·  11) tileRow() แถวแผ่นฐาน
+// ════════════════════════════════════════════════════════════════════════════
+
+// ───────── 6) นิพจน์ ─────────
+// mx(html) → '<span class="mx">…</span>'   inline-block + white-space:nowrap
+//   ⚠️ กล่อง flex (.wg-eq.row, .chips, ปุ่ม flex ฯลฯ) จะแยกข้อความกับ <sup>/<sub>/<i> เป็นก้อนๆ ("2³" → "2 3")
+//   ห่อนิพจน์ที่มีตัวยก/ตัวห้อยด้วย mx() ทุกครั้งที่จะเป็นลูกตรงๆ ของกล่อง flex  เช่น  '<div class="wg-eq row">' + mx('2<sup>3</sup>') + ' = ' + mx('8') + '</div>'
+const mx = h => `<span class="mx">${h}</span>`;
+// pwr(base, exp) → mx(base<sup>exp</sup>)  ถ้า exp มีเศษส่วน (.frac) จะใช้ sup.fx ให้เศษส่วนในตัวยกไม่เบี้ยว
+//   เช่น pwr('8', frac(2, 3)) · pwr('(' + frac(1, 2) + ')', '<i>x</i>') · pwr('2', '<i>x</i> + 1')
+const pwr = (b, e) => mx(`${b}<sup${/class="frac"/.test(e) ? ' class="fx"' : ''}>${e}</sup>`);
+// nrt(n, s) → รากที่ n ของ s  (n = 2 หรือไม่ใส่ = √ ธรรมดา เหมือน rt())   เช่น nrt(3, '8') = ∛8 · nrt(4, '5<sup>3</sup>')
+const nrt = (n, s) => (n === undefined || n === null || +n === 2) ? rt(s) : `<span class="rt nrt"><span class="rt-n">${n}</span><span class="rt-s">√</span><span class="rt-in">${s}</span></span>`;
+// baseLabel(a, o) → ป้ายฐาน a เป็น HTML:  Math.E หรือ 'e' → <i>e</i> · ค่าเท่า 1/n (n = 2..10) → เศษส่วนบน/ล่าง (0.5 → ½ · 1/3 → ⅓ · 0.2 → ⅕) · อื่นๆ เป็นทศนิยม (0.7, 1.5, 2)
+//   สตริง = คืนตามเดิม (ใส่ HTML เองได้) · o.plain = true → ได้อักษรเศษส่วนยูนิโค้ด (½ ⅓ ¼ …) ไว้ใช้ในข้อความ SVG ที่ใส่ HTML ไม่ได้
+const _XL_UF = { 2: '½', 3: '⅓', 4: '¼', 5: '⅕', 6: '⅙', 7: '⅐', 8: '⅛', 9: '⅑', 10: '⅒' };
+function baseLabel(a, o) {
+  o = o || {};
+  if (a === 'e' || (typeof a === 'number' && Math.abs(a - Math.E) < 1e-9)) return '<i>e</i>';
+  if (typeof a === 'string') return a;
+  for (let n = 2; n <= 10; n++) if (Math.abs(a - 1 / n) < 1e-9) return o.plain ? _XL_UF[n] : frac(1, n);
+  return mn(Math.round(a * 1000) / 1000);
+}
+// lg(base, arg) → log ฐาน base ของ arg  เช่น lg(2, '8') = log₂ 8 · lg(null, 'x') = log x (ฐาน 10 ไม่มีตัวห้อย) · lg('e', 'x') = ln x · lg(0.5, 'x') = log_{½} x
+//   base เป็นตัวเลข (ผ่าน baseLabel) หรือสตริง/HTML ก็ได้ · คืนก้อน mx เดียว (log + ตัวห้อย + ช่องว่างไม่ตัดบรรทัด + อาร์กิวเมนต์)
+const lg = (base, arg) => {
+  if (base === 'e') return mx(`ln&nbsp;${arg}`);
+  const b = base === null || base === undefined ? '' : `<sub>${typeof base === 'number' ? baseLabel(base) : base}</sub>`;
+  return mx(`log${b}&nbsp;${arg}`);
+};
+
+// ───────── 7) ตัวเลื่อนฐาน ─────────
+// makeBaseSlider(host, o) → { a (getter), set(a), el, list }
+//   o = { list: [0.2, 0.25, 1/3, 0.5, 0.7, 1, 1.5, 2, Math.E, 3, 4, 5]   ค่าที่เลื่อนได้ (เรียงน้อย→มาก)
+//         value: 2                ค่าเริ่ม (ใกล้ที่สุดในรายการ)
+//         label: '<i>a</i> ='     ป้ายหน้าตัวเลื่อน (HTML)
+//         allowOne: false         false = ตัดฐาน 1 ออกจากรายการ (ฐาน 1 ใช้ไม่ได้) · true = ให้เลื่อนถึง 1
+//         onChange: a => {}       เรียกเมื่อผู้ใช้ขยับ (และเมื่อเรียก set) — ไม่เรียกตอนสร้าง · ค่าที่ส่งเป็นตัวเลขจริง (1/3 ไม่ปัดเศษ) }
+//   ป้ายค่าใช้ baseLabel() · ลงทะเบียน LIVE แล้ว · host ว่างๆ ได้ (ฟังก์ชันเขียนแถวตัวเลื่อนลงไปเอง)
+function makeBaseSlider(host, o) {
+  o = o || {};
+  const base = o.list || [0.2, 0.25, 1 / 3, 0.5, 0.7, 1, 1.5, 2, Math.E, 3, 4, 5];
+  const list = o.allowOne ? base.slice() : base.filter(v => Math.abs(v - 1) > 1e-9);
+  const w = { i: 0 };
+  host.innerHTML = `<div class="slider-row bs-row"><b>${o.label || '<i>a</i> ='}</b><input type="range" min="0" max="${list.length - 1}" step="1" value="0" class="bs-in"><span class="slider-val bs-val"></span></div>`;
+  const inp = host.querySelector('.bs-in'), val = host.querySelector('.bs-val');
+  const near = a => { let b = 0; list.forEach((v, i) => { if (Math.abs(v - a) < Math.abs(list[b] - a)) b = i; }); return b; };
+  const paint = () => { inp.value = w.i; val.innerHTML = baseLabel(list[w.i]); };
+  inp.oninput = () => { w.i = +inp.value; paint(); if (o.onChange) o.onChange(list[w.i]); };
+  Object.defineProperty(w, 'a', { get: () => list[w.i] });
+  w.set = a => { w.i = near(a); paint(); if (o.onChange) o.onChange(list[w.i]); };
+  w.el = host; w.list = list; w.refresh = paint;
+  w.i = near(o.value === undefined ? 2 : o.value); paint();
+  LIVE.push(w);
+  return w;
+}
+
+// ───────── 8) กราฟ expo / log ลง Plot ─────────
+// เรียกก่อน plot.svg()  ·  cls = 's-blue' | 's-orange' | … (สีเส้น)
+// plotExpo(plot, a, cls, o)   y = a^(x − h) + k
+//   o = { h: 0, k: 0, asym: true | 's-muted' | …  เส้นประเส้นกำกับ y = k (true = สีเทา) · dot: true | 'f-red'  จุด (h, 1 + k) · dash: true  เส้นกราฟเป็นเส้นประ (กราฟเป้าหมาย)
+//         front: false  วางไว้หน้าแกน · n: 500 จำนวนจุดสุ่ม · r: 6 รัศมีจุด }
+function plotExpo(plot, a, cls, o) {
+  o = o || {}; const h = o.h || 0, k = o.k || 0;
+  if (o.asym) plot.dash(plot.xmin - 1, k, plot.xmax + 1, k, typeof o.asym === 'string' ? o.asym : 's-muted');
+  plot.path(x => Math.pow(a, x - h) + k, cls, { n: o.n || 500, dash: o.dash, front: o.front });
+  if (o.dot) plot.dot(h, 1 + k, typeof o.dot === 'string' ? o.dot : 'f-red', false, o.r || 6);
+  return plot;
+}
+// plotLog(plot, a, cls, o)    y = log_a(x − h) + k  เฉพาะ x > h  (สุ่มจุดถี่ใกล้เส้นกำกับ เพื่อให้เส้นทิ่มลงขอบกรอบจริง)
+//   o = { h: 0, k: 0, asym: true | 's-muted' | …  เส้นประเส้นกำกับแนวตั้ง x = h · dot: true | 'f-red'  จุด (1 + h, k) · dash · front · n: 500 · r: 6 }
+function plotLog(plot, a, cls, o) {
+  o = o || {}; const h = o.h || 0, k = o.k || 0, la = Math.log(a);
+  if (o.asym) plot.dash(h, plot.ymin - 1, h, plot.ymax + 1, typeof o.asym === 'string' ? o.asym : 's-muted');
+  const xe = plot.xmax + 0.5;
+  if (xe - h > 1e-3) {
+    const n = o.n || 500, t0 = Math.log(1e-3), t1 = Math.log(xe - h);   // x − h = e^t  →  y = t / ln a + k
+    let d = '';
+    for (let i = 0; i <= n; i++) { const t = t0 + (t1 - t0) * i / n; d += (i ? 'L' : 'M') + plot.X(h + Math.exp(t)) + ' ' + plot.Y(t / la + k); }
+    plot.put(`<path class="pl-c ${cls}" d="${d}" clip-path="url(#${plot.id})"${o.dash ? ' stroke-dasharray="7 6"' : ''}/>`, o.front);
+  }
+  if (o.dot) plot.dot(1 + h, k, typeof o.dot === 'string' ? o.dot : 'f-red', false, o.r || 6);
+  return plot;
+}
+
+// ───────── 9) เกมจับคู่ ─────────
+// makeMatch(host, pairs, o) → w     pairs = [{ l: T|html (คอลัมน์ซ้าย เรียงตามเดิม), r: T|html (คอลัมน์ขวา สลับลำดับ), c: 'blue'|'orange'|'green'|'purple'|'pink'|'teal' (สีคู่ ไม่ใส่ = ไล่สีตามลำดับ), why: T|html (ขึ้นเมื่อจับถูก) }]
+//   o = { prompt: T|html (คำโปรย ≤ 1 บรรทัด), hint: T|html (ขึ้นเมื่อจับผิด), seed: 1 (ลำดับสุ่มของคอลัมน์ขวา — ปุ่มเริ่มใหม่สุ่มใหม่) }
+//   กดซ้ายแล้วกดขวา → ถูก = ล็อกสีคู่ + เลขวงกลมกำกับทั้งสองฝั่ง + เหตุผล · ผิด = สั่นแดงแล้วปล่อย · ตัวนับ "จับคู่แล้ว k / n" · ปุ่มเริ่มใหม่
+//   ลงทะเบียน LIVE แล้ว — เปลี่ยนภาษาไม่รีเซ็ต · ข้อความในปุ่มเป็นบล็อกธรรมดา (ไม่ใช่ flex) ตัวยกไม่แยกก้อน
+//   w.done[i] (จับแล้วหรือยัง) · w.count · w.order (ลำดับของคอลัมน์ขวา) · w.reset()
+function makeMatch(host, pairs, o) {
+  o = o || {};
+  const n = pairs.length, PAL = ['blue', 'orange', 'green', 'purple', 'pink', 'teal'], CIRC = '①②③④⑤⑥⑦⑧⑨⑩';
+  const w = { seed: o.seed || 1, sel: null, done: pairs.map(() => false), order: [], msg: null, bad: null, count: 0 };
+  const shuffle = () => {
+    let s = (w.seed * 2654435761) >>> 0;
+    const rnd = () => { s = (s + 0x6D2B79F5) >>> 0; let t = s; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
+    for (let tries = 0; tries < 20; tries++) {
+      w.order = pairs.map((_, i) => i);
+      for (let k = n - 1; k > 0; k--) { const m = Math.floor(rnd() * (k + 1)); [w.order[k], w.order[m]] = [w.order[m], w.order[k]]; }
+      if (n < 2 || w.order.some((v, i) => v !== i)) break;
+    }
+  };
+  host.innerHTML = '<div class="sc-prompt"></div><div class="mt-grid"><div class="mt-col mt-l"></div><div class="mt-col mt-r"></div></div><div class="mt-bar"><span class="mt-cnt"></span><button class="btn ghost mt-reset"></button></div><div class="mt-msg"></div>';
+  const q = s => host.querySelector(s), pr = q('.sc-prompt');
+  const colOf = i => pairs[i].c || PAL[i % PAL.length];
+  const item = (side, i) => {
+    const p = pairs[i], done = w.done[i], bad = w.bad && ((side === 'l' && w.bad.l === i) || (side === 'r' && w.bad.r === i));
+    return `<button class="mt-item cl-${colOf(i)}${done ? ' done' : ''}${side === 'l' && w.sel === i ? ' sel' : ''}${bad ? ' bad' : ''}" data-side="${side}" data-i="${i}">${done ? `<span class="mt-badge">${CIRC[i] || i + 1}</span>` : ''}${tx(side === 'l' ? p.l : p.r)}</button>`;
+  };
+  w.paint = () => {
+    pr.innerHTML = o.prompt ? tx(o.prompt) : ''; pr.style.display = o.prompt ? '' : 'none';
+    q('.mt-l').innerHTML = pairs.map((_, i) => item('l', i)).join('');
+    q('.mt-r').innerHTML = w.order.map(i => item('r', i)).join('');
+    q('.mt-cnt').textContent = (EN() ? 'Matched ' : 'จับคู่แล้ว ') + w.count + ' / ' + n;
+    q('.mt-reset').textContent = EN() ? '↻ Start over' : '↻ เริ่มใหม่';
+    const m = w.msg;
+    q('.mt-msg').innerHTML = m ? `<div class="verdict ${m.ok ? 'ok' : 'no'}"><span class="mk">${m.ok ? '✓' : '✗'}</span><div>${typeof m.html === 'function' ? m.html() : m.html}</div></div>` : '';
+    host.querySelectorAll('.mt-item').forEach(b => { b.onclick = () => click(b.dataset.side, +b.dataset.i); });
+  };
+  const click = (side, i) => {
+    if (side === 'l') { if (w.done[i]) return; w.sel = w.sel === i ? null : i; w.msg = null; w.bad = null; w.paint(); return; }
+    if (w.done[i]) return;
+    if (w.sel === null) { w.msg = { ok: false, html: () => tx(T('เลือกฝั่งซ้ายก่อน แล้วค่อยกดฝั่งขวาที่เป็นคู่กัน', 'Pick something on the left first, then its partner on the right.')) }; w.paint(); return; }
+    if (w.sel === i) {
+      w.done[i] = true; w.count++;
+      const p = pairs[i], all = w.count === n;
+      w.msg = { ok: true, html: () => (p.why ? tx(p.why) : tx(T('ถูกต้อง!', 'Correct!'))) + (all ? ` <b>${tx(T('จับคู่ครบทุกคู่แล้ว 🎉', 'All pairs matched 🎉'))}</b>` : '') };
+      w.sel = null; w.bad = null; w.paint();
+    } else {
+      w.bad = { l: w.sel, r: i }; w.msg = { ok: false, html: () => o.hint ? tx(o.hint) : tx(T('ยังไม่ใช่คู่กัน — ลองใหม่', 'Not a pair — try again')) };
+      w.sel = null; w.paint();
+      const mark = w.bad; setTimeout(() => { if (w.bad === mark) { w.bad = null; w.paint(); } }, 600);
+    }
+  };
+  w.reset = () => { w.seed++; w.sel = null; w.msg = null; w.bad = null; w.done = pairs.map(() => false); w.count = 0; shuffle(); w.paint(); };
+  q('.mt-reset').onclick = w.reset;
+  w.refresh = () => w.paint();
+  shuffle(); LIVE.push(w); w.paint();
+  return w;
+}
+
+// ───────── 10) เกมคัดแยก ─────────
+// makeSort(host, cards, bins, o) → w    cards = [{ t: T|html (หน้าการ์ด), bin: index ถังที่ถูก, why: T|html (เหตุผลสั้น ขึ้นใต้การ์ดในถังเมื่อถูก), no: T|html (ไม่ใส่ก็ได้ — ขึ้นเมื่อใส่ผิดถัง) }] · bins = [T|html]
+//   o = { prompt: T|html, colors: ['green','red'] (สีถังตามลำดับ ค่าเริ่ม blue/orange/purple/teal), seed: 1 (ลำดับการ์ดในกอง) }
+//   กดการ์ด (ในกอง) แล้วกดถัง (ไม่ใช้ลาก — ใช้ได้บนจอสัมผัส) · ถูก = การ์ดเข้าถัง + เหตุผล · ผิด = การ์ดสั่นแดงและยังอยู่ในกอง · ตัวนับ "จัดแล้ว k / n" · ปุ่มเริ่มใหม่ · ลงทะเบียน LIVE
+//   w.placed[i] (index ถังที่การ์ด i เข้าไปแล้ว หรือ null) · w.count · w.reset()
+function makeSort(host, cards, bins, o) {
+  o = o || {};
+  const n = cards.length, PAL = o.colors || ['blue', 'orange', 'purple', 'teal'];
+  const w = { seed: o.seed || 1, sel: null, placed: cards.map(() => null), pool: [], msg: null, bad: null, count: 0 };
+  const shuffle = () => {
+    let s = (w.seed * 2246822519) >>> 0;
+    const rnd = () => { s = (s + 0x6D2B79F5) >>> 0; let t = s; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
+    for (let tries = 0; tries < 20; tries++) {
+      w.pool = cards.map((_, i) => i);
+      for (let k = n - 1; k > 0; k--) { const m = Math.floor(rnd() * (k + 1)); [w.pool[k], w.pool[m]] = [w.pool[m], w.pool[k]]; }
+      if (n < 3 || w.pool.slice(0, 3).some(i => cards[i].bin !== cards[w.pool[0]].bin)) break;   // ไม่ให้ 3 ใบแรกในกองอยู่ถังเดียวกันหมด
+    }
+  };
+  host.innerHTML = '<div class="sc-prompt"></div><div class="so-pool"></div><div class="so-bins"></div><div class="mt-bar"><span class="mt-cnt"></span><button class="btn ghost mt-reset"></button></div><div class="mt-msg"></div>';
+  const q = s => host.querySelector(s), pr = q('.sc-prompt');
+  w.paint = () => {
+    pr.innerHTML = o.prompt ? tx(o.prompt) : ''; pr.style.display = o.prompt ? '' : 'none';
+    q('.so-pool').innerHTML = w.pool.filter(i => w.placed[i] === null).map(i => `<button class="chip so-card${w.sel === i ? ' active' : ''}${w.bad === i ? ' bad' : ''}" data-i="${i}">${tx(cards[i].t)}</button>`).join('') || `<span class="so-empty">${tx(T('จัดครบทุกใบแล้ว', 'Every card is sorted'))}</span>`;
+    q('.so-bins').innerHTML = bins.map((b, j) => `<div class="so-bin cl-${PAL[j % PAL.length]}${w.sel !== null ? ' ready' : ''}" data-b="${j}" tabindex="0" role="button"><div class="so-bin-h">${tx(b)}</div>${w.pool.filter(i => w.placed[i] === j).map(i => `<div class="so-item"><span class="so-chip">${tx(cards[i].t)}</span>${cards[i].why ? `<span class="so-why">${tx(cards[i].why)}</span>` : ''}</div>`).join('')}</div>`).join('');
+    q('.mt-cnt').textContent = (EN() ? 'Sorted ' : 'จัดแล้ว ') + w.count + ' / ' + n;
+    q('.mt-reset').textContent = EN() ? '↻ Start over' : '↻ เริ่มใหม่';
+    const m = w.msg;
+    q('.mt-msg').innerHTML = m ? `<div class="verdict ${m.ok ? 'ok' : 'no'}"><span class="mk">${m.ok ? '✓' : '✗'}</span><div>${typeof m.html === 'function' ? m.html() : m.html}</div></div>` : '';
+    host.querySelectorAll('.so-card').forEach(b => { b.onclick = () => { const i = +b.dataset.i; w.sel = w.sel === i ? null : i; w.msg = null; w.bad = null; w.paint(); }; });
+    host.querySelectorAll('.so-bin').forEach(b => { const go = () => drop(+b.dataset.b); b.onclick = go; b.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go(); } }; });
+  };
+  const drop = j => {
+    if (w.sel === null) { w.msg = { ok: false, html: () => tx(T('เลือกการ์ดก่อน แล้วค่อยกดถังที่ใช่', 'Pick a card first, then press the bin it belongs to.')) }; w.paint(); return; }
+    const i = w.sel, c = cards[i];
+    if (c.bin === j) {
+      w.placed[i] = j; w.count++; w.sel = null; w.bad = null;
+      w.msg = { ok: true, html: () => (c.why ? tx(c.why) : tx(T('ถูกถัง!', 'Right bin!'))) + (w.count === n ? ` <b>${tx(T('จัดครบทุกใบแล้ว 🎉', 'Everything is sorted 🎉'))}</b>` : '') };
+      w.paint();
+    } else {
+      w.bad = i; w.msg = { ok: false, html: () => c.no ? tx(c.no) : tx(T('ยังไม่ใช่ถังนี้ — ลองถังอื่น', 'Not this bin — try another one')) };
+      w.paint();
+      const mark = i; setTimeout(() => { if (w.bad === mark) { w.bad = null; w.paint(); } }, 600);
+    }
+  };
+  w.reset = () => { w.seed++; w.sel = null; w.msg = null; w.bad = null; w.placed = cards.map(() => null); w.count = 0; shuffle(); w.paint(); };
+  q('.mt-reset').onclick = w.reset;
+  w.refresh = () => w.paint();
+  shuffle(); LIVE.push(w); w.paint();
+  return w;
+}
+
+// ───────── 11) แถวแผ่นฐาน ─────────
+// tileRow(base, n, o) → <div class="tl-row"> (element)   แถว "แผ่นฐาน" n แผ่น แต่ละแผ่นเขียน base (HTML) · el.tiles = [แผ่น…] (animate ทีละแผ่นได้ เช่น t.style.opacity / transform)
+//   o = { cls: 'b'|'o'|'g'|'p'|'r'|'t' (สีแผ่น ค่าเริ่ม b) · gap: 3 หรือ [3, 5] (เว้นช่องหลังแผ่นที่ 3 / 5 — แบ่งกลุ่ม เช่น 3 + 2) · size: 38 (px กว้างแผ่น) · label: html ต่อท้ายแถว }
+//   ใช้ใน makeScenes ได้ตรงๆ:  S.el.appendChild(tileRow('2', 5, { gap: 3 }))   ·   tileRow.html(...) → สตริง HTML (ไม่มีแอนิเมชัน)
+//   (ความหมาย: เลขชี้กำลัง = จำนวนแผ่นฐาน · เครื่องหมาย + ไม่ต่อแถวแผ่น ต่างจาก ×)
+function tileRow(base, n, o) {
+  o = o || {};
+  const el = document.createElement('div'), CL = { b: 'blue', o: 'orange', g: 'green', p: 'purple', r: 'red', t: 'teal' }, gaps = o.gap === undefined || o.gap === null ? [] : [].concat(o.gap);
+  el.className = 'tl-row cl-' + (CL[o.cls || 'b'] || o.cls); el.style.setProperty('--tl', (o.size || 38) + 'px');
+  el.tiles = [];
+  for (let i = 0; i < n; i++) {
+    const t = document.createElement('span'); t.className = 'tl-tile'; t.innerHTML = mx(base);
+    el.appendChild(t); el.tiles.push(t);
+    if (gaps.includes(i + 1) && i + 1 < n) { const g = document.createElement('span'); g.className = 'tl-gap'; el.appendChild(g); }
+  }
+  if (o.label) { const l = document.createElement('span'); l.className = 'tl-label'; l.innerHTML = o.label; el.appendChild(l); }
+  return el;
+}
+tileRow.html = (base, n, o) => tileRow(base, n, o).outerHTML;
 
 
 // ══════════════ ฟังก์ชันผกผัน ══════════════

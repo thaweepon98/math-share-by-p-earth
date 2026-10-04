@@ -4,7 +4,7 @@
 <script id="theme-boot">(function(){var t='light';try{t=localStorage.getItem('siteTheme')||'light'}catch(e){}document.documentElement.setAttribute('data-theme',t==='dark'?'dark':'light')})();</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>สื่อการสอน : ฟังก์ชันผกผัน ม.4</title>
+<title>สื่อการสอน : การประยุกต์เอกซ์โพเนนเชียลและลอการิทึม ม.4</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Anuphan:wght@300;400;500;600;700&display=swap');
 
@@ -286,7 +286,7 @@
     .so-bins { grid-template-columns: 1fr; }
   }
 /* ── theme:start — สร้างโดย tools/build_lessons.py ห้ามแก้มือ (แก้ที่สคริปต์แล้วรันใหม่) ── */
-:root{ --page:#BE185D; }
+:root{ --page:#8A5A00; }
 :root[data-theme="light"]{
   --bg:#F4F4F1; --card:#FFFFFF; --text:#16181A; --muted:#5E6166; --border:#DEDED8;
   --primary:color-mix(in srgb, var(--page) 86%, #000); --primary-2:color-mix(in srgb, var(--page) 62%, #000);
@@ -301,7 +301,7 @@
 }
 :root[data-theme="dark"]{
   --bg:#121212; --card:#1C1C1C; --text:#FFFFFF; --muted:#B3B3B3; --border:#333333;
-  --primary:#ec79a9; --primary-2:#f19dc0;
+  --primary:#ecc479; --primary-2:#f1d49d;
   --secondary:#FFB37A; --secondary-light:#FFD0A8; --accent:#8AF25E; --accent-2:#5BD27E;
   --shadow:0 8px 24px rgba(0,0,0,.5);
   --strong:color-mix(in srgb, var(--page) 48%, #1C1C1C); --chip:#2A2A2A; --chip-hover:#353535;
@@ -422,33 +422,32 @@ input[type=range]{ accent-color:var(--primary); }
 <body>
 
 <header>
-  <div class="lesson-cover" aria-hidden="true"><svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"><rect width="120" height="120" fill="#BE185D"/><circle cx="14" cy="16" r="46" fill="#000" fill-opacity=".14"/><g fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 100 L100 20" stroke-dasharray="4 5" stroke-opacity=".45" stroke-width="2"/><path d="M20.0,100.0 L21.0,100.0 L22.0,100.0 L23.0,99.9 L24.0,99.8 L25.0,99.7 L26.0,99.5 L27.0,99.4 L28.0,99.2 L29.0,99.0 L30.0,98.8 L31.0,98.5 L32.0,98.2 L33.0,97.9 L34.0,97.5 L35.0,97.2 L36.0,96.8 L37.0,96.4 L38.0,96.0 L39.0,95.5 L40.0,95.0 L41.0,94.5 L42.0,94.0 L43.0,93.4 L44.0,92.8 L45.0,92.2 L46.0,91.5 L47.0,90.9 L48.0,90.2 L49.0,89.5 L50.0,88.8 L51.0,88.0 L52.0,87.2 L53.0,86.4 L54.0,85.5 L55.0,84.7 L56.0,83.8 L57.0,82.9 L58.0,82.0 L59.0,81.0 L60.0,80.0 L61.0,79.0 L62.0,78.0 L63.0,76.9 L64.0,75.8 L65.0,74.7 L66.0,73.6 L67.0,72.4 L68.0,71.2 L69.0,70.0 L70.0,68.8 L71.0,67.5 L72.0,66.2 L73.0,64.9 L74.0,63.5 L75.0,62.2 L76.0,60.8 L77.0,59.4 L78.0,58.0 L79.0,56.5 L80.0,55.0 L81.0,53.5 L82.0,51.9 L83.0,50.4 L84.0,48.8 L85.0,47.2 L86.0,45.6 L87.0,43.9 L88.0,42.2 L89.0,40.5 L90.0,38.8 L91.0,37.0 L92.0,35.2 L93.0,33.4 L94.0,31.5 L95.0,29.7 L96.0,27.8 L97.0,25.9 L98.0,24.0 L99.0,22.0 L100.0,20.0" stroke-width="3.8"/><path d="M20.0,100.0 L20.0,99.0 L20.1,98.0 L20.1,97.0 L20.2,96.0 L20.3,95.0 L20.4,94.0 L20.6,93.0 L20.8,92.0 L21.0,91.0 L21.2,90.0 L21.5,89.0 L21.8,88.0 L22.1,87.0 L22.4,86.0 L22.8,85.0 L23.2,84.0 L23.6,83.0 L24.1,82.0 L24.5,81.0 L25.0,80.0 L25.5,79.0 L26.1,78.0 L26.6,77.0 L27.2,76.0 L27.8,75.0 L28.5,74.0 L29.1,73.0 L29.8,72.0 L30.5,71.0 L31.2,70.0 L32.0,69.0 L32.8,68.0 L33.6,67.0 L34.5,66.0 L35.3,65.0 L36.2,64.0 L37.1,63.0 L38.0,62.0 L39.0,61.0 L40.0,60.0 L41.0,59.0 L42.0,58.0 L43.1,57.0 L44.2,56.0 L45.3,55.0 L46.4,54.0 L47.6,53.0 L48.8,52.0 L50.0,51.0 L51.2,50.0 L52.5,49.0 L53.8,48.0 L55.1,47.0 L56.5,46.0 L57.8,45.0 L59.2,44.0 L60.6,43.0 L62.0,42.0 L63.5,41.0 L65.0,40.0 L66.5,39.0 L68.1,38.0 L69.6,37.0 L71.2,36.0 L72.8,35.0 L74.4,34.0 L76.1,33.0 L77.8,32.0 L79.5,31.0 L81.2,30.0 L83.0,29.0 L84.8,28.0 L86.6,27.0 L88.5,26.0 L90.3,25.0 L92.2,24.0 L94.1,23.0 L96.0,22.0 L98.0,21.0 L100.0,20.0" stroke-width="3.8" stroke-opacity=".6"/><circle cx="76.0" cy="60.8" r="4.5" fill="#fff" stroke="none"/><circle cx="59.2" cy="44.0" r="4.5" fill="#fff" stroke="none"/></g></svg></div>
+  <div class="lesson-cover" aria-hidden="true"><svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"><rect width="120" height="120" fill="#8A5A00"/><circle cx="14" cy="16" r="46" fill="#000" fill-opacity=".14"/><g fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 100 L112 100" stroke-opacity=".45" stroke-width="2"/><rect x="16" y="90.0" width="13" height="10.0" rx="2" fill="#fff" fill-opacity="0.35" stroke="none"/><rect x="35" y="84.0" width="13" height="16.0" rx="2" fill="#fff" fill-opacity="0.47" stroke="none"/><rect x="54" y="74.4" width="13" height="25.6" rx="2" fill="#fff" fill-opacity="0.59" stroke="none"/><rect x="73" y="59.0" width="13" height="41.0" rx="2" fill="#fff" fill-opacity="0.71" stroke="none"/><rect x="92" y="34.5" width="13" height="65.5" rx="2" fill="#fff" fill-opacity="0.83" stroke="none"/><path d="M18.0 86.0 L104.0 22.0" stroke-width="3"/><path d="M99.8 30.0 L104.0 22.0 L95.2 23.7" stroke-width="3"/></g></svg></div>
+  <a href="./index.html" class="back-link" data-th="← กลับหน้าเอกซ์โพเนนเชียลและลอการิทึม" data-en="← Back to Exponential &amp; Logarithm">← กลับหน้าเอกซ์โพเนนเชียลและลอการิทึม</a>
   <button id="themeToggle" class="theme-toggle" type="button" onclick="toggleTheme()" title="สลับโหมดสว่าง/มืด" aria-label="สลับโหมดสว่าง/มืด"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6"/></svg></button>
   <button id="langToggle" class="lang-toggle" onclick="toggleLang()">EN</button>
-  <h1 data-th="ฟังก์ชันผกผัน" data-en="Inverse Functions">ฟังก์ชันผกผัน</h1>
-  <p data-th="สลับ x, y แล้วจัดรูป • กราฟสะท้อนรอบเส้น y = x • มีอินเวอร์สเมื่อ f เป็นหนึ่งต่อหนึ่ง • ทริก f(ax+b) • ม.4" data-en="Swap x, y and solve • graphs mirror in y = x • exists exactly when f is one-to-one • the f(ax+b) trick">สลับ x, y แล้วจัดรูป • กราฟสะท้อนรอบเส้น y = x • มีอินเวอร์สเมื่อ f เป็นหนึ่งต่อหนึ่ง • ทริก f(ax+b) • ม.4</p>
+  <h1 data-th="การประยุกต์เอกซ์โพเนนเชียลและลอการิทึม" data-en="Applications of Exponentials and Logarithms">การประยุกต์เอกซ์โพเนนเชียลและลอการิทึม</h1>
+  <p data-th="ดอกเบี้ยทบต้น • การเติบโต • ครึ่งชีวิต • สเกล log: pH และริกเตอร์ • ม.4" data-en="Compound interest • growth • half-life • log scales: pH and Richter">ดอกเบี้ยทบต้น • การเติบโต • ครึ่งชีวิต • สเกล log: pH และริกเตอร์ • ม.4</p>
 </header>
 
 <nav>
-  <button class="tab-btn active" onclick="showTab('idea', this)" data-th="แนวคิดและวิธีหา" data-en="Idea and Method">แนวคิดและวิธีหา</button>
-  <button class="tab-btn" onclick="showTab('graph', this)" data-th="กราฟสะท้อน" data-en="Mirror Graph">กราฟสะท้อน</button>
-  <button class="tab-btn" onclick="showTab('exist', this)" data-th="เมื่อไรมีอินเวอร์ส" data-en="When It Exists">เมื่อไรมีอินเวอร์ส</button>
-  <button class="tab-btn" onclick="showTab('dr', this)" data-th="D และ R สลับกัน" data-en="D and R Swap">D และ R สลับกัน</button>
-  <button class="tab-btn" onclick="showTab('trick', this)" data-th="ทริก f(ax+b)" data-en="The f(ax+b) Trick">ทริก f(ax+b)</button>
+  <button class="tab-btn active" onclick="showTab('interest', this)" data-th="ดอกเบี้ยทบต้น" data-en="Compound Interest">ดอกเบี้ยทบต้น</button>
+  <button class="tab-btn" onclick="showTab('growth', this)" data-th="การเติบโต" data-en="Growth">การเติบโต</button>
+  <button class="tab-btn" onclick="showTab('decay', this)" data-th="ครึ่งชีวิต" data-en="Half-life">ครึ่งชีวิต</button>
+  <button class="tab-btn" onclick="showTab('scale', this)" data-th="สเกล log" data-en="Log Scales">สเกล log</button>
   <button class="tab-btn" onclick="showTab('quiz', this)" data-th="แบบฝึกหัด" data-en="Quiz">แบบฝึกหัด</button>
 </nav>
 
 <main>
-  <section id="tab-idea" class="tab-panel active"></section>
-  <section id="tab-graph" class="tab-panel"></section>
-  <section id="tab-exist" class="tab-panel"></section>
-  <section id="tab-dr" class="tab-panel"></section>
-  <section id="tab-trick" class="tab-panel"></section>
+  <section id="tab-interest" class="tab-panel active"></section>
+  <section id="tab-growth" class="tab-panel"></section>
+  <section id="tab-decay" class="tab-panel"></section>
+  <section id="tab-scale" class="tab-panel"></section>
   <section id="tab-quiz" class="tab-panel"></section>
 </main>
 
 <script>
-const PAGE_TITLE = { th: "สื่อการสอน : ฟังก์ชันผกผัน ม.4", en: "Teaching Aid: Inverse Functions" };
+const PAGE_TITLE = { th: "สื่อการสอน : การประยุกต์เอกซ์โพเนนเชียลและลอการิทึม ม.4", en: "Teaching Aid: Applications of Exponentials and Logarithms" };
 // ══════════════ ภาษาไทย/อังกฤษ (ค่าใน data-th/data-en ถือเป็น HTML — ดู docs/adr/0002) ══════════════
 let langMemory = 'th';
 function getLang() { try { return localStorage.getItem('siteLang') || 'th'; } catch (e) { return langMemory; } }
@@ -1182,621 +1181,559 @@ function tileRow(base, n, o) {
 tileRow.html = (base, n, o) => tileRow(base, n, o).outerHTML;
 
 
-// ══════════════ ฟังก์ชันผกผัน ══════════════
-// ภาพมาก่อน · ฉากเล่าเรื่อง (makeScenes) · ทายก่อนเฉลย (makePredict) · คลิกบนกราฟ (plotPointer) — ดู docs/media-design-guide.md §3④
+// ══════════════ การประยุกต์เอกซ์โพเนนเชียลและลอการิทึม ══════════════
+// สเปก: docs/design-exponential-log.md §7 ⑥ · ภาพมาก่อน · ฉาก (makeScenes) · ทายก่อนเฉลย (makePredict) · ตัวเลื่อนให้ลองทำ
+// สี: น้ำเงิน = เงินต้น/ของที่ตั้งต้น · ส้ม = ดอกเบี้ย/ส่วนที่เพิ่ม · แดง = จุดที่ถาม · เขียว = ผลที่ได้
+// ตัวเลขหลักพันคั่นด้วยช่องว่างไม่ตัดบรรทัด (10 000) ตลอดทั้งชิ้น
 const I = s => `<i>${s}</i>`;
-const X = I('x'), Y = I('y');
-const INF = Infinity, iv = (lo, hi, lc, hc) => IV(lo, hi, lc, hc);
-const setStr = a => '{' + a.join(', ') + '}';
-const fi = '<i>f</i><sup>−1</sup>';
-const cbrt = s => `<sup>3</sup>${rt(s)}`;
-const YN = [T('✓ ใช่', '✓ Yes'), T('✗ ไม่ใช่', '✗ No')];
-const FN2 = [T('✓ เป็นฟังก์ชัน', '✓ A function'), T('✗ ไม่เป็นฟังก์ชัน', '✗ Not a function')];
-const pr2 = (x, y) => `(${mn(x)}, ${mn(y)})`;
-// รายการ "a, b และ c" — ต้องระบุภาษา l เพราะ T(th, en) ถูกสร้างตอนโหลดหน้า
-const listAnd = (a, l) => { const t = a.map(v => typeof v === 'number' ? num(v) : v), and = l === 'en' ? ' and ' : ' และ '; return t.length < 3 ? t.join(and) : t.slice(0, -1).join(', ') + and + t[t.length - 1]; };
+const X = I('x'), TT = I('t');
+const NB = ' ';
+const clamp01 = t => Math.max(0, Math.min(1, t));
+const SI = s => `<tspan font-style="italic">${s}</tspan>`;
+// เลขคั่นหลักพัน: fmt(10000) = "10 000" · fmt(11248.64, 2) = "11 248.64"
+const fmt = (v, dec) => {
+  const s = dec === undefined ? String(v) : (+v).toFixed(dec);
+  const a = s.split('.'); a[0] = a[0].replace(/\B(?=(\d{3})+(?!\d))/g, NB);
+  return mn(a.join('.'));
+};
+const BAHT = () => tx(T('บาท', 'baht'));
+// ตัวยกในข้อความ SVG (ฐาน + ตัวยกเล็ก)
+const svPow = (b, e, fs) => `${b}<tspan dy="-5" font-size="${fs || 9}">${e}</tspan><tspan dy="5">​</tspan>`;
+const amt = rest => T('เงินรวม = ' + rest, 'Amount = ' + rest);
+const lg10 = a => lg(null, a);
 
-// CSS เฉพาะชิ้นนี้ (ใช้แต่ตัวแปรธีม จึงเปลี่ยนตามโหมดสว่าง/มืดเอง) — ฉีดจาก JS เพราะห้ามแก้ base.css
-function injectCss() {
-  const s = document.createElement('style'); s.id = 'inv-css';
-  s.textContent = `
-  .sw-box { background: var(--card); border: 1.5px solid var(--border); border-radius: 12px; padding: 8px 18px; max-width: 580px; margin: 4px auto; min-height: 250px; overflow-x: auto; }
-  .sw-row { font-size: 1.5rem; font-weight: 800; line-height: 2.4; color: var(--text); text-align: left; white-space: nowrap; }
-  .sw-row.dim { opacity: .5; }
-  .sw-row .ans { font-size: 1.4rem; }
-  .sw-x, .sw-y { display: inline-block; padding: 0 7px; border-radius: 9px; border: 2px solid; line-height: 1.5; }
-  .sw-x { border-color: var(--g-blue); background: color-mix(in srgb, var(--g-blue) 18%, var(--card)); }
-  .sw-y { border-color: var(--g-curve); background: color-mix(in srgb, var(--g-curve) 20%, var(--card)); }
-  .lump { margin: 0 2px; display: inline-block; overflow: hidden; white-space: nowrap; vertical-align: bottom; padding: 0 7px; line-height: 1.5; border-radius: 9px; border: 2px solid var(--g-purple); background: color-mix(in srgb, var(--g-purple) 16%, var(--card)); }
-  .sc-svg .cv-belt { fill: var(--border); stroke: var(--muted); stroke-width: 1.5; }
-  .sc-svg .cv-chev { fill: var(--muted); }
-  .sc-svg .cv-box { fill: color-mix(in srgb, var(--g-teal) 14%, var(--card)); stroke: var(--g-teal); stroke-width: 2.4; }
-  .sc-svg .cv-br { fill: none; stroke: var(--muted); stroke-width: 2; }
-  .sc-svg .cv-ball circle { fill: color-mix(in srgb, var(--g-curve) 28%, var(--card)); stroke: var(--g-curve); stroke-width: 2.6; }
-  .sc-svg .cv-ball text { font-size: 19px; }
-  .sc-svg .dr-cell { fill: var(--card); stroke: var(--muted); stroke-width: 2; }
-  .sc-svg .dr-cell.hot { fill: color-mix(in srgb, var(--g-curve) 24%, var(--card)); stroke: var(--g-curve); }
-  .sc-svg .dr-cell.ok { stroke: var(--g-green); stroke-width: 3; }
-  .plot.pick { cursor: crosshair; }
-  .plot .try-hover { fill: none; stroke: var(--muted); stroke-width: 2; stroke-dasharray: 3 3; pointer-events: none; }
-  .plot .try-hl { pointer-events: none; font-size: 12px; fill: var(--muted); }
-  .rcv { margin-top: 6px; }
-  `;
-  document.head.appendChild(s);
+// ───────── วิดเจ็ตวาดซ้ำตามภาษา (ภาพนิ่งที่มีข้อความตามภาษา) ─────────
+function apLive(host, fn) {
+  const w = { refresh: () => { host.innerHTML = fn(); } };
+  LIVE.push(w); w.refresh();
+  return w;
 }
-// เฟดแถว/ก้อน HTML เข้า (ใช้ในฉากที่เป็นสมการ HTML)
-const fadeIn = (A, el, ms) => A.run(ms || 420, t => { el.style.opacity = t; el.style.transform = `translateY(${((1 - t) * 10).toFixed(1)}px)`; }, EASE.out);
 
-// ───────── แท็บ 1 การ์ด 1: สายพานย้อนกลับ ─────────
-// f(x) = 3x − 5 ประกอบด้วยเครื่อง "×3" แล้ว "−5" : ลูกบอล 2 → 6 → 1 ; f⁻¹ ถอดทีละเครื่องจากท้ายไปหน้า "+5" แล้ว "÷3" : 1 → 6 → 2
-const CV = { W: 520, H: 262, S: 50, E: 470, y: 134, bx: [150, 290], bw: 84, bt: 62, bh: 140 };
-function convBuild(root) {
-  const C = CV, m = {};
-  const svg = m.svg = sv('svg', { class: 'sc-svg', viewBox: `0 0 ${C.W} ${C.H}` }, root);
-  sv('text', { x: 18, y: 28, class: 'sc-big', text: 'f(x) = 3x − 5' }, svg);
-  sv('rect', { class: 'cv-belt', x: 16, y: C.y + 26, width: C.W - 32, height: 14, rx: 7 }, svg);
-  const chev = dir => { const g = sv('g', {}, svg); for (let i = 0; i < 11; i++) { const x = 36 + i * 44 + (dir > 0 ? 0 : 22), y = C.y + 33; sv('polygon', { class: 'cv-chev', points: dir > 0 ? `${x - 5},${y - 5} ${x + 5},${y} ${x - 5},${y + 5}` : `${x + 5},${y - 5} ${x - 5},${y} ${x + 5},${y + 5}` }, g); } return g; };
-  m.gR = chev(1); m.gL = chev(-1);
-  m.box = C.bx.map((x, i) => { const g = sv('g', {}, svg); sv('rect', { class: 'cv-box', x: x - C.bw / 2, y: C.bt, width: C.bw, height: C.bh, rx: 12 }, g); return { g, big: sv('text', { x, y: C.bt + 32, 'text-anchor': 'middle', class: 'sc-big', text: '' }, g), small: sv('text', { x, y: C.bt + 56, 'text-anchor': 'middle', class: 'sc-small', text: '' }, g) }; });
-  m.brG = sv('g', {}, svg);
-  sv('path', { class: 'cv-br', d: `M${C.bx[0] - C.bw / 2} ${C.bt - 8} v-8 H${C.bx[1] + C.bw / 2} v8` }, m.brG);
-  m.brT = sv('text', { x: (C.bx[0] + C.bx[1]) / 2, y: C.bt - 24, 'text-anchor': 'middle', class: 'sc-big', text: '' }, m.brG);
-  m.ballG = sv('g', { class: 'cv-ball' }, svg); sv('circle', { cx: 0, cy: 0, r: 21 }, m.ballG); m.ballT = sv('text', { x: 0, y: 7, 'text-anchor': 'middle', text: '' }, m.ballG);
-  m.bot = sv('text', { x: C.W / 2, y: C.H - 14, 'text-anchor': 'middle', class: 'sc-big', text: '' }, svg);
-  m.ball = (x, v, op, s) => { m.ballG.setAttribute('transform', `translate(${(+x).toFixed(1)} ${C.y}) scale(${s || 1})`); m.ballT.textContent = v; m.ballG.style.opacity = op === undefined ? 1 : op; };
-  // mode: 1 = f (ไปหน้า) · −1 = f⁻¹ (ย้อนกลับ) · 0 = ทั้งคู่ (ไปแล้วกลับ)
-  m.mode = md => {
-    const F = ['×3', '−5'], B = ['÷3', '+5'];
-    m.box.forEach((b, i) => { b.big.textContent = md === -1 ? B[i] : F[i]; b.small.textContent = md === 0 ? B[i] : ''; });
-    m.brT.textContent = md === 1 ? 'f' : md === -1 ? 'f⁻¹' : 'f⁻¹ ∘ f';
-    m.gR.style.display = md === -1 ? 'none' : ''; m.gL.style.display = md === 1 ? 'none' : '';
+// ───────── ตัวช่วยกราฟ (ชั้น dyn ภายใน svg เดียว) ─────────
+function efMount(el, cfg, pre, xl, yl) {
+  const pl = new Plot(Object.assign({ w: 520, h: 360, pad: 30 }, cfg));
+  pl.raw('<g class="dyn"></g>', true);
+  el.innerHTML = (pre || '') + apFmtSvg(pl.svg(), xl, yl);
+  return { pl, g: el.querySelector('.dyn') };
+}
+// เลข 4 หลักขึ้นไปในป้ายแกนเป็นแบบคั่นหลักพัน + เปลี่ยนชื่อแกน x/y
+function apFmtSvg(s, xl, yl) {
+  s = s.replace(/>(\d{4,})</g, (m, n) => '>' + n.replace(/\B(?=(\d{3})+(?!\d))/g, NB) + '<');
+  if (xl) s = s.replace('italic">x</text>', 'italic">' + xl + '</text>');
+  if (yl) s = s.replace('italic">y</text>', 'italic">' + yl + '</text>');
+  return s;
+}
+function efD(pl, f, x0, x1, n) {
+  let s = '', pen = false;
+  for (let i = 0; i <= n; i++) {
+    const x = x0 + (x1 - x0) * i / n, y = f(x);
+    if (!isFinite(y) || Math.abs(y) > 1e7) { pen = false; continue; }
+    s += (pen ? 'L' : 'M') + pl.X(x) + ' ' + pl.Y(y); pen = true;
+  }
+  return s;
+}
+const efCurve = (pl, f, x0, x1, cls, o) => { o = o || {}; return `<path class="pl-c ${cls}" d="${efD(pl, f, x0, x1, o.n || 300)}" clip-path="url(#${pl.id})"${o.dash ? ' stroke-dasharray="7 6"' : ''}/>`; };
+const efDot = (pl, x, y, cls, r, st) => `<circle class="pl-dot ${cls}" cx="${pl.X(x)}" cy="${pl.Y(y)}" r="${r || 5.5}"${st ? ` style="${st}"` : ''}/>`;
+const efText = (pl, x, y, cls, html, o) => { o = o || {}; return `<text class="pl-lbl ${cls}" style="font-size:${o.fs || 15}px${o.op !== undefined ? ';opacity:' + o.op : ''}" x="${pl.X(x) + (o.dx || 0)}" y="${pl.Y(y) + (o.dy || 0)}" text-anchor="${o.anchor || 'start'}">${html}</text>`; };
+const efSeg = (pl, x1, y1, x2, y2, cls, o) => { o = o || {}; return `<line class="pl-c ${cls}" style="stroke-width:${o.sw || 2.4}${o.solid ? '' : ';stroke-dasharray:6 5'}${o.op !== undefined ? ';opacity:' + o.op : ''}" x1="${pl.X(x1)}" y1="${pl.Y(y1)}" x2="${pl.X(x2)}" y2="${pl.Y(y2)}" clip-path="url(#${pl.id})"/>`; };
+// ลูกศรพิกัดจอ (px) · col = blue | orange | green | red | purple
+function efArrow(x1, y1, x2, y2, col) {
+  const L = Math.hypot(x2 - x1, y2 - y1); if (L < 8) return '';
+  const ux = (x2 - x1) / L, uy = (y2 - y1) / L, hl = 11, bx = x2 - ux * hl, by = y2 - uy * hl, nx = -uy * 5, ny = ux * 5;
+  return `<line class="pl-c s-${col}" style="stroke-width:2.8" x1="${x1}" y1="${y1}" x2="${bx.toFixed(1)}" y2="${by.toFixed(1)}"/><polygon class="f-${col}" points="${x2},${y2} ${(bx + nx).toFixed(1)},${(by + ny).toFixed(1)} ${(bx - nx).toFixed(1)},${(by - ny).toFixed(1)}"/>`;
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  แท็บ 1 · ดอกเบี้ยทบต้น
+// ═══════════════════════════════════════════════════════════════
+// แท่งเงินรวม: ล่างน้ำเงิน = เงินต้น 10 000 · บนส้ม = ดอกเบี้ยสะสม · แกนตั้งตัดช่วงล่าง (เริ่มที่ 9 600) เพื่อให้เห็นส่วนที่เพิ่ม
+const IB = { W: 540, H: 352, x0: 76, base: 262, top: 34, lo: 9600, hi: 11400 };
+const ibY = v => +(IB.base - (v - IB.lo) / (IB.hi - IB.lo) * (IB.base - IB.top)).toFixed(2);
+// bars = [{ name: T, tot: เงินรวม, lab: ป้ายตัวเลข, g: 0–1 ความสูงที่โผล่, q: true = กรอบประ "?" }] · o.slots = จำนวนช่อง · o.guide = ขีดเทียบระดับของแท่ง index นั้น
+function ibPaint(el, bars, o) {
+  o = o || {};
+  const slots = o.slots || bars.length, slot = (IB.W - IB.x0 - 16) / slots;
+  let s = '';
+  [10000, 10400, 10800, 11200].forEach(v => { s += `<line class="sc-grid" x1="${IB.x0}" y1="${ibY(v)}" x2="${IB.W - 8}" y2="${ibY(v)}"/><text class="sc-tick" x="${IB.x0 - 8}" y="${ibY(v) + 4}" text-anchor="end" style="font-size:12px">${fmt(v)}</text>`; });
+  s += `<line class="sc-axis" x1="${IB.x0}" y1="${IB.top - 8}" x2="${IB.x0}" y2="${IB.base}"/><line class="sc-axis" x1="${IB.x0}" y1="${IB.base}" x2="${IB.W - 8}" y2="${IB.base}"/>`;
+  s += `<path class="sc-axis" d="M${IB.x0 - 7} ${IB.base - 6} l14 -6 M${IB.x0 - 7} ${IB.base - 13} l14 -6"/>`;
+  s += `<text class="sc-tick" x="${IB.x0 - 8}" y="${IB.base + 18}" text-anchor="end" style="font-size:12px">${fmt(IB.lo)}</text>`;
+  const yp = ibY(10000);
+  bars.forEach((b, i) => {
+    const cx = IB.x0 + slot * (i + 0.5);
+    s += `<text class="sc-tick" x="${cx}" y="${IB.base + 20}" text-anchor="middle" style="font-size:14px">${tx(b.name)}</text>`;
+    if (b.q) { s += `<rect x="${cx - 32}" y="${ibY(11350)}" width="64" height="${IB.base - ibY(11350)}" rx="5" fill="none" stroke="var(--muted)" stroke-width="2.4" stroke-dasharray="6 5"/><text x="${cx}" y="${ibY(10650) + 12}" text-anchor="middle" style="font-size:38px;fill:var(--muted)">?</text>`; return; }
+    const g = clamp01(b.g === undefined ? 1 : b.g), top = lerp(10000, b.tot, g), yt = ibY(top);
+    s += `<rect class="f-blue" x="${cx - 32}" y="${yp}" width="64" height="${IB.base - yp}" rx="3"/>`;
+    if (yp - yt > 0.4) s += `<rect class="f-orange" x="${cx - 32}" y="${yt}" width="64" height="${(yp - yt).toFixed(2)}" rx="3"/>`;
+    if (g >= 0.999) s += `<text x="${cx}" y="${yt - 8}" text-anchor="middle" style="font-size:16px">${b.lab}</text>`;
+  });
+  if (o.guide !== undefined) { const gy = ibY(bars[o.guide].tot); s += `<line class="sc-guide" style="stroke:var(--g-red)" x1="${IB.x0 + slot * (o.guide + 0.5) + 36}" y1="${gy}" x2="${IB.W - 10}" y2="${gy}"/>`; }
+  if (o.extra) s += o.extra;
+  const sq = (x, cls, t) => `<rect class="${cls}" x="${x}" y="${IB.H - 38}" width="13" height="13" rx="2"/><text class="sc-small" x="${x + 19}" y="${IB.H - 27}" style="font-size:13px">${t}</text>`;
+  s += sq(IB.x0 - 56, 'f-blue', tx(T('เงินต้น 10 000 บาท', 'principal 10 000 baht'))) + sq(IB.x0 + 190, 'f-orange', tx(T('ดอกเบี้ยสะสม', 'interest so far')));
+  s += `<text class="sc-small" x="${IB.x0 - 56}" y="${IB.H - 8}" style="font-size:12.5px">${tx(T('แกนตั้งเริ่มที่ 9 600 บาท (ตัดช่วงล่างออกเพื่อให้เห็นส่วนที่เพิ่ม)', 'The vertical axis starts at 9 600 baht so the growth is visible.'))}</text>`;
+  el.innerHTML = `<svg class="sc-svg" viewBox="0 0 ${IB.W} ${IB.H}" xmlns="http://www.w3.org/2000/svg">${s}</svg>`;
+}
+
+const IS_AMT = [10000, 10400, 10816, 11248.64], IS_LAB = ['10' + NB + '000', '10' + NB + '400', '10' + NB + '816', '11' + NB + '248.64'];
+const IS_NAME = [T('เริ่มฝาก', 'Deposit'), T('สิ้นปีที่ 1', 'End of year 1'), T('สิ้นปีที่ 2', 'End of year 2'), T('สิ้นปีที่ 3', 'End of year 3')];
+// k = แท่งสุดท้ายที่มี (0–3) · g = ความสูงของแท่งนั้น
+function isPaint(el, k, g) {
+  ibPaint(el, IS_AMT.slice(0, k + 1).map((v, i) => ({ name: IS_NAME[i], tot: v, lab: IS_LAB[i], g: i < k ? 1 : g })), { slots: 4 });
+}
+const IS_SCENES = [
+  { cap: T(`<b>เงินต้น 10${NB}000 บาท</b> — ฝากไว้ ดอกเบี้ย 4% ต่อปี ทบปีละครั้ง นาน 3 ปี กด ▶ ดูเงินสิ้นปีที่ 1`, `<b>Principal 10${NB}000 baht</b> — deposited at 4% interest per year, compounded once a year for 3 years. Press ▶ to see the end of year 1.`),
+    end: S => isPaint(S.el, 0, 1) },
+  { cap: T(`<b>สิ้นปีที่ 1</b> — ดอกเบี้ย = 4% ของ 10${NB}000 = 400 บาท → เงินรวม 10${NB}400 บาท`, `<b>End of year 1</b> — interest = 4% of 10${NB}000 = 400 baht → money 10${NB}400 baht.`),
+    end: S => isPaint(S.el, 1, 1), play: async S => { await S.anim.run(1300, t => isPaint(S.el, 1, t), EASE.inOut); } },
+  { cap: T(`<b>สิ้นปีที่ 2</b> — ดอกเบี้ย = 4% ของ <b>10${NB}400</b> = 416 บาท (ไม่ใช่ 400 เพราะเอาดอกเบี้ยปีแรกไปคิดดอกด้วย) → เงินรวม 10${NB}816 บาท`, `<b>End of year 2</b> — interest = 4% of <b>10${NB}400</b> = 416 baht (not 400, because last year's interest earns interest too) → money 10${NB}816 baht.`),
+    end: S => isPaint(S.el, 2, 1), play: async S => { await S.anim.run(1300, t => isPaint(S.el, 2, t), EASE.inOut); } },
+  { cap: T(`<b>สิ้นปีที่ 3</b> — ดอกเบี้ย = 4% ของ 10${NB}816 = 432.64 บาท → เงินรวม 11${NB}248.64 บาท · ดอกเบี้ยที่ถูกเอาไปคิดดอกต่อแบบนี้เรียกว่า <b>ดอกเบี้ยทบต้น</b>`, `<b>End of year 3</b> — interest = 4% of 10${NB}816 = 432.64 baht → money 11${NB}248.64 baht · interest that is added to the principal and earns interest again is called <b>compound interest</b>.`),
+    end: S => isPaint(S.el, 3, 1), play: async S => { await S.anim.run(1300, t => isPaint(S.el, 3, t), EASE.inOut); } }
+];
+
+// ตัวอย่างวิธีคิด: ทบปีละครั้ง (เขียนเต็มฝั่งซ้ายทุกบรรทัด)
+const iF = (n, nt) => `${I('P')}${pwr('(1 + ' + frac(I('r'), I('n')) + ')', I('nt'))}`;
+const IE_ROWS = () => [
+  { h: amt(`${iF()}`), n: T('<i>P</i> = 10 000 · <i>r</i> = 0.04 · <i>n</i> = 1 · <i>t</i> = 3', '<i>P</i> = 10 000 · <i>r</i> = 0.04 · <i>n</i> = 1 · <i>t</i> = 3') },
+  { h: amt(`10${NB}000${pwr('(1 + ' + frac('0.04', 1) + ')', '1 · 3')}`), n: T('แทนค่า', 'Substitute') },
+  { h: amt(`10${NB}000${pwr('(1.04)', 3)}`), n: T('1 + 0.04 = 1.04 และ 1 · 3 = 3', '1 + 0.04 = 1.04 and 1 · 3 = 3') },
+  { h: amt(`10${NB}000 · 1.124864`), n: T(`${pwr('1.04', 3)} = 1.04 · 1.04 · 1.04 = 1.124864`, `${pwr('1.04', 3)} = 1.04 · 1.04 · 1.04 = 1.124864`) },
+  { h: T(`เงินรวม = 11${NB}248.64 บาท`, `Amount = 11${NB}248.64 baht`) }
+];
+
+// ทายก่อน: ทบทุกไตรมาส เทียบกับปีละครั้ง
+function ipItem() {
+  return { chip: T('ทบทุกไตรมาส', 'Compounded quarterly'), draw: async (el, ctx) => {
+    const done = ctx.done[0];
+    const paint = g => ibPaint(el, [
+      { name: T('เงินต้น', 'Principal'), tot: 10000, lab: '10' + NB + '000' },
+      { name: T('ทบปีละครั้ง', 'Yearly'), tot: 11248.64, lab: '11' + NB + '248.64' },
+      done ? { name: T('ทบทุกไตรมาส', 'Quarterly'), tot: lerp(10000, 11268.25, g), lab: '11' + NB + '268.25', g } : { name: T('ทบทุกไตรมาส', 'Quarterly'), q: true }
+    ], { slots: 3, guide: done && g >= 0.999 ? 1 : undefined, extra: done && g >= 0.999 ? `<text class="pl-lbl r" style="font-size:15px" x="${IB.W - 12}" y="${ibY(11248.64) + 20}" text-anchor="end">+19.61</text>` : '' });
+    if (done && ctx.animate && ctx.last === 0) { paint(0); await ctx.anim.run(1100, paint, EASE.inOut); paint(1); } else paint(1);
+  }, qs: [{
+    q: T(`ฝาก 10${NB}000 บาท ดอกเบี้ย 4% ต่อปี นาน 3 ปี · ทบปีละครั้งได้ 11${NB}248.64 บาท ถ้าเปลี่ยนเป็นทบทุก 3 เดือน (ไตรมาสละครั้ง) จะได้เงินรวม`, `Deposit 10${NB}000 baht at 4% interest per year for 3 years · yearly compounding gives 11${NB}248.64 baht. If it is compounded every 3 months instead, the amount will be`),
+    o: [T(`น้อยกว่า 11${NB}248.64 บาท`, `less than 11${NB}248.64 baht`), T(`เท่ากับ 11${NB}248.64 บาท`, `exactly 11${NB}248.64 baht`), T('มากกว่าเล็กน้อย', 'a little more'), T('มากกว่าเท่าตัว', 'more than double')], a: 2,
+    why: T(`ทบทุกไตรมาส: <i>n</i> = 4, <i>r</i>/<i>n</i> = 0.04/4 = 0.01 (1% ต่องวด) ทั้งหมด <i>nt</i> = 4 · 3 = 12 งวด → เงินรวม = 10${NB}000${pwr('(1.01)', 12)} ≈ 11${NB}268.25 บาท · มากกว่าทบปีละครั้งอยู่ 19.61 บาท เพราะดอกเบี้ยถูกเอาไปคิดดอกต่อเร็วขึ้น`,
+      `Quarterly: <i>n</i> = 4, <i>r</i>/<i>n</i> = 0.04/4 = 0.01 (1% per period), a total of <i>nt</i> = 4 · 3 = 12 periods → amount = 10${NB}000${pwr('(1.01)', 12)} ≈ 11${NB}268.25 baht · that is 19.61 baht more than yearly, because the interest starts earning interest sooner.`)
+  }] };
+}
+
+// กี่ปีเงินเป็น 2 เท่า: กราฟ + ขั้นตอนใช้ log
+function dbHtml() {
+  const pl = new Plot({ w: 520, h: 340, pad: 32, xmin: 0, xmax: 26, ymin: 0, ymax: 3, gx: 5, lx: 5, gy: 0.5, ly: 0.5 });
+  const tt = Math.log(2) / Math.log(1.04);
+  pl.dash(0, 2, tt, 2, 's-red'); pl.dash(tt, 0, tt, 2, 's-red');
+  pl.path(x => Math.pow(1.04, x), 's-blue', { n: 300 });
+  pl.dot(tt, 2, 'f-red', false, 7);
+  pl.text(0.6, 2, tx(T('เงินรวม = 2 เท่าของเงินต้น', 'amount = 2 × principal')), 'r', 'start', 0, -9);
+  pl.text(tt, 0, `${SI('t')} ≈ 17.7 ${tx(T('ปี', 'years'))}`, 'r', 'start', 8, -10);
+  pl.text(0.6, 2.75, `${SI('A')} = ${SI('P')}(1.04)<tspan dy="-6" font-size="11" font-style="italic">t</tspan>`, 'b', 'start', 0, 0);
+  return apFmtSvg(pl.svg(), 't', 'A/P');
+}
+const DB_ROWS = () => [
+  { h: `${I('P')}${pwr('(1.04)', TT)} = 2${I('P')}`, n: T('ต้องการเงินรวมเป็น 2 เท่าของเงินต้น', 'We want the amount to be twice the principal') },
+  { h: `${pwr('(1.04)', TT)} = 2`, n: T('หารทั้งสองข้างด้วย <i>P</i>', 'Divide both sides by <i>P</i>') },
+  { h: `${lg10(pwr('(1.04)', TT))} = ${lg10('2')}`, n: T('ใส่ log ทั้งสองข้าง (ตัวไม่รู้อยู่ที่เลขชี้กำลัง ต้องใช้ log ช่วย)', 'Take log of both sides (the unknown sits in the exponent, so log helps)') },
+  { h: `${TT} · ${lg10('1.04')} = ${lg10('2')}`, n: T('สมบัติ log: log aⁿ = n · log a', 'Log law: log aⁿ = n · log a') },
+  { h: `${TT} = ${frac(lg10('2'), lg10('1.04'))}`, n: T('หารทั้งสองข้างด้วย log 1.04', 'Divide both sides by log 1.04') },
+  { h: `${TT} = ${frac('0.3010', '0.0170')}`, n: T('log 2 ≈ 0.3010 และ log 1.04 ≈ 0.0170', 'log 2 ≈ 0.3010 and log 1.04 ≈ 0.0170') },
+  { h: T(`${TT} ≈ 17.7 ปี`, `${TT} ≈ 17.7 years`), n: T('เงินเป็น 2 เท่าเมื่อผ่านไปประมาณ 17.7 ปี', 'The money doubles after about 17.7 years') }
+];
+
+// ตัวเลื่อน P, r, n, t
+function icChart(P0, f, n, t) {
+  const W = 540, H = 262, x0 = 66, base = 222, top = 22, A = y => P0 * Math.pow(f, n * y), total = A(t);
+  const rough = total / 4, mag = Math.pow(10, Math.floor(Math.log10(rough)));
+  const step = [1, 2, 2.5, 5, 10].map(k => k * mag).find(v => v >= rough), hi = step * Math.ceil(total / step - 1e-9);
+  const Y = v => base - v / hi * (base - top), slot = (W - x0 - 12) / t, bw = Math.min(40, slot * 0.72);
+  let s = '';
+  for (let v = 0; v <= hi + 1e-6; v += step) s += `<line class="sc-grid" x1="${x0}" y1="${Y(v)}" x2="${W - 8}" y2="${Y(v)}"/><text class="sc-tick" x="${x0 - 8}" y="${Y(v) + 4}" text-anchor="end" style="font-size:12px">${fmt(Math.round(v))}</text>`;
+  s += `<line class="sc-axis" x1="${x0}" y1="${top - 6}" x2="${x0}" y2="${base}"/><line class="sc-axis" x1="${x0}" y1="${base}" x2="${W - 8}" y2="${base}"/>`;
+  for (let y = 1; y <= t; y++) {
+    const cx = x0 + slot * (y - 0.5), yp = Y(P0), yt = Y(A(y));
+    s += `<rect class="f-blue" x="${cx - bw / 2}" y="${yp}" width="${bw}" height="${base - yp}" rx="2"/>`;
+    if (yp - yt > 0.4) s += `<rect class="f-orange" x="${cx - bw / 2}" y="${yt}" width="${bw}" height="${(yp - yt).toFixed(2)}" rx="2"/>`;
+    if (t <= 10 || y === 1 || y % 5 === 0 || y === t) s += `<text class="sc-tick" x="${cx}" y="${base + 17}" text-anchor="middle" style="font-size:12px">${y}</text>`;
+  }
+  s += `<text class="sc-small" x="${x0}" y="${H - 6}" style="font-size:13px">${tx(T('ปีที่', 'year'))}</text>`;
+  return `<svg class="sc-svg" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">${s}</svg>`;
+}
+function makeIntCalc(host) {
+  const w = { P: 10000, r: 4, n: 1, t: 3 };
+  host.innerHTML = '<div class="sc-prompt"></div><div class="ic-chart"></div>' + sliderRow('<i>P</i> =', 'icP', 1000, 50000, 1000, 10000) + sliderRow('<i>r</i> =', 'icR', 1, 10, 0.5, 4) + '<div class="chips ic-n"></div>' + sliderRow('<i>t</i> =', 'icT', 1, 20, 1, 3) + '<div class="wg-eq col ic-eq"></div>';
+  const q = s => host.querySelector(s), NS = [[1, T('ปีละครั้ง', 'yearly')], [2, T('ครึ่งปี', 'half-yearly')], [4, T('ไตรมาส', 'quarterly')], [12, T('รายเดือน', 'monthly')]];
+  w.render = () => {
+    const { P, r, n, t } = w, f = 1 + r / 100 / n, A = P * Math.pow(f, n * t), rd = +(r / 100).toFixed(4), f6 = +f.toFixed(6), exact = Math.abs(f - f6) < 1e-12;
+    q('.sc-prompt').innerHTML = tx(T('ปรับเงินต้น อัตราดอกเบี้ย จำนวนงวดต่อปี และจำนวนปี ดูเงินรวมเปลี่ยน', 'Change the principal, the rate, the periods per year and the years, and watch the amount change'));
+    q('#icPv').textContent = fmt(P) + ' ' + BAHT(); q('#icRv').textContent = r + '%'; q('#icTv').textContent = t + ' ' + tx(T('ปี', 'years'));
+    q('.ic-n').innerHTML = `<span class="chips-label">${tx(T('ทบ', 'Compounded'))}</span>` + NS.map(([k, lb]) => `<button class="chip${n === k ? ' active' : ''}" data-n="${k}">${tx(lb)} (<i>n</i> = ${k})</button>`).join('');
+    q('.ic-n').querySelectorAll('.chip').forEach(c => c.onclick = () => { w.n = +c.dataset.n; w.render(); });
+    q('.ic-chart').innerHTML = icChart(P, f, n, t);
+    q('.ic-eq').innerHTML = `<div>${tx(amt(`${I('P')}${pwr('(1 + ' + frac(I('r'), I('n')) + ')', I('nt'))}`))}</div>` +
+      `<div>${tx(amt(`${fmt(P)}${pwr('(1 + ' + frac(rd, n) + ')', n + ' · ' + t)}`))}</div>` +
+      `<div>${tx(T('เงินรวม', 'Amount'))} ${exact ? '=' : '≈'} ${fmt(P)}${pwr('(' + f6 + ')', n * t)}</div>` +
+      `<div>${ans(tx(T('เงินรวม', 'Amount')) + ' ≈ ' + fmt(A, 2) + ' ' + BAHT())} &nbsp; <span class="ptag">${tx(T('ดอกเบี้ยรวม', 'total interest'))} ≈ ${fmt(A - P, 2)}</span></div>`;
   };
-  m.pose = k => {
-    m.mode(k === 0 || k === -1 ? 1 : k === 1 ? -1 : 0);
-    if (k === 0) m.ball(C.E, '1'); else m.ball(C.S, '2');
-    m.bot.textContent = k === 0 ? 'f(2) = 1' : k === 1 ? 'f⁻¹(1) = 2' : k === 2 ? 'f⁻¹(f(2)) = f⁻¹(1) = 2' : '';
+  [['P', 'icP'], ['r', 'icR'], ['t', 'icT']].forEach(([k, id]) => { const s = q('#' + id); s.oninput = () => { w[k] = +s.value; w.render(); }; });
+  w.refresh = () => w.render();
+  LIVE.push(w); w.render();
+  return w;
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  แท็บ 2 · การเติบโต
+// ═══════════════════════════════════════════════════════════════
+// การเติบโต: แบคทีเรีย 100 ตัว เพิ่มเป็น 2 เท่าทุก 20 นาที (ย้ายมาจากชิ้นฟังก์ชันเอกซ์โพเนนเชียล)
+function makeGrowth(host) {
+  const w = { t: 60 };
+  host.innerHTML = '<div class="sc-prompt"></div><div class="plhost"></div>' + sliderRow('<i>t</i> =', 'gt', 0, 120, 20, 60) + '<div class="wg-eq col gr-eq"></div>';
+  const q = s => host.querySelector(s), sl = q('#gt');
+  w.render = () => {
+    const t = w.t, m = t / 20, N = 100 * Math.pow(2, m);
+    q('.sc-prompt').innerHTML = tx(T('เลื่อนเวลา t ดูจำนวนแบคทีเรีย — เริ่ม 100 ตัว เพิ่มเป็น 2 เท่าทุก 20 นาที', 'Slide the time t and watch the bacteria — start at 100, doubling every 20 minutes'));
+    q('#gtv').textContent = t + (EN() ? ' min' : ' นาที');
+    const pl = new Plot({ w: 520, h: 380, pad: 36, xmin: 0, xmax: 120, ymin: 0, ymax: 7000, gx: 20, lx: 20, gy: 1000, ly: 1000 });
+    pl.path(x => 100 * Math.pow(2, x / 20), 's-blue', { n: 300 });
+    for (let k = 0; k <= 6; k++) pl.dot(k * 20, 100 * Math.pow(2, k), 'f-blue', false, 4.5);
+    pl.dash(t, 0, t, N, 's-red'); pl.dash(0, N, t, N, 's-red'); pl.dot(t, N, 'f-red', false, 7.5);
+    pl.raw(efText(pl, t, N, 'r', `N = ${fmt(N)}`, { dx: t > 80 ? -12 : 12, dy: -12, fs: 17, anchor: t > 80 ? 'end' : 'start' }), true);
+    q('.plhost').innerHTML = apFmtSvg(pl.svg(), 't', 'N');
+    q('.gr-eq').innerHTML = `<div>N = 100 · ${pwr('2', frac(t, 20))}</div><div>N = 100 · ${pwr('2', m)}</div><div>N = 100 · ${fmt(Math.pow(2, m))}</div><div>${ans('N = ' + fmt(N))} ${tx(T('ตัว', 'bacteria'))}</div>`;
   };
-  // วิ่งผ่านสองเครื่อง ทิศ dir (+1 ไป / −1 กลับ) · ms = เวลาต่อช่วง
-  m.run = async (A, dir, ms) => {
-    const pts = dir > 0 ? [C.S, C.bx[0], C.bx[1], C.E] : [C.E, C.bx[1], C.bx[0], C.S], vals = dir > 0 ? ['2', '6', '1'] : ['1', '6', '2'];
-    m.ball(pts[0], vals[0]);
-    for (let i = 1; i <= 3; i++) {
-      const v = vals[i - 1];
-      await A.run(ms, t => m.ball(lerp(pts[i - 1], pts[i], t), v, Math.abs(lerp(pts[i - 1], pts[i], t) - (i < 3 ? pts[i] : 1e9)) < C.bw / 2 ? .6 : 1), EASE.lin);
-      if (i < 3) {
-        await A.run(300, t => m.ball(pts[i], t < .5 ? v : vals[i], .6, 1 + .3 * Math.sin(Math.PI * t)), EASE.lin);
-        await A.wait(120);
+  sl.oninput = () => { w.t = +sl.value; w.render(); };
+  w.refresh = () => w.render();
+  LIVE.push(w); w.render();
+  return w;
+}
+
+// ทายก่อน: เมื่อไรถึง 10 000 ตัว (โชว์กราฟแค่ถึง t = 120 ก่อนทาย)
+const GT = { xmin: 0, xmax: 170, ymin: 0, ymax: 12000, h: 360, gx: 20, lx: 20, gy: 2000, ly: 2000 };
+const GT_T = 20 * Math.log10(100) / Math.log10(2);      // ≈ 132.9 นาที
+function gtItem() {
+  const f = t => 100 * Math.pow(2, t / 20);
+  return { chip: T('แบคทีเรีย 100 ตัว', '100 bacteria'), draw: async (el, ctx) => {
+    const done = ctx.done[0];
+    const paint = q => {
+      const m = efMount(el, GT, '', 't', 'N'), pl = m.pl;
+      let s = efSeg(pl, 0, 10000, 170, 10000, 's-red', { sw: 2.2 }) + efText(pl, 1.5, 10000, 'r', 'N = 10' + NB + '000', { dy: -8, fs: 15 });
+      s += efCurve(pl, f, 0, done ? lerp(120, GT_T, clamp01(q / 0.75)) : 120, 's-blue', { n: 300 });
+      for (let k = 0; k <= 6; k++) s += efDot(pl, k * 20, f(k * 20), 'f-blue', 4.5);
+      if (!done) s += efText(pl, 92, 1400, '', tx(T('ต่อไปอีกนานเท่าไร?', 'how much longer?')), { fs: 15 });
+      if (done && q > 0.75) {
+        const o = (q - 0.75) / 0.25;
+        s += `<g style="opacity:${o}">` + efSeg(pl, GT_T, 0, GT_T, 10000, 's-red', { sw: 2.2 }) + efDot(pl, GT_T, 10000, 'f-red', 7.5) + efText(pl, GT_T - 3, 600, 'r', `${SI('t')} ≈ ${fmt(GT_T, 1)} ${tx(T('นาที', 'min'))}`, { anchor: 'end', dy: -8, fs: 15 }) + '</g>';
       }
-    }
-    m.ball(pts[3], vals[2]);
-  };
-  return m;
+      m.g.innerHTML = s;
+    };
+    if (done && ctx.animate && ctx.last === 0) { paint(0); await ctx.anim.run(1400, paint, EASE.inOut); paint(1); } else paint(done ? 1 : 0);
+  }, qs: [{
+    q: T(`แบคทีเรียเริ่มที่ 100 ตัว เพิ่มเป็น 2 เท่าทุก 20 นาที (N = 100 · ${pwr('2', frac(TT, 20))}) ต้องใช้เวลาประมาณเท่าไรจึงถึง 10${NB}000 ตัว`, `Bacteria start at 100 and double every 20 minutes (N = 100 · ${pwr('2', frac(TT, 20))}). About how long until there are 10${NB}000?`),
+    o: [T('ประมาณ 1 ชั่วโมง', 'about 1 hour'), T('2 ชั่วโมง 13 นาที', '2 hours 13 minutes'), T('ประมาณ 5 ชั่วโมง', 'about 5 hours'), T('ประมาณ 33 ชั่วโมง', 'about 33 hours')], a: 1,
+    why: T(`แก้ 100 · ${pwr('2', frac(TT, 20))} = 10${NB}000 → ${pwr('2', frac(TT, 20))} = 100 → ${TT} = 20 · ${frac(lg10('100'), lg10('2'))} = 20 · ${frac(2, '0.3010')} ≈ 132.9 นาที ≈ 2 ชั่วโมง 13 นาที · ดูขั้นตอนเต็มในกล่องถัดไป · เช็ก: ผ่านไป 1 ชั่วโมงมีแค่ 100 · ${pwr('2', 3)} = 800 ตัว`,
+      `Solve 100 · ${pwr('2', frac(TT, 20))} = 10${NB}000 → ${pwr('2', frac(TT, 20))} = 100 → ${TT} = 20 · ${frac(lg10('100'), lg10('2'))} = 20 · ${frac(2, '0.3010')} ≈ 132.9 minutes ≈ 2 hours 13 minutes · full steps are in the next box · check: after 1 hour there are only 100 · ${pwr('2', 3)} = 800.`)
+  }] };
 }
-const convFresh = (S, k) => { S.el.innerHTML = ''; const m = convBuild(S.el); m.pose(k); return m; };
-const CONV_SCENES = [
-  { cap: T(`ลูกบอลเลข <b>2</b> วิ่งเข้าเครื่อง <i>f</i>: เครื่องแรก ×3 ได้ 6 · เครื่องที่สอง −5 ได้ 1 → <i>f</i>(2) = 1`, `Ball <b>2</b> rolls into machine <i>f</i>: the first box ×3 gives 6 · the second −5 gives 1 → <i>f</i>(2) = 1.`),
-    end: S => { convFresh(S, 0); },
-    play: async S => { const m = convFresh(S, -1); m.bot.textContent = ''; await S.anim.wait(250); await m.run(S.anim, 1, 600); m.bot.textContent = 'f(2) = 1'; } },
-  { cap: T(`กลับทิศสายพาน! ลูกบอล 1 วิ่งย้อนกลับ และต้อง<b>ถอดจากเครื่องท้ายไปเครื่องหน้า</b>: +5 ได้ 6 · แล้ว ÷3 ได้ 2 → <i>f</i><sup>−1</sup>(1) = 2 · เครื่องย้อนกลับนี้คือ <i>f</i><sup>−1</sup>(x) = ${frac('x + 5', '3')}`,
-           `Reverse the belt! Ball 1 rolls back and must <b>undo the boxes from the last to the first</b>: +5 gives 6 · then ÷3 gives 2 → <i>f</i><sup>−1</sup>(1) = 2 · this backward machine is <i>f</i><sup>−1</sup>(x) = ${frac('x + 5', '3')}.`),
-    end: S => { convFresh(S, 1); },
+const GT_ROWS = () => [
+  { h: `100 · ${pwr('2', frac(TT, 20))} = 10${NB}000`, n: T('ต้องการ N = 10 000 ตัว', 'We want N = 10 000') },
+  { h: `${pwr('2', frac(TT, 20))} = 100`, n: T('หารทั้งสองข้างด้วย 100', 'Divide both sides by 100') },
+  { h: `${lg10(pwr('2', frac(TT, 20)))} = ${lg10('100')}`, n: T('ใส่ log ทั้งสองข้าง', 'Take log of both sides') },
+  { h: `${frac(TT, 20)} · ${lg10('2')} = 2`, n: T('log aⁿ = n · log a และ log 100 = 2', 'log aⁿ = n · log a, and log 100 = 2') },
+  { h: `${frac(TT, 20)} = ${frac(2, lg10('2'))}`, n: T('หารทั้งสองข้างด้วย log 2', 'Divide both sides by log 2') },
+  { h: `${TT} = ${frac('20 · 2', '0.3010')}`, n: T('คูณทั้งสองข้างด้วย 20 และใช้ log 2 ≈ 0.3010', 'Multiply both sides by 20 and use log 2 ≈ 0.3010') },
+  { h: T(`${TT} ≈ 132.9 นาที`, `${TT} ≈ 132.9 minutes`), n: T('≈ 2 ชั่วโมง 13 นาที', '≈ 2 hours 13 minutes') }
+];
+
+// ═══════════════════════════════════════════════════════════════
+//  แท็บ 3 · ครึ่งชีวิต
+// ═══════════════════════════════════════════════════════════════
+// ยา 80 mg ครึ่งชีวิต 6 ชั่วโมง (ย้ายมาจากชิ้นฟังก์ชันเอกซ์โพเนนเชียล)
+const efDecay = { answered: false, sc: null };
+const DC = { W: 520, H: 320, x0: 76, slot: 120, base: 262, top: 40, mg: 2.55 };
+const dcVals = [80, 40, 20, 10];
+function dcPaint(el, o) {                       // o = { upto (จำนวนแท่งที่โผล่ ทศนิยมได้), grow: 0–1, reveal: เฉลยแท่งสุดท้ายและเส้นประ }
+  const cx = i => DC.x0 + DC.slot * i + 35, hh = v => v * DC.mg;
+  let s = `<line class="sc-axis" x1="30" y1="${DC.base}" x2="${DC.W - 10}" y2="${DC.base}"/>`;
+  if (o.reveal && o.upto >= 4) {
+    let d = ''; for (let k = 0; k <= 60; k++) { const t = 18 * k / 60; d += (k ? 'L' : 'M') + (cx(0) + DC.slot * t / 6).toFixed(1) + ' ' + (DC.base - hh(80 * Math.pow(0.5, t / 6))).toFixed(1); }
+    s += `<path class="pl-c s-blue" style="stroke-dasharray:7 6;stroke-width:2.6" d="${d}"/>`;
+  }
+  dcVals.forEach((v, i) => {
+    const vis = clamp01(o.upto - i); if (vis <= 0) return;
+    const last = i === 3 && !o.reveal;
+    s += `<text class="sc-tick" x="${cx(i)}" y="${DC.base + 20}" text-anchor="middle" style="font-size:14px">t = ${i * 6} ${EN() ? 'h' : 'ชม.'}</text>`;
+    if (last) { s += `<rect x="${cx(i) - 32}" y="${DC.base - 110}" width="64" height="110" rx="5" fill="none" stroke="var(--muted)" stroke-width="2.4" stroke-dasharray="6 5"/><text x="${cx(i)}" y="${DC.base - 50}" text-anchor="middle" style="font-size:34px;fill:var(--muted)">?</text>`; return; }
+    const prevH = i === 0 ? hh(v) : hh(dcVals[i - 1]), cur = hh(v), isNew = o.grow !== undefined && i === Math.ceil(o.upto - 1e-9) - 1 && i > 0;
+    const height = isNew ? lerp(prevH, cur, clamp01(o.grow)) : cur;
+    s += `<rect x="${cx(i) - 32}" y="${DC.base - height}" width="64" height="${height}" rx="5" style="fill:color-mix(in srgb, var(--g-curve) 32%, var(--card));stroke:var(--g-curve);stroke-width:2.4"/><text x="${cx(i)}" y="${DC.base - height + 21}" text-anchor="middle" style="font-size:16px">${isNew ? num(lerp(dcVals[i - 1], v, clamp01(o.grow))) : v} mg</text>`;
+    if (i > 0 && vis >= 1 || (isNew && o.grow > 0.6)) { const ax1 = cx(i - 1) + 22, ay1 = DC.base - hh(dcVals[i - 1]) - 22, ax2 = cx(i) - 22, ay2 = DC.base - hh(v) - 30; s += efArrow(ax1, ay1, ax2, ay2, 'orange') + `<text class="pl-lbl o" style="font-size:17px" x="${(ax1 + ax2) / 2 + 12}" y="${(ay1 + ay2) / 2 - 8}" text-anchor="start">× ½</text>`; }
+  });
+  el.innerHTML = `<svg class="sc-svg" viewBox="0 0 ${DC.W} ${DC.H}" xmlns="http://www.w3.org/2000/svg">${s}</svg>`;
+}
+const DC_SCENES = [
+  { cap: T('<b>ยา 80 mg</b> — ครึ่งชีวิต 6 ชั่วโมง กด ▶ ดูว่าผ่านไป 6 ชั่วโมงเหลือเท่าไร', '<b>80 mg of a drug</b> — half-life 6 hours. Press ▶ to see how much remains after 6 hours.'),
+    end: S => dcPaint(S.el, { upto: 1, reveal: true }) },
+  { cap: T(`<b>ผ่านไป 6 ชั่วโมง</b> — ยา 80 mg ครึ่งชีวิต 6 ชั่วโมง คือทุก 6 ชั่วโมงเหลือครึ่งหนึ่ง → 80 × ½ = 40 mg`, `<b>After 6 hours</b> — 80 mg of a drug with a half-life of 6 hours: every 6 hours half remains → 80 × ½ = 40 mg.`),
+    end: S => dcPaint(S.el, { upto: 2, reveal: true }),
+    play: async S => { dcPaint(S.el, { upto: 1, reveal: true }); await S.anim.run(1500, t => dcPaint(S.el, { upto: 2, grow: t, reveal: true }), EASE.inOut); } },
+  { cap: T(`<b>ผ่านไป 12 ชั่วโมง</b> — ครึ่งอีกครั้ง → 40 × ½ = 20 mg`, `<b>After 12 hours</b> — halved again → 40 × ½ = 20 mg.`),
+    end: S => dcPaint(S.el, { upto: 3, reveal: true }),
+    play: async S => { dcPaint(S.el, { upto: 2, reveal: true }); await S.anim.run(1500, t => dcPaint(S.el, { upto: 3, grow: t, reveal: true }), EASE.inOut); } },
+  { cap: () => efDecay.answered
+      ? tx(T(`<b>ผ่านไป 18 ชั่วโมง</b> (3 ครึ่งชีวิต) — ครึ่งอีกครั้ง → 20 × ½ = 10 mg · เส้นประคือกราฟของ A = 80 · ${pwr('(' + frac(1, 2) + ')', frac(TT, 6))} ที่ผ่านทุกแท่ง`, `<b>After 18 hours</b> (3 half-lives) — halved once more → 20 × ½ = 10 mg · the dashed curve is the graph of A = 80 · ${pwr('(' + frac(1, 2) + ')', frac(TT, 6))}, passing through every bar.`))
+      : tx(T('<b>ผ่านไป 18 ชั่วโมง</b> — ลองทายก่อนด้านล่างว่ายาเหลือเท่าไร แท่งนี้จะเฉลยหลังทาย', '<b>After 18 hours</b> — make your guess below first; this bar is revealed once you answer.')),
+    end: S => dcPaint(S.el, { upto: 4, reveal: efDecay.answered }),
+    play: async S => { if (!efDecay.answered) return; dcPaint(S.el, { upto: 3, reveal: true }); await S.anim.run(1500, t => dcPaint(S.el, { upto: 4, grow: t, reveal: true }), EASE.inOut); } }
+];
+function dcPredItem() {
+  return { chip: T('ยา 80 mg', 'Drug dose 80 mg'), draw: (el, ctx) => {
+    const done = ctx.done[0], ok = ctx.ok[0], cell = (th, en, hl) => `<span class="ptag" style="font-size:1rem;padding:4px 14px${hl ? ';background:var(--card);border:2px solid var(--g-green)' : ''}">${tx(T(th, en))}</span>`;
+    el.innerHTML = `<div class="chips" style="justify-content:center">${cell('0 ชม.: 80 mg', '0 h: 80 mg')}→${cell('6 ชม.: 40 mg', '6 h: 40 mg')}→${cell('12 ชม.: 20 mg', '12 h: 20 mg')}→${done ? cell('18 ชม.: 10 mg', '18 h: 10 mg', ok) : cell('18 ชม.: ? mg', '18 h: ? mg')}</div>`;
+    if (done !== efDecay.answered) { efDecay.answered = done; if (done && ctx.animate && efDecay.sc) efDecay.sc.go(3, true); else if (efDecay.sc) efDecay.sc.refresh(); }
+  }, qs: [{
+    q: T('ผ่านไป 18 ชั่วโมง (3 ครึ่งชีวิต) ยาเหลือกี่ mg', 'After 18 hours (3 half-lives), how many mg of the drug remain?'),
+    o: ['40 mg', '20 mg', '10 mg', '0 mg'], a: 2,
+    why: T(`18 ÷ 6 = 3 ครึ่งชีวิต → A = 80 · ${pwr('(' + frac(1, 2) + ')', 3)} = 80 · ${frac(1, 8)} = 10 mg · ยาไม่หมดเป็น 0 เพราะครึ่งของสิ่งที่เหลือยังมีเหลือเสมอ (เส้นกำกับ y = 0)`,
+      `18 ÷ 6 = 3 half-lives → A = 80 · ${pwr('(' + frac(1, 2) + ')', 3)} = 80 · ${frac(1, 8)} = 10 mg · it never reaches 0, since half of what remains is always something (asymptote y = 0).`)
+  }] };
+}
+
+// ตัวอย่าง: เมื่อไรเหลือ 5 mg — จุดบนกราฟ 80 → 40 → 20 → 10 → 5
+const D5 = { xmin: 0, xmax: 32, ymin: 0, ymax: 90, h: 360, gx: 6, lx: 6, gy: 10, ly: 10 };
+const d5F = t => 80 * Math.pow(0.5, t / 6);
+function d5Paint(el, st) {                      // st = { n: จำนวนจุดที่โผล่ (ทศนิยมได้), guide: 0–1 }
+  const m = efMount(el, D5, '', 't', 'A'), pl = m.pl;
+  let s = efCurve(pl, d5F, 0, 32, 's-blue', { n: 300 });
+  s += efSeg(pl, 0, 5, 32, 5, 's-red', { sw: 2.2 }) + efText(pl, 0.8, 5, 'r', 'A = 5 mg', { dy: -9, fs: 15 });
+  for (let i = 0; i < 5; i++) {
+    const v = clamp01(st.n - i); if (v <= 0) continue;
+    const t = 6 * i, A = 80 / Math.pow(2, i), last = i === 4;
+    s += efDot(pl, t, A, last ? 'f-red' : 'f-blue', last ? 7.5 : 6, `opacity:${v}`) + efText(pl, t, A, last ? 'r' : 'b', `${A} mg`, { dx: 10, dy: -10, fs: 15, op: v });
+    if (i > 0) s += efText(pl, t - 3, d5F(t - 3), 'o', '× ½', { dx: 8, dy: -9, fs: 15, op: v });
+  }
+  if (st.guide > 0) s += `<g style="opacity:${st.guide}">` + efSeg(pl, 24, 0, 24, 5, 's-red', { sw: 2.2 }) + efText(pl, 24.5, 22, 'r', `${SI('t')} = 24 ${tx(T('ชม.', 'h'))}`, { fs: 16 }) + '</g>';
+  m.g.innerHTML = s;
+}
+const D5_SCENES = [
+  { cap: T('<b>ยา 80 mg</b> ครึ่งชีวิต 6 ชั่วโมง — เส้นแดงคือระดับ 5 mg อยากรู้ว่ายาลดลงถึงระดับนี้เมื่อไร กด ▶ ดูยาลดลงทีละครึ่ง', '<b>80 mg of the drug</b>, half-life 6 hours — the red line is the 5 mg level. When does the drug reach it? Press ▶ and watch it halve step by step.'),
+    end: S => d5Paint(S.el, { n: 1, guide: 0 }) },
+  { cap: T(`<b>ครึ่งทีละ 6 ชั่วโมง</b> — 80 → 40 → 20 → 10 → 5 ใช้ครึ่ง 4 ครั้ง · เวลา = 4 × 6 = 24 ชั่วโมง ที่จุดแดงตรงกับ 5 mg พอดี`, `<b>Halving every 6 hours</b> — 80 → 40 → 20 → 10 → 5 takes 4 halvings · time = 4 × 6 = 24 hours, where the red dot lands exactly on 5 mg.`),
+    end: S => d5Paint(S.el, { n: 5, guide: 1 }),
+    play: async S => { await S.anim.run(3600, t => d5Paint(S.el, { n: 1 + 4 * t, guide: 0 }), EASE.lin); await S.anim.run(500, t => d5Paint(S.el, { n: 5, guide: t }), EASE.lin); } }
+];
+const D5_ROWS = () => [
+  { h: `80 · ${pwr('(' + frac(1, 2) + ')', frac(TT, 6))} = 5`, n: T('ต้องการยาเหลือ 5 mg', 'We want 5 mg to remain') },
+  { h: `${pwr('(' + frac(1, 2) + ')', frac(TT, 6))} = ${frac(1, 16)}`, n: T('หารทั้งสองข้างด้วย 80 (5 ÷ 80 = 1/16)', 'Divide both sides by 80 (5 ÷ 80 = 1/16)') },
+  { h: `${pwr('(' + frac(1, 2) + ')', frac(TT, 6))} = ${pwr('(' + frac(1, 2) + ')', 4)}`, n: T('1/16 = ½ · ½ · ½ · ½ = (½)⁴ ทำให้ฐานเท่ากัน', '1/16 = ½ · ½ · ½ · ½ = (½)⁴, so both sides have the same base') },
+  { h: `${frac(TT, 6)} = 4`, n: T('ฐานเท่ากัน เลขชี้กำลังต้องเท่ากัน', 'Same base, so the exponents must be equal') },
+  { h: T(`${TT} = 24 ชั่วโมง`, `${TT} = 24 hours`), n: T('คูณทั้งสองข้างด้วย 6', 'Multiply both sides by 6') }
+];
+
+// ═══════════════════════════════════════════════════════════════
+//  แท็บ 4 · สเกล log
+// ═══════════════════════════════════════════════════════════════
+// ไม้บรรทัดขีดเท่ากัน: แถวบน = ค่าจริง (กำลังของ 10) · แถวล่าง = ค่าที่อ่านบนสเกล (pH หรือขนาด)
+const SC_W = 560, SC_H = 214, SC_X0 = 40, SC_X1 = 520;
+const scX = (cfg, e) => SC_X0 + (e - cfg.lo) / (cfg.hi - cfg.lo) * (SC_X1 - SC_X0);
+const pw10 = e => `10<tspan dy="-5" font-size="10">${mn(e)}</tspan>`;
+const CFG_PH = { lo: -14, hi: 0, top: e => pw10(e), bot: e => String(-e), fs: 13, stagger: true,
+  topTitle: () => `[H<tspan dy="-5" font-size="9">+</tspan><tspan dy="5">] (mol/${tx(T('ลิตร', 'L'))})</tspan> — ${tx(T('แต่ละขีดคูณ 10', 'each mark is × 10'))}`,
+  botTitle: () => tx(T('ค่า pH = −log [H⁺] (อ่านจากเลขชี้กำลัง)', 'pH = −log [H⁺] (read off the exponent)')) };
+const CFG_RC = { lo: 1, hi: 9, top: e => String(e), bot: e => pw10(e - 1), fs: 15,
+  topTitle: () => tx(T('ขนาดริกเตอร์ (M)', 'Richter magnitude (M)')),
+  botTitle: () => tx(T('แอมพลิจูด (เทียบขนาด 1)', 'Amplitude (vs magnitude 1)')) };
+const SCOL = { blue: ['f-blue', 'b'], orange: ['f-orange', 'o'], red: ['f-red', 'r'], green: ['f-green', 'g'] };
+// st = { marks: [{ e (ตำแหน่งบนไม้บรรทัด ทศนิยมได้), col, lines: [ข้อความ SVG…] }], bracket: { a, b, text, steps, p } }
+function scPaint(el, cfg, st) {
+  st = st || {};
+  const y0 = 62;
+  let s = `<text class="sc-small" x="12" y="17" style="font-size:13px">${cfg.topTitle()}</text>`;
+  s += `<line class="sc-axis" x1="${SC_X0 - 16}" y1="${y0}" x2="${SC_X1 + 16}" y2="${y0}"/>`;
+  for (let e = cfg.lo; e <= cfg.hi; e++) {
+    const x = scX(cfg, e);
+    s += `<line class="sc-axis" x1="${x}" y1="${y0 - 7}" x2="${x}" y2="${y0 + 7}"/>`;
+    s += `<text class="sc-tick" x="${x}" y="${y0 - 14 - (cfg.stagger && (e - cfg.lo) % 2 ? 17 : 0)}" text-anchor="middle" style="font-size:${cfg.fs}px">${cfg.top(e)}</text>`;
+    s += `<text class="sc-tick" x="${x}" y="${y0 + 28}" text-anchor="middle" style="font-size:15px;fill:var(--text)">${cfg.bot(e)}</text>`;
+  }
+  s += `<text class="sc-small" x="12" y="${y0 + 52}" style="font-size:13px">${cfg.botTitle()}</text>`;
+  if (st.bracket) {
+    const b = st.bracket, xa = scX(cfg, b.a), xb = scX(cfg, b.b), yb = 182, steps = Math.round(Math.abs(b.b - b.a)), p = b.p === undefined ? 1 : b.p;
+    const xe = lerp(xa, xb, clamp01(p));
+    s += `<path class="pl-c s-green" style="stroke-width:2.4" d="M${xa} ${yb - 9} V${yb} H${xe.toFixed(1)}${p >= 0.999 ? ` V${yb - 9}` : ''}" fill="none"/>`;
+    if (b.steps !== false) for (let k = 0; k < steps; k++) {
+      const o = clamp01(p * steps - k); if (o <= 0) continue;
+      s += `<text class="pl-lbl g" style="font-size:13px;opacity:${o}" x="${((xa + xb) / 2 + (k + 0.5 - steps / 2) * (xb - xa) / steps).toFixed(1)}" y="${yb - 7}" text-anchor="middle">× 10</text>`;
+    }
+    if (b.text) s += `<text class="pl-lbl g" style="font-size:16px;opacity:${p >= 0.999 ? 1 : 0}" x="${((xa + xb) / 2).toFixed(1)}" y="${yb + 22}" text-anchor="middle">${b.text}</text>`;
+  }
+  (st.marks || []).forEach(mk => {
+    const x = scX(cfg, mk.e), c = SCOL[mk.col] || SCOL.blue, anchor = x < 80 ? 'start' : x > SC_W - 80 ? 'end' : 'middle', tx0 = anchor === 'start' ? x - 14 : anchor === 'end' ? x + 14 : x;
+    s += `<line class="pl-c s-${mk.col}" style="stroke-width:2;stroke-dasharray:4 4" x1="${x}" y1="${y0 + 36}" x2="${x}" y2="${y0 + 70}"/><circle class="pl-dot ${c[0]}" cx="${x}" cy="${y0}" r="9"/>`;
+    (mk.lines || []).forEach((ln, k) => { s += `<text class="pl-lbl ${c[1]}" style="font-size:16px" x="${tx0}" y="${y0 + 88 + k * 20}" text-anchor="${anchor}">${ln}</text>`; });
+  });
+  el.innerHTML = `<svg class="sc-svg" viewBox="0 0 ${SC_W} ${SC_H}" xmlns="http://www.w3.org/2000/svg">${s}</svg>`;
+}
+const phMark = (e, col, full) => ({ e, col, lines: full ? [`[H<tspan dy="-5" font-size="10">+</tspan><tspan dy="5">] = ${svPow('10', mn(e), 10)}</tspan>`, `pH = ${-e}`] : [`pH ${Math.round(-e)}`] });
+const PH_HINT = { a: -8, b: -7, text: '' };
+const PH_SCENES = [
+  { cap: T(`<b>ไม้บรรทัด pH</b> — ขีดห่างเท่ากันทุกขีด แต่ขยับไปทางขวา 1 ขีด ค่า [H⁺] เพิ่มเป็น 10 เท่า · กด ▶ ดูว่า [H⁺] = ${pwr('10', '−3')} อยู่ตรงไหน`, `<b>The pH ruler</b> — every mark is the same distance apart, but moving one mark to the right makes [H⁺] 10 times bigger · press ▶ to see where [H⁺] = ${pwr('10', '−3')} sits.`),
+    end: S => scPaint(S.el, CFG_PH, { bracket: PH_HINT }) },
+  { cap: T(`<b>[H⁺] = ${pwr('10', '−3')}</b> → pH = −log ${pwr('10', '−3')} = −(−3) = <b>3</b> · pH คือเลขชี้กำลังของ 10 แล้วเปลี่ยนเครื่องหมาย`, `<b>[H⁺] = ${pwr('10', '−3')}</b> → pH = −log ${pwr('10', '−3')} = −(−3) = <b>3</b> · pH is the exponent of 10 with its sign flipped.`),
+    end: S => scPaint(S.el, CFG_PH, { marks: [phMark(-3, 'blue', true)] }),
+    play: async S => { await S.anim.run(1900, t => scPaint(S.el, CFG_PH, { marks: [{ e: lerp(0, -3, t), col: 'blue', lines: t >= 0.999 ? phMark(-3, 'blue', true).lines : [] }] }), EASE.inOut); } },
+  { cap: T(`<b>น้ำบริสุทธิ์</b> — [H⁺] = ${pwr('10', '−7')} → pH = −log ${pwr('10', '−7')} = <b>7</b> · จาก pH 3 มา pH 7 เลื่อนไปทางซ้าย 4 ขีด (ค่า [H⁺] น้อยลง ${pwr('10', 4)} เท่า)`, `<b>Pure water</b> — [H⁺] = ${pwr('10', '−7')} → pH = −log ${pwr('10', '−7')} = <b>7</b> · from pH 3 to pH 7 the marker moves 4 marks to the left ([H⁺] gets ${pwr('10', 4)} times smaller).`),
+    end: S => scPaint(S.el, CFG_PH, { marks: [phMark(-7, 'green', true)] }),
+    play: async S => { await S.anim.run(2200, t => scPaint(S.el, CFG_PH, { marks: [{ e: lerp(-3, -7, t), col: t >= 0.999 ? 'green' : 'blue', lines: t >= 0.999 ? phMark(-7, 'green', true).lines : [] }] }), EASE.inOut); } }
+];
+// ทายก่อน: pH 3 กรดกว่า pH 5 กี่เท่า
+function phPredItem() {
+  return { chip: T('เทียบ pH 3 กับ pH 5', 'Compare pH 3 and pH 5'), draw: async (el, ctx) => {
+    const done = ctx.done[0];
+    const paint = p => scPaint(el, CFG_PH, { marks: [phMark(-3, 'orange'), phMark(-5, 'blue')], bracket: done ? { a: -5, b: -3, text: `× 10 × 10 = ${svPow('10', 2, 11)} = 100 ${tx(T('เท่า', 'times'))}`, p } : { a: -5, b: -3, text: '?', steps: false } });
+    if (done && ctx.animate && ctx.last === 0) { paint(0); await ctx.anim.run(1300, paint, EASE.inOut); paint(1); } else paint(1);
+  }, qs: [{
+    q: T('สารละลายที่มี pH 3 มีความเข้มข้นของ H⁺ มากกว่าสารละลายที่มี pH 5 กี่เท่า (pH 3 เป็นกรดมากกว่ากี่เท่า)', 'A solution with pH 3 has how many times the H⁺ concentration of a solution with pH 5 (how many times more acidic)?'),
+    o: [T('2 เท่า', '2 times'), T('100 เท่า', '100 times'), T('1.67 เท่า', '1.67 times'), T('20 เท่า', '20 times')], a: 1,
+    why: T(`pH = −log [H⁺] → pH 3 คือ [H⁺] = ${pwr('10', '−3')} และ pH 5 คือ [H⁺] = ${pwr('10', '−5')} · อัตราส่วน = ${pwr('10', '−3')} ÷ ${pwr('10', '−5')} = ${pwr('10', 2)} = 100 · ต่างกัน 2 ขีด ขีดละ × 10 → × 10 × 10 = 100 (ไม่ใช่ 5 − 3 = 2 เท่า)`,
+      `pH = −log [H⁺] → pH 3 means [H⁺] = ${pwr('10', '−3')} and pH 5 means [H⁺] = ${pwr('10', '−5')} · ratio = ${pwr('10', '−3')} ÷ ${pwr('10', '−5')} = ${pwr('10', 2)} = 100 · 2 marks apart, each mark × 10 → × 10 × 10 = 100 (not 5 − 3 = 2 times).`)
+  }] };
+}
+// ริกเตอร์: ขนาด 7 กับ 5
+const RC_MARKS = { five: { e: 5, col: 'blue', lines: [] }, seven: { e: 7, col: 'orange', lines: [] } };
+const rcMk = (e, col) => ({ e, col, lines: [tx(T('ขนาด ', 'M ')) + e] });
+const RC_BR = { a: 5, b: 7, text: `× 10 × 10 = ${svPow('10', 2, 11)} = 100 ` };
+const RC_SCENES = [
+  { cap: T('<b>ไม้บรรทัดริกเตอร์</b> — ขนาดเพิ่มทีละ 1 ขีด แอมพลิจูดของคลื่นแผ่นดินไหวเพิ่มเป็น 10 เท่าทุกขีด · กด ▶ เทียบขนาด 5 กับขนาด 7', '<b>The Richter ruler</b> — each step of 1 in magnitude makes the quake wave amplitude 10 times bigger · press ▶ to compare magnitude 5 with magnitude 7.'),
+    end: S => scPaint(S.el, CFG_RC, { bracket: { a: 1, b: 2, text: '' } }) },
+  { cap: T(`<b>ขนาด 7 กับขนาด 5</b> — ต่างกัน 2 ขีด แอมพลิจูดคลื่นต่างกัน × 10 × 10 = ${pwr('10', 2)} = 100 เท่า · ขนาด 7 มีแอมพลิจูดเป็น 100 เท่าของขนาด 5`, `<b>Magnitude 7 versus magnitude 5</b> — 2 marks apart, so the wave amplitude differs by × 10 × 10 = ${pwr('10', 2)} = 100 times · magnitude 7 has 100 times the amplitude of magnitude 5.`),
+    end: S => scPaint(S.el, CFG_RC, { marks: [rcMk(5, 'blue'), rcMk(7, 'orange')], bracket: Object.assign({}, RC_BR, { text: RC_BR.text + tx(T('เท่า', 'times')) }) }),
     play: async S => {
-      const m = convFresh(S, 0), A = S.anim; m.bot.textContent = ''; await A.wait(300);
-      await A.run(520, t => { m.gR.style.opacity = 1 - t; m.box.forEach(b => { b.g.style.opacity = 1 - .75 * Math.sin(Math.PI * t); }); m.brG.style.opacity = 1 - Math.sin(Math.PI * t); if (t > .5 && m.brT.textContent === 'f') m.mode(-1); }, EASE.lin);
-      m.gR.style.opacity = 1; m.mode(-1); await A.wait(150);
-      await m.run(A, -1, 600); m.bot.textContent = 'f⁻¹(1) = 2';
-    } },
-  { cap: T(`วิ่งไปแล้วย้อนกลับ ได้เลขเดิมเสมอ: <i>f</i><sup>−1</sup>(<i>f</i>(2)) = 2 · <i>f</i><sup>−1</sup> "ล้าง" สิ่งที่ <i>f</i> ทำไว้`,
-           `Go forward, then come back, and you always get the starting number: <i>f</i><sup>−1</sup>(<i>f</i>(2)) = 2 · <i>f</i><sup>−1</sup> "washes out" what <i>f</i> did.`),
-    end: S => { convFresh(S, 2); },
-    play: async S => {
-      const m = convFresh(S, 1), A = S.anim; m.bot.textContent = ''; m.mode(1); await A.wait(300);
-      await m.run(A, 1, 380); m.mode(-1); await A.wait(150); await m.run(A, -1, 380); m.mode(0); m.bot.textContent = 'f⁻¹(f(2)) = f⁻¹(1) = 2';
+      await S.anim.run(900, t => scPaint(S.el, CFG_RC, { marks: [Object.assign(rcMk(5, 'blue'), { lines: t >= 0.999 ? rcMk(5, 'blue').lines : [] })] }), EASE.out);
+      await S.anim.run(1700, t => scPaint(S.el, CFG_RC, { marks: [rcMk(5, 'blue'), Object.assign({ e: lerp(5, 7, t), col: 'orange' }, { lines: t >= 0.999 ? rcMk(7, 'orange').lines : [] })], bracket: { a: 5, b: 7, text: RC_BR.text + tx(T('เท่า', 'times')), p: t } }), EASE.inOut);
     } }
 ];
-
-// ───────── แท็บ 1 การ์ด 2: ป้าย x กับ y ลอยสลับที่ แล้วจัดรูป ─────────
-const Xs = `<span class="sw-x">${X}</span>`, Ys = `<span class="sw-y">${Y}</span>`;
-const SWR = [
-  `<i>f</i>(${X}) = 3${X} − 5`,
-  `${Ys} = 3${Xs} − 5`,
-  `${Xs} = 3${Ys} − 5`,
-  `3${Ys} = ${Xs} + 5`,
-  `${Ys} = ${frac(`${Xs} + 5`, '3')}`,
-  `${fi}(${X}) = ${ans(frac(`${X} + 5`, '3'))}`
-];
-const SWS = [{ rows: [0, 1], dim: [0] }, { rows: [1, 2], dim: [1] }, { rows: [2, 3, 4], dim: [2] }, { rows: [4, 5], dim: [4] }];
-function swDraw(el, sc, hideNew) {
-  el.innerHTML = '<div class="sw-box"></div>'; const box = el.firstChild, out = {};
-  sc.rows.forEach(i => { const r = document.createElement('div'); r.className = 'sw-row' + (sc.dim.includes(i) ? ' dim' : ''); r.innerHTML = SWR[i]; if (hideNew && !sc.dim.includes(i)) r.style.opacity = 0; box.appendChild(r); out[i] = r; });
-  return out;
-}
-const SW_SCENES = [
-  { cap: T(`<i>f</i>(x) คือ "ผลลัพธ์" ของ <i>f</i> ดังนั้นเขียนเป็น <b>y</b> ได้เลย: y = 3x − 5 (x = อินพุต, y = เอาต์พุต)`, `<i>f</i>(x) is the output of <i>f</i>, so just write it as <b>y</b>: y = 3x − 5 (x = input, y = output).`),
-    end: S => { swDraw(S.el, SWS[0]); },
-    play: async S => { const r = swDraw(S.el, SWS[0], true); await fadeIn(S.anim, r[0], 1); r[0].style.opacity = .5; await S.anim.wait(250); await fadeIn(S.anim, r[1]); } },
-  { cap: T(`ย้อนกลับ = อินพุตกับเอาต์พุต<b>สลับบทบาท</b> → ป้าย x กับ y ลอยสลับที่กัน: x = 3y − 5`, `Going backwards = input and output <b>swap roles</b> → the labels x and y float past each other: x = 3y − 5.`),
-    end: S => { swDraw(S.el, SWS[1]); },
-    play: async S => {
-      const r = swDraw(S.el, SWS[1], true), A = S.anim, row = r[2];
-      row.innerHTML = SWR[1]; await fadeIn(A, row, 380); await A.wait(500);
-      const xs = row.querySelector('.sw-x'), ys = row.querySelector('.sw-y'), rx = xs.getBoundingClientRect(), ry = ys.getBoundingClientRect(), dx = (ry.left + ry.width / 2) - (rx.left + rx.width / 2);
-      await A.run(1300, t => { const lift = Math.sin(Math.PI * t) * 26; xs.style.transform = `translate(${(dx * t).toFixed(1)}px, ${(-lift).toFixed(1)}px)`; ys.style.transform = `translate(${(-dx * t).toFixed(1)}px, ${lift.toFixed(1)}px)`; });
-      row.innerHTML = SWR[2];
-    } },
-  { cap: T(`จัดรูปให้ y อยู่คนเดียว: ย้าย −5 ไปบวกอีกฝั่ง → 3y = x + 5 · แล้วหารด้วย 3 → y = ${frac('x + 5', '3')}`, `Solve for y: move −5 across → 3y = x + 5 · then divide by 3 → y = ${frac('x + 5', '3')}.`),
-    end: S => { swDraw(S.el, SWS[2]); },
-    play: async S => { const r = swDraw(S.el, SWS[2], true), A = S.anim; await fadeIn(A, r[3]); await A.wait(450); await fadeIn(A, r[4]); } },
-  { cap: T(`y ตัวนี้คืออินเวอร์สของ f จึงเปลี่ยนชื่อกลับเป็น <i>f</i><sup>−1</sup>(x) = ${frac('x + 5', '3')} · ตรวจ: f(2) = 1 และ <i>f</i><sup>−1</sup>(1) = (1 + 5)/3 = 2 ✓`, `This y is the inverse of f, so rename it <i>f</i><sup>−1</sup>(x) = ${frac('x + 5', '3')} · check: f(2) = 1 and <i>f</i><sup>−1</sup>(1) = (1 + 5)/3 = 2 ✓.`),
-    end: S => { swDraw(S.el, SWS[3]); },
-    play: async S => { const r = swDraw(S.el, SWS[3], true); await fadeIn(S.anim, r[5], 600); } }
-];
-
-// ตัวอย่างวิธีคิด (คงไว้: เป็น "ขั้น" ไม่ใช่ "ฉาก")
-const MET = [
-  { label: 'f(x) = 5 − 2x', rows: () => [
-      { h: T(`${Y} = 5 − 2x`, `${Y} = 5 − 2x`), n: T('เขียน f(x) เป็น y ก่อน', 'write f(x) as y first') },
-      { h: T(`สลับ x ↔ y : &nbsp; x = 5 − 2y`, `Swap x ↔ y : &nbsp; x = 5 − 2y`), n: T('อินพุตกับเอาต์พุตสลับบทบาทกัน', 'input and output swap roles') },
-      { h: T(`จัดรูปให้ y อยู่คนเดียว : &nbsp; 2y = 5 − x → y = ${frac('5 − x', 2)}`, `Solve for y : &nbsp; 2y = 5 − x → y = ${frac('5 − x', 2)}`) },
-      { h: T(`${fi}(x) = ${ans(frac('5 − x', 2))}`, `${fi}(x) = ${ans(frac('5 − x', 2))}`), n: T('ตรวจ: f(f⁻¹(x)) = 5 − 2·(5 − x)/2 = x ✓', 'check: f(f⁻¹(x)) = 5 − 2·(5 − x)/2 = x ✓') }] },
-  { label: 'f(x) = (2x + 1)/(x − 3)', rows: () => [
-      { h: T(`${Y} = ${frac('2x + 1', 'x − 3')} &nbsp; (x ≠ 3)`, `${Y} = ${frac('2x + 1', 'x − 3')} &nbsp; (x ≠ 3)`) },
-      { h: T(`สลับ x ↔ y : &nbsp; x = ${frac('2y + 1', 'y − 3')}`, `Swap x ↔ y : &nbsp; x = ${frac('2y + 1', 'y − 3')}`) },
-      { h: T(`x(y − 3) = 2y + 1 → xy − 3x = 2y + 1 → xy − 2y = 3x + 1`, `x(y − 3) = 2y + 1 → xy − 3x = 2y + 1 → xy − 2y = 3x + 1`), n: T('ย้ายพจน์ที่มี y ไปฝั่งเดียวกัน', 'collect the y-terms on one side') },
-      { h: T(`y(x − 2) = 3x + 1 → y = ${frac('3x + 1', 'x − 2')}`, `y(x − 2) = 3x + 1 → y = ${frac('3x + 1', 'x − 2')}`) },
-      { h: T(`${fi}(x) = ${ans(frac('3x + 1', 'x − 2'))} , &nbsp; x ≠ 2`, `${fi}(x) = ${ans(frac('3x + 1', 'x − 2'))} , &nbsp; x ≠ 2`), n: T('x ≠ 2 ตรงกับ R<sub>f</sub> = ℝ − {2} (ดูแท็บ D และ R สลับกัน)', 'x ≠ 2 matches R<sub>f</sub> = ℝ − {2} (see the "D and R swap" tab)') }] },
-  { label: 'f(x) = x² + 2 , x ≥ 0', rows: () => [
-      { h: T(`${Y} = x² + 2 , &nbsp; D<sub>f</sub> = [0, ∞)`, `${Y} = x² + 2 , &nbsp; D<sub>f</sub> = [0, ∞)`), n: T('โดเมนที่จำกัดไว้ทำให้ f เป็น 1-1 จึงหาอินเวอร์สได้', 'the restricted domain makes f one-to-one, so an inverse exists') },
-      { h: T(`สลับ x ↔ y : &nbsp; x = y² + 2 → y² = x − 2`, `Swap x ↔ y : &nbsp; x = y² + 2 → y² = x − 2`) },
-      { h: T(`y = ±${rt('x − 2')} → ต้องเลือก <b>ตัวเดียว</b>`, `y = ±${rt('x − 2')} → we must pick <b>one</b> sign`), n: T('y ของอินเวอร์ส คือ x ของ f ซึ่ง x ≥ 0 → เลือกค่าบวก (R<sub>f⁻¹</sub> = D<sub>f</sub>)', 'the inverse\'s y is f\'s x, which is ≥ 0 → pick the positive root (R<sub>f⁻¹</sub> = D<sub>f</sub>)') },
-      { h: T(`${fi}(x) = ${ans(rt('x − 2'))} , &nbsp; D<sub>f⁻¹</sub> = R<sub>f</sub> = [2, ∞)`, `${fi}(x) = ${ans(rt('x − 2'))} , &nbsp; D<sub>f⁻¹</sub> = R<sub>f</sub> = [2, ∞)`) }] },
-  { label: 'f(x) = √(x − 1)', rows: () => [
-      { h: T(`${Y} = ${rt('x − 1')} , &nbsp; D<sub>f</sub> = [1, ∞) , R<sub>f</sub> = [0, ∞)`, `${Y} = ${rt('x − 1')} , &nbsp; D<sub>f</sub> = [1, ∞) , R<sub>f</sub> = [0, ∞)`) },
-      { h: T(`สลับ x ↔ y : &nbsp; x = ${rt('y − 1')} → x² = y − 1 → y = x² + 1`, `Swap x ↔ y : &nbsp; x = ${rt('y − 1')} → x² = y − 1 → y = x² + 1`), n: T('ยกกำลังสองทั้งสองข้างเพื่อกำจัดรูท', 'square both sides to remove the root') },
-      { h: T(`${fi}(x) = ${ans('x² + 1')} , &nbsp; แต่ ${ans('x ≥ 0')}`, `${fi}(x) = ${ans('x² + 1')} , &nbsp; but ${ans('x ≥ 0')}`), n: T('ห้ามลืมโดเมน: D<sub>f⁻¹</sub> = R<sub>f</sub> = [0, ∞) — ถ้าไม่ใส่ x² + 1 จะเป็นพาราโบลาเต็มซึ่งไม่ใช่ 1-1', 'never forget the domain: D<sub>f⁻¹</sub> = R<sub>f</sub> = [0, ∞) — without it x² + 1 is a full parabola, which is not one-to-one') }] },
-  { label: 'f(x) = x³ + 1', rows: () => [
-      { h: T(`${Y} = x³ + 1`, `${Y} = x³ + 1`) },
-      { h: T(`สลับ x ↔ y : &nbsp; x = y³ + 1 → y³ = x − 1`, `Swap x ↔ y : &nbsp; x = y³ + 1 → y³ = x − 1`) },
-      { h: T(`${fi}(x) = ${ans(cbrt('x − 1'))}`, `${fi}(x) = ${ans(cbrt('x − 1'))}`), n: T('รากที่ 3 หาได้ทุกจำนวนจริง จึงไม่ต้องจำกัดโดเมน', 'a cube root exists for every real number, so no domain restriction is needed') }] }
-];
-
-// ───────── แท็บ 2: กราฟสะท้อน ─────────
-// f พับตามเส้น y = x : จุด (x, y) → m + cos(πt)·(ส่วนตั้งฉาก) ; t = 0 ที่เดิม, t = 1 ที่ (y, x)  (มองจากด้านบนของกระดาษที่พับ)
-const foldPt = (x, y, c) => { const m = (x + y) / 2, h = (x - y) / 2; return [m + c * h, m - c * h]; };
-const GF = [
-  { eq: 'y = 2x − 1', f: x => 2 * x - 1, segs: [[-2.4, 3.4]], one: true, inv: `${frac('x + 1', '2')}`, pts: [[0, -1], [2, 3], [3, 5]] },
-  { eq: 'y = x³ + 2', f: x => x * x * x + 2, segs: [[-2, 1.58]], one: true, inv: cbrt('x − 2'), pts: [[-1, 1], [0, 2], [1, 3]] },
-  { eq: 'y = x² , x ≥ 0', f: x => x * x, segs: [[0, 2.449]], one: true, inv: rt('x'), pts: [[2, 4]] },
-  { eq: `y = ${rt('x')}`, f: x => Math.sqrt(x), segs: [[0, 6]], one: true, inv: 'x<sup>2</sup> , x ≥ 0', pts: [[4, 2]] },
-  { eq: 'y = x²', f: x => x * x, segs: [[-2.449, 2.449]], one: false, inv: null, pts: [[-2, 4], [2, 4]] }
-];
-const gEq = g => g.eq.replace('x²', 'x<sup>2</sup>').replace('x³', 'x<sup>3</sup>').replace(/√x/, rt('x'));
-const gPlot = () => new Plot({ w: 460, h: 460, xmin: -6, xmax: 6, ymin: -6, ymax: 6, pad: 28, lx: 2, ly: 2 });
-function foldBuild(root, g) {
-  const pl = gPlot(), m = { pl };
-  pl.dash(-9, -9, 9, 9, 's-muted'); pl.text(5.1, 5.6, 'y = x', '', 'middle');
-  root.innerHTML = pl.svg();
-  const svg = m.svg = root.querySelector('svg'), lay = sv('g', { 'clip-path': `url(#${pl.id})` }, svg), top = sv('g', {}, svg);
-  const col = g.one ? 'orange' : 'red';
-  const dpath = c => g.segs.map(sg => { let s = ''; for (let i = 0; i <= 140; i++) { const u = sg[0] + (sg[1] - sg[0]) * i / 140, q = foldPt(u, g.f(u), c); s += (i ? 'L' : 'M') + pl.X(q[0]) + ' ' + pl.Y(q[1]); } return s; }).join('');
-  m.ghost = sv('path', { class: 'pl-c s-' + col, d: dpath(-1) }, lay);
-  sv('path', { class: 'pl-c s-blue', d: dpath(1) }, lay);
-  m.links = g.pts.map(p => sv('line', { class: 'pl-dash s-pink', x1: pl.X(p[0]), y1: pl.Y(p[1]), x2: pl.X(p[1]), y2: pl.Y(p[0]) }, top));
-  m.dB = g.pts.map(p => sv('circle', { class: 'pl-dot f-blue', cx: pl.X(p[0]), cy: pl.Y(p[1]), r: 6.5 }, top));
-  m.dO = g.pts.map(p => sv('circle', { class: 'pl-dot f-' + col, cx: pl.X(p[0]), cy: pl.Y(p[1]), r: 6.5 }, top));
-  m.lbB = g.pts.map(p => sv('text', { class: 'pl-lbl b', x: pl.X(p[0]) + 9, y: pl.Y(p[1]) - 9, text: pr2(p[0], p[1]) }, top));
-  m.lbO = g.pts.map(p => sv('text', { class: 'pl-lbl ' + (g.one ? 'o' : 'r'), x: pl.X(p[1]) + 9, y: pl.Y(p[0]) + 18, text: pr2(p[1], p[0]) }, top));
-  // c: ตัวคูณส่วนตั้งฉาก 1 → −1 · lab: แสดงพิกัด/เส้นเชื่อม
-  m.fold = (c, lab) => {
-    m.ghost.setAttribute('d', dpath(c)); m.ghost.style.display = c > .985 ? 'none' : '';
-    g.pts.forEach((p, i) => { const q = foldPt(p[0], p[1], c); m.dO[i].setAttribute('cx', pl.X(q[0])); m.dO[i].setAttribute('cy', pl.Y(q[1])); m.dO[i].style.display = c > .985 ? 'none' : ''; });
-    m.links.forEach(l => { l.style.display = lab ? '' : 'none'; }); m.lbB.forEach(l => { l.style.display = lab ? '' : 'none'; }); m.lbO.forEach(l => { l.style.display = lab ? '' : 'none'; });
-  };
-  m.pose = k => { m.fold(k === 0 ? 1 : -1, k >= 2); m.dB.forEach(d => { d.style.display = k >= 0 ? '' : 'none'; }); };
-  return m;
-}
-function makeFold(host) {
-  const w = { cur: 0 };
-  host.innerHTML = '<div class="chips"></div><div class="foldsc"></div>';
-  const fresh = (S, k) => { S.el.innerHTML = ''; const m = foldBuild(S.el, GF[w.cur]); m.pose(k); return m; };
-  const g = () => GF[w.cur], p0 = () => g().pts[0];
-  const scenes = [
-    { cap: () => tx(T(`กระดาษแผ่นนี้มีกราฟของ <b><i>f</i></b> (น้ำเงิน) และเส้นประ <b>y = x</b> คือ "รอยพับ"`, `This sheet shows the graph of <b><i>f</i></b> (blue); the dashed line <b>y = x</b> is the "fold".`)),
-      end: S => { fresh(S, 0); }, play: async S => { const m = fresh(S, 0); m.svg.style.opacity = 0; await S.anim.run(500, t => { m.svg.style.opacity = t; }, EASE.lin); } },
-    { cap: () => tx(T(`พับกระดาษตามรอยพับ — กราฟของ <i>f</i> ถูกพับไปทับอีกฝั่ง ได้เส้น${g().one ? 'สีส้ม' : 'สีแดง'}`, `Fold the paper along the crease — the graph of <i>f</i> flips over to the other side and lands as the ${g().one ? 'orange' : 'red'} curve.`)),
-      end: S => { fresh(S, 1); }, play: async S => { const m = fresh(S, 0); await S.anim.wait(250); await S.anim.run(2400, t => m.fold(Math.cos(Math.PI * t), false), EASE.inOut); } },
-    { cap: () => { const p = p0(), a = p[0], b = p[1]; return g().one
-        ? tx(T(`จุด ${pr2(a, b)} บน <i>f</i> ไปตกที่ ${pr2(b, a)} — <b>พิกัดสลับกัน</b> · เส้นประเชื่อมคู่จุดตั้งฉากกับรอยพับเสมอ · เส้นที่พับมาคือกราฟของ <i>f</i><sup>−1</sup>(x) = ${g().inv}`, `The point ${pr2(a, b)} on <i>f</i> lands on ${pr2(b, a)} — <b>the coordinates swap</b> · the dashed segment joining a pair is always perpendicular to the crease · the folded curve is the graph of <i>f</i><sup>−1</sup>(x) = ${g().inv}.`))
-        : tx(T(`ภาพที่พับมา (แดง) ไม่เป็นฟังก์ชัน: เส้นตั้งตัดได้ 2 จุด เช่น ${pr2(4, -2)} กับ ${pr2(4, 2)} → <b>y = x² (ทั้งเส้น) ไม่มีอินเวอร์ส</b> ลองเลือก "x² , x ≥ 0" ที่ครึ่งเดียว`, `The folded image (red) is not a function: a vertical line meets it twice, e.g. ${pr2(4, -2)} and ${pr2(4, 2)} → <b>y = x² (the whole curve) has no inverse</b>; try "x² , x ≥ 0", the half curve.`)); },
-      end: S => { fresh(S, 2); }, play: async S => { const m = fresh(S, 1); m.fold(-1, true); m.links.forEach(l => { l.style.opacity = 0; }); m.lbB.concat(m.lbO).forEach(l => { l.style.opacity = 0; }); await S.anim.run(600, t => { m.links.concat(m.lbB, m.lbO).forEach(l => { l.style.opacity = t; }); }, EASE.lin); } }
-  ];
-  const sc = makeScenes(host.querySelector('.foldsc'), scenes, { prompt: T('เลือกฟังก์ชัน แล้วกด ▶ ดูกระดาษถูกพับตามเส้น y = x', 'Pick a function, then press ▶ to fold the paper along y = x') });
+// ลองทำ: เลือก pH / ริกเตอร์ แล้วเลื่อนสองค่า
+function makeScaleTry(host) {
+  const w = { mode: 'ph', ph: [3, 5], rc: [5, 7] };
+  host.innerHTML = '<div class="chips sy-mode"></div><div class="sc-prompt"></div><div class="sy-pic"></div>' + sliderRow('A =', 'syA', 0, 14, 1, 3) + sliderRow('B =', 'syB', 0, 14, 1, 5) + '<div class="wg-eq col sy-eq"></div>';
+  const q = s => host.querySelector(s), sa = q('#syA'), sb = q('#syB');
   w.render = () => {
-    const c = host.querySelector('.chips');
-    c.innerHTML = `<span class="chips-label">f</span>` + GF.map((e, i) => `<button class="chip${i === w.cur ? ' active' : ''}" data-i="${i}">${gEq(e)}</button>`).join('');
-    c.querySelectorAll('.chip').forEach(b => b.onclick = () => { w.cur = +b.dataset.i; w.render(); sc.go(sc.k, false); });
+    const ph = w.mode === 'ph', cfg = ph ? CFG_PH : CFG_RC, [a, b] = ph ? w.ph : w.rc;
+    q('.sy-mode').innerHTML = `<span class="chips-label">${tx(T('สเกล', 'Scale'))}</span><button class="chip${ph ? ' active' : ''}" data-m="ph">pH</button><button class="chip${!ph ? ' active' : ''}" data-m="rc">${tx(T('ริกเตอร์', 'Richter'))}</button>`;
+    q('.sy-mode').querySelectorAll('.chip').forEach(c => c.onclick = () => { w.mode = c.dataset.m; sync(); w.render(); });
+    q('.sc-prompt').innerHTML = tx(ph ? T('เลื่อนค่า pH สองค่า ดูว่า [H⁺] ต่างกันกี่เท่า', 'Slide two pH values and see how many times [H⁺] differs') : T('เลื่อนขนาดแผ่นดินไหวสองค่า ดูว่าแอมพลิจูดคลื่นต่างกันกี่เท่า', 'Slide two earthquake magnitudes and see how many times the wave amplitude differs'));
+    const dlt = Math.abs(b - a), ratio = Math.pow(10, dlt);
+    q('#syAv').textContent = ph ? 'pH ' + a : (EN() ? 'M ' : 'ขนาด ') + a; q('#syBv').textContent = ph ? 'pH ' + b : (EN() ? 'M ' : 'ขนาด ') + b;
+    const eOf = v => ph ? -v : v, col = ['blue', 'orange'];
+    const mk = (v, c) => ({ e: eOf(v), col: c, lines: [ph ? 'pH ' + v : tx(T('ขนาด ', 'M ')) + v] });
+    scPaint(q('.sy-pic'), cfg, { marks: a === b ? [mk(a, 'blue')] : [mk(a, 'blue'), mk(b, 'orange')], bracket: dlt > 0 ? { a: eOf(Math.min(a, b)), b: eOf(Math.max(a, b)), text: `${svPow('10', dlt, 11)} = ${fmt(ratio)} ${tx(T('เท่า', 'times'))}` } : null });
+    const hi = ph ? (a < b ? a : b) : (a > b ? a : b);
+    q('.sy-eq').innerHTML = `<div>${tx(T('ต่างกัน', 'Difference'))} = |${b} − ${a}| = ${dlt} ${tx(T('ขีด', 'marks'))}</div><div>${tx(T('อัตราส่วน', 'Ratio'))} = ${pwr('10', dlt)} = ${fmt(ratio)}</div>` +
+      `<div>${ans(dlt === 0 ? tx(T('เท่ากัน (1 เท่า)', 'the same (1 time)')) : tx(ph ? T(`pH ${hi} มี [H⁺] มากกว่า ${fmt(ratio)} เท่า`, `pH ${hi} has ${fmt(ratio)} times more [H⁺]`) : T(`ขนาด ${hi} มีแอมพลิจูดมากกว่า ${fmt(ratio)} เท่า`, `M ${hi} has ${fmt(ratio)} times the amplitude`)))}</div>`;
   };
+  const sync = () => { const ph = w.mode === 'ph', v = ph ? w.ph : w.rc; sa.min = sb.min = ph ? 0 : 1; sa.max = sb.max = ph ? 14 : 9; sa.value = v[0]; sb.value = v[1]; };
+  sa.oninput = () => { (w.mode === 'ph' ? w.ph : w.rc)[0] = +sa.value; w.render(); };
+  sb.oninput = () => { (w.mode === 'ph' ? w.ph : w.rc)[1] = +sb.value; w.render(); };
   w.refresh = () => w.render();
-  LIVE.push(w); w.render();
+  LIVE.push(w); sync(); w.render();
+  return w;
 }
 
-// ลองทำ: โชว์จุด (a, b) บน f ให้คลิกจุดสะท้อน (ดูดเข้าจุดจำนวนเต็ม) — ใช้ plotPointer
-const TRY = [
-  { g: 0, a: 2, b: 3 }, { g: 1, a: 1, b: 3 }, { g: 2, a: 2, b: 4 }, { g: 3, a: 4, b: 2 }, { g: 0, a: -1, b: -3 }, { g: 1, a: -1, b: 1 }
-];
-function makeTry(host) {
-  const w = { cur: 0, st: { clicked: null } };
-  host.innerHTML = '<div class="chips"></div><div class="sc-prompt"></div><div class="setrow try-eq" style="text-align:center"></div><div class="try-stage"></div><div class="try-res"></div>';
-  const q = s => host.querySelector(s);
-  const select = i => { w.cur = i; w.st = { clicked: null }; w.render(); };
-  w.render = () => {
-    const it = TRY[w.cur], g = GF[it.g], st = w.st, a = it.a, b = it.b;
-    q('.chips').innerHTML = `<span class="chips-label">${EN() ? 'Point' : 'จุดที่'}</span>` + TRY.map((_, i) => `<button class="chip${i === w.cur ? ' active' : ''}" data-i="${i}">${i + 1}</button>`).join('');
-    q('.chips').querySelectorAll('.chip').forEach(c => c.onclick = () => select(+c.dataset.i));
-    q('.sc-prompt').innerHTML = tx(T(`คลิกบนกราฟ ตรงตำแหน่งของจุดสะท้อนของ ${pr2(a, b)} รอบเส้น y = x`, `Click on the graph where the mirror image of ${pr2(a, b)} in the line y = x lies`));
-    q('.try-eq').innerHTML = `<i>f</i> : ${gEq(g)}`;
-    const pl = gPlot(), cl = st.clicked, ok = cl && cl.x === b && cl.y === a;
-    pl.dash(-9, -9, 9, 9, 's-muted'); pl.text(5.1, 5.6, 'y = x', '', 'middle');
-    g.segs.forEach(sg => pl.param(u => u, u => g.f(u), sg[0], sg[1], 's-blue', 200));
-    if (cl) {
-      g.segs.forEach(sg => pl.param(u => g.f(u), u => u, sg[0], sg[1], 's-orange', 200));
-      pl.dash(a, b, b, a, 's-pink');
-      const f = (a + b) / 2, s = .3, sg = Math.sign(a - b), ux = sg / Math.SQRT2, uy = -sg / Math.SQRT2, vx = 1 / Math.SQRT2, vy = 1 / Math.SQRT2;   // มุมฉากที่ตีนเส้นตั้งฉาก
-      pl.put(`<path class="pl-c s-pink" style="stroke-width:1.8" d="M${pl.X(f + s * ux)} ${pl.Y(f + s * uy)} L${pl.X(f + s * (ux + vx))} ${pl.Y(f + s * (uy + vy))} L${pl.X(f + s * vx)} ${pl.Y(f + s * vy)}" clip-path="url(#${pl.id})"/>`);
-      if (!ok) pl.dot(cl.x, cl.y, 'f-red', true, 7.5);
-      pl.dot(b, a, 'f-green', false, 7); pl.text(b, a, pr2(b, a), 'g', 'start', 9, 20);
-    }
-    pl.dot(a, b, 'f-blue', false, 7); pl.text(a, b, pr2(a, b), 'b', 'start', 9, -9);
-    q('.try-stage').innerHTML = pl.svg();
-    const svg = q('.try-stage svg'), res = q('.try-res');
-    if (!cl) {
-      svg.classList.add('pick');
-      const ring = sv('circle', { class: 'try-hover', r: 8, cx: -50, cy: -50 }, svg), lab = sv('text', { class: 'try-hl', x: -50, y: -50, text: '' }, svg);
-      const hide = () => { ring.setAttribute('cx', -50); lab.setAttribute('x', -50); };
-      const pp = plotPointer(svg, pl, {
-        snap: 1,
-        onHover: pt => { if (!pt.inside) { hide(); return; } ring.setAttribute('cx', pl.X(pt.x)); ring.setAttribute('cy', pl.Y(pt.y)); lab.setAttribute('x', pl.X(pt.x) + 11); lab.setAttribute('y', pl.Y(pt.y) - 9); lab.textContent = pr2(pt.x, pt.y); },
-        onClick: pt => { if (!pt.inside) return; w.st = { clicked: { x: pt.x, y: pt.y } }; w.render(); }
-      });
-      svg.style.touchAction = 'pan-y';   // ต้องการแค่การแตะ — ให้นิ้วเลื่อนหน้าจอผ่านกราฟได้
-      svg.addEventListener('pointerleave', hide);
-      res.innerHTML = '';
-    } else {
-      res.innerHTML = `<div class="verdict ${ok ? 'ok' : 'no'}"><span class="mk">${ok ? '✓' : '✗'}</span><div>` + (ok
-        ? tx(T(`ถูก! ${pr2(a, b)} ↔ ${pr2(b, a)} : พิกัดสลับกัน และสองจุดอยู่ห่างรอยพับ y = x เท่ากัน คนละฝั่ง (เส้นประตั้งฉากกับ y = x)`, `Correct! ${pr2(a, b)} ↔ ${pr2(b, a)}: the coordinates swap, and the two points sit at the same distance from the crease y = x, on opposite sides (the dashed segment is perpendicular to y = x).`))
-        : tx(T(`ยังไม่ใช่ — คุณคลิก ${pr2(cl.x, cl.y)} (วงแดง) แต่จุดสะท้อนคือ ${pr2(b, a)} (จุดเขียว): สลับพิกัด x กับ y · เส้นประตั้งฉากกับ y = x และถูกรอยพับแบ่งครึ่งพอดี`, `Not quite — you clicked ${pr2(cl.x, cl.y)} (red ring) but the mirror image is ${pr2(b, a)} (green dot): swap x and y · the dashed segment is perpendicular to y = x and the crease cuts it exactly in half.`))) + '</div></div>' +
-        (ok ? '' : `<div style="text-align:center;margin-top:8px"><button class="btn ghost tryagain">${EN() ? '↻ Try again' : '↻ ลองอีกครั้ง'}</button></div>`);
-      const ag = res.querySelector('.tryagain'); if (ag) ag.onclick = () => { w.st = { clicked: null }; w.render(); };
-    }
-  };
-  w.refresh = () => w.render();
-  LIVE.push(w); w.render();
-}
-
-// ───────── แท็บ 3: เมื่อไรมีอินเวอร์ส ─────────
-// (ก) ลูกศรหมุนกลับหัว 180° — ทายก่อนว่ายังเป็นฟังก์ชันไหม
-const RV = [
-  { A: ['1', '2', '3'], B: ['a', 'b'], p: [[0, 0], [1, 0], [2, 1]] },
-  { A: ['1', '2', '3', '4'], B: ['a', 'b', 'c', 'd'], p: [[0, 2], [1, 0], [2, 3], [3, 1]] },
-  { A: ['1', '2', '3', '4'], B: ['a', 'b', 'c'], p: [[0, 0], [1, 1], [2, 2], [3, 1]] }
-];
-function revBuild(root, r) {
-  const m = {}, n = Math.max(r.A.length, r.B.length), H = 84 + n * 46, W = 420, xa = 100, xb = 320, mid = H / 2 + 4;
-  const ya = i => mid + (i - (r.A.length - 1) / 2) * 46, yb = j => mid + (j - (r.B.length - 1) / 2) * 46;
-  const svg = m.svg = sv('svg', { class: 'sc-svg', viewBox: `0 0 ${W} ${H}` }, root);
-  [[xa, 'A'], [xb, 'B']].forEach(([cx, nm]) => { sv('ellipse', { class: 'sc-set', cx, cy: mid, rx: 50, ry: n * 23 + 12 }, svg); sv('text', { x: cx, y: 18, 'text-anchor': 'middle', class: 'sc-big', text: nm }, svg); });
-  const inc = r.B.map((_, j) => r.p.filter(p => p[1] === j).length);
-  m.arr = r.p.map(() => svArrow(svg));
-  m.nA = r.A.map((a, i) => { const g = sv('g', { class: 'sc-node' }, svg); sv('circle', { cx: xa, cy: ya(i), r: 16 }, g); sv('text', { x: xa, y: ya(i) + 6, 'text-anchor': 'middle', text: a }, g); return g; });
-  m.nB = r.B.map((b, j) => { const g = sv('g', { class: 'sc-node' }, svg); sv('circle', { cx: xb, cy: yb(j), r: 16 }, g); sv('text', { x: xb, y: yb(j) + 6, 'text-anchor': 'middle', text: b }, g); return g; });
-  m.bot = sv('text', { x: W / 2, y: H - 12, 'text-anchor': 'middle', class: 'sc-big', text: '' }, svg);
-  const P1 = p => [xa + 22, ya(p[0])], P2 = p => [xb - 24, yb(p[1])];
-  m.rot = phi => r.p.forEach((p, i) => {
-    const a = P1(p), b = P2(p), cx = (a[0] + b[0]) / 2, cy = (a[1] + b[1]) / 2, c = Math.cos(phi), s = Math.sin(phi), rr = q => [cx + (q[0] - cx) * c - (q[1] - cy) * s, cy + (q[0] - cx) * s + (q[1] - cy) * c], u = rr(a), v = rr(b);
-    m.arr[i].set(u[0], u[1], v[0], v[1], 1);
-  });
-  m.oneOne = inc.every(c => c <= 1);
-  // rev = false: f ธรรมดา · true: กลับหัวแล้ว ระบายสี (B ที่มีลูกศรออกหลายเส้น = แดง)
-  m.pose = rev => {
-    m.rot(rev ? Math.PI : 0);
-    m.arr.forEach((a, i) => a.cls(!rev ? '' : m.oneOne ? 'green' : inc[r.p[i][1]] > 1 ? 'red' : ''));
-    m.nB.forEach((n2, j) => n2.setAttribute('class', 'sc-node' + (rev ? (inc[j] > 1 ? ' bad' : m.oneOne ? ' good' : '') : '')));
-    m.nA.forEach(n2 => n2.setAttribute('class', 'sc-node' + (rev && m.oneOne ? ' good' : '')));
-    m.bot.textContent = rev ? tx(T('f⁻¹ : ลูกศรทุกเส้นกลับหัว', 'f⁻¹ : every arrow reversed')) : 'f';
-  };
-  return m;
-}
-function revItem(r, n) {
-  const inc = r.B.map((_, j) => r.p.filter(p => p[1] === j).length), multi = r.B.filter((_, j) => inc[j] > 1), one = multi.length === 0;
-  return {
-    chip: T(`รูปที่ ${n}`, `Diagram ${n}`),
-    draw: async (el, ctx) => {
-      const m = revBuild(el, r);
-      if (!ctx.done[0]) { m.pose(false); return; }
-      if (ctx.animate) { m.pose(false); m.bot.textContent = ''; await ctx.anim.run(1300, t => m.rot(Math.PI * t)); }
-      m.pose(true);
-    },
-    qs: [{
-      q: T('ถ้ากลับหัวลูกศรทุกเส้น จะยังเป็นฟังก์ชันไหม?', 'If every arrow is reversed, is it still a function?'), o: YN, a: one ? 0 : 1,
-      why: one ? T('y ทุกตัวถูกลูกศรชี้เส้นเดียว (f เป็น 1-1) → พอกลับหัวทุกตัวยังมีลูกศรออกเส้นเดียว → ยังเป็นฟังก์ชัน → f มีอินเวอร์ส', 'every y receives exactly one arrow (f is one-to-one) → after reversing, each still has one arrow leaving → still a function → f has an inverse.')
-        : T(`${listAnd(multi, 'th')} ถูกลูกศรชี้จาก x สองตัว → พอกลับหัว ${listAnd(multi, 'th')} มีลูกศรออก 2 เส้น (สีแดง) → ไม่เป็นฟังก์ชัน เพราะ f ไม่เป็น 1-1`, `${listAnd(multi, 'en')} receives arrows from two x → after reversing it has two arrows leaving (red) → not a function, because f is not one-to-one.`)
-    }]
-  };
-}
-
-// (ข) จำกัดโดเมน — ทายก่อนว่า c น้อยสุดเท่าไรถึง 1-1 แล้วตัวเลื่อนวิ่งเอง
-const RS = [
-  { chip: '<i>f</i>(x) = (x − 2)<sup>2</sup> − 1', f: x => (x - 2) * (x - 2) - 1, v: 2, win: [-3, 8, -2, 9], sl: [-2, 5], o: [0, 1, 2, 3], a: 2, inv: `2 + ${rt('x + 1')}` },
-  { chip: '<i>f</i>(x) = |x + 1|', f: x => Math.abs(x + 1), v: -1, win: [-6, 6, -1, 8], sl: [-5, 3], o: [-2, -1, 0, 1], a: 1, inv: 'x − 1' },
-  { chip: '<i>f</i>(x) = x<sup>2</sup> − 6x + 5', f: x => x * x - 6 * x + 5, v: 3, win: [-2, 8, -5, 10], sl: [-1, 6], o: [1, 3, 5, 6], a: 1, inv: `3 + ${rt('x + 4')}` }
-];
-function rsItem(e) {
-  return {
-    chip: e.chip,
-    draw: async (el, ctx) => {
-      const D = ctx.data, any = ctx.done[0], [x0, x1, y0, y1] = e.win;
-      el.innerHTML = '<div class="plh"></div><div class="rcc"></div><div class="rcv"></div>';
-      const ph = el.querySelector('.plh'), vh = el.querySelector('.rcv');
-      const upd = c => {
-        const pl = new Plot({ w: 460, h: 400, xmin: x0, xmax: x1, ymin: y0, ymax: y1, pad: 28, lx: 1, ly: 1 });
-        if (!any) { pl.path(e.f, 's-blue', { n: 300 }); ph.innerHTML = pl.svg(); return; }
-        const one = c >= e.v - 1e-9;
-        pl.path(e.f, 's-muted', { x0: x0, x1: c, dash: true, n: 200 }); pl.path(e.f, 's-blue', { x0: c, x1: x1, n: 300 }); pl.dot(c, e.f(c), 'f-blue', false, 6.5);
-        if (!one) { const yy = e.f(c), tw = 2 * e.v - c; pl.dash(x0 - 9, yy, x1 + 9, yy, 's-red'); pl.dot(c, yy, 'f-red', false, 6); if (tw <= x1) pl.dot(tw, yy, 'f-red', false, 6); }
-        ph.innerHTML = pl.svg();
-        vh.innerHTML = `<div class="verdict ${one ? 'ok' : 'no'}"><span class="mk">${one ? '✓' : '✗'}</span><div>` + tx(one
-          ? T(`<i>x</i> ≥ ${num(c)} : เหลือขาเดียว เส้นนอนตัดไม่เกิน 1 จุด → 1-1 มีอินเวอร์ส`, `<i>x</i> ≥ ${num(c)}: one arm only, a horizontal line meets it at most once → one-to-one, so an inverse exists.`)
-          : T(`<i>x</i> ≥ ${num(c)} : ยังคร่อมจุดยอด เส้นนอนสีแดงตัด 2 จุด → ไม่ 1-1`, `<i>x</i> ≥ ${num(c)}: still straddles the vertex, the red horizontal line meets it twice → not one-to-one.`)) + '</div></div>';
-      };
-      if (!any) { upd(0); return; }
-      const lo = e.sl[0];
-      if (ctx.animate) { await ctx.anim.run(2600, t => upd(lerp(lo, e.v, t)), EASE.inOut); D.c = e.v; }
-      const c = D.c === undefined ? e.v : D.c;
-      upd(c);
-      const sc = el.querySelector('.rcc');
-      sc.innerHTML = sliderRow('<i>x</i> ≥', 'rc', e.sl[0], e.sl[1], 0.5, c);
-      const sl = sc.querySelector('#rc'), lab = sc.querySelector('#rcv'); lab.textContent = mn(c);
-      sl.oninput = () => { D.c = +sl.value; lab.textContent = mn(D.c); upd(D.c); };
-    },
-    qs: [{
-      q: T('จำกัดโดเมนเป็น x ≥ c — c น้อยที่สุดเท่าไรที่ทำให้ f เป็น 1-1?', 'Restrict the domain to x ≥ c — what is the smallest c that makes f one-to-one?'),
-      o: e.o.map(v => 'c = ' + mn(v)), a: e.a,
-      why: T(`จุดยอดอยู่ที่ x = ${num(e.v)} — ทางซ้ายกับทางขวาของจุดยอดให้ y ซ้ำกัน (เส้นแดง) ต้องเหลือขาเดียว จึงต้อง c ≥ ${num(e.v)} · ที่ c = ${num(e.v)} พอดีก็ยังได้ · ได้ <i>f</i><sup>−1</sup>(x) = ${e.inv}`, `The vertex is at x = ${num(e.v)} — points left and right of it share the same y (red line), so only one arm may stay: c ≥ ${num(e.v)} · c = ${num(e.v)} exactly is allowed · giving <i>f</i><sup>−1</sup>(x) = ${e.inv}.`)
-    }]
-  };
-}
-
-// ───────── แท็บ 4: D และ R สลับกัน ─────────
-// ตาราง D/R: ช่องของ f ลอยไขว้ไปเป็นช่องของ f⁻¹
-const DRS = [
-  { chip: `<i>f</i>(x) = ${frac('2x + 1', 'x − 3')}`, Df: 'ℝ − {3}', Rf: 'ℝ − {2}', Dfi: 'ℝ − {2}', Rfi: 'ℝ − {3}',
-    c1: T(`<i>f</i>(x) = ${frac('2x + 1', 'x − 3')} · ตัวส่วนห้ามเป็น 0 → D<sub>f</sub> = ℝ − {3} · ค่า y ที่ไปไม่ถึงคือ ${frac('a', 'c')} = 2 → R<sub>f</sub> = ℝ − {2}`, `<i>f</i>(x) = ${frac('2x + 1', 'x − 3')} · the denominator cannot be 0 → D<sub>f</sub> = ℝ − {3} · the unreachable y is ${frac('a', 'c')} = 2 → R<sub>f</sub> = ℝ − {2}.`),
-    c3: T(`ตรวจจากสูตร <i>f</i><sup>−1</sup>(x) = ${frac('3x + 1', 'x − 2')} : ตัวส่วน x − 2 ห้ามเป็น 0 → x ≠ 2 ตรงกับช่อง D<sub>f⁻¹</sub> ✓`, `Check with the formula <i>f</i><sup>−1</sup>(x) = ${frac('3x + 1', 'x − 2')}: the denominator x − 2 cannot be 0 → x ≠ 2, matching the D<sub>f⁻¹</sub> cell ✓.`) },
-  { chip: `<i>f</i>(x) = ${rt('x − 1')} + 2`, Df: '[1, ∞)', Rf: '[2, ∞)', Dfi: '[2, ∞)', Rfi: '[1, ∞)',
-    c1: T(`<i>f</i>(x) = ${rt('x − 1')} + 2 · ในรูท x − 1 ≥ 0 → D<sub>f</sub> = [1, ∞) · รูทให้ค่า ≥ 0 จึง y ≥ 2 → R<sub>f</sub> = [2, ∞)`, `<i>f</i>(x) = ${rt('x − 1')} + 2 · inside the root x − 1 ≥ 0 → D<sub>f</sub> = [1, ∞) · a root is ≥ 0, so y ≥ 2 → R<sub>f</sub> = [2, ∞).`),
-    c3: T(`ตรวจ: <i>f</i><sup>−1</sup>(x) = (x − 2)<sup>2</sup> + 1 ต้องใส่เงื่อนไข x ≥ 2 (= D<sub>f⁻¹</sub>) ไม่งั้นเป็นพาราโบลาเต็มที่ไม่ใช่ 1-1`, `Check: <i>f</i><sup>−1</sup>(x) = (x − 2)<sup>2</sup> + 1 needs the condition x ≥ 2 (= D<sub>f⁻¹</sub>); otherwise it is a full parabola, which is not one-to-one.`) },
-  { chip: `<i>f</i>(x) = x<sup>2</sup> − 1 , x ≥ 0`, Df: '[0, ∞)', Rf: '[−1, ∞)', Dfi: '[−1, ∞)', Rfi: '[0, ∞)',
-    c1: T(`<i>f</i>(x) = x<sup>2</sup> − 1 เมื่อ x ≥ 0 → D<sub>f</sub> = [0, ∞) · x² ≥ 0 จึง y ≥ −1 → R<sub>f</sub> = [−1, ∞)`, `<i>f</i>(x) = x<sup>2</sup> − 1 for x ≥ 0 → D<sub>f</sub> = [0, ∞) · x² ≥ 0, so y ≥ −1 → R<sub>f</sub> = [−1, ∞).`),
-    c3: T(`ตรวจ: <i>f</i><sup>−1</sup>(x) = ${rt('x + 1')} ในรูท x + 1 ≥ 0 → x ≥ −1 ตรงกับ D<sub>f⁻¹</sub> ✓ และค่ารูท ≥ 0 ตรงกับ R<sub>f⁻¹</sub> ✓`, `Check: <i>f</i><sup>−1</sup>(x) = ${rt('x + 1')}: inside the root x + 1 ≥ 0 → x ≥ −1, matching D<sub>f⁻¹</sub> ✓, and a root is ≥ 0, matching R<sub>f⁻¹</sub> ✓.`) }
-];
-const DRG = { W: 520, H: 250, cx: [210, 420], ry: [98, 188], cw: 188, ch: 52 };
-function drBuild(root, e) {
-  const G = DRG, m = {};
-  const svg = m.svg = sv('svg', { class: 'sc-svg', viewBox: `0 0 ${G.W} ${G.H}` }, root);
-  sv('text', { x: G.cx[0], y: 36, 'text-anchor': 'middle', class: 'sc-big', text: 'D' }, svg); sv('text', { x: G.cx[1], y: 36, 'text-anchor': 'middle', class: 'sc-big', text: 'R' }, svg);
-  sv('text', { x: 46, y: G.ry[0] + 7, 'text-anchor': 'middle', class: 'sc-big', text: 'f' }, svg); sv('text', { x: 46, y: G.ry[1] + 7, 'text-anchor': 'middle', class: 'sc-big', text: 'f⁻¹' }, svg);
-  const cell = (c, r, txt) => { const g = sv('g', {}, svg), rc = sv('rect', { class: 'dr-cell', x: G.cx[c] - G.cw / 2, y: G.ry[r] - G.ch / 2, width: G.cw, height: G.ch, rx: 12 }, g), t = sv('text', { x: G.cx[c], y: G.ry[r] + 7, 'text-anchor': 'middle', class: 'sc-big', text: txt }, g); return { rc, t }; };
-  m.f = [cell(0, 0, e.Df), cell(1, 0, e.Rf)];
-  m.fi = [cell(0, 1, e.Dfi), cell(1, 1, e.Rfi)];
-  m.chip = [svChip(svg, e.Df, 'sel', 150, 40), svChip(svg, e.Rf, 'sel', 150, 40)];
-  m.pose = k => {
-    m.fi.forEach(c => { c.t.style.opacity = k >= 1 ? 1 : 0; c.rc.setAttribute('class', 'dr-cell' + (k === 1 ? ' hot' : k >= 2 ? ' ok' : '')); });
-    m.chip.forEach(c => c.at(0, 0, 1, 0));
-  };
-  return m;
-}
-function makeDrSwap(host) {
-  const w = { cur: 0 };
-  host.innerHTML = '<div class="chips"></div><div class="drsc"></div>';
-  const fresh = (S, k) => { S.el.innerHTML = ''; const m = drBuild(S.el, DRS[w.cur]); m.pose(k); return m; };
-  const e = () => DRS[w.cur];
-  const scenes = [
-    { cap: () => tx(e().c1), end: S => { fresh(S, 0); }, play: async S => { const m = fresh(S, 0); m.svg.style.opacity = 0; await S.anim.run(500, t => { m.svg.style.opacity = t; }, EASE.lin); } },
-    { cap: () => tx(T(`ค่าที่ <i>f</i> <b>ส่งออก</b> (R<sub>f</sub>) กลายเป็นค่าที่ <i>f</i><sup>−1</sup> <b>รับเข้า</b> (D<sub>f⁻¹</sub>) และ D<sub>f</sub> ไปเป็น R<sub>f⁻¹</sub> — ช่องลอยไขว้สลับที่กัน`, `The values <i>f</i> <b>sends out</b> (R<sub>f</sub>) become the values <i>f</i><sup>−1</sup> <b>takes in</b> (D<sub>f⁻¹</sub>), and D<sub>f</sub> becomes R<sub>f⁻¹</sub> — the cells float across and trade places.`)),
-      end: S => { fresh(S, 1); },
-      play: async S => {
-        const m = fresh(S, 0), A = S.anim, G = DRG; m.fi.forEach(c => { c.t.style.opacity = 0; });
-        const dst = [1, 0];   // D_f → ช่อง R ของ f⁻¹ ; R_f → ช่อง D ของ f⁻¹
-        await A.wait(300);
-        await A.run(1700, t => m.chip.forEach((c, i) => c.at(lerp(G.cx[i], G.cx[dst[i]], t), lerp(G.ry[0], G.ry[1], t), 1, Math.min(1, t * 6))));
-        m.chip.forEach(c => c.at(0, 0, 1, 0)); m.pose(1);
-      } },
-    { cap: () => tx(e().c3), end: S => { fresh(S, 2); }, play: async S => { const m = fresh(S, 1), A = S.anim; await A.wait(500); m.pose(2); } }
-  ];
-  const sc = makeScenes(host.querySelector('.drsc'), scenes, { prompt: T('เลือกฟังก์ชัน แล้วกด ▶ ดูช่องของ D และ R ลอยสลับที่', 'Pick a function, then press ▶ to watch the D and R cells fly to each other\'s place') });
-  w.render = () => {
-    const c = host.querySelector('.chips');
-    c.innerHTML = `<span class="chips-label">f</span>` + DRS.map((x, i) => `<button class="chip${i === w.cur ? ' active' : ''}" data-i="${i}">${x.chip}</button>`).join('');
-    c.querySelectorAll('.chip').forEach(b => b.onclick = () => { w.cur = +b.dataset.i; w.render(); sc.go(sc.k, false); });
-  };
-  w.refresh = () => w.render();
-  LIVE.push(w); w.render();
-}
-// เครื่องมือเดิม: เศษส่วน (ax + b)/(cx + d) กับอินเวอร์ส
-function makeSwap(host) {
-  const w = { a: 2, b: 1, c: 1, d: -3 };
-  host.innerHTML = '<div class="sc-prompt"></div><div class="two"><div>' + sliderRow('a =', 'sa', -5, 5, 1, 2) + sliderRow('b =', 'sb', -5, 5, 1, 1) + sliderRow('c =', 'sc', -5, 5, 1, 1) + sliderRow('d =', 'sd', -5, 5, 1, -3) + '</div><div class="eqs wg-eq col"></div></div><div class="plhost"></div><div class="tbox"></div>';
-  const ids = ['a', 'b', 'c', 'd'];
-  w.render = () => {
-    host.querySelector('.sc-prompt').textContent = EN() ? 'Move a, b, c, d — watch f and f⁻¹ and their dashed asymptotes together' : 'เลื่อน a, b, c, d — ดู f กับ f⁻¹ และเส้นประของทั้งสองพร้อมกัน';
-    ids.forEach(k => { host.querySelector('#s' + k + 'v').textContent = mn(w[k]); });
-    const { a, b, c, d } = w, lin = (p, q) => polyHtml([q, p]) || '0';
-    const ok = c !== 0 && a * d - b * c !== 0;
-    host.querySelector('.eqs').innerHTML = `<div>${I('f')}(x) = ${frac(lin(a, b), lin(c, d))}</div>` + (ok ? `<div>${fi}(x) = ${frac(lin(-d, b), lin(c, -a))}</div>` : '');
-    const pl = new Plot({ w: 460, h: 460, xmin: -8, xmax: 8, ymin: -8, ymax: 8, pad: 28, lx: 2, ly: 2 });
-    pl.dash(-12, -12, 12, 12, 's-muted');
-    if (ok) {
-      const xa = -d / c, ya = a / c;
-      pl.path(x => (a * x + b) / (c * x + d), 's-blue', { n: 800 }); pl.path(x => (-d * x + b) / (c * x - a), 's-orange', { n: 800 });
-      pl.dash(xa, -20, xa, 20, 's-blue'); pl.dash(-20, ya, 20, ya, 's-blue'); pl.dash(ya, -20, ya, 20, 's-orange'); pl.dash(-20, xa, 20, xa, 's-orange');
-    }
-    host.querySelector('.plhost').innerHTML = pl.svg();
-    if (!ok) { host.querySelector('.tbox').innerHTML = `<div class="box-warn">${tx(T('ต้องให้ c ≠ 0 และ ad − bc ≠ 0 จึงเป็นเศษส่วนที่หาอินเวอร์สได้ (ไม่หักล้างเป็นค่าคงที่/เส้นตรง)', 'We need c ≠ 0 and ad − bc ≠ 0 for a genuine fraction with an inverse (otherwise it collapses to a constant or a line).'))}</div>`; return; }
-    const xa = num(-d / c), ya = num(a / c);
-    host.querySelector('.tbox').innerHTML = `<div class="tbl-scroll"><table class="tbl"><tr><th></th><th>D</th><th>R</th></tr>` +
-      `<tr><th>${I('f')}</th><td class="cur">ℝ − {${xa}}</td><td>ℝ − {${ya}}</td></tr><tr><th>${fi}</th><td>ℝ − {${ya}}</td><td class="cur">ℝ − {${xa}}</td></tr></table></div>` +
-      `<div class="wg-cap">${tx(T(`ช่องสีเหลืองคือค่าเดียวกัน (${xa} กับ ${ya} สลับที่) · เส้นประของ f (น้ำเงิน) x = ${xa}, y = ${ya} กลายเป็นเส้นประของ f⁻¹ (ส้ม) x = ${ya}, y = ${xa}`,
-        `The yellow cells hold the same value (${xa} and ${ya} swap places) · f's dashed lines (blue) x = ${xa}, y = ${ya} become f⁻¹'s (orange) x = ${ya}, y = ${xa}.`))}</div>`;
-  };
-  ids.forEach(k => { const s = host.querySelector('#s' + k); s.oninput = () => { w[k] = +s.value; w.render(); }; });
-  w.refresh = () => w.render();
-  LIVE.push(w); w.render();
-}
-
-// ───────── แท็บ 5: ทริก f(ax+b) ─────────
-// f(ax + b) = cx + d : "ก้อน" (ax + b) เป็นกล่องสีม่วงเดียวกันทุกบรรทัด
-// n = ตัวเลขที่ถามหา f⁻¹(n) ; o = ตัวเลือก (เรียงเอง) ; ia = ตำแหน่งคำตอบ
-const TRP = [
-  { a: 2, b: 3, c: 8, d: 9, n: 17, o: [1, 5, 37, 65], ia: 1 },
-  { a: 3, b: -1, c: 6, d: 4, n: 16, o: [47, 38, 5, 2], ia: 2 },
-  { a: -1, b: 4, c: 3, d: -7, n: 2, o: [2, 3, -1, 1], ia: 3 }
-];
-function trCalc(p) {
-  const k = p.c / p.a, m = p.d - k * p.b, L = polyHtml([p.b, p.a]), lump = s => `<span class="lump">${s}</span>`;
-  const x0 = (p.n - p.d) / p.c, ans0 = p.a * x0 + p.b, kS = k === 1 ? '' : mn(k), mS = m === 0 ? '' : ` ${m < 0 ? '−' : '+'} ${Math.abs(m)}`;
-  return { k, m, L, lump, x0, ans0,
-    r1: `<i>f</i>(${lump(L)}) = ${polyHtml([p.d, p.c])}`,
-    r2: `<i>f</i>(${lump(L)}) = ${kS}(${lump(L)})${mS}`,
-    r3: `<i>f</i>(${X}) = ${ans(polyHtml([m, k]))}`,
-    prob: `<i>f</i>(${L}) = ${polyHtml([p.d, p.c])}` };
-}
-function lumpDraw(el, rows, dim, hideNew) {
-  el.innerHTML = '<div class="sw-box"></div>'; const box = el.firstChild, out = [];
-  rows.forEach((h, i) => { const r = document.createElement('div'); r.className = 'sw-row' + (dim.includes(i) ? ' dim' : ''); r.innerHTML = h; if (hideNew && !dim.includes(i)) r.style.opacity = 0; box.appendChild(r); out.push(r); });
-  return out;
-}
-function makeLump(host) {
-  const w = { cur: 0 };
-  host.innerHTML = '<div class="chips"></div><div class="lumpsc"></div>';
-  const P = () => trCalc(TRP[w.cur]), R = () => { const c = P(); return [c.r1, c.r2, c.r3]; };
-  const scenes = [
-    { cap: () => { const p = TRP[w.cur], c = P(); return tx(T(`โจทย์ <i>f</i>(${c.L}) = ${polyHtml([p.d, p.c])} · มอง (${c.L}) เป็น <b>"ก้อน"</b> เดียว (กล่องสีม่วง) — เป้าหมายคือให้ฝั่งขวาเป็น "ก้อน" ด้วย`, `Problem <i>f</i>(${c.L}) = ${polyHtml([p.d, p.c])} · treat (${c.L}) as a single <b>"lump"</b> (purple box) — the goal is to make the right-hand side a lump too.`)); },
-      end: S => { lumpDraw(S.el, R().slice(0, 1), []); },
-      play: async S => { const r = lumpDraw(S.el, R().slice(0, 1), [], true); await fadeIn(S.anim, r[0], 500); } },
-    { cap: () => { const p = TRP[w.cur], c = P(), kk = polyHtml(pMul([c.k], [p.b, p.a])); return tx(T(`จัดฝั่งขวาให้เป็นก้อนเดียวกัน: ${c.k === 1 ? '' : mn(c.k) + ' × '}(${c.L}) = ${kk}${c.m === 0 ? '' : ' จึงต้อง' + (c.m < 0 ? 'ลบ ' : 'บวก ') + Math.abs(c.m)} → ${polyHtml([p.d, p.c])} = ${c.k === 1 ? '' : mn(c.k)}(${c.L})${c.m === 0 ? '' : (c.m < 0 ? ' − ' : ' + ') + Math.abs(c.m)}`, `Make the right side contain the same lump: ${c.k === 1 ? '' : mn(c.k) + ' × '}(${c.L}) = ${kk}${c.m === 0 ? '' : ', so ' + (c.m < 0 ? 'subtract ' : 'add ') + Math.abs(c.m)} → ${polyHtml([p.d, p.c])} = ${c.k === 1 ? '' : mn(c.k)}(${c.L})${c.m === 0 ? '' : (c.m < 0 ? ' − ' : ' + ') + Math.abs(c.m)}.`)); },
-      end: S => { lumpDraw(S.el, R().slice(0, 2), [0]); },
-      play: async S => { const r = lumpDraw(S.el, R().slice(0, 2), [0], true); await fadeIn(S.anim, r[1], 600); } },
-    { cap: () => tx(T(`ตอนนี้เปลี่ยน "ก้อน" เป็น <b>x</b> ทุกที่ — กล่องยุบเหลือ x → <i>f</i>(x) = ${polyHtml([P().m, P().k])}`, `Now replace the lump by <b>x</b> everywhere — the boxes collapse to x → <i>f</i>(x) = ${polyHtml([P().m, P().k])}.`)),
-      end: S => { lumpDraw(S.el, R(), [1]); },
-      play: async S => {
-        const A = S.anim, r = lumpDraw(S.el, R(), [0, 1], true), rw = r[2];
-        rw.innerHTML = R()[1]; rw.className = 'sw-row'; await fadeIn(A, rw, 350); await A.wait(500);
-        const lumps = [...rw.querySelectorAll('.lump')], ws = lumps.map(l => l.offsetWidth - 0);
-        const tgt = lumps.map(l => { const c = l.cloneNode(true); c.innerHTML = X; c.style.cssText = 'position:absolute;visibility:hidden'; rw.appendChild(c); const v = c.offsetWidth; c.remove(); return v; });
-        lumps.forEach((l, i) => { l.style.width = ws[i] + 'px'; });
-        let swapped = false;
-        await A.run(1100, t => lumps.forEach((l, i) => { l.style.width = lerp(ws[i], tgt[i], t).toFixed(1) + 'px'; if (t > .5 && !swapped) { l.innerHTML = X; if (i === lumps.length - 1) swapped = true; } }), EASE.inOut);
-        await A.wait(350); rw.innerHTML = R()[2];
-      } }
-  ];
-  const sc = makeScenes(host.querySelector('.lumpsc'), scenes, { prompt: T('เลือกโจทย์ แล้วกด ▶ ดู "ก้อน" ถูกจัดแล้วยุบเป็น x', 'Pick a problem, then press ▶ to see the "lump" appear and collapse into x') });
-  w.render = () => {
-    const c = host.querySelector('.chips');
-    c.innerHTML = `<span class="chips-label">${EN() ? 'Problem' : 'โจทย์'}</span>` + TRP.map((p, i) => `<button class="chip${i === w.cur ? ' active' : ''}" data-i="${i}"><i>f</i>(${polyHtml([p.b, p.a])}) = ${polyHtml([p.d, p.c])}</button>`).join('');
-    c.querySelectorAll('.chip').forEach(b => b.onclick = () => { w.cur = +b.dataset.i; w.render(); sc.go(sc.k, false); });
-  };
-  w.refresh = () => w.render();
-  LIVE.push(w); w.render();
-}
-// ทายก่อน f⁻¹(ตัวเลข) แล้วเฉลยทีละขั้น
-function trItem(p, n) {
-  const c = trCalc(p), nn = mn(p.n), xs = mn(c.x0);
-  return {
-    chip: T(`โจทย์ ${n}`, `Problem ${n}`),
-    draw: async (el, ctx) => {
-      const rows = [`<i>f</i>(${c.lump(c.L)}) = ${polyHtml([p.d, p.c])}`, `${fi}(${nn}) = ?`];
-      if (ctx.done[0]) rows.push(
-        `${fi}(${polyHtml([p.d, p.c])}) = ${c.lump(c.L)}`,
-        `${polyHtml([p.d, p.c])} = ${nn} → ${X} = ${xs}`,
-        `${fi}(${nn}) = ${polyHtml([p.b, p.a]).replace(/<i>x<\/i>/g, `(${xs})`)} = ${ans(mn(c.ans0))}`);
-      const r = lumpDraw(el, rows, [], false);
-      if (ctx.done[0] && ctx.animate) { for (let i = 2; i < r.length; i++) r[i].style.opacity = 0; for (let i = 2; i < r.length; i++) { await ctx.anim.wait(450); await fadeIn(ctx.anim, r[i], 500); } }
-    },
-    qs: [{
-      q: T(`ค่าของ ${fi}(${nn}) เป็นเท่าใด?`, `What is ${fi}(${nn})?`), o: p.o.map(mn), a: p.ia,
-      why: T(`<i>f</i>(ก้อน) = ${polyHtml([p.d, p.c])} แปลว่า ก้อน = ${fi}(${polyHtml([p.d, p.c])}) → ตั้ง ${polyHtml([p.d, p.c])} = ${nn} ได้ x = ${xs} แล้วแทนในก้อน ได้ ${mn(c.ans0)} (ดูขั้นด้านบน) · ตัวหลอก: ${mn(c.x0)} คือ x ไม่ใช่คำตอบ`, `<i>f</i>(lump) = ${polyHtml([p.d, p.c])} means lump = ${fi}(${polyHtml([p.d, p.c])}) → set ${polyHtml([p.d, p.c])} = ${nn} to get x = ${xs}, then put it in the lump to get ${mn(c.ans0)} (see the steps above) · the decoy ${mn(c.x0)} is just x, not the answer.`)
-    }]
-  };
-}
-
-// ───────── แบบฝึกหัด ─────────
+// ═══════════════════════════════════════════════════════════════
+//  แบบฝึกหัด 8 ข้อ (แต่งใหม่)
+// ═══════════════════════════════════════════════════════════════
 const QUIZ = [
-  { q: T('ถ้า f(x) = 2x + 7 แล้ว f⁻¹(x) คือ', 'If f(x) = 2x + 7, then f⁻¹(x) is'), o: [frac('x − 7', '2'), frac('x + 7', '2'), '2x − 7', frac('1', '2x + 7')], a: 0, e: T(`y = 2x + 7 → สลับ: x = 2y + 7 → y = ${frac('x − 7', '2')}`, `y = 2x + 7 → swap: x = 2y + 7 → y = ${frac('x − 7', '2')}.`) },
-  { q: T('ถ้า (2, 5) อยู่บนกราฟของ f แล้วจุดใดอยู่บนกราฟของ f⁻¹', 'If (2, 5) is on the graph of f, which point is on the graph of f⁻¹?'), o: ['(2, 5)', '(5, 2)', '(−2, −5)', '(−5, 2)'], a: 1, e: T('f⁻¹ สลับพิกัดของ f ทุกจุด: (a, b) → (b, a)', 'f⁻¹ swaps the coordinates of every point: (a, b) → (b, a).') },
-  { q: T('ฟังก์ชันใดมีอินเวอร์สที่เป็นฟังก์ชัน (บนโดเมนที่กำหนด)', 'Which function has an inverse that is a function (on its stated domain)?'), o: ['y = x² , x ∈ ℝ', 'y = |x| , x ∈ ℝ', 'y = x³ + 1 , x ∈ ℝ', 'y = 3 , x ∈ ℝ'], a: 2, e: T('ต้อง 1-1: x³ + 1 ผ่านเส้นนอนทดสอบ ส่วน x², |x| ตัด 2 จุด และ y = 3 ทุก x ได้ค่าเดียวกัน', 'It must be one-to-one: x³ + 1 passes the horizontal-line test; x² and |x| meet a line twice; y = 3 gives every x the same value.') },
-  { q: T(`f(x) = ${frac('x − 1', 'x + 2')} แล้ว f⁻¹(x) คือ`, `f(x) = ${frac('x − 1', 'x + 2')}. Then f⁻¹(x) is`), o: [frac('2x + 1', '1 − x'), frac('x + 2', 'x − 1'), frac('2x − 1', 'x + 1'), frac('x + 1', '2 − x')], a: 0, e: T(`x = ${frac('y − 1', 'y + 2')} → xy + 2x = y − 1 → y(x − 1) = −2x − 1 → y = ${frac('2x + 1', '1 − x')} (ตรวจ: f(3) = 2/5, f⁻¹(2/5) = 3 ✓)`, `x = ${frac('y − 1', 'y + 2')} → xy + 2x = y − 1 → y(x − 1) = −2x − 1 → y = ${frac('2x + 1', '1 − x')} (check: f(3) = 2/5, f⁻¹(2/5) = 3 ✓).`) },
-  { q: T('f(x) = x² − 1 เมื่อ x ≥ 0 โดเมนของ f⁻¹ คือ', 'f(x) = x² − 1 for x ≥ 0. The domain of f⁻¹ is'), o: ['[0, ∞)', '[−1, ∞)', 'ℝ', '(−1, ∞)'], a: 1, e: T('D<sub>f⁻¹</sub> = R<sub>f</sub> และ x ≥ 0 → x² − 1 ≥ −1 ได้ทุกค่าตั้งแต่ −1 → [−1, ∞) (f⁻¹(x) = √(x + 1))', 'D<sub>f⁻¹</sub> = R<sub>f</sub>, and x ≥ 0 gives x² − 1 ≥ −1 reaching every value from −1 → [−1, ∞) (f⁻¹(x) = √(x + 1)).') },
-  { q: T('f(x) = x² + 4x เมื่อ x ≥ −2 แล้ว f⁻¹(x) คือ', 'f(x) = x² + 4x for x ≥ −2. Then f⁻¹(x) is'), o: ['−2 + √(x + 4)', '−2 − √(x + 4)', '2 + √(x + 4)', '√(x + 4)'], a: 0, e: T('x = y² + 4y → y² + 4y − x = 0 → y = −2 ± √(x + 4) แล้วเลือก y ≥ −2 (R<sub>f⁻¹</sub> = D<sub>f</sub>) → −2 + √(x + 4)', 'x = y² + 4y → y² + 4y − x = 0 → y = −2 ± √(x + 4), then pick y ≥ −2 (R<sub>f⁻¹</sub> = D<sub>f</sub>) → −2 + √(x + 4).') },
-  { q: T('ถ้า f(2x − 1) = 6x + 3 แล้ว f⁻¹(9) มีค่าเท่าใด', 'If f(2x − 1) = 6x + 3, what is f⁻¹(9)?'), o: ['1', '2', '3', '−1'], a: 0, e: T('ตั้ง 6x + 3 = 9 → x = 1 → f⁻¹(9) = 2(1) − 1 = 1 (ตรวจ: f(x) = 3x + 6, f(1) = 9 ✓)', 'Set 6x + 3 = 9 → x = 1 → f⁻¹(9) = 2(1) − 1 = 1 (check: f(x) = 3x + 6, f(1) = 9 ✓).') },
-  { q: T('f(x) = √(x − 3) แล้วเรนจ์ของ f⁻¹ คือ', 'f(x) = √(x − 3). The range of f⁻¹ is'), o: ['[0, ∞)', '[3, ∞)', 'ℝ', '(−∞, 3]'], a: 1, e: T('R<sub>f⁻¹</sub> = D<sub>f</sub> = [3, ∞) (ในรูท x − 3 ≥ 0)', 'R<sub>f⁻¹</sub> = D<sub>f</sub> = [3, ∞) (inside the root x − 3 ≥ 0).') },
-  { q: T('กราฟของ f และ f⁻¹ สมมาตรกันรอบเส้นใด', 'The graphs of f and f⁻¹ are symmetric about which line?'), o: [T('แกน x', 'the x-axis'), T('แกน y', 'the y-axis'), 'y = x', 'y = −x'], a: 2, e: T('สลับพิกัด (a, b) ↔ (b, a) คือการสะท้อนรอบเส้น y = x', 'Swapping (a, b) ↔ (b, a) is exactly reflection in the line y = x.') },
-  { q: T(`f(x) = ${frac('2x + 3', 'x − 1')} โดเมนของ f⁻¹ คือ`, `f(x) = ${frac('2x + 3', 'x − 1')}. The domain of f⁻¹ is`), o: ['ℝ − {1}', 'ℝ − {2}', 'ℝ − {3}', 'ℝ'], a: 1, e: T('D<sub>f⁻¹</sub> = R<sub>f</sub> = ℝ − {a/c} = ℝ − {2/1} = ℝ − {2}', 'D<sub>f⁻¹</sub> = R<sub>f</sub> = ℝ − {a/c} = ℝ − {2/1} = ℝ − {2}.') }
+  { q: T(`ฝากเงิน 20${NB}000 บาท ดอกเบี้ย 5% ต่อปี ทบปีละครั้ง เมื่อครบ 2 ปีจะได้เงินรวมเท่าไร`, `Deposit 20${NB}000 baht at 5% interest per year, compounded yearly. How much is there after 2 years?`),
+    o: [T(`22${NB}050 บาท`, `22${NB}050 baht`), T(`22${NB}000 บาท`, `22${NB}000 baht`), T(`22${NB}100 บาท`, `22${NB}100 baht`), T(`21${NB}000 บาท`, `21${NB}000 baht`)], a: 0,
+    e: T(`เงินรวม = 20${NB}000${pwr('(1.05)', 2)} = 20${NB}000 · 1.1025 = 22${NB}050 บาท · 22${NB}000 คือดอกเบี้ยธรรมดา (ปีละ 1${NB}000 สองปี) ที่ไม่ได้คิดดอกซ้อน · 21${NB}000 คือครบแค่ 1 ปี`, `Amount = 20${NB}000${pwr('(1.05)', 2)} = 20${NB}000 · 1.1025 = 22${NB}050 baht · 22${NB}000 is simple interest (1${NB}000 a year for two years) with no interest on interest · 21${NB}000 is only one year.`) },
+  { q: T(`ฝากเงิน 5${NB}000 บาท ดอกเบี้ย 8% ต่อปี ทบทุก 3 เดือน นาน 1 ปี จะได้เงินรวมเท่าไร`, `Deposit 5${NB}000 baht at 8% interest per year, compounded every 3 months for 1 year. How much is there at the end?`),
+    o: [T(`5${NB}412.16 บาท`, `5${NB}412.16 baht`), T(`5${NB}400 บาท`, `5${NB}400 baht`), T(`5${NB}100 บาท`, `5${NB}100 baht`), T(`6${NB}802.44 บาท`, `6${NB}802.44 baht`)], a: 0,
+    e: T(`<i>n</i> = 4 → ได้ดอก 0.08 ÷ 4 = 0.02 ต่องวด ทั้งหมด 4 งวด → เงินรวม = 5${NB}000${pwr('(1.02)', 4)} = 5${NB}000 · 1.08243216 ≈ 5${NB}412.16 บาท · 5${NB}400 คือทบปีละครั้ง (5${NB}000 · 1.08) · 6${NB}802.44 เกิดจากใช้ 8% ต่อทุกงวด`, `<i>n</i> = 4 → 0.08 ÷ 4 = 0.02 per period, 4 periods → amount = 5${NB}000${pwr('(1.02)', 4)} = 5${NB}000 · 1.08243216 ≈ 5${NB}412.16 baht · 5${NB}400 is yearly compounding (5${NB}000 · 1.08) · 6${NB}802.44 comes from using 8% in every period.`) },
+  { q: T(`เงินฝากดอกเบี้ย 7% ต่อปี ทบปีละครั้ง ใช้เวลาประมาณกี่ปีเงินจึงเป็น 2 เท่าของเงินต้น (กำหนด log 2 ≈ 0.3010 และ log 1.07 ≈ 0.0294)`, `A deposit earns 7% per year, compounded yearly. About how many years until the money is twice the principal? (Given log 2 ≈ 0.3010 and log 1.07 ≈ 0.0294)`),
+    o: [T('ประมาณ 10.2 ปี', 'about 10.2 years'), T('ประมาณ 14.3 ปี', 'about 14.3 years'), T('ประมาณ 0.098 ปี', 'about 0.098 years'), T('ประมาณ 4.3 ปี', 'about 4.3 years')], a: 0,
+    e: T(`${pwr('(1.07)', TT)} = 2 → ${TT} · ${lg10('1.07')} = ${lg10('2')} → ${TT} = ${frac('0.3010', '0.0294')} ≈ 10.2 ปี · 14.3 มาจาก 100 ÷ 7 (คิดแบบดอกเบี้ยธรรมดา) · 0.098 คือหารกลับด้าน · 4.3 คือเอา log 2 ไปหารด้วย 0.07 ตรงๆ`, `${pwr('(1.07)', TT)} = 2 → ${TT} · ${lg10('1.07')} = ${lg10('2')} → ${TT} = ${frac('0.3010', '0.0294')} ≈ 10.2 years · 14.3 comes from 100 ÷ 7 (simple interest) · 0.098 divides the wrong way round · 4.3 divides log 2 by 0.07 directly.`) },
+  { q: T(`ยีสต์ 500 เซลล์ เพิ่มเป็น 2 เท่าทุก 30 นาที (N = 500 · ${pwr('2', frac(TT, 30))}) ต้องใช้เวลาเท่าไรจึงมี 8${NB}000 เซลล์`, `500 yeast cells double every 30 minutes (N = 500 · ${pwr('2', frac(TT, 30))}). How long until there are 8${NB}000 cells?`),
+    o: [T('2 ชั่วโมง', '2 hours'), T('1 ชั่วโมง 30 นาที', '1 hour 30 minutes'), T('4 ชั่วโมง', '4 hours'), T('8 ชั่วโมง', '8 hours')], a: 0,
+    e: T(`500 · ${pwr('2', frac(TT, 30))} = 8${NB}000 → ${pwr('2', frac(TT, 30))} = 16 = ${pwr('2', 4)} → ${frac(TT, 30)} = 4 → ${TT} = 120 นาที = 2 ชั่วโมง · 4 คือจำนวนรอบที่เพิ่มเป็นสองเท่า ไม่ใช่จำนวนชั่วโมง · 1 ชั่วโมง 30 นาที ให้แค่ 3 รอบ ได้ 4${NB}000 เซลล์`, `500 · ${pwr('2', frac(TT, 30))} = 8${NB}000 → ${pwr('2', frac(TT, 30))} = 16 = ${pwr('2', 4)} → ${frac(TT, 30)} = 4 → ${TT} = 120 minutes = 2 hours · 4 is the number of doublings, not hours · 1 hour 30 minutes gives only 3 doublings, 4${NB}000 cells.`) },
+  { q: T(`สารกัมมันตรังสี 1${NB}200 มิลลิกรัม มีครึ่งชีวิต 4 วัน ต้องผ่านไปกี่วันจึงเหลือ 150 มิลลิกรัม`, `A sample of 1${NB}200 mg of a radioactive substance has a half-life of 4 days. How many days until 150 mg remain?`),
+    o: [T('12 วัน', '12 days'), T('3 วัน', '3 days'), T('8 วัน', '8 days'), T('16 วัน', '16 days')], a: 0,
+    e: T(`1${NB}200 · ${pwr('(' + frac(1, 2) + ')', frac(TT, 4))} = 150 → ${pwr('(' + frac(1, 2) + ')', frac(TT, 4))} = ${frac(1, 8)} = ${pwr('(' + frac(1, 2) + ')', 3)} → ${frac(TT, 4)} = 3 → ${TT} = 12 วัน · 3 คือจำนวนครึ่งชีวิต ต้องคูณ 4 วัน · 8 วัน เหลือ 300 มก. · 16 วัน เหลือ 75 มก.`, `1${NB}200 · ${pwr('(' + frac(1, 2) + ')', frac(TT, 4))} = 150 → ${pwr('(' + frac(1, 2) + ')', frac(TT, 4))} = ${frac(1, 8)} = ${pwr('(' + frac(1, 2) + ')', 3)} → ${frac(TT, 4)} = 3 → ${TT} = 12 days · 3 is the number of half-lives, so multiply by 4 days · 8 days leaves 300 mg · 16 days leaves 75 mg.`) },
+  { q: T(`สารละลายมี [H⁺] = 2 × ${pwr('10', '−4')} โมลต่อลิตร (กำหนด log 2 ≈ 0.30) ค่า pH เท่ากับเท่าใด`, `A solution has [H⁺] = 2 × ${pwr('10', '−4')} mol/L (given log 2 ≈ 0.30). What is its pH?`),
+    o: ['3.70', '4.30', '4.00', '−3.70'], a: 0,
+    e: T(`pH = −log (2 × ${pwr('10', '−4')}) = −(log 2 + log ${pwr('10', '−4')}) = −(0.30 − 4) = 3.70 · 4.30 เกิดจากบวก log 2 แทนที่จะลบ · 4.00 ลืมตัวคูณ 2 · −3.70 ลืมเครื่องหมายลบหน้า log`, `pH = −log (2 × ${pwr('10', '−4')}) = −(log 2 + log ${pwr('10', '−4')}) = −(0.30 − 4) = 3.70 · 4.30 comes from adding log 2 instead of subtracting · 4.00 forgets the factor 2 · −3.70 forgets the minus sign in front of log.`) },
+  { q: T('น้ำส้มสายชูมี pH 2 ส่วนน้ำฝนมี pH 6 ข้อใดถูกต้อง', 'Vinegar has pH 2 and rain water has pH 6. Which statement is correct?'),
+    o: [T(`น้ำส้มสายชูมี [H⁺] มากกว่า ${pwr('10', 4)} = 10${NB}000 เท่า`, `Vinegar has ${pwr('10', 4)} = 10${NB}000 times more [H⁺]`), T('น้ำส้มสายชูมี [H⁺] มากกว่า 4 เท่า', 'Vinegar has 4 times more [H⁺]'), T('น้ำส้มสายชูมี [H⁺] มากกว่า 3 เท่า', 'Vinegar has 3 times more [H⁺]'), T(`น้ำฝนมี [H⁺] มากกว่า ${pwr('10', 4)} เท่า`, `Rain water has ${pwr('10', 4)} times more [H⁺]`)], a: 0,
+    e: T(`pH 2 คือ [H⁺] = ${pwr('10', '−2')} และ pH 6 คือ [H⁺] = ${pwr('10', '−6')} · ${pwr('10', '−2')} ÷ ${pwr('10', '−6')} = ${pwr('10', 4)} = 10${NB}000 · pH น้อยกว่า [H⁺] มากกว่า · ต่างกัน 4 ขีด ขีดละ × 10 ไม่ใช่บวก 4 หรือหาร 6 ÷ 2`, `pH 2 means [H⁺] = ${pwr('10', '−2')} and pH 6 means [H⁺] = ${pwr('10', '−6')} · ${pwr('10', '−2')} ÷ ${pwr('10', '−6')} = ${pwr('10', 4)} = 10${NB}000 · the smaller pH has the larger [H⁺] · 4 marks apart at × 10 each, not 4 times and not 6 ÷ 2.`) },
+  { q: T('แผ่นดินไหวขนาด 9 มีแอมพลิจูดของคลื่นเป็นกี่เท่าของแผ่นดินไหวขนาด 6', 'An earthquake of magnitude 9 has how many times the wave amplitude of an earthquake of magnitude 6?'),
+    o: [T(`1${NB}000 เท่า`, `1${NB}000 times`), T('3 เท่า', '3 times'), T('1.5 เท่า', '1.5 times'), T('100 เท่า', '100 times')], a: 0,
+    e: T(`ขนาดต่างกัน 9 − 6 = 3 → แอมพลิจูดต่างกัน ${pwr('10', 3)} = 1${NB}000 เท่า · 3 เท่าเกิดจากใช้ส่วนต่าง 3 เป็นอัตราส่วนตรงๆ · 1.5 เท่าเกิดจาก 9 ÷ 6 · 100 เท่าคือต่างกันแค่ 2 ขีด`, `The magnitudes differ by 9 − 6 = 3 → the amplitudes differ by ${pwr('10', 3)} = 1${NB}000 times · 3 times uses the difference as the ratio · 1.5 times is 9 ÷ 6 · 100 times is only 2 marks apart.`) }
 ];
 
+// ═══════════════════════════════════════════════════════════════
+//  ประกอบหน้า
+// ═══════════════════════════════════════════════════════════════
 function build() {
-  injectCss();
-  document.getElementById('tab-idea').innerHTML =
-    card('🛤️', d('สายพานย้อนกลับ: f⁻¹ ถอด f ทีละเครื่อง', 'The reverse conveyor: f⁻¹ undoes f box by box'),
-      `<div id="w-conv"></div>
-       <div class="formula" style="font-size:1.15rem"><span>f(a) = b</span><span>⟺</span><span>f⁻¹(b) = a</span></div>
-       <div class="box-warn">${d('<b>f⁻¹ ไม่ได้แปลว่า 1/f</b> — เลข −1 ตรงนี้เป็นสัญลักษณ์ของ "ฟังก์ชันผกผัน" ไม่ใช่เลขชี้กำลัง', '<b>f⁻¹ does not mean 1/f</b> — the −1 here is notation for "inverse function", not an exponent.')}</div>`) +
-    card('🔀', d('สลับ x ↔ y แล้วจัดรูป', 'Swap x ↔ y, then solve'),
-      `<div id="w-swp"></div>
-       <div class="formula" style="font-size:1.05rem;gap:6px 10px"><span>${d('① เขียน y = f(x)', '① write y = f(x)')}</span><span>→</span><span>${d('② สลับ x ↔ y', '② swap x ↔ y')}</span><span>→</span><span>${d('③ จัดรูปให้ y อยู่คนเดียว', '③ solve for y')}</span></div>`) +
-    card('📌', d('ตัวอย่างวิธีคิด', 'Worked examples'), '<div id="w-met"></div>');
-  makeScenes(document.getElementById('w-conv'), CONV_SCENES, { prompt: T('กด ▶ ทีละฉาก — ดูลูกบอลวิ่งไป แล้ววิ่งย้อนกลับ', 'Press ▶ one scene at a time — watch the ball roll forward, then back') });
-  makeScenes(document.getElementById('w-swp'), SW_SCENES, { prompt: T('กด ▶ ทีละฉาก — ดูป้าย x กับ y ลอยสลับที่', 'Press ▶ one scene at a time — watch the labels x and y swap places') });
-  makeProblemSteps(document.getElementById('w-met'), T('โจทย์', 'Problem'), MET);
+  const $ = id => document.getElementById(id);
+  // ── แท็บ 1 · ดอกเบี้ยทบต้น ──
+  $('tab-interest').innerHTML =
+    card('🏦', d('ดอกเบี้ยทบต้น: เอาดอกเบี้ยไปคิดดอกต่อ', 'Compound interest: interest that earns interest'),
+      `<div id="w-is"></div>
+       <div class="formula"><span>${d('เงินรวม', 'Amount')} = ${I('P')}${pwr('(1 + ' + frac(I('r'), I('n')) + ')', I('nt'))}</span><span style="font-size:.9rem;font-weight:600">${d('<i>P</i> = เงินต้น · <i>r</i> = อัตราดอกเบี้ยต่อปี (ทศนิยม) · <i>n</i> = จำนวนงวดต่อปี · <i>t</i> = จำนวนปี', '<i>P</i> = principal · <i>r</i> = yearly rate (decimal) · <i>n</i> = periods per year · <i>t</i> = years')}</span></div>`) +
+    card('🧮', d('ตัวอย่าง: ทบปีละครั้ง 3 ปี', 'Example: yearly compounding for 3 years'), '<div id="w-ie"></div>') +
+    card('🔮', d('ทายก่อน: ทบบ่อยขึ้นได้มากกว่าไหม', 'Guess first: does more frequent compounding pay more?'), '<div id="w-ip"></div>') +
+    card('⏳', d('กี่ปีเงินเป็น 2 เท่า (ใช้ log)', 'How many years to double the money (using log)'), '<div id="w-dbp"></div><div id="w-db"></div>') +
+    card('🎛️', d('ลองเอง: เลื่อน P, r, n, t', 'Try it: slide P, r, n, t'), '<div id="w-ic"></div>');
+  makeScenes($('w-is'), IS_SCENES, { prompt: T('กด ▶ ทีละฉาก — ดูเงินฝาก 10 000 บาทโตขึ้นทุกปี', 'Press ▶ one scene at a time — watch a 10 000 baht deposit grow each year') });
+  makeSteps($('w-ie'), IE_ROWS);
+  makePredict($('w-ip'), [ipItem()], { prompt: T('ดูภาพ แล้วทายว่าทบทุกไตรมาสได้เงินรวมมากกว่าทบปีละครั้งไหม', 'Look at the picture, then guess whether quarterly compounding beats yearly compounding') });
+  apLive($('w-dbp'), () => `<div class="sc-prompt">${tx(T('กราฟของ 1.04<sup><i>t</i></sup> ตัดเส้น 2 เท่าที่ปีไหน', 'Where does the graph of 1.04<sup><i>t</i></sup> cross the 2× line?'))}</div>` + dbHtml());
+  makeSteps($('w-db'), DB_ROWS);
+  makeIntCalc($('w-ic'));
 
-  document.getElementById('tab-graph').innerHTML =
-    card('🪞', d('พับกระดาษตามเส้น y = x', 'Fold the paper along y = x'),
-      `<div id="w-fold"></div>
-       <div class="formula" style="font-size:1.15rem"><span>(a, b) ${d('บน', 'on')} f</span><span>⟺</span><span>(b, a) ${d('บน', 'on')} f⁻¹</span></div>`) +
-    card('🎯', d('ลองทำ: จุดสะท้อนอยู่ตรงไหน', 'Try it: where is the mirror point?'), '<div id="w-try"></div>');
-  makeFold(document.getElementById('w-fold'));
-  makeTry(document.getElementById('w-try'));
+  // ── แท็บ 2 · การเติบโต ──
+  $('tab-growth').innerHTML =
+    card('🦠', d('การเติบโต: แบคทีเรีย', 'Growth: bacteria'),
+      `<div id="w-gr"></div>
+       <div class="formula"><span>N = 100 · ${pwr('2', frac(TT, 20))}</span><span>${d('ฐาน 2 &gt; 1 → เพิ่ม', 'base 2 &gt; 1 → increasing')}</span></div>`) +
+    card('🔮', d('ทายก่อน: เมื่อไรถึง 10 000 ตัว', 'Guess first: when do we reach 10 000?'), '<div id="w-gtp"></div>') +
+    card('🧮', d('ตัวอย่าง: หาเวลาที่ถึง 10 000 ตัว', 'Example: finding the time to reach 10 000'), '<div id="w-gts"></div>');
+  makeGrowth($('w-gr'));
+  makePredict($('w-gtp'), [gtItem()], { prompt: T('ดูกราฟถึงนาทีที่ 120 แล้วทายว่าจะถึง 10 000 ตัวเมื่อไร', 'Look at the graph up to minute 120, then guess when it reaches 10 000') });
+  makeSteps($('w-gts'), GT_ROWS);
 
-  document.getElementById('tab-exist').innerHTML =
-    card('↩️', d('กลับหัวลูกศรของ f', 'Reverse the arrows of f'),
-      `<div id="w-flip"></div>
-       <div class="formula" style="font-size:1.1rem"><span>${d('มีอินเวอร์สที่เป็นฟังก์ชัน', 'an inverse that is a function exists')}</span><span>⟺</span><span>${d('f เป็นหนึ่งต่อหนึ่ง (1-1)', 'f is one-to-one (1-1)')}</span></div>`) +
-    card('✂️', d('ทำให้ f เป็น 1-1 ด้วยการจำกัดโดเมน', 'Making f one-to-one by restricting the domain'),
-      `<div id="w-res"></div>
-       <div class="box-info">${d('f ที่ไม่ 1-1 ตลอดทั้งโดเมน ตัดเอาครึ่งหนึ่งที่ <b>ขึ้นอย่างเดียวหรือลงอย่างเดียว</b> ก็หาอินเวอร์สได้ — แต่ต้องบอกโดเมนที่จำกัดไว้ให้ครบ', 'An f that is not 1-1 on its whole domain can get an inverse by keeping one half that <b>only rises or only falls</b> — but always state the restricted domain.')}</div>`);
-  makePredict(document.getElementById('w-flip'), RV.map(revItem), { label: T('แผนภาพ', 'Diagram'), prompt: T('ดูแผนภาพของ f แล้วทายก่อน — จากนั้นลูกศรจะหมุนกลับหัวให้ดู', 'Look at f and guess first — then the arrows turn upside down') });
-  makePredict(document.getElementById('w-res'), RS.map(rsItem), { label: T('ฟังก์ชัน', 'Function'), prompt: T('ดูกราฟ แล้วทายก่อน — จากนั้นตัวเลื่อน c จะวิ่งให้ดูเอง', 'Look at the graph and guess first — then the slider c sweeps by itself') });
+  // ── แท็บ 3 · ครึ่งชีวิต ──
+  $('tab-decay').innerHTML =
+    card('💊', d('การสลาย: ครึ่งชีวิตของยา', 'Decay: the half-life of a drug'),
+      `<div id="w-dc"></div><div id="w-dcp"></div>
+       <div class="formula"><span>A = 80 · ${pwr('(' + frac(1, 2) + ')', frac(TT, 6))}</span><span>${d('ฐาน ½ อยู่ระหว่าง 0 กับ 1 → ลด', 'base ½ is between 0 and 1 → decreasing')}</span></div>`) +
+    card('⏱️', d('ตัวอย่าง: เมื่อไรเหลือ 5 mg', 'Example: when are 5 mg left?'),
+      `<div id="w-d5"></div><div id="w-d5s"></div>
+       <div class="box-info">${d('ถ้าเศษส่วนที่ได้เขียนเป็นกำลังของ ½ ไม่ลงตัว (เช่น เหลือ 7 mg) ให้ใส่ log ทั้งสองข้างเหมือนแท็บการเติบโต ', 'If the fraction is not a neat power of ½ (say 7 mg left), take log of both sides as in the Growth tab ')} ${goTab('growth', d('ไปแท็บการเติบโต ▸', 'Go to the Growth tab ▸'))}</div>`);
+  efDecay.sc = makeScenes($('w-dc'), DC_SCENES, { prompt: T('กด ▶ ดูยา 80 mg ลดลงครึ่งหนึ่งทุก 6 ชั่วโมง', 'Press ▶ and watch 80 mg of the drug halve every 6 hours') });
+  makePredict($('w-dcp'), [dcPredItem()], { prompt: T('ก่อนดูฉากสุดท้าย ลองทายก่อน', 'Before the last scene, take a guess') });
+  makeScenes($('w-d5'), D5_SCENES, { prompt: T('กด ▶ ดูยาลดเป็นครึ่งๆ จนถึงเส้น 5 mg', 'Press ▶ and watch the drug halve down to the 5 mg line') });
+  makeSteps($('w-d5s'), D5_ROWS);
 
-  document.getElementById('tab-dr').innerHTML =
-    card('🔄', d('โดเมนกับเรนจ์สลับกัน', 'Domain and range trade places'),
-      `<div id="w-dr"></div>
-       <div class="formula" style="font-size:1.15rem"><span>D<sub>f⁻¹</sub> = R<sub>f</sub></span><span>R<sub>f⁻¹</sub> = D<sub>f</sub></span></div>`) +
-    card('🧮', d('เครื่องมือเศษส่วน: f กับ f⁻¹ พร้อมกัน', 'Fraction tool: f and f⁻¹ together'), '<div id="w-swap"></div>');
-  makeDrSwap(document.getElementById('w-dr'));
-  makeSwap(document.getElementById('w-swap'));
+  // ── แท็บ 4 · สเกล log ──
+  $('tab-scale').innerHTML =
+    card('🧪', d('pH: ไม้บรรทัดที่ขีดห่างเท่ากัน แต่ละขีดคูณ 10', 'pH: a ruler with equal marks, each mark × 10'),
+      `<div id="w-ph"></div>
+       <div class="formula"><span>pH = −${lg10('[H<sup>+</sup>]')}</span><span>${d('ขยับ 1 ขีด = × 10', 'one mark = × 10')}</span></div>`) +
+    card('🔮', d('ทายก่อน: pH 3 กับ pH 5', 'Guess first: pH 3 and pH 5'), '<div id="w-php"></div>') +
+    card('🌋', d('ริกเตอร์: ขนาดต่างกัน 1 แอมพลิจูดต่างกัน 10 เท่า', 'Richter: 1 step in magnitude = 10 times the amplitude'),
+      `<div id="w-rc"></div>
+       <div class="formula"><span>${d('ขนาดต่างกัน Δ → แอมพลิจูดต่างกัน', 'Magnitudes differ by Δ → amplitudes differ by')} ${pwr('10', 'Δ')} ${d('เท่า', 'times')}</span></div>`) +
+    card('🎛️', d('ลองเอง: เทียบสองค่า', 'Try it: compare two values'), '<div id="w-sy"></div>');
+  makeScenes($('w-ph'), PH_SCENES, { prompt: T('กด ▶ ทีละฉาก — ดู [H⁺] บนไม้บรรทัดแล้วอ่านค่า pH', 'Press ▶ one scene at a time — find [H⁺] on the ruler and read off the pH') });
+  makePredict($('w-php'), [phPredItem()], { prompt: T('ดูตำแหน่งของ pH 3 และ pH 5 บนไม้บรรทัด แล้วทายว่าต่างกันกี่เท่า', 'Look at pH 3 and pH 5 on the ruler, then guess how many times they differ') });
+  makeScenes($('w-rc'), RC_SCENES, { prompt: T('กด ▶ เทียบขนาด 5 กับขนาด 7 บนไม้บรรทัด', 'Press ▶ to compare magnitude 5 with magnitude 7 on the ruler') });
+  makeScaleTry($('w-sy'));
 
-  document.getElementById('tab-trick').innerHTML =
-    card('🧱', d('หา f(x) จาก f(ax + b) = cx + d: ทำ "ก้อน"', 'Finding f(x) from f(ax + b) = cx + d: make the "lump"'),
-      `<div id="w-lump"></div>
-       <div class="formula" style="font-size:1.1rem"><span>${d('จัดให้เห็นก้อน (ax + b)', 'make the lump (ax + b) appear')}</span><span>→</span><span>${d('เปลี่ยนก้อนเป็น x', 'replace the lump by x')}</span></div>`) +
-    card('🪄', d('ทริก f⁻¹(ตัวเลข): ไม่ต้องหา f⁻¹ เต็มสูตร', 'The f⁻¹(number) trick: no full formula needed'),
-      `<div id="w-trq"></div>
-       <div class="formula" style="font-size:1.1rem"><span>f(ax + b) = cx + d</span><span>⇒</span><span>ax + b = f⁻¹(cx + d)</span></div>
-       <div class="box-ok">${d('ตั้ง cx + d ให้เท่ากับตัวเลข หา x แล้วแทนใน ax + b — ประหยัดเวลามากเมื่อโจทย์ถามค่าที่จุดเดียว', 'Set cx + d equal to the number, find x, and put it in ax + b — a big time saver when only one value is asked.')}</div>`);
-  makeLump(document.getElementById('w-lump'));
-  makePredict(document.getElementById('w-trq'), TRP.map(trItem), { label: T('โจทย์', 'Problem'), prompt: T('ดูโจทย์แล้วทายก่อน — จากนั้นเฉลยทีละขั้น', 'Look at the problem and guess first — then the steps appear one by one') });
-
-  document.getElementById('tab-quiz').innerHTML = card('🎯', d('แบบฝึกหัด — ทดสอบความเข้าใจ', 'Quiz — test your understanding'), '<div id="w-quiz"></div>');
-  makeQuiz(document.getElementById('w-quiz'), QUIZ);
+  // ── แท็บ 5 ──
+  $('tab-quiz').innerHTML = card('🎯', d('แบบฝึกหัด — ทดสอบความเข้าใจ', 'Quiz — test your understanding'), '<div id="w-quiz"></div>');
+  makeQuiz($('w-quiz'), QUIZ.map(it => Object.assign({}, it, { o: it.o.map(o => typeof o === 'string' && /<|\^/.test(o) ? o : (typeof o === 'string' ? mx(o) : o)) })));
 }
 
 

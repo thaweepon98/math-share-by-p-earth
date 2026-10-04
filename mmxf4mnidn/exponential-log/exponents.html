@@ -4,7 +4,7 @@
 <script id="theme-boot">(function(){var t='light';try{t=localStorage.getItem('siteTheme')||'light'}catch(e){}document.documentElement.setAttribute('data-theme',t==='dark'?'dark':'light')})();</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>สื่อการสอน : ฟังก์ชันผกผัน ม.4</title>
+<title>สื่อการสอน : เลขยกกำลัง ม.4</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Anuphan:wght@300;400;500;600;700&display=swap');
 
@@ -286,7 +286,7 @@
     .so-bins { grid-template-columns: 1fr; }
   }
 /* ── theme:start — สร้างโดย tools/build_lessons.py ห้ามแก้มือ (แก้ที่สคริปต์แล้วรันใหม่) ── */
-:root{ --page:#BE185D; }
+:root{ --page:#A3237E; }
 :root[data-theme="light"]{
   --bg:#F4F4F1; --card:#FFFFFF; --text:#16181A; --muted:#5E6166; --border:#DEDED8;
   --primary:color-mix(in srgb, var(--page) 86%, #000); --primary-2:color-mix(in srgb, var(--page) 62%, #000);
@@ -301,7 +301,7 @@
 }
 :root[data-theme="dark"]{
   --bg:#121212; --card:#1C1C1C; --text:#FFFFFF; --muted:#B3B3B3; --border:#333333;
-  --primary:#ec79a9; --primary-2:#f19dc0;
+  --primary:#e481c7; --primary-2:#eba3d6;
   --secondary:#FFB37A; --secondary-light:#FFD0A8; --accent:#8AF25E; --accent-2:#5BD27E;
   --shadow:0 8px 24px rgba(0,0,0,.5);
   --strong:color-mix(in srgb, var(--page) 48%, #1C1C1C); --chip:#2A2A2A; --chip-hover:#353535;
@@ -422,33 +422,32 @@ input[type=range]{ accent-color:var(--primary); }
 <body>
 
 <header>
-  <div class="lesson-cover" aria-hidden="true"><svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"><rect width="120" height="120" fill="#BE185D"/><circle cx="14" cy="16" r="46" fill="#000" fill-opacity=".14"/><g fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 100 L100 20" stroke-dasharray="4 5" stroke-opacity=".45" stroke-width="2"/><path d="M20.0,100.0 L21.0,100.0 L22.0,100.0 L23.0,99.9 L24.0,99.8 L25.0,99.7 L26.0,99.5 L27.0,99.4 L28.0,99.2 L29.0,99.0 L30.0,98.8 L31.0,98.5 L32.0,98.2 L33.0,97.9 L34.0,97.5 L35.0,97.2 L36.0,96.8 L37.0,96.4 L38.0,96.0 L39.0,95.5 L40.0,95.0 L41.0,94.5 L42.0,94.0 L43.0,93.4 L44.0,92.8 L45.0,92.2 L46.0,91.5 L47.0,90.9 L48.0,90.2 L49.0,89.5 L50.0,88.8 L51.0,88.0 L52.0,87.2 L53.0,86.4 L54.0,85.5 L55.0,84.7 L56.0,83.8 L57.0,82.9 L58.0,82.0 L59.0,81.0 L60.0,80.0 L61.0,79.0 L62.0,78.0 L63.0,76.9 L64.0,75.8 L65.0,74.7 L66.0,73.6 L67.0,72.4 L68.0,71.2 L69.0,70.0 L70.0,68.8 L71.0,67.5 L72.0,66.2 L73.0,64.9 L74.0,63.5 L75.0,62.2 L76.0,60.8 L77.0,59.4 L78.0,58.0 L79.0,56.5 L80.0,55.0 L81.0,53.5 L82.0,51.9 L83.0,50.4 L84.0,48.8 L85.0,47.2 L86.0,45.6 L87.0,43.9 L88.0,42.2 L89.0,40.5 L90.0,38.8 L91.0,37.0 L92.0,35.2 L93.0,33.4 L94.0,31.5 L95.0,29.7 L96.0,27.8 L97.0,25.9 L98.0,24.0 L99.0,22.0 L100.0,20.0" stroke-width="3.8"/><path d="M20.0,100.0 L20.0,99.0 L20.1,98.0 L20.1,97.0 L20.2,96.0 L20.3,95.0 L20.4,94.0 L20.6,93.0 L20.8,92.0 L21.0,91.0 L21.2,90.0 L21.5,89.0 L21.8,88.0 L22.1,87.0 L22.4,86.0 L22.8,85.0 L23.2,84.0 L23.6,83.0 L24.1,82.0 L24.5,81.0 L25.0,80.0 L25.5,79.0 L26.1,78.0 L26.6,77.0 L27.2,76.0 L27.8,75.0 L28.5,74.0 L29.1,73.0 L29.8,72.0 L30.5,71.0 L31.2,70.0 L32.0,69.0 L32.8,68.0 L33.6,67.0 L34.5,66.0 L35.3,65.0 L36.2,64.0 L37.1,63.0 L38.0,62.0 L39.0,61.0 L40.0,60.0 L41.0,59.0 L42.0,58.0 L43.1,57.0 L44.2,56.0 L45.3,55.0 L46.4,54.0 L47.6,53.0 L48.8,52.0 L50.0,51.0 L51.2,50.0 L52.5,49.0 L53.8,48.0 L55.1,47.0 L56.5,46.0 L57.8,45.0 L59.2,44.0 L60.6,43.0 L62.0,42.0 L63.5,41.0 L65.0,40.0 L66.5,39.0 L68.1,38.0 L69.6,37.0 L71.2,36.0 L72.8,35.0 L74.4,34.0 L76.1,33.0 L77.8,32.0 L79.5,31.0 L81.2,30.0 L83.0,29.0 L84.8,28.0 L86.6,27.0 L88.5,26.0 L90.3,25.0 L92.2,24.0 L94.1,23.0 L96.0,22.0 L98.0,21.0 L100.0,20.0" stroke-width="3.8" stroke-opacity=".6"/><circle cx="76.0" cy="60.8" r="4.5" fill="#fff" stroke="none"/><circle cx="59.2" cy="44.0" r="4.5" fill="#fff" stroke="none"/></g></svg></div>
+  <div class="lesson-cover" aria-hidden="true"><svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"><rect width="120" height="120" fill="#A3237E"/><circle cx="104" cy="108" r="46" fill="#000" fill-opacity=".14"/><g fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><text x="50" y="84" font-size="64" font-weight="700" fill="#fff" stroke="none" text-anchor="middle" font-family="Anuphan, system-ui, sans-serif" font-style="italic">a</text><text x="86" y="50" font-size="30" font-weight="700" fill="#fff" stroke="none" text-anchor="middle" font-family="Anuphan, system-ui, sans-serif" font-style="italic">m</text><path d="M76 58 L104 58" stroke-width="3"/><text x="90" y="84" font-size="26" font-weight="700" fill="#fff" stroke="none" text-anchor="middle" font-family="Anuphan, system-ui, sans-serif" font-style="italic">n</text></g></svg></div>
+  <a href="./index.html" class="back-link" data-th="← กลับหน้าเอกซ์โพเนนเชียลและลอการิทึม" data-en="← Back to Exponential &amp; Logarithm">← กลับหน้าเอกซ์โพเนนเชียลและลอการิทึม</a>
   <button id="themeToggle" class="theme-toggle" type="button" onclick="toggleTheme()" title="สลับโหมดสว่าง/มืด" aria-label="สลับโหมดสว่าง/มืด"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6"/></svg></button>
   <button id="langToggle" class="lang-toggle" onclick="toggleLang()">EN</button>
-  <h1 data-th="ฟังก์ชันผกผัน" data-en="Inverse Functions">ฟังก์ชันผกผัน</h1>
-  <p data-th="สลับ x, y แล้วจัดรูป • กราฟสะท้อนรอบเส้น y = x • มีอินเวอร์สเมื่อ f เป็นหนึ่งต่อหนึ่ง • ทริก f(ax+b) • ม.4" data-en="Swap x, y and solve • graphs mirror in y = x • exists exactly when f is one-to-one • the f(ax+b) trick">สลับ x, y แล้วจัดรูป • กราฟสะท้อนรอบเส้น y = x • มีอินเวอร์สเมื่อ f เป็นหนึ่งต่อหนึ่ง • ทริก f(ax+b) • ม.4</p>
+  <h1 data-th="เลขยกกำลัง" data-en="Exponents">เลขยกกำลัง</h1>
+  <p data-th="ทบทวนสมบัติ Expo ข้อ 1–7 • เลขชี้กำลัง 1/n • เลขชี้กำลังเศษส่วน m/n • เลขชี้กำลังเป็นจำนวนจริง • ม.4" data-en="Review of exponent laws 1–7 • exponent 1/n • fractional exponents m/n • real exponents">ทบทวนสมบัติ Expo ข้อ 1–7 • เลขชี้กำลัง 1/n • เลขชี้กำลังเศษส่วน m/n • เลขชี้กำลังเป็นจำนวนจริง • ม.4</p>
 </header>
 
 <nav>
-  <button class="tab-btn active" onclick="showTab('idea', this)" data-th="แนวคิดและวิธีหา" data-en="Idea and Method">แนวคิดและวิธีหา</button>
-  <button class="tab-btn" onclick="showTab('graph', this)" data-th="กราฟสะท้อน" data-en="Mirror Graph">กราฟสะท้อน</button>
-  <button class="tab-btn" onclick="showTab('exist', this)" data-th="เมื่อไรมีอินเวอร์ส" data-en="When It Exists">เมื่อไรมีอินเวอร์ส</button>
-  <button class="tab-btn" onclick="showTab('dr', this)" data-th="D และ R สลับกัน" data-en="D and R Swap">D และ R สลับกัน</button>
-  <button class="tab-btn" onclick="showTab('trick', this)" data-th="ทริก f(ax+b)" data-en="The f(ax+b) Trick">ทริก f(ax+b)</button>
+  <button class="tab-btn active" onclick="showTab('review', this)" data-th="ทบทวนข้อ 1–7" data-en="Laws 1–7">ทบทวนข้อ 1–7</button>
+  <button class="tab-btn" onclick="showTab('unit', this)" data-th="เลขชี้กำลัง 1/n" data-en="Exponent 1/n">เลขชี้กำลัง 1/n</button>
+  <button class="tab-btn" onclick="showTab('frac', this)" data-th="เลขชี้กำลัง m/n" data-en="Exponent m/n">เลขชี้กำลัง m/n</button>
+  <button class="tab-btn" onclick="showTab('real', this)" data-th="เลขชี้กำลังจำนวนจริง" data-en="Real Exponents">เลขชี้กำลังจำนวนจริง</button>
   <button class="tab-btn" onclick="showTab('quiz', this)" data-th="แบบฝึกหัด" data-en="Quiz">แบบฝึกหัด</button>
 </nav>
 
 <main>
-  <section id="tab-idea" class="tab-panel active"></section>
-  <section id="tab-graph" class="tab-panel"></section>
-  <section id="tab-exist" class="tab-panel"></section>
-  <section id="tab-dr" class="tab-panel"></section>
-  <section id="tab-trick" class="tab-panel"></section>
+  <section id="tab-review" class="tab-panel active"></section>
+  <section id="tab-unit" class="tab-panel"></section>
+  <section id="tab-frac" class="tab-panel"></section>
+  <section id="tab-real" class="tab-panel"></section>
   <section id="tab-quiz" class="tab-panel"></section>
 </main>
 
 <script>
-const PAGE_TITLE = { th: "สื่อการสอน : ฟังก์ชันผกผัน ม.4", en: "Teaching Aid: Inverse Functions" };
+const PAGE_TITLE = { th: "สื่อการสอน : เลขยกกำลัง ม.4", en: "Teaching Aid: Exponents" };
 // ══════════════ ภาษาไทย/อังกฤษ (ค่าใน data-th/data-en ถือเป็น HTML — ดู docs/adr/0002) ══════════════
 let langMemory = 'th';
 function getLang() { try { return localStorage.getItem('siteLang') || 'th'; } catch (e) { return langMemory; } }
@@ -1182,621 +1181,580 @@ function tileRow(base, n, o) {
 tileRow.html = (base, n, o) => tileRow(base, n, o).outerHTML;
 
 
-// ══════════════ ฟังก์ชันผกผัน ══════════════
-// ภาพมาก่อน · ฉากเล่าเรื่อง (makeScenes) · ทายก่อนเฉลย (makePredict) · คลิกบนกราฟ (plotPointer) — ดู docs/media-design-guide.md §3④
+// ══════════════ เลขยกกำลัง (ชิ้น ① ฉบับจัดลำดับใหม่ v2) ══════════════
+// สเปก: docs/design-exponential-log.md §7 · แท็บ review / unit / frac / real / quiz
+// ภาพมาก่อน · ฉาก (makeScenes) · ทายก่อนเฉลย (makePredict) · เกมจับคู่ · review + frac ย้ายมาจาก lesson_roots.js เดิม
+// สี: น้ำเงิน = ฐาน/แผ่นฐาน · ส้ม = ตัวเศษ(กำลัง) · เขียว = ตัวส่วน(ราก)/ผลลัพธ์ · แดง = ใช้ไม่ได้
+// ⚠️ ⁿ√ ปรากฏได้หลังแท็บ unit บอก "เขียนแทนด้วย ⁿ√a" แล้วเท่านั้น (review/unit ไม่ใช้เครื่องหมายราก)
 const I = s => `<i>${s}</i>`;
-const X = I('x'), Y = I('y');
-const INF = Infinity, iv = (lo, hi, lc, hc) => IV(lo, hi, lc, hc);
-const setStr = a => '{' + a.join(', ') + '}';
-const fi = '<i>f</i><sup>−1</sup>';
-const cbrt = s => `<sup>3</sup>${rt(s)}`;
-const YN = [T('✓ ใช่', '✓ Yes'), T('✗ ไม่ใช่', '✗ No')];
-const FN2 = [T('✓ เป็นฟังก์ชัน', '✓ A function'), T('✗ ไม่เป็นฟังก์ชัน', '✗ Not a function')];
-const pr2 = (x, y) => `(${mn(x)}, ${mn(y)})`;
-// รายการ "a, b และ c" — ต้องระบุภาษา l เพราะ T(th, en) ถูกสร้างตอนโหลดหน้า
-const listAnd = (a, l) => { const t = a.map(v => typeof v === 'number' ? num(v) : v), and = l === 'en' ? ' and ' : ' และ '; return t.length < 3 ? t.join(and) : t.slice(0, -1).join(', ') + and + t[t.length - 1]; };
+const X = I('x'), Y = I('y'), A_ = I('a'), B_ = I('b'), M_ = I('m'), N_ = I('n');
+const SI = s => `<tspan font-style="italic">${s}</tspan>`;                      // ตัวเอียงในข้อความ SVG
+const sPow = (b, e, rest) => `${b}<tspan dy="-6" font-size="11">${e}</tspan><tspan dy="6">${rest || '​'}</tspan>`;   // ตัวยกในข้อความ SVG
+const clamp01 = t => Math.max(0, Math.min(1, t));
+const RR = `<span style="font-family:'Cambria Math','STIX Two Math','Segoe UI Symbol',serif;font-weight:700">ℝ</span>`;
+const SRR = `<tspan font-family="'Cambria Math','STIX Two Math','Segoe UI Symbol',serif" font-weight="700">ℝ</tspan>`;
+// รากในร้อยแก้ว/ข้อความ SVG/ตัวเลือก = ข้อความธรรมดา (ไม่ใช้ nrt/rt) : pr(3, '(−8)') = ∛(−8)
+const SUPD = '⁰¹²³⁴⁵⁶⁷⁸⁹';
+const pr = (n, s) => (n === 2 ? '√' : n === 3 ? '∛' : n === 4 ? '∜' : SUPD[n] + '√') + s;
+const rzIt = h => `<span class="rz-it">${h}</span>`;
+const rzLine = (parts, cls, op) => `<div class="rz-line ${cls || ''}"${op !== undefined && !Array.isArray(op) ? ` style="opacity:${op}"` : ''}>${parts.map((p, i) => `<span class="rz-it"${Array.isArray(op) && op[i] !== undefined ? ` style="opacity:${op[i]}"` : ''}>${p}</span>`).join('')}</div>`;
+const rzPill = (cls, h, op) => `<span class="rz-pill ${cls}" style="opacity:${op === undefined ? 1 : op}">${h}</span>`;
+const rzP = (b, m, n) => pwr(b, frac(m, n));                                    // b^(m/n)
+const rzRes = (h, no) => `<span class="rz-res${no ? ' no' : ''}">${h}</span>`;     // กรอบผลลัพธ์
+// รากที่มีเลขกำกับรากเสมอ (แม้ n = 2) + ไฮไลต์ส่วนต่างๆ h = { n, s, i }
+const rzRoot = (n, s, h) => { h = h || {}; return `<span class="rt nrt"><span class="rt-n${h.n ? ' rz-h b' : ''}">${n}</span><span class="rt-s${h.s ? ' rz-h o' : ''}">√</span><span class="rt-in${h.i ? ' rz-h g' : ''}">${s}</span></span>`; };
+// กล่องหนึ่งเรื่อง: title (T หรือ html) + แถวภาพ/ผลในบรรทัดเดียวกัน (rows = html ของ .rz-row)
+const rzBox = (col, title, rows) => `<div class="rz-box cl-${col}">${title ? `<div class="rz-box-t">${typeof title === 'string' ? title : tx(title)}</div>` : ''}${rows}</div>`;
+const rzRow = parts => `<div class="rz-row">${parts.map(p => `<span class="rz-it">${p}</span>`).join('')}</div>`;
 
-// CSS เฉพาะชิ้นนี้ (ใช้แต่ตัวแปรธีม จึงเปลี่ยนตามโหมดสว่าง/มืดเอง) — ฉีดจาก JS เพราะห้ามแก้ base.css
-function injectCss() {
-  const s = document.createElement('style'); s.id = 'inv-css';
-  s.textContent = `
-  .sw-box { background: var(--card); border: 1.5px solid var(--border); border-radius: 12px; padding: 8px 18px; max-width: 580px; margin: 4px auto; min-height: 250px; overflow-x: auto; }
-  .sw-row { font-size: 1.5rem; font-weight: 800; line-height: 2.4; color: var(--text); text-align: left; white-space: nowrap; }
-  .sw-row.dim { opacity: .5; }
-  .sw-row .ans { font-size: 1.4rem; }
-  .sw-x, .sw-y { display: inline-block; padding: 0 7px; border-radius: 9px; border: 2px solid; line-height: 1.5; }
-  .sw-x { border-color: var(--g-blue); background: color-mix(in srgb, var(--g-blue) 18%, var(--card)); }
-  .sw-y { border-color: var(--g-curve); background: color-mix(in srgb, var(--g-curve) 20%, var(--card)); }
-  .lump { margin: 0 2px; display: inline-block; overflow: hidden; white-space: nowrap; vertical-align: bottom; padding: 0 7px; line-height: 1.5; border-radius: 9px; border: 2px solid var(--g-purple); background: color-mix(in srgb, var(--g-purple) 16%, var(--card)); }
-  .sc-svg .cv-belt { fill: var(--border); stroke: var(--muted); stroke-width: 1.5; }
-  .sc-svg .cv-chev { fill: var(--muted); }
-  .sc-svg .cv-box { fill: color-mix(in srgb, var(--g-teal) 14%, var(--card)); stroke: var(--g-teal); stroke-width: 2.4; }
-  .sc-svg .cv-br { fill: none; stroke: var(--muted); stroke-width: 2; }
-  .sc-svg .cv-ball circle { fill: color-mix(in srgb, var(--g-curve) 28%, var(--card)); stroke: var(--g-curve); stroke-width: 2.6; }
-  .sc-svg .cv-ball text { font-size: 19px; }
-  .sc-svg .dr-cell { fill: var(--card); stroke: var(--muted); stroke-width: 2; }
-  .sc-svg .dr-cell.hot { fill: color-mix(in srgb, var(--g-curve) 24%, var(--card)); stroke: var(--g-curve); }
-  .sc-svg .dr-cell.ok { stroke: var(--g-green); stroke-width: 3; }
-  .plot.pick { cursor: crosshair; }
-  .plot .try-hover { fill: none; stroke: var(--muted); stroke-width: 2; stroke-dasharray: 3 3; pointer-events: none; }
-  .plot .try-hl { pointer-events: none; font-size: 12px; fill: var(--muted); }
-  .rcv { margin-top: 6px; }
-  `;
-  document.head.appendChild(s);
+// ───────── ตัวช่วยกราฟ (ชั้น dyn ภายใน svg เดียว) ─────────
+function rzMount(el, cfg, pre) {
+  const pl = new Plot(Object.assign({ w: 520, h: 360, pad: 28 }, cfg));
+  pl.raw('<g class="dyn"></g>', true);
+  el.innerHTML = (pre || '') + pl.svg();
+  return { pl, g: el.querySelector('.dyn') };
 }
-// เฟดแถว/ก้อน HTML เข้า (ใช้ในฉากที่เป็นสมการ HTML)
-const fadeIn = (A, el, ms) => A.run(ms || 420, t => { el.style.opacity = t; el.style.transform = `translateY(${((1 - t) * 10).toFixed(1)}px)`; }, EASE.out);
-
-// ───────── แท็บ 1 การ์ด 1: สายพานย้อนกลับ ─────────
-// f(x) = 3x − 5 ประกอบด้วยเครื่อง "×3" แล้ว "−5" : ลูกบอล 2 → 6 → 1 ; f⁻¹ ถอดทีละเครื่องจากท้ายไปหน้า "+5" แล้ว "÷3" : 1 → 6 → 2
-const CV = { W: 520, H: 262, S: 50, E: 470, y: 134, bx: [150, 290], bw: 84, bt: 62, bh: 140 };
-function convBuild(root) {
-  const C = CV, m = {};
-  const svg = m.svg = sv('svg', { class: 'sc-svg', viewBox: `0 0 ${C.W} ${C.H}` }, root);
-  sv('text', { x: 18, y: 28, class: 'sc-big', text: 'f(x) = 3x − 5' }, svg);
-  sv('rect', { class: 'cv-belt', x: 16, y: C.y + 26, width: C.W - 32, height: 14, rx: 7 }, svg);
-  const chev = dir => { const g = sv('g', {}, svg); for (let i = 0; i < 11; i++) { const x = 36 + i * 44 + (dir > 0 ? 0 : 22), y = C.y + 33; sv('polygon', { class: 'cv-chev', points: dir > 0 ? `${x - 5},${y - 5} ${x + 5},${y} ${x - 5},${y + 5}` : `${x + 5},${y - 5} ${x - 5},${y} ${x + 5},${y + 5}` }, g); } return g; };
-  m.gR = chev(1); m.gL = chev(-1);
-  m.box = C.bx.map((x, i) => { const g = sv('g', {}, svg); sv('rect', { class: 'cv-box', x: x - C.bw / 2, y: C.bt, width: C.bw, height: C.bh, rx: 12 }, g); return { g, big: sv('text', { x, y: C.bt + 32, 'text-anchor': 'middle', class: 'sc-big', text: '' }, g), small: sv('text', { x, y: C.bt + 56, 'text-anchor': 'middle', class: 'sc-small', text: '' }, g) }; });
-  m.brG = sv('g', {}, svg);
-  sv('path', { class: 'cv-br', d: `M${C.bx[0] - C.bw / 2} ${C.bt - 8} v-8 H${C.bx[1] + C.bw / 2} v8` }, m.brG);
-  m.brT = sv('text', { x: (C.bx[0] + C.bx[1]) / 2, y: C.bt - 24, 'text-anchor': 'middle', class: 'sc-big', text: '' }, m.brG);
-  m.ballG = sv('g', { class: 'cv-ball' }, svg); sv('circle', { cx: 0, cy: 0, r: 21 }, m.ballG); m.ballT = sv('text', { x: 0, y: 7, 'text-anchor': 'middle', text: '' }, m.ballG);
-  m.bot = sv('text', { x: C.W / 2, y: C.H - 14, 'text-anchor': 'middle', class: 'sc-big', text: '' }, svg);
-  m.ball = (x, v, op, s) => { m.ballG.setAttribute('transform', `translate(${(+x).toFixed(1)} ${C.y}) scale(${s || 1})`); m.ballT.textContent = v; m.ballG.style.opacity = op === undefined ? 1 : op; };
-  // mode: 1 = f (ไปหน้า) · −1 = f⁻¹ (ย้อนกลับ) · 0 = ทั้งคู่ (ไปแล้วกลับ)
-  m.mode = md => {
-    const F = ['×3', '−5'], B = ['÷3', '+5'];
-    m.box.forEach((b, i) => { b.big.textContent = md === -1 ? B[i] : F[i]; b.small.textContent = md === 0 ? B[i] : ''; });
-    m.brT.textContent = md === 1 ? 'f' : md === -1 ? 'f⁻¹' : 'f⁻¹ ∘ f';
-    m.gR.style.display = md === -1 ? 'none' : ''; m.gL.style.display = md === 1 ? 'none' : '';
-  };
-  m.pose = k => {
-    m.mode(k === 0 || k === -1 ? 1 : k === 1 ? -1 : 0);
-    if (k === 0) m.ball(C.E, '1'); else m.ball(C.S, '2');
-    m.bot.textContent = k === 0 ? 'f(2) = 1' : k === 1 ? 'f⁻¹(1) = 2' : k === 2 ? 'f⁻¹(f(2)) = f⁻¹(1) = 2' : '';
-  };
-  // วิ่งผ่านสองเครื่อง ทิศ dir (+1 ไป / −1 กลับ) · ms = เวลาต่อช่วง
-  m.run = async (A, dir, ms) => {
-    const pts = dir > 0 ? [C.S, C.bx[0], C.bx[1], C.E] : [C.E, C.bx[1], C.bx[0], C.S], vals = dir > 0 ? ['2', '6', '1'] : ['1', '6', '2'];
-    m.ball(pts[0], vals[0]);
-    for (let i = 1; i <= 3; i++) {
-      const v = vals[i - 1];
-      await A.run(ms, t => m.ball(lerp(pts[i - 1], pts[i], t), v, Math.abs(lerp(pts[i - 1], pts[i], t) - (i < 3 ? pts[i] : 1e9)) < C.bw / 2 ? .6 : 1), EASE.lin);
-      if (i < 3) {
-        await A.run(300, t => m.ball(pts[i], t < .5 ? v : vals[i], .6, 1 + .3 * Math.sin(Math.PI * t)), EASE.lin);
-        await A.wait(120);
-      }
-    }
-    m.ball(pts[3], vals[2]);
-  };
-  return m;
+function rzD(pl, f, x0, x1, n) {
+  let s = '', pen = false;
+  for (let i = 0; i <= n; i++) {
+    const x = x0 + (x1 - x0) * i / n, y = f(x);
+    if (!isFinite(y) || Math.abs(y) > 1e4) { pen = false; continue; }
+    s += (pen ? 'L' : 'M') + pl.X(x) + ' ' + pl.Y(y); pen = true;
+  }
+  return s;
 }
-const convFresh = (S, k) => { S.el.innerHTML = ''; const m = convBuild(S.el); m.pose(k); return m; };
-const CONV_SCENES = [
-  { cap: T(`ลูกบอลเลข <b>2</b> วิ่งเข้าเครื่อง <i>f</i>: เครื่องแรก ×3 ได้ 6 · เครื่องที่สอง −5 ได้ 1 → <i>f</i>(2) = 1`, `Ball <b>2</b> rolls into machine <i>f</i>: the first box ×3 gives 6 · the second −5 gives 1 → <i>f</i>(2) = 1.`),
-    end: S => { convFresh(S, 0); },
-    play: async S => { const m = convFresh(S, -1); m.bot.textContent = ''; await S.anim.wait(250); await m.run(S.anim, 1, 600); m.bot.textContent = 'f(2) = 1'; } },
-  { cap: T(`กลับทิศสายพาน! ลูกบอล 1 วิ่งย้อนกลับ และต้อง<b>ถอดจากเครื่องท้ายไปเครื่องหน้า</b>: +5 ได้ 6 · แล้ว ÷3 ได้ 2 → <i>f</i><sup>−1</sup>(1) = 2 · เครื่องย้อนกลับนี้คือ <i>f</i><sup>−1</sup>(x) = ${frac('x + 5', '3')}`,
-           `Reverse the belt! Ball 1 rolls back and must <b>undo the boxes from the last to the first</b>: +5 gives 6 · then ÷3 gives 2 → <i>f</i><sup>−1</sup>(1) = 2 · this backward machine is <i>f</i><sup>−1</sup>(x) = ${frac('x + 5', '3')}.`),
-    end: S => { convFresh(S, 1); },
-    play: async S => {
-      const m = convFresh(S, 0), A = S.anim; m.bot.textContent = ''; await A.wait(300);
-      await A.run(520, t => { m.gR.style.opacity = 1 - t; m.box.forEach(b => { b.g.style.opacity = 1 - .75 * Math.sin(Math.PI * t); }); m.brG.style.opacity = 1 - Math.sin(Math.PI * t); if (t > .5 && m.brT.textContent === 'f') m.mode(-1); }, EASE.lin);
-      m.gR.style.opacity = 1; m.mode(-1); await A.wait(150);
-      await m.run(A, -1, 600); m.bot.textContent = 'f⁻¹(1) = 2';
-    } },
-  { cap: T(`วิ่งไปแล้วย้อนกลับ ได้เลขเดิมเสมอ: <i>f</i><sup>−1</sup>(<i>f</i>(2)) = 2 · <i>f</i><sup>−1</sup> "ล้าง" สิ่งที่ <i>f</i> ทำไว้`,
-           `Go forward, then come back, and you always get the starting number: <i>f</i><sup>−1</sup>(<i>f</i>(2)) = 2 · <i>f</i><sup>−1</sup> "washes out" what <i>f</i> did.`),
-    end: S => { convFresh(S, 2); },
-    play: async S => {
-      const m = convFresh(S, 1), A = S.anim; m.bot.textContent = ''; m.mode(1); await A.wait(300);
-      await m.run(A, 1, 380); m.mode(-1); await A.wait(150); await m.run(A, -1, 380); m.mode(0); m.bot.textContent = 'f⁻¹(f(2)) = f⁻¹(1) = 2';
-    } }
-];
+const rzCurve = (pl, f, x0, x1, cls, o) => { o = o || {}; return `<path class="pl-c ${cls}" d="${rzD(pl, f, x0, x1, o.n || 300)}" clip-path="url(#${pl.id})"${o.dash ? ' stroke-dasharray="7 6"' : ''}${o.op !== undefined ? ` style="opacity:${o.op}"` : ''}/>`; };
+const rzDot = (pl, x, y, cls, r, st) => `<circle class="pl-dot ${cls}" cx="${pl.X(x)}" cy="${pl.Y(y)}" r="${r || 5.5}"${st ? ` style="${st}"` : ''}/>`;
+const rzRing = (pl, x, y, cls, r) => `<circle class="pl-open ${cls}" cx="${pl.X(x)}" cy="${pl.Y(y)}" r="${r || 7}"/>`;
+const rzText = (pl, x, y, cls, html, o) => { o = o || {}; return `<text class="pl-lbl ${cls}" style="font-size:${o.fs || 15}px${o.op !== undefined ? ';opacity:' + o.op : ''}" x="${pl.X(x) + (o.dx || 0)}" y="${pl.Y(y) + (o.dy || 0)}" text-anchor="${o.anchor || 'start'}">${html}</text>`; };
+const rzSeg = (pl, x1, y1, x2, y2, cls, o) => { o = o || {}; return `<line class="pl-c ${cls}" style="stroke-width:${o.sw || 2.4}${o.solid ? '' : ';stroke-dasharray:6 5'}${o.op !== undefined ? ';opacity:' + o.op : ''}" x1="${pl.X(x1)}" y1="${pl.Y(y1)}" x2="${pl.X(x2)}" y2="${pl.Y(y2)}" clip-path="url(#${pl.id})"/>`; };
 
-// ───────── แท็บ 1 การ์ด 2: ป้าย x กับ y ลอยสลับที่ แล้วจัดรูป ─────────
-const Xs = `<span class="sw-x">${X}</span>`, Ys = `<span class="sw-y">${Y}</span>`;
-const SWR = [
-  `<i>f</i>(${X}) = 3${X} − 5`,
-  `${Ys} = 3${Xs} − 5`,
-  `${Xs} = 3${Ys} − 5`,
-  `3${Ys} = ${Xs} + 5`,
-  `${Ys} = ${frac(`${Xs} + 5`, '3')}`,
-  `${fi}(${X}) = ${ans(frac(`${X} + 5`, '3'))}`
-];
-const SWS = [{ rows: [0, 1], dim: [0] }, { rows: [1, 2], dim: [1] }, { rows: [2, 3, 4], dim: [2] }, { rows: [4, 5], dim: [4] }];
-function swDraw(el, sc, hideNew) {
-  el.innerHTML = '<div class="sw-box"></div>'; const box = el.firstChild, out = {};
-  sc.rows.forEach(i => { const r = document.createElement('div'); r.className = 'sw-row' + (sc.dim.includes(i) ? ' dim' : ''); r.innerHTML = SWR[i]; if (hideNew && !sc.dim.includes(i)) r.style.opacity = 0; box.appendChild(r); out[i] = r; });
-  return out;
+// ───────── แผ่นฐานที่คุมความจางของแต่ละแผ่นได้ (หน้าตาเหมือน tileRow) ─────────
+const RZCL = { b: 'blue', o: 'orange', g: 'green', p: 'purple', r: 'red', t: 'teal' };
+function rzTiles(base, n, cls, o) {
+  o = o || {}; const op = o.op || (() => 1);
+  let h = '';
+  for (let i = 0; i < n; i++) {
+    const v = op(i), sc = o.sc ? o.sc(i) : 1;
+    h += `<span class="tl-tile" style="opacity:${(+v).toFixed(3)}${sc !== 1 ? `;transform:scale(${sc.toFixed(3)})` : ''}">${mx(base)}</span>`;
+    if (o.gap && [].concat(o.gap).includes(i + 1) && i + 1 < n) h += '<span class="tl-gap"></span>';
+  }
+  return `<div class="tl-row cl-${RZCL[cls] || cls}" style="--tl:${o.size || 38}px">${h}</div>`;
 }
-const SW_SCENES = [
-  { cap: T(`<i>f</i>(x) คือ "ผลลัพธ์" ของ <i>f</i> ดังนั้นเขียนเป็น <b>y</b> ได้เลย: y = 3x − 5 (x = อินพุต, y = เอาต์พุต)`, `<i>f</i>(x) is the output of <i>f</i>, so just write it as <b>y</b>: y = 3x − 5 (x = input, y = output).`),
-    end: S => { swDraw(S.el, SWS[0]); },
-    play: async S => { const r = swDraw(S.el, SWS[0], true); await fadeIn(S.anim, r[0], 1); r[0].style.opacity = .5; await S.anim.wait(250); await fadeIn(S.anim, r[1]); } },
-  { cap: T(`ย้อนกลับ = อินพุตกับเอาต์พุต<b>สลับบทบาท</b> → ป้าย x กับ y ลอยสลับที่กัน: x = 3y − 5`, `Going backwards = input and output <b>swap roles</b> → the labels x and y float past each other: x = 3y − 5.`),
-    end: S => { swDraw(S.el, SWS[1]); },
-    play: async S => {
-      const r = swDraw(S.el, SWS[1], true), A = S.anim, row = r[2];
-      row.innerHTML = SWR[1]; await fadeIn(A, row, 380); await A.wait(500);
-      const xs = row.querySelector('.sw-x'), ys = row.querySelector('.sw-y'), rx = xs.getBoundingClientRect(), ry = ys.getBoundingClientRect(), dx = (ry.left + ry.width / 2) - (rx.left + rx.width / 2);
-      await A.run(1300, t => { const lift = Math.sin(Math.PI * t) * 26; xs.style.transform = `translate(${(dx * t).toFixed(1)}px, ${(-lift).toFixed(1)}px)`; ys.style.transform = `translate(${(-dx * t).toFixed(1)}px, ${lift.toFixed(1)}px)`; });
-      row.innerHTML = SWR[2];
-    } },
-  { cap: T(`จัดรูปให้ y อยู่คนเดียว: ย้าย −5 ไปบวกอีกฝั่ง → 3y = x + 5 · แล้วหารด้วย 3 → y = ${frac('x + 5', '3')}`, `Solve for y: move −5 across → 3y = x + 5 · then divide by 3 → y = ${frac('x + 5', '3')}.`),
-    end: S => { swDraw(S.el, SWS[2]); },
-    play: async S => { const r = swDraw(S.el, SWS[2], true), A = S.anim; await fadeIn(A, r[3]); await A.wait(450); await fadeIn(A, r[4]); } },
-  { cap: T(`y ตัวนี้คืออินเวอร์สของ f จึงเปลี่ยนชื่อกลับเป็น <i>f</i><sup>−1</sup>(x) = ${frac('x + 5', '3')} · ตรวจ: f(2) = 1 และ <i>f</i><sup>−1</sup>(1) = (1 + 5)/3 = 2 ✓`, `This y is the inverse of f, so rename it <i>f</i><sup>−1</sup>(x) = ${frac('x + 5', '3')} · check: f(2) = 1 and <i>f</i><sup>−1</sup>(1) = (1 + 5)/3 = 2 ✓.`),
-    end: S => { swDraw(S.el, SWS[3]); },
-    play: async S => { const r = swDraw(S.el, SWS[3], true); await fadeIn(S.anim, r[5], 600); } }
-];
+const rzPop = (p, n) => i => clamp01(p * n - i);                 // แผ่นโผล่ทีละแผ่นตามความคืบหน้า p
 
-// ตัวอย่างวิธีคิด (คงไว้: เป็น "ขั้น" ไม่ใช่ "ฉาก")
-const MET = [
-  { label: 'f(x) = 5 − 2x', rows: () => [
-      { h: T(`${Y} = 5 − 2x`, `${Y} = 5 − 2x`), n: T('เขียน f(x) เป็น y ก่อน', 'write f(x) as y first') },
-      { h: T(`สลับ x ↔ y : &nbsp; x = 5 − 2y`, `Swap x ↔ y : &nbsp; x = 5 − 2y`), n: T('อินพุตกับเอาต์พุตสลับบทบาทกัน', 'input and output swap roles') },
-      { h: T(`จัดรูปให้ y อยู่คนเดียว : &nbsp; 2y = 5 − x → y = ${frac('5 − x', 2)}`, `Solve for y : &nbsp; 2y = 5 − x → y = ${frac('5 − x', 2)}`) },
-      { h: T(`${fi}(x) = ${ans(frac('5 − x', 2))}`, `${fi}(x) = ${ans(frac('5 − x', 2))}`), n: T('ตรวจ: f(f⁻¹(x)) = 5 − 2·(5 − x)/2 = x ✓', 'check: f(f⁻¹(x)) = 5 − 2·(5 − x)/2 = x ✓') }] },
-  { label: 'f(x) = (2x + 1)/(x − 3)', rows: () => [
-      { h: T(`${Y} = ${frac('2x + 1', 'x − 3')} &nbsp; (x ≠ 3)`, `${Y} = ${frac('2x + 1', 'x − 3')} &nbsp; (x ≠ 3)`) },
-      { h: T(`สลับ x ↔ y : &nbsp; x = ${frac('2y + 1', 'y − 3')}`, `Swap x ↔ y : &nbsp; x = ${frac('2y + 1', 'y − 3')}`) },
-      { h: T(`x(y − 3) = 2y + 1 → xy − 3x = 2y + 1 → xy − 2y = 3x + 1`, `x(y − 3) = 2y + 1 → xy − 3x = 2y + 1 → xy − 2y = 3x + 1`), n: T('ย้ายพจน์ที่มี y ไปฝั่งเดียวกัน', 'collect the y-terms on one side') },
-      { h: T(`y(x − 2) = 3x + 1 → y = ${frac('3x + 1', 'x − 2')}`, `y(x − 2) = 3x + 1 → y = ${frac('3x + 1', 'x − 2')}`) },
-      { h: T(`${fi}(x) = ${ans(frac('3x + 1', 'x − 2'))} , &nbsp; x ≠ 2`, `${fi}(x) = ${ans(frac('3x + 1', 'x − 2'))} , &nbsp; x ≠ 2`), n: T('x ≠ 2 ตรงกับ R<sub>f</sub> = ℝ − {2} (ดูแท็บ D และ R สลับกัน)', 'x ≠ 2 matches R<sub>f</sub> = ℝ − {2} (see the "D and R swap" tab)') }] },
-  { label: 'f(x) = x² + 2 , x ≥ 0', rows: () => [
-      { h: T(`${Y} = x² + 2 , &nbsp; D<sub>f</sub> = [0, ∞)`, `${Y} = x² + 2 , &nbsp; D<sub>f</sub> = [0, ∞)`), n: T('โดเมนที่จำกัดไว้ทำให้ f เป็น 1-1 จึงหาอินเวอร์สได้', 'the restricted domain makes f one-to-one, so an inverse exists') },
-      { h: T(`สลับ x ↔ y : &nbsp; x = y² + 2 → y² = x − 2`, `Swap x ↔ y : &nbsp; x = y² + 2 → y² = x − 2`) },
-      { h: T(`y = ±${rt('x − 2')} → ต้องเลือก <b>ตัวเดียว</b>`, `y = ±${rt('x − 2')} → we must pick <b>one</b> sign`), n: T('y ของอินเวอร์ส คือ x ของ f ซึ่ง x ≥ 0 → เลือกค่าบวก (R<sub>f⁻¹</sub> = D<sub>f</sub>)', 'the inverse\'s y is f\'s x, which is ≥ 0 → pick the positive root (R<sub>f⁻¹</sub> = D<sub>f</sub>)') },
-      { h: T(`${fi}(x) = ${ans(rt('x − 2'))} , &nbsp; D<sub>f⁻¹</sub> = R<sub>f</sub> = [2, ∞)`, `${fi}(x) = ${ans(rt('x − 2'))} , &nbsp; D<sub>f⁻¹</sub> = R<sub>f</sub> = [2, ∞)`) }] },
-  { label: 'f(x) = √(x − 1)', rows: () => [
-      { h: T(`${Y} = ${rt('x − 1')} , &nbsp; D<sub>f</sub> = [1, ∞) , R<sub>f</sub> = [0, ∞)`, `${Y} = ${rt('x − 1')} , &nbsp; D<sub>f</sub> = [1, ∞) , R<sub>f</sub> = [0, ∞)`) },
-      { h: T(`สลับ x ↔ y : &nbsp; x = ${rt('y − 1')} → x² = y − 1 → y = x² + 1`, `Swap x ↔ y : &nbsp; x = ${rt('y − 1')} → x² = y − 1 → y = x² + 1`), n: T('ยกกำลังสองทั้งสองข้างเพื่อกำจัดรูท', 'square both sides to remove the root') },
-      { h: T(`${fi}(x) = ${ans('x² + 1')} , &nbsp; แต่ ${ans('x ≥ 0')}`, `${fi}(x) = ${ans('x² + 1')} , &nbsp; but ${ans('x ≥ 0')}`), n: T('ห้ามลืมโดเมน: D<sub>f⁻¹</sub> = R<sub>f</sub> = [0, ∞) — ถ้าไม่ใส่ x² + 1 จะเป็นพาราโบลาเต็มซึ่งไม่ใช่ 1-1', 'never forget the domain: D<sub>f⁻¹</sub> = R<sub>f</sub> = [0, ∞) — without it x² + 1 is a full parabola, which is not one-to-one') }] },
-  { label: 'f(x) = x³ + 1', rows: () => [
-      { h: T(`${Y} = x³ + 1`, `${Y} = x³ + 1`) },
-      { h: T(`สลับ x ↔ y : &nbsp; x = y³ + 1 → y³ = x − 1`, `Swap x ↔ y : &nbsp; x = y³ + 1 → y³ = x − 1`) },
-      { h: T(`${fi}(x) = ${ans(cbrt('x − 1'))}`, `${fi}(x) = ${ans(cbrt('x − 1'))}`), n: T('รากที่ 3 หาได้ทุกจำนวนจริง จึงไม่ต้องจำกัดโดเมน', 'a cube root exists for every real number, so no domain restriction is needed') }] }
-];
+const RZ_CSS = `
+.rz-eq { text-align: center; font-size: 2rem; font-weight: 800; color: var(--primary); line-height: 2.1; margin: 6px 0; }
+.rz-line { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 2px 14px; font-size: 1.55rem; font-weight: 800; color: var(--primary); line-height: 1.95; margin: 2px 0; }
+.rz-line.sm { font-size: 1.15rem; line-height: 1.8; }
+.rz-line.lg { font-size: 2.1rem; }
+.rz-it { display: inline-block; white-space: nowrap; }
+.rz-stage { display: flex; flex-direction: column; align-items: center; gap: 6px; min-height: 280px; padding: 10px 0; }
+.rz-pills { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; min-height: 38px; margin: 4px 0; }
+.rz-pill { display: inline-block; padding: 4px 14px; border: 2px solid var(--border); border-radius: 30px; font-weight: 700; font-size: .95rem; background: var(--card); color: var(--text); }
+.rz-pill.g { border-color: var(--g-green); background: color-mix(in srgb, var(--g-green) 16%, var(--card)); }
+.rz-pill.o { border-color: var(--g-curve); background: color-mix(in srgb, var(--g-curve) 16%, var(--card)); }
+.rz-pill.b { border-color: var(--g-blue); background: color-mix(in srgb, var(--g-blue) 16%, var(--card)); }
+.rz-pill.r { border-color: var(--g-red); background: color-mix(in srgb, var(--g-red) 16%, var(--card)); }
+.rz-hn { background: color-mix(in srgb, var(--g-curve) 42%, transparent); border-radius: 4px; color: var(--text); }
+.rz-hd { background: color-mix(in srgb, var(--g-green) 42%, transparent); border-radius: 4px; color: var(--text); }
+.rz-h { border-radius: 5px; color: var(--text); }
+.rz-h.b { background: color-mix(in srgb, var(--g-blue) 40%, transparent); }
+.rz-h.o { background: color-mix(in srgb, var(--g-curve) 40%, transparent); }
+.rz-h.g { background: color-mix(in srgb, var(--g-green) 40%, transparent); }
+.rz-line.lg sup.fx { font-size: .82em; margin-left: 3px; }
+.rz-line.lg sup.fx .frac .num, .rz-line.lg sup.fx .frac .den { padding-left: 4px; padding-right: 4px; }
+.rz-read { font-weight: 700; line-height: 1.7; }
+.rz-read .rz-line { margin-top: 6px; }
+.rt { line-height: 1.2; }
+.rt .rt-in { padding-top: 1px; }
+.rz-note { font-size: .95rem; font-weight: 600; color: var(--muted); text-align: center; }
+.rv { display: flex; flex-direction: column; gap: 10px; }
+.rv-row { display: grid; grid-template-columns: 62px minmax(150px, 1fr) minmax(230px, 1.5fr); gap: 6px 14px; align-items: center; padding: 10px 12px; border: 2px solid var(--border); border-radius: 14px; background: var(--card); }
+.rv-no { min-width: 50px; height: 28px; padding: 0 10px; border-radius: 8px; background: var(--card); color: var(--primary); border: 2.5px solid var(--primary); font-weight: 800; font-size: .9rem; display: inline-flex; align-items: center; justify-content: center; white-space: nowrap; }
+.rv-f { font-size: 1.25rem; font-weight: 800; color: var(--primary); line-height: 2; }
+.rv-ex .rv-vis { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; }
+.rv-ex .rv-note { font-size: .88rem; font-weight: 600; color: var(--muted); margin-top: 2px; line-height: 1.5; }
+.rv-ex .frac .num, .rv-ex .frac .den { min-width: 0; }
+.rv-ex .frac { margin: 0 2px; }
+.rv-side { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 6px 10px; padding: 6px 4px; }
+.rv-tag { font-size: .9rem; font-weight: 700; color: var(--muted); }
+.rv-cnt { font-weight: 800; font-size: 1.05rem; padding: 2px 12px; border-radius: 20px; border: 2px solid var(--g-green); background: color-mix(in srgb, var(--g-green) 16%, var(--card)); color: var(--text); }
+.rv-cnt.no { border-color: var(--g-red); background: color-mix(in srgb, var(--g-red) 14%, var(--card)); }
+.rv-vs { text-align: center; font-size: 1.6rem; font-weight: 800; color: var(--muted); }
+.rv-vs.no { color: var(--g-red); } .rv-vs.ok { color: var(--g-green); }
+.rz-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 8px 0; }
+.rz-card { border: 2.5px solid var(--border); border-radius: 14px; padding: 10px 8px 12px; text-align: center; background: var(--card); }
+.rz-card.ok { border-color: var(--g-green); background: color-mix(in srgb, var(--g-green) 11%, var(--card)); }
+.rz-card.no { border-color: var(--g-red); background: color-mix(in srgb, var(--g-red) 10%, var(--card)); }
+.rz-card .rz-q { font-weight: 700; line-height: 1.6; min-height: 3.2em; }
+.rz-tab { border-collapse: collapse; margin: 8px auto; font-weight: 700; }
+.rz-tab td, .rz-tab th { border: 2px solid var(--border); padding: 6px 14px; text-align: center; }
+.rz-tab th { background: color-mix(in srgb, var(--g-green) 14%, var(--card)); }
+.rz-tab tr.win td { background: color-mix(in srgb, var(--g-green) 18%, var(--card)); }
+.rz-tab tr.lose td { background: color-mix(in srgb, var(--g-red) 10%, var(--card)); }
+.ar-svg { max-width: 520px; }
+.ft-chips .chip { font-size: 1.25rem; padding: 6px 18px; }
+.ft-chips .chip.bad { border-color: var(--g-red) !important; background: color-mix(in srgb, var(--g-red) 16%, var(--card)) !important; color: var(--text) !important; animation: mtShake .45s ease; }
+.ft-chips .chip.good { border-color: var(--g-green); background: color-mix(in srgb, var(--g-green) 20%, var(--card)); color: var(--text); }
+.rz-box { border: 2.5px solid var(--cc, var(--border)); border-radius: 14px; background: color-mix(in srgb, var(--cc, var(--card)) 9%, var(--card)); padding: 8px 14px 10px; margin: 10px 0; }
+.rz-box-t { font-weight: 800; font-size: .92rem; color: var(--muted); text-align: center; margin-bottom: 2px; line-height: 1.5; }
+.rz-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 4px 12px; font-size: 1.3rem; font-weight: 800; color: var(--primary); line-height: 2; }
+.rz-row .tl-row { margin: 0; flex-wrap: nowrap; }
+.rz-res { display: inline-block; padding: 0 12px; border: 2.5px solid var(--g-green); border-radius: 10px; background: color-mix(in srgb, var(--g-green) 16%, var(--card)); color: var(--text); white-space: nowrap; }
+.rz-res.no { border-color: var(--g-red); background: color-mix(in srgb, var(--g-red) 14%, var(--card)); }
+.rz-grps { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; margin: 4px 0; }
+.rz-grp { padding: 6px 8px; border: 2px dashed var(--muted); border-radius: 12px; }
+.rz-grp.hi { border: 2.5px solid var(--g-green); background: color-mix(in srgb, var(--g-green) 12%, var(--card)); }
+.rz-grp .tl-row { margin: 0; }
+.rz-bar { display: flex; width: 100%; max-width: 520px; height: 46px; border-radius: 12px; overflow: hidden; border: 2px solid var(--border); margin: 6px auto; }
+.rz-bar > div { display: flex; align-items: center; justify-content: center; font-weight: 800; color: var(--text); white-space: nowrap; overflow: hidden; }
+.rz-bar .sb { background: color-mix(in srgb, var(--g-blue) 30%, var(--card)); border-right: 2px solid var(--border); }
+.rz-bar .so { background: color-mix(in srgb, var(--g-curve) 30%, var(--card)); }
+.rz-vt { width: 100%; max-width: 560px; margin: 4px auto; display: flex; flex-direction: column; gap: 8px; }
+.rz-vr { display: grid; grid-template-columns: 112px 1fr 104px; gap: 8px 10px; align-items: center; font-weight: 800; color: var(--primary); }
+.rz-vr .trk { position: relative; height: 24px; border-radius: 8px; background: color-mix(in srgb, var(--muted) 14%, var(--card)); border: 2px solid var(--border); overflow: hidden; }
+.rz-vr .fill { position: absolute; left: 0; top: 0; bottom: 0; background: color-mix(in srgb, var(--g-blue) 55%, var(--card)); }
+.rz-vr.last .fill { background: color-mix(in srgb, var(--g-green) 60%, var(--card)); }
+.rz-vr .tgt { position: absolute; top: -2px; bottom: -2px; width: 0; border-left: 3px dashed var(--g-green); }
+.rz-vr .val { color: var(--text); text-align: right; white-space: nowrap; }
+@media (max-width: 700px) {
+  .rz-eq { font-size: 1.5rem; } .rz-line { font-size: 1.25rem; gap: 2px 8px; } .rz-line.lg { font-size: 1.6rem; }
+  .rv-row { grid-template-columns: 62px 1fr; } .rv-ex { grid-column: 1 / -1; }
+  .rz-cards { grid-template-columns: 1fr; }
+  .rz-row { font-size: 1.1rem; } .rz-vr { grid-template-columns: 84px 1fr 78px; font-size: .9rem; }
+}`;
 
-// ───────── แท็บ 2: กราฟสะท้อน ─────────
-// f พับตามเส้น y = x : จุด (x, y) → m + cos(πt)·(ส่วนตั้งฉาก) ; t = 0 ที่เดิม, t = 1 ที่ (y, x)  (มองจากด้านบนของกระดาษที่พับ)
-const foldPt = (x, y, c) => { const m = (x + y) / 2, h = (x - y) / 2; return [m + c * h, m - c * h]; };
-const GF = [
-  { eq: 'y = 2x − 1', f: x => 2 * x - 1, segs: [[-2.4, 3.4]], one: true, inv: `${frac('x + 1', '2')}`, pts: [[0, -1], [2, 3], [3, 5]] },
-  { eq: 'y = x³ + 2', f: x => x * x * x + 2, segs: [[-2, 1.58]], one: true, inv: cbrt('x − 2'), pts: [[-1, 1], [0, 2], [1, 3]] },
-  { eq: 'y = x² , x ≥ 0', f: x => x * x, segs: [[0, 2.449]], one: true, inv: rt('x'), pts: [[2, 4]] },
-  { eq: `y = ${rt('x')}`, f: x => Math.sqrt(x), segs: [[0, 6]], one: true, inv: 'x<sup>2</sup> , x ≥ 0', pts: [[4, 2]] },
-  { eq: 'y = x²', f: x => x * x, segs: [[-2.449, 2.449]], one: false, inv: null, pts: [[-2, 4], [2, 4]] }
-];
-const gEq = g => g.eq.replace('x²', 'x<sup>2</sup>').replace('x³', 'x<sup>3</sup>').replace(/√x/, rt('x'));
-const gPlot = () => new Plot({ w: 460, h: 460, xmin: -6, xmax: 6, ymin: -6, ymax: 6, pad: 28, lx: 2, ly: 2 });
-function foldBuild(root, g) {
-  const pl = gPlot(), m = { pl };
-  pl.dash(-9, -9, 9, 9, 's-muted'); pl.text(5.1, 5.6, 'y = x', '', 'middle');
-  root.innerHTML = pl.svg();
-  const svg = m.svg = root.querySelector('svg'), lay = sv('g', { 'clip-path': `url(#${pl.id})` }, svg), top = sv('g', {}, svg);
-  const col = g.one ? 'orange' : 'red';
-  const dpath = c => g.segs.map(sg => { let s = ''; for (let i = 0; i <= 140; i++) { const u = sg[0] + (sg[1] - sg[0]) * i / 140, q = foldPt(u, g.f(u), c); s += (i ? 'L' : 'M') + pl.X(q[0]) + ' ' + pl.Y(q[1]); } return s; }).join('');
-  m.ghost = sv('path', { class: 'pl-c s-' + col, d: dpath(-1) }, lay);
-  sv('path', { class: 'pl-c s-blue', d: dpath(1) }, lay);
-  m.links = g.pts.map(p => sv('line', { class: 'pl-dash s-pink', x1: pl.X(p[0]), y1: pl.Y(p[1]), x2: pl.X(p[1]), y2: pl.Y(p[0]) }, top));
-  m.dB = g.pts.map(p => sv('circle', { class: 'pl-dot f-blue', cx: pl.X(p[0]), cy: pl.Y(p[1]), r: 6.5 }, top));
-  m.dO = g.pts.map(p => sv('circle', { class: 'pl-dot f-' + col, cx: pl.X(p[0]), cy: pl.Y(p[1]), r: 6.5 }, top));
-  m.lbB = g.pts.map(p => sv('text', { class: 'pl-lbl b', x: pl.X(p[0]) + 9, y: pl.Y(p[1]) - 9, text: pr2(p[0], p[1]) }, top));
-  m.lbO = g.pts.map(p => sv('text', { class: 'pl-lbl ' + (g.one ? 'o' : 'r'), x: pl.X(p[1]) + 9, y: pl.Y(p[0]) + 18, text: pr2(p[1], p[0]) }, top));
-  // c: ตัวคูณส่วนตั้งฉาก 1 → −1 · lab: แสดงพิกัด/เส้นเชื่อม
-  m.fold = (c, lab) => {
-    m.ghost.setAttribute('d', dpath(c)); m.ghost.style.display = c > .985 ? 'none' : '';
-    g.pts.forEach((p, i) => { const q = foldPt(p[0], p[1], c); m.dO[i].setAttribute('cx', pl.X(q[0])); m.dO[i].setAttribute('cy', pl.Y(q[1])); m.dO[i].style.display = c > .985 ? 'none' : ''; });
-    m.links.forEach(l => { l.style.display = lab ? '' : 'none'; }); m.lbB.forEach(l => { l.style.display = lab ? '' : 'none'; }); m.lbO.forEach(l => { l.style.display = lab ? '' : 'none'; });
-  };
-  m.pose = k => { m.fold(k === 0 ? 1 : -1, k >= 2); m.dB.forEach(d => { d.style.display = k >= 0 ? '' : 'none'; }); };
-  return m;
-}
-function makeFold(host) {
-  const w = { cur: 0 };
-  host.innerHTML = '<div class="chips"></div><div class="foldsc"></div>';
-  const fresh = (S, k) => { S.el.innerHTML = ''; const m = foldBuild(S.el, GF[w.cur]); m.pose(k); return m; };
-  const g = () => GF[w.cur], p0 = () => g().pts[0];
-  const scenes = [
-    { cap: () => tx(T(`กระดาษแผ่นนี้มีกราฟของ <b><i>f</i></b> (น้ำเงิน) และเส้นประ <b>y = x</b> คือ "รอยพับ"`, `This sheet shows the graph of <b><i>f</i></b> (blue); the dashed line <b>y = x</b> is the "fold".`)),
-      end: S => { fresh(S, 0); }, play: async S => { const m = fresh(S, 0); m.svg.style.opacity = 0; await S.anim.run(500, t => { m.svg.style.opacity = t; }, EASE.lin); } },
-    { cap: () => tx(T(`พับกระดาษตามรอยพับ — กราฟของ <i>f</i> ถูกพับไปทับอีกฝั่ง ได้เส้น${g().one ? 'สีส้ม' : 'สีแดง'}`, `Fold the paper along the crease — the graph of <i>f</i> flips over to the other side and lands as the ${g().one ? 'orange' : 'red'} curve.`)),
-      end: S => { fresh(S, 1); }, play: async S => { const m = fresh(S, 0); await S.anim.wait(250); await S.anim.run(2400, t => m.fold(Math.cos(Math.PI * t), false), EASE.inOut); } },
-    { cap: () => { const p = p0(), a = p[0], b = p[1]; return g().one
-        ? tx(T(`จุด ${pr2(a, b)} บน <i>f</i> ไปตกที่ ${pr2(b, a)} — <b>พิกัดสลับกัน</b> · เส้นประเชื่อมคู่จุดตั้งฉากกับรอยพับเสมอ · เส้นที่พับมาคือกราฟของ <i>f</i><sup>−1</sup>(x) = ${g().inv}`, `The point ${pr2(a, b)} on <i>f</i> lands on ${pr2(b, a)} — <b>the coordinates swap</b> · the dashed segment joining a pair is always perpendicular to the crease · the folded curve is the graph of <i>f</i><sup>−1</sup>(x) = ${g().inv}.`))
-        : tx(T(`ภาพที่พับมา (แดง) ไม่เป็นฟังก์ชัน: เส้นตั้งตัดได้ 2 จุด เช่น ${pr2(4, -2)} กับ ${pr2(4, 2)} → <b>y = x² (ทั้งเส้น) ไม่มีอินเวอร์ส</b> ลองเลือก "x² , x ≥ 0" ที่ครึ่งเดียว`, `The folded image (red) is not a function: a vertical line meets it twice, e.g. ${pr2(4, -2)} and ${pr2(4, 2)} → <b>y = x² (the whole curve) has no inverse</b>; try "x² , x ≥ 0", the half curve.`)); },
-      end: S => { fresh(S, 2); }, play: async S => { const m = fresh(S, 1); m.fold(-1, true); m.links.forEach(l => { l.style.opacity = 0; }); m.lbB.concat(m.lbO).forEach(l => { l.style.opacity = 0; }); await S.anim.run(600, t => { m.links.concat(m.lbB, m.lbO).forEach(l => { l.style.opacity = t; }); }, EASE.lin); } }
+// ═══════════════════════════════════════════════════════════════
+//  แท็บ 1 · ทบทวนสมบัติ Expo ข้อ 1–7 (ย้ายมาจาก lesson_roots.js เดิม)
+// ═══════════════════════════════════════════════════════════════
+const rvDim = i => 0.22;
+const rvT = (base, n, cls, op, size) => rzTiles(base, n, cls, { size: size || 28, op });
+function rvRows() {
+  const x2 = pwr('2', X), x3 = pwr('3', X), x6 = pwr('6', X);
+  return [
+    { f: `${pwr(A_, M_)} × ${pwr(A_, N_)} = ${pwr(A_, M_ + ' + ' + N_)}`,
+      vis: rvT('2', 3, 'b') + rvT('2', 2, 'o') + `<span class="rz-it">= ${mx(pwr('2', 3) + ' · ' + pwr('2', 2) + ' = ' + pwr('2', 5))}</span>`,
+      note: T('แผ่น 2 สามแผ่น ต่อกับอีกสองแผ่น รวมห้าแผ่น (เลขชี้กำลังบวกกัน)', '3 tiles joined to 2 tiles make 5 tiles (the exponents add)') },
+    { f: `${frac(pwr(A_, M_), pwr(A_, N_))} = ${pwr(A_, M_ + ' − ' + N_)}`,
+      vis: frac(rvT('2', 5, 'b', i => i < 2 ? .22 : 1), rvT('2', 2, 'o', rvDim)) + `<span class="rz-it">= ${mx(pwr('2', 3))}</span>`,
+      note: T('แผ่นบนกับแผ่นล่างตัดกันทีละคู่ (แผ่นจาง) เหลือ 3 แผ่น', 'Top and bottom tiles cancel in pairs (faded) — 3 tiles are left') },
+    { f: `${pwr('(' + pwr(A_, M_) + ')', N_)} = ${pwr(A_, M_ + N_)}`,
+      vis: `<div>${rvT('2', 2, 'b')}${rvT('2', 2, 'b')}${rvT('2', 2, 'b')}</div><span class="rz-it">= ${mx(pwr('(' + pwr('2', 2) + ')', 3) + ' = ' + pwr('2', 6))}</span>`,
+      note: T('แถวละ 2 แผ่น วาง 3 แถว = 6 แผ่น (เลขชี้กำลังคูณกัน)', '2 tiles per row, 3 rows = 6 tiles (the exponents multiply)') },
+    { f: `${pwr('(' + A_ + B_ + ')', M_)} = ${pwr(A_, M_)}${pwr(B_, M_)}`,
+      vis: rzTiles('2·3', 2, 'g', { size: 46 }) + `<span class="rz-it">${mx(x2 + ' · ' + x3 + ' = (2 · 3)<sup>' + X + '</sup> = ' + x6)}</span>`,
+      note: T('ตัวอย่างของครู · x = 2: 4 · 9 = 36 = 6²', 'The teacher’s example · x = 2: 4 · 9 = 36 = 6²') },
+    { f: `${pwr('(' + frac(A_, B_) + ')', M_)} = ${frac(pwr(A_, M_), pwr(B_, M_))}`,
+      vis: frac(rvT('2', 2, 'b'), rvT('3', 2, 'o')) + `<span class="rz-it">= ${mx(pwr('(' + frac(2, 3) + ')', 2) + ' = ' + frac(pwr('2', 2), pwr('3', 2)) + ' = ' + frac(4, 9))}</span>`,
+      note: T('ยกกำลังทั้งเศษและส่วน', 'The power goes on both the top and the bottom') },
+    { f: `${pwr(A_, 0)} = 1 &nbsp;<span style="font-size:.8em">(<i>a</i> ≠ 0)</span>`,
+      vis: frac(rvT('2', 3, 'b', rvDim), rvT('2', 3, 'o', rvDim)) + `<span class="rz-it">= 1 &nbsp;= ${mx(pwr('2', 3) + ' ÷ ' + pwr('2', 3) + ' = ' + pwr('2', 0))}</span>`,
+      note: T('ตัดหมดทุกคู่ แล้วเหลือ 1 (ไม่ใช่ 0) จึง a⁰ = 1', 'Every pair cancels and 1 is left (not 0), so a⁰ = 1') },
+    { f: `${pwr(A_, '−' + N_)} = ${frac(1, pwr(A_, N_))}`,
+      vis: frac(rvT('2', 2, 'b', rvDim), rvT('2', 5, 'o', i => i < 2 ? .22 : 1)) + `<span class="rz-it">= ${mx(frac(1, pwr('2', 3)) + ' = ' + pwr('2', '−3') + ' = ' + frac(1, 8))}</span>`,
+      note: T('ล่างเหลือ 3 แผ่น จึงอยู่ใต้ 1 เป็นเศษส่วน', '3 tiles are left on the bottom, so they sit under 1 as a fraction') }
   ];
-  const sc = makeScenes(host.querySelector('.foldsc'), scenes, { prompt: T('เลือกฟังก์ชัน แล้วกด ▶ ดูกระดาษถูกพับตามเส้น y = x', 'Pick a function, then press ▶ to fold the paper along y = x') });
-  w.render = () => {
-    const c = host.querySelector('.chips');
-    c.innerHTML = `<span class="chips-label">f</span>` + GF.map((e, i) => `<button class="chip${i === w.cur ? ' active' : ''}" data-i="${i}">${gEq(e)}</button>`).join('');
-    c.querySelectorAll('.chip').forEach(b => b.onclick = () => { w.cur = +b.dataset.i; w.render(); sc.go(sc.k, false); });
-  };
-  w.refresh = () => w.render();
-  LIVE.push(w); w.render();
+}
+function rvTable() {
+  return '<div class="rv">' + rvRows().map((r, i) => `<div class="rv-row"><span class="rv-no">${d('ข้อ ' + (i + 1), 'Law ' + (i + 1))}</span><div class="rv-f">${r.f}</div><div class="rv-ex"><div class="rv-vis">${r.vis}</div><div class="rv-note">${d(r.note.th, r.note.en)}</div></div></div>`).join('') + '</div>';
 }
 
-// ลองทำ: โชว์จุด (a, b) บน f ให้คลิกจุดสะท้อน (ดูดเข้าจุดจำนวนเต็ม) — ใช้ plotPointer
-const TRY = [
-  { g: 0, a: 2, b: 3 }, { g: 1, a: 1, b: 3 }, { g: 2, a: 2, b: 4 }, { g: 3, a: 4, b: 2 }, { g: 0, a: -1, b: -3 }, { g: 1, a: -1, b: 1 }
-];
-function makeTry(host) {
-  const w = { cur: 0, st: { clicked: null } };
-  host.innerHTML = '<div class="chips"></div><div class="sc-prompt"></div><div class="setrow try-eq" style="text-align:center"></div><div class="try-stage"></div><div class="try-res"></div>';
-  const q = s => host.querySelector(s);
-  const select = i => { w.cur = i; w.st = { clicked: null }; w.render(); };
-  w.render = () => {
-    const it = TRY[w.cur], g = GF[it.g], st = w.st, a = it.a, b = it.b;
-    q('.chips').innerHTML = `<span class="chips-label">${EN() ? 'Point' : 'จุดที่'}</span>` + TRY.map((_, i) => `<button class="chip${i === w.cur ? ' active' : ''}" data-i="${i}">${i + 1}</button>`).join('');
-    q('.chips').querySelectorAll('.chip').forEach(c => c.onclick = () => select(+c.dataset.i));
-    q('.sc-prompt').innerHTML = tx(T(`คลิกบนกราฟ ตรงตำแหน่งของจุดสะท้อนของ ${pr2(a, b)} รอบเส้น y = x`, `Click on the graph where the mirror image of ${pr2(a, b)} in the line y = x lies`));
-    q('.try-eq').innerHTML = `<i>f</i> : ${gEq(g)}`;
-    const pl = gPlot(), cl = st.clicked, ok = cl && cl.x === b && cl.y === a;
-    pl.dash(-9, -9, 9, 9, 's-muted'); pl.text(5.1, 5.6, 'y = x', '', 'middle');
-    g.segs.forEach(sg => pl.param(u => u, u => g.f(u), sg[0], sg[1], 's-blue', 200));
-    if (cl) {
-      g.segs.forEach(sg => pl.param(u => g.f(u), u => u, sg[0], sg[1], 's-orange', 200));
-      pl.dash(a, b, b, a, 's-pink');
-      const f = (a + b) / 2, s = .3, sg = Math.sign(a - b), ux = sg / Math.SQRT2, uy = -sg / Math.SQRT2, vx = 1 / Math.SQRT2, vy = 1 / Math.SQRT2;   // มุมฉากที่ตีนเส้นตั้งฉาก
-      pl.put(`<path class="pl-c s-pink" style="stroke-width:1.8" d="M${pl.X(f + s * ux)} ${pl.Y(f + s * uy)} L${pl.X(f + s * (ux + vx))} ${pl.Y(f + s * (uy + vy))} L${pl.X(f + s * vx)} ${pl.Y(f + s * vy)}" clip-path="url(#${pl.id})"/>`);
-      if (!ok) pl.dot(cl.x, cl.y, 'f-red', true, 7.5);
-      pl.dot(b, a, 'f-green', false, 7); pl.text(b, a, pr2(b, a), 'g', 'start', 9, 20);
-    }
-    pl.dot(a, b, 'f-blue', false, 7); pl.text(a, b, pr2(a, b), 'b', 'start', 9, -9);
-    q('.try-stage').innerHTML = pl.svg();
-    const svg = q('.try-stage svg'), res = q('.try-res');
-    if (!cl) {
-      svg.classList.add('pick');
-      const ring = sv('circle', { class: 'try-hover', r: 8, cx: -50, cy: -50 }, svg), lab = sv('text', { class: 'try-hl', x: -50, y: -50, text: '' }, svg);
-      const hide = () => { ring.setAttribute('cx', -50); lab.setAttribute('x', -50); };
-      const pp = plotPointer(svg, pl, {
-        snap: 1,
-        onHover: pt => { if (!pt.inside) { hide(); return; } ring.setAttribute('cx', pl.X(pt.x)); ring.setAttribute('cy', pl.Y(pt.y)); lab.setAttribute('x', pl.X(pt.x) + 11); lab.setAttribute('y', pl.Y(pt.y) - 9); lab.textContent = pr2(pt.x, pt.y); },
-        onClick: pt => { if (!pt.inside) return; w.st = { clicked: { x: pt.x, y: pt.y } }; w.render(); }
-      });
-      svg.style.touchAction = 'pan-y';   // ต้องการแค่การแตะ — ให้นิ้วเลื่อนหน้าจอผ่านกราฟได้
-      svg.addEventListener('pointerleave', hide);
-      res.innerHTML = '';
-    } else {
-      res.innerHTML = `<div class="verdict ${ok ? 'ok' : 'no'}"><span class="mk">${ok ? '✓' : '✗'}</span><div>` + (ok
-        ? tx(T(`ถูก! ${pr2(a, b)} ↔ ${pr2(b, a)} : พิกัดสลับกัน และสองจุดอยู่ห่างรอยพับ y = x เท่ากัน คนละฝั่ง (เส้นประตั้งฉากกับ y = x)`, `Correct! ${pr2(a, b)} ↔ ${pr2(b, a)}: the coordinates swap, and the two points sit at the same distance from the crease y = x, on opposite sides (the dashed segment is perpendicular to y = x).`))
-        : tx(T(`ยังไม่ใช่ — คุณคลิก ${pr2(cl.x, cl.y)} (วงแดง) แต่จุดสะท้อนคือ ${pr2(b, a)} (จุดเขียว): สลับพิกัด x กับ y · เส้นประตั้งฉากกับ y = x และถูกรอยพับแบ่งครึ่งพอดี`, `Not quite — you clicked ${pr2(cl.x, cl.y)} (red ring) but the mirror image is ${pr2(b, a)} (green dot): swap x and y · the dashed segment is perpendicular to y = x and the crease cuts it exactly in half.`))) + '</div></div>' +
-        (ok ? '' : `<div style="text-align:center;margin-top:8px"><button class="btn ghost tryagain">${EN() ? '↻ Try again' : '↻ ลองอีกครั้ง'}</button></div>`);
-      const ag = res.querySelector('.tryagain'); if (ag) ag.onclick = () => { w.st = { clicked: null }; w.render(); };
-    }
-  };
-  w.refresh = () => w.render();
-  LIVE.push(w); w.render();
+// ทายก่อนเฉลย: สองฝั่งเท่ากันไหม
+function rvPredItem(c) {
+  return { chip: c.chip, draw: (el, ctx) => { el.innerHTML = c.html(ctx.done[0]); },
+    qs: [{ q: c.q, o: [T('เท่ากัน', 'Equal'), T('ไม่เท่ากัน', 'Not equal')], a: c.a, why: c.why }] };
 }
-
-// ───────── แท็บ 3: เมื่อไรมีอินเวอร์ส ─────────
-// (ก) ลูกศรหมุนกลับหัว 180° — ทายก่อนว่ายังเป็นฟังก์ชันไหม
-const RV = [
-  { A: ['1', '2', '3'], B: ['a', 'b'], p: [[0, 0], [1, 0], [2, 1]] },
-  { A: ['1', '2', '3', '4'], B: ['a', 'b', 'c', 'd'], p: [[0, 2], [1, 0], [2, 3], [3, 1]] },
-  { A: ['1', '2', '3', '4'], B: ['a', 'b', 'c'], p: [[0, 0], [1, 1], [2, 2], [3, 1]] }
+const rvSide = (tag, vis, cnt, no) => `<div class="rv-side"><span class="rv-tag">${tx(tag)}</span>${vis}${cnt ? `<span class="rv-cnt${no ? ' no' : ''}">${cnt}</span>` : ''}</div>`;
+const RV_PRED = [
+  { chip: mx(pwr('2', 3) + ' · ' + pwr('2', 4) + ' = ' + pwr('2', 12)), a: 1,
+    q: T(`สองฝั่งของ ${mx(pwr('2', 3) + ' · ' + pwr('2', 4) + ' = ' + pwr('2', 12))} เท่ากันไหม`, `Are the two sides of ${mx(pwr('2', 3) + ' · ' + pwr('2', 4) + ' = ' + pwr('2', 12))} equal?`),
+    html: done => rvSide(T('ซ้าย', 'Left'), rzTiles('2', 3, 'b', { size: 30 }) + '<span class="rz-it" style="font-weight:800">×</span>' + rzTiles('2', 4, 'o', { size: 30 }), done ? '3 + 4 = 7 ' + tx(T('แผ่น', 'tiles')) : '', true) +
+      `<div class="rv-vs${done ? ' no' : ''}">${done ? '≠' : '?'}</div>` + rvSide(T('ขวา', 'Right'), rzTiles('2', 12, 'g', { size: 30 }), done ? '12 ' + tx(T('แผ่น', 'tiles')) : '', true),
+    why: T(`ต่อแถวแผ่นแล้วนับ: 3 + 4 = 7 แผ่น จึงได้ ${pwr('2', 7)} ไม่ใช่ ${pwr('2', 12)} · คูณกันแล้วเลขชี้กำลัง<b>บวก</b>กัน (การคูณเลขชี้กำลังเป็นของยกกำลังซ้อนกัน)`,
+      `Join the rows and count: 3 + 4 = 7 tiles, so we get ${pwr('2', 7)}, not ${pwr('2', 12)} · when you multiply, the exponents <b>add</b> (multiplying exponents belongs to a power of a power).`) },
+  { chip: mx(pwr('(' + pwr('2', 3) + ')', 4) + ' = ' + pwr('2', 12)), a: 0,
+    q: T(`สองฝั่งของ ${mx(pwr('(' + pwr('2', 3) + ')', 4) + ' = ' + pwr('2', 12))} เท่ากันไหม`, `Are the two sides of ${mx(pwr('(' + pwr('2', 3) + ')', 4) + ' = ' + pwr('2', 12))} equal?`),
+    html: done => rvSide(T('ซ้าย', 'Left'), '<div>' + [0, 1, 2, 3].map(() => rzTiles('2', 3, 'b', { size: 30 })).join('') + '</div>', done ? '3 × 4 = 12 ' + tx(T('แผ่น', 'tiles')) : '') +
+      `<div class="rv-vs${done ? ' ok' : ''}">${done ? '=' : '?'}</div>` + rvSide(T('ขวา', 'Right'), rzTiles('2', 12, 'g', { size: 30 }), done ? '12 ' + tx(T('แผ่น', 'tiles')) : ''),
+    why: T(`แถวละ 3 แผ่น วาง 4 แถว = 3 × 4 = 12 แผ่น → ${pwr('2', 12)} เท่ากัน · ยกกำลังซ้อนกันเลขชี้กำลัง<b>คูณ</b>กัน`,
+      `3 tiles per row, 4 rows = 3 × 4 = 12 tiles → ${pwr('2', 12)}, so they are equal · for a power of a power the exponents <b>multiply</b>.`) },
+  { chip: mx(pwr('2', '−3') + ' = −8'), a: 1,
+    q: T(`สองฝั่งของ ${mx(pwr('2', '−3') + ' = −8')} เท่ากันไหม`, `Are the two sides of ${mx(pwr('2', '−3') + ' = −8')} equal?`),
+    html: done => rvSide(T('ซ้าย', 'Left'), `<span class="rz-it" style="font-size:1.4rem;font-weight:800">${pwr('2', '−3')} =</span>` + frac(1, rzTiles('2', 3, 'b', { size: 30 })), done ? mx(frac(1, 8)) : '', true) +
+      `<div class="rv-vs${done ? ' no' : ''}">${done ? '≠' : '?'}</div>` + rvSide(T('ขวา', 'Right'), `<span class="rz-it" style="font-size:1.6rem;font-weight:800">−8</span>`, done ? tx(T('ติดลบ', 'negative')) : '', true),
+    why: T(`เลขชี้กำลังติดลบหมายถึงกลับเป็นเศษส่วน ${pwr('2', '−3')} = ${frac(1, pwr('2', 3))} = ${frac(1, 8)} · ไม่ได้ทำให้ค่าติดลบ (แผ่นฐานทุกแผ่นเป็น 2 บวก)`,
+      `A negative exponent means flip into a fraction: ${pwr('2', '−3')} = ${frac(1, pwr('2', 3))} = ${frac(1, 8)} · it does not make the value negative (every base tile is a positive 2).`) }
 ];
-function revBuild(root, r) {
-  const m = {}, n = Math.max(r.A.length, r.B.length), H = 84 + n * 46, W = 420, xa = 100, xb = 320, mid = H / 2 + 4;
-  const ya = i => mid + (i - (r.A.length - 1) / 2) * 46, yb = j => mid + (j - (r.B.length - 1) / 2) * 46;
-  const svg = m.svg = sv('svg', { class: 'sc-svg', viewBox: `0 0 ${W} ${H}` }, root);
-  [[xa, 'A'], [xb, 'B']].forEach(([cx, nm]) => { sv('ellipse', { class: 'sc-set', cx, cy: mid, rx: 50, ry: n * 23 + 12 }, svg); sv('text', { x: cx, y: 18, 'text-anchor': 'middle', class: 'sc-big', text: nm }, svg); });
-  const inc = r.B.map((_, j) => r.p.filter(p => p[1] === j).length);
-  m.arr = r.p.map(() => svArrow(svg));
-  m.nA = r.A.map((a, i) => { const g = sv('g', { class: 'sc-node' }, svg); sv('circle', { cx: xa, cy: ya(i), r: 16 }, g); sv('text', { x: xa, y: ya(i) + 6, 'text-anchor': 'middle', text: a }, g); return g; });
-  m.nB = r.B.map((b, j) => { const g = sv('g', { class: 'sc-node' }, svg); sv('circle', { cx: xb, cy: yb(j), r: 16 }, g); sv('text', { x: xb, y: yb(j) + 6, 'text-anchor': 'middle', text: b }, g); return g; });
-  m.bot = sv('text', { x: W / 2, y: H - 12, 'text-anchor': 'middle', class: 'sc-big', text: '' }, svg);
-  const P1 = p => [xa + 22, ya(p[0])], P2 = p => [xb - 24, yb(p[1])];
-  m.rot = phi => r.p.forEach((p, i) => {
-    const a = P1(p), b = P2(p), cx = (a[0] + b[0]) / 2, cy = (a[1] + b[1]) / 2, c = Math.cos(phi), s = Math.sin(phi), rr = q => [cx + (q[0] - cx) * c - (q[1] - cy) * s, cy + (q[0] - cx) * s + (q[1] - cy) * c], u = rr(a), v = rr(b);
-    m.arr[i].set(u[0], u[1], v[0], v[1], 1);
+
+// ═══════════════════════════════════════════════════════════════
+//  แท็บ 2 · เลขชี้กำลัง 1/n
+// ═══════════════════════════════════════════════════════════════
+const lawChip = n => `<span class="rv-no">${tx(T('ข้อ ' + n, 'Law ' + n))}</span>`;       // ชิปเลขข้อสมบัติ
+const rzT1 = (base, cls, op, size) => `<div class="tl-row cl-${RZCL[cls] || cls}" style="--tl:${size || 40}px"><span class="tl-tile" style="opacity:${op}">${mx(base)}</span></div>`;
+// st = { k (0–2), p (0–1) }
+function unPaint(el, st) {
+  const k = st.k, p = st.p, h12 = pwr('9', frac(1, 2));
+  let h = '<div class="rz-stage">';
+  if (k === 0) {
+    h += rzLine([h12 + ' = ?'], 'lg');
+    h += `<div class="rz-note">${tx(T('เลขชี้กำลังเป็น ½ หมายถึงอะไร — ลองยกกำลังสองแล้วใช้สมบัติข้อ 3', 'What does an exponent of ½ mean? Try squaring it and use property 3'))}</div>`;
+  }
+  if (k === 1) {
+    const Q = pwr('(' + h12 + ')', 2);
+    h += rzLine([h12 + ' = ?'], 'lg');
+    h += `<div class="rz-pills">${rzPill('o', lawChip(3) + ' ' + mx(pwr('(' + pwr(A_, M_) + ')', N_) + ' = ' + pwr(A_, M_ + N_)), clamp01(p * 6))}</div>`;
+    h += rzLine([Q, '= ' + pwr('9', frac(1, 2) + ' · 2')], '', clamp01(p * 4 - 0.5));
+    h += rzLine([Q, '= ' + pwr('9', 1) + ' = 9'], '', clamp01(p * 4 - 1.5));
+    h += `<div class="rz-pills">${rzPill('g', tx(T(`ยกกำลังสองแล้วได้ 9 → ${h12} คือจำนวนบวกที่ยกกำลังสองได้ 9`, `Squared it gives 9 → ${h12} is the positive number whose square is 9`)), clamp01(p * 4 - 2.4))}</div>`;
+    h += rzLine([h12, '= 3'], 'lg', clamp01(p * 4 - 3));
+  }
+  if (k === 2) {
+    const h13 = pwr('8', frac(1, 3)), pop = clamp01(p / 0.3), sep = p > 0.35, hi = p > 0.6, res = clamp01((p - 0.7) / 0.15), chk = clamp01((p - 0.88) / 0.12);
+    h += rzLine([h13 + ' = ?'], 'lg');
+    h += rzLine([mx('8 = 2 · 2 · 2')], 'sm', clamp01(p * 10));
+    h += sep ? '<div class="rz-grps">' + [0, 1, 2].map(i => `<span class="rz-grp${hi && i === 0 ? ' hi' : ''}">${rzT1('2', 'b', 1)}</span>`).join('') + '</div>' : rzTiles('2', 3, 'b', { op: rzPop(pop, 3), size: 40 });
+    h += `<div class="rz-pills">${rzPill('g', tx(T('แบ่งเป็น 3 กองเท่ากัน กองละ 1 แผ่น = 2', 'Split into 3 equal piles — 1 tile in each pile = 2')), hi ? 1 : 0)}</div>`;
+    h += rzLine([h13, '= 2'], 'lg', res);
+    h += rzLine([pwr('(' + h13 + ')', 3), '= ' + pwr('8', frac(1, 3) + ' · 3') + ' = ' + pwr('8', 1) + ' = 8 ✓'], 'sm', chk);
+  }
+  el.innerHTML = h + '</div>';
+}
+const unAnim = (k, ms) => S => S.anim.run(ms, t => unPaint(S.el, { k, p: t }), EASE.lin);
+const UN_SCENES = [
+  { cap: T(`<b>${pwr('9', frac(1, 2))}</b> — เลขชี้กำลังเป็น ½ จะหมายถึงอะไร กด ▶ ดูว่าสมบัติข้อ 3 ช่วยตอบได้อย่างไร`,
+      `<b>${pwr('9', frac(1, 2))}</b> — what does an exponent of ½ mean? Press ▶ and see how property 3 answers it.`),
+    end: S => unPaint(S.el, { k: 0, p: 1 }) },
+  { cap: T(`<b>ยกกำลังสองทั้งก้อน</b> — ${pwr('(' + pwr('9', frac(1, 2)) + ')', 2)} = ${pwr('9', frac(1, 2) + ' · 2')} = ${pwr('9', 1)} = 9 (สมบัติข้อ 3: เลขชี้กำลังคูณกัน) · แปลว่า ${pwr('9', frac(1, 2))} คือจำนวนบวกที่ยกกำลังสองแล้วได้ 9 → ${pwr('9', frac(1, 2))} = 3`,
+      `<b>Square the whole thing</b> — ${pwr('(' + pwr('9', frac(1, 2)) + ')', 2)} = ${pwr('9', frac(1, 2) + ' · 2')} = ${pwr('9', 1)} = 9 (property 3: the exponents multiply) · so ${pwr('9', frac(1, 2))} is the positive number whose square is 9 → ${pwr('9', frac(1, 2))} = 3.`),
+    end: S => unPaint(S.el, { k: 1, p: 1 }), play: unAnim(1, 4200) },
+  { cap: T(`<b>${pwr('8', frac(1, 3))}</b> — แผ่นฐาน 8 = 2 · 2 · 2 คือแผ่น 2 สามแผ่น แบ่งเป็น 3 กองเท่ากัน กองละ 1 แผ่น = 2 → ${pwr('8', frac(1, 3))} = 2 · ตรวจ: ${pwr('(' + pwr('8', frac(1, 3)) + ')', 3)} = ${pwr('8', 1)} = 8`,
+      `<b>${pwr('8', frac(1, 3))}</b> — the base-tile picture of 8 = 2 · 2 · 2 is three tiles of 2, split into 3 equal piles with 1 tile each = 2 → ${pwr('8', frac(1, 3))} = 2 · check: ${pwr('(' + pwr('8', frac(1, 3)) + ')', 3)} = ${pwr('8', 1)} = 8.`),
+    end: S => unPaint(S.el, { k: 2, p: 1 }), play: unAnim(2, 4200) }
+];
+
+// ทายก่อนเฉลย (ใช้ซ้ำกับแท็บ m/n): chip + โจทย์ใหญ่ + คำใบ้ + ผลเฉลยหลังทาย
+const exPredItem = c => ({ chip: mx(c.chipH), draw: (el, ctx) => {
+  const done = ctx.done[0];
+  el.innerHTML = `<div class="rz-stage" style="min-height:0">${rzLine([c.big], 'lg')}<div class="rz-note">${tx(c.need)}</div>${done ? c.reveal : ''}</div>`;
+}, qs: [{ q: c.q, o: c.o, a: c.ans, why: c.why }] });
+const UN_PRED = [
+  { chipH: pwr('16', frac(1, 4)), big: pwr('16', frac(1, 4)) + ' = ?', need: T('หา x ที่ x⁴ = 16', 'Find x with x⁴ = 16'),
+    reveal: rzLine([rzTiles('2', 4, 'b', { size: 34 }), mx('2 · 2 · 2 · 2 = 16 ✓')], 'sm'),
+    q: T(`${pwr('16', frac(1, 4))} มีค่าเท่าใด`, `What is ${pwr('16', frac(1, 4))}?`),
+    o: ['4', '2', '±2', '8'], ans: 1,
+    why: T(`จำนวนที่ยกกำลัง 4 แล้วได้ 16 คือ 2 เพราะ 2 · 2 · 2 · 2 = 16 · n = 4 เป็นเลขคู่ คำตอบเป็นค่าบวกตัวเดียว (ไม่ใช่ ±2)`,
+      `The number whose 4th power is 16 is 2, since 2 · 2 · 2 · 2 = 16 · n = 4 is even, so the answer is the single positive value (not ±2).`) },
+  { chipH: pwr('27', frac(1, 3)), big: pwr('27', frac(1, 3)) + ' = ?', need: T('หา x ที่ x³ = 27', 'Find x with x³ = 27'),
+    reveal: rzLine([rzTiles('3', 3, 'b', { size: 34 }), mx('3 · 3 · 3 = 27 ✓')], 'sm'),
+    q: T(`${pwr('27', frac(1, 3))} มีค่าเท่าใด`, `What is ${pwr('27', frac(1, 3))}?`),
+    o: ['9', frac(1, 3), '3', '−3'], ans: 2,
+    why: T(`3 · 3 · 3 = 27 จึง ${pwr('27', frac(1, 3))} = 3 · ไม่ใช่ 27 ÷ 3 = 9 (เลขชี้กำลัง ⅓ ไม่ได้แปลว่าหารสาม)`,
+      `3 · 3 · 3 = 27, so ${pwr('27', frac(1, 3))} = 3 · not 27 ÷ 3 = 9 (an exponent of ⅓ does not mean “divide by three”).`) },
+  { chipH: pwr('(−8)', frac(1, 3)), big: pwr('(−8)', frac(1, 3)) + ' = ?', need: T('หา x ที่ x³ = −8', 'Find x with x³ = −8'),
+    reveal: rzLine([rzTiles('(−2)', 3, 'b', { size: 40 }), mx('(−2)(−2)(−2) = −8 ✓')], 'sm'),
+    q: T(`${pwr('(−8)', frac(1, 3))} มีค่าเท่าใด`, `What is ${pwr('(−8)', frac(1, 3))}?`),
+    o: ['2', '−4', T('ไม่เป็นจำนวนจริง', 'Not a real number'), '−2'], ans: 3,
+    why: T(`(−2)(−2)(−2) = −8 จึงได้ −2 · n = 3 เป็นเลขคี่ ฐานติดลบได้ เพราะคูณลบสามตัวแล้วยังติดลบ`,
+      `(−2)(−2)(−2) = −8, so the answer is −2 · n = 3 is odd, so a negative base is fine — three negatives multiply to a negative.`) },
+  { chipH: pwr('(−4)', frac(1, 2)), big: pwr('(−4)', frac(1, 2)) + ' = ?', need: T('หา x ที่ x² = −4', 'Find x with x² = −4'),
+    reveal: rzLine([mx('x · x = x² ≥ 0'), rzRes('∉ ' + RR, true)], 'sm'),
+    q: T(`${pwr('(−4)', frac(1, 2))} มีค่าเท่าใด`, `What is ${pwr('(−4)', frac(1, 2))}?`),
+    o: ['−2', '2', '±2', T('ไม่เป็นจำนวนจริง', 'Not a real number')], ans: 3,
+    why: T(`จำนวนจริงยกกำลังสองแล้วไม่มีทางติดลบ จึงไม่มี x ที่ x² = −4 · n = 2 เป็นเลขคู่ ฐานต้องไม่ติดลบ`,
+      `A real number squared can never be negative, so no x has x² = −4 · n = 2 is even, so the base cannot be negative.`) }
+];
+
+// ═══════════════════════════════════════════════════════════════
+//  แท็บ 3 · เลขชี้กำลัง m/n (ย้ายมาจาก lesson_roots.js เดิม)
+// ═══════════════════════════════════════════════════════════════
+const frExp = (m, n, hn, hd) => `<sup class="fx"><span class="frac"><span class="num${hn ? ' rz-hn' : ''}">${m}</span><span class="den${hd ? ' rz-hd' : ''}">${n}</span></span></sup>`;
+const frPow = (b, m, n, hn, hd) => mx(b + frExp(m, n, hn, hd));
+// st = { k (0–3), p (0–1 ความคืบหน้าของฉากนั้น) }
+function frPaint(el, st) {
+  const k = st.k, p = st.p;
+  const hd = k >= 1 && (k > 1 || p > 0.05), hn = k >= 1 && (k > 1 || p > 0.5);
+  const e1 = k === 1 ? clamp01((p - 0.88) / 0.12) : (k > 1 ? 1 : 0);
+  let h = '<div class="rz-stage">';
+  h += rzLine([frPow('8', 2, 3, hn, hd)].concat(k >= 1 ? ['= ' + nrt(3, '8<sup>2</sup>')] : []), 'lg', k >= 1 ? [1, e1] : undefined);
+  if (k === 1) {
+    h += `<div class="rz-pills">${rzPill('g', tx(T('ตัวส่วน 3 = ราก (รากที่ 3)', 'denominator 3 = root (cube root)')), hd ? 1 : 0)}${rzPill('o', tx(T('ตัวเศษ 2 = กำลัง (ยกกำลัง 2)', 'numerator 2 = power (to the power 2)')), hn ? 1 : 0)}</div>`;
+  }
+  if (k >= 2) {
+    const q = k === 2 ? p : 1, pop = rzPop(q, 3);
+    h += `<div class="rz-pills">${rzPill('g', tx(T('ตัวส่วน 3 = รากที่ 3', 'denominator 3 = cube root')))}${rzPill('o', tx(T('ตัวเศษ 2 = ยกกำลัง 2', 'numerator 2 = power 2')))}</div>`;
+    h += rzLine([nrt(3, '8'), '='].concat([rzTiles('2', 3, 'b', { op: pop, sc: i => 0.6 + 0.4 * pop(i) })], [mx(`2 · 2 · 2 = 8`)]), '', undefined);
+    h += rzLine([nrt(3, '8') + ' = 2'], '', k === 2 ? clamp01((p - 0.85) / 0.15) : 1);
+  }
+  if (k >= 3) {
+    const q = p, pop = rzPop(q, 2);
+    h += rzLine([frPow('8', 2, 3, true, true), '= (' + nrt(3, '8') + ')<sup>2</sup>', '= ' + pwr('2', 2), '= 4'], '', [1, clamp01(q * 4), clamp01(q * 4 - 1), clamp01(q * 4 - 2)]);
+    h += rzLine([rzTiles('2', 2, 'o', { op: pop, sc: i => 0.6 + 0.4 * pop(i) }), mx(`2 · 2 = 4`)], 'sm', clamp01(q * 3));
+    h += rzLine([frPow('8', 2, 3, true, true), '= ' + nrt(3, '8<sup>2</sup>') + ' = ' + nrt(3, '64') + ' = 4'], 'sm', clamp01(q * 4 - 2.4));
+  }
+  el.innerHTML = h + '</div>';
+}
+const frAnim = (k, ms) => S => S.anim.run(ms, t => frPaint(S.el, { k, p: t }), EASE.lin);
+const FR_SCENES = [
+  { cap: T(`<b>${pwr('8', frac(2, 3))}</b> — เลขชี้กำลังเป็นเศษส่วน กด ▶ ดูว่าตัวส่วนกับตัวเศษทำหน้าที่อะไร`,
+      `<b>${pwr('8', frac(2, 3))}</b> — the exponent is a fraction. Press ▶ and see what the denominator and the numerator each do.`),
+    end: S => frPaint(S.el, { k: 0, p: 1 }) },
+  { cap: T(`<b>ตัวส่วนคือราก ตัวเศษคือกำลัง</b> — ตัวส่วน 3 บอกว่าถอดรากที่ 3 · ตัวเศษ 2 บอกว่ายกกำลัง 2 · จึงเขียนได้ ${pwr('8', frac(2, 3))} = ∛(8²)`,
+      `<b>The denominator is the root, the numerator is the power</b> — the denominator 3 says take the cube root · the numerator 2 says raise to the power 2 · so ${pwr('8', frac(2, 3))} = ∛(8²).`),
+    end: S => frPaint(S.el, { k: 1, p: 1 }), play: frAnim(1, 2800) },
+  { cap: T(`<b>ถอดรากที่ 3 ของ 8</b> — หาแผ่นฐานที่เรียง 3 แผ่นแล้วได้ 8 คือ 2 · 2 · 2 = 8 จึง ∛8 = 2`,
+      `<b>The cube root of 8</b> — find the base tile that, laid in 3 tiles, makes 8: 2 · 2 · 2 = 8, so ∛8 = 2.`),
+    end: S => frPaint(S.el, { k: 2, p: 1 }), play: frAnim(2, 2600) },
+  { cap: T(`<b>แล้วยกกำลัง 2</b> — (∛8)² = 2² = 4 · ลองสลับลำดับ ∛(8²) = ∛64 = 4 ก็ได้ค่าเดียวกัน`,
+      `<b>Then raise to the power 2</b> — (∛8)² = 2² = 4 · swapping the order, ∛(8²) = ∛64 = 4, gives the same value.`),
+    end: S => frPaint(S.el, { k: 3, p: 1 }), play: frAnim(3, 3200) }
+];
+
+// ทายก่อนเฉลย: สองการ์ดคู่กัน
+function frPredDraw(el, ctx) {
+  const done = ctx.done[0];
+  const card = (m, n, ok, q, a) => `<div class="rz-card${done ? (ok ? ' ok' : ' no') : ''}"><div class="rz-line">${frPow('(−8)', m, n, false, true)}</div><div class="rz-q">${done ? a : q}</div></div>`;
+  el.innerHTML = '<div class="rz-cards">' +
+    card(3, 2, false, tx(T(`ตัวส่วน 2 → รากที่ 2 ของ −8 = ?`, `denominator 2 → the square root of −8 = ?`)),
+      `${tx(T('✗ ใช้ไม่ได้', '✗ cannot use it'))}<br>√(−8) ${tx(T('ไม่เป็นจำนวนจริง', 'is not a real number'))}`) +
+    card(2, 3, true, tx(T(`ตัวส่วน 3 → รากที่ 3 ของ −8 = ?`, `denominator 3 → the cube root of −8 = ?`)),
+      `${tx(T('✓ ใช้ได้', '✓ can use it'))}<br>∛(−8) = −2 ${tx(T('แล้ว', 'then'))} (−2)² = 4`) + '</div>';
+}
+const FR_PRED = [
+  { chip: mx(pwr('(−8)', frac(3, 2))), draw: frPredDraw, qs: [{
+    q: T(`${pwr('(−8)', frac(3, 2))} ใช้สมบัติข้อ 8 (ตัวส่วน = ราก ตัวเศษ = กำลัง) ได้ไหม`, `Can ${pwr('(−8)', frac(3, 2))} use property 8 (denominator = root, numerator = power)?`),
+    o: [T('ได้', 'Yes'), T('ไม่ได้', 'No')], a: 1,
+    why: T(`สมบัติข้อ 8 ใช้ได้เมื่อรากที่ n ของฐานเป็นจำนวนจริง · ตัวส่วน 2 ต้องหา √(−8) ซึ่งไม่เป็นจำนวนจริง → ${pwr('(−8)', frac(3, 2))} ไม่นิยามในจำนวนจริง · ห้ามเขียนเป็น √((−8)³) แล้วหาค่า`,
+      `Property 8 works only when the nth root of the base is real · the denominator 2 needs √(−8), which is not real → ${pwr('(−8)', frac(3, 2))} is undefined in the real numbers · do not rewrite it as √((−8)³) and compute.`) }] },
+  { chip: mx(pwr('(−8)', frac(2, 3))), draw: frPredDraw, qs: [{
+    q: T(`${pwr('(−8)', frac(2, 3))} มีค่าเท่าใด`, `What is ${pwr('(−8)', frac(2, 3))}?`),
+    o: ['4', '−4', T('ไม่นิยาม', 'Undefined'), '16'], a: 0,
+    why: T(`ตัวส่วน 3 ต้องหา ∛(−8) = −2 ซึ่งเป็นจำนวนจริง จึงใช้สมบัติข้อ 8 ได้ → (−2)² = 4 · กำลังสองของจำนวนลบกลับเป็นบวก`,
+      `The denominator 3 needs ∛(−8) = −2, which is real, so property 8 applies → (−2)² = 4 · squaring a negative number gives a positive one.`) }] }
+];
+
+// เกมจับคู่ 6 คู่
+const FR_PAIRS = [
+  { l: rzP('5', 3, 4), r: nrt(4, '5<sup>3</sup>'), why: T('ตัวส่วน 4 = รากที่ 4 · ตัวเศษ 3 = ยกกำลัง 3', 'denominator 4 = 4th root · numerator 3 = power 3') },
+  { l: rzP('7', 1, 2), r: rt('7'), why: T('ตัวส่วน 2 = รากที่สอง · ตัวเศษ 1 = ยกกำลัง 1 (ไม่ต้องเขียน)', 'denominator 2 = square root · numerator 1 = power 1 (not written)') },
+  { l: rzP('2', 5, 3), r: nrt(3, '2<sup>5</sup>'), why: T('ตัวส่วน 3 = รากที่ 3 · ตัวเศษ 5 = ยกกำลัง 5', 'denominator 3 = cube root · numerator 5 = power 5') },
+  { l: rzP(X, 2, 5), r: nrt(5, X + '<sup>2</sup>'), why: T('ฐานเป็นตัวแปรก็ใช้ได้เหมือนกัน · ตัวส่วน 5 = รากที่ 5', 'a variable base works the same way · denominator 5 = 5th root') },
+  { l: pwr('3', '−' + frac(1, 2)), r: frac(1, rt('3')), why: T('เครื่องหมายลบ = กลับเป็นส่วน: 3<sup>−1/2</sup> = 1 / 3<sup>1/2</sup> = 1 / √3', 'the minus sign = flip into a fraction: 3<sup>−1/2</sup> = 1 / 3<sup>1/2</sup> = 1 / √3') },
+  { l: rzP('10', 3, 2), r: rt('10<sup>3</sup>'), why: T('ตัวส่วน 2 = รากที่สอง · ตัวเศษ 3 = ยกกำลัง 3', 'denominator 2 = square root · numerator 3 = power 3') }
+];
+
+// ── แท็บ 3 (เพิ่ม) · ทายก่อน: คำนวณ m/n ──
+const FR_CALC = [
+  { chipH: pwr('27', frac(2, 3)), big: frPow('27', 2, 3, true, true) + ' = ?', need: T('ตัวส่วน 3 = รากที่ 3 · ตัวเศษ 2 = ยกกำลัง 2', 'denominator 3 = cube root · numerator 2 = power 2'),
+    reveal: rzLine([frPow('27', 2, 3), '= (' + nrt(3, '27') + ')<sup>2</sup>', '= ' + pwr('3', 2), '= 9'], 'sm'),
+    q: T(`${pwr('27', frac(2, 3))} มีค่าเท่าใด`, `What is ${pwr('27', frac(2, 3))}?`),
+    o: ['6', '9', '18', '3'], ans: 1,
+    why: T(`ตัวส่วน 3 → ∛27 = 3 · ตัวเศษ 2 → 3² = 9 · ถ้าได้ 6 คือเอา 3 × 2 แทนที่จะยกกำลัง 2`,
+      `Denominator 3 → ∛27 = 3 · numerator 2 → 3² = 9 · getting 6 means multiplying 3 × 2 instead of squaring.`) },
+  { chipH: pwr('16', frac(3, 4)), big: frPow('16', 3, 4, true, true) + ' = ?', need: T('ตัวส่วน 4 = รากที่ 4 · ตัวเศษ 3 = ยกกำลัง 3', 'denominator 4 = 4th root · numerator 3 = power 3'),
+    reveal: rzLine([frPow('16', 3, 4), '= (' + nrt(4, '16') + ')<sup>3</sup>', '= ' + pwr('2', 3), '= 8'], 'sm'),
+    q: T(`${pwr('16', frac(3, 4))} มีค่าเท่าใด`, `What is ${pwr('16', frac(3, 4))}?`),
+    o: ['12', '4', '2', '8'], ans: 3,
+    why: T(`ตัวส่วน 4 → ⁴√16 = 2 เพราะ 2⁴ = 16 · ตัวเศษ 3 → 2³ = 8 · ถ้าได้ 2 คือลืมยกกำลังตัวเศษ`,
+      `Denominator 4 → the 4th root of 16 is 2 because 2⁴ = 16 · numerator 3 → 2³ = 8 · getting 2 means forgetting the numerator’s power.`) },
+  { chipH: pwr('4', '−' + frac(1, 2)), big: pwr('4', '−' + frac(1, 2)) + ' = ?', need: T('เครื่องหมายลบ = กลับเป็นส่วน', 'a minus sign = flip into a fraction'),
+    reveal: rzLine([pwr('4', '−' + frac(1, 2)), '= ' + frac(1, pwr('4', frac(1, 2))), '= ' + frac(1, rt('4')), '= ' + frac(1, 2)], 'sm'),
+    q: T(`${pwr('4', '−' + frac(1, 2))} มีค่าเท่าใด`, `What is ${pwr('4', '−' + frac(1, 2))}?`),
+    o: ['−2', frac(1, 2), '2', frac(1, 16)], ans: 1,
+    why: T(`เครื่องหมายลบที่เลขชี้กำลังคือกลับเป็นส่วน ${pwr('4', '−' + frac(1, 2))} = ${frac(1, pwr('4', frac(1, 2)))} = ${frac(1, 2)} · ไม่ได้ทำให้ค่าติดลบ`,
+      `A minus sign in the exponent flips into a fraction: ${pwr('4', '−' + frac(1, 2))} = ${frac(1, pwr('4', frac(1, 2)))} = ${frac(1, 2)} · it does not make the value negative.`) }
+];
+
+// ═══════════════════════════════════════════════════════════════
+//  แท็บ 4 · เลขชี้กำลังเป็นจำนวนจริง (2^√2)
+// ═══════════════════════════════════════════════════════════════
+const RL_ZOOM = [{ lo: 1, hi: 2, ap: 1.4 }, { lo: 1.4, hi: 1.5, ap: 1.41 }, { lo: 1.41, hi: 1.42, ap: 1.414 }, { lo: 1.414, hi: 1.415, ap: 1.4142 }];
+const rlFmt = v => mn(+v.toFixed(5));
+// เส้นจำนวนของเลขชี้กำลัง 4 แถว ซูมเข้าหา √2 — p (0–1) เผยทีละแถว
+function rlZoom(el, p) {
+  const W = 520, pad = 34, RH = 82, H = RH * 4 + 6, X = (r, v) => pad + (v - RL_ZOOM[r].lo) / (RL_ZOOM[r].hi - RL_ZOOM[r].lo) * (W - 2 * pad);
+  let s = `<svg class="plot" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">`;
+  RL_ZOOM.forEach((z, r) => {
+    const op = clamp01(p * 4 - r), y = 40 + r * RH, sq = X(r, Math.SQRT2);
+    s += `<g style="opacity:${op.toFixed(3)}">`;
+    if (r < 3) {
+      const n = RL_ZOOM[r + 1], xa = X(r, n.lo), xb = X(r, n.hi), yn = 40 + (r + 1) * RH;
+      s += `<polygon class="fa-green" points="${xa},${y + 9} ${xb},${y + 9} ${W - pad},${yn - 10} ${pad},${yn - 10}" style="opacity:${clamp01(p * 4 - r - 0.5).toFixed(3)}"/><rect class="fa-green" x="${xa}" y="${y - 9}" width="${Math.max(2, xb - xa)}" height="18"/>`;
+    }
+    s += `<line class="pl-axis" x1="${pad - 10}" y1="${y}" x2="${W - pad + 10}" y2="${y}"/>`;
+    for (let i = 0; i <= 10; i++) {
+      const x = pad + i * (W - 2 * pad) / 10;
+      s += `<line class="pl-axis" x1="${x}" y1="${y - (i % 5 ? 4 : 7)}" x2="${x}" y2="${y + (i % 5 ? 4 : 7)}"/>`;
+      if (i % 5 === 0) s += `<text class="pl-tick" x="${x}" y="${y + 22}" text-anchor="middle">${rlFmt(z.lo + (z.hi - z.lo) * i / 10)}</text>`;
+    }
+    s += `<circle class="pl-dot f-blue" cx="${X(r, z.ap)}" cy="${y}" r="5.5"/><text class="pl-lbl b" x="${X(r, z.ap) - 4}" y="${y - 14}" text-anchor="${r === 3 ? 'end' : 'middle'}" style="font-size:15px">${rlFmt(z.ap)}</text>`;
+    s += `<polygon class="f-green" points="${sq},${y + 3} ${sq - 6},${y + 14} ${sq + 6},${y + 14}"/><text class="pl-lbl g" x="${sq + (r === 3 ? 10 : 0)}" y="${y + 38}" text-anchor="${r === 3 ? 'start' : 'middle'}" style="font-size:15px">√2</text>`;
+    s += '</g>';
   });
-  m.oneOne = inc.every(c => c <= 1);
-  // rev = false: f ธรรมดา · true: กลับหัวแล้ว ระบายสี (B ที่มีลูกศรออกหลายเส้น = แดง)
-  m.pose = rev => {
-    m.rot(rev ? Math.PI : 0);
-    m.arr.forEach((a, i) => a.cls(!rev ? '' : m.oneOne ? 'green' : inc[r.p[i][1]] > 1 ? 'red' : ''));
-    m.nB.forEach((n2, j) => n2.setAttribute('class', 'sc-node' + (rev ? (inc[j] > 1 ? ' bad' : m.oneOne ? ' good' : '') : '')));
-    m.nA.forEach(n2 => n2.setAttribute('class', 'sc-node' + (rev && m.oneOne ? ' good' : '')));
-    m.bot.textContent = rev ? tx(T('f⁻¹ : ลูกศรทุกเส้นกลับหัว', 'f⁻¹ : every arrow reversed')) : 'f';
-  };
-  return m;
-}
-function revItem(r, n) {
-  const inc = r.B.map((_, j) => r.p.filter(p => p[1] === j).length), multi = r.B.filter((_, j) => inc[j] > 1), one = multi.length === 0;
-  return {
-    chip: T(`รูปที่ ${n}`, `Diagram ${n}`),
-    draw: async (el, ctx) => {
-      const m = revBuild(el, r);
-      if (!ctx.done[0]) { m.pose(false); return; }
-      if (ctx.animate) { m.pose(false); m.bot.textContent = ''; await ctx.anim.run(1300, t => m.rot(Math.PI * t)); }
-      m.pose(true);
-    },
-    qs: [{
-      q: T('ถ้ากลับหัวลูกศรทุกเส้น จะยังเป็นฟังก์ชันไหม?', 'If every arrow is reversed, is it still a function?'), o: YN, a: one ? 0 : 1,
-      why: one ? T('y ทุกตัวถูกลูกศรชี้เส้นเดียว (f เป็น 1-1) → พอกลับหัวทุกตัวยังมีลูกศรออกเส้นเดียว → ยังเป็นฟังก์ชัน → f มีอินเวอร์ส', 'every y receives exactly one arrow (f is one-to-one) → after reversing, each still has one arrow leaving → still a function → f has an inverse.')
-        : T(`${listAnd(multi, 'th')} ถูกลูกศรชี้จาก x สองตัว → พอกลับหัว ${listAnd(multi, 'th')} มีลูกศรออก 2 เส้น (สีแดง) → ไม่เป็นฟังก์ชัน เพราะ f ไม่เป็น 1-1`, `${listAnd(multi, 'en')} receives arrows from two x → after reversing it has two arrows leaving (red) → not a function, because f is not one-to-one.`)
-    }]
-  };
+  el.innerHTML = '<div class="rz-stage" style="min-height:0">' + s + '</svg></div>';
 }
 
-// (ข) จำกัดโดเมน — ทายก่อนว่า c น้อยสุดเท่าไรถึง 1-1 แล้วตัวเลื่อนวิ่งเอง
-const RS = [
-  { chip: '<i>f</i>(x) = (x − 2)<sup>2</sup> − 1', f: x => (x - 2) * (x - 2) - 1, v: 2, win: [-3, 8, -2, 9], sl: [-2, 5], o: [0, 1, 2, 3], a: 2, inv: `2 + ${rt('x + 1')}` },
-  { chip: '<i>f</i>(x) = |x + 1|', f: x => Math.abs(x + 1), v: -1, win: [-6, 6, -1, 8], sl: [-5, 3], o: [-2, -1, 0, 1], a: 1, inv: 'x − 1' },
-  { chip: '<i>f</i>(x) = x<sup>2</sup> − 6x + 5', f: x => x * x - 6 * x + 5, v: 3, win: [-2, 8, -5, 10], sl: [-1, 6], o: [1, 3, 5, 6], a: 1, inv: `3 + ${rt('x + 4')}` }
-];
-function rsItem(e) {
-  return {
-    chip: e.chip,
-    draw: async (el, ctx) => {
-      const D = ctx.data, any = ctx.done[0], [x0, x1, y0, y1] = e.win;
-      el.innerHTML = '<div class="plh"></div><div class="rcc"></div><div class="rcv"></div>';
-      const ph = el.querySelector('.plh'), vh = el.querySelector('.rcv');
-      const upd = c => {
-        const pl = new Plot({ w: 460, h: 400, xmin: x0, xmax: x1, ymin: y0, ymax: y1, pad: 28, lx: 1, ly: 1 });
-        if (!any) { pl.path(e.f, 's-blue', { n: 300 }); ph.innerHTML = pl.svg(); return; }
-        const one = c >= e.v - 1e-9;
-        pl.path(e.f, 's-muted', { x0: x0, x1: c, dash: true, n: 200 }); pl.path(e.f, 's-blue', { x0: c, x1: x1, n: 300 }); pl.dot(c, e.f(c), 'f-blue', false, 6.5);
-        if (!one) { const yy = e.f(c), tw = 2 * e.v - c; pl.dash(x0 - 9, yy, x1 + 9, yy, 's-red'); pl.dot(c, yy, 'f-red', false, 6); if (tw <= x1) pl.dot(tw, yy, 'f-red', false, 6); }
-        ph.innerHTML = pl.svg();
-        vh.innerHTML = `<div class="verdict ${one ? 'ok' : 'no'}"><span class="mk">${one ? '✓' : '✗'}</span><div>` + tx(one
-          ? T(`<i>x</i> ≥ ${num(c)} : เหลือขาเดียว เส้นนอนตัดไม่เกิน 1 จุด → 1-1 มีอินเวอร์ส`, `<i>x</i> ≥ ${num(c)}: one arm only, a horizontal line meets it at most once → one-to-one, so an inverse exists.`)
-          : T(`<i>x</i> ≥ ${num(c)} : ยังคร่อมจุดยอด เส้นนอนสีแดงตัด 2 จุด → ไม่ 1-1`, `<i>x</i> ≥ ${num(c)}: still straddles the vertex, the red horizontal line meets it twice → not one-to-one.`)) + '</div></div>';
-      };
-      if (!any) { upd(0); return; }
-      const lo = e.sl[0];
-      if (ctx.animate) { await ctx.anim.run(2600, t => upd(lerp(lo, e.v, t)), EASE.inOut); D.c = e.v; }
-      const c = D.c === undefined ? e.v : D.c;
-      upd(c);
-      const sc = el.querySelector('.rcc');
-      sc.innerHTML = sliderRow('<i>x</i> ≥', 'rc', e.sl[0], e.sl[1], 0.5, c);
-      const sl = sc.querySelector('#rc'), lab = sc.querySelector('#rcv'); lab.textContent = mn(c);
-      sl.oninput = () => { D.c = +sl.value; lab.textContent = mn(D.c); upd(D.c); };
-    },
-    qs: [{
-      q: T('จำกัดโดเมนเป็น x ≥ c — c น้อยที่สุดเท่าไรที่ทำให้ f เป็น 1-1?', 'Restrict the domain to x ≥ c — what is the smallest c that makes f one-to-one?'),
-      o: e.o.map(v => 'c = ' + mn(v)), a: e.a,
-      why: T(`จุดยอดอยู่ที่ x = ${num(e.v)} — ทางซ้ายกับทางขวาของจุดยอดให้ y ซ้ำกัน (เส้นแดง) ต้องเหลือขาเดียว จึงต้อง c ≥ ${num(e.v)} · ที่ c = ${num(e.v)} พอดีก็ยังได้ · ได้ <i>f</i><sup>−1</sup>(x) = ${e.inv}`, `The vertex is at x = ${num(e.v)} — points left and right of it share the same y (red line), so only one arm may stay: c ≥ ${num(e.v)} · c = ${num(e.v)} exactly is allowed · giving <i>f</i><sup>−1</sup>(x) = ${e.inv}.`)
-    }]
-  };
+// ตารางแท่ง: 2^1.4 … 2^√2 ค่านิ่งเข้าหา 2.6651 (แกนแท่งเริ่มที่ 2.63 ขยายให้เห็นความต่าง)
+const RL_VALS = [[1.4, '1.4'], [1.41, '1.41'], [1.414, '1.414'], [1.4142, '1.4142'], [Math.SQRT2, '√2']];
+function rlTable(el, p) {
+  const lo = 2.63, span = 0.04, tg = (Math.pow(2, Math.SQRT2) - lo) / span;
+  let h = '<div class="rz-stage" style="min-height:0"><div class="rz-vt">';
+  RL_VALS.forEach((r, k) => {
+    const v = Math.pow(2, r[0]), u = clamp01(p * 5 - k);
+    h += `<div class="rz-vr${k === 4 ? ' last' : ''}"><span style="opacity:${u > 0 ? 1 : 0.15}">${pwr('2', r[1])}</span><div class="trk"><div class="fill" style="width:${((v - lo) / span * 100 * u).toFixed(2)}%"></div><div class="tgt" style="left:${(tg * 100).toFixed(2)}%"></div></div><span class="val" style="opacity:${u > 0.9 ? 1 : 0}">≈ ${v.toFixed(4)}</span></div>`;
+  });
+  h += `</div><div class="rz-note">${tx(T('แท่งยาวตามค่าของ 2<sup>x</sup> (แกนเริ่มที่ 2.63 เพื่อขยายให้เห็นความต่าง) · เส้นประเขียว = 2<sup>√2</sup>', 'Bar length = the value of 2<sup>x</sup> (the axis starts at 2.63 to magnify the differences) · green dashed line = 2<sup>√2</sup>'))}</div></div>`;
+  el.innerHTML = h;
 }
 
-// ───────── แท็บ 4: D และ R สลับกัน ─────────
-// ตาราง D/R: ช่องของ f ลอยไขว้ไปเป็นช่องของ f⁻¹
-const DRS = [
-  { chip: `<i>f</i>(x) = ${frac('2x + 1', 'x − 3')}`, Df: 'ℝ − {3}', Rf: 'ℝ − {2}', Dfi: 'ℝ − {2}', Rfi: 'ℝ − {3}',
-    c1: T(`<i>f</i>(x) = ${frac('2x + 1', 'x − 3')} · ตัวส่วนห้ามเป็น 0 → D<sub>f</sub> = ℝ − {3} · ค่า y ที่ไปไม่ถึงคือ ${frac('a', 'c')} = 2 → R<sub>f</sub> = ℝ − {2}`, `<i>f</i>(x) = ${frac('2x + 1', 'x − 3')} · the denominator cannot be 0 → D<sub>f</sub> = ℝ − {3} · the unreachable y is ${frac('a', 'c')} = 2 → R<sub>f</sub> = ℝ − {2}.`),
-    c3: T(`ตรวจจากสูตร <i>f</i><sup>−1</sup>(x) = ${frac('3x + 1', 'x − 2')} : ตัวส่วน x − 2 ห้ามเป็น 0 → x ≠ 2 ตรงกับช่อง D<sub>f⁻¹</sub> ✓`, `Check with the formula <i>f</i><sup>−1</sup>(x) = ${frac('3x + 1', 'x − 2')}: the denominator x − 2 cannot be 0 → x ≠ 2, matching the D<sub>f⁻¹</sub> cell ✓.`) },
-  { chip: `<i>f</i>(x) = ${rt('x − 1')} + 2`, Df: '[1, ∞)', Rf: '[2, ∞)', Dfi: '[2, ∞)', Rfi: '[1, ∞)',
-    c1: T(`<i>f</i>(x) = ${rt('x − 1')} + 2 · ในรูท x − 1 ≥ 0 → D<sub>f</sub> = [1, ∞) · รูทให้ค่า ≥ 0 จึง y ≥ 2 → R<sub>f</sub> = [2, ∞)`, `<i>f</i>(x) = ${rt('x − 1')} + 2 · inside the root x − 1 ≥ 0 → D<sub>f</sub> = [1, ∞) · a root is ≥ 0, so y ≥ 2 → R<sub>f</sub> = [2, ∞).`),
-    c3: T(`ตรวจ: <i>f</i><sup>−1</sup>(x) = (x − 2)<sup>2</sup> + 1 ต้องใส่เงื่อนไข x ≥ 2 (= D<sub>f⁻¹</sub>) ไม่งั้นเป็นพาราโบลาเต็มที่ไม่ใช่ 1-1`, `Check: <i>f</i><sup>−1</sup>(x) = (x − 2)<sup>2</sup> + 1 needs the condition x ≥ 2 (= D<sub>f⁻¹</sub>); otherwise it is a full parabola, which is not one-to-one.`) },
-  { chip: `<i>f</i>(x) = x<sup>2</sup> − 1 , x ≥ 0`, Df: '[0, ∞)', Rf: '[−1, ∞)', Dfi: '[−1, ∞)', Rfi: '[0, ∞)',
-    c1: T(`<i>f</i>(x) = x<sup>2</sup> − 1 เมื่อ x ≥ 0 → D<sub>f</sub> = [0, ∞) · x² ≥ 0 จึง y ≥ −1 → R<sub>f</sub> = [−1, ∞)`, `<i>f</i>(x) = x<sup>2</sup> − 1 for x ≥ 0 → D<sub>f</sub> = [0, ∞) · x² ≥ 0, so y ≥ −1 → R<sub>f</sub> = [−1, ∞).`),
-    c3: T(`ตรวจ: <i>f</i><sup>−1</sup>(x) = ${rt('x + 1')} ในรูท x + 1 ≥ 0 → x ≥ −1 ตรงกับ D<sub>f⁻¹</sub> ✓ และค่ารูท ≥ 0 ตรงกับ R<sub>f⁻¹</sub> ✓`, `Check: <i>f</i><sup>−1</sup>(x) = ${rt('x + 1')}: inside the root x + 1 ≥ 0 → x ≥ −1, matching D<sub>f⁻¹</sub> ✓, and a root is ≥ 0, matching R<sub>f⁻¹</sub> ✓.`) }
-];
-const DRG = { W: 520, H: 250, cx: [210, 420], ry: [98, 188], cw: 188, ch: 52 };
-function drBuild(root, e) {
-  const G = DRG, m = {};
-  const svg = m.svg = sv('svg', { class: 'sc-svg', viewBox: `0 0 ${G.W} ${G.H}` }, root);
-  sv('text', { x: G.cx[0], y: 36, 'text-anchor': 'middle', class: 'sc-big', text: 'D' }, svg); sv('text', { x: G.cx[1], y: 36, 'text-anchor': 'middle', class: 'sc-big', text: 'R' }, svg);
-  sv('text', { x: 46, y: G.ry[0] + 7, 'text-anchor': 'middle', class: 'sc-big', text: 'f' }, svg); sv('text', { x: 46, y: G.ry[1] + 7, 'text-anchor': 'middle', class: 'sc-big', text: 'f⁻¹' }, svg);
-  const cell = (c, r, txt) => { const g = sv('g', {}, svg), rc = sv('rect', { class: 'dr-cell', x: G.cx[c] - G.cw / 2, y: G.ry[r] - G.ch / 2, width: G.cw, height: G.ch, rx: 12 }, g), t = sv('text', { x: G.cx[c], y: G.ry[r] + 7, 'text-anchor': 'middle', class: 'sc-big', text: txt }, g); return { rc, t }; };
-  m.f = [cell(0, 0, e.Df), cell(1, 0, e.Rf)];
-  m.fi = [cell(0, 1, e.Dfi), cell(1, 1, e.Rfi)];
-  m.chip = [svChip(svg, e.Df, 'sel', 150, 40), svChip(svg, e.Rf, 'sel', 150, 40)];
-  m.pose = k => {
-    m.fi.forEach(c => { c.t.style.opacity = k >= 1 ? 1 : 0; c.rc.setAttribute('class', 'dr-cell' + (k === 1 ? ' hot' : k >= 2 ? ' ok' : '')); });
-    m.chip.forEach(c => c.at(0, 0, 1, 0));
-  };
-  return m;
-}
-function makeDrSwap(host) {
-  const w = { cur: 0 };
-  host.innerHTML = '<div class="chips"></div><div class="drsc"></div>';
-  const fresh = (S, k) => { S.el.innerHTML = ''; const m = drBuild(S.el, DRS[w.cur]); m.pose(k); return m; };
-  const e = () => DRS[w.cur];
-  const scenes = [
-    { cap: () => tx(e().c1), end: S => { fresh(S, 0); }, play: async S => { const m = fresh(S, 0); m.svg.style.opacity = 0; await S.anim.run(500, t => { m.svg.style.opacity = t; }, EASE.lin); } },
-    { cap: () => tx(T(`ค่าที่ <i>f</i> <b>ส่งออก</b> (R<sub>f</sub>) กลายเป็นค่าที่ <i>f</i><sup>−1</sup> <b>รับเข้า</b> (D<sub>f⁻¹</sub>) และ D<sub>f</sub> ไปเป็น R<sub>f⁻¹</sub> — ช่องลอยไขว้สลับที่กัน`, `The values <i>f</i> <b>sends out</b> (R<sub>f</sub>) become the values <i>f</i><sup>−1</sup> <b>takes in</b> (D<sub>f⁻¹</sub>), and D<sub>f</sub> becomes R<sub>f⁻¹</sub> — the cells float across and trade places.`)),
-      end: S => { fresh(S, 1); },
-      play: async S => {
-        const m = fresh(S, 0), A = S.anim, G = DRG; m.fi.forEach(c => { c.t.style.opacity = 0; });
-        const dst = [1, 0];   // D_f → ช่อง R ของ f⁻¹ ; R_f → ช่อง D ของ f⁻¹
-        await A.wait(300);
-        await A.run(1700, t => m.chip.forEach((c, i) => c.at(lerp(G.cx[i], G.cx[dst[i]], t), lerp(G.ry[0], G.ry[1], t), 1, Math.min(1, t * 6))));
-        m.chip.forEach(c => c.at(0, 0, 1, 0)); m.pose(1);
-      } },
-    { cap: () => tx(e().c3), end: S => { fresh(S, 2); }, play: async S => { const m = fresh(S, 1), A = S.anim; await A.wait(500); m.pose(2); } }
-  ];
-  const sc = makeScenes(host.querySelector('.drsc'), scenes, { prompt: T('เลือกฟังก์ชัน แล้วกด ▶ ดูช่องของ D และ R ลอยสลับที่', 'Pick a function, then press ▶ to watch the D and R cells fly to each other\'s place') });
-  w.render = () => {
-    const c = host.querySelector('.chips');
-    c.innerHTML = `<span class="chips-label">f</span>` + DRS.map((x, i) => `<button class="chip${i === w.cur ? ' active' : ''}" data-i="${i}">${x.chip}</button>`).join('');
-    c.querySelectorAll('.chip').forEach(b => b.onclick = () => { w.cur = +b.dataset.i; w.render(); sc.go(sc.k, false); });
-  };
-  w.refresh = () => w.render();
-  LIVE.push(w); w.render();
-}
-// เครื่องมือเดิม: เศษส่วน (ax + b)/(cx + d) กับอินเวอร์ส
-function makeSwap(host) {
-  const w = { a: 2, b: 1, c: 1, d: -3 };
-  host.innerHTML = '<div class="sc-prompt"></div><div class="two"><div>' + sliderRow('a =', 'sa', -5, 5, 1, 2) + sliderRow('b =', 'sb', -5, 5, 1, 1) + sliderRow('c =', 'sc', -5, 5, 1, 1) + sliderRow('d =', 'sd', -5, 5, 1, -3) + '</div><div class="eqs wg-eq col"></div></div><div class="plhost"></div><div class="tbox"></div>';
-  const ids = ['a', 'b', 'c', 'd'];
-  w.render = () => {
-    host.querySelector('.sc-prompt').textContent = EN() ? 'Move a, b, c, d — watch f and f⁻¹ and their dashed asymptotes together' : 'เลื่อน a, b, c, d — ดู f กับ f⁻¹ และเส้นประของทั้งสองพร้อมกัน';
-    ids.forEach(k => { host.querySelector('#s' + k + 'v').textContent = mn(w[k]); });
-    const { a, b, c, d } = w, lin = (p, q) => polyHtml([q, p]) || '0';
-    const ok = c !== 0 && a * d - b * c !== 0;
-    host.querySelector('.eqs').innerHTML = `<div>${I('f')}(x) = ${frac(lin(a, b), lin(c, d))}</div>` + (ok ? `<div>${fi}(x) = ${frac(lin(-d, b), lin(c, -a))}</div>` : '');
-    const pl = new Plot({ w: 460, h: 460, xmin: -8, xmax: 8, ymin: -8, ymax: 8, pad: 28, lx: 2, ly: 2 });
-    pl.dash(-12, -12, 12, 12, 's-muted');
-    if (ok) {
-      const xa = -d / c, ya = a / c;
-      pl.path(x => (a * x + b) / (c * x + d), 's-blue', { n: 800 }); pl.path(x => (-d * x + b) / (c * x - a), 's-orange', { n: 800 });
-      pl.dash(xa, -20, xa, 20, 's-blue'); pl.dash(-20, ya, 20, ya, 's-blue'); pl.dash(ya, -20, ya, 20, 's-orange'); pl.dash(-20, xa, 20, xa, 's-orange');
+// กราฟจุด y = 2^x ที่ x ห่างกัน 1, ½, ¼, ⅛, 1/16 แล้วเป็นเส้นเรียบ
+const RL_STEPS = [1, 0.5, 0.25, 0.125, 0.0625], RL_STEPLAB = ['1', '½', '¼', '⅛', '1/16'], RL_COLS = ['f-blue', 'f-orange', 'f-green', 'f-purple', 'f-red'], RL_RAD = [6.5, 5, 3.8, 2.8, 2.1];
+function rlPoints(el, p) {
+  const m = rzMount(el, { xmin: -3, xmax: 3, ymin: -1, ymax: 9, h: 340, lx: 1, ly: 1, gx: 1, gy: 1 }), pl = m.pl;
+  let s = '';
+  const done = p >= 1;
+  RL_STEPS.forEach((st, j) => {
+    const op = clamp01(p * 5 - j);
+    if (op <= 0) return;
+    s += `<g style="opacity:${op.toFixed(3)}">`;
+    for (let i = 0; i * st <= 6 + 1e-9; i++) {
+      const x = -3 + i * st;
+      if (j > 0 && Math.abs(x / RL_STEPS[j - 1] - Math.round(x / RL_STEPS[j - 1])) < 1e-9) continue;
+      s += rzDot(pl, x, Math.pow(2, x), RL_COLS[j], RL_RAD[j]);
     }
-    host.querySelector('.plhost').innerHTML = pl.svg();
-    if (!ok) { host.querySelector('.tbox').innerHTML = `<div class="box-warn">${tx(T('ต้องให้ c ≠ 0 และ ad − bc ≠ 0 จึงเป็นเศษส่วนที่หาอินเวอร์สได้ (ไม่หักล้างเป็นค่าคงที่/เส้นตรง)', 'We need c ≠ 0 and ad − bc ≠ 0 for a genuine fraction with an inverse (otherwise it collapses to a constant or a line).'))}</div>`; return; }
-    const xa = num(-d / c), ya = num(a / c);
-    host.querySelector('.tbox').innerHTML = `<div class="tbl-scroll"><table class="tbl"><tr><th></th><th>D</th><th>R</th></tr>` +
-      `<tr><th>${I('f')}</th><td class="cur">ℝ − {${xa}}</td><td>ℝ − {${ya}}</td></tr><tr><th>${fi}</th><td>ℝ − {${ya}}</td><td class="cur">ℝ − {${xa}}</td></tr></table></div>` +
-      `<div class="wg-cap">${tx(T(`ช่องสีเหลืองคือค่าเดียวกัน (${xa} กับ ${ya} สลับที่) · เส้นประของ f (น้ำเงิน) x = ${xa}, y = ${ya} กลายเป็นเส้นประของ f⁻¹ (ส้ม) x = ${ya}, y = ${xa}`,
-        `The yellow cells hold the same value (${xa} and ${ya} swap places) · f's dashed lines (blue) x = ${xa}, y = ${ya} become f⁻¹'s (orange) x = ${ya}, y = ${xa}.`))}</div>`;
-  };
-  ids.forEach(k => { const s = host.querySelector('#s' + k); s.oninput = () => { w[k] = +s.value; w.render(); }; });
-  w.refresh = () => w.render();
-  LIVE.push(w); w.render();
+    s += '</g>';
+  });
+  if (done) s += rzCurve(pl, x => Math.pow(2, x), -3, 3, 's-blue', { n: 300 }) + rzDot(pl, Math.SQRT2, Math.pow(2, Math.SQRT2), 'f-green', 7.5) + rzText(pl, 1.55, 1.7, 'g', sPow('2', '√2', ' ≈ 2.665'), { fs: 16 });
+  const lv = Math.min(4, Math.floor(p * 5));
+  s += rzText(pl, -2.9, 8.35, 'o', `${tx(T('x ห่างกันทีละ', 'x spacing'))} ${RL_STEPLAB[lv]}`, { fs: 17 }) + rzText(pl, -2.9, 7.2, 'b', sPow(`${SI('y')} = 2`, SI('x')), { fs: 17 });
+  m.g.innerHTML = s;
 }
 
-// ───────── แท็บ 5: ทริก f(ax+b) ─────────
-// f(ax + b) = cx + d : "ก้อน" (ax + b) เป็นกล่องสีม่วงเดียวกันทุกบรรทัด
-// n = ตัวเลขที่ถามหา f⁻¹(n) ; o = ตัวเลือก (เรียงเอง) ; ia = ตำแหน่งคำตอบ
-const TRP = [
-  { a: 2, b: 3, c: 8, d: 9, n: 17, o: [1, 5, 37, 65], ia: 1 },
-  { a: 3, b: -1, c: 6, d: 4, n: 16, o: [47, 38, 5, 2], ia: 2 },
-  { a: -1, b: 4, c: 3, d: -7, n: 2, o: [2, 3, -1, 1], ia: 3 }
+function rlStart(el) {
+  el.innerHTML = '<div class="rz-stage" style="min-height:0">' + rzLine([pwr('2', '√2') + ' = ?'], 'lg') +
+    rzLine([mx('1 &lt; √2 &lt; 2')], 'sm') + rzLine([mx(pwr('2', 1) + ' &lt; ' + pwr('2', '√2') + ' &lt; ' + pwr('2', 2))], 'sm') +
+    `<div class="rz-note">${tx(T('√2 = 1.41421356… เป็นทศนิยมไม่รู้จบ ไม่ซ้ำ — จะยกกำลังแบบนี้ได้อย่างไร', '√2 = 1.41421356… never ends and never repeats — how can we raise 2 to it?'))}</div></div>`;
+}
+const RL_SCENES = [
+  { cap: T(`<b>${pwr('2', '√2')} = ?</b> — เลขชี้กำลังเป็นจำนวนจริงที่ไม่ใช่เศษส่วน เรารู้แค่ว่าค่าอยู่ระหว่าง 2 กับ 4 กด ▶ ดูวิธีไล่เข้าหา`,
+      `<b>${pwr('2', '√2')} = ?</b> — the exponent is a real number that is not a fraction; all we know is the value lies between 2 and 4. Press ▶ to see how we close in on it.`),
+    end: S => rlStart(S.el) },
+  { cap: T(`<b>ซูมเส้นจำนวนของเลขชี้กำลัง</b> — √2 อยู่ใน [1, 2] → ใน [1.4, 1.5] → ใน [1.41, 1.42] → ใน [1.414, 1.415] · แต่ละรอบได้ทศนิยมที่เข้าใกล้ √2 มากขึ้น (จุดน้ำเงิน) : 1.4 → 1.41 → 1.414 → 1.4142`,
+      `<b>Zoom in on the exponent’s number line</b> — √2 lies in [1, 2] → in [1.4, 1.5] → in [1.41, 1.42] → in [1.414, 1.415] · each round gives a decimal closer to √2 (blue dot): 1.4 → 1.41 → 1.414 → 1.4142.`),
+    end: S => rlZoom(S.el, 1), play: S => S.anim.run(4200, t => rlZoom(S.el, t), EASE.lin) },
+  { cap: T(`<b>ยกกำลังด้วยทศนิยมแต่ละตัว</b> — ${pwr('2', '1.4')} ≈ 2.6390 → ${pwr('2', '1.41')} ≈ 2.6574 → ${pwr('2', '1.414')} ≈ 2.6647 → ${pwr('2', '1.4142')} ≈ 2.6651 · ค่านิ่งเข้าหา 2.6651… นั่นคือค่าของ ${pwr('2', '√2')}`,
+      `<b>Raise 2 to each decimal</b> — ${pwr('2', '1.4')} ≈ 2.6390 → ${pwr('2', '1.41')} ≈ 2.6574 → ${pwr('2', '1.414')} ≈ 2.6647 → ${pwr('2', '1.4142')} ≈ 2.6651 · the values settle toward 2.6651…, which is the value of ${pwr('2', '√2')}.`),
+    end: S => rlTable(S.el, 1), play: S => S.anim.run(4600, t => rlTable(S.el, t), EASE.lin) },
+  { cap: T(`<b>เติมช่องว่างของกราฟ</b> — วางจุดของ ${pwr('2', X)} ที่ x ห่างกัน 1 → ½ → ¼ → ⅛ → 1/16 จุดถี่ขึ้นจนต่อกันเป็นเส้นเรียบ ${rlSqNote()}`,
+      `<b>Filling the gaps of the graph</b> — plot ${pwr('2', X)} with x spaced by 1 → ½ → ¼ → ⅛ → 1/16; the dots get so dense they join into a smooth curve. ${rlSqNote(true)}`),
+    end: S => rlPoints(S.el, 1), play: S => S.anim.run(5200, t => rlPoints(S.el, t), EASE.lin) }
 ];
-function trCalc(p) {
-  const k = p.c / p.a, m = p.d - k * p.b, L = polyHtml([p.b, p.a]), lump = s => `<span class="lump">${s}</span>`;
-  const x0 = (p.n - p.d) / p.c, ans0 = p.a * x0 + p.b, kS = k === 1 ? '' : mn(k), mS = m === 0 ? '' : ` ${m < 0 ? '−' : '+'} ${Math.abs(m)}`;
-  return { k, m, L, lump, x0, ans0,
-    r1: `<i>f</i>(${lump(L)}) = ${polyHtml([p.d, p.c])}`,
-    r2: `<i>f</i>(${lump(L)}) = ${kS}(${lump(L)})${mS}`,
-    r3: `<i>f</i>(${X}) = ${ans(polyHtml([m, k]))}`,
-    prob: `<i>f</i>(${L}) = ${polyHtml([p.d, p.c])}` };
-}
-function lumpDraw(el, rows, dim, hideNew) {
-  el.innerHTML = '<div class="sw-box"></div>'; const box = el.firstChild, out = [];
-  rows.forEach((h, i) => { const r = document.createElement('div'); r.className = 'sw-row' + (dim.includes(i) ? ' dim' : ''); r.innerHTML = h; if (hideNew && !dim.includes(i)) r.style.opacity = 0; box.appendChild(r); out.push(r); });
-  return out;
-}
-function makeLump(host) {
-  const w = { cur: 0 };
-  host.innerHTML = '<div class="chips"></div><div class="lumpsc"></div>';
-  const P = () => trCalc(TRP[w.cur]), R = () => { const c = P(); return [c.r1, c.r2, c.r3]; };
-  const scenes = [
-    { cap: () => { const p = TRP[w.cur], c = P(); return tx(T(`โจทย์ <i>f</i>(${c.L}) = ${polyHtml([p.d, p.c])} · มอง (${c.L}) เป็น <b>"ก้อน"</b> เดียว (กล่องสีม่วง) — เป้าหมายคือให้ฝั่งขวาเป็น "ก้อน" ด้วย`, `Problem <i>f</i>(${c.L}) = ${polyHtml([p.d, p.c])} · treat (${c.L}) as a single <b>"lump"</b> (purple box) — the goal is to make the right-hand side a lump too.`)); },
-      end: S => { lumpDraw(S.el, R().slice(0, 1), []); },
-      play: async S => { const r = lumpDraw(S.el, R().slice(0, 1), [], true); await fadeIn(S.anim, r[0], 500); } },
-    { cap: () => { const p = TRP[w.cur], c = P(), kk = polyHtml(pMul([c.k], [p.b, p.a])); return tx(T(`จัดฝั่งขวาให้เป็นก้อนเดียวกัน: ${c.k === 1 ? '' : mn(c.k) + ' × '}(${c.L}) = ${kk}${c.m === 0 ? '' : ' จึงต้อง' + (c.m < 0 ? 'ลบ ' : 'บวก ') + Math.abs(c.m)} → ${polyHtml([p.d, p.c])} = ${c.k === 1 ? '' : mn(c.k)}(${c.L})${c.m === 0 ? '' : (c.m < 0 ? ' − ' : ' + ') + Math.abs(c.m)}`, `Make the right side contain the same lump: ${c.k === 1 ? '' : mn(c.k) + ' × '}(${c.L}) = ${kk}${c.m === 0 ? '' : ', so ' + (c.m < 0 ? 'subtract ' : 'add ') + Math.abs(c.m)} → ${polyHtml([p.d, p.c])} = ${c.k === 1 ? '' : mn(c.k)}(${c.L})${c.m === 0 ? '' : (c.m < 0 ? ' − ' : ' + ') + Math.abs(c.m)}.`)); },
-      end: S => { lumpDraw(S.el, R().slice(0, 2), [0]); },
-      play: async S => { const r = lumpDraw(S.el, R().slice(0, 2), [0], true); await fadeIn(S.anim, r[1], 600); } },
-    { cap: () => tx(T(`ตอนนี้เปลี่ยน "ก้อน" เป็น <b>x</b> ทุกที่ — กล่องยุบเหลือ x → <i>f</i>(x) = ${polyHtml([P().m, P().k])}`, `Now replace the lump by <b>x</b> everywhere — the boxes collapse to x → <i>f</i>(x) = ${polyHtml([P().m, P().k])}.`)),
-      end: S => { lumpDraw(S.el, R(), [1]); },
-      play: async S => {
-        const A = S.anim, r = lumpDraw(S.el, R(), [0, 1], true), rw = r[2];
-        rw.innerHTML = R()[1]; rw.className = 'sw-row'; await fadeIn(A, rw, 350); await A.wait(500);
-        const lumps = [...rw.querySelectorAll('.lump')], ws = lumps.map(l => l.offsetWidth - 0);
-        const tgt = lumps.map(l => { const c = l.cloneNode(true); c.innerHTML = X; c.style.cssText = 'position:absolute;visibility:hidden'; rw.appendChild(c); const v = c.offsetWidth; c.remove(); return v; });
-        lumps.forEach((l, i) => { l.style.width = ws[i] + 'px'; });
-        let swapped = false;
-        await A.run(1100, t => lumps.forEach((l, i) => { l.style.width = lerp(ws[i], tgt[i], t).toFixed(1) + 'px'; if (t > .5 && !swapped) { l.innerHTML = X; if (i === lumps.length - 1) swapped = true; } }), EASE.inOut);
-        await A.wait(350); rw.innerHTML = R()[2];
-      } }
-  ];
-  const sc = makeScenes(host.querySelector('.lumpsc'), scenes, { prompt: T('เลือกโจทย์ แล้วกด ▶ ดู "ก้อน" ถูกจัดแล้วยุบเป็น x', 'Pick a problem, then press ▶ to see the "lump" appear and collapse into x') });
-  w.render = () => {
-    const c = host.querySelector('.chips');
-    c.innerHTML = `<span class="chips-label">${EN() ? 'Problem' : 'โจทย์'}</span>` + TRP.map((p, i) => `<button class="chip${i === w.cur ? ' active' : ''}" data-i="${i}"><i>f</i>(${polyHtml([p.b, p.a])}) = ${polyHtml([p.d, p.c])}</button>`).join('');
-    c.querySelectorAll('.chip').forEach(b => b.onclick = () => { w.cur = +b.dataset.i; w.render(); sc.go(sc.k, false); });
-  };
-  w.refresh = () => w.render();
-  LIVE.push(w); w.render();
-}
-// ทายก่อน f⁻¹(ตัวเลข) แล้วเฉลยทีละขั้น
-function trItem(p, n) {
-  const c = trCalc(p), nn = mn(p.n), xs = mn(c.x0);
-  return {
-    chip: T(`โจทย์ ${n}`, `Problem ${n}`),
-    draw: async (el, ctx) => {
-      const rows = [`<i>f</i>(${c.lump(c.L)}) = ${polyHtml([p.d, p.c])}`, `${fi}(${nn}) = ?`];
-      if (ctx.done[0]) rows.push(
-        `${fi}(${polyHtml([p.d, p.c])}) = ${c.lump(c.L)}`,
-        `${polyHtml([p.d, p.c])} = ${nn} → ${X} = ${xs}`,
-        `${fi}(${nn}) = ${polyHtml([p.b, p.a]).replace(/<i>x<\/i>/g, `(${xs})`)} = ${ans(mn(c.ans0))}`);
-      const r = lumpDraw(el, rows, [], false);
-      if (ctx.done[0] && ctx.animate) { for (let i = 2; i < r.length; i++) r[i].style.opacity = 0; for (let i = 2; i < r.length; i++) { await ctx.anim.wait(450); await fadeIn(ctx.anim, r[i], 500); } }
-    },
-    qs: [{
-      q: T(`ค่าของ ${fi}(${nn}) เป็นเท่าใด?`, `What is ${fi}(${nn})?`), o: p.o.map(mn), a: p.ia,
-      why: T(`<i>f</i>(ก้อน) = ${polyHtml([p.d, p.c])} แปลว่า ก้อน = ${fi}(${polyHtml([p.d, p.c])}) → ตั้ง ${polyHtml([p.d, p.c])} = ${nn} ได้ x = ${xs} แล้วแทนในก้อน ได้ ${mn(c.ans0)} (ดูขั้นด้านบน) · ตัวหลอก: ${mn(c.x0)} คือ x ไม่ใช่คำตอบ`, `<i>f</i>(lump) = ${polyHtml([p.d, p.c])} means lump = ${fi}(${polyHtml([p.d, p.c])}) → set ${polyHtml([p.d, p.c])} = ${nn} to get x = ${xs}, then put it in the lump to get ${mn(c.ans0)} (see the steps above) · the decoy ${mn(c.x0)} is just x, not the answer.`)
-    }]
-  };
-}
+function rlSqNote(en) { return en ? 'So y = 2<sup>x</sup> can be drawn as a continuous curve (next piece).' : 'จึงวาด y = 2<sup>x</sup> เป็นเส้นต่อเนื่องได้ (ชิ้นถัดไป)'; }
 
-// ───────── แบบฝึกหัด ─────────
+// ทายก่อนเฉลย: 3^√2 · 3^(2 − √2)
+const RL_PRED = { chip: mx(pwr('3', '√2') + ' · ' + pwr('3', '2 − √2')), draw: (el, ctx) => {
+  const done = ctx.done[0], w1 = (Math.SQRT2 / 2 * 100).toFixed(2), w2 = (100 - Math.SQRT2 / 2 * 100).toFixed(2);
+  el.innerHTML = `<div class="rz-stage" style="min-height:0">${rzLine([mx(pwr('3', '√2') + ' · ' + pwr('3', '2 − √2') + ' = ?')], 'lg')}` +
+    `<div class="rz-note">${tx(T('คูณกัน → เลขชี้กำลังต่อกัน (บวกกัน) ดูความยาวรวมของสองท่อน', 'Multiplying → the exponents join (add) — look at the total length of the two pieces'))}</div>` +
+    `<div class="rz-bar"><div class="sb" style="width:${w1}%">√2</div><div class="so" style="width:${w2}%">2 − √2</div></div>` +
+    (done ? rzLine([mx('√2 + (2 − √2) = 2'), '→ ' + mx(pwr('3', 2) + ' = 9')], 'sm') : `<div class="rz-note">${tx(T('รวมแล้วยาวเท่าใด ?', 'How long is the total?'))}</div>`) + '</div>';
+}, qs: [{ q: T(`${pwr('3', '√2')} · ${pwr('3', '2 − √2')} เท่ากับเท่าใด`, `What is ${pwr('3', '√2')} · ${pwr('3', '2 − √2')} equal to?`),
+  o: ['6', '9', pwr('3', '2√2'), '3'], a: 1,
+  why: T(`สมบัติข้อ 1 ใช้ได้กับเลขชี้กำลังจำนวนจริง (ฐานบวก): เลขชี้กำลังบวกกัน √2 + (2 − √2) = 2 → ${pwr('3', 2)} = 9 · √2 หักล้างกันเอง จึงได้จำนวนเต็ม`,
+    `Property 1 works for real exponents (positive base): the exponents add, √2 + (2 − √2) = 2 → ${pwr('3', 2)} = 9 · the √2 parts cancel, leaving a whole number.`) }] };
+
+// ═══════════════════════════════════════════════════════════════
+//  แบบฝึกหัด 8 ข้อ (แต่งใหม่)
+// ═══════════════════════════════════════════════════════════════
 const QUIZ = [
-  { q: T('ถ้า f(x) = 2x + 7 แล้ว f⁻¹(x) คือ', 'If f(x) = 2x + 7, then f⁻¹(x) is'), o: [frac('x − 7', '2'), frac('x + 7', '2'), '2x − 7', frac('1', '2x + 7')], a: 0, e: T(`y = 2x + 7 → สลับ: x = 2y + 7 → y = ${frac('x − 7', '2')}`, `y = 2x + 7 → swap: x = 2y + 7 → y = ${frac('x − 7', '2')}.`) },
-  { q: T('ถ้า (2, 5) อยู่บนกราฟของ f แล้วจุดใดอยู่บนกราฟของ f⁻¹', 'If (2, 5) is on the graph of f, which point is on the graph of f⁻¹?'), o: ['(2, 5)', '(5, 2)', '(−2, −5)', '(−5, 2)'], a: 1, e: T('f⁻¹ สลับพิกัดของ f ทุกจุด: (a, b) → (b, a)', 'f⁻¹ swaps the coordinates of every point: (a, b) → (b, a).') },
-  { q: T('ฟังก์ชันใดมีอินเวอร์สที่เป็นฟังก์ชัน (บนโดเมนที่กำหนด)', 'Which function has an inverse that is a function (on its stated domain)?'), o: ['y = x² , x ∈ ℝ', 'y = |x| , x ∈ ℝ', 'y = x³ + 1 , x ∈ ℝ', 'y = 3 , x ∈ ℝ'], a: 2, e: T('ต้อง 1-1: x³ + 1 ผ่านเส้นนอนทดสอบ ส่วน x², |x| ตัด 2 จุด และ y = 3 ทุก x ได้ค่าเดียวกัน', 'It must be one-to-one: x³ + 1 passes the horizontal-line test; x² and |x| meet a line twice; y = 3 gives every x the same value.') },
-  { q: T(`f(x) = ${frac('x − 1', 'x + 2')} แล้ว f⁻¹(x) คือ`, `f(x) = ${frac('x − 1', 'x + 2')}. Then f⁻¹(x) is`), o: [frac('2x + 1', '1 − x'), frac('x + 2', 'x − 1'), frac('2x − 1', 'x + 1'), frac('x + 1', '2 − x')], a: 0, e: T(`x = ${frac('y − 1', 'y + 2')} → xy + 2x = y − 1 → y(x − 1) = −2x − 1 → y = ${frac('2x + 1', '1 − x')} (ตรวจ: f(3) = 2/5, f⁻¹(2/5) = 3 ✓)`, `x = ${frac('y − 1', 'y + 2')} → xy + 2x = y − 1 → y(x − 1) = −2x − 1 → y = ${frac('2x + 1', '1 − x')} (check: f(3) = 2/5, f⁻¹(2/5) = 3 ✓).`) },
-  { q: T('f(x) = x² − 1 เมื่อ x ≥ 0 โดเมนของ f⁻¹ คือ', 'f(x) = x² − 1 for x ≥ 0. The domain of f⁻¹ is'), o: ['[0, ∞)', '[−1, ∞)', 'ℝ', '(−1, ∞)'], a: 1, e: T('D<sub>f⁻¹</sub> = R<sub>f</sub> และ x ≥ 0 → x² − 1 ≥ −1 ได้ทุกค่าตั้งแต่ −1 → [−1, ∞) (f⁻¹(x) = √(x + 1))', 'D<sub>f⁻¹</sub> = R<sub>f</sub>, and x ≥ 0 gives x² − 1 ≥ −1 reaching every value from −1 → [−1, ∞) (f⁻¹(x) = √(x + 1)).') },
-  { q: T('f(x) = x² + 4x เมื่อ x ≥ −2 แล้ว f⁻¹(x) คือ', 'f(x) = x² + 4x for x ≥ −2. Then f⁻¹(x) is'), o: ['−2 + √(x + 4)', '−2 − √(x + 4)', '2 + √(x + 4)', '√(x + 4)'], a: 0, e: T('x = y² + 4y → y² + 4y − x = 0 → y = −2 ± √(x + 4) แล้วเลือก y ≥ −2 (R<sub>f⁻¹</sub> = D<sub>f</sub>) → −2 + √(x + 4)', 'x = y² + 4y → y² + 4y − x = 0 → y = −2 ± √(x + 4), then pick y ≥ −2 (R<sub>f⁻¹</sub> = D<sub>f</sub>) → −2 + √(x + 4).') },
-  { q: T('ถ้า f(2x − 1) = 6x + 3 แล้ว f⁻¹(9) มีค่าเท่าใด', 'If f(2x − 1) = 6x + 3, what is f⁻¹(9)?'), o: ['1', '2', '3', '−1'], a: 0, e: T('ตั้ง 6x + 3 = 9 → x = 1 → f⁻¹(9) = 2(1) − 1 = 1 (ตรวจ: f(x) = 3x + 6, f(1) = 9 ✓)', 'Set 6x + 3 = 9 → x = 1 → f⁻¹(9) = 2(1) − 1 = 1 (check: f(x) = 3x + 6, f(1) = 9 ✓).') },
-  { q: T('f(x) = √(x − 3) แล้วเรนจ์ของ f⁻¹ คือ', 'f(x) = √(x − 3). The range of f⁻¹ is'), o: ['[0, ∞)', '[3, ∞)', 'ℝ', '(−∞, 3]'], a: 1, e: T('R<sub>f⁻¹</sub> = D<sub>f</sub> = [3, ∞) (ในรูท x − 3 ≥ 0)', 'R<sub>f⁻¹</sub> = D<sub>f</sub> = [3, ∞) (inside the root x − 3 ≥ 0).') },
-  { q: T('กราฟของ f และ f⁻¹ สมมาตรกันรอบเส้นใด', 'The graphs of f and f⁻¹ are symmetric about which line?'), o: [T('แกน x', 'the x-axis'), T('แกน y', 'the y-axis'), 'y = x', 'y = −x'], a: 2, e: T('สลับพิกัด (a, b) ↔ (b, a) คือการสะท้อนรอบเส้น y = x', 'Swapping (a, b) ↔ (b, a) is exactly reflection in the line y = x.') },
-  { q: T(`f(x) = ${frac('2x + 3', 'x − 1')} โดเมนของ f⁻¹ คือ`, `f(x) = ${frac('2x + 3', 'x − 1')}. The domain of f⁻¹ is`), o: ['ℝ − {1}', 'ℝ − {2}', 'ℝ − {3}', 'ℝ'], a: 1, e: T('D<sub>f⁻¹</sub> = R<sub>f</sub> = ℝ − {a/c} = ℝ − {2/1} = ℝ − {2}', 'D<sub>f⁻¹</sub> = R<sub>f</sub> = ℝ − {a/c} = ℝ − {2/1} = ℝ − {2}.') }
+  { q: T(`ค่าของ ${frac(pwr('3', 2) + ' · ' + pwr('3', 5), pwr('3', 4))} เท่ากับเท่าใด`, `What is ${frac(pwr('3', 2) + ' · ' + pwr('3', 5), pwr('3', 4))} equal to?`),
+    o: ['27', '729', '81', '9'], a: 0,
+    e: T(`คูณกันเลขชี้กำลังบวกกัน (สมบัติข้อ 1): 3² · 3⁵ = 3⁷ · แล้วหารเลขชี้กำลังลบกัน (สมบัติข้อ 2): 3⁷ ÷ 3⁴ = 3³ = 27 · ถ้าได้ 729 คือเอา 2 × 5 มาคูณกัน`,
+      `Multiplying adds the exponents (property 1): 3² · 3⁵ = 3⁷ · dividing subtracts them (property 2): 3⁷ ÷ 3⁴ = 3³ = 27 · getting 729 means multiplying 2 × 5.`) },
+  { q: T(`${pwr('81', frac(1, 4))} มีค่าเท่าใด`, `What is ${pwr('81', frac(1, 4))}?`),
+    o: ['±3', '9', '3', '20.25'], a: 2,
+    e: T(`หาจำนวนที่ยกกำลัง 4 แล้วได้ 81 คือ 3 เพราะ 3⁴ = 81 · n = 4 เป็นเลขคู่ จึงตอบค่าบวกตัวเดียว (ไม่ใช่ ±3) · ไม่ใช่ 81 ÷ 4`,
+      `Find the number whose 4th power is 81: 3, since 3⁴ = 81 · n = 4 is even, so the answer is the single positive value (not ±3) · it is not 81 ÷ 4.`) },
+  { q: T(`${pwr('32', frac(3, 5))} มีค่าเท่าใด`, `What is ${pwr('32', frac(3, 5))}?`),
+    o: ['6', '2', '8', '96'], a: 2,
+    e: T(`ตัวส่วน 5 → รากที่ 5 ของ 32 = 2 เพราะ 2⁵ = 32 · ตัวเศษ 3 → 2³ = 8 · ถ้าได้ 2 คือลืมยกกำลังตัวเศษ`,
+      `Denominator 5 → the 5th root of 32 is 2 since 2⁵ = 32 · numerator 3 → 2³ = 8 · getting 2 means forgetting the numerator’s power.`) },
+  { q: T(`${pwr('9', '−' + frac(3, 2))} มีค่าเท่าใด`, `What is ${pwr('9', '−' + frac(3, 2))}?`),
+    o: ['−27', '27', frac(1, 27), frac(1, 6)], a: 2,
+    e: T(`เครื่องหมายลบ = กลับเป็นส่วน ${pwr('9', '−' + frac(3, 2))} = ${frac(1, pwr('9', frac(3, 2)))} · ตัวส่วน 2 → √9 = 3 แล้ว 3³ = 27 → ${frac(1, 27)} · เครื่องหมายลบที่เลขชี้กำลังไม่ทำให้ค่าติดลบ`,
+      `A minus sign flips into a fraction: ${pwr('9', '−' + frac(3, 2))} = ${frac(1, pwr('9', frac(3, 2)))} · denominator 2 → √9 = 3, then 3³ = 27 → ${frac(1, 27)} · a minus in the exponent does not make the value negative.`) },
+  { q: T('ข้อใดไม่เป็นจำนวนจริง', 'Which one is not a real number?'),
+    o: [pwr('(−64)', frac(1, 3)), pwr('(−1)', frac(1, 5)), pwr('(−81)', frac(1, 4)), pwr('(−8)', frac(2, 3))], a: 2,
+    e: T(`ตัวส่วน 4 เป็นรากเลขคู่ ฐานติดลบจึงหาค่าในจำนวนจริงไม่ได้ (ไม่มีจำนวนจริงที่ยกกำลัง 4 แล้วได้ −81) · ส่วนตัวส่วน 3 และ 5 เป็นรากเลขคี่ ใช้กับฐานติดลบได้ · และ ${pwr('(−8)', frac(2, 3))} = (−2)² = 4`,
+      `The denominator 4 is an even root, so a negative base has no real value (no real number has 4th power −81) · the denominators 3 and 5 are odd roots, fine for a negative base · and ${pwr('(−8)', frac(2, 3))} = (−2)² = 4.`) },
+  { q: T(`${frac(pwr('5', '2 + √3'), pwr('5', '√3'))} เท่ากับเท่าใด`, `What is ${frac(pwr('5', '2 + √3'), pwr('5', '√3'))} equal to?`),
+    o: ['10', '25', pwr('5', '2√3'), '5√3'], a: 1,
+    e: T(`หารกันเลขชี้กำลังลบกัน (สมบัติข้อ 2 ใช้ได้กับจำนวนจริง): (2 + √3) − √3 = 2 → 5² = 25 · √3 หักล้างกันเอง`,
+      `Dividing subtracts the exponents (property 2 works for real exponents): (2 + √3) − √3 = 2 → 5² = 25 · the √3 parts cancel.`) },
+  { q: T(`ค่าของ ${pwr('(' + pwr('8', frac(1, 3)) + ' · ' + pwr('9', frac(1, 2)) + ')', 2)} เท่ากับเท่าใด`, `What is ${pwr('(' + pwr('8', frac(1, 3)) + ' · ' + pwr('9', frac(1, 2)) + ')', 2)} equal to?`),
+    o: ['36', '25', '6', '12'], a: 0,
+    e: T(`${pwr('8', frac(1, 3))} = 2 และ ${pwr('9', frac(1, 2))} = 3 → (2 · 3)² = 6² = 36 · ถ้าได้ 25 คือบวกก่อนยกกำลังสอง (2 + 3)² · ถ้าได้ 6 คือลืมยกกำลังสอง`,
+      `${pwr('8', frac(1, 3))} = 2 and ${pwr('9', frac(1, 2))} = 3 → (2 · 3)² = 6² = 36 · getting 25 means adding first, (2 + 3)² · getting 6 means forgetting the square.`) },
+  { q: T(`ถ้า ${pwr('a', frac(1, 4))} = 3 แล้ว a เท่ากับเท่าใด`, `If ${pwr('a', frac(1, 4))} = 3, what is a?`),
+    o: ['81', '12', frac(3, 4), '64'], a: 0,
+    e: T(`${pwr('a', frac(1, 4))} คือจำนวนที่ยกกำลัง 4 แล้วได้ a → a = 3⁴ = 3 · 3 · 3 · 3 = 81 · ถ้าได้ 12 คือเอา 3 × 4`,
+      `${pwr('a', frac(1, 4))} is the number whose 4th power is a → a = 3⁴ = 3 · 3 · 3 · 3 = 81 · getting 12 means multiplying 3 × 4.`) },
+  { q: T(`${pwr('3', '√5')} · ${pwr('3', '1 − √5')} เท่ากับเท่าใด`, `What is ${pwr('3', '√5')} · ${pwr('3', '1 − √5')} equal to?`),
+    o: ['3', '9', '1', pwr('3', '√5')], a: 0,
+    e: T(`คูณกันเลขชี้กำลังบวกกัน: √5 + (1 − √5) = 1 → 3¹ = 3 · √5 หักล้างกันเอง`,
+      `Multiplying adds the exponents: √5 + (1 − √5) = 1 → 3¹ = 3 · the √5 parts cancel.`) }
 ];
 
+// ═══════════════════════════════════════════════════════════════
+//  ประกอบหน้า
+// ═══════════════════════════════════════════════════════════════
 function build() {
-  injectCss();
-  document.getElementById('tab-idea').innerHTML =
-    card('🛤️', d('สายพานย้อนกลับ: f⁻¹ ถอด f ทีละเครื่อง', 'The reverse conveyor: f⁻¹ undoes f box by box'),
-      `<div id="w-conv"></div>
-       <div class="formula" style="font-size:1.15rem"><span>f(a) = b</span><span>⟺</span><span>f⁻¹(b) = a</span></div>
-       <div class="box-warn">${d('<b>f⁻¹ ไม่ได้แปลว่า 1/f</b> — เลข −1 ตรงนี้เป็นสัญลักษณ์ของ "ฟังก์ชันผกผัน" ไม่ใช่เลขชี้กำลัง', '<b>f⁻¹ does not mean 1/f</b> — the −1 here is notation for "inverse function", not an exponent.')}</div>`) +
-    card('🔀', d('สลับ x ↔ y แล้วจัดรูป', 'Swap x ↔ y, then solve'),
-      `<div id="w-swp"></div>
-       <div class="formula" style="font-size:1.05rem;gap:6px 10px"><span>${d('① เขียน y = f(x)', '① write y = f(x)')}</span><span>→</span><span>${d('② สลับ x ↔ y', '② swap x ↔ y')}</span><span>→</span><span>${d('③ จัดรูปให้ y อยู่คนเดียว', '③ solve for y')}</span></div>`) +
-    card('📌', d('ตัวอย่างวิธีคิด', 'Worked examples'), '<div id="w-met"></div>');
-  makeScenes(document.getElementById('w-conv'), CONV_SCENES, { prompt: T('กด ▶ ทีละฉาก — ดูลูกบอลวิ่งไป แล้ววิ่งย้อนกลับ', 'Press ▶ one scene at a time — watch the ball roll forward, then back') });
-  makeScenes(document.getElementById('w-swp'), SW_SCENES, { prompt: T('กด ▶ ทีละฉาก — ดูป้าย x กับ y ลอยสลับที่', 'Press ▶ one scene at a time — watch the labels x and y swap places') });
-  makeProblemSteps(document.getElementById('w-met'), T('โจทย์', 'Problem'), MET);
+  const st = document.createElement('style'); st.textContent = RZ_CSS; document.head.appendChild(st);
 
-  document.getElementById('tab-graph').innerHTML =
-    card('🪞', d('พับกระดาษตามเส้น y = x', 'Fold the paper along y = x'),
-      `<div id="w-fold"></div>
-       <div class="formula" style="font-size:1.15rem"><span>(a, b) ${d('บน', 'on')} f</span><span>⟺</span><span>(b, a) ${d('บน', 'on')} f⁻¹</span></div>`) +
-    card('🎯', d('ลองทำ: จุดสะท้อนอยู่ตรงไหน', 'Try it: where is the mirror point?'), '<div id="w-try"></div>');
-  makeFold(document.getElementById('w-fold'));
-  makeTry(document.getElementById('w-try'));
+  // ── แท็บ 1 · ทบทวนสมบัติข้อ 1–7 ──
+  document.getElementById('tab-review').innerHTML =
+    card('📋', d('สมบัติ Expo ข้อ 1–7 (ทบทวน)', 'Expo Properties 1–7 (Review)'),
+      `<div class="sc-prompt">${d('แต่ละแถว: สมบัติ + ภาพแผ่นฐาน (แผ่นจางคือแผ่นที่ถูกตัดทิ้ง)', 'Each row: the property + a base-tile picture (faded tiles are the ones that cancel)')}</div>${rvTable()}
+       <div style="text-align:center;margin-top:12px"><a class="btn ghost" style="display:inline-block;text-decoration:none" href="../../m1/exponents/exponents.html" data-th="ทบทวนละเอียดที่สื่อ ม.1 →" data-en="Detailed review in the Grade 7 media →">ทบทวนละเอียดที่สื่อ ม.1 →</a></div>`) +
+    card('🔮', d('ทายก่อน: สองฝั่งเท่ากันไหม', 'Guess first: are the two sides equal?'), '<div id="w-rvp"></div>');
+  makePredict(document.getElementById('w-rvp'), RV_PRED.map(rvPredItem), { label: T('สมการ', 'Equation'), prompt: T('ดูแผ่นฐานของสองฝั่ง แล้วทายว่าเท่ากันไหม — เฉลยจะนับแผ่นให้ดู', 'Look at the tiles on both sides and guess whether they are equal — the answer counts the tiles') });
 
-  document.getElementById('tab-exist').innerHTML =
-    card('↩️', d('กลับหัวลูกศรของ f', 'Reverse the arrows of f'),
-      `<div id="w-flip"></div>
-       <div class="formula" style="font-size:1.1rem"><span>${d('มีอินเวอร์สที่เป็นฟังก์ชัน', 'an inverse that is a function exists')}</span><span>⟺</span><span>${d('f เป็นหนึ่งต่อหนึ่ง (1-1)', 'f is one-to-one (1-1)')}</span></div>`) +
-    card('✂️', d('ทำให้ f เป็น 1-1 ด้วยการจำกัดโดเมน', 'Making f one-to-one by restricting the domain'),
-      `<div id="w-res"></div>
-       <div class="box-info">${d('f ที่ไม่ 1-1 ตลอดทั้งโดเมน ตัดเอาครึ่งหนึ่งที่ <b>ขึ้นอย่างเดียวหรือลงอย่างเดียว</b> ก็หาอินเวอร์สได้ — แต่ต้องบอกโดเมนที่จำกัดไว้ให้ครบ', 'An f that is not 1-1 on its whole domain can get an inverse by keeping one half that <b>only rises or only falls</b> — but always state the restricted domain.')}</div>`);
-  makePredict(document.getElementById('w-flip'), RV.map(revItem), { label: T('แผนภาพ', 'Diagram'), prompt: T('ดูแผนภาพของ f แล้วทายก่อน — จากนั้นลูกศรจะหมุนกลับหัวให้ดู', 'Look at f and guess first — then the arrows turn upside down') });
-  makePredict(document.getElementById('w-res'), RS.map(rsItem), { label: T('ฟังก์ชัน', 'Function'), prompt: T('ดูกราฟ แล้วทายก่อน — จากนั้นตัวเลื่อน c จะวิ่งให้ดูเอง', 'Look at the graph and guess first — then the slider c sweeps by itself') });
+  // ── แท็บ 2 · เลขชี้กำลัง 1/n ──
+  document.getElementById('tab-unit').innerHTML =
+    card('🔍', d('เลขชี้กำลัง 1/n คืออะไร', 'What is an exponent of 1/n?'),
+      `<div id="w-un"></div>
+       <div class="formula"><span>${pwr(A_, frac(1, N_))} = ${B_} &nbsp;${d('เมื่อ', 'when')}&nbsp; ${pwr(B_, N_)} = ${A_}</span><span>${d('เขียนแทนด้วย', 'also written')} ${nrt(N_, A_)}</span></div>
+       <div class="box-info">${d('<b>n คู่</b> → ต้องใช้ a ≥ 0 (คำตอบเป็นค่าบวก) · <b>n คี่</b> → ใช้ a ติดลบได้ · รากที่ n ละเอียดๆ ดูที่ชิ้น “รากที่ n”', '<b>n even</b> → a must be ≥ 0 (the answer is the positive value) · <b>n odd</b> → a may be negative · see the “nth Roots” piece for the full story')}</div>`) +
+    card('🔮', d('ทายก่อน: เลขชี้กำลัง 1/n', 'Guess first: an exponent of 1/n'), '<div id="w-unp"></div>');
+  makeScenes(document.getElementById('w-un'), UN_SCENES, { prompt: T(`กด ▶ ทีละฉาก — ดูว่า ${pwr('9', frac(1, 2))} และ ${pwr('8', frac(1, 3))} หมายถึงจำนวนอะไร`, `Press ▶ one scene at a time — see which numbers ${pwr('9', frac(1, 2))} and ${pwr('8', frac(1, 3))} stand for`) });
+  makePredict(document.getElementById('w-unp'), UN_PRED.map(exPredItem), { label: T('โจทย์', 'Problem'), prompt: T('เลือกโจทย์ แล้วทาย — เฉลยจะต่อแผ่นฐานให้ดู', 'Pick a problem and guess — the answer builds it from base tiles') });
 
-  document.getElementById('tab-dr').innerHTML =
-    card('🔄', d('โดเมนกับเรนจ์สลับกัน', 'Domain and range trade places'),
-      `<div id="w-dr"></div>
-       <div class="formula" style="font-size:1.15rem"><span>D<sub>f⁻¹</sub> = R<sub>f</sub></span><span>R<sub>f⁻¹</sub> = D<sub>f</sub></span></div>`) +
-    card('🧮', d('เครื่องมือเศษส่วน: f กับ f⁻¹ พร้อมกัน', 'Fraction tool: f and f⁻¹ together'), '<div id="w-swap"></div>');
-  makeDrSwap(document.getElementById('w-dr'));
-  makeSwap(document.getElementById('w-swap'));
+  // ── แท็บ 3 · เลขชี้กำลัง m/n ──
+  document.getElementById('tab-frac').innerHTML =
+    card('🍰', d(`เลขชี้กำลัง m/n: ตัวส่วนคือราก ตัวเศษคือกำลัง`, 'Exponent m/n: the denominator is the root, the numerator is the power'),
+      `<div id="w-fr"></div>
+       <div class="formula"><span>${pwr(A_, frac(M_, N_))} = ${nrt(N_, pwr(A_, M_))}</span><span>${d('ใช้ได้เมื่อ', 'valid when')} ${nrt(N_, A_)} ∈ ${RR}</span></div>`) +
+    card('🔮', d('ทายก่อน: คำนวณ m/n', 'Guess first: evaluating m/n'), '<div id="w-frc"></div>') +
+    card('🔮', d('ทายก่อน: ฐานติดลบ', 'Guess first: a negative base'), '<div id="w-frp"></div>') +
+    card('🧩', d('เกมจับคู่: เลขชี้กำลังเศษส่วนกับราก', 'Matching game: fractional exponents and roots'), '<div id="w-frm"></div>');
+  makeScenes(document.getElementById('w-fr'), FR_SCENES, { prompt: T(`กด ▶ ทีละฉาก — ดู ${pwr('8', frac(2, 3))} ถูกแยกเป็นรากกับกำลัง`, `Press ▶ one scene at a time — watch ${pwr('8', frac(2, 3))} split into a root and a power`) });
+  makePredict(document.getElementById('w-frc'), FR_CALC.map(exPredItem), { label: T('โจทย์', 'Problem'), prompt: T('เลือกโจทย์ แล้วทาย — ตัวส่วนคือราก ตัวเศษคือกำลัง', 'Pick a problem and guess — the denominator is the root, the numerator is the power') });
+  makePredict(document.getElementById('w-frp'), FR_PRED, { label: T('ฐานติดลบ', 'Negative base'), prompt: T('ดูสองการ์ดคู่กัน แล้วทาย — ตัวส่วนต่างกันจะเกิดอะไรขึ้น', 'Look at the two cards side by side and guess — what does a different denominator change?') });
+  makeMatch(document.getElementById('w-frm'), FR_PAIRS, { prompt: T('กดเลขชี้กำลังเศษส่วนทางซ้าย แล้วกดรูปรากที่เท่ากันทางขวา', 'Tap a fractional exponent on the left, then the equal radical on the right'),
+    hint: T('ตัวส่วนบอกรากที่เท่าไร ตัวเศษบอกกำลัง · ถ้ามีเครื่องหมายลบให้กลับเป็นส่วนก่อน', 'The denominator gives the root, the numerator the power · a minus sign flips it into a fraction first') });
 
-  document.getElementById('tab-trick').innerHTML =
-    card('🧱', d('หา f(x) จาก f(ax + b) = cx + d: ทำ "ก้อน"', 'Finding f(x) from f(ax + b) = cx + d: make the "lump"'),
-      `<div id="w-lump"></div>
-       <div class="formula" style="font-size:1.1rem"><span>${d('จัดให้เห็นก้อน (ax + b)', 'make the lump (ax + b) appear')}</span><span>→</span><span>${d('เปลี่ยนก้อนเป็น x', 'replace the lump by x')}</span></div>`) +
-    card('🪄', d('ทริก f⁻¹(ตัวเลข): ไม่ต้องหา f⁻¹ เต็มสูตร', 'The f⁻¹(number) trick: no full formula needed'),
-      `<div id="w-trq"></div>
-       <div class="formula" style="font-size:1.1rem"><span>f(ax + b) = cx + d</span><span>⇒</span><span>ax + b = f⁻¹(cx + d)</span></div>
-       <div class="box-ok">${d('ตั้ง cx + d ให้เท่ากับตัวเลข หา x แล้วแทนใน ax + b — ประหยัดเวลามากเมื่อโจทย์ถามค่าที่จุดเดียว', 'Set cx + d equal to the number, find x, and put it in ax + b — a big time saver when only one value is asked.')}</div>`);
-  makeLump(document.getElementById('w-lump'));
-  makePredict(document.getElementById('w-trq'), TRP.map(trItem), { label: T('โจทย์', 'Problem'), prompt: T('ดูโจทย์แล้วทายก่อน — จากนั้นเฉลยทีละขั้น', 'Look at the problem and guess first — then the steps appear one by one') });
+  // ── แท็บ 4 · เลขชี้กำลังเป็นจำนวนจริง ──
+  document.getElementById('tab-real').innerHTML =
+    card('🔢', d('เลขชี้กำลังเป็นจำนวนจริง เช่น 2<sup>√2</sup>', 'A real exponent such as 2<sup>√2</sup>'),
+      `<div id="w-rl"></div>
+       <div class="formula"><span>${pwr(A_, X)} · ${pwr(A_, Y)} = ${pwr(A_, X + ' + ' + Y)}</span><span>${pwr('(' + pwr(A_, X) + ')', Y)} = ${pwr(A_, X + Y)}</span><span>${d('สมบัติข้อ 1–7 ใช้ได้เมื่อ', 'Laws 1–7 still work when')} a &gt; 0, ${X}, ${Y} ∈ ${RR}</span></div>`) +
+    card('🔮', d('ทายก่อน: ตัดกันเองของ √2', 'Guess first: the √2 parts cancel'), '<div id="w-rlp"></div>');
+  makeScenes(document.getElementById('w-rl'), RL_SCENES, { prompt: T(`กด ▶ ทีละฉาก — ดู ${pwr('2', '√2')} ถูกไล่เข้าหาด้วยทศนิยม แล้วกราฟถูกเติมให้เต็ม`, `Press ▶ one scene at a time — see ${pwr('2', '√2')} approached by decimals, then the graph filled in`) });
+  makePredict(document.getElementById('w-rlp'), [RL_PRED], { label: T('โจทย์', 'Problem'), prompt: T('ดูความยาวของเลขชี้กำลังสองท่อน แล้วทายผลคูณ', 'Look at the two pieces of the exponent and guess the product') });
 
+  // ── แท็บ 5 ──
   document.getElementById('tab-quiz').innerHTML = card('🎯', d('แบบฝึกหัด — ทดสอบความเข้าใจ', 'Quiz — test your understanding'), '<div id="w-quiz"></div>');
-  makeQuiz(document.getElementById('w-quiz'), QUIZ);
+  makeQuiz(document.getElementById('w-quiz'), QUIZ.map(it => Object.assign({}, it, { o: it.o.map(o => typeof o === 'string' && /<|\^/.test(o) ? o : (typeof o === 'string' ? mx(o) : o)) })));
 }
 
 
