@@ -285,6 +285,59 @@
     .mt-badge { left: 4px; font-size: 1rem; }
     .so-bins { grid-template-columns: 1fr; }
   }
+
+  /* ─── ของกลางกลุ่มตรีโกณมิติ (makeUnitCircle, makeTriangle, piTicks ใน base.js) — เพิ่มท้ายไฟล์เท่านั้น · สีใช้ตัวแปร --g-* / var(--card) ทั้งหมด ─── */
+  .uc-wrap, .tri-wrap { margin: 4px 0; }
+  .uc-svg .uc-circ { fill: color-mix(in srgb, var(--g-blue) 7%, var(--card)); stroke: var(--text); stroke-width: 2.4; }
+  .uc-svg .uc-tk { fill: var(--muted); stroke: none; }
+  .uc-svg .uc-lab { font-size: 13px; fill: var(--muted); font-weight: 600; }
+  .uc-svg .uc-rad { stroke: var(--text); stroke-width: 3; stroke-linecap: round; }
+  .uc-svg .uc-p { fill: var(--g-red); stroke: var(--g-ring); stroke-width: 2.4; }
+  .uc-svg .uc-halo { fill: var(--g-red); fill-opacity: .2; stroke: none; }
+  .uc-svg .uc-plab { font-size: 17px; font-style: italic; }
+  .uc-svg .uc-dash { fill: none; stroke: var(--muted); stroke-width: 2; stroke-dasharray: 6 5; }
+  .uc-svg .uc-dash.s-purple { stroke: var(--g-purple); stroke-width: 2.4; }
+  .uc-svg .uc-thick { stroke-width: 7; stroke-linecap: butt; fill: none; }
+  .uc-svg .uc-arc { fill: none; stroke: var(--g-curve); stroke-width: 3.4; stroke-linecap: round; stroke-linejoin: round; }
+  .uc-svg .uc-arrow { fill: var(--g-curve); stroke: none; }
+  .uc-read { display: flex; flex-wrap: wrap; gap: 8px 10px; justify-content: center; margin: 8px 0 2px; min-height: 8px; }
+  .uc-read .ptag { font-size: 1rem; padding: 4px 14px; background: var(--card); border: 2px solid var(--border); color: var(--text); }
+  .uc-sw { display: inline-block; width: 12px; height: 12px; border-radius: 3px; margin-right: 7px; vertical-align: -1px; }
+  .uc-sw.b { background: var(--g-blue); } .uc-sw.r { background: var(--g-red); }
+
+  .tri-svg .tr-fill { fill: color-mix(in srgb, var(--g-blue) 9%, var(--card)); stroke: none; }
+  .tri-svg .tr-side { stroke: var(--text); stroke-width: 3; stroke-linecap: round; }
+  .tri-svg .tr-side.hl { stroke-width: 4.6; }
+  .tri-svg .tr-side.hl.blue { stroke: var(--g-blue); } .tri-svg .tr-side.hl.orange { stroke: var(--g-curve); } .tri-svg .tr-side.hl.green { stroke: var(--g-green); }
+  .tri-svg .tr-side.hl.purple { stroke: var(--g-purple); } .tri-svg .tr-side.hl.pink { stroke: var(--g-pink); } .tri-svg .tr-side.hl.red { stroke: var(--g-red); } .tri-svg .tr-side.hl.teal { stroke: var(--g-teal); }
+  .tri-svg .tr-glow { stroke: transparent; stroke-width: 15; stroke-linecap: round; opacity: 0; }
+  .tri-svg .tr-glow.on { opacity: .3; }
+  .tri-svg .tr-glow.blue { stroke: var(--g-blue); } .tri-svg .tr-glow.orange { stroke: var(--g-curve); } .tri-svg .tr-glow.green { stroke: var(--g-green); }
+  .tri-svg .tr-glow.purple { stroke: var(--g-purple); } .tri-svg .tr-glow.pink { stroke: var(--g-pink); } .tri-svg .tr-glow.red { stroke: var(--g-red); } .tri-svg .tr-glow.teal { stroke: var(--g-teal); }
+  .tri-svg .tr-arc { fill: color-mix(in srgb, var(--muted) 22%, transparent); stroke: var(--muted); stroke-width: 2; }
+  .tri-svg .tr-arc.hl.blue { fill: color-mix(in srgb, var(--g-blue) 28%, transparent); stroke: var(--g-blue); } .tri-svg .tr-arc.hl.orange { fill: color-mix(in srgb, var(--g-curve) 28%, transparent); stroke: var(--g-curve); }
+  .tri-svg .tr-arc.hl.green { fill: color-mix(in srgb, var(--g-green) 28%, transparent); stroke: var(--g-green); } .tri-svg .tr-arc.hl.purple { fill: color-mix(in srgb, var(--g-purple) 28%, transparent); stroke: var(--g-purple); }
+  .tri-svg .tr-arc.hl.pink { fill: color-mix(in srgb, var(--g-pink) 28%, transparent); stroke: var(--g-pink); } .tri-svg .tr-arc.hl.red { fill: color-mix(in srgb, var(--g-red) 28%, transparent); stroke: var(--g-red); }
+  .tri-svg .tr-arc.hl.teal { fill: color-mix(in srgb, var(--g-teal) 28%, transparent); stroke: var(--g-teal); }
+  .tri-svg .tr-right { fill: none; stroke: var(--muted); stroke-width: 2; }
+  .tri-svg .tr-lab { font-size: 17px; }
+  .tri-svg .tr-alab { font-style: italic; }
+  .tri-svg .tr-name { font-size: 17px; font-style: italic; fill: var(--muted); }
+  .tri-svg .tr-handle { fill: var(--g-red); fill-opacity: .2; stroke: var(--g-red); stroke-width: 2.4; cursor: grab; }
+
+  /* เลย์เอ็ตกลุ่มตรีโกณ: ซ้าย = ภาพ (สามเหลี่ยม/วงกลม) · ขวา = บรรทัดสมการที่โผล่ทีละบรรทัด (.tg-lines > .tg-line) — จอแคบเรียงบนล่าง */
+  .tg-split { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: 10px 18px; align-items: center; }
+  .tg-split > div { min-width: 0; }
+  .tg-lines { display: flex; flex-direction: column; gap: 4px; }
+  .tg-line { font-size: 1.2rem; font-weight: 700; line-height: 1.9; color: var(--primary); }
+  .tg-line.fresh { animation: rowIn .45s ease; }
+  .tg-line .ans { font-size: 1.05em; }
+  /* ตัวหนังสือสีใน .formula (พื้นเขียวเข้ม): ข้าม = ฟ้า · ชิด = ส้ม · ฉาก = เขียว — ผสมขาวให้อ่านออกทั้ง 2 โหมด */
+  .formula .fm-b { color: color-mix(in srgb, var(--g-blue) 40%, #fff); } .formula .fm-o { color: color-mix(in srgb, var(--g-curve) 45%, #fff); } .formula .fm-g { color: color-mix(in srgb, var(--g-green) 40%, #fff); }
+  .formula .fm-p { color: color-mix(in srgb, var(--g-pink) 45%, #fff); } .formula .fm-r { color: color-mix(in srgb, var(--g-red) 45%, #fff); }
+  @media (max-width: 700px) { .tg-split { grid-template-columns: 1fr; } .tg-line { font-size: 1.08rem; } }
+  .formula .tg-line { color: inherit; }
+  .tg-split .wk-eq { overflow-y: hidden; padding: 4px 0; }
 /* ── theme:start — สร้างโดย tools/build_lessons.py ห้ามแก้มือ (แก้ที่สคริปต์แล้วรันใหม่) ── */
 :root{ --page:#0D6E9E; }
 :root[data-theme="light"]{
@@ -379,6 +432,7 @@ input[type=range]{ accent-color:var(--primary); }
   .lang-toggle{ right:12px; }
   .theme-toggle{ right:74px; }
   nav{ flex-wrap:nowrap; overflow-x:auto; justify-content:flex-start; scrollbar-width:none; }
+  nav .tab-btn{ flex:0 0 auto; white-space:nowrap; }   /* ชื่อแท็บบรรทัดเดียว ปัดแถบซ้าย-ขวาแทน (ไม่บีบจนตัดคำ) */
   nav::-webkit-scrollbar{ display:none; }
 }
 /* โหมดมืด: สีที่หน้านี้ฝังไว้เอง (สร้างอัตโนมัติ) */
@@ -1180,6 +1234,418 @@ function tileRow(base, n, o) {
 }
 tileRow.html = (base, n, o) => tileRow(base, n, o).outerHTML;
 
+// ════════════════════════════════════════════════════════════════════════════
+//  ชุดของกลางเพิ่มสำหรับกลุ่ม "ตรีโกณมิติ ม.5" (docs/design-trigonometry.md §1.2)
+//  ⚠️ เพิ่มท้ายไฟล์เท่านั้น — ห้ามแก้ของเดิมด้านบน (สื่อ 11 ชิ้นเดิมต้องไม่เปลี่ยน)
+//  ชื่อ const/function ระดับบนสุดที่เพิ่ม: rad radDeg radText radAuto piFrac piTicks exactVal exactPlain makeUnitCircle makeTriangle (+ _tg… _TG_…)
+//
+//   12) rad / radDeg / radText / radAuto / piFrac   ป้ายมุมแบบ kπ/n (HTML เศษส่วนบน/ล่าง · ข้อความธรรมดาสำหรับ SVG)
+//   13) piTicks()                                    ป้ายแกน x เป็นพหุคูณ π ลง Plot
+//   14) exactVal() / exactPlain()                    ค่าแม่นของ sin cos tan csc sec cot ที่มุม kπ/n (n = 1, 2, 3, 4, 6)
+//   15) makeUnitCircle()                             วงกลมหนึ่งหน่วย + จุด P ลากได้
+//   16) makeTriangle()                               สามเหลี่ยม SVG ป้ายด้าน/มุม ไฮไลต์ ลากจุดยอด
+// ════════════════════════════════════════════════════════════════════════════
+
+// ───────── 12) ป้ายมุม kπ/n ─────────
+const _tgGcd = (a, b) => b ? _tgGcd(b, a % b) : Math.abs(a);
+// ลดทอน k/n → { k, n } (n > 0, เครื่องหมายอยู่ที่ k)
+function _tgRed(k, n) { n = n === undefined ? 1 : n; if (n < 0) { k = -k; n = -n; } const g = _tgGcd(k, n) || 1; return { k: k / g, n: n / g }; }
+// rad(k, n) → ป้ายมุม kπ/n เป็น HTML (ก้อน mx เดียว ไม่ตัดบรรทัด) · ตัดทอนเศษส่วนเอง
+//   rad(1, 6) = π/6 (เศษส่วนบน/ล่าง) · rad(5, 6) = 5π/6 · rad(1) = π · rad(2) = 2π · rad(0) = 0 · rad(-1, 3) = −π/3 · rad(2, 4) = π/2
+//   ใช้ได้ทั้งในร้อยแก้ว/คำบรรยายฉาก/ตัวเลือก quiz/ชิป/.formula  (ใน SVG ใช้ radText ไม่ใช่ตัวนี้ — HTML ใส่ใน <text> ไม่ได้)
+function rad(k, n) {
+  const r = _tgRed(k, n);
+  if (r.k === 0) return mx('0');
+  const a = Math.abs(r.k), top = (a === 1 ? '' : a) + 'π';
+  return mx((r.k < 0 ? '−' : '') + (r.n === 1 ? top : frac(top, r.n)));
+}
+// radText(k, n) → ข้อความธรรมดา "5π/6" "−π/3" "2π" "0" — ไว้ใส่ <text> ใน SVG / title / aria
+function radText(k, n) {
+  const r = _tgRed(k, n);
+  if (r.k === 0) return '0';
+  const a = Math.abs(r.k);
+  return (r.k < 0 ? '−' : '') + (a === 1 ? '' : a) + 'π' + (r.n === 1 ? '' : '/' + r.n);
+}
+const _tgDeg = (k, n) => mn(Math.round(k * 180 / (n === undefined ? 1 : n) * 1000) / 1000) + '°';
+// radDeg(k, n) → rad(k, n) + " (30°)"  องศาคำนวณเอง · ใช้ทั้งชิ้น ① (ยังไม่นิยามเรเดียน เขียนคู่กันเสมอ)   radDeg(1, 6) = π/6 (30°) · radDeg(2, 3) = 2π/3 (120°)
+const radDeg = (k, n) => mx(rad(k, n) + ' (' + _tgDeg(k, n) + ')');
+// piFrac(theta) → { k, n } ถ้า theta (เรเดียน) เป็นพหุคูณตรรกยะของ π ที่ n ∈ 1, 2, 3, 4, 6, 8, 12 (ตัดทอนแล้ว) · ไม่ใช่ → null
+function piFrac(theta) {
+  for (const n of [1, 2, 3, 4, 6, 8, 12]) { const v = theta / Math.PI * n; if (Math.abs(v - Math.round(v)) < 1e-6) return _tgRed(Math.round(v), n); }
+  return null;
+}
+// radAuto(theta, o) → ป้ายมุมจากค่าเรเดียนจริง (เช่นมุมที่ลาก): เป็นพหุคูณ π → rad() (o.deg = true → radDeg()) · ไม่ใช่ → ทศนิยม "1.234 rad"
+function radAuto(theta, o) {
+  o = o || {}; const f = piFrac(theta);
+  if (f) return o.deg ? radDeg(f.k, f.n) : rad(f.k, f.n);
+  return mx(mn(Math.round(theta * 1000) / 1000) + ' rad' + (o.deg ? ' (' + mn(Math.round(theta * 180 / Math.PI * 10) / 10) + '°)' : ''));
+}
+
+// ───────── 13) ป้ายแกน x เป็นพหุคูณ π ─────────
+// piTicks(plot, step, o) → plot   เรียกก่อน plot.svg()  ·  step = ระยะป้าย (เรเดียน เช่น Math.PI / 2) ต้องเป็นพหุคูณตรรกยะของ π (mπ/n, n ≤ 12)
+//   o = { every: 1 (ป้ายทุก k ช่อง) · size: 13 (px) · dy: 17 (ระยะป้ายใต้แกน) · ticks: true (ขีดสั้นบนแกน) · cls: 'pl-tick' }
+//   ข้ามป้าย 0 (เหมือนเลขแกนปกติ) · ป้ายเป็นข้อความ SVG ("π/2", "3π/2", "−π") ไม่ใช่ HTML
+//   ⚠️ ปิดเลขแกน x เดิมของ Plot ด้วย lx ใหญ่ๆ:  const pl = new Plot({ xmin: -2 * Math.PI, xmax: 2 * Math.PI, gx: Math.PI / 2, lx: 100, … }); piTicks(pl, Math.PI / 2); … pl.svg()
+//      (gx = ระยะเส้นกริด · lx = ระยะเลขแกนเดิม — lx: 100 = ไม่มีเลขเดิมเลย)  · ห้ามแก้ class Plot
+function piTicks(plot, step, o) {
+  o = o || {};
+  const ratio = step / Math.PI; let d = 0, nn = 0;
+  for (let q = 1; q <= 12; q++) { const p = ratio * q; if (Math.abs(p - Math.round(p)) < 1e-6) { d = q; nn = Math.round(p); break; } }
+  if (!d) return plot;
+  const y0 = Math.min(Math.max(0, plot.ymin), plot.ymax), every = o.every || 1, size = o.size || 13, dy = o.dy === undefined ? 17 : o.dy;
+  let s = '';
+  for (let m = Math.ceil(plot.xmin / step - 1e-9); m <= Math.floor(plot.xmax / step + 1e-9); m++) {
+    if (m === 0 || m % every !== 0) continue;
+    const px = plot.X(m * step), py = plot.Y(y0);
+    if (o.ticks !== false) s += `<line class="pl-axis" x1="${px}" y1="${py - 4}" x2="${px}" y2="${py + 4}"/>`;
+    const edge = Math.abs(m * step - plot.xmax) < 1e-6;   // ป้ายที่ขอบขวาสุดชิดซ้ายของขอบ ไม่ชนตัวอักษร x ปลายแกน
+    s += `<text class="${o.cls || 'pl-tick'}" style="font-size:${size}px" x="${edge ? px + 2 : px}" y="${py + dy}" text-anchor="${edge ? 'end' : 'middle'}">${radText(m * nn, d)}</text>`;
+  }
+  return plot.raw(s, true);
+}
+
+// ───────── 14) ค่าแม่นของฟังก์ชันตรีโกณ ─────────
+// ตารางที่มุมอ้างอิง 0° 30° 45° 60° 90°: [สปส.เศษ, รากในเศษ, สปส.ส่วน, รากในส่วน] (0 = [0]) · null = หาค่าไม่ได้
+// ⚠️ tan 30° = 1/√3 ตามสรุปครู (ไม่ใช่ √3/3)
+const _TG_EX = {
+  sin: { 0: [0], 30: [1, 1, 2, 1], 45: [1, 2, 2, 1], 60: [1, 3, 2, 1], 90: [1, 1, 1, 1] },
+  cos: { 0: [1, 1, 1, 1], 30: [1, 3, 2, 1], 45: [1, 2, 2, 1], 60: [1, 1, 2, 1], 90: [0] },
+  tan: { 0: [0], 30: [1, 1, 1, 3], 45: [1, 1, 1, 1], 60: [1, 3, 1, 1], 90: null },
+  csc: { 0: null, 30: [2, 1, 1, 1], 45: [1, 2, 1, 1], 60: [2, 1, 1, 3], 90: [1, 1, 1, 1] },
+  sec: { 0: [1, 1, 1, 1], 30: [2, 1, 1, 3], 45: [1, 2, 1, 1], 60: [2, 1, 1, 1], 90: null },
+  cot: { 0: null, 30: [1, 3, 1, 1], 45: [1, 1, 1, 1], 60: [1, 1, 1, 3], 90: [0] }
+};
+// → { v: [..] | null (หาค่าไม่ได้), neg } หรือ undefined (มุมที่ไม่รองรับ)
+function _tgExact(fn, k, n) {
+  const d0 = k * 180 / (n === undefined ? 1 : n), deg = Math.round(d0);
+  if (!_TG_EX[fn] || Math.abs(d0 - deg) > 1e-9 || (deg % 30 !== 0 && deg % 45 !== 0)) return undefined;
+  const a = ((deg % 360) + 360) % 360; let ref, sS, cS;
+  if (a <= 90) { ref = a; sS = 1; cS = 1; } else if (a <= 180) { ref = 180 - a; sS = 1; cS = -1; } else if (a <= 270) { ref = a - 180; sS = -1; cS = -1; } else { ref = 360 - a; sS = -1; cS = 1; }
+  const v = _TG_EX[fn][ref], sg = { sin: sS, cos: cS, tan: sS * cS, csc: sS, sec: cS, cot: sS * cS }[fn];
+  return { v, neg: !!v && v[0] !== 0 && sg < 0 };
+}
+function _tgFmt(v, plain) {
+  if (v[0] === 0) return '0';
+  const part = (a, b) => (a > 1 || b === 1 ? a : '') + (b > 1 ? (plain ? '√' + b : `<span style="line-height:1.2">${rt(b)}</span>`) : '');   // line-height 1.2: ขีดบนรากไม่ลอยในบรรทัดที่สูง
+  const num = part(v[0], v[1]);
+  if (v[2] === 1 && v[3] === 1) return num;
+  return plain ? num + '/' + part(v[2], v[3]) : frac(num, part(v[2], v[3]));
+}
+// exactVal(fn, k, n) → ค่าแม่นของ fn ('sin' | 'cos' | 'tan' | 'csc' | 'sec' | 'cot') ที่มุม kπ/n เป็น HTML ก้อน mx เดียว
+//   n ∈ 1, 2, 3, 4, 6 (k เป็นจำนวนเต็มใดก็ได้ รวมมุมลบ/เกินรอบ — หาจตุภาคและมุมอ้างอิงให้เอง)
+//   exactVal('sin', 1, 6) = ½ · exactVal('cos', 1, 6) = √3/2 · exactVal('cos', 3, 4) = −√2/2 · exactVal('tan', 1, 3) = √3 · exactVal('tan', 5, 6) = −1/√3 ·
+//   exactVal('tan', 1, 6) = 1/√3 (ตามสรุปครู ไม่ใช่ √3/3) · exactVal('tan', 1, 2) = "หาค่าไม่ได้" / "undefined" (ตามภาษาปัจจุบัน และตัวสลับภาษาเปลี่ยนให้เอง) · exactVal('csc', 1, 3) = 2/√3
+//   มุมที่ไม่รองรับ (เช่น π/12) → ทศนิยม 3 ตำแหน่ง (ไม่ error)
+//   ใช้สร้างตาราง/เฉลย/ป้ายสด จะได้ไม่พิมพ์ค่าผิด — เทียบเลขได้ด้วย Math.sin(k * Math.PI / n)
+function exactVal(fn, k, n) {
+  n = n === undefined ? 1 : n;
+  const e = _tgExact(fn, k, n);
+  if (!e) { const x = fn === 'csc' ? 1 / Math.sin(k * Math.PI / n) : fn === 'sec' ? 1 / Math.cos(k * Math.PI / n) : fn === 'cot' ? 1 / Math.tan(k * Math.PI / n) : Math[fn](k * Math.PI / n); return mx(isFinite(x) ? mn(Math.round(x * 1000) / 1000) : 'undefined'); }
+  if (!e.v) { const th = 'หาค่าไม่ได้', en = 'undefined'; return mx(`<span data-th="${th}" data-en="${en}">${EN() ? en : th}</span>`); }
+  return mx((e.neg ? '−' : '') + _tgFmt(e.v, false));
+}
+// exactPlain(fn, k, n) → เหมือน exactVal แต่เป็นข้อความธรรมดา ("√3/2", "−1/2", "1/√3") ไว้ใส่ <text> ใน SVG · หาค่าไม่ได้ → ตามภาษาปัจจุบัน
+function exactPlain(fn, k, n) {
+  n = n === undefined ? 1 : n;
+  const e = _tgExact(fn, k, n);
+  if (!e) { const x = Math[fn] ? Math[fn](k * Math.PI / n) : NaN; return isFinite(x) ? mn(Math.round(x * 1000) / 1000) : 'undefined'; }
+  if (!e.v) return EN() ? 'undefined' : 'หาค่าไม่ได้';
+  return (e.neg ? '−' : '') + _tgFmt(e.v, true);
+}
+
+// ───────── ตัวช่วยร่วมของ makeUnitCircle / makeTriangle ─────────
+// ลบวิดเจ็ตที่ host หายไปจาก DOM ออกจาก LIVE (วิดเจ็ตที่สร้างใน makeScenes ถูกสร้างใหม่ทุกครั้งที่วาดฉาก)
+// ตัด widget ที่ตายแล้วออกจาก LIVE — เลื่อนไปทำหลังงานปัจจุบันจบ (microtask) เพราะ makeUnitCircle/makeTriangle อาจถูกเรียกระหว่าง
+// applyLang กำลัง LIVE.forEach อยู่ (refresh วาดฉากใหม่) — splice ตอนนั้นทำให้ widget ตัวถัดไปถูกข้าม ภาษาไม่เปลี่ยน
+let _tgPruneQ = false;
+function _tgPrune() {
+  if (_tgPruneQ) return; _tgPruneQ = true;
+  queueMicrotask(() => { _tgPruneQ = false; for (let i = LIVE.length - 1; i >= 0; i--) if (LIVE[i]._dead) LIVE.splice(i, 1); });
+}
+const _TG_TXT = { blue: 'b', orange: 'o', green: 'g', purple: 'p', pink: 'p', red: 'r', teal: 'g' };   // สี → คลาสป้าย .pl-lbl.*
+
+// ───────── 15) วงกลมหนึ่งหน่วย ─────────
+// makeUnitCircle(host, o) → w     วาด SVG วงกลมหนึ่งหน่วย (แกน x, y + ป้าย (1,0) (0,1) (−1,0) (0,−1)) + จุด P ลากได้ + ที่แสดงตาม o.show   ⚠️ แทนที่เนื้อหาเดิมของ host ทั้งหมด
+//   o = {
+//     theta: 0                 มุมเริ่มต้น (เรเดียน)
+//     snap: 0                  ดูดมุมตอนลาก (เรเดียน เช่น Math.PI / 12 · 0 = อิสระ)
+//     draggable: true          ลาก P ได้ (Pointer Events: กด/ลากที่ไหนในภาพ P ก็วิ่งตามมุมของเมาส์/นิ้ว) · false = ภาพนิ่ง/สั่งด้วยโค้ด
+//     range: [0, 2π]           ช่วงมุมที่ลากได้ · ยาวไม่เกิน 2π = ตัดวนเข้าช่วง (ลากข้าม 0 แล้วเป็น 2π−ε) · ยาวกว่า 2π = ต่อเนื่องไม่วน (เช่น [−4π, 4π] ลากได้หลายรอบ)
+//     show: ['proj', 'arc', …] ของที่แสดง (ดูด้านล่าง) — สลับทีหลังด้วย w.setShow([...])
+//     onChange: (θ, byUser) => {}   เรียกทุกครั้งที่มุมเปลี่ยน (ลาก, w.set, ทุกเฟรมของ animateTo) — byUser = true เมื่อมาจากการลากจริง
+//     readout: ป้ายสดใต้ภาพ — ไม่ใส่ = ถ้า show มี 'proj' ใช้ ['theta', 'cos', 'sin'] · ใส่เป็น array ของ 'theta' | 'cos' | 'sin' | 'tan' · [] = ไม่แสดง · หรือฟังก์ชัน (θ, w) => html ของคุณเอง
+//        ค่าแสดงทศนิยม 3 ตำแหน่ง + ค่าแม่นนำหน้าเมื่อมุมเป็น kπ/n (n = 1, 2, 3, 4, 6) เช่น "cos θ = x = √3/2 ≈ 0.866"
+//     rLabel: '1'              ชื่อรัศมีบนป้ายแกน ("r" → (r, 0) (0, r) …) · ใส่เป็นข้อความ SVG (ใช้ <tspan font-style="italic">r</tspan> ได้)
+//     pLabel: 'P'              ป้ายข้างจุด P (false = ไม่แสดง) · arcLabel: 'θ' ป้ายส่วนโค้ง · refLabel: 'α' ป้ายมุมอ้างอิง
+//     triLabels: { x: 'r cos θ', y: 'r sin θ', r: 'r' }  ป้ายของ 'tri' (ข้อความ SVG)
+//     band: [a, b]             ช่วงมุมของ 'band' (เรเดียน ทวนเข็มจาก a ไป b) · hline: k เส้นนอน y = k ของ 'hline' · vline: k เส้นตั้ง x = k ของ 'vline' (hlineLabel / vlineLabel = ป้ายข้อความ SVG ไม่ใส่ = ตัวเลข)
+//     w: 520, h: 440, cx, cy, R  ขนาด viewBox · จุดศูนย์กลาง (px) · รัศมีวงกลม (px) — ค่าเริ่ม R = 0.34·min(w, h), ศูนย์กลางกลางภาพ  (ใช้จัดแกน y ให้ตรงกับ Plot ข้างๆ ในชิ้น ④)
+//   }
+//   o.show (ใช้ร่วมกันได้):
+//     'proj'  เส้นประตั้งฉากจาก P ลงแกน x และแกน y + แท่งหนา "เงา" บนแกน (cos θ = x สีน้ำเงิน · sin θ = y สีแดง) + ป้ายสดใต้ภาพ
+//     'arc'   ส่วนโค้ง/ลูกศรมุม θ จาก (1, 0) ถึง P (ทวนเข็ม = บวก · ตามเข็ม = ลบ · เกิน 2π วาดเกลียวหลายรอบ)
+//     'quad'  ระบายจตุภาคที่ P อยู่ (P บนแกน = ไม่ระบาย) — w.quadrant = 1..4 (0 = บนแกน)
+//     'ref'   สามเหลี่ยม + ส่วนโค้ง "มุมอ้างอิง" (มุมแหลมระหว่าง OP กับแกน x ด้านใกล้) — w.refAngle = ขนาดเป็นเรเดียน
+//     'tri'   สามเหลี่ยมมุมฉาก O–(x, 0)–P ป้ายขา/รัศมี (ใช้กับ ③ รัศมี r) · 'band' ระบายช่วงมุม [a, b] (ใช้ ⑤) · 'hline' เส้นนอน y = k + จุดตัดวงกลม · 'vline' เส้นตั้ง x = k + จุดตัด
+//   คืน w = { theta (getter), set(θ, quiet?), animateTo(θ, ms?, anim?, ease?) → Promise, setShow([...]), setBand(a, b), setHline(k, label?), setVline(k, label?),
+//             quadrant, refAngle, svg, g (กลุ่มว่างสำหรับวาดเพิ่ม อยู่บนสุด ไม่ถูกล้าง), read (div ป้ายสด), X(x), Y(y) (พิกัดวงกลม → px), cx, cy, R, refresh() }
+//   ลงทะเบียน LIVE เอง (และตัวเองออกจาก LIVE เมื่อ host หายไปจาก DOM) — ใช้ใน makeScenes ได้ตรงๆ:
+//     scene.end  = S => { makeUnitCircle(S.el, { theta: Math.PI / 2, show: ['proj', 'arc'], draggable: false }); }
+//     scene.play = async S => { const c = makeUnitCircle(S.el, { show: ['proj', 'arc'] }); await c.animateTo(Math.PI / 2, 1200, S.anim); }   // animateTo รับ S.anim (ถูก kill เมื่อกด ▶/◀/↻)
+//   สีใช้ --g-* และข้อความใช้ .sc-svg (ธีมสว่าง/มืดอัตโนมัติ) · วาดเพิ่มเองลง w.g ด้วย w.X/w.Y เช่น
+//     w.g.insertAdjacentHTML('beforeend', `<text class="pl-lbl b" x="${w.X(0.5)}" y="${w.Y(0.9)}">…</text>`)   (ป้ายสี: pl-lbl b/o/g/p/r · เส้น: pl-c s-blue/… · จุด: pl-dot f-red/…)
+//   ⚠️ ถ้าสร้างวงกลมใหม่ในฉาก (end/play) ใส่ draggable: false ใน end() ของฉากที่ไม่ต้องลาก · ฉากที่อยากให้ลากต่อได้ปล่อย draggable เป็น true ได้ (ผูก pointer ใหม่ทุกครั้งที่สร้างอยู่แล้ว)
+function makeUnitCircle(host, o) {
+  o = o || {}; _tgPrune();
+  const TAU = Math.PI * 2, W = o.w || 520, H = o.h || 440, cx = o.cx !== undefined ? o.cx : W / 2, cy = o.cy !== undefined ? o.cy : H / 2, R = o.R || Math.min(W, H) * 0.34;
+  const lo = o.range ? o.range[0] : 0, hi = o.range ? o.range[1] : TAU, snap = o.snap || 0, drag = o.draggable !== false;
+  const X = x => cx + x * R, Y = y => cy - y * R, f1 = v => (+v).toFixed(1);
+  let th = o.theta || 0, show = new Set(typeof o.show === 'string' ? o.show.split(/[ ,]+/) : (o.show || []));
+  let band = o.band || [-Math.PI / 2, Math.PI / 2], hl = o.hline !== undefined ? o.hline : null, vl = o.vline !== undefined ? o.vline : null, hlLab = o.hlineLabel, vlLab = o.vlineLabel;
+  const w = { _dead: false };
+  Object.defineProperty(w, 'theta', { get: () => th });
+  Object.defineProperty(w, 'quadrant', { get: () => { const c = Math.cos(th), s = Math.sin(th); return (Math.abs(c) < 1e-9 || Math.abs(s) < 1e-9) ? 0 : c > 0 ? (s > 0 ? 1 : 4) : (s > 0 ? 2 : 3); } });
+  Object.defineProperty(w, 'refAngle', { get: () => Math.atan2(Math.abs(Math.sin(th)), Math.abs(Math.cos(th))) });
+  const rl = o.rLabel === undefined ? '1' : o.rLabel, ax = (a, b, h) => `<path class="sc-axis" d="M${a} ${b} ${h}" fill="none"/>`;
+  const lab = (x, y, anc, t) => `<text class="uc-lab" x="${f1(x)}" y="${f1(y)}" text-anchor="${anc}">${t}</text>`;
+  let st = `<circle class="uc-circ" cx="${cx}" cy="${cy}" r="${R}"/>`;
+  st += `<line class="sc-axis" x1="${f1(X(-1.38))}" y1="${cy}" x2="${f1(X(1.38))}" y2="${cy}"/><line class="sc-axis" x1="${cx}" y1="${f1(Y(-1.38))}" x2="${cx}" y2="${f1(Y(1.38))}"/>`;
+  st += ax(f1(X(1.38) + 7), cy, 'l-7 -4 m7 4 l-7 4') + ax(cx, f1(Y(1.38) - 7), 'l-4 7 m4 -7 l4 7');
+  st += `<text class="uc-lab" style="font-style:italic" x="${f1(X(1.38) + 4)}" y="${cy + 20}">x</text><text class="uc-lab" style="font-style:italic" x="${cx + 9}" y="${f1(Y(1.38) - 4)}">y</text>`;
+  [[1, 0], [0, 1], [-1, 0], [0, -1]].forEach(p => { st += `<circle class="uc-tk" cx="${f1(X(p[0]))}" cy="${f1(Y(p[1]))}" r="3.6"/>`; });
+  st += lab(X(1) + 9, cy + 19, 'start', `(${rl}, 0)`) + lab(X(-1) - 9, cy + 19, 'end', `(−${rl}, 0)`) + lab(cx + 10, Y(1) - 7, 'start', `(0, ${rl})`) + lab(cx + 10, Y(-1) + 17, 'start', `(0, −${rl})`);
+  host.innerHTML = `<div class="uc-wrap"><svg class="sc-svg uc-svg" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg"><g class="uc-st">${st}</g><g class="uc-dyn"></g><g class="uc-user"></g></svg><div class="uc-read"></div></div>`;
+  const svg = host.querySelector('svg'), dyn = host.querySelector('.uc-dyn'), read = host.querySelector('.uc-read');
+  w.svg = svg; w.g = host.querySelector('.uc-user'); w.read = read; w.X = X; w.Y = Y; w.cx = cx; w.cy = cy; w.R = R;
+
+  // เกลียว/ส่วนโค้งมุม (มุมคณิตศาสตร์ ทวนเข็ม = บวก) · รัศมีโตขึ้นเมื่อเกิน 1 รอบ
+  const rA = R * 0.24, rAt = a => rA + (Math.abs(a) > TAU ? R * 0.05 * (Math.abs(a) - TAU) / TAU : 0);
+  const spiral = (a0, a1) => { const n = Math.max(2, Math.ceil(Math.abs(a1 - a0) / 0.07)); let d = ''; for (let i = 0; i <= n; i++) { const a = a0 + (a1 - a0) * i / n, r = rAt(a); d += (i ? 'L' : 'M') + f1(cx + r * Math.cos(a)) + ' ' + f1(cy - r * Math.sin(a)); } return d; };
+  const arcSec = (a0, a1, r) => `M${cx} ${cy} L${f1(cx + r * Math.cos(a0))} ${f1(cy - r * Math.sin(a0))} A${r} ${r} 0 ${Math.abs(a1 - a0) > Math.PI ? 1 : 0} 0 ${f1(cx + r * Math.cos(a1))} ${f1(cy - r * Math.sin(a1))} Z`;
+  const dec = v => { const s = (Math.round(v * 1000) / 1000).toFixed(3); return mn(/^-0\.000$/.test(s) ? '0.000' : s); };
+  const fmtNum = v => mn(String(Math.round(v * 100) / 100));
+  const readHtml = () => {
+    const c = Math.cos(th), s = Math.sin(th), pf = piFrac(th), ex = pf && [1, 2, 3, 4, 6].includes(pf.n) ? pf : null;
+    let items = o.readout;
+    if (typeof items === 'function') return items(th, w);
+    if (items === undefined) items = show.has('proj') ? ['theta', 'cos', 'sin'] : [];
+    const val = (fn, v) => { const e = ex ? exactVal(fn, ex.k, ex.n) : null, simple = Math.abs(v - Math.round(v)) < 1e-9; return e ? (simple ? e : e + ' ≈ ' + dec(v)) : dec(v); };
+    return items.map(k => {
+      if (k === 'theta') return `<span class="ptag">θ = ${radAuto(th, { deg: true })}</span>`;
+      if (k === 'cos') return `<span class="ptag"><span class="uc-sw b"></span>cos θ = <i>x</i> = ${val('cos', c)}</span>`;
+      if (k === 'sin') return `<span class="ptag"><span class="uc-sw r"></span>sin θ = <i>y</i> = ${val('sin', s)}</span>`;
+      if (k === 'tan') { const tn = Math.abs(c) < 1e-9 ? (ex ? exactVal('tan', ex.k, ex.n) : tx(T('หาค่าไม่ได้', 'undefined'))) : (ex ? exactVal('tan', ex.k, ex.n) + (Math.abs(s / c - Math.round(s / c)) < 1e-9 ? '' : ' ≈ ' + dec(s / c)) : dec(s / c)); return `<span class="ptag">tan θ = <i>y</i>/<i>x</i> = ${tn}</span>`; }
+      return '';
+    }).join('');
+  };
+
+  w.paint = () => {
+    const c = Math.cos(th), s = Math.sin(th), px = X(c), py = Y(s), phi = ((th % TAU) + TAU) % TAU; let g = '';
+    if (show.has('quad')) { const q = w.quadrant; if (q) { const sx = (q === 1 || q === 4) ? 1 : -1, sy = (q === 1 || q === 2) ? 1 : -1; g += `<rect class="fa-orange" x="${f1(Math.min(cx, X(1.38 * sx)))}" y="${f1(Math.min(cy, Y(1.38 * sy)))}" width="${f1(1.38 * R)}" height="${f1(1.38 * R)}"/>`; } }
+    if (show.has('band')) { const a = band[0], b = band[1]; g += `<path class="fa-blue" d="${arcSec(a, b, R)}"/><path class="uc-thick s-blue" style="stroke-width:6;stroke-linecap:round" d="M${f1(cx + R * Math.cos(a))} ${f1(cy - R * Math.sin(a))} A${R} ${R} 0 ${Math.abs(b - a) > Math.PI ? 1 : 0} 0 ${f1(cx + R * Math.cos(b))} ${f1(cy - R * Math.sin(b))}"/>`; }
+    if (show.has('hline') && hl !== null) {
+      g += `<line class="uc-dash s-purple" x1="${f1(X(-1.38))}" y1="${f1(Y(hl))}" x2="${f1(X(1.38))}" y2="${f1(Y(hl))}"/>`;
+      if (Math.abs(hl) <= 1 + 1e-9) { const xx = Math.sqrt(Math.max(0, 1 - hl * hl)); (xx < 1e-6 ? [0] : [xx, -xx]).forEach(x => { g += `<circle class="pl-dot f-green" cx="${f1(X(x))}" cy="${f1(Y(hl))}" r="6"/>`; }); }
+      g += `<text class="pl-lbl p" x="${W - 8}" y="${f1(Y(hl) - 7)}" text-anchor="end">y = ${hlLab !== undefined ? hlLab : fmtNum(hl)}</text>`;
+    }
+    if (show.has('vline') && vl !== null) {
+      g += `<line class="uc-dash s-purple" x1="${f1(X(vl))}" y1="${f1(Y(-1.38))}" x2="${f1(X(vl))}" y2="${f1(Y(1.38))}"/>`;
+      if (Math.abs(vl) <= 1 + 1e-9) { const yy = Math.sqrt(Math.max(0, 1 - vl * vl)); (yy < 1e-6 ? [0] : [yy, -yy]).forEach(y => { g += `<circle class="pl-dot f-green" cx="${f1(X(vl))}" cy="${f1(Y(y))}" r="6"/>`; }); }
+      g += `<text class="pl-lbl p" x="${f1(X(vl) + 7)}" y="${f1(Y(-1.38) - 6)}" text-anchor="start">x = ${vlLab !== undefined ? vlLab : fmtNum(vl)}</text>`;
+    }
+    if (show.has('tri') || show.has('ref')) {
+      const tl = Object.assign({ x: 'x', y: 'y', r: 'r' }, o.triLabels || {}), sx = c >= 0 ? 1 : -1, sy = s >= 0 ? 1 : -1;
+      g += `<polygon class="fa-green" points="${cx},${cy} ${f1(px)},${cy} ${f1(px)},${f1(py)}"/><line class="uc-dash s-muted" x1="${f1(px)}" y1="${f1(py)}" x2="${f1(px)}" y2="${cy}"/>`;
+      if (Math.abs(c) > 0.08 && Math.abs(s) > 0.08) g += `<path class="sc-axis" d="M${f1(px - sx * 10)} ${cy} l0 ${-sy * 10} l${sx * 10} 0" fill="none" style="stroke-width:1.6"/>`;
+      if (show.has('tri')) {
+        if (Math.abs(c) > 0.12) g += `<text class="pl-lbl g" x="${f1((cx + px) / 2)}" y="${f1(cy + (s >= 0 ? 24 : -12))}" text-anchor="middle">${tl.x}</text>`;
+        if (Math.abs(s) > 0.12) g += `<text class="pl-lbl g" x="${f1(px + sx * 12)}" y="${f1((cy + py) / 2 + 5)}" text-anchor="${c >= 0 ? 'start' : 'end'}">${tl.y}</text>`;
+        const mx_ = (cx + px) / 2, my_ = (cy + py) / 2, nx = -(py - cy), ny = (px - cx), nl = Math.hypot(nx, ny) || 1, side = (nx * (cx - px) + ny * (cy - py)) > 0 ? -1 : 1;
+        g += `<text class="pl-lbl o" x="${f1(mx_ + side * nx / nl * 16)}" y="${f1(my_ + side * ny / nl * 16 + 5)}" text-anchor="middle">${tl.r}</text>`;
+      }
+    }
+    if (show.has('ref') && w.refAngle > 0.02) {
+      let a0, a1; if (phi <= Math.PI / 2) { a0 = 0; a1 = phi; } else if (phi <= Math.PI) { a0 = phi; a1 = Math.PI; } else if (phi <= 1.5 * Math.PI) { a0 = Math.PI; a1 = phi; } else { a0 = phi; a1 = TAU; }
+      const r = R * 0.42, am = (a0 + a1) / 2, small = (a1 - a0) < 0.5;   // รัศมีใหญ่กว่าส่วนโค้งมุม θ (0.24R) — แสดงพร้อมกันได้ ป้ายไม่ชน
+      g += `<path class="fa-red" d="${arcSec(a0, a1, r)}"/><path class="sc-axis s-red" fill="none" style="stroke-width:2.6" d="M${f1(cx + r * Math.cos(a0))} ${f1(cy - r * Math.sin(a0))} A${r} ${r} 0 0 0 ${f1(cx + r * Math.cos(a1))} ${f1(cy - r * Math.sin(a1))}"/>`;
+      g += `<text class="pl-lbl r" style="font-size:16px;font-style:italic" x="${f1(cx + (r + (small ? 24 : 14)) * Math.cos(am))}" y="${f1(cy - (r + (small ? 24 : 14)) * Math.sin(am) + 5)}" text-anchor="middle">${o.refLabel || 'α'}</text>`;
+    }
+    if (show.has('proj')) {
+      g += `<line class="uc-dash" x1="${f1(px)}" y1="${f1(py)}" x2="${f1(px)}" y2="${cy}"/><line class="uc-dash" x1="${f1(px)}" y1="${f1(py)}" x2="${cx}" y2="${f1(py)}"/>`;
+      g += `<line class="uc-thick s-blue" x1="${cx}" y1="${cy}" x2="${f1(px)}" y2="${cy}"/><line class="uc-thick s-red" x1="${cx}" y1="${cy}" x2="${cx}" y2="${f1(py)}"/>`;
+      g += `<circle class="pl-dot f-blue" cx="${f1(px)}" cy="${cy}" r="5"/><circle class="pl-dot f-red" cx="${cx}" cy="${f1(py)}" r="5"/>`;
+    }
+    if (show.has('arc') && Math.abs(th) > 0.02) {
+      const sg = th >= 0 ? 1 : -1, ae = rAt(th), ta = th + sg * Math.PI / 2, ex2 = cx + ae * Math.cos(th), ey2 = cy - ae * Math.sin(th);
+      const tdx = Math.cos(ta), tdy = -Math.sin(ta), nrx = -tdy, nry = tdx, hl_ = 10;
+      g += `<path class="uc-arc" d="${spiral(0, th)}"/><polygon class="uc-arrow" points="${f1(ex2 + tdx * 3)},${f1(ey2 + tdy * 3)} ${f1(ex2 - tdx * hl_ + nrx * 5)},${f1(ey2 - tdy * hl_ + nry * 5)} ${f1(ex2 - tdx * hl_ - nrx * 5)},${f1(ey2 - tdy * hl_ - nry * 5)}"/>`;
+      const la = Math.abs(th) <= TAU ? (Math.abs(th) < 0.5 ? sg * 0.25 : th / 2) : th, lr = rAt(la) + (Math.abs(th) < 0.5 ? 24 : 17);
+      g += `<text class="pl-lbl o" style="font-size:17px;font-style:italic" x="${f1(cx + lr * Math.cos(la))}" y="${f1(cy - lr * Math.sin(la) + 6)}" text-anchor="middle">${o.arcLabel || 'θ'}</text>`;
+    }
+    g += `<line class="uc-rad" x1="${cx}" y1="${cy}" x2="${f1(px)}" y2="${f1(py)}"/>`;
+    if (drag) g += `<circle class="uc-halo" cx="${f1(px)}" cy="${f1(py)}" r="17"/>`;
+    g += `<circle class="uc-p" cx="${f1(px)}" cy="${f1(py)}" r="8"/>`;
+    if (o.pLabel !== false) g += `<text class="uc-plab" x="${f1(cx + (R + 24) * Math.cos(th))}" y="${f1(cy - (R + 24) * Math.sin(th) + 6)}" text-anchor="middle">${o.pLabel || 'P'}</text>`;
+    dyn.innerHTML = g;
+    read.innerHTML = readHtml(); read.style.display = read.innerHTML ? '' : 'none';
+  };
+  w.set = (v, quiet, byUser) => { th = v; w.paint(); if (!quiet && o.onChange) o.onChange(th, !!byUser); return w; };
+  w.animateTo = (v, ms, anim, ease) => { anim = anim || makeAnimator(); const t0 = th; return anim.run(ms === undefined ? 900 : ms, t => w.set(lerp(t0, v, t)), ease || EASE.inOut).then(() => w.set(v)); };
+  w.setShow = list => { show = new Set(typeof list === 'string' ? list.split(/[ ,]+/) : list); w.paint(); return w; };
+  w.setBand = (a, b) => { band = [a, b]; w.paint(); return w; };
+  w.setHline = (k, label) => { hl = k; hlLab = label; w.paint(); return w; };
+  w.setVline = (k, label) => { vl = k; vlLab = label; w.paint(); return w; };
+  w.refresh = () => { if (!svg.isConnected) { w._dead = true; return; } w.paint(); };
+  if (drag) {
+    svg.style.cursor = 'grab';
+    const pseudo = { xmin: -1e4, xmax: 1e4, ymin: -1e4, ymax: 1e4, ix: p => (p - cx) / R, iy: p => (cy - p) / R };
+    const mv = pt => {
+      if (Math.hypot(pt.rx, pt.ry) < 0.04) return;
+      const ang = Math.atan2(pt.ry, pt.rx); let v;
+      if (hi - lo > TAU + 1e-9) v = Math.min(hi, Math.max(lo, ang + TAU * Math.round((th - ang) / TAU)));
+      else { v = ang; while (v < lo) v += TAU; while (v >= lo + TAU) v -= TAU; }
+      if (snap) v = Math.round(v / snap) * snap;
+      if (Math.abs(v) < 1e-9) v = 0;
+      w.set(v, false, true);
+    };
+    plotPointer(svg, pseudo, { snap: 0, clamp: false, onDown: mv, onDrag: mv });
+  }
+  LIVE.push(w); w.paint();
+  return w;
+}
+
+// ───────── 16) สามเหลี่ยม ─────────
+// makeTriangle(host, o) → w     วาด SVG สามเหลี่ยมจากจุดยอด 3 จุด (พิกัดกราฟ y ขึ้นบน) · ป้ายด้าน/มุม · เครื่องหมายมุมฉาก · ส่วนโค้งมุม · ไฮไลต์ · ลากจุดยอด   ⚠️ แทนที่เนื้อหาเดิมของ host ทั้งหมด
+//   o = {
+//     verts: [[x0, y0], [x1, y1], [x2, y2]]   จุดยอด 0, 1, 2 (พิกัดกราฟ)   ← จำเป็น
+//     sides: [s0, s1, s2]     ป้ายด้าน — ⚠️ ด้าน i = ด้านตรงข้ามจุดยอด i (ด้าน 0 = เส้น V1–V2, ด้าน 1 = V0–V2, ด้าน 2 = V0–V1) ตรงกับ a, b, c = ด้านตรงข้าม A, B, C
+//     angles: [a0, a1, a2]    ป้ายมุมที่จุดยอด i (null = ไม่มีป้าย) · names: ['A', 'B', 'C'] ชื่อจุดยอด (ไม่ใส่ = ไม่แสดง)
+//        ป้ายเป็นข้อความ T(th, en) หรือสตริง SVG (ใส่ <tspan font-style="italic">θ</tspan> ได้) — ❌ HTML เศษส่วนใส่ไม่ได้ (อยู่ใน <text>) ใช้ 3/5 ตัวเลขธรรมดา
+//     right: 1                จุดยอดที่เป็นมุมฉาก (ขีดสี่เหลี่ยมเล็ก ไม่วาดส่วนโค้งมุมนั้น)
+//     arcs: [0, 2]            จุดยอดที่วาดส่วนโค้งมุม (ไม่ใส่ = ทุกจุดที่มีป้ายมุม ยกเว้นมุมฉาก) · arcR: 28 รัศมีส่วนโค้ง (px)
+//     box: { xmin, xmax, ymin, ymax }   กรอบพิกัดกราฟที่ต้องการให้เห็น (สเกล x = y เสมอ ไม่บิดสามเหลี่ยม) — ถ้าจะ setVerts/ลากให้ใส่กรอบที่ครอบทุกตำแหน่งที่เป็นไปได้ ไม่ใส่ = ครอบจุดเริ่มต้น
+//     w: 520, h: 340, pad: 46 ขนาด viewBox/ขอบ (px)
+//     drag: 2 (หรือ [1, 2])    จุดยอดที่ลากได้ (มีวงจับ) · onDrag: (pt, idx, w) => {}  pt = { x, y (ดูดตาม snap แล้ว), rx, ry (ก่อนดูด) } พิกัดกราฟ — คุณคำนวณจุดใหม่เอง แล้วเรียก w.setVerts([...])
+//        (ไม่ใส่ onDrag = จุดยอดวิ่งตามเมาส์ตรงๆ) · snap: 0 ดูดพิกัดตอนลาก (หน่วยกราฟ) · onChange: pts => {} (เรียกหลัง setVerts)
+//   }
+//   คืน w = { pts (getter, สำเนา), setVerts(pts), setLabels({ sides, angles }), hl(...), vis(key, opacity), grow(i, p, rev?), fillOp(op), parts (องค์ประกอบ SVG ดิบ), svg, g (กลุ่มว่างสำหรับวาดเพิ่ม อยู่บนสุด ไม่ถูกล้าง), px(x, y) → [px, py], V(i) → [px, py] ของจุดยอด, refresh() }
+//   ไฮไลต์ hl(key, สี) — key = 's0' | 's1' | 's2' (ด้าน i) หรือ 'a0' | 'a1' | 'a2' (มุมที่จุดยอด i) · สี = 'blue' | 'orange' | 'green' | 'purple' | 'pink' | 'red' | 'teal' (เส้นเรืองแสง + ป้ายสีเดียวกัน)
+//     w.hl('s0', 'blue') เพิ่มไฮไลต์ด้าน 0 · w.hl('s0') ล้างด้าน 0 · w.hl({ s0: 'blue', s2: 'orange' }) ตั้งใหม่ทั้งชุด (ที่ไม่อยู่ในอ็อบเจ็กต์ถูกล้าง) · w.hl(null) ล้างทั้งหมด
+//   ซ่อน/โชว์ป้าย (เช่นให้ป้ายขึ้นทีละด้านใน makeScenes): w.vis('s1', 0) ซ่อนป้ายด้าน 1 · w.vis('a0', 1) โชว์ป้ายมุม 0 พร้อมส่วนโค้ง (ไล่ opacity ใน S.anim.run ได้) · w.vis('all', 0) ทุกป้าย
+//   ใช้ใน makeScenes ได้ตรงๆ (สร้างใหม่ในทุก end()/play() ได้เลย) · ลงทะเบียน LIVE เอง (และออกจาก LIVE เมื่อ host หายไป)
+//   ตัวอย่างลากมุมยอดบนของสามเหลี่ยม 3-4-5 ให้ขยายแบบคล้าย:
+//     makeTriangle(el, { verts: [[0, 0], [4, 0], [4, 3]], right: 1, angles: ['θ', null, null], sides: ['3', '4', '5'], box: { xmin: -.5, xmax: 13, ymin: -1, ymax: 10 }, drag: 2,
+//       onDrag: (pt, i, w) => { const s = Math.max(1, Math.min(3, Math.round(pt.rx / 4))); w.setVerts([[0, 0], [4 * s, 0], [4 * s, 3 * s]]); } })
+function makeTriangle(host, o) {
+  o = o || {}; _tgPrune();
+  const W = o.w || 520, H = o.h || 340, pad = o.pad === undefined ? 46 : o.pad, f1 = v => (+v).toFixed(1);
+  let pts = o.verts.map(p => p.slice());
+  const bx = o.box || (() => { const xs = pts.map(p => p[0]), ys = pts.map(p => p[1]); return { xmin: Math.min(...xs), xmax: Math.max(...xs), ymin: Math.min(...ys), ymax: Math.max(...ys) }; })();
+  const bw = Math.max(1e-6, bx.xmax - bx.xmin), bh = Math.max(1e-6, bx.ymax - bx.ymin), sc = Math.min((W - 2 * pad) / bw, (H - 2 * pad) / bh);
+  const ox = (W - bw * sc) / 2 - bx.xmin * sc, oy = H - (H - bh * sc) / 2 + bx.ymin * sc;
+  const PX = x => ox + x * sc, PY = y => oy - y * sc;
+  const dragList = o.drag === undefined || o.drag === null ? [] : [].concat(o.drag);
+  let sides = (o.sides || [null, null, null]).slice(), angles = (o.angles || [null, null, null]).slice();
+  const arcs = o.arcs || [0, 1, 2].filter(i => angles[i] != null && i !== o.right), arcR0 = o.arcR || 28;
+  const w = { _dead: false }, hlState = {};
+  host.innerHTML = '<div class="tri-wrap"><svg class="sc-svg tri-svg" viewBox="0 0 ' + W + ' ' + H + '" xmlns="http://www.w3.org/2000/svg"></svg></div>';
+  const svg = host.querySelector('svg'), mk = (tag, attrs) => sv(tag, attrs, svg);
+  const fill = mk('polygon', { class: 'tr-fill' });
+  const glow = [0, 1, 2].map(() => mk('line', { class: 'tr-glow' })), edge = [0, 1, 2].map(() => mk('line', { class: 'tr-side' }));
+  const arcEl = [0, 1, 2].map(() => mk('path', { class: 'tr-arc' })), rmark = mk('path', { class: 'tr-right' });
+  const sLab = [0, 1, 2].map(() => mk('text', { class: 'tr-lab', 'text-anchor': 'middle' })), aLab = [0, 1, 2].map(() => mk('text', { class: 'tr-lab tr-alab', 'text-anchor': 'middle' }));
+  const nLab = [0, 1, 2].map(() => mk('text', { class: 'tr-name', 'text-anchor': 'middle' }));
+  const handles = dragList.map(i => ({ i, el: mk('circle', { class: 'tr-handle', r: 15 }) }));
+  const user = mk('g', { class: 'tr-user' });
+  w.svg = svg; w.g = user;
+  const P = () => pts.map(p => [PX(p[0]), PY(p[1])]);
+  const unit = (a, b) => { const dx = b[0] - a[0], dy = b[1] - a[1], l = Math.hypot(dx, dy) || 1; return [dx / l, dy / l]; };
+  const estW = t => String(t).replace(/<[^>]*>/g, '').length * 9.5;
+  const setLab = (el, t) => { el.innerHTML = t == null ? '' : tx(t); el.style.display = t == null ? 'none' : ''; };
+  w.layout = () => {
+    const V = P(), G = [(V[0][0] + V[1][0] + V[2][0]) / 3, (V[0][1] + V[1][1] + V[2][1]) / 3];
+    fill.setAttribute('points', V.map(p => f1(p[0]) + ',' + f1(p[1])).join(' '));
+    for (let i = 0; i < 3; i++) {
+      const a = V[(i + 1) % 3], b = V[(i + 2) % 3];
+      [glow[i], edge[i]].forEach(l => { l.setAttribute('x1', f1(a[0])); l.setAttribute('y1', f1(a[1])); l.setAttribute('x2', f1(b[0])); l.setAttribute('y2', f1(b[1])); });
+      // ป้ายด้าน: กึ่งกลางด้าน ดันออกนอกสามเหลี่ยมตามเส้นตั้งฉาก (ระยะเผื่อความกว้างข้อความ ไม่ให้ทับเส้น)
+      const mx_ = (a[0] + b[0]) / 2, my_ = (a[1] + b[1]) / 2; let nx = -(b[1] - a[1]), ny = b[0] - a[0]; const nl = Math.hypot(nx, ny) || 1; nx /= nl; ny /= nl;
+      if (nx * (mx_ - G[0]) + ny * (my_ - G[1]) < 0) { nx = -nx; ny = -ny; }
+      const off = 9 + estW(sides[i] == null ? '' : tx(sides[i])) / 2 * Math.abs(nx) + 10 * Math.abs(ny);
+      sLab[i].setAttribute('x', f1(mx_ + nx * off)); sLab[i].setAttribute('y', f1(my_ + ny * off + 6));
+    }
+    for (let i = 0; i < 3; i++) {
+      const v = V[i], A = V[(i + 1) % 3], B = V[(i + 2) % 3], u1 = unit(v, A), u2 = unit(v, B);
+      const e1 = Math.hypot(A[0] - v[0], A[1] - v[1]), e2 = Math.hypot(B[0] - v[0], B[1] - v[1]);
+      const r = Math.min(arcR0, 0.4 * Math.min(e1, e2)), cr = u1[0] * u2[1] - u1[1] * u2[0];
+      const p1 = [v[0] + u1[0] * r, v[1] + u1[1] * r], p2 = [v[0] + u2[0] * r, v[1] + u2[1] * r];
+      arcEl[i].setAttribute('d', `M${f1(v[0])} ${f1(v[1])} L${f1(p1[0])} ${f1(p1[1])} A${f1(r)} ${f1(r)} 0 0 ${cr > 0 ? 1 : 0} ${f1(p2[0])} ${f1(p2[1])} Z`);
+      arcEl[i].style.display = arcs.includes(i) ? '' : 'none';
+      let bxv = u1[0] + u2[0], byv = u1[1] + u2[1]; const bl = Math.hypot(bxv, byv); if (bl < 1e-6) { bxv = -u1[1]; byv = u1[0]; } else { bxv /= bl; byv /= bl; }
+      // ป้ายมุม: วางบนเส้นแบ่งครึ่งมุม — มุมแคบต้องถอยลึกเข้าไปจนข้อความไม่ทับขอบ · ถ้าในสามเหลี่ยมไม่พอที่ก็วางนอกสามเหลี่ยม
+      const lw = estW(angles[i] == null ? '' : tx(angles[i])), alpha = Math.acos(Math.max(-1, Math.min(1, u1[0] * u2[0] + u1[1] * u2[1])));
+      let lr = Math.max(r + 14 + lw * 0.45, 30 + lw * 0.45); const need = (lw / 2 + 7) / Math.tan(Math.max(alpha, 0.05) / 2), maxIn = 0.7 * Math.min(e1, e2);
+      if (need > lr) lr = need <= maxIn ? need : -(14 + lw * 0.5);
+      aLab[i].setAttribute('x', f1(v[0] + bxv * lr)); aLab[i].setAttribute('y', f1(v[1] + byv * lr + 6));
+      nLab[i].setAttribute('x', f1(v[0] - bxv * (dragList.includes(i) ? 30 : 22))); nLab[i].setAttribute('y', f1(v[1] - byv * (dragList.includes(i) ? 30 : 22) + 6));   // ชื่อจุดยอด: ดันออกนอกสามเหลี่ยม
+      if (i === o.right) rmark.setAttribute('d', `M${f1(v[0] + u1[0] * 15)} ${f1(v[1] + u1[1] * 15)} L${f1(v[0] + (u1[0] + u2[0]) * 15)} ${f1(v[1] + (u1[1] + u2[1]) * 15)} L${f1(v[0] + u2[0] * 15)} ${f1(v[1] + u2[1] * 15)}`);
+    }
+    rmark.style.display = o.right === undefined || o.right === null ? 'none' : '';
+    handles.forEach(h => { h.el.setAttribute('cx', f1(V[h.i][0])); h.el.setAttribute('cy', f1(V[h.i][1])); });
+  };
+  const paintText = () => { for (let i = 0; i < 3; i++) { setLab(sLab[i], sides[i]); setLab(aLab[i], angles[i]); setLab(nLab[i], o.names ? o.names[i] : null); } };
+  w.setVerts = np => { pts = np.map(p => p.slice()); w.layout(); if (o.onChange) o.onChange(w.pts); return w; };
+  w.setLabels = l => { l = l || {}; if (l.sides) sides = l.sides.slice(); if (l.angles) angles = l.angles.slice(); paintText(); w.layout(); return w; };
+  w.vis = (key, op) => {
+    const set = (k, i) => { if (k === 's') sLab[i].style.opacity = op; else { aLab[i].style.opacity = op; arcEl[i].style.opacity = op; } };
+    if (key === 'all') { [0, 1, 2].forEach(i => { set('s', i); set('a', i); }); return w; }
+    set(key[0], +key[1]); return w;
+  };
+  const hlApply = key => {
+    const c = hlState[key] || '', i = +key[1];
+    if (key[0] === 's') { glow[i].setAttribute('class', 'tr-glow' + (c ? ' on ' + c : '')); edge[i].setAttribute('class', 'tr-side' + (c ? ' hl ' + c : '')); sLab[i].setAttribute('class', 'tr-lab' + (c ? ' pl-lbl ' + _TG_TXT[c] : '')); }
+    else { arcEl[i].setAttribute('class', 'tr-arc' + (c ? ' hl ' + c : '')); aLab[i].setAttribute('class', 'tr-lab tr-alab' + (c ? ' pl-lbl ' + _TG_TXT[c] : '')); }
+  };
+  w.hl = (key, c) => {
+    const all = ['s0', 's1', 's2', 'a0', 'a1', 'a2'];
+    if (key === null || key === undefined) all.forEach(k => { delete hlState[k]; hlApply(k); });
+    else if (typeof key === 'object') all.forEach(k => { if (key[k]) hlState[k] = key[k]; else delete hlState[k]; hlApply(k); });
+    else { if (c) hlState[key] = c; else delete hlState[key]; hlApply(key); }
+    return w;
+  };
+  w.px = (x, y) => [PX(x), PY(y)];
+  w.V = i => P()[i];
+  w.parts = { fill, glow, edge, arc: arcEl, sLab, aLab, nLab, right: rmark };   // องค์ประกอบ SVG ดิบ (ไว้ทำแอนิเมชันเอง เช่น style.opacity)
+  // grow(i, p, rev) — วาดด้าน i เฉพาะส่วน p (0–1) ให้ "งอก" ออกมา: ปกติจากปลายด้านจุดยอด (i+1)%3 ไปจุดยอด (i+2)%3 · rev = true กลับทาง · p ≥ 1 = ปกติ · p ≤ 0 = ซ่อนด้าน (เส้น+เรืองแสง) · ใช้ใน S.anim.run(…, t => w.grow(2, t))
+  w.grow = (i, p, rev) => {
+    const V = P(), a = V[(i + 1) % 3], b = V[(i + 2) % 3], len = Math.hypot(b[0] - a[0], b[1] - a[1]);
+    [edge[i], glow[i]].forEach(l => {
+      l.style.display = p <= 0.001 ? 'none' : '';
+      if (p >= 1) { l.style.strokeDasharray = ''; l.style.strokeDashoffset = ''; }
+      else { l.style.strokeDasharray = `${len} ${len}`; l.style.strokeDashoffset = (rev ? -len * (1 - p) : len * (1 - p)).toFixed(2); }
+    });
+    return w;
+  };
+  w.fillOp = op => { fill.style.opacity = op; return w; };
+  Object.defineProperty(w, 'pts', { get: () => pts.map(p => p.slice()) });
+  w.refresh = () => { if (!svg.isConnected) { w._dead = true; return; } paintText(); w.layout(); };
+  if (dragList.length) {
+    const pseudo = { xmin: -1e4, xmax: 1e4, ymin: -1e4, ymax: 1e4, ix: p => (p - ox) / sc, iy: p => (oy - p) / sc };
+    let cur = null;
+    const pick = pt => { let best = null, bd = 1e9; handles.forEach(h => { const v = P()[h.i], dd = Math.hypot(pt.px - v[0], pt.py - v[1]); if (dd < bd) { bd = dd; best = h.i; } }); return best; };
+    const mv = pt => {
+      if (cur === null) return;
+      const sn = o.snap || 0, q = { x: sn ? Math.round(pt.rx / sn) * sn : pt.rx, y: sn ? Math.round(pt.ry / sn) * sn : pt.ry, rx: pt.rx, ry: pt.ry };
+      if (o.onDrag) o.onDrag(q, cur, w); else { const np = w.pts; np[cur] = [q.x, q.y]; w.setVerts(np); }
+    };
+    svg.style.cursor = 'grab';
+    plotPointer(svg, pseudo, { snap: 0, clamp: false, onDown: pt => { cur = pick(pt); mv(pt); }, onDrag: mv, onUp: () => { cur = null; } });
+  }
+  paintText(); w.layout();
+  LIVE.push(w);
+  return w;
+}
+
 
 // ══════════════ ฟังก์ชันเอกซ์โพเนนเชียล ══════════════
 // สเปก: docs/design-exponential-log.md §2 + §7 (v2: แบคทีเรีย/ครึ่งชีวิตย้ายไป applications) · ภาพมาก่อน · ฉาก (makeScenes) · ทายก่อนเฉลย (makePredict) · เกมคัดแยก/จับคู่/ทับกราฟ
@@ -1970,6 +2436,11 @@ function toggleTheme() {
 })();
 syncThemeButton();
 new MutationObserver(syncThemeButton).observe(document.documentElement, { attributes: true, attributeFilter: ['lang'] });
+// แถบแท็บบนจอแคบเลื่อนซ้าย-ขวาได้: กดแท็บแล้วเลื่อนปุ่มนั้นมาให้เห็นทั้งปุ่ม
+document.addEventListener('click', e => {
+  const b = e.target.closest && e.target.closest('nav .tab-btn');
+  if (b && b.scrollIntoView) b.scrollIntoView({ block: 'nearest', inline: 'center', behavior: 'smooth' });
+});
 </script>
 </body>
 </html>

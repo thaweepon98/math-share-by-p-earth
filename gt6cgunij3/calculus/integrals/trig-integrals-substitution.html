@@ -163,6 +163,7 @@ input[type=range]{ accent-color:var(--primary); }
   .lang-toggle{ right:12px; }
   .theme-toggle{ right:74px; }
   nav{ flex-wrap:nowrap; overflow-x:auto; justify-content:flex-start; scrollbar-width:none; }
+  nav .tab-btn{ flex:0 0 auto; white-space:nowrap; }   /* ชื่อแท็บบรรทัดเดียว ปัดแถบซ้าย-ขวาแทน (ไม่บีบจนตัดคำ) */
   nav::-webkit-scrollbar{ display:none; }
 }
 /* โหมดมืด: สีที่หน้านี้ฝังไว้เอง (สร้างอัตโนมัติ) */
@@ -511,6 +512,11 @@ function toggleTheme() {
 })();
 syncThemeButton();
 new MutationObserver(syncThemeButton).observe(document.documentElement, { attributes: true, attributeFilter: ['lang'] });
+// แถบแท็บบนจอแคบเลื่อนซ้าย-ขวาได้: กดแท็บแล้วเลื่อนปุ่มนั้นมาให้เห็นทั้งปุ่ม
+document.addEventListener('click', e => {
+  const b = e.target.closest && e.target.closest('nav .tab-btn');
+  if (b && b.scrollIntoView) b.scrollIntoView({ block: 'nearest', inline: 'center', behavior: 'smooth' });
+});
 </script>
 </body>
 </html>
