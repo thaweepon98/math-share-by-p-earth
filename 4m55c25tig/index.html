@@ -338,6 +338,99 @@
   @media (max-width: 700px) { .tg-split { grid-template-columns: 1fr; } .tg-line { font-size: 1.08rem; } }
   .formula .tg-line { color: inherit; }
   .tg-split .wk-eq { overflow-y: hidden; padding: 4px 0; }
+
+  /* ═══ BEGIN ของกลางกลุ่มเมทริกซ์ ม.5 (matHtml, makeMatrix, flyTo, makeDetArea ใน base.js) — เพิ่มท้ายไฟล์เท่านั้น · สีใช้ --g-* / color-mix กับ --text/--card ═══ */
+  .mat-wrap { position: relative; display: inline-block; vertical-align: middle; white-space: nowrap; margin: 2px 3px; max-width: 100%; }
+  .mat-wrap.has-dim { margin-bottom: 1.35em; }
+  .mat-main { display: inline-flex; align-items: center; gap: .35em; }
+  .mat-name { font-weight: 800; font-style: italic; }
+  .mat-dim { position: absolute; left: 0; right: 0; top: 100%; text-align: center; font-size: .72em; font-weight: 700; color: var(--muted); line-height: 1.3; }
+  .mat { position: relative; display: inline-block; padding: .2em .66em; color: var(--text); }
+  .mat.sq::before, .mat.sq::after { content: ''; position: absolute; top: 0; bottom: 0; width: .36em; border: 2.4px solid currentColor; pointer-events: none; }
+  .mat.sq::before { left: 0; border-right: none; }
+  .mat.sq::after { right: 0; border-left: none; }
+  .mat.bar::before, .mat.bar::after { content: ''; position: absolute; top: 0; bottom: 0; border-left: 2.4px solid currentColor; pointer-events: none; }
+  .mat.bar::before { left: .12em; }
+  .mat.bar::after { right: .12em; }
+  .mat-grid { display: inline-grid; gap: .12em .5em; align-items: center; justify-items: center; }
+  .mc { display: flex; align-items: center; justify-content: center; min-width: 1.75em; min-height: 1.95em; padding: 0 .3em; border-radius: 7px; font-weight: 800; line-height: 1.2; transition: background .2s, box-shadow .2s, opacity .25s; }
+  .mc .frac { margin: 0 1px; }
+  .mc.empty { color: var(--muted); opacity: .6; font-weight: 700; }
+  .mc.aug { border-left: 2.4px dashed var(--muted); border-radius: 0 7px 7px 0; margin-left: .35em; padding-left: .5em; }
+  .mc.tap { cursor: pointer; }
+  .mc.tap:hover { box-shadow: inset 0 0 0 2px var(--muted); }
+  .mc.hb { background: color-mix(in srgb, var(--g-blue) 26%, transparent); box-shadow: inset 0 0 0 2px var(--g-blue); }
+  .mc.ho { background: color-mix(in srgb, var(--g-curve) 28%, transparent); box-shadow: inset 0 0 0 2px var(--g-curve); }
+  .mc.hg { background: color-mix(in srgb, var(--g-green) 26%, transparent); box-shadow: inset 0 0 0 2px var(--g-green); }
+  .mc.hr { background: color-mix(in srgb, var(--g-red) 24%, transparent); box-shadow: inset 0 0 0 2px var(--g-red); }
+  .mc.hp { background: color-mix(in srgb, var(--g-purple) 24%, transparent); box-shadow: inset 0 0 0 2px var(--g-purple); }
+  .mc.hy { background: color-mix(in srgb, var(--g-curve) 40%, yellow); box-shadow: inset 0 0 0 2px var(--g-curve); }
+  .mc.dim, .mc.struck { opacity: .3; }
+  .mc.pop { animation: mcPop .45s ease; }
+  @keyframes mcPop { 0% { transform: scale(.4); } 60% { transform: scale(1.25); } 100% { transform: scale(1); } }
+  @keyframes mcShake { 0%, 100% { transform: translateX(0); } 20% { transform: translateX(-6px); } 40% { transform: translateX(6px); } 60% { transform: translateX(-4px); } 80% { transform: translateX(4px); } }
+  .shake { animation: mcShake .5s ease; }
+  .mk-diag { position: absolute; left: .66em; right: .66em; top: .2em; bottom: .2em; width: calc(100% - 1.32em); height: calc(100% - .4em); pointer-events: none; overflow: visible; }
+  .mk-diag line { stroke: var(--muted); stroke-width: 2.2; stroke-dasharray: 5 5; vector-effect: non-scaling-stroke; }
+  .mk-in { position: relative; display: inline-block; max-width: 100%; vertical-align: top; }
+  .mk-ctl { display: flex; flex-wrap: wrap; gap: 6px 14px; margin: 10px 3px 0; align-items: center; }
+  .mk-grp { display: inline-flex; align-items: center; gap: 6px; font-weight: 700; }
+  .mk-lbl { color: var(--muted); font-size: .9rem; }
+  .mk-b { width: 34px; height: 34px; border-radius: 50%; border: 2px solid var(--primary); background: var(--card); color: var(--primary); font-family: 'Anuphan', sans-serif; font-size: 1.15rem; font-weight: 800; cursor: pointer; line-height: 1; padding: 0; }
+  .mk-b:hover:not(:disabled) { background: color-mix(in srgb, var(--g-green) 20%, var(--card)); }
+  .mk-b:disabled { opacity: .3; cursor: not-allowed; }
+  .mk-pop { position: absolute; z-index: 30; display: flex; align-items: center; gap: 8px; padding: 6px 10px; background: var(--card); border: 2px solid var(--primary); border-radius: 30px; box-shadow: 0 6px 20px rgba(0,0,0,.2); }
+  .mk-v { min-width: 34px; text-align: center; font-weight: 800; font-size: 1.2rem; }
+  .mk-strike { position: absolute; background: var(--g-red); border-radius: 2px; pointer-events: none; z-index: 3; }
+  .mk-strike.h { height: 3px; transform-origin: left center; animation: mkSweepX .4s ease-out both; }
+  .mk-strike.v { width: 3px; transform-origin: center top; animation: mkSweepY .4s ease-out both; }
+  @keyframes mkSweepX { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+  @keyframes mkSweepY { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+  .fly { position: absolute; z-index: 8; pointer-events: none; white-space: nowrap; font-weight: 800; transform: translate(-50%, -50%); }
+  .fly-row, .fly-col { display: inline-flex; gap: .55em; align-items: center; padding: .1em .45em; border-radius: 8px; background: color-mix(in srgb, var(--g-blue) 22%, var(--card)); box-shadow: inset 0 0 0 2px var(--g-blue); }
+  .fly-col { flex-direction: column; }
+  .fly-num { padding: 0 .35em; border-radius: 8px; background: color-mix(in srgb, var(--g-curve) 26%, var(--card)); box-shadow: inset 0 0 0 2px var(--g-curve); }
+  .da-wrap { max-width: 560px; margin: 0 auto; }
+  .da-wrap .plot { touch-action: none; }
+  .da-wrap .da-edge { fill: none; stroke-width: 2.4; stroke-linejoin: round; }
+  .da-halo { fill-opacity: .18; cursor: grab; }
+  .da-read { display: flex; flex-wrap: wrap; gap: 8px 16px; justify-content: center; align-items: center; margin: 8px 0 2px; font-weight: 700; }
+  .da-eq { font-size: 1.05rem; }
+  .da-eq b { color: var(--g-green); font-size: 1.15em; } .da-eq b.da-zero { color: var(--g-red); }
+  .da-none { color: color-mix(in srgb, var(--g-red) 75%, var(--text)); font-weight: 800; }
+  .da-k { justify-content: center; }
+  /* เลย์เอ็ตในหน้าเมทริกซ์ */
+  .mx-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 6px 12px; margin: 6px 0; font-size: 1.15rem; font-weight: 800; }
+  .mx-op { font-size: 1.5rem; font-weight: 800; color: var(--muted); padding: 0 2px; }
+  .mx-calc { font-size: 1.05rem; font-weight: 700; line-height: 1.9; text-align: center; min-height: 1.9em; }
+  .mx-calc .hit { padding: 1px 6px; border-radius: 6px; background: color-mix(in srgb, var(--g-green) 22%, var(--card)); }
+  .mx-stage { position: relative; }
+  .mx-note { text-align: center; font-weight: 700; color: var(--muted); margin: 4px 0; min-height: 1.6em; }
+  .mx-tag { display: inline-block; padding: 2px 12px; border-radius: 20px; font-weight: 800; font-size: .92rem; border: 2px solid var(--cc, var(--border)); background: color-mix(in srgb, var(--cc, var(--card)) 14%, var(--card)); }
+  .mx-chk { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 6px 10px; padding: 8px 6px; border-radius: 12px; border: 2px solid var(--border); margin-top: 8px; font-weight: 800; }
+  .mx-chk.ok { border-color: var(--g-green); background: color-mix(in srgb, var(--g-green) 9%, var(--card)); }
+  .mx-chk.no { border-color: var(--g-red); background: color-mix(in srgb, var(--g-red) 8%, var(--card)); }
+  .mx-chk .mk-ml { font-size: .92rem; color: var(--muted); width: 100%; text-align: center; font-weight: 700; }
+  .mx-mark { font-size: 1.6rem; font-weight: 800; line-height: 1; }
+  .mx-chk.ok .mx-mark { color: var(--g-green); } .mx-chk.no .mx-mark { color: var(--g-red); }
+  .nest { position: relative; border: 2.5px solid var(--cc); border-radius: 16px; padding: 8px 10px 10px; margin-top: 8px; background: color-mix(in srgb, var(--cc) 8%, var(--card)); cursor: pointer; transition: box-shadow .2s, background .2s; }
+  .nest.on { box-shadow: 0 0 0 4px color-mix(in srgb, var(--cc) 35%, transparent); background: color-mix(in srgb, var(--cc) 18%, var(--card)); }
+  .nest-h { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 6px 12px; }
+  .nest-t { font-weight: 800; color: color-mix(in srgb, var(--cc) 70%, var(--text)); }
+  .gm-q { text-align: center; font-size: 1.5rem; font-weight: 800; margin: 8px 0; }
+  .gm-board { display: flex; justify-content: center; margin: 8px 0; }
+  .gm-board .mc.right { background: color-mix(in srgb, var(--g-green) 30%, transparent); box-shadow: inset 0 0 0 2px var(--g-green); }
+  .gm-board .mc.wrong { background: color-mix(in srgb, var(--g-red) 28%, transparent); box-shadow: inset 0 0 0 2px var(--g-red); animation: mcShake .45s ease; }
+  @media (max-width: 700px) {
+    .mat { padding: .18em .5em; }
+    .mat-grid { gap: .1em .3em; }
+    .mc { min-width: 1.45em; min-height: 1.8em; padding: 0 .16em; }
+    .mat-wrap { margin: 2px 1px; }
+    .mx-row { gap: 4px 6px; font-size: 1.02rem; }
+    .mk-diag { left: .5em; right: .5em; width: calc(100% - 1em); }
+    .mc.aug { margin-left: .2em; padding-left: .3em; }
+  }
+  /* ═══ END ของกลางกลุ่มเมทริกซ์ ม.5 ═══ */
 /* ── theme:start — สร้างโดย tools/build_lessons.py ห้ามแก้มือ (แก้ที่สคริปต์แล้วรันใหม่) ── */
 :root{ --page:#0F766E; }
 :root[data-theme="light"]{
@@ -1646,6 +1739,310 @@ function makeTriangle(host, o) {
   LIVE.push(w);
   return w;
 }
+
+// ════════════════════════════════════════════════════════════════════════════
+//  ═══ BEGIN ชุดของกลางกลุ่มเมทริกซ์ ม.5 ═══  (docs/design-matrices.md §1.2)
+//  ⚠️ เพิ่มท้ายไฟล์เท่านั้น — ห้ามแก้ของเดิมด้านบน (สื่อ 17 ชิ้นเดิมต้องไม่เปลี่ยน — มีแค่บล็อกนี้ที่เพิ่ม)
+//  ชื่อ const/function ระดับบนสุดที่เพิ่ม: Q qAdd qSub qMul qDiv qNeg qEq qIsZero qNum qHtml (+ qText ดูหมายเหตุ)
+//     mAdd mSub mScale mMul mT mDet mMinor mCof mAdj mInv mEq mId mZero matHtml makeMatrix flyTo makeDetArea (+ _qG _toQ _mQ _qTxt _MK_CLS)
+//  ⚠️ qText: lesson_equations-inequalities.js มี `const qText` ของตัวเอง (ฟังก์ชันสร้างป้ายใน SVG คนละอย่าง) — ถ้าประกาศ `function qText` ที่นี่ หน้านั้นจะพัง
+//     จึงผูกเป็นคุณสมบัติของ window (window.qText) แทน · ในหน้าเมทริกซ์เรียก qText(q) ได้ตามปกติ · โค้ดในไฟล์นี้เรียกผ่าน _qTxt
+//
+//  17) Q / qAdd … qNum / qHtml / qText   จำนวนตรรกยะแม่นยำ (ห้ามใช้ทศนิยมคำนวณเมทริกซ์)
+//  18) mAdd … mZero                     คณิตเมทริกซ์บน array 2 มิติของ Q หรือเลขธรรมดา (คืน array ของ Q)
+//  19) matHtml(M, o)                    เมทริกซ์นิ่งเป็น HTML (วงเล็บยืดตามจำนวนแถว)
+//  20) makeMatrix(host, M, o)           เมทริกซ์มีชีวิต: แตะแก้เลข · ปุ่ม +/− แถวหลัก · ไฮไลต์ · ขีดฆ่าแถว/หลัก
+//  21) flyTo(stage, from, to, html, …)  ตัวเลข/ก้อน HTML บินจากที่หนึ่งไปทับอีกที่หนึ่ง (ใช้ใน makeScenes ได้)
+//  22) makeDetArea(host, o)             ลูกศร 2 เส้นลากได้ พื้นที่สี่เหลี่ยมด้านขนาน = det สด (ใช้ชิ้น ② ③)
+// ════════════════════════════════════════════════════════════════════════════
+
+// ───────── 17) จำนวนตรรกยะ ─────────
+// Q(n, d) → { n, d } ตัดทอนเองแล้ว ส่วน d > 0 เสมอ (เครื่องหมายอยู่ที่ n) · Q(3) = 3 · Q(-6, 4) = −3/2
+//   ทุกฟังก์ชัน q* และ m* รับ "เลขธรรมดา" แทน Q ได้ทุกที่ (แปลงเอง: เลขจำนวนเต็มแม่นยำ · ทศนิยมปัดที่ 6 ตำแหน่ง)
+//   qAdd(a, b) qSub qMul qDiv (ส่วนเป็น 0 → throw) qNeg(a) · qEq(a, b) → boolean · qIsZero(a) · qNum(a) → ทศนิยม (ไว้เทียบ/แสดงผล ห้ามไว้คำนวณต่อ)
+//   qHtml(q) → HTML: จำนวนเต็ม "−7" · เศษส่วนบน/ล่าง (frac) มีลบนำหน้าเป็น "−" (U+2212) เช่น −<frac 7/2>
+//   qText(q) → ข้อความธรรมดา "−7/2" ไว้ใส่ <text> ใน SVG
+const _qG = (a, b) => { a = Math.abs(a); b = Math.abs(b); while (b) { const t = a % b; a = b; b = t; } return a || 1; };
+function Q(n, dd) {
+  if (dd === undefined) dd = 1;
+  if (!Number.isInteger(n) || !Number.isInteger(dd)) { const k = 1000000; n = Math.round(n / dd * k); dd = k; }
+  if (dd === 0) throw new Error('Q: ส่วนเป็น 0');
+  if (dd < 0) { n = -n; dd = -dd; }
+  const g = _qG(n, dd);
+  return { n: n / g + 0, d: dd / g, _q: true };
+}
+const _toQ = x => (x && x._q) ? x : Q(x);
+const qAdd = (a, b) => { a = _toQ(a); b = _toQ(b); return Q(a.n * b.d + b.n * a.d, a.d * b.d); };
+const qSub = (a, b) => { a = _toQ(a); b = _toQ(b); return Q(a.n * b.d - b.n * a.d, a.d * b.d); };
+const qMul = (a, b) => { a = _toQ(a); b = _toQ(b); return Q(a.n * b.n, a.d * b.d); };
+const qDiv = (a, b) => { a = _toQ(a); b = _toQ(b); if (b.n === 0) throw new Error('qDiv: หารด้วย 0'); return Q(a.n * b.d, a.d * b.n); };
+const qNeg = a => { a = _toQ(a); return Q(-a.n, a.d); };
+const qEq = (a, b) => { a = _toQ(a); b = _toQ(b); return a.n === b.n && a.d === b.d; };
+const qIsZero = a => _toQ(a).n === 0;
+const qNum = a => { a = _toQ(a); return a.n / a.d; };
+const qHtml = q => { q = _toQ(q); const a = Math.abs(q.n); return (q.n < 0 ? '−' : '') + (q.d === 1 ? String(a) : frac(a, q.d)); };
+const _qTxt = q => { q = _toQ(q); return (q.n < 0 ? '−' : '') + Math.abs(q.n) + (q.d === 1 ? '' : '/' + q.d); };
+window.qText = _qTxt;
+
+// ───────── 18) คณิตเมทริกซ์ ─────────
+// M = array 2 มิติ [[a, b], [c, d]] ของ Q หรือเลข · ทุกฟังก์ชันคืน array ของ Q (ไม่แก้ตัวที่ส่งเข้ามา)
+//   mAdd(A, B) mSub(A, B) → null ถ้ามิติไม่เท่า · mScale(M, k) · mMul(A, B) → null ถ้ามิติตัวใน (หลักของ A ≠ แถวของ B) ไม่เท่า · mT(M) ทรานสโพส
+//   mDet(M) → Q (จัตุรัส n ≤ 4 · 1×1 = ตัวมันเอง) · mMinor(M, i, j) = เมทริกซ์ย่อย (ตัดแถว i หลัก j · 0-based) · mCof(M, i, j) = Cᵢⱼ = (−1)ⁱ⁺ʲ det(เมทริกซ์ย่อย)
+//   mAdj(M) = ทรานสโพสของเมทริกซ์โคแฟกเตอร์ · mInv(M) = adj ÷ det (คืน null ถ้า det = 0) · mEq(A, B) → boolean · mId(n) · mZero(r, c)
+const _mQ = M => M.map(r => r.map(_toQ));
+const mAdd = (A, B) => { A = _mQ(A); B = _mQ(B); if (A.length !== B.length || A[0].length !== B[0].length) return null; return A.map((r, i) => r.map((v, j) => qAdd(v, B[i][j]))); };
+const mSub = (A, B) => { A = _mQ(A); B = _mQ(B); if (A.length !== B.length || A[0].length !== B[0].length) return null; return A.map((r, i) => r.map((v, j) => qSub(v, B[i][j]))); };
+const mScale = (M, k) => _mQ(M).map(r => r.map(v => qMul(v, k)));
+function mMul(A, B) {
+  A = _mQ(A); B = _mQ(B);
+  if (A[0].length !== B.length) return null;
+  return A.map(r => B[0].map((_, j) => r.reduce((s, v, k) => qAdd(s, qMul(v, B[k][j])), Q(0))));
+}
+const mT = M => { M = _mQ(M); return M[0].map((_, j) => M.map(r => r[j])); };
+const mMinor = (M, i, j) => _mQ(M).filter((_, a) => a !== i).map(r => r.filter((_, b) => b !== j));
+function mDet(M) {
+  M = _mQ(M); const n = M.length;
+  if (!n || M.some(r => r.length !== n)) throw new Error('mDet: ต้องเป็นเมทริกซ์จัตุรัส');
+  if (n === 1) return M[0][0];
+  if (n === 2) return qSub(qMul(M[0][0], M[1][1]), qMul(M[0][1], M[1][0]));
+  let s = Q(0);
+  for (let j = 0; j < n; j++) { if (qIsZero(M[0][j])) continue; const t = qMul(M[0][j], mDet(mMinor(M, 0, j))); s = j % 2 ? qSub(s, t) : qAdd(s, t); }
+  return s;
+}
+const mCof = (M, i, j) => { const d0 = mDet(mMinor(M, i, j)); return (i + j) % 2 ? qNeg(d0) : d0; };
+function mAdj(M) {
+  M = _mQ(M); const n = M.length;
+  if (n === 1) return [[Q(1)]];
+  return M.map((_, i) => M.map((__, j) => mCof(M, j, i)));
+}
+function mInv(M) {
+  M = _mQ(M); const d0 = mDet(M);
+  if (qIsZero(d0)) return null;
+  return mAdj(M).map(r => r.map(v => qDiv(v, d0)));
+}
+const mEq = (A, B) => { A = _mQ(A); B = _mQ(B); return A.length === B.length && A[0].length === B[0].length && A.every((r, i) => r.every((v, j) => qEq(v, B[i][j]))); };
+const mId = n => Array.from({ length: n }, (_, i) => Array.from({ length: n }, (__, j) => Q(i === j ? 1 : 0)));
+const mZero = (r, c) => Array.from({ length: r }, () => Array.from({ length: c === undefined ? r : c }, () => Q(0)));
+
+// ───────── 19) เมทริกซ์นิ่ง (HTML) ─────────
+// matHtml(M, o) → HTML ก้อน inline-block ไม่ตัดบรรทัด (ใช้ในร้อยแก้ว / คำบรรยายฉาก / ตัวเลือก quiz / .formula ได้)  M = array 2 มิติ — ช่องเป็น Q/เลข · null = ช่องประจาง "?" · สตริง = HTML ดิบ (เช่น 'x + 1')
+//   o = { br: '[' (วงเล็บเหลี่ยม · ค่าเริ่ม) | '|' (เส้นตรง = det) · aug: k (เส้นประแบ่งหลังหลักที่ k — เมทริกซ์แต่งเติม · 1 = หลังหลักแรก)
+//         cls: (i, j) => 'hb' | 'ho' | 'hg' | 'hr' | 'hp' | 'hy' | 'dim' | '' (คลาสไฮไลต์ต่อช่อง · 0-based · ผสมได้ "hb pop")
+//         name: 'A' (ชื่อหน้าเมทริกซ์ "A =" · ใส่ HTML ได้เช่น 'A<sup>t</sup>') · eq: false (ไม่ใส่ " =") · dim: true (มิติ "2×3" ใต้ภาพ)
+//         diag: true (เส้นประทแยงหลักทับเมทริกซ์) · key: 'A' (data-m ไว้ค้นช่อง — ค่าเริ่ม = name) }
+//   ทุกช่องมี data-i / data-j · ค้นช่อง: root.querySelector('[data-m="A"] .mc[data-i="0"][data-j="1"]')
+//   คลาสไฮไลต์: hb น้ำเงิน (แถว) · ho ส้ม (หลัก) · hg เขียว (ผล/ถูก) · hr แดง · hp ม่วง · hy เหลือง (det เดิม) · dim จาง · pop เด้ง
+function matHtml(M, o) {
+  o = o || {};
+  const R = M.length, C = R ? M[0].length : 0, key = o.key !== undefined ? o.key : (o.name || '');
+  let cells = '';
+  for (let i = 0; i < R; i++) for (let j = 0; j < C; j++) {
+    const v = M[i][j], cl = o.cls ? (o.cls(i, j) || '') : '';
+    const body = v === null || v === undefined ? '?' : typeof v === 'string' ? v : qHtml(v);
+    cells += `<span class="mc${v === null || v === undefined ? ' empty' : ''}${o.aug !== undefined && j === o.aug ? ' aug' : ''}${cl ? ' ' + cl : ''}" data-i="${i}" data-j="${j}">${body}</span>`;
+  }
+  const diag = o.diag ? '<svg class="mk-diag" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="0" x2="100" y2="100"/></svg>' : '';
+  return `<span class="mat-wrap${o.dim ? ' has-dim' : ''}" data-m="${esc(String(key))}"><span class="mat-main">${o.name ? `<span class="mat-name">${o.name}${o.eq === false ? '' : ' ='}</span>` : ''}<span class="mat ${o.br === '|' ? 'bar' : 'sq'}"><span class="mat-grid" style="grid-template-columns:repeat(${C}, auto)">${cells}</span>${diag}</span></span>${o.dim ? `<span class="mat-dim">${R}×${C}</span>` : ''}</span>`;
+}
+const _MK_CLS = { blue: 'hb', orange: 'ho', green: 'hg', red: 'hr', purple: 'hp', yellow: 'hy', dim: 'dim' };
+
+// ───────── 20) เมทริกซ์มีชีวิต ─────────
+// makeMatrix(host, M, o) → w     ⚠️ แทนที่เนื้อหาเดิมของ host ทั้งหมด · ทุกช่องเป็น element จริง (กดได้ ไฮไลต์ได้ บินได้)
+//   o = { edit: true (แตะช่อง → ป๊อปอัป − / + ปรับค่า · ช่วง o.min..o.max ค่าเริ่ม −9..9 · เลขจำนวนเต็ม)
+//         resize: { r: [1, 4], c: [1, 4] } (ปุ่ม +/− แถว/หลัก · ช่องใหม่เป็น 0 · ไม่ใส่ = ปรับขนาดไม่ได้)
+//         onChange: M => {}  (ค่าในช่องเปลี่ยนหรือขนาดเปลี่ยนจากผู้ใช้ — M เป็นสำเนา array ของ Q)
+//         onTap: (i, j) => {}  (แตะช่อง — ใช้ได้โดยไม่ต้อง edit)
+//         br, aug, name, eq, dim, diag, cls, key เหมือน matHtml }
+//   คืน w = { M (getter สำเนา), set(M), cell(i, j) → element, hl(spec, cls), clear(), strike(i, j) → Promise, unstrike(), el, refresh() }
+//     spec = { row: i } | { col: j } | { cell: [i, j] } | { diag: 'main' | 'anti' } · cls = 'blue' | 'orange' | 'green' | 'red' | 'purple' | 'yellow' | 'dim' หรือชื่อคลาสตรงๆ ('hb') — ซ้อนหลายอันได้ · clear() ล้างไฮไลต์ทั้งหมด
+//     strike(i, j) = เส้นขีดฆ่าแถว i + หลัก j วิ่งพาดผ่าน (แอนิเมชันสั้น ~0.4 วินาที) ช่องที่ถูกขีดจางลง (ไว้ทำไมเนอร์/โคแฟกเตอร์) · unstrike() ล้าง
+//   ลงทะเบียน LIVE เอง (และออกจาก LIVE เมื่อ host หายไป) · set/ปรับขนาดแล้ววาดใหม่ทั้งก้อน (ไฮไลต์ที่ตั้งด้วย hl ยังอยู่ · strike หาย)
+function makeMatrix(host, M0, o) {
+  o = o || {}; _tgPrune();
+  let M = _mQ(M0);
+  const lo = o.min === undefined ? -9 : o.min, hi = o.max === undefined ? 9 : o.max;
+  const w = { _dead: false, el: host }, hls = []; let pop = null;
+  Object.defineProperty(w, 'M', { get: () => M.map(r => r.slice()) });
+  const cells = () => [...host.querySelectorAll('.mc')];
+  const closePop = () => { if (pop) { pop.remove(); pop = null; } };
+  const inSpec = (sp, i, j, C) => sp.row !== undefined ? i === sp.row : sp.col !== undefined ? j === sp.col : sp.cell ? (i === sp.cell[0] && j === sp.cell[1]) : sp.diag === 'main' ? i === j : sp.diag === 'anti' ? i + j === C - 1 : false;
+  const applyHl = () => {
+    const C = M.length ? M[0].length : 0;
+    cells().forEach(el => { const i = +el.dataset.i, j = +el.dataset.j; hls.forEach(h => { if (inSpec(h.spec, i, j, C)) el.classList.add(h.cls); }); });
+  };
+  const fire = () => { if (o.onChange) o.onChange(w.M); };
+  function openPop(i, j, el) {
+    closePop();
+    const inn = host.querySelector('.mk-in'); if (!inn) return;
+    pop = document.createElement('div'); pop.className = 'mk-pop';
+    pop.innerHTML = '<button class="mk-b" data-d="-1" aria-label="−">−</button><span class="mk-v"></span><button class="mk-b" data-d="1" aria-label="+">+</button>';
+    inn.appendChild(pop);
+    const val = pop.querySelector('.mk-v'), show = () => { val.textContent = mn(String(Math.round(qNum(M[i][j])))); };
+    show();
+    pop.addEventListener('click', e => e.stopPropagation());
+    pop.addEventListener('pointerdown', e => e.stopPropagation());
+    pop.querySelectorAll('.mk-b').forEach(b => b.onclick = () => {
+      const nv = Math.max(lo, Math.min(hi, Math.round(qNum(M[i][j])) + (+b.dataset.d)));
+      M[i][j] = Q(nv); el.innerHTML = qHtml(M[i][j]); el.classList.remove('empty'); show(); fire();
+    });
+    const ir = inn.getBoundingClientRect(), er = el.getBoundingClientRect(), pw = pop.offsetWidth;
+    pop.style.left = Math.max(0, Math.min(ir.width - pw, er.left - ir.left + er.width / 2 - pw / 2)).toFixed(1) + 'px';
+    pop.style.top = (er.bottom - ir.top + 4).toFixed(1) + 'px';
+  }
+  function paint() {
+    closePop();
+    const R = M.length, C = R ? M[0].length : 0;
+    let ctl = '';
+    if (o.resize) {
+      const rr = o.resize.r || [1, 4], cc = o.resize.c || [1, 4];
+      const grp = (lab, v, k, lim) => `<span class="mk-grp"><span class="mk-lbl">${lab}</span><button class="mk-b" data-a="${k}-" ${v <= lim[0] ? 'disabled' : ''} aria-label="−">−</button><b>${v}</b><button class="mk-b" data-a="${k}+" ${v >= lim[1] ? 'disabled' : ''} aria-label="+">+</button></span>`;
+      ctl = `<div class="mk-ctl">${grp(tx(T('แถว', 'Rows')), R, 'r', rr)}${grp(tx(T('หลัก', 'Columns')), C, 'c', cc)}</div>`;
+    }
+    host.innerHTML = `<div class="mk-in">${matHtml(M, o)}${ctl}</div>`;
+    if (o.edit || o.onTap) cells().forEach(el => {
+      el.classList.add('tap');
+      el.onclick = e => { e.stopPropagation(); const i = +el.dataset.i, j = +el.dataset.j; if (o.edit) openPop(i, j, el); if (o.onTap) o.onTap(i, j); };
+    });
+    host.querySelectorAll('.mk-ctl .mk-b').forEach(b => b.onclick = () => {
+      const a = b.dataset.a, rr = o.resize.r || [1, 4], cc = o.resize.c || [1, 4];
+      let nr = M.length, nc = M[0].length;
+      if (a === 'r+') nr++; else if (a === 'r-') nr--; else if (a === 'c+') nc++; else nc--;
+      if (nr < rr[0] || nr > rr[1] || nc < cc[0] || nc > cc[1]) return;
+      M = Array.from({ length: nr }, (_, i) => Array.from({ length: nc }, (__, j) => (M[i] && M[i][j]) || Q(0)));
+      paint(); fire();
+    });
+    applyHl();
+  }
+  w.set = M1 => { M = _mQ(M1); paint(); return w; };
+  w.cell = (i, j) => host.querySelector(`.mc[data-i="${i}"][data-j="${j}"]`);
+  w.hl = (spec, cls) => { hls.push({ spec, cls: _MK_CLS[cls] || cls || 'hb' }); applyHl(); return w; };
+  w.clear = () => { hls.length = 0; cells().forEach(el => { Object.values(_MK_CLS).forEach(c => el.classList.remove(c)); }); return w; };
+  w.unstrike = () => { host.querySelectorAll('.mk-strike').forEach(e => e.remove()); cells().forEach(e => e.classList.remove('struck')); return w; };
+  w.strike = (i, j) => {
+    w.unstrike();
+    const mat = host.querySelector('.mat'); if (!mat) return Promise.resolve();
+    const mr = mat.getBoundingClientRect(), R = M.length, C = M[0].length;
+    const a = w.cell(i, 0).getBoundingClientRect(), b = w.cell(i, C - 1).getBoundingClientRect(), c = w.cell(0, j).getBoundingClientRect(), d2 = w.cell(R - 1, j).getBoundingClientRect();
+    const h = document.createElement('span'); h.className = 'mk-strike h';
+    h.style.cssText = `left:${(a.left - mr.left - 6).toFixed(1)}px;top:${(a.top + a.height / 2 - mr.top - 1.5).toFixed(1)}px;width:${(b.right - a.left + 12).toFixed(1)}px`;
+    const v = document.createElement('span'); v.className = 'mk-strike v';
+    v.style.cssText = `left:${(c.left + c.width / 2 - mr.left - 1.5).toFixed(1)}px;top:${(c.top - mr.top - 4).toFixed(1)}px;height:${(d2.bottom - c.top + 8).toFixed(1)}px`;
+    mat.appendChild(h); mat.appendChild(v);
+    cells().forEach(el => { if (+el.dataset.i === i || +el.dataset.j === j) el.classList.add('struck'); });
+    return new Promise(res => setTimeout(res, 420));
+  };
+  w.refresh = () => { if (!host.isConnected) { w._dead = true; return; } paint(); };
+  const onDoc = e => { if (!host.isConnected) { document.removeEventListener('pointerdown', onDoc); return; } if (pop && !pop.contains(e.target)) closePop(); };
+  document.addEventListener('pointerdown', onDoc);
+  LIVE.push(w); paint();
+  return w;
+}
+
+// ───────── 21) ตัวเลข/ก้อนบิน ─────────
+// flyTo(stage, from, to, html, anim, ms, o) → Promise      โคลนก้อน HTML ลอยใน stage จาก from ไปทับ to แล้วหายไป (ไม่ใส่ o.keep)
+//   stage = element ที่จะวางโคลนข้างใน (ตั้ง position: relative ให้เองถ้ายังไม่ได้ตั้ง — ใน makeScenes ใช้ S.el ได้เลย)
+//   from / to = element | array ของ element (ใช้กล่องรวม — เช่น ช่องทั้งแถวเพื่อ "แถวหมุนตั้ง") | { left, top, width, height } (พิกัดจอ)
+//   html = สิ่งที่บิน (ตัวเลข / matHtml / แถวตัวเลข '<span class="fly-row"><span>2</span><span>1</span></span>' — .fly-row เรียงนอน) · ตัวอักษรสืบจาก from (ถ้าเป็น element)
+//   anim = makeAnimator (S.anim ในฉาก — ถูก kill แล้วโคลนหายเอง) · ms ค่าเริ่ม 800
+//   o = { arc: true | px (โค้งขึ้นระหว่างบิน · true = 40px) · rotate: 90 (องศาที่หมุนตลอดทาง — "แถวหมุนตั้ง" ใช้ 90 ตามเข็ม: ตัวซ้ายสุดไปอยู่บนสุด) · keep: true (ทิ้งโคลนไว้ที่ปลายทาง · คืน element ผ่าน Promise)
+//         dx, dy (px เลื่อนจุดปลายทาง — ให้เลข 2 ตัวมาชนกันไม่ทับพอดี) · from0 (องศาเริ่มต้นของการหมุน) · ease: EASE.inOut }
+//   ตัวอย่าง: await flyTo(S.el, aCell, resultCell, '7', S.anim, 700, { arc: true })
+function flyTo(stage, from, to, html, anim, ms, o) {
+  o = o || {}; anim = anim || makeAnimator(); ms = ms === undefined ? 800 : ms;
+  if (getComputedStyle(stage).position === 'static') stage.style.position = 'relative';
+  const sr = stage.getBoundingClientRect();
+  const rect = e => {
+    if (Array.isArray(e)) { const rs = e.map(x => x.getBoundingClientRect()); const l = Math.min(...rs.map(r => r.left)), t = Math.min(...rs.map(r => r.top)), r2 = Math.max(...rs.map(r => r.right)), b = Math.max(...rs.map(r => r.bottom)); return { left: l, top: t, width: r2 - l, height: b - t }; }
+    if (e && e.getBoundingClientRect) { const r = e.getBoundingClientRect(); return { left: r.left, top: r.top, width: r.width, height: r.height }; }
+    return e;
+  };
+  const f = rect(from), t = rect(to);
+  const fx = f.left + f.width / 2 - sr.left, fy = f.top + f.height / 2 - sr.top, tx_ = t.left + t.width / 2 - sr.left + (o.dx || 0), ty_ = t.top + t.height / 2 - sr.top + (o.dy || 0);
+  const el0 = Array.isArray(from) ? from[0] : from, cs = el0 && el0.nodeType === 1 ? getComputedStyle(el0) : null;
+  const c = document.createElement('div'); c.className = 'fly';
+  if (cs) c.style.cssText = `font-size:${cs.fontSize};font-weight:${cs.fontWeight};color:${cs.color}`;
+  c.innerHTML = html; stage.appendChild(c);
+  const arcH = o.arc === true ? 40 : (o.arc || 0), rot = o.rotate || 0, r0 = o.from0 || 0;
+  const place = p => { const x = fx + (tx_ - fx) * p, y = fy + (ty_ - fy) * p - arcH * Math.sin(Math.PI * p); c.style.left = x.toFixed(1) + 'px'; c.style.top = y.toFixed(1) + 'px'; c.style.transform = `translate(-50%,-50%) rotate(${(r0 + rot * p).toFixed(1)}deg)`; };
+  place(0);
+  setTimeout(() => { if (anim.dead && !o.keep && c.parentNode) c.remove(); }, ms + 80);
+  return anim.run(ms, place, o.ease || EASE.inOut).then(() => { place(1); if (!o.keep) c.remove(); return c; });
+}
+
+// ───────── 22) ดีเทอร์มิแนนต์เป็นพื้นที่ ─────────
+// makeDetArea(host, o) → w   กราฟ (Plot + plotPointer) · ลูกศร 2 เส้น = หลัก 2 หลักของ A = [a b; c d] → ลูกศรน้ำเงิน (a, c) · ลูกศรส้ม (b, d) · ลากหัวลูกศรได้ (ดูดจำนวนเต็ม −4..4)
+//   สี่เหลี่ยมด้านขนานจากลูกศร 2 เส้นระบาย: det > 0 = ฟ้า · det < 0 = แดง + ป้าย "พลิกด้าน" · det = 0 → แบนเป็นเส้น + ป้าย "แบน! det = 0" · ป้ายพื้นที่ = det สด
+//   ใต้กราฟ: A สด (matHtml) + บรรทัด det A = (a)(d) − (b)(c) = ค่า
+//   o = { M: [[3, 1], [1, 2]] (เริ่มต้น · ต้อง 2×2) · k: true (ตัวเลื่อน k = 1..3 + ปุ่ม 1 2 3 → แสดงภาพ kA ซ้อน พื้นที่ k² เท่า · หัวลูกศรลากได้ ±4 เท่าเดิม แต่กราฟซูมออกตาม k: ±9 / ±15 / ±21)
+//         inv: true (แสดงกล่อง A⁻¹ สด หรือ "ไม่มี A⁻¹" เมื่อ det = 0) · onChange: M => {} (ผู้ใช้ลาก) }
+//   คืน w = { M (getter · array ของ Q), set(M), refresh() } · ลงทะเบียน LIVE · ⚠️ แทนที่เนื้อหาเดิมของ host
+function makeDetArea(host, o) {
+  o = o || {}; _tgPrune();
+  const LIM = 4, RNGS = [9, 15, 21];                  // โหมด k: หัวลูกศรลากได้ ±4 · กราฟซูมออกตาม k (k = 1, 2, 3) เพื่อให้ kA ยังอยู่ในกรอบ
+  let m = (o.M || [[3, 1], [1, 2]]).map(r => r.map(v => Math.round(qNum(v)))), kk = 1;
+  const w = { _dead: false };
+  Object.defineProperty(w, 'M', { get: () => _mQ(m) });
+  host.innerHTML = `<div class="da-wrap"></div>`;
+  const wrap = host.firstChild;
+  wrap.innerHTML = `<div class="da-plot"></div>${o.k ? '<div class="slider-row da-k"><b><i>k</i> =</b><input type="range" min="1" max="3" step="1" value="1"><span class="slider-val"></span><span class="da-kc">' + [1, 2, 3].map(v => `<button type="button" class="chip da-kb" data-k="${v}">${v}</button>`).join('') + '</span></div>' : ''}<div class="da-read"></div>`;
+  const box = wrap.querySelector('.da-plot'), rd = wrap.querySelector('.da-read');
+  let pl, svg, dyn;
+  const X = x => pl.X(x), Y = y => pl.Y(y);
+  const arrow = (x1, y1, x2, y2, cls) => {
+    const dx = x2 - x1, dy = y2 - y1, L = Math.hypot(dx, dy); if (L < 1) return '';
+    const ux = dx / L, uy = dy / L, hl_ = 13, nx = -uy * 6, ny = ux * 6, bx = x2 - ux * hl_, by = y2 - uy * hl_;
+    return `<line class="pl-c ${cls}" style="stroke-width:3.4" x1="${x1}" y1="${y1}" x2="${bx.toFixed(1)}" y2="${by.toFixed(1)}"/><polygon class="${cls.replace('s-', 'f-')}" points="${x2},${y2} ${(bx + nx).toFixed(1)},${(by + ny).toFixed(1)} ${(bx - nx).toFixed(1)},${(by - ny).toFixed(1)}"/>`;
+  };
+  let cur = null;
+  const pickHead = pt => { const d1 = Math.hypot(pt.rx - m[0][0], pt.ry - m[1][0]), d2 = Math.hypot(pt.rx - m[0][1], pt.ry - m[1][1]); return d1 <= d2 ? 1 : 2; };
+  const mv = pt => {
+    if (!cur) return;
+    const x = Math.max(-LIM, Math.min(LIM, Math.round(pt.rx))), y = Math.max(-LIM, Math.min(LIM, Math.round(pt.ry)));
+    if (cur === 1) { if (m[0][0] === x && m[1][0] === y) return; m[0][0] = x; m[1][0] = y; } else { if (m[0][1] === x && m[1][1] === y) return; m[0][1] = x; m[1][1] = y; }
+    paint(); if (o.onChange) o.onChange(w.M);
+  };
+  const mount = () => {                                   // สร้างกราฟ (ใหม่ทุกครั้งที่ k เปลี่ยน — ไม่เกิดระหว่างลากหัวลูกศร)
+    const R = o.k ? RNGS[kk - 1] : 8, lx = o.k ? (R > 12 ? 6 : 3) : 2;
+    pl = new Plot({ w: 480, h: 480, xmin: -R, xmax: R, ymin: -R, ymax: R, pad: 26, gx: R > 12 ? 3 : 1, gy: R > 12 ? 3 : 1, lx, ly: lx });
+    box.innerHTML = pl.svg().replace(/<\/svg>$/, '<g class="da-dyn"></g></svg>');
+    svg = box.querySelector('svg'); dyn = box.querySelector('.da-dyn');
+    plotPointer(svg, pl, { snap: 0, clamp: false, onDown: pt => { cur = pickHead(pt); mv(pt); }, onDrag: mv, onUp: () => { cur = null; } });
+    svg.style.cursor = 'grab';
+  };
+  const paint = () => {
+    const a = m[0][0], b = m[0][1], c = m[1][0], d2 = m[1][1], det = a * d2 - b * c, k = kk;
+    let g = '';
+    const poly = (s, cls, extra) => `<polygon class="${cls}" ${extra || ''} points="${[[0, 0], [a * s, c * s], [(a + b) * s, (c + d2) * s], [b * s, d2 * s]].map(p => X(p[0]) + ',' + Y(p[1])).join(' ')}"/>`;
+    if (o.k && k > 1) g += poly(k, 'fa-green') + poly(k, 'da-edge s-green');
+    if (det !== 0) g += poly(1, det > 0 ? 'fa-blue' : 'fa-red');
+    g += poly(1, 'da-edge ' + (det > 0 ? 's-blue' : det < 0 ? 's-red' : 's-muted'), det === 0 ? 'style="stroke-dasharray:6 5"' : '');
+    g += arrow(X(0), Y(0), X(a), Y(c), 's-blue') + arrow(X(0), Y(0), X(b), Y(d2), 's-orange');
+    g += `<circle class="da-halo f-blue" cx="${X(a)}" cy="${Y(c)}" r="16"/><circle class="da-halo f-orange" cx="${X(b)}" cy="${Y(d2)}" r="16"/>`;
+    g += `<circle class="pl-dot f-blue" cx="${X(a)}" cy="${Y(c)}" r="6.5"/><circle class="pl-dot f-orange" cx="${X(b)}" cy="${Y(d2)}" r="6.5"/>`;
+    const lab = (x, y, cl, t) => `<text class="pl-lbl ${cl}" style="font-size:14px;paint-order:stroke;stroke:var(--card);stroke-width:4px;stroke-linejoin:round" x="${X(x) + (x >= 0 ? 12 : -12)}" y="${Y(y) + (y >= 0 ? -10 : 20)}" text-anchor="${x >= 0 ? 'start' : 'end'}">${t}</text>`;
+    g += lab(a, c, 'b', `(${mn(a)}, ${mn(c)})`) + lab(b, d2, 'o', `(${mn(b)}, ${mn(d2)})`);
+    const cx_ = X((a + b) / 2), cy_ = Y((c + d2) / 2);
+    const area = det === 0 ? tx(T('แบน! det = 0', 'Flat! det = 0')) : (det < 0 ? tx(T('พลิกด้าน ', 'Flipped ')) : '') + 'det = ' + mn(det);
+    g += `<text class="pl-lbl ${det > 0 ? 'b' : 'r'}" style="font-size:15px;paint-order:stroke;stroke:var(--card);stroke-width:4px;stroke-linejoin:round" x="${cx_}" y="${cy_ + 5}" text-anchor="middle">${det === 0 ? '' : area}</text>`;
+    if (det === 0) g += `<text class="pl-lbl r" style="font-size:16px;paint-order:stroke;stroke:var(--card);stroke-width:4px;stroke-linejoin:round" x="${X(0) + 14}" y="${Y(0) + 40}">${area}</text>`;
+    dyn.innerHTML = g;
+    const Aq = _mQ(m), inv = o.inv ? mInv(Aq) : null;
+    let h = matHtml(Aq, { name: 'A' }) + `<span class="da-eq">det <i>A</i> = <i>ad</i> − <i>bc</i> = (${mn(a)})(${mn(d2)}) − (${mn(b)})(${mn(c)}) = <b class="${det === 0 ? 'da-zero' : ''}">${mn(det)}</b></span>`;
+    if (o.k) h += `<span class="da-eq">det(<i>kA</i>) = <i>k</i><sup>2</sup> det <i>A</i> = ${k * k} × ${mn(det)} = <b>${mn(k * k * det)}</b></span>`;
+    if (o.inv) h += inv ? `<span class="da-inv">${matHtml(inv, { name: 'A<sup>−1</sup>' })}</span>` : `<span class="da-inv da-none">${tx(T('ไม่มี A<sup>−1</sup> (เพราะ det = 0)', 'No A<sup>−1</sup> (because det = 0)'))}</span>`;
+    rd.innerHTML = h;
+    const kin = wrap.querySelector('.da-k input'); if (kin) { if (+kin.value !== k) kin.value = k; wrap.querySelector('.da-k .slider-val').textContent = k; wrap.querySelectorAll('.da-kb').forEach(bn => bn.classList.toggle('active', +bn.dataset.k === k)); }
+  };
+  const setK = v => { v = Math.max(1, Math.min(3, Math.round(+v) || 1)); if (v === kk) return; kk = v; mount(); paint(); };
+  w.set = M => { m = M.map(r => r.map(v => Math.round(qNum(v)))); paint(); return w; };
+  w.refresh = () => { if (!host.isConnected) { w._dead = true; return; } paint(); };
+  const kin0 = wrap.querySelector('.da-k input');
+  if (kin0) { kin0.oninput = () => setK(kin0.value); kin0.onchange = () => setK(kin0.value); wrap.querySelectorAll('.da-kb').forEach(bn => { bn.onclick = () => { kin0.value = bn.dataset.k; setK(bn.dataset.k); }; }); }
+  mount();
+  LIVE.push(w); paint();
+  return w;
+}
+//  ═══ END ชุดของกลางกลุ่มเมทริกซ์ ม.5 ═══
 
 
 // ══════════════ วงกลมหนึ่งหน่วยและเรเดียน ══════════════
