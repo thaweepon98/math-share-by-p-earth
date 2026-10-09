@@ -431,6 +431,29 @@
     .mc.aug { margin-left: .2em; padding-left: .3em; }
   }
   /* ═══ END ของกลางกลุ่มเมทริกซ์ ม.5 ═══ */
+
+  /* ═══ BEGIN ของกลางกลุ่มจำนวนเชิงซ้อน ม.5 (makeCStepper, makeCPlane ใน base.js) — เพิ่มท้ายไฟล์เท่านั้น · สีใช้ --g-* / color-mix กับ --text/--card ═══ */
+  .cx-stp { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 8px 26px; margin: 8px 0; }
+  .cx-out { flex-basis: 100%; text-align: center; font-size: 1.45rem; font-weight: 700; line-height: 1.5; color: color-mix(in srgb, var(--cc, var(--text)) 70%, var(--text)); }
+  .cx-grp { display: inline-flex; align-items: center; gap: 8px; font-weight: 700; }
+  .cx-k { color: var(--muted); min-width: 1em; text-align: center; font-size: 1.1rem; }
+  .cx-v { display: inline-block; min-width: 2.1em; text-align: center; font-size: 1.2rem; font-weight: 700; }
+  .cx-i { padding-right: .17em; }
+  .cx-rt { display: inline-flex; align-items: stretch; vertical-align: middle; line-height: 1.3; font-weight: 700; }
+  .cx-rt svg { width: .64em; flex: none; overflow: visible; margin-right: -.5px; }
+  .cx-rt path { fill: none; stroke: currentColor; stroke-width: 2; stroke-linejoin: miter; vector-effect: non-scaling-stroke; }
+  .cx-ri { border-top: 2px solid currentColor; padding: .06em 3px 0 2px; }
+  .cx-bar { display: inline-block; line-height: 1.05; border-top: 2px solid currentColor; }
+  .cp-wrap { position: relative; max-width: 560px; margin: 8px auto; }
+  .cp-wrap > svg.plot { margin: 0; max-width: none; width: 100%; }
+  .cp-halo { fill-opacity: .2; cursor: grab; }
+  .cp-lbl { position: absolute; left: 0; top: 0; transform: translate(-50%, -50%); white-space: nowrap; z-index: 2; pointer-events: none; background: var(--card); color: var(--text); border: 2px solid var(--border); border-radius: 10px; padding: 0 8px; font-size: 1.02rem; font-weight: 700; line-height: 1.5; }
+  .cp-lbl.b { --cc: var(--g-blue); } .cp-lbl.o { --cc: var(--g-curve); } .cp-lbl.g { --cc: var(--g-green); } .cp-lbl.p { --cc: var(--g-purple); } .cp-lbl.r { --cc: var(--g-red); }
+  .cp-lbl.b, .cp-lbl.o, .cp-lbl.g, .cp-lbl.p, .cp-lbl.r { color: color-mix(in srgb, var(--cc) 70%, var(--text)); border-color: color-mix(in srgb, var(--cc) 60%, var(--card)); }
+  .cp-lbl.ax { border-color: transparent; color: var(--muted); font-size: .95rem; font-weight: 700; padding: 0 4px; }
+  .cp-lbl .frac { margin: 0 2px; }
+  @media (max-width: 700px) { .cp-lbl { font-size: .88rem; padding: 0 5px; } .cp-lbl.ax { font-size: .82rem; } .cx-out { font-size: 1.25rem; } }
+  /* ═══ END ของกลางกลุ่มจำนวนเชิงซ้อน ม.5 ═══ */
 /* ── theme:start — สร้างโดย tools/build_lessons.py ห้ามแก้มือ (แก้ที่สคริปต์แล้วรันใหม่) ── */
 :root{ --page:#8A5A00; }
 :root[data-theme="light"]{
@@ -2041,6 +2064,313 @@ function makeDetArea(host, o) {
   return w;
 }
 //  ═══ END ชุดของกลางกลุ่มเมทริกซ์ ม.5 ═══
+
+// ════════════════════════════════════════════════════════════════════════════
+//  ═══ BEGIN ชุดของกลางกลุ่มจำนวนเชิงซ้อน ม.5 ═══  (docs/design-complex-numbers.md §1.2)
+//  ⚠️ เพิ่มท้ายไฟล์เท่านั้น — ห้ามแก้ของเดิมด้านบน (สื่อ 21 ชิ้นเดิมต้องไม่เปลี่ยน — มีแค่บล็อกนี้ที่เพิ่ม)
+//  ใช้ของกลางเมทริกซ์ (Q, qAdd…, qHtml, _qTxt) กับของกลางตรีโกณ (rad, _tgPrune) ที่อยู่ด้านบน
+//  ชื่อ const/function ระดับบนสุดที่เพิ่ม: Cx cxAdd cxSub cxMul cxDiv cxNeg cxConj cxEq cxAbs2 cxPow cxHtml cxText makeCStepper makeCPlane cisHtml
+//     cxI cxRt (ค่าคงที่ i · เครื่องหมายรากสำหรับสมการตัวโต) (+ ตัวช่วยภายใน _toC _cx… _CX_CLS)
+//  คลาส CSS ที่เพิ่ม (base.css ท้ายไฟล์): .cx-stp .cx-out .cx-grp .cx-k .cx-v · .cx-i (i ตัวเอียงเว้นขวา) · .cx-rt .cx-ri (รากสองแบบวาดเอง) · .cp-wrap .cp-lbl .cp-halo · .cx-bar (เส้นขีดบน z̄: <span class="cx-bar"><i>z</i></span>)
+//
+//  23) Cx / cxAdd … cxPow       จำนวนเชิงซ้อนแม่นยำ (ส่วนจริง/จินตภาพเป็น Q)
+//  24) cxHtml / cxText          เขียน a + bi เป็น HTML / ข้อความธรรมดา
+//  25) makeCStepper(host, z, o) แถว −/+ ของ a และ b → "z = a + bi" สด
+//  26) makeCPlane(host, o)      ระนาบเชิงซ้อน: จุดลากได้ + ลูกศร + ป้าย HTML บนพื้นทึบ + arc / circle / arrow
+//  27) cisHtml(r, k, n, o)      "r cis kπ/n"  /  "r(cos θ + i sin θ)"
+// ════════════════════════════════════════════════════════════════════════════
+
+// ───────── 22b) i และเครื่องหมายราก ─────────
+// cxI = '<i class="cx-i">i</i>' — หน่วยจินตภาพ i ตัวเอียงที่เว้นขวานิดหน่อย (i ไม่ชนตัวยก i² หรือวงเล็บ "i)") · ใช้ทุกที่ที่ต้องเขียน i ใน HTML (cxHtml ใช้ตัวนี้)
+// cxRt(h) → รากที่สองสำหรับสมการตัวโต/ใน .cb-big: เครื่องหมาย √ เป็น SVG ยืดตามความสูงของเส้นขีดบน ปลายบนของ √ ต่อกับปลายซ้ายของเส้นขีดพอดี (ไม่ลอยแยก ไม่ขึ้นกับ line-height)
+//   cxRt('−9') → √(−9) แบบเส้นขีดบน · ในร้อยแก้ว/คำบรรยาย/ตัวเลือกใช้ข้อความธรรมดา √(−9) ตามเดิม
+const cxI = '<i class="cx-i">i</i>';
+const cxRt = h => `<span class="cx-rt"><svg viewBox="0 0 10 20" preserveAspectRatio="none" aria-hidden="true"><path d="M0.6 13 L2.8 11.4 L5.2 18.6 L10 1.1"/></svg><span class="cx-ri">${h}</span></span>`;
+
+// ───────── 23) จำนวนเชิงซ้อน ─────────
+// Cx(re, im) → { re: Q, im: Q }   รับ "เลขธรรมดา" หรือ Q ได้ทั้งสองช่อง (แปลงเอง · ทศนิยมปัดที่ 6 ตำแหน่ง) · Cx(3) = 3 + 0i · Cx(z) = z (ส่ง Cx เข้ามาคืนตัวเดิม)
+//   ทุกฟังก์ชัน cx* รับ "เลขธรรมดา / Q / Cx" แทน Cx ได้ทุกที่ (เลขธรรมดา = ส่วนจริงอย่างเดียว) และคืน Cx ใหม่ (ไม่แก้ตัวที่ส่งเข้ามา)
+//   cxAdd(a, b) cxSub(a, b) cxMul(a, b) · cxDiv(a, b) (b = 0 → throw) · cxNeg(a) = −a · cxConj(a) = สังยุค a − bi · cxEq(a, b) → boolean
+//   cxAbs2(z) → Q ของ a² + b² (กำลังสองของ |z| — ใช้แทน |z| จะได้ไม่ติดราก) · cxPow(z, n) n เต็ม ≥ 0 (n = 0 → 1 · n ติดลบ/ไม่เต็ม → throw)
+//   ตัวอย่าง: cxMul(Cx(1, 2), Cx(3, -5)) = 13 + 1i · cxDiv(Cx(5, 5), Cx(1, 2)) = 3 − i · cxPow(Cx(2, -1), 2) = 3 − 4i
+//   อ่านค่า: z.re / z.im เป็น Q → qHtml(z.re) · qNum(z.re) (ทศนิยม ไว้เทียบ/วาด ห้ามไว้คำนวณต่อ) · qEq(z.im, 0)
+function Cx(re, im) {
+  if (re && re._c) return re;
+  return { re: _toQ(re === undefined ? 0 : re), im: _toQ(im === undefined ? 0 : im), _c: true };
+}
+const _toC = x => (x && x._c) ? x : Cx(x, 0);
+const cxAdd = (a, b) => { a = _toC(a); b = _toC(b); return Cx(qAdd(a.re, b.re), qAdd(a.im, b.im)); };
+const cxSub = (a, b) => { a = _toC(a); b = _toC(b); return Cx(qSub(a.re, b.re), qSub(a.im, b.im)); };
+const cxMul = (a, b) => { a = _toC(a); b = _toC(b); return Cx(qSub(qMul(a.re, b.re), qMul(a.im, b.im)), qAdd(qMul(a.re, b.im), qMul(a.im, b.re))); };
+const cxNeg = a => { a = _toC(a); return Cx(qNeg(a.re), qNeg(a.im)); };
+const cxConj = a => { a = _toC(a); return Cx(a.re, qNeg(a.im)); };
+const cxEq = (a, b) => { a = _toC(a); b = _toC(b); return qEq(a.re, b.re) && qEq(a.im, b.im); };
+const cxAbs2 = z => { z = _toC(z); return qAdd(qMul(z.re, z.re), qMul(z.im, z.im)); };
+function cxDiv(a, b) {
+  a = _toC(a); b = _toC(b);
+  const d0 = cxAbs2(b);
+  if (qIsZero(d0)) throw new Error('cxDiv: หารด้วย 0');
+  const n = cxMul(a, cxConj(b));
+  return Cx(qDiv(n.re, d0), qDiv(n.im, d0));
+}
+function cxPow(z, n) {
+  if (!Number.isInteger(n) || n < 0) throw new Error('cxPow: n ต้องเป็นจำนวนเต็ม ≥ 0');
+  let r = Cx(1, 0); z = _toC(z);
+  for (let k = 0; k < n; k++) r = cxMul(r, z);
+  return r;
+}
+
+// ───────── 24) เขียน a + bi ─────────
+// cxHtml(z, o) → HTML ก้อน mx เดียว (ไม่ตัดบรรทัด) · i เป็นตัวเอียง · เครื่องหมาย + − เว้นวรรครอบ · ลบเป็น "−" (U+2212)
+//   Cx(3, -4) → 3 − 4i · Cx(0, -1) → −i · Cx(0, 3) → 3i · Cx(5, 0) → 5 · Cx(Q(13, 34), Q(1, 34)) → 13/34 + 1/34 i (เศษส่วนบน/ล่าง) · 1i เขียน "i" ไม่ใช่ "1i"
+//   o.paren: true → ใส่วงเล็บเมื่อมี 2 พจน์ (a + bi) (พจน์เดียวไม่ใส่) · o.var: 'z₁' → นำหน้า "z₁ = " (ตัวแรกที่เป็นตัวอักษรถูกทำเอียงเอง ในก้อนเดียวกัน)
+//   ⚠️ ส่วนจินตภาพเป็นรากไม่ได้ (Cx เป็น Q) — "√19 i" ให้เขียนสตริงเองในไฟล์ lesson (เว้นวรรค √19 i)
+// cxText(z, o) → ข้อความธรรมดาไว้ใส่ aria / <text> ใน SVG: "3 − 4i" · เศษส่วน "13/34 + (1/34)i" · o.var / o.paren เหมือนกัน
+const _cxAbsQ = q => (q.n < 0 ? qNeg(q) : q);
+function cxHtml(z, o) {
+  o = o || {}; z = _toC(z);
+  const a = z.re, b = z.im, az = qIsZero(a), bz = qIsZero(b), ib = q => (qEq(q, 1) ? '' : qHtml(q)) + cxI;
+  let s;
+  if (bz) s = qHtml(a);
+  else if (az) s = (b.n < 0 ? '−' : '') + ib(_cxAbsQ(b));
+  else s = qHtml(a) + (b.n < 0 ? ' − ' : ' + ') + ib(_cxAbsQ(b));
+  if (o.paren && !az && !bz) s = '(' + s + ')';
+  if (o.var) s = o.var.replace(/^([A-Za-z])/, '<i>$1</i>') + ' = ' + s;
+  return mx(s);
+}
+function cxText(z, o) {
+  o = o || {}; z = _toC(z);
+  const a = z.re, b = z.im, az = qIsZero(a), bz = qIsZero(b);
+  const ib = q => (qEq(q, 1) ? '' : (q.d === 1 ? String(q.n) : '(' + _qTxt(q) + ')')) + 'i';
+  let s;
+  if (bz) s = _qTxt(a);
+  else if (az) s = (b.n < 0 ? '−' : '') + ib(_cxAbsQ(b));
+  else s = _qTxt(a) + (b.n < 0 ? ' − ' : ' + ') + ib(_cxAbsQ(b));
+  if (o.paren && !az && !bz) s = '(' + s + ')';
+  if (o.var) s = o.var + ' = ' + s;
+  return s;
+}
+
+// ───────── 25) ตัวปรับ a, b ─────────
+// makeCStepper(host, z, o) → w     ⚠️ แทนที่เนื้อหาเดิมของ host ทั้งหมด · แถว [a − 3 +] [b − 5 +] ใต้บรรทัดโตตรงกลาง "z = a + bi" (เปลี่ยนสดทุกครั้งที่กด)
+//   z = Cx เริ่มต้น (a, b ปัดเป็นจำนวนเต็ม — ตัวปรับเดินทีละ 1)
+//   o = { name: 'z₁' (ชื่อที่ขึ้นหน้า "z₁ = " · ค่าเริ่ม 'z') · cls: 'b' (น้ำเงิน · ค่าเริ่ม) | 'o' (ส้ม) · min: −9, max: 9 (ช่วงของ a และ b)
+//         onChange: z => {} (ผู้ใช้กด หรือเรียก w.set โดยไม่ quiet — ค่าที่ส่งเป็น Cx · ไม่เรียกตอนสร้าง) }
+//   คืน w = { z (getter → Cx), set(z, quiet?), el: host, refresh() }
+//   ลงทะเบียน LIVE เอง (และออกจาก LIVE เมื่อ host หายไปจาก DOM — สร้างใน makeScenes ได้) · ใช้ปุ่ม .mk-b ของกลางเมทริกซ์
+function makeCStepper(host, z0, o) {
+  o = o || {}; _tgPrune();
+  const lo = o.min === undefined ? -9 : o.min, hi = o.max === undefined ? 9 : o.max, cc = o.cls === 'o' ? 'orange' : 'blue';
+  const zi = Cx(z0 === undefined ? 0 : z0), clampV = v => Math.max(lo, Math.min(hi, Math.round(v)));
+  let a = clampV(qNum(zi.re)), b = clampV(qNum(zi.im));
+  const w = { _dead: false, el: host };
+  Object.defineProperty(w, 'z', { get: () => Cx(a, b) });
+  const btn = (k, sg) => `<button type="button" class="mk-b" data-k="${k}" aria-label="${k[0]} ${sg}">${sg}</button>`;
+  host.innerHTML = `<div class="cx-stp cl-${cc}"><div class="cx-out"></div><span class="cx-grp"><b class="cx-k"><i>a</i></b>${btn('a-', '−')}<span class="cx-v" data-v="a"></span>${btn('a+', '+')}</span><span class="cx-grp"><b class="cx-k"><i>b</i></b>${btn('b-', '−')}<span class="cx-v" data-v="b"></span>${btn('b+', '+')}</span></div>`;
+  const q = s => host.querySelector(s);
+  const paint = () => {
+    q('.cx-out').innerHTML = cxHtml(Cx(a, b), { var: o.name || 'z' });
+    q('[data-v="a"]').textContent = mn(a); q('[data-v="b"]').textContent = mn(b);
+    host.querySelectorAll('.mk-b').forEach(e => { const k = e.dataset.k, v = k[0] === 'a' ? a : b; e.disabled = k[1] === '-' ? v <= lo : v >= hi; });
+  };
+  host.querySelectorAll('.mk-b').forEach(e => e.onclick = () => {
+    const k = e.dataset.k, d1 = k[1] === '-' ? -1 : 1;
+    if (k[0] === 'a') a = clampV(a + d1); else b = clampV(b + d1);
+    paint(); if (o.onChange) o.onChange(w.z);
+  });
+  w.set = (z, quiet) => { z = Cx(z); a = clampV(qNum(z.re)); b = clampV(qNum(z.im)); paint(); if (!quiet && o.onChange) o.onChange(w.z); return w; };
+  w.refresh = () => { if (!host.isConnected) { w._dead = true; return; } paint(); };
+  LIVE.push(w); paint();
+  return w;
+}
+
+// ───────── 26) ระนาบเชิงซ้อน ─────────
+// makeCPlane(host, o) → w     ⚠️ แทนที่เนื้อหาเดิมของ host ทั้งหมด · ระนาบ (Plot ตาราง 1 หน่วย) แกนจริง/แกนจินตภาพ + จุดลากได้ + ลูกศรจากจุดกำเนิด + ป้าย HTML
+//   แกนนอนป้าย "แกนจริง / Re" · แกนตั้งป้าย "แกนจินตภาพ / Im" (EN ตามภาษาเอง) · เลขแกนนอน 1 2 −1 … เลขแกนตั้ง i 2i −i … (ขนาด 15px ในหน่วย viewBox)
+//   o = {
+//     range: 6                         ระนาบ −range..range ทั้งสองแกน (หน่วยยาวเท่ากันเสมอ — วงกลมเป็นวงกลมจริง) · range > 8 → เลขแกนเว้นทีละ 2 (บังคับด้วย o.tick)
+//     points: [{ id, z (เลข/Cx), cls: 'b' | 'o' | 'g' | 'p' | 'r' (น้ำเงิน ส้ม เขียว ม่วง แดง · ค่าเริ่ม 'b'),
+//                label: T | html | z => html (ค่าที่ส่งเข้า = Cx ปัจจุบัน — ใส่ค่าสดได้เช่น z => 'z = ' + cxHtml(z)) · ไม่ใส่ = ไม่มีป้าย,
+//                drag: false (true = ลากได้ · ดูด snap · ตรึงในกรอบ),  arrow: false (true = ลูกศรจากจุดกำเนิดถึงจุด สีเดียวกัน),
+//                snap: 1 (ระยะดูดตอนลาก หน่วยระนาบ · 0.5 ได้ · 0 = อิสระ),  guide: false (true = เส้นประตั้งฉากลงสองแกน) }]
+//     onChange: (zs, id) => {}         ผู้ใช้ลากจุดหรือเรียก w.set โดยไม่ quiet · zs = { [id]: Cx } ของทุกจุด · id = จุดที่เพิ่งขยับ · ไม่เรียกตอนสร้าง
+//   }
+//   คืน w = { plot, svg, layer, get(id), set(id, z, quiet?), toSvg(x, y), label(x, y, html, cls, o?), arrow(z0, z1, cls, o?), arc(r, t0, t1, cls, o?), circle(r, cls, o?), clearExtras(), redraw(), refresh() }
+//     get(id) → Cx · set(id, z, quiet) ขยับจุด (วาดใหม่ ป้ายตาม) — ใช้ใน S.anim.run ทุกเฟรมด้วย quiet = true · ลากจุดข้างนอกกรอบ = ตรึงที่ขอบ
+//     toSvg(x, y) → [px, py] พิกัด SVG (viewBox 460 × 460) ของจุด (x, y) บนระนาบ
+//     layer = <g> ของส่วนวาดเพิ่ม (อยู่ใต้จุด/ลูกศรของ points · เหนือกริด) — ใส่ SVG เองได้ (insertAdjacentHTML) · clearExtras() ล้าง layer + ป้ายที่สร้างด้วย label()
+//     arrow(z0, z1, cls, o) ลูกศรจากจุดเชิงซ้อน z0 ไป z1 (เลข/Cx) · cls 'b'|'o'|'g'|'p'|'r'|'m' (m = เทา) · o = { dash: true (เส้นประ), width: 3.4 } → คืน <g>
+//     arc(r, t0, t1, cls, o) โค้งรัศมี r (หน่วยระนาบ) จากมุม t0 ถึง t1 (เรเดียน ทวนเข็ม = บวก; t0 = 0 คือเริ่มจากแกนจริง) · o = { head: true (หัวลูกศรปลายโค้ง), dash, width } → คืน <path>
+//     circle(r, cls, o) วงกลมรัศมี r รอบจุดกำเนิด (o.dash) → คืน <circle> · ใช้ปรับเป็นกวาดได้ด้วย el.setAttribute('r', r * w.plot.sx)
+//     label(x, y, html, cls, o) ป้าย HTML ที่จุด (x, y) บนระนาบ · cls สีขอบ/ตัวอักษร 'b'|'o'|'g'|'p'|'r' หรือว่าง · o = { at: 'auto' (ค่าเริ่ม) | 'r' | 'l' | 't' | 'b' | 'tr' | 'tl' | 'br' | 'bl' ทิศของป้ายเทียบกับจุด, gap: 8 (px) } → คืน <div>
+//        html เป็น T | สตริง | () => html (วาดใหม่ตามภาษา)
+//   ป้าย (ทั้งของจุดและ label()) = <div> HTML ลอยทับ SVG บน "พื้นทึบ" สีการ์ด ฟอนต์ ≥ 15px เส้น/ลูกศรอยู่ใต้ป้ายเสมอ ไม่ตัดผ่านตัวหนังสือ
+//     ตำแหน่ง 'auto' = ถอยออกนอกปลายลูกศร (ห่างจากจุดกำเนิด) จึงไม่ทับลูกศร/เส้นประ · จุดบนแกนจริง → ป้ายอยู่เหนือแกน · จุดบนแกนจินตภาพ → ป้ายอยู่ขวาแกน · ตรึงให้อยู่ในกรอบ
+//     ตำแหน่งคำนวณเป็น px เมื่อ container มีความกว้างจริง (ResizeObserver) — วาดในแท็บที่ซ่อนอยู่ได้ ป้ายจัดตำแหน่งเองตอนแสดง · ใช้ที่ 375px ได้
+//   ใช้ใน makeScenes ได้ตรงๆ (สร้างใหม่ในทุก end()/play() ได้ · ลงทะเบียน LIVE เอง และออกเมื่อ host หายไป) · ลากจุดอย่าสร้าง svg ใหม่ระหว่างลาก (ภายในทำให้แล้ว)
+//   ตัวอย่าง:
+//     const pl = makeCPlane(el, { range: 5, points: [{ id: 'z', z: Cx(3, 2), cls: 'b', drag: true, arrow: true, guide: true, label: z => cxHtml(z, { var: 'z' }) }] });
+//     pl.arc(1, 0, Math.atan2(2, 3), 'o', { head: true }); pl.label(1.1, 0.35, '<i>θ</i>', 'o', { at: 'tr' });
+const _CX_CLS = { b: 'blue', o: 'orange', g: 'green', p: 'purple', r: 'red', t: 'teal' };
+const _cxStroke = c => (_CX_CLS[c] ? 's-' + _CX_CLS[c] : 's-muted');
+const _cxFillAttr = c => (_CX_CLS[c] ? `class="f-${_CX_CLS[c]}"` : 'style="fill:var(--muted)"');
+function _cxArrowSvg(x1, y1, x2, y2, cls, o) {
+  o = o || {};
+  const dx = x2 - x1, dy = y2 - y1, L = Math.hypot(dx, dy); if (L < 2) return '';
+  const ux = dx / L, uy = dy / L, tip = L - (o.trim || 0), hl = Math.min(15, tip * 0.55), hw = 6.4;
+  const tx_ = x1 + ux * tip, ty_ = y1 + uy * tip, bx = tx_ - ux * hl, by = ty_ - uy * hl, nx = -uy * hw, ny = ux * hw, f = v => v.toFixed(1);
+  return `<g class="cp-arr"><line class="pl-c ${_cxStroke(cls)}" style="stroke-width:${o.width || 3.4}${o.dash ? ';stroke-dasharray:7 6' : ''}" x1="${f(x1)}" y1="${f(y1)}" x2="${f(bx)}" y2="${f(by)}"/><polygon ${_cxFillAttr(cls)} points="${f(tx_)},${f(ty_)} ${f(bx + nx)},${f(by + ny)} ${f(bx - nx)},${f(by - ny)}"/></g>`;
+}
+function makeCPlane(host, o) {
+  o = o || {}; _tgPrune();
+  const R = o.range || 6, W = 460, H = 460, pad = 30, tick = o.tick || (R > 8 ? 2 : 1);
+  const pl = new Plot({ w: W, h: H, xmin: -R, xmax: R, ymin: -R, ymax: R, pad, gx: 1, gy: 1, lx: 1000, ly: 1000 });
+  const X0 = pl.X(0), Y0 = pl.Y(0), U = pl.sx, F = v => +v.toFixed(2);
+  let tk = '';
+  for (let k = -R; k <= R; k += tick) {
+    if (k === 0) continue;
+    tk += `<line class="pl-axis" x1="${pl.X(k)}" y1="${Y0 - 4}" x2="${pl.X(k)}" y2="${Y0 + 4}"/><text class="pl-tick" style="font-size:15px" x="${pl.X(k)}" y="${Y0 + 22}" text-anchor="middle">${mn(k)}</text>`;
+    tk += `<line class="pl-axis" x1="${X0 - 4}" y1="${pl.Y(k)}" x2="${X0 + 4}" y2="${pl.Y(k)}"/><text class="pl-tick" style="font-size:15px" x="${X0 - 9}" y="${pl.Y(k) + 5}" text-anchor="end">${k === 1 ? '' : k === -1 ? '−' : mn(k)}<tspan font-style="italic">i</tspan></text>`;
+  }
+  pl.raw(tk, true);
+  const svgStr = pl.svg().replace(/<text class="pl-tick"[^>]*font-style:italic[^>]*>[xy]<\/text>/g, '').replace(/<\/svg>$/, '<g class="cp-x"></g><g class="cp-p"></g></svg>');
+  host.innerHTML = `<div class="cp-wrap">${svgStr}</div>`;
+  const wrap = host.querySelector('.cp-wrap'), svg = wrap.querySelector('svg'), gx = svg.querySelector('.cp-x'), gp = svg.querySelector('.cp-p');
+  const pts = (o.points || []).map(p => ({ id: p.id, z: Cx(p.z), cls: p.cls || 'b', label: p.label, drag: !!p.drag, arrow: !!p.arrow, snap: p.snap === undefined ? 1 : p.snap, guide: !!p.guide }));
+  const byId = id => pts.find(p => p.id === id);
+  const w = { _dead: false, plot: pl, svg, layer: gx };
+  const entries = [];                                                   // ป้ายทั้งหมด: { el, kind: 'axRe' | 'axIm' | 'pt' | 'ex', p?, x?, y?, at, gap, spec }
+  const zs = () => { const m = {}; pts.forEach(p => { m[p.id] = p.z; }); return m; };
+  const specHtml = (spec, z) => (typeof spec === 'function' ? spec(z) : tx(spec));
+  const mkLabel = (kind, spec, cls, extra) => {
+    const el = document.createElement('div'); el.className = 'cp-lbl ' + (cls || '');
+    wrap.appendChild(el);
+    const e = Object.assign({ el, kind, spec, at: 'auto', gap: 8 }, extra || {});
+    entries.push(e); fillLabel(e); return e;
+  };
+  const fillLabel = e => { e.el.innerHTML = specHtml(e.spec, e.p ? e.p.z : undefined); };
+  const AT = { r: [1, 0], l: [-1, 0], t: [0, -1], b: [0, 1], tr: [.7071, -.7071], tl: [-.7071, -.7071], br: [.7071, .7071], bl: [-.7071, .7071] };
+  const layout = () => {
+    const cw = wrap.clientWidth; if (!cw) return;
+    const sc = cw / W, chh = H * sc, X0p = X0 * sc, Y0p = Y0 * sc, cl = (v, a, b) => Math.max(a, Math.min(b, v));
+    entries.forEach(e => {
+      const bw = e.el.offsetWidth, bh = e.el.offsetHeight; let cx, cy;
+      if (e.kind === 'axRe') { cx = cw - bw / 2 - 6; cy = Y0p - bh / 2 - 8; }
+      else if (e.kind === 'axIm') { cx = X0p + 12 + bw / 2; cy = Math.max(bh / 2 + 3, (pad - 8) * sc); }
+      else {
+        const zx = e.p ? qNum(e.p.z.re) : e.x, zy = e.p ? qNum(e.p.z.im) : e.y, px = pl.X(zx) * sc, py = pl.Y(zy) * sc;
+        let u = AT[e.at];
+        if (!u) {
+          const rx = px - X0p, ry = py - Y0p, rl = Math.hypot(rx, ry);
+          if (rl < 0.2 * U * sc) u = AT.tr;
+          else if (Math.abs(ry) < 0.15 * U * sc) u = AT.t;
+          else if (Math.abs(rx) < 0.15 * U * sc) u = AT.r;
+          else u = [rx / rl, ry / rl];
+        }
+        const d0 = (e.p ? 9 * sc : 2) + e.gap;                         // ระยะจากจุดถึงมุม/ขอบที่ใกล้ที่สุดของป้าย
+        cx = px + u[0] * d0 + Math.sign(u[0]) * bw / 2 * Math.min(1, Math.abs(u[0]) * 2.2);
+        cy = py + u[1] * d0 + Math.sign(u[1]) * bh / 2 * Math.min(1, Math.abs(u[1]) * 2.2);
+      }
+      e.el.style.left = cl(cx, bw / 2 + 2, cw - bw / 2 - 2).toFixed(1) + 'px';
+      e.el.style.top = cl(cy, bh / 2 + 2, chh - bh / 2 - 2).toFixed(1) + 'px';
+    });
+  };
+  const paintPts = () => {
+    let h = '';
+    pts.forEach(p => {
+      const px = pl.X(qNum(p.z.re)), py = pl.Y(qNum(p.z.im)), cl = _CX_CLS[p.cls] || 'blue';
+      if (p.guide) h += `<line class="pl-dash s-${cl}" style="opacity:.75" x1="${px}" y1="${py}" x2="${px}" y2="${Y0}"/><line class="pl-dash s-${cl}" style="opacity:.75" x1="${px}" y1="${py}" x2="${X0}" y2="${py}"/>`;
+      if (p.arrow) h += _cxArrowSvg(X0, Y0, px, py, p.cls, { trim: 8 });
+    });
+    pts.forEach(p => {
+      const px = pl.X(qNum(p.z.re)), py = pl.Y(qNum(p.z.im)), cl = _CX_CLS[p.cls] || 'blue';
+      if (p.drag) h += `<circle class="cp-halo f-${cl}" cx="${px}" cy="${py}" r="18"/>`;
+      h += `<circle class="pl-dot f-${cl}" cx="${px}" cy="${py}" r="7.5"/>`;
+    });
+    gp.innerHTML = h;
+  };
+  const paintLabels = () => entries.forEach(fillLabel);
+  const redraw = () => { paintPts(); paintLabels(); layout(); return w; };
+  // ป้ายประจำ: ชื่อแกน + ป้ายของจุด
+  mkLabel('axRe', T('แกนจริง / Re', 'Real axis / Re'), 'ax');
+  mkLabel('axIm', T('แกนจินตภาพ / Im', 'Imaginary axis / Im'), 'ax');
+  pts.forEach(p => { if (p.label !== undefined && p.label !== null) mkLabel('pt', p.label, p.cls, { p }); });
+
+  w.get = id => { const p = byId(id); return p ? p.z : undefined; };
+  w.set = (id, z, quiet) => {
+    const p = byId(id); if (!p) return w;
+    p.z = Cx(z); redraw();
+    if (!quiet && o.onChange) o.onChange(zs(), id);
+    return w;
+  };
+  w.toSvg = (x, y) => [pl.X(x), pl.Y(y)];
+  const addEl = html => { gx.insertAdjacentHTML('beforeend', html); return gx.lastElementChild; };
+  w.arrow = (z0, z1, cls, ao) => { ao = ao || {}; z0 = Cx(z0); z1 = Cx(z1); return addEl(_cxArrowSvg(pl.X(qNum(z0.re)), pl.Y(qNum(z0.im)), pl.X(qNum(z1.re)), pl.Y(qNum(z1.im)), cls, ao)); };
+  w.arc = (r, t0, t1, cls, ao) => {
+    ao = ao || {}; const n = Math.max(2, Math.ceil(Math.abs(t1 - t0) / 0.05)), rp = r * U, P = t => [X0 + rp * Math.cos(t), Y0 - rp * Math.sin(t)];
+    let d = ''; for (let i = 0; i <= n; i++) { const q = P(t0 + (t1 - t0) * i / n); d += (i ? 'L' : 'M') + F(q[0]) + ' ' + F(q[1]); }
+    const el = addEl(`<path class="pl-c ${_cxStroke(cls)}" style="stroke-width:${ao.width || 3}${ao.dash ? ';stroke-dasharray:6 5' : ''}" d="${d}"/>`);
+    if (ao.head && Math.abs(t1 - t0) > 0.02) {                          // หัวลูกศรปลายโค้ง ตามแนวเส้นสัมผัส
+      const sg = t1 >= t0 ? 1 : -1, e = P(t1), tg = [-Math.sin(t1) * sg, -Math.cos(t1) * sg], nm = [-tg[1], tg[0]], hl = 12, hw = 5.5;
+      const b = [e[0] - tg[0] * hl, e[1] - tg[1] * hl], f = v => v.toFixed(1);
+      gx.insertAdjacentHTML('beforeend', `<polygon ${_cxFillAttr(cls)} points="${f(e[0] + tg[0] * 3)},${f(e[1] + tg[1] * 3)} ${f(b[0] + nm[0] * hw)},${f(b[1] + nm[1] * hw)} ${f(b[0] - nm[0] * hw)},${f(b[1] - nm[1] * hw)}"/>`);
+    }
+    return el;
+  };
+  w.circle = (r, cls, co) => { co = co || {}; return addEl(`<circle class="pl-c ${_cxStroke(cls)}" style="stroke-width:${co.width || 2.8}${co.dash ? ';stroke-dasharray:7 6' : ''}" cx="${X0}" cy="${Y0}" r="${F(r * U)}"/>`); };
+  w.label = (x, y, html, cls, lo) => { lo = lo || {}; const e = mkLabel('ex', html, cls, { x, y, at: lo.at || 'auto', gap: lo.gap === undefined ? 8 : lo.gap }); layout(); return e.el; };
+  w.clearExtras = () => {
+    gx.innerHTML = '';
+    for (let i = entries.length - 1; i >= 0; i--) if (entries[i].kind === 'ex') { entries[i].el.remove(); entries.splice(i, 1); }
+    return w;
+  };
+  w.redraw = redraw;
+  let ro = null;
+  w.refresh = () => { if (!host.isConnected) { w._dead = true; if (ro) ro.disconnect(); return; } paintLabels(); layout(); };
+
+  // ลากจุด
+  const drags = pts.filter(p => p.drag);
+  if (drags.length) {
+    let cur = null;
+    const pick = pt => {
+      let best = null, bd = 1e9;
+      drags.forEach(p => { const dd = Math.hypot(pt.rx - qNum(p.z.re), pt.ry - qNum(p.z.im)); if (dd < bd) { bd = dd; best = p; } });
+      return (bd < 1.8 || drags.length === 1) ? best : null;
+    };
+    const mv = pt => {
+      if (!cur) return;
+      const sn = v => cur.snap ? Math.round(v / cur.snap) * cur.snap : Math.round(v * 100) / 100, cl = v => Math.max(-R, Math.min(R, v));
+      const nz = Cx(cl(sn(pt.rx)), cl(sn(pt.ry)));
+      if (cxEq(nz, cur.z)) return;
+      w.set(cur.id, nz);
+    };
+    plotPointer(svg, pl, { snap: 0, clamp: false, onDown: pt => { cur = pick(pt); mv(pt); }, onDrag: mv, onUp: () => { cur = null; } });
+    svg.style.cursor = 'grab';
+  }
+  paintPts(); layout();
+  if (typeof ResizeObserver !== 'undefined') { ro = new ResizeObserver(() => layout()); ro.observe(wrap); } else window.addEventListener('resize', layout);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => layout());
+  requestAnimationFrame(layout);
+  LIVE.push(w);
+  return w;
+}
+
+// ───────── 27) r cis θ ─────────
+// cisHtml(r, k, n, o) → HTML ก้อน mx เดียว: "r cis kπ/n" · มุมผ่าน rad(k, n) (เศษส่วนบน/ล่าง ตัดทอนเอง: rad(1, 4) = π/4 · rad(3, 2) = 3π/2 · 0 → 0)
+//   r = เลข / Q / สตริง HTML (เช่น rt('2') สำหรับ √2) · r = 1 → ไม่เขียน r ("cis π/3")
+//   o.full: true → "r(cos θ + i sin θ)" (ใช้ที่แท็บเชิงขั้วแรก ก่อนแนะนำ cis) · o.paren: true → ห่อทั้งก้อนด้วยวงเล็บ (เมื่อต้องยกกำลัง/ต่อท้าย)
+//   cisHtml(2, 1, 4) = 2 cis π/4 · cisHtml(rt('2'), 5, 4) = √2 cis 5π/4 · cisHtml(4, 2, 3, { full: true }) = 4(cos 2π/3 + i sin 2π/3)
+function cisHtml(r, k, n, o) {
+  o = o || {};
+  let rh = (r && r._q) ? qHtml(r) : String(r === undefined ? 1 : r);
+  if (/class="rt/.test(rh)) rh = `<span style="line-height:1.2">${rh}</span>`;   // ขีดบนรากไม่ลอยในบรรทัดสูง
+  const one = rh === '1', th = rad(k, n);
+  let s = o.full ? `${one ? '' : rh}(cos ${th} + ${cxI} sin ${th})` : `${one ? '' : rh + ' '}cis ${th}`;
+  if (o.full && one) s = `cos ${th} + ${cxI} sin ${th}`;
+  if (o.paren) s = '(' + s + ')';
+  return mx(s);
+}
+//  ═══ END ชุดของกลางกลุ่มจำนวนเชิงซ้อน ม.5 ═══
 
 
 // ══════════════ การประยุกต์เอกซ์โพเนนเชียลและลอการิทึม ══════════════
