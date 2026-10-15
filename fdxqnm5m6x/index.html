@@ -454,6 +454,67 @@
   .cp-lbl .frac { margin: 0 2px; }
   @media (max-width: 700px) { .cp-lbl { font-size: .88rem; padding: 0 5px; } .cp-lbl.ax { font-size: .82rem; } .cx-out { font-size: 1.25rem; } }
   /* ═══ END ของกลางกลุ่มจำนวนเชิงซ้อน ม.5 ═══ */
+
+  /* ═══ BEGIN ของกลางกลุ่มลำดับและอนุกรม ม.6 (sq, sigmaHtml, makeSeqRow, makeSeqPlot ใน base.js) — เพิ่มท้ายไฟล์เท่านั้น · สีใช้ --g-* / color-mix กับ --card จึงเปลี่ยนตามโหมดสว่าง/มืด ═══ */
+  /* Σ: ขีดบน/ล่างซ้อนกลางตัว Σ ขนาดตาม font-size ของพ่อแม่ */
+  .sg { display: inline-flex; align-items: center; gap: .18em; vertical-align: middle; white-space: nowrap; }
+  .sg-op { display: inline-flex; flex-direction: column; align-items: center; line-height: 1.05; }
+  .sg-hi, .sg-lo { font-size: .62em; font-weight: 700; line-height: 1.25; }
+  .sg-s { font-size: 1.75em; line-height: 1; font-weight: 400; }
+  .sg-b { display: inline-flex; align-items: center; font-weight: 700; }
+  /* แถวพจน์ */
+  .sq-rowwrap { margin: 8px 0; }
+  .sq-row { display: flex; flex-wrap: wrap; justify-content: center; align-items: flex-end; gap: 12px 0; }
+  .sq-u { display: inline-grid; grid-template-columns: auto auto; grid-template-rows: 0 auto; align-items: end; }
+  .sq-row.hg .sq-u { grid-template-rows: 3rem auto; }
+  .sq-c { grid-column: 2; grid-row: 2; display: inline-flex; flex-direction: column; align-items: center; gap: 3px; }
+  .sq-chip, .sq-df { display: inline-flex; align-items: center; justify-content: center; min-width: 3rem; padding: 3px 10px; border-radius: 12px; border: 2.5px solid var(--cc); background: color-mix(in srgb, var(--cc) 16%, var(--card)); font-weight: 700; font-size: 1.3rem; line-height: 1.5; white-space: nowrap; color: var(--text); transition: background .25s, border-color .25s, opacity .25s; }
+  .sq-chip { --cc: var(--g-blue); }
+  .sq-df { --cc: var(--g-curve); font-size: 1.15rem; min-width: 2.4rem; justify-self: center; }
+  .sq-chip.hb, .sq-df.hb { --cc: var(--g-blue); background: color-mix(in srgb, var(--g-blue) 34%, var(--card)); }
+  .sq-chip.ho, .sq-df.ho { --cc: var(--g-curve); background: color-mix(in srgb, var(--g-curve) 34%, var(--card)); }
+  .sq-chip.hg, .sq-df.hg { --cc: var(--g-green); background: color-mix(in srgb, var(--g-green) 34%, var(--card)); }
+  .sq-chip.hr, .sq-df.hr { --cc: var(--g-red); background: color-mix(in srgb, var(--g-red) 30%, var(--card)); }
+  .sq-chip.hp, .sq-df.hp { --cc: var(--g-purple); background: color-mix(in srgb, var(--g-purple) 30%, var(--card)); }
+  .sq-chip.hy, .sq-df.hy { --cc: #E0A800; background: color-mix(in srgb, #E0A800 30%, var(--card)); }
+  .sq-chip.dim, .sq-df.dim, .sq-g.dim { opacity: .28; }
+  .sq-chip.pop, .sq-df.pop { animation: sqPop .5s ease; }
+  @keyframes sqPop { 0% { transform: scale(1); } 40% { transform: scale(1.22); } 100% { transform: scale(1); } }
+  .sq-ix { font-size: .9rem; font-weight: 700; color: var(--muted); line-height: 1.3; }
+  .sq-more { font-size: 1.5rem; font-weight: 700; color: var(--muted); padding-bottom: 14px; }
+  .sq-g { grid-column: 1; grid-row: 1; position: relative; width: 3.4rem; align-self: stretch; margin: 0; transition: opacity .25s; }
+  .sq-gl { position: absolute; left: 50%; top: 0; transform: translateX(-50%); white-space: nowrap; font-size: 1.1rem; font-weight: 700; line-height: 1.2; color: color-mix(in srgb, var(--g-curve) 68%, var(--text)); }
+  .sq-ga { display: block; width: calc(100% + 2.4rem); margin: 0 -1.2rem; height: 1.3rem; position: absolute; left: 0; bottom: 0; overflow: visible; }
+  .sq-ga path { fill: none; stroke: var(--g-curve); stroke-width: 2.6; stroke-linecap: round; vector-effect: non-scaling-stroke; }
+  .sq-ga polygon { fill: var(--g-curve); }
+  .sq-g.hg .sq-gl { color: color-mix(in srgb, var(--g-green) 72%, var(--text)); } .sq-g.hg .sq-ga path { stroke: var(--g-green); } .sq-g.hg .sq-ga polygon { fill: var(--g-green); }
+  .sq-g.hb .sq-gl { color: color-mix(in srgb, var(--g-blue) 75%, var(--text)); }
+  .sq-g.pop .sq-gl { animation: sqPop .5s ease; }
+  /* แถวผลต่างหลายชั้น (สามเหลี่ยม) */
+  .sq-tri { display: grid; row-gap: 6px; align-items: center; justify-items: center; margin: 4px auto; max-width: 640px; }
+  .sq-tri .sq-chip, .sq-tri .sq-df { justify-self: center; min-width: 0; padding: 3px 6px; }
+  .sq-tl { justify-self: end; padding-right: 10px; font-weight: 700; color: var(--muted); font-size: 1.05rem; white-space: nowrap; }
+  /* กราฟจุดของลำดับ */
+  .sq-band { fill: var(--g-purple); fill-opacity: .16; stroke: none; }
+  .sq-gl .frac { font-size: .85em; line-height: 1; margin: 0 1px; }
+  .sq-pw { position: relative; max-width: 640px; margin: 8px auto; }
+  .sq-pw > svg.plot { margin: 0; max-width: none; width: 100%; }
+  .sq-pw .pl-dot { transition: opacity .3s; }
+  .sq-lbl { position: absolute; left: 0; top: 0; transform: translate(-50%, -50%); white-space: nowrap; z-index: 2; pointer-events: none; background: var(--card); color: var(--text); border: 2px solid var(--border); border-radius: 10px; padding: 0 8px; font-size: 1rem; font-weight: 700; line-height: 1.5; transition: opacity .3s; }
+  .sq-lbl.b { --cc: var(--g-blue); } .sq-lbl.o { --cc: var(--g-curve); } .sq-lbl.g { --cc: var(--g-green); } .sq-lbl.p { --cc: var(--g-purple); } .sq-lbl.r { --cc: var(--g-red); }
+  .sq-lbl.b, .sq-lbl.o, .sq-lbl.g, .sq-lbl.p, .sq-lbl.r { color: color-mix(in srgb, var(--cc) 70%, var(--text)); border-color: color-mix(in srgb, var(--cc) 60%, var(--card)); }
+  .sq-lbl .frac { margin: 0 2px; }
+  @media (max-width: 700px) {
+    .sq-chip { min-width: 2.2rem; padding: 2px 6px; font-size: 1.05rem; border-radius: 10px; }
+    .sq-df { font-size: .95rem; min-width: 1.8rem; }
+    .sq-ix { font-size: .75rem; }
+    .sq-row.hg .sq-u { grid-template-rows: 2.3rem auto; }
+    .sq-g { width: 2.2rem; } .sq-gl { font-size: .9rem; } .sq-ga { width: calc(100% + 1.6rem); margin: 0 -.8rem; height: 1.1rem; }
+    .sq-tl { font-size: .85rem; padding-right: 4px; }
+    .sq-pw .pl-tick { font-size: 24px !important; }
+    .sq-lbl { font-size: .85rem; padding: 0 5px; }
+  }
+  /* ═══ END ของกลางกลุ่มลำดับและอนุกรม ม.6 ═══ */
 /* ── theme:start — สร้างโดย tools/build_lessons.py ห้ามแก้มือ (แก้ที่สคริปต์แล้วรันใหม่) ── */
 :root{ --page:#B45309; }
 :root[data-theme="light"]{
@@ -2375,6 +2436,216 @@ function cisHtml(r, k, n, o) {
   return mx(s);
 }
 //  ═══ END ชุดของกลางกลุ่มจำนวนเชิงซ้อน ม.5 ═══
+
+// ════════════════════════════════════════════════════════════════════════════
+//  ═══ BEGIN ชุดของกลางกลุ่มลำดับและอนุกรม ม.6 ═══  (docs/design-sequences-series.md §1.2)
+//  ⚠️ เพิ่มท้ายไฟล์เท่านั้น — ห้ามแก้ของเดิมด้านบน (สื่อ 25 ชิ้นเดิมต้องไม่เปลี่ยน — มีแค่บล็อกนี้ที่เพิ่ม)
+//  ใช้ของกลางเมทริกซ์ (Q, qSub, qDiv, qNeg, qNum, qHtml) · mx / mn / frac · Plot / LIVE ที่อยู่ด้านบน
+//  ชื่อ const/function ระดับบนสุดที่เพิ่ม: sq sigmaHtml makeSeqRow makeSeqPlot (+ ตัวช่วยภายใน _sqSub _sqNum _sqTerm _sqQ _sqGap _sqNice)
+//  คลาส CSS ที่เพิ่ม (base.css ท้ายไฟล์): .sg* (Σ) · .sq-rowwrap .sq-row .sq-u .sq-c .sq-chip .sq-ix .sq-g .sq-tri .sq-df (แถวพจน์) · .sq-pw .sq-lbl (กราฟจุด)
+//
+//  28) sq(name, sub)                 ตัวแปรมีตัวห้อย  sq('a', 'n+1') = aₙ₊₁ (ห่อ mx แล้ว · ตัวห้อยที่เป็นตัวอักษรเอียง ตัวเลขตั้ง) · sq('S', 10) · sq('d', 1)
+//  29) sigmaHtml(lo, hi, body, o)    Σ ตัวใหญ่ ขีดบน/ขีดล่างซ้อนกลางตัว Σ แล้วตามด้วย body (ห่อ mx แล้ว · ขนาดตาม font-size ของพ่อแม่)
+//        lo = 1 หรือ '1' → ขีดล่าง "k = 1" · hi = 'n' | 10 | '∞' · body = HTML ของพจน์ (ตัวแปรเขียน <i>k</i> เอง) · o.v = ชื่อตัวแปร (ค่าเริ่ม 'k')
+//        sigmaHtml(1, 5, '(2<i>k</i> + 1)') · sigmaHtml(1, '∞', frac(1, '2<sup><i>k</i></sup>')) · sigmaHtml(1, '<i>n</i>', '<i>k</i>')
+//  30) makeSeqRow(host, terms, o)    แถวชิปพจน์ (น้ำเงิน) + ป้าย a₁ a₂ … ใต้ชิป · ⚠️ แทนที่เนื้อหาเดิมของ host
+//        terms = array ของ เลข / Q / HTML-string
+//        o = { gap: 'd' | 'r' | null (ป้ายโค้งส้มระหว่างชิป "+4" / "−3" / "× 3" / "× (−2)" / "× ½" คำนวณเองจาก terms ที่เป็นเลข/Q) ·
+//              gapText: [html…] (ป้ายแทนค่าที่คำนวณ — ใช้เมื่อ terms เป็น HTML) · diffs: k (แถวผลต่าง k ชั้นซ้อนลงไปเป็นสามเหลี่ยม แต่ละค่าอยู่กึ่งกลางระหว่างสองค่าชั้นบน — โหมดนี้เป็นตาราง ไม่ขึ้นบรรทัดใหม่ ใช้ ≤ 7 พจน์) ·
+//              more: true (ต่อท้าย ", …") · name: 'a' (ชื่อป้ายใต้ชิป · false = ไม่มีป้าย) · from: 1 (เลขตัวแรกของป้าย) · idx: [html…] (ป้ายแทน) }
+//        คืน { el, set(terms), chip(i) → element ชิปที่ i (0-based), gapEl(i) → ป้ายระหว่างชิป i กับ i+1, diffEl(level, i) → ช่องผลต่างชั้น level (1-based) ตัวที่ i (0-based),
+//              highlight(sel, cls), clear(), n }
+//        highlight: sel = selector string (ค้นใน el) | element | array ของ element · cls = 'hb' น้ำเงิน · 'ho' ส้ม · 'hg' เขียว · 'hr' แดง · 'hp' ม่วง · 'hy' เหลือง · 'dim' จาง · 'pop' เด้ง (ผสมได้ "hg pop") · clear() ล้างทั้งหมด
+//        ทุกชิป/ป้ายเป็น element จริง → ใช้ flyTo(S.el, w.chip(0), เป้าหมาย, html, S.anim, ms) ใน makeScenes ได้ · ใช้ได้ที่ 375px (ขึ้นบรรทัดใหม่ได้ ไม่มีแถบเลื่อนแนวนอน) · ลงทะเบียน LIVE
+//  31) makeSeqPlot(host, o)          กราฟจุด (n, aₙ) บน Plot · ⚠️ แทนที่เนื้อหาเดิมของ host · แกน n เริ่มที่ 0 แสดงเฉพาะจำนวนเต็มบวก (ไม่มีครึ่งซ้าย) · เลขแกนอยู่นอกพื้นที่กราฟ จุดจึงไม่ทับเลข
+//        o = { f: n => ค่า | terms: [เลข/Q…] · n: 10 (จำนวนพจน์ที่วาด) · yRange: [ymin, ymax] (ไม่ใส่ = อัตโนมัติ รวม 0 เสมอ) · cls: 'blue' (สีจุด) ·
+//              limit: L (เส้นประม่วง y = L + ป้าย "L" บนพื้นทึบ) · band: ε (แถบจางรอบ L ต้องใส่คู่กับ limit) · join: false (true = ลากเส้นต่อจุด) ·
+//              labels: true | [i…] (ป้ายค่าของจุด — i เป็น 0-based · อยู่บนพื้นทึบ เหนือจุด/ใต้จุดถ้าค่าติดลบหรือชิดขอบบน) ·
+//              series: [{ f, terms, cls, label }] (หลายชุดในกราฟเดียว — ใช้แทน f/terms · label = ป้ายชื่อชุดที่ปลายขวา) ·
+//              xName / yName: HTML ชื่อแกน (ค่าเริ่ม n / aₙ — yName ใน SVG ใช้ <tspan> ได้) · big: true (ตัวเลขแกนใหญ่ขึ้น) }
+//        คืน { plot (Plot ที่ X/Y/ix/iy ถูกแทนด้วยกรอบของกราฟนี้), svg, layer (<g> ว่างไว้วาดเพิ่ม — เหนือเส้น ใต้จุด), reveal(k) (แสดงจุด+ป้ายค่าของ 1..k ที่เหลือโปร่งใส — ยังกินที่ ใช้เป็นเป้า flyTo ได้),
+//              dot(i, s = 0) → element จุดที่ i ของชุด s, toSvg(n, y) → [x, y] ในพิกัด viewBox, label(n, y, html, cls, { at: 't'|'b'|'l'|'r' }) → element ป้าย HTML บนพื้นทึบ,
+//              redraw(o2) (ผสม o2 ทับ o แล้ววาดใหม่ทั้งก้อน) }
+//        ใช้ใน makeScenes ได้ (สร้างใหม่ใน end() ตามปกติ) · ใช้ได้ที่ 375px (ตัวเลขแกนขยายเอง) · ลงทะเบียน LIVE
+// ════════════════════════════════════════════════════════════════════════════
+
+// ───────── 28) ตัวแปรมีตัวห้อย ─────────
+const _sqSub = s => { s = String(s); return /</.test(s) ? s : s.replace(/[A-Za-z]+/g, m => `<i>${m}</i>`).replace(/-/g, '−'); };
+function sq(name, sub) {
+  const nm = /^[A-Za-z]$/.test(String(name)) ? `<i>${name}</i>` : String(name);
+  return mx(nm + (sub === undefined || sub === null || sub === '' ? '' : `<sub>${_sqSub(sub)}</sub>`));
+}
+
+// ───────── 29) Σ ─────────
+function sigmaHtml(lo, hi, body, o) {
+  o = o || {};
+  const v = o.v === undefined ? 'k' : o.v, loH = typeof lo === 'number' ? mn(lo) : lo, hiH = typeof hi === 'number' ? mn(hi) : hi;
+  return mx(`<span class="sg"><span class="sg-op"><span class="sg-hi">${hiH}</span><span class="sg-s">Σ</span><span class="sg-lo"><i>${v}</i> = ${loH}</span></span><span class="sg-b">${body}</span></span>`);
+}
+
+// ───────── 30) แถวพจน์ ─────────
+const _sqNum = v => mn(String(Math.round(v * 1e6) / 1e6));
+const _sqQ = t => (t && t._q) ? t : (typeof t === 'number' && isFinite(t)) ? Q(t) : null;
+const _sqTerm = t => (t && t._q) ? qHtml(t) : typeof t === 'number' ? _sqNum(t) : String(t);
+function _sqGap(kind, a, b) {
+  const qa = _sqQ(a), qb = _sqQ(b); if (!qa || !qb) return '';
+  if (kind === 'd') { const df = qSub(qb, qa); return df.n < 0 ? '−' + qHtml(qNeg(df)) : '+' + qHtml(df); }
+  if (qa.n === 0) return '';
+  const r = qDiv(qb, qa); return r.n < 0 ? '× (' + qHtml(r) + ')' : '× ' + qHtml(r);
+}
+function makeSeqRow(host, terms0, o) {
+  o = o || {};
+  const w = { _dead: false };
+  let terms = terms0.slice();
+  const root = document.createElement('div');
+  const SEL_CLS = ['hb', 'ho', 'hg', 'hr', 'hp', 'hy', 'dim', 'pop'];
+  const name = o.name === undefined ? 'a' : o.name, from = o.from === undefined ? 1 : o.from;
+  const idxHtml = i => o.idx ? o.idx[i] : (name === false ? '' : sq(name, from + i));
+  const paint = () => {
+    const n = terms.length;
+    if (o.diffs) {
+      const levels = [terms.map(_sqQ)];
+      for (let L = 1; L <= o.diffs; L++) { const p = levels[L - 1]; if (p.length < 2 || p.some(x => !x)) break; levels.push(p.slice(1).map((x, i) => qSub(x, p[i]))); }
+      let h = `<div class="sq-tri" style="grid-template-columns:auto repeat(${2 * n}, minmax(0, 1fr))">`;
+      if (name !== false) h += `<span class="sq-tl" style="grid-row:1;grid-column:1"></span>` + terms.map((t, i) => `<span class="sq-ix" style="grid-row:1;grid-column:${2 * i + 2} / span 2;justify-self:center">${idxHtml(i)}</span>`).join('');
+      h += `<span class="sq-tl" style="grid-row:2;grid-column:1">${sq(name === false ? 'a' : name)}</span>` + terms.map((t, i) => `<span class="sq-chip" data-i="${i}" style="grid-row:2;grid-column:${2 * i + 2} / span 2">${_sqTerm(t)}</span>`).join('');
+      for (let L = 1; L < levels.length; L++) {
+        h += `<span class="sq-tl" style="grid-row:${L + 2};grid-column:1">${sq('d', L)}</span>`;
+        h += levels[L].map((q, j) => `<span class="sq-df" data-l="${L}" data-i="${j}" style="grid-row:${L + 2};grid-column:${2 * j + L + 2} / span 2">${qHtml(q)}</span>`).join('');
+      }
+      root.className = 'sq-rowwrap'; root.innerHTML = h + '</div>';
+      return;
+    }
+    const hg = o.gap === 'd' || o.gap === 'r' || !!o.gapText;
+    let h = `<div class="sq-row${hg ? ' hg' : ''}">`;
+    terms.forEach((t, i) => {
+      const gt = i === 0 ? '' : (o.gapText ? (o.gapText[i - 1] || '') : hg ? _sqGap(o.gap, terms[i - 1], t) : '');
+      h += `<span class="sq-u">${hg && i > 0 ? `<span class="sq-g" data-i="${i - 1}"><span class="sq-gl">${gt}</span><svg class="sq-ga" viewBox="0 0 100 26" preserveAspectRatio="none" aria-hidden="true"><path d="M8 25 Q50 -12 90 21"/><polygon points="96,24 85,12 79,22"/></svg></span>` : ''}<span class="sq-c"><span class="sq-chip" data-i="${i}">${_sqTerm(t)}</span>${name === false ? '' : `<span class="sq-ix">${idxHtml(i)}</span>`}</span></span>`;
+    });
+    if (o.more) h += `<span class="sq-u"><span class="sq-c"><span class="sq-more">, …</span></span></span>`;
+    root.className = 'sq-rowwrap'; root.innerHTML = h + '</div>';
+  };
+  const norm = sel => typeof sel === 'string' ? [...root.querySelectorAll(sel)] : Array.isArray(sel) ? sel : sel ? [sel] : [];
+  w.el = root; w.n = terms.length;
+  w.set = t => { terms = t.slice(); w.n = terms.length; paint(); return w; };
+  w.chip = i => root.querySelector(`.sq-chip[data-i="${i}"]`);
+  w.gapEl = i => root.querySelector(`.sq-g[data-i="${i}"]`);
+  w.diffEl = (level, i) => root.querySelector(`.sq-df[data-l="${level}"][data-i="${i}"]`);
+  w.highlight = (sel, cls) => { norm(sel).forEach(e => cls.split(' ').forEach(c => e.classList.add(c))); return w; };
+  w.clear = () => { root.querySelectorAll('.sq-chip, .sq-df, .sq-g').forEach(e => SEL_CLS.forEach(c => e.classList.remove(c))); return w; };
+  w.refresh = () => { if (!root.isConnected) w._dead = true; };
+  host.innerHTML = ''; host.appendChild(root); paint();
+  LIVE.push(w);
+  return w;
+}
+
+// ───────── 31) กราฟจุดของลำดับ ─────────
+// ช่องแกน y: 1, 2, 5 × 10ᵏ (2.5 ใช้เฉพาะช่วงทศนิยม — ลำดับจำนวนเต็มจะได้เลขแกนเป็นจำนวนเต็ม ไม่ใช่ 2.5, 7.5)
+function _sqNice(span, n) { const raw = span / n, p = Math.pow(10, Math.floor(Math.log10(raw))), m = raw / p; return (m <= 1 ? 1 : m <= 2 ? 2 : (m <= 2.5 && p < 1) ? 2.5 : m <= 5 ? 5 : 10) * p; }
+function makeSeqPlot(host, o0) {
+  const W = 560, H = 370, MR = 20, MT = 18, MB = 44;
+  let ML = 52;
+  const opt = Object.assign({}, o0 || {});
+  const w = { _dead: false };
+  const wrap = document.createElement('div'); wrap.className = 'sq-pw';
+  host.innerHTML = ''; host.appendChild(wrap);
+  let pl = null, entries = [], dots = [], N = 0, ro = null;
+  const build = () => {
+    const o = opt; N = o.n || 10;
+    const ser = (o.series || [{ f: o.f, terms: o.terms, cls: o.cls, label: o.label }]).map(s => ({
+      cls: s.cls || 'blue', label: s.label,
+      v: Array.from({ length: N }, (_, i) => s.terms ? s.terms[i] : s.f(i + 1))
+    }));
+    ser.forEach(s => { s.y = s.v.map(v => (v && v._q) ? qNum(v) : v); });
+    const all = [].concat(...ser.map(s => s.y)).filter(isFinite);
+    if (o.limit !== undefined) { all.push(o.limit); if (o.band) { all.push(o.limit + o.band, o.limit - o.band); } }
+    let lo = Math.min(0, ...all), hi = Math.max(0, ...all);
+    if (hi === lo) hi = lo + 1;
+    let ymin, ymax, step;
+    if (o.yRange) { ymin = o.yRange[0]; ymax = o.yRange[1]; step = _sqNice(ymax - ymin, 5); }
+    else { const sp = hi - lo; if (hi > 0) hi += sp * 0.12; if (lo < 0) lo -= sp * 0.12; step = _sqNice(hi - lo, 5); ymin = Math.floor(lo / step + 1e-9) * step; ymax = Math.ceil(hi / step - 1e-9) * step; }
+    // ระยะซ้ายพอสำหรับเลขแกนที่ยาวที่สุด (บนมือถือเลขแกนขยายเป็น 24px — ต้องไม่โดนตัดเครื่องหมายลบ)
+    let maxCh = 1;
+    for (let y = Math.ceil(ymin / step - 1e-9) * step; y <= ymax + 1e-9; y += step) maxCh = Math.max(maxCh, String(Math.round(Math.round(y / step) * step * 1e6) / 1e6).length);
+    ML = Math.max(52, 18 + 14 * maxCh);
+    const hasLab = !!(o.series && o.series.some(s => s.label));
+    const xmin = 0, xmax = N + Math.max(0.7, N * 0.06) + (hasLab ? Math.max(1.6, N * 0.12) : 0);   // เว้นท้ายแกนตามจำนวนจุด — ป้าย n ไม่ชนเลขท้าย (เช่น 100)
+    pl = new Plot({ w: W, h: H, xmin, xmax, ymin, ymax, pad: 30 });
+    const X = x => +(ML + (x - xmin) / (xmax - xmin) * (W - ML - MR)).toFixed(2), Y = y => +(MT + (ymax - y) / (ymax - ymin) * (H - MT - MB)).toFixed(2);
+    Object.assign(pl, { X, Y, ix: px => xmin + (px - ML) * (xmax - xmin) / (W - ML - MR), iy: py => ymax - (py - MT) * (ymax - ymin) / (H - MT - MB), sx: (W - ML - MR) / (xmax - xmin), sy: (H - MT - MB) / (ymax - ymin) });
+    const fs = o.big ? 17 : 15, X0 = X(0), Yb = Y(ymin), Y0 = Y(0), Xr = X(xmax);
+    let g = '', ax = '';
+    const nStep = N <= 12 ? 1 : N <= 24 ? 2 : N <= 60 ? 5 : N <= 120 ? 10 : N <= 240 ? 20 : 50;
+    for (let k = nStep; k <= N; k += nStep) { g += `<line class="pl-grid" x1="${X(k)}" y1="${MT}" x2="${X(k)}" y2="${Yb}"/>`; ax += `<text class="pl-tick" style="font-size:${fs}px" x="${X(k)}" y="${Yb + fs + 6}" text-anchor="middle">${k}</text>`; }
+    for (let y = Math.ceil(ymin / step - 1e-9) * step; y <= ymax + 1e-9; y += step) {
+      const yy = Math.round(y / step) * step; g += `<line class="pl-grid" x1="${X0}" y1="${Y(yy)}" x2="${Xr}" y2="${Y(yy)}"/>`;
+      if (Math.abs(yy) > 1e-9) ax += `<text class="pl-tick" style="font-size:${fs}px" x="${X0 - 8}" y="${Y(yy) + 5}" text-anchor="end">${_sqNum(yy)}</text>`;
+    }
+    ax += `<line class="pl-axis" x1="${X0}" y1="${Yb}" x2="${X0}" y2="${MT - 6}"/><line class="pl-axis" x1="${X0}" y1="${Y0}" x2="${Xr}" y2="${Y0}"/>`;
+    ax += `<text class="pl-tick" style="font-size:${fs}px" x="${X0 - 8}" y="${Y0 + (ymin < 0 ? -6 : 18)}" text-anchor="end">0</text>`;
+    ax += `<text class="pl-tick" style="font-size:${fs + 1}px;font-style:italic" x="${Xr + 4}" y="${Yb + fs + 6}">${o.xName || 'n'}</text>`;
+    ax += `<text class="pl-tick" style="font-size:${fs + 1}px;font-style:italic" x="${X0 + 8}" y="${MT + 6}">${o.yName || 'a<tspan font-size="12" dy="4">n</tspan>'}</text>`;
+    let back = '';
+    if (o.limit !== undefined) {
+      if (o.band) back += `<rect class="sq-band" x="${X0}" y="${Y(o.limit + o.band)}" width="${Xr - X0}" height="${Math.max(2, Y(o.limit - o.band) - Y(o.limit + o.band))}"/>`;
+      back += `<line class="pl-dash s-purple" style="stroke-width:2.6" x1="${X0}" y1="${Y(o.limit)}" x2="${Xr}" y2="${Y(o.limit)}"/>`;
+    }
+    if (o.join) ser.forEach(s => { back += `<path class="pl-c s-${s.cls}" style="stroke-width:2.4;opacity:.55" d="${s.y.map((v, i) => (i ? 'L' : 'M') + X(i + 1) + ' ' + Y(v)).join('')}"/>`; });
+    const r = N > 60 ? 2.6 : N > 30 ? 3.8 : N > 16 ? 5.2 : 7;
+    let dd = '';
+    ser.forEach((s, si) => s.y.forEach((v, i) => {
+      if (!isFinite(v) || v < ymin - 1e-9 || v > ymax + 1e-9) return;
+      dd += `<circle class="pl-dot f-${s.cls}" data-s="${si}" data-i="${i}" cx="${X(i + 1)}" cy="${Y(v)}" r="${r}"/>`;
+    }));
+    wrap.innerHTML = `<svg class="plot" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">${g}${back}${ax}<g class="sq-x"></g><g class="sq-pts">${dd}</g></svg>`;
+    w.svg = wrap.firstChild; w.layer = w.svg.querySelector('.sq-x'); w.plot = pl;
+    dots = [...w.svg.querySelectorAll('.sq-pts circle')];
+    entries = [];
+    const AT = { t: [0, -1], b: [0, 1], l: [-1, 0], r: [1, 0] };
+    w._mk = (x, y, html, cls, lo) => {
+      lo = lo || {};
+      const el = document.createElement('div'); el.className = 'sq-lbl ' + (cls || ''); wrap.appendChild(el);
+      const e = { el, x, y, html, at: lo.at || 't', gap: lo.gap === undefined ? 10 : lo.gap, idx: lo.idx, r };
+      entries.push(e); el.innerHTML = tx(html); return e;
+    };
+    if (o.limit !== undefined) w._mk(xmax - 0.05, o.limit, '<i>L</i>', 'p', { at: 't', gap: 4 });
+    if (o.labels) ser.forEach((s, si) => {
+      const idxs = o.labels === true ? s.y.map((_, i) => i) : o.labels;
+      idxs.forEach(i => { const v = s.y[i]; if (v === undefined || !isFinite(v)) return; w._mk(i + 1, v, _sqTerm(s.v[i]), s.cls === 'blue' ? 'b' : s.cls === 'orange' ? 'o' : '', { at: v < 0 || v > ymax - (ymax - ymin) * 0.1 ? 'b' : 't', idx: i }); });
+    });
+    if (hasLab) ser.forEach(s => { if (s.label) w._mk(N, s.y[N - 1], s.label, s.cls === 'blue' ? 'b' : s.cls === 'orange' ? 'o' : '', { at: 'r', gap: 8 }); });
+    w.layout = () => {
+      const cw = wrap.clientWidth; if (!cw) return;
+      const sc = cw / W, chh = H * sc, cl = (v, a, b) => Math.max(a, Math.min(b, v));
+      entries.forEach(e => {
+        const bw = e.el.offsetWidth, bh = e.el.offsetHeight, px = X(e.x) * sc, py = Y(e.y) * sc, u = AT[e.at], d0 = (e.idx !== undefined || e.at === 'r' ? e.r * sc + 4 : 0) + e.gap * sc * 0.5;
+        const cx = px + u[0] * (d0 + bw / 2), cy = py + u[1] * (d0 + bh / 2);
+        e.el.style.left = cl(cx, bw / 2 + 2, cw - bw / 2 - 2).toFixed(1) + 'px';
+        e.el.style.top = cl(cy, bh / 2 + 2, chh - bh / 2 - 2).toFixed(1) + 'px';
+      });
+    };
+    w.reveal(w._k === undefined ? N : w._k);
+    w.layout();
+  };
+  w.reveal = k => {
+    w._k = k;
+    dots.forEach(c => { c.style.opacity = +c.dataset.i < k ? '' : '0'; });
+    entries.forEach(e => { if (e.idx !== undefined) e.el.style.opacity = e.idx < k ? '' : '0'; });
+    return w;
+  };
+  w.dot = (i, s) => dots.find(c => +c.dataset.i === i && +c.dataset.s === (s || 0));
+  w.toSvg = (n, y) => [pl.X(n), pl.Y(y)];
+  w.label = (n, y, html, cls, lo) => { const e = w._mk(n, y, html, cls, lo); w.layout(); return e.el; };
+  w.redraw = o2 => { if (o2) Object.assign(opt, o2); w._k = undefined; build(); return w; };
+  w.refresh = () => { if (!wrap.isConnected) { w._dead = true; return; } entries.forEach(e => { e.el.innerHTML = tx(e.html); }); w.layout(); };
+  build();
+  if (typeof ResizeObserver !== 'undefined') { ro = new ResizeObserver(() => w.layout()); ro.observe(wrap); } else window.addEventListener('resize', () => w.layout());
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => w.layout());
+  requestAnimationFrame(() => w.layout());
+  LIVE.push(w);
+  return w;
+}
+//  ═══ END ชุดของกลางกลุ่มลำดับและอนุกรม ม.6 ═══
 
 
 // ══════════════ ความสัมพันธ์และฟังก์ชัน ══════════════
