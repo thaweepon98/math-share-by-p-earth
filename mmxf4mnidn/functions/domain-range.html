@@ -515,6 +515,73 @@
     .sq-lbl { font-size: .85rem; padding: 0 5px; }
   }
   /* ═══ END ของกลางกลุ่มลำดับและอนุกรม ม.6 ═══ */
+
+  /* ═══ BEGIN ของกลางกลุ่มหลักการนับและความน่าจะเป็น ม.5 (cpPH cpCH binomH cardHtml makeSlots makeTree makeObjRow ใน base.js) — เพิ่มท้ายไฟล์เท่านั้น · สีใช้ --g-* / color-mix กับ --card จึงเปลี่ยนตามโหมดสว่าง/มืด ═══ */
+  /* กรอบค่าที่แทนลงสูตร (เหมือน .sx-nb ของกลุ่มลำดับ) */
+  .cp-nb { display: inline-block; border: 2.5px solid color-mix(in srgb, var(--muted) 70%, var(--card)); background: color-mix(in srgb, var(--muted) 14%, var(--card)); border-radius: 10px; padding: 0 .35em; margin: 0 .1em; line-height: 1.25; }
+  .mx sub .cp-nb { border-width: 2px; border-radius: 7px; padding: 0 .22em; line-height: 1.1; }
+  /* (n r) วงเล็บโค้งสูงสองชั้น */
+  .cp-bn { display: inline-flex; align-items: stretch; vertical-align: middle; font-weight: 700; margin: 0 .12em; }
+  .cp-bs { display: inline-flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1.12; padding: 0 .1em; }
+  .cp-bp { width: .42em; min-width: 5px; height: auto; flex: none; overflow: visible; }
+  .cp-bp path { fill: none; stroke: currentColor; stroke-width: 2.4px; stroke-linecap: round; vector-effect: non-scaling-stroke; }
+  /* ชิปไพ่ */
+  .cp-card { display: inline-flex; align-items: center; gap: .08em; vertical-align: middle; padding: 0 .38em; margin: 0 .1em; border: 2px solid var(--border); border-radius: .45em; background: var(--card); font-weight: 700; font-size: .95em; line-height: 1.45; white-space: nowrap; color: var(--text); box-shadow: 0 1px 0 color-mix(in srgb, var(--muted) 30%, transparent); }
+  .cp-card.r { color: var(--g-red); }
+  .cp-card b { font-weight: 700; }
+  /* ช่องกฎการคูณ */
+  .cp-sl { display: flex; flex-wrap: wrap; justify-content: center; align-items: flex-start; gap: 8px 0; margin: 10px 0; }
+  .cp-sl-u { display: grid; grid-template-columns: auto auto; grid-template-rows: 1.5rem auto auto; justify-items: center; }
+  .cp-sl-op { grid-column: 1; grid-row: 2; align-self: center; font-size: 1.6rem; font-weight: 700; color: var(--muted); margin: 0 .45rem; line-height: 1; }
+  .cp-sl-tag { grid-column: 2; grid-row: 1; align-self: end; font-size: .82rem; font-weight: 700; line-height: 1.2; white-space: nowrap; color: color-mix(in srgb, var(--g-curve) 68%, var(--text)); visibility: hidden; }
+  .cp-sl-u.cond .cp-sl-tag { visibility: visible; }
+  .cp-sl-box { grid-column: 2; grid-row: 2; min-width: 4rem; min-height: 3.2rem; box-sizing: border-box; padding: 2px 10px; display: flex; align-items: center; justify-content: center; border: 2.5px dashed var(--muted); border-radius: 14px; background: transparent; font-size: 1.5rem; font-weight: 700; line-height: 1.4; color: var(--text); white-space: nowrap; transition: background .25s, border-color .25s; }
+  .cp-sl-box.f { border-style: solid; border-color: var(--g-blue); background: color-mix(in srgb, var(--g-blue) 16%, var(--card)); }
+  .cp-sl-u.cond .cp-sl-box { border-color: var(--g-curve); background: color-mix(in srgb, var(--g-curve) 12%, var(--card)); }
+  .cp-sl-u.cond .cp-sl-box.f { background: color-mix(in srgb, var(--g-curve) 24%, var(--card)); }
+  .cp-sl-u.hb .cp-sl-box { border-style: solid; border-color: var(--g-blue); background: color-mix(in srgb, var(--g-blue) 34%, var(--card)); }
+  .cp-sl-u.ho .cp-sl-box { border-style: solid; border-color: var(--g-curve); background: color-mix(in srgb, var(--g-curve) 34%, var(--card)); }
+  .cp-sl-u.hg .cp-sl-box { border-style: solid; border-color: var(--g-green); background: color-mix(in srgb, var(--g-green) 34%, var(--card)); }
+  .cp-sl-lb { grid-column: 2; grid-row: 3; margin-top: 3px; font-size: .95rem; font-weight: 700; line-height: 1.3; color: var(--muted); text-align: center; }
+  .cp-sl-r { opacity: 0; }
+  .cp-sl-r.on { opacity: 1; }
+  .cp-sl-r .cp-sl-box { border-style: solid; border-color: var(--g-green); background: color-mix(in srgb, var(--g-green) 16%, var(--card)); color: color-mix(in srgb, var(--g-green) 72%, var(--text)); }
+  /* ต้นไม้ */
+  .cp-tr { position: relative; width: 100%; max-width: 780px; margin: 8px auto; min-height: 40px; font-weight: 700; }
+  .cp-tr-svg { position: absolute; left: 0; top: 0; overflow: visible; pointer-events: none; }
+  .cp-tr-e { fill: none; stroke: color-mix(in srgb, var(--muted) 75%, var(--card)); stroke-width: 2.4; stroke-dasharray: 1 1; stroke-linecap: round; transition: stroke .25s, stroke-width .25s; }
+  .cp-tr-e.hb { stroke: var(--g-blue); stroke-width: 3.6; } .cp-tr-e.ho { stroke: var(--g-curve); stroke-width: 3.6; } .cp-tr-e.hg { stroke: var(--g-green); stroke-width: 3.6; }
+  .cp-tr-e.hp { stroke: var(--g-purple); stroke-width: 3.6; } .cp-tr-e.hr { stroke: var(--g-red); stroke-width: 3.6; }
+  .cp-tn { position: absolute; left: 0; top: 0; z-index: 2; display: inline-flex; align-items: center; justify-content: center; box-sizing: border-box; padding: 2px .75em; border: 2.5px solid color-mix(in srgb, var(--muted) 70%, var(--card)); border-radius: 999px; background: var(--card); color: var(--text); font-size: 1em; line-height: 1.4; white-space: nowrap; transition: border-color .25s, background .25s; }
+  .cp-tn.dot { width: 14px; height: 14px; padding: 0; border: none; background: var(--text); }
+  .cp-te { position: absolute; left: 0; top: 0; z-index: 3; padding: 0 6px; border: 2px solid transparent; border-radius: 9px; background: var(--card); color: var(--text); font-size: .9em; line-height: 1.2; white-space: nowrap; }
+  .cp-te .frac { margin: 0; }
+  .cp-tf { position: absolute; left: 0; top: 0; z-index: 2; padding: 0 .55em; border: 2px solid transparent; border-radius: 9px; color: var(--text); font-size: 1.05em; line-height: 1.45; white-space: nowrap; transition: border-color .25s, background .25s; }
+  .cp-tn.hb, .cp-te.hb, .cp-tf.hb { border-color: var(--g-blue); background: color-mix(in srgb, var(--g-blue) 24%, var(--card)); }
+  .cp-tn.ho, .cp-te.ho, .cp-tf.ho { border-color: var(--g-curve); background: color-mix(in srgb, var(--g-curve) 24%, var(--card)); }
+  .cp-tn.hg, .cp-te.hg, .cp-tf.hg { border-color: var(--g-green); background: color-mix(in srgb, var(--g-green) 24%, var(--card)); }
+  .cp-tn.hp, .cp-te.hp, .cp-tf.hp { border-color: var(--g-purple); background: color-mix(in srgb, var(--g-purple) 24%, var(--card)); }
+  .cp-tn.hr, .cp-te.hr, .cp-tf.hr { border-color: var(--g-red); background: color-mix(in srgb, var(--g-red) 22%, var(--card)); }
+  /* แถวของ/คน */
+  .cp-ob { position: relative; width: 100%; margin: 8px 0; }
+  .cp-o { position: absolute; left: 0; top: 0; z-index: 3; display: flex; align-items: center; justify-content: center; box-sizing: border-box; border: 2.5px solid var(--cc, var(--g-blue)); border-radius: 50%; background: color-mix(in srgb, var(--cc, var(--g-blue)) 22%, var(--card)); color: var(--text); font-weight: 700; line-height: 1; transition: background .25s, box-shadow .25s; }
+  .cp-o.c-b { --cc: var(--g-blue); } .cp-o.c-o { --cc: var(--g-curve); } .cp-o.c-g { --cc: var(--g-green); } .cp-o.c-p { --cc: var(--g-purple); } .cp-o.c-k { --cc: var(--g-pink); } .cp-o.c-muted { --cc: var(--muted); }
+  .cp-o.hb { background: color-mix(in srgb, var(--g-blue) 40%, var(--card)); box-shadow: 0 0 0 3.5px var(--g-blue); }
+  .cp-o.ho { background: color-mix(in srgb, var(--g-curve) 40%, var(--card)); box-shadow: 0 0 0 3.5px var(--g-curve); }
+  .cp-o.hg { background: color-mix(in srgb, var(--g-green) 40%, var(--card)); box-shadow: 0 0 0 3.5px var(--g-green); }
+  .cp-o.hp { background: color-mix(in srgb, var(--g-purple) 40%, var(--card)); box-shadow: 0 0 0 3.5px var(--g-purple); }
+  .cp-o.hr { background: color-mix(in srgb, var(--g-red) 36%, var(--card)); box-shadow: 0 0 0 3.5px var(--g-red); }
+  .cp-ot sub { font-size: .62em; line-height: 0; }
+  .cp-ofr { position: absolute; left: 0; top: 0; z-index: 1; box-sizing: border-box; border: 3px solid var(--g-curve); border-radius: 999px; background: color-mix(in srgb, var(--g-curve) 14%, transparent); pointer-events: none; }
+  .cp-omk { position: absolute; left: 0; top: 0; width: 0; height: 0; z-index: 2; }
+  .cp-oc { position: absolute; left: 0; top: 0; transform: translate(-50%, -38%); font-weight: 700; line-height: 1; color: var(--muted); }
+  .cp-on { position: absolute; left: 0; top: 0; transform: translateX(-50%); font-weight: 700; line-height: 1; color: var(--muted); }
+  @media (max-width: 700px) {
+    .cp-sl-box { min-width: 3rem; min-height: 2.8rem; padding: 2px 6px; font-size: 1.2rem; border-radius: 12px; }
+    .cp-sl-op { font-size: 1.3rem; margin: 0 .25rem; }
+    .cp-sl-lb { font-size: .82rem; } .cp-sl-tag { font-size: .72rem; }
+  }
+  /* ═══ END ของกลางกลุ่มหลักการนับและความน่าจะเป็น ม.5 ═══ */
 /* ── theme:start — สร้างโดย tools/build_lessons.py ห้ามแก้มือ (แก้ที่สคริปต์แล้วรันใหม่) ── */
 :root{ --page:#0F766E; }
 :root[data-theme="light"]{
@@ -2645,6 +2712,396 @@ function makeSeqPlot(host, o0) {
   return w;
 }
 //  ═══ END ชุดของกลางกลุ่มลำดับและอนุกรม ม.6 ═══
+
+// ════════════════════════════════════════════════════════════════════════════
+//  ═══ BEGIN ชุดของกลางกลุ่มหลักการนับและความน่าจะเป็น ม.5 ═══  (docs/design-counting-probability.md §1.2)
+//  ⚠️ เพิ่มท้ายไฟล์เท่านั้น — ห้ามแก้ของเดิมด้านบน (สื่อ 30 ชิ้นเดิมต้องไม่เปลี่ยน — มีแค่บล็อกนี้ที่เพิ่ม)
+//  ใช้ของกลางเดิม: mx / mn / tx / T / EASE / lerp / reducedMotion / makeAnimator / sv / LIVE (+ flyTo / makeScenes ในชิ้นที่เรียกใช้)
+//  ชื่อ const/function ระดับบนสุดที่เพิ่ม: cpFact cpP cpC cpNum cpPH cpCH binomH cardHtml makeSlots makeTree makeObjRow (+ ตัวช่วยภายใน _cp…)
+//  คลาส CSS ที่เพิ่ม (base.css ท้ายไฟล์): .cp-nb · .cp-bn .cp-bp .cp-bs (binomH) · .cp-card .cp-su · .cp-sl* (ช่องกฎการคูณ) · .cp-tr* .cp-tn .cp-te .cp-tf (ต้นไม้) · .cp-ob .cp-o .cp-ofr .cp-omk .cp-oc .cp-on (แถวของ)
+//  (ชื่อ cp-wrap / cp-lbl / cp-x / cp-p / cp-halo / cp-arr เป็นของ lesson_complex-plane.js — ห้ามใช้ซ้ำ)
+//
+//  32) cpFact(n) · cpP(n, r) · cpC(n, r)   คำนวณจำนวนเต็ม (Number) · throw Error ถ้าอินพุตไม่ใช่จำนวนเต็ม ≥ 0 หรือผลเกิน Number.MAX_SAFE_INTEGER
+//        r > n → cpP, cpC คืน 0 · cpFact(0) = 1 · cpC(52, 5) = 2598960 · cpP(7, 3) = 210 (คำนวณด้วย BigInt จึงไม่เพี้ยนระหว่างทาง)
+//  33) cpNum(x)                            จำนวนเต็มคั่นจุลภาค: cpNum(5040) = "5,040" · cpNum(793618560) = "793,618,560" · ลบใช้ "−"
+//  34) cpPH(n, r, o) · cpCH(n, r, o)       Pₙ,ᵣ / Cₙ,ᵣ เป็น HTML ห่อ mx (ตัวห้อย n,r ตัวแปรเอียง ตัวเลขตั้ง — ส่งเป็นสตริงเอง)
+//        cpCH('n', 'r') · cpCH(7, 3) · cpCH('n', 'n−1') · o.box = true → ใส่กรอบ .cp-nb ที่ n และ r (ค่าที่แทนลงสูตร)
+//  35) binomH(n, r, o)                     (n r) วงเล็บโค้งสูงสองชั้น n บน r ล่าง (SVG ยืดตามความสูง) · o.box เหมือนข้างบน · ขนาดตาม font-size ของพ่อแม่
+//  36) cardHtml(rank, suit)                ชิปไพ่เล็ก: rank 'A' '2'…'10' 'J' 'Q' 'K' · suit 'h' ♥ 'd' ♦ (แดง --g-red) 's' ♠ 'c' ♣ (สีตัวหนังสือ)
+//  37) makeSlots(host, slots, o)           แถวช่องกฎการคูณ  slots = [{ label: T|html (ป้ายใต้ช่อง), val?: ค่าเริ่ม, cond?: true (เริ่มต้นมาร์ก cond) }]
+//        o = { op: '×' (ตัวคั่น) } · ท้ายแถวมี "= ผล" (ซ่อนจนเรียก result) · ช่องว่างเส้นประ ช่องเติมแล้วทึบน้ำเงิน · ⚠️ แทนที่เนื้อหาเดิมของ host
+//        คืน { el, fill(i, v, anim) → Promise (เติมพร้อมแอนิเมชัน · ไม่ใส่ anim = ทันที), setNow(i, v) (v = null → ล้างช่อง), mark(i, cls) (cls = 'cond' ขอบ/พื้นส้ม + ป้าย "เติมก่อน" ·
+//              'hb' | 'ho' | 'hg' ไฮไลต์ช่อง · null ล้างทั้งหมดของช่องนั้น · i = null ใช้กับทุกช่อง), result(v, anim) → Promise (แสดง "= v" เขียว), clear(), slotEl(i) (element ช่อง — ใช้กับ flyTo), resultEl }
+//        v เป็นเลข → ใส่จุลภาคให้เอง (cpNum) · เป็น string/T → ใช้ตามนั้น · ลงทะเบียน LIVE · ที่ 375px ขึ้นบรรทัดใหม่ได้ ไม่ล้นแนวนอน
+//  38) makeTree(host, levels, o)           แผนภาพต้นไม้ SVG+HTML ซ้าย→ขวา · ⚠️ แทนที่เนื้อหาเดิมของ host
+//        levels = [['ข้าวผัด','กะเพรา'], ['น้ำเปล่า','ชาเย็น']] (ทุกกิ่งแตกเท่ากัน · ป้ายเป็น string/HTML/T) หรือ levels = null + o.children(path) → [ป้าย…] (path = array index ที่เดินมา · [] = ใบ)
+//        o = { children, root: ป้ายราก (ไม่ใส่ = จุด) · edge(path) → HTML ป้ายบนกิ่งที่พาไปโหนด path (เช่นเศษส่วน — วางเป็น HTML บนพื้นทึบ) ·
+//              leaf(path) → HTML ป้ายท้ายใบ (ค่าเริ่ม = ต่อป้ายตามทาง เช่น "HT") | false (ไม่มีป้ายท้ายใบ) · show: ความลึกที่แสดงตอนสร้าง (ค่าเริ่ม = ทั้งหมด) }
+//        คืน { el, reveal(depth, anim) → Promise (กิ่งชั้น depth งอก: เส้นยืดแล้วป้ายจางเข้า · ไม่ใส่ anim = showNow), showNow(depth) (แสดงถึงชั้น depth ทันที · 0 = เหลือแค่ราก),
+//              highlight(pred, cls) (pred(leafPath) จริง → ไฮไลต์เส้นทางจากรากถึงใบ+ป้าย · cls 'hb'|'ho'|'hg'|'hp'|'hr'|null · highlight() ไม่ใส่อะไร = ล้างทั้งหมด), clear(),
+//              leafCount(), nodeEl(path) / leafEl(path) (element ไว้ใช้กับ flyTo), depth }
+//        ใบ > 16 → ย่อระยะ · ใบ > 36 → throw Error · ใช้ที่ 375px (ย่อตัวอักษร/ระยะเองจนพอดีความกว้าง) · ลงทะเบียน LIVE
+//  39) makeObjRow(host, items, o)          แถวของ/คน: วงกลมมีตัวอักษร  items = [{ t: 'A', c: 'b'|'o'|'g'|'p'|'k'|'muted', sub?: '1' }] (sub → A₁ A₂) · ⚠️ แทนที่เนื้อหาเดิมของ host
+//        o = { room: true (กันที่แถวบน/ป้ายเลขช่องไว้ตั้งแต่ต้น — ความสูงจะไม่กระโดดตอน lift / gaps) , size: 48 (เส้นผ่านศูนย์กลางสูงสุด px) }
+//        คืน { el(i) (element วงกลม), bundle(idxs, anim) (ของในกลุ่มขยับมาติดกัน ต่อท้ายตำแหน่งแรกของกลุ่ม + กรอบส้มรอบกลุ่ม), unbundle(anim),
+//              gaps(on, { except: [idx…], anim }) (แสดง "^" ระหว่างของ/หัว/ท้าย + เลขช่อง 1…k ใต้ "^" · except = ของที่ไม่นับ — ยกขึ้นแถวบนให้อัตโนมัติ),
+//              lift(idxs, anim) (ยกขึ้นลอยแถวบน), place(idx, gapNo, anim) (ย้ายของที่ยกไว้ลงช่อง gapNo — เลขช่องตามที่แสดงตอน gaps),
+//              swap(i, j, anim) (สลับที่ ทางโค้งข้ามกัน), order(perm, anim) (จัดเรียงทั้งแถวใหม่ perm = array ของ idx), highlight(idxs, cls) (cls 'hb'|'ho'|'hg'|'hp'|'hr'|null · idxs = null ล้างทั้งหมด),
+//              setSub(i, sub), clear() (คืนสถานะเริ่ม ทันที) }
+//        เมธอดที่มี anim คืน Promise · ไม่ใส่ anim = ทำทันที (ใช้ใน end()) · ที่ 375px วงกลมย่อเองให้พอดี · ลงทะเบียน LIVE
+//        แอนิเมชันใช้ anim.run ของ makeAnimator (S.anim ใน makeScenes) · reducedMotion → กระโดดไปสถานะปลาย
+// ════════════════════════════════════════════════════════════════════════════
+
+// ───────── 32–33) จำนวนนับ ─────────
+const _CP_MAX = BigInt(Number.MAX_SAFE_INTEGER);
+const _cpArg = (v, who) => { if (typeof v !== 'number' || !Number.isInteger(v) || v < 0) throw new Error(who + ': ต้องเป็นจำนวนเต็ม ≥ 0 (ได้ ' + v + ')'); return BigInt(v); };
+const _cpOut = (b, who) => { if (b > _CP_MAX) throw new Error(who + ': ผลเกิน Number.MAX_SAFE_INTEGER'); return b; };
+function cpFact(n) { const k = _cpArg(n, 'cpFact'); let r = 1n; for (let i = 2n; i <= k; i++) { r = _cpOut(r * i, 'cpFact'); } return Number(r); }
+function cpP(n, r) { const a = _cpArg(n, 'cpP'), b = _cpArg(r, 'cpP'); if (b > a) return 0; let p = 1n; for (let i = 0n; i < b; i++) { p = _cpOut(p * (a - i), 'cpP'); } return Number(p); }
+function cpC(n, r) { const a = _cpArg(n, 'cpC'); let b = _cpArg(r, 'cpC'); if (b > a) return 0; if (b > a - b) b = a - b; let c = 1n; for (let i = 1n; i <= b; i++) { c = _cpOut(c * (a - b + i) / i, 'cpC'); } return Number(c); }
+const cpNum = x => { if (!Number.isInteger(x)) return mn(String(x)); return (x < 0 ? '−' : '') + String(Math.abs(x)).replace(/\B(?=(\d{3})+(?!\d))/g, ','); };
+
+// ───────── 34–35) Pₙ,ᵣ · Cₙ,ᵣ · (n r) ─────────
+const _cpV = s => { s = String(s); return /</.test(s) ? s : s.replace(/[A-Za-z]+/g, m => `<i>${m}</i>`).replace(/-/g, '−'); };
+const _cpB = (s, box) => box ? `<span class="cp-nb">${_cpV(s)}</span>` : _cpV(s);
+const cpPH = (n, r, o) => { const b = !!(o && o.box); return mx(`P<sub>${_cpB(n, b)},${_cpB(r, b)}</sub>`); };
+const cpCH = (n, r, o) => { const b = !!(o && o.box); return mx(`C<sub>${_cpB(n, b)},${_cpB(r, b)}</sub>`); };
+function binomH(n, r, o) {
+  const b = !!(o && o.box);
+  const paren = side => `<svg class="cp-bp" viewBox="0 0 10 40" preserveAspectRatio="none" aria-hidden="true"><path d="${side === 'l' ? 'M8.4 1 Q1.4 20 8.4 39' : 'M1.6 1 Q8.6 20 1.6 39'}"/></svg>`;
+  return mx(`<span class="cp-bn">${paren('l')}<span class="cp-bs"><span>${_cpB(n, b)}</span><span>${_cpB(r, b)}</span></span>${paren('r')}</span>`);
+}
+
+// ───────── 36) ไพ่ ─────────
+const _CP_SUIT = { h: '♥', d: '♦', s: '♠', c: '♣' };
+function cardHtml(rank, suit) {
+  if (!_CP_SUIT[suit]) throw new Error('cardHtml: suit ต้องเป็น h d s c');
+  return `<span class="cp-card ${suit === 'h' || suit === 'd' ? 'r' : 'k'}"><b>${rank}</b><span class="cp-su">${_CP_SUIT[suit]}︎</span></span>`;
+}
+
+// ───────── 37) ช่องกฎการคูณ ─────────
+function makeSlots(host, slots0, o) {
+  o = o || {};
+  const op = o.op === undefined ? '×' : o.op;
+  const w = { _dead: false };
+  const slots = slots0.map(s => ({ label: s.label, val: s.val === undefined ? null : s.val }));
+  const vals = slots.map(s => s.val);
+  let resV = null;
+  const root = document.createElement('div'); root.className = 'cp-sl';
+  root.innerHTML = slots.map((s, i) => `<div class="cp-sl-u" data-i="${i}">${i ? `<span class="cp-sl-op">${op}</span>` : ''}<span class="cp-sl-tag"></span><div class="cp-sl-box"><span class="cp-sl-v"></span></div><div class="cp-sl-lb"></div></div>`).join('') +
+    `<div class="cp-sl-u cp-sl-r"><span class="cp-sl-op">=</span><div class="cp-sl-box"><span class="cp-sl-v"></span></div></div>`;
+  const units = [...root.querySelectorAll('.cp-sl-u:not(.cp-sl-r)')], resU = root.querySelector('.cp-sl-r');
+  const boxes = units.map(u => u.querySelector('.cp-sl-box')), resBox = resU.querySelector('.cp-sl-box');
+  slots0.forEach((s, i) => { if (s.cond) units[i].classList.add('cond'); });
+  const fmt = v => typeof v === 'number' ? cpNum(v) : tx(v);
+  const paintBox = i => { const v = vals[i], b = boxes[i]; b.querySelector('.cp-sl-v').innerHTML = v === null || v === undefined ? '' : fmt(v); b.classList.toggle('f', !(v === null || v === undefined)); };
+  const paint = () => {
+    units.forEach((u, i) => { u.querySelector('.cp-sl-tag').textContent = EN() ? 'fill first' : 'เติมก่อน'; u.querySelector('.cp-sl-lb').innerHTML = tx(slots[i].label); paintBox(i); });
+    resBox.querySelector('.cp-sl-v').innerHTML = resV === null ? '' : fmt(resV);
+  };
+  const HC = ['hb', 'ho', 'hg'];
+  w.el = root; w.resultEl = resBox;
+  w.slotEl = i => boxes[i];
+  w.setNow = (i, v) => { vals[i] = v; paintBox(i); return w; };
+  w.fill = (i, v, anim) => {
+    w.setNow(i, v);
+    if (!anim || reducedMotion() || v === null || v === undefined) return Promise.resolve();
+    const b = boxes[i], vEl = b.querySelector('.cp-sl-v');
+    return anim.run(380, t => { b.style.transform = `scale(${(0.72 + 0.28 * EASE.back(t)).toFixed(3)})`; vEl.style.opacity = Math.min(1, t * 2.2); }).then(() => { b.style.transform = ''; vEl.style.opacity = ''; });
+  };
+  w.mark = (i, cls) => {
+    if (i === null || i === undefined) { units.forEach((_, k) => w.mark(k, cls)); return w; }
+    const u = units[i]; if (!u) return w;
+    if (cls === 'cond') u.classList.add('cond');
+    else { HC.forEach(c => u.classList.remove(c)); if (!cls) u.classList.remove('cond'); else if (HC.indexOf(cls) >= 0) u.classList.add(cls); }
+    return w;
+  };
+  w.result = (v, anim) => {
+    resV = v; paint(); resU.classList.add('on');
+    if (!anim || reducedMotion()) return Promise.resolve();
+    return anim.run(380, t => { resU.style.opacity = t; }).then(() => { resU.style.opacity = ''; });
+  };
+  w.clear = () => { for (let i = 0; i < vals.length; i++) vals[i] = null; resV = null; units.forEach(u => HC.concat('cond').forEach(c => u.classList.remove(c))); resU.classList.remove('on'); paint(); return w; };
+  w.refresh = () => { if (!root.isConnected) { w._dead = true; return; } paint(); };
+  host.innerHTML = ''; host.appendChild(root); paint();
+  LIVE.push(w);
+  return w;
+}
+
+// ───────── 38) ต้นไม้ ─────────
+function makeTree(host, levels, o) {
+  o = o || {};
+  const w = { _dead: false };
+  const kidsOf = o.children || (path => (levels && levels[path.length]) || []);
+  const nodes = [];
+  const mkNode = (path, parent, label) => { const n = { path, key: path.join('.'), depth: path.length, parent, kids: [], label }; nodes.push(n); return n; };
+  const grow = nd => {
+    if (nd.depth >= 8) throw new Error('makeTree: ลึกเกิน 8 ชั้น');
+    (kidsOf(nd.path) || []).forEach((lb, i) => nd.kids.push(grow(mkNode(nd.path.concat(i), nd, lb))));
+    return nd;
+  };
+  grow(mkNode([], null, o.root));
+  const leaves = nodes.filter(n => !n.kids.length);
+  if (leaves.length > 36) throw new Error('makeTree: ใบมากกว่า 36 (' + leaves.length + ')');
+  const D = Math.max(...nodes.map(n => n.depth));
+  const wrap = document.createElement('div'); wrap.className = 'cp-tr';
+  const svg = sv('svg', { class: 'cp-tr-svg', 'aria-hidden': 'true' }, wrap);
+  const addDiv = cls => { const e = document.createElement('div'); e.className = cls; wrap.appendChild(e); return e; };
+  nodes.forEach(n => {
+    n.pill = addDiv('cp-tn' + (!n.parent && o.root === undefined ? ' dot' : ''));
+    if (n.parent) n.line = sv('line', { class: 'cp-tr-e', pathLength: 1 }, svg);
+    if (n.parent && o.edge && tx(o.edge(n.path))) n.edgeEl = addDiv('cp-te');
+    if (n.parent && !n.kids.length && o.leaf !== false) n.leafEl = addDiv('cp-tf');
+  });
+  const along = n => { const a = []; for (let m = n; m && m.parent; m = m.parent) a.unshift(tx(m.label)); return a.join(''); };
+  const setTexts = () => nodes.forEach(n => {
+    if (n.parent || o.root !== undefined) n.pill.innerHTML = tx(n.label);
+    if (n.edgeEl) n.edgeEl.innerHTML = tx(o.edge(n.path));
+    if (n.leafEl) n.leafEl.innerHTML = o.leaf ? tx(o.leaf(n.path)) : along(n);
+  });
+  let shown = o.show === undefined ? D : o.show, lastCw = 0;
+  const HC = ['hb', 'ho', 'hg', 'hp', 'hr'];
+  const setHl = (n, cls) => [n.pill, n.line, n.edgeEl, n.leafEl].forEach(e => { if (!e) return; HC.forEach(c => e.classList.remove(c)); if (cls) e.classList.add(cls); });
+  const setOp = (n, v) => { [n.pill, n.edgeEl, n.leafEl].forEach(e => { if (e) e.style.opacity = v; }); if (n.line) n.line.style.opacity = v > 0 ? 1 : 0; };
+  const applyShown = () => nodes.forEach(n => { setOp(n, n.depth <= shown ? 1 : 0); if (n.line) n.line.style.strokeDashoffset = 0; });
+  const layout = () => {
+    const cw = wrap.clientWidth; if (!cw) return;
+    lastCw = cw;
+    const pad = 8, hasEdge = nodes.some(n => n.edgeEl), hasLeaf = leaves.some(n => n.leafEl);
+    const meas = s => {
+      wrap.style.fontSize = (16 * s) + 'px';
+      const colW = Array(D + 1).fill(0); let ph = 0, ew = 0, eh = 0, lw = 0;
+      nodes.forEach(n => {
+        n.w = n.pill.offsetWidth; n.h = n.pill.offsetHeight;
+        colW[n.depth] = Math.max(colW[n.depth], n.w); ph = Math.max(ph, n.h);
+        if (n.edgeEl) { ew = Math.max(ew, n.edgeEl.offsetWidth); eh = Math.max(eh, n.edgeEl.offsetHeight); }
+        if (n.leafEl) lw = Math.max(lw, n.leafEl.offsetWidth);
+      });
+      const gapMin = hasEdge ? ew + 18 : 34, leafPart = hasLeaf ? lw + 10 : 0;
+      return { colW, ph, ew, eh, gapMin, leafPart, sumW: colW.reduce((a, b) => a + b, 0), need: 2 * pad + colW.reduce((a, b) => a + b, 0) + D * gapMin + leafPart };
+    };
+    let m, s;
+    for (const sc of [1, .93, .86, .8, .74, .68, .62]) { s = sc; m = meas(s); if (m.need <= cw) break; }
+    let gap = D ? (cw - 2 * pad - m.sumW - m.leafPart) / D : 0;
+    gap = Math.max(18, Math.min(170, gap));
+    const off = Math.max(0, (cw - (m.sumW + D * gap + m.leafPart)) / 2);
+    const Xc = []; let acc = off;
+    for (let d = 0; d <= D; d++) { Xc[d] = acc + m.colW[d] / 2; acc += m.colW[d] + gap; }
+    const L = leaves.length, padY = 8, u = hasEdge ? Math.min(.7, Math.max(.5, 1 - (m.ew / 2 + 8) / gap)) : .7;   // ป้ายบนกิ่งอยู่ที่สัดส่วน u ของเส้น (ช่องกว้าง = ชิดปลายกิ่ง · แคบ = กลางเส้น)
+    const rowH = Math.max((L > 16 ? 30 : 46) * (0.7 + 0.3 * s), m.ph + 10, hasEdge ? (m.eh + 8) / u : 0);
+    leaves.forEach((n, i) => { n.y = padY + (i + .5) * rowH; });
+    for (let i = nodes.length - 1; i >= 0; i--) { const n = nodes[i]; if (n.kids.length) n.y = (n.kids[0].y + n.kids[n.kids.length - 1].y) / 2; }
+    const H = Math.ceil(L * rowH + 2 * padY);
+    nodes.forEach(n => { n.x = Xc[n.depth]; n.pill.style.left = (n.x - n.w / 2).toFixed(1) + 'px'; n.pill.style.top = (n.y - n.h / 2).toFixed(1) + 'px'; });
+    nodes.forEach(n => {
+      if (n.leafEl) { n.leafEl.style.left = (n.x + n.w / 2 + 10).toFixed(1) + 'px'; n.leafEl.style.top = (n.y - n.leafEl.offsetHeight / 2).toFixed(1) + 'px'; }
+      if (n.line) {
+        const p = n.parent, x1 = p.x + p.w / 2, y1 = p.y, x2 = n.x - n.w / 2, y2 = n.y;
+        [['x1', x1], ['y1', y1], ['x2', x2], ['y2', y2]].forEach(([k, v]) => n.line.setAttribute(k, v.toFixed(1)));
+        if (n.edgeEl) {
+          const cx = x1 + (x2 - x1) * u, cy = y1 + (y2 - y1) * u;
+          n.edgeEl.style.left = (cx - n.edgeEl.offsetWidth / 2).toFixed(1) + 'px'; n.edgeEl.style.top = (cy - n.edgeEl.offsetHeight / 2).toFixed(1) + 'px';
+        }
+      }
+    });
+    svg.setAttribute('width', cw); svg.setAttribute('height', H); svg.setAttribute('viewBox', `0 0 ${cw} ${H}`);
+    wrap.style.height = H + 'px';
+    applyShown();
+  };
+  w.el = wrap; w.depth = D;
+  w.leafCount = () => leaves.length;
+  const find = path => nodes.find(n => n.key === path.join('.'));
+  w.nodeEl = path => { const n = find(path); return n && n.pill; };
+  w.leafEl = path => { const n = find(path); return n && (n.leafEl || n.pill); };
+  w.showNow = d => { shown = d; applyShown(); return w; };
+  w.reveal = (d, anim) => {
+    if (!anim || reducedMotion()) { w.showNow(d); return Promise.resolve(); }
+    const ns = nodes.filter(n => n.depth === d);
+    shown = d;
+    nodes.forEach(n => { if (n.depth < d) setOp(n, 1); else if (n.depth > d) setOp(n, 0); });
+    ns.forEach(n => { setOp(n, 0); n.line.style.opacity = 1; n.line.style.strokeDashoffset = 1; });
+    return anim.run(520, t => ns.forEach(n => { n.line.style.strokeDashoffset = 1 - t; }))
+      .then(() => anim.run(320, t => ns.forEach(n => { [n.pill, n.edgeEl, n.leafEl].forEach(e => { if (e) e.style.opacity = t; }); })))
+      .then(() => applyShown());
+  };
+  w.highlight = (pred, cls) => {
+    if (!pred) { nodes.forEach(n => setHl(n, null)); return w; }
+    leaves.forEach(lf => { if (pred(lf.path)) for (let n = lf; n && n.parent; n = n.parent) setHl(n, cls); });
+    return w;
+  };
+  w.clear = () => w.highlight();
+  w.refresh = () => { if (!wrap.isConnected) { w._dead = true; return; } setTexts(); layout(); };
+  host.innerHTML = ''; host.appendChild(wrap);
+  setTexts(); layout();
+  if (typeof ResizeObserver !== 'undefined') new ResizeObserver(() => { if (wrap.clientWidth !== lastCw) layout(); }).observe(wrap); else window.addEventListener('resize', layout);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(layout);
+  requestAnimationFrame(layout);
+  LIVE.push(w);
+  return w;
+}
+
+// ───────── 39) แถวของ/คน ─────────
+function makeObjRow(host, items0, o) {
+  o = o || {};
+  const w = { _dead: false };
+  const items = items0.map(it => ({ t: it.t, sub: it.sub, sub0: it.sub, c: it.c || 'b' }));
+  const wrap = document.createElement('div'); wrap.className = 'cp-ob';
+  host.innerHTML = ''; host.appendChild(wrap);
+  const HC = ['hb', 'ho', 'hg', 'hp', 'hr'];
+  const els = items.map(it => { const e = document.createElement('div'); e.className = 'cp-o c-' + it.c; wrap.appendChild(e); return e; });
+  const paintItem = i => { const it = items[i]; els[i].innerHTML = `<span class="cp-ot">${it.t}${(it.sub === undefined || it.sub === null || it.sub === '') ? '' : `<sub>${_cpV(it.sub)}</sub>`}</span>`; };
+  items.forEach((_, i) => paintItem(i));
+  const S0 = () => ({ order: items.map((_, i) => i), lifted: [], fill: {}, bundles: [], gapsOn: false, everGaps: false, everLift: false });
+  let S = S0(), G = null, lastCw = 0;
+  const cur = items.map(() => null);
+  const mkFrame = () => { const e = document.createElement('div'); e.className = 'cp-ofr'; wrap.insertBefore(e, wrap.firstChild); return e; };
+
+  // ── เรขาคณิต: คำนวณตำแหน่งปลายทางทั้งหมดจากสถานะ S ──
+  const geom = cw => {
+    const placed = new Set(); Object.keys(S.fill).forEach(k => S.fill[k].forEach(i => placed.add(i)));
+    const base = S.order.filter(i => S.lifted.indexOf(i) < 0 && !placed.has(i));
+    const units = [], seen = new Set();
+    base.forEach(i => {
+      if (seen.has(i)) return;
+      const bd = S.bundles.find(b => b.idxs.indexOf(i) >= 0);
+      if (bd) { const ms = base.filter(j => bd.idxs.indexOf(j) >= 0); ms.forEach(j => seen.add(j)); units.push({ items: ms, bundled: true }); }
+      else { seen.add(i); units.push({ items: [i], bundled: false }); }
+    });
+    const U = units.length, showGaps = S.gapsOn, fillOf = k => S.fill[k] || [];
+    const layoutFor = d => {
+      const sp = Math.max(6, d * .2), spb = Math.max(3, d * .08), padb = d * .14 + 4, gw = d * .55, list = [];
+      for (let k = 1; k <= U + 1; k++) {
+        const m = fillOf(k).length;
+        if (showGaps || m) list.push({ kind: 'slot', k, m, w: m ? m * d + (m - 1) * spb : gw });
+        if (k <= U) { const u = units[k - 1], mm = u.items.length; list.push({ kind: 'unit', u, w: u.bundled ? mm * d + (mm - 1) * spb + 2 * padb : d }); }
+      }
+      let tot = 0; list.forEach((e, i) => { tot += e.w + (i ? sp : 0); });
+      return { list, tot, sp, spb, padb };
+    };
+    const avail = cw - 16;
+    let d = o.size || 48, L = layoutFor(d);
+    for (let k = 0; k < 2 && L.tot > avail; k++) { d = Math.max(22, d * avail / L.tot); L = layoutFor(d); }
+    const hasTop = !!o.room || S.everLift, hasBot = !!o.room || S.everGaps || S.gapsOn;
+    const liftY = 12 + d / 2, rowY = hasTop ? liftY + d + 26 : 12 + d / 2 + 6;
+    const labelDy = d / 2 + 18, H = rowY + d / 2 + (hasBot ? d * .35 + 30 : 14);
+    const pos = items.map(() => null), markers = [];
+    let x = (cw - L.tot) / 2;
+    L.list.forEach((e, idx) => {
+      if (idx) x += L.sp;
+      if (e.kind === 'slot') {
+        if (e.m) fillOf(e.k).forEach((it, j) => { pos[it] = { x: x + d / 2 + j * (d + L.spb), y: rowY }; });
+        if (showGaps) markers.push({ k: e.k, x: x + e.w / 2, filled: e.m > 0 });
+      } else {
+        const ix = x + (e.u.bundled ? L.padb : 0);
+        e.u.items.forEach((it, j) => { pos[it] = { x: ix + d / 2 + j * (d + L.spb), y: rowY }; });
+      }
+      x += e.w;
+    });
+    const lm = S.lifted.length, lw = lm * d + Math.max(0, lm - 1) * L.sp;
+    S.lifted.forEach((it, j) => { pos[it] = { x: (cw - lw) / 2 + d / 2 + j * (d + L.sp), y: liftY }; });
+    const frames = S.bundles.map(b => ({ b, members: b.idxs.filter(i => base.indexOf(i) >= 0) }));
+    return { pos, markers, d, H, rowY, labelDy, padb: L.padb, frames };
+  };
+
+  // ── ป้ายช่อง "^" + เลขช่อง ──
+  const mk = new Map();
+  const mkEnsure = k => {
+    let m = mk.get(k);
+    if (!m) { const el = document.createElement('div'); el.className = 'cp-omk'; el.innerHTML = `<span class="cp-oc">^</span><span class="cp-on">${k}</span>`; wrap.appendChild(el); m = { el, caret: el.firstChild, num: el.lastChild, x: 0 }; mk.set(k, m); }
+    return m;
+  };
+  const mkPlace = (m, x, g) => {
+    m.x = x; m.el.style.transform = `translate(${x.toFixed(1)}px, ${g.rowY.toFixed(1)}px)`;
+    m.caret.style.fontSize = (g.d * .62).toFixed(1) + 'px'; m.num.style.top = g.labelDy.toFixed(1) + 'px'; m.num.style.fontSize = Math.max(13, g.d * .34).toFixed(1) + 'px';
+  };
+  const syncMarkers = g => {
+    const keep = new Set(g.markers.map(s => s.k));
+    mk.forEach((m, k) => { if (!keep.has(k)) { m.el.remove(); mk.delete(k); } });
+    g.markers.forEach(s => { const m = mkEnsure(s.k); mkPlace(m, s.x, g); m.el.style.opacity = ''; m.caret.style.visibility = s.filled ? 'hidden' : ''; });
+  };
+
+  // ── ใช้ตำแหน่ง ──
+  const setPos = (i, x, y) => { cur[i] = { x, y }; els[i].style.transform = `translate(${(x - G.d / 2).toFixed(1)}px, ${(y - G.d / 2).toFixed(1)}px)`; };
+  const sizeAll = g => { wrap.style.height = Math.ceil(g.H) + 'px'; els.forEach(e => { e.style.width = e.style.height = g.d.toFixed(1) + 'px'; e.style.fontSize = (g.d * .5).toFixed(1) + 'px'; }); };
+  const updateFrames = () => {
+    if (!G) return;
+    G.frames.forEach(f => {
+      const b = f.b;
+      if (!f.members.length) { b.el.style.display = 'none'; return; }
+      const d = G.d, pb = G.padb * .8;
+      let x0 = Infinity, x1 = -Infinity;
+      f.members.forEach(i => { const p = cur[i]; if (!p) return; x0 = Math.min(x0, p.x); x1 = Math.max(x1, p.x); });
+      if (!isFinite(x0)) return;
+      b.el.style.display = ''; b.el.style.width = (x1 - x0 + d + 2 * pb).toFixed(1) + 'px'; b.el.style.height = (d + 18).toFixed(1) + 'px';   // กรอบอยู่ที่ระดับแถวเสมอ (สมาชิกวิ่งโค้งก็ไม่ยืดกรอบ)
+      b.el.style.transform = `translate(${(x0 - d / 2 - pb).toFixed(1)}px, ${(G.rowY - d / 2 - 9).toFixed(1)}px)`;
+    });
+  };
+  const apply = g => { G = g; sizeAll(g); items.forEach((_, i) => setPos(i, g.pos[i].x, g.pos[i].y)); syncMarkers(g); updateFrames(); };
+  const layoutNow = () => { const cw = wrap.clientWidth; if (!cw) return; lastCw = cw; apply(geom(cw)); };
+
+  // ── ทุกการเปลี่ยนสถานะ = เปลี่ยน S แล้วเรียก transition ──
+  const transition = (anim, ms, arcOf, tick, done) => {
+    const cw = wrap.clientWidth;
+    if (!cw) { if (tick) tick(1); if (done) done(); return Promise.resolve(); }
+    lastCw = cw;
+    const g = geom(cw), from = cur.map(p => p ? { x: p.x, y: p.y } : null);
+    if (!anim || reducedMotion() || from.some(p => !p)) { apply(g); if (tick) tick(1); if (done) done(); return Promise.resolve(); }
+    G = g; sizeAll(g);
+    const mOld = new Map(); mk.forEach((m, k) => mOld.set(k, m.x));
+    const newKeys = new Set(g.markers.map(s => s.k));
+    g.markers.forEach(s => { if (!mk.has(s.k)) { const m = mkEnsure(s.k); mkPlace(m, s.x, g); m.el.style.opacity = 0; } });
+    return anim.run(ms, t => {
+      items.forEach((_, i) => { const a = from[i], b = g.pos[i], arc = arcOf ? arcOf(i) : 0; setPos(i, lerp(a.x, b.x, t), lerp(a.y, b.y, t) + arc * Math.sin(Math.PI * t)); });
+      g.markers.forEach(s => { const m = mk.get(s.k); if (mOld.has(s.k)) mkPlace(m, lerp(mOld.get(s.k), s.x, t), g); else m.el.style.opacity = t; m.caret.style.visibility = (s.filled && t > .6) ? 'hidden' : ''; });
+      mk.forEach((m, k) => { if (!newKeys.has(k)) m.el.style.opacity = 1 - t; });
+      if (tick) tick(t);
+      updateFrames();
+    }).then(() => { apply(g); if (tick) tick(1); if (done) done(); });
+  };
+
+  w.bundle = (idxs, anim) => {
+    const grp = S.order.filter(i => idxs.indexOf(i) >= 0), first = S.order.findIndex(i => idxs.indexOf(i) >= 0);
+    const rest = S.order.filter(i => idxs.indexOf(i) < 0), at = S.order.slice(0, first).filter(i => idxs.indexOf(i) < 0).length;
+    S.order = rest.slice(0, at).concat(grp, rest.slice(at));
+    const b = { idxs: grp, el: mkFrame() }; b.el.style.opacity = 0; S.bundles.push(b);
+    return transition(anim, 700, null, t => { b.el.style.opacity = t; });
+  };
+  w.unbundle = anim => {
+    const gone = S.bundles; S.bundles = [];
+    return transition(anim, 500, null, t => gone.forEach(b => { b.el.style.opacity = 1 - t; }), () => gone.forEach(b => b.el.remove()));
+  };
+  const liftIn = idxs => { idxs.forEach(i => { if (S.lifted.indexOf(i) < 0) S.lifted.push(i); Object.keys(S.fill).forEach(k => { S.fill[k] = S.fill[k].filter(x => x !== i); }); }); S.everLift = true; };
+  w.lift = (idxs, anim) => { liftIn(idxs); return transition(anim, 650); };
+  w.place = (idx, gapNo, anim) => { S.lifted = S.lifted.filter(i => i !== idx); (S.fill[gapNo] = S.fill[gapNo] || []).push(idx); return transition(anim, 750); };
+  w.gaps = (on, go) => {
+    go = go || {}; S.gapsOn = !!on; if (on) S.everGaps = true;
+    if (on && go.except) liftIn(go.except);
+    return transition(go.anim, 600);
+  };
+  w.swap = (i, j, anim) => {
+    const a = S.order.indexOf(i), b = S.order.indexOf(j); if (a < 0 || b < 0) return Promise.resolve();
+    S.order[a] = j; S.order[b] = i;
+    const arc = (G ? G.d : 44) * .85;
+    return transition(anim, 800, k => k === i ? -arc : k === j ? arc : 0);
+  };
+  w.order = (perm, anim) => { S.order = perm.slice(); return transition(anim, 800); };
+  w.highlight = (idxs, cls) => { (idxs === null || idxs === undefined ? items.map((_, i) => i) : idxs).forEach(i => { HC.forEach(c => els[i].classList.remove(c)); if (cls) els[i].classList.add(cls); }); return w; };
+  w.setSub = (i, sub) => { items[i].sub = sub; paintItem(i); return w; };
+  w.el = i => els[i];
+  w.clear = () => {
+    S.bundles.forEach(b => b.el.remove()); S = S0();
+    items.forEach((it, i) => { it.sub = it.sub0; paintItem(i); HC.forEach(c => els[i].classList.remove(c)); });
+    layoutNow(); return w;
+  };
+  w.refresh = () => { if (!wrap.isConnected) { w._dead = true; return; } layoutNow(); };
+  layoutNow();
+  if (typeof ResizeObserver !== 'undefined') new ResizeObserver(() => { if (wrap.clientWidth !== lastCw) layoutNow(); }).observe(wrap); else window.addEventListener('resize', layoutNow);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(layoutNow);
+  requestAnimationFrame(layoutNow);
+  LIVE.push(w);
+  return w;
+}
+//  ═══ END ชุดของกลางกลุ่มหลักการนับและความน่าจะเป็น ม.5 ═══
 
 
 // ══════════════ โดเมนและเรนจ์ ══════════════
