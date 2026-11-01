@@ -582,6 +582,63 @@
     .cp-sl-lb { font-size: .82rem; } .cp-sl-tag { font-size: .72rem; }
   }
   /* ═══ END ของกลางกลุ่มหลักการนับและความน่าจะเป็น ม.5 ═══ */
+
+  /* ═══ BEGIN ของกลางกลุ่มสถิติ ม.6 (stMean… makeDotPlot makeFreqTable makeHistogram makeBoxPlot ใน base.js) — เพิ่มท้ายไฟล์เท่านั้น · สีใช้ --g-* / color-mix กับ --card จึงเปลี่ยนตามโหมดสว่าง/มืด ═══ */
+  /* กรอบค่าที่แทนลงสูตร */
+  .st-nb { display: inline-block; border: 2.5px solid color-mix(in srgb, var(--muted) 70%, var(--card)); background: color-mix(in srgb, var(--muted) 14%, var(--card)); border-radius: 10px; padding: 0 .35em; margin: 0 .1em; line-height: 1.25; }
+  .mx sub .st-nb { border-width: 2px; border-radius: 7px; padding: 0 .22em; line-height: 1.1; }
+  /* กราฟ SVG */
+  .st-wrap { width: 100%; max-width: 600px; margin: 8px auto; }
+  .st-svg { width: 100%; height: auto; display: block; background: var(--card); border: 1.5px solid var(--border); border-radius: 12px; }
+  .st-svg text { fill: var(--text); font-family: 'Anuphan', sans-serif; font-weight: 700; }
+  .st-svg .st-tick { fill: var(--muted); font-weight: 600; }
+  .st-svg .st-ytl { fill: var(--muted); }
+  .st-axis { stroke: var(--muted); stroke-width: 1.8; }
+  .st-grid { stroke: var(--border); stroke-width: 1; }
+  .st-dot { fill: var(--g-blue); stroke: var(--g-ring); stroke-width: 1.6; transition: fill .2s; }
+  .st-dot.hb { fill: var(--g-blue); stroke: var(--text); stroke-width: 2.4; }
+  .st-dot.ho { fill: var(--g-curve); } .st-dot.hg { fill: var(--g-green); } .st-dot.hp { fill: var(--g-pink); }
+  .st-hit { cursor: default; } .st-hit.drag { cursor: grab; touch-action: none; } .st-hit.drag:active { cursor: grabbing; }
+  .st-bar { fill: color-mix(in srgb, var(--g-blue) 55%, var(--card)); stroke: var(--g-blue); stroke-width: 2; }
+  .st-bars.faded .st-bar { fill-opacity: .35; }
+  .st-bar.hb { fill: color-mix(in srgb, var(--g-blue) 85%, var(--card)); } .st-bar.ho { fill: color-mix(in srgb, var(--g-curve) 70%, var(--card)); stroke: var(--g-curve); }
+  .st-bar.hg { fill: color-mix(in srgb, var(--g-green) 70%, var(--card)); stroke: var(--g-green); } .st-bar.hp { fill: color-mix(in srgb, var(--g-pink) 70%, var(--card)); stroke: var(--g-pink); }
+  .st-line { fill: none; stroke: var(--g-curve); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; } .st-line.og { stroke: var(--g-blue); }
+  .st-pt { fill: var(--g-curve); stroke: var(--g-ring); stroke-width: 1.6; }
+  .st-line.og ~ .st-pt { fill: var(--g-blue); }
+  /* ป้ายบนพื้นทึบ + หมุด */
+  .st-lb rect { fill: var(--card); stroke: var(--border); stroke-width: 1.6; }
+  .st-lb.st-fl rect { stroke: none; fill-opacity: 1; }
+  .st-rd { stroke: var(--g-green); stroke-width: 2.6; stroke-dasharray: 7 5; stroke-linecap: round; }
+  .st-rdl rect { stroke: var(--g-green); stroke-width: 2.2; } .st-rdl text { fill: color-mix(in srgb, var(--g-green) 72%, var(--text)); }
+  .st-mk.green rect { stroke: var(--g-green); stroke-width: 2.2; } .st-mk.green text { fill: color-mix(in srgb, var(--g-green) 72%, var(--text)); }
+  .st-mk.purple rect { stroke: var(--g-purple); stroke-width: 2.2; } .st-mk.purple text { fill: color-mix(in srgb, var(--g-purple) 72%, var(--text)); }
+  .st-mk.pink rect { stroke: var(--g-pink); stroke-width: 2.2; } .st-mk.pink text { fill: color-mix(in srgb, var(--g-pink) 75%, var(--text)); }
+  .st-mk.orange rect { stroke: var(--g-curve); stroke-width: 2.2; } .st-mk.orange text { fill: color-mix(in srgb, var(--g-curve) 68%, var(--text)); }
+  .st-mk.blue rect { stroke: var(--g-blue); stroke-width: 2.2; } .st-mk.blue text { fill: color-mix(in srgb, var(--g-blue) 75%, var(--text)); }
+  .st-mkl { stroke-width: 2.6; stroke-linecap: round; }
+  .st-mkl.green { stroke: var(--g-green); } .st-mkl.purple { stroke: var(--g-purple); } .st-mkl.pink { stroke: var(--g-pink); } .st-mkl.orange { stroke: var(--g-curve); } .st-mkl.blue { stroke: var(--g-blue); }
+  /* แผนภาพกล่อง */
+  .st-bw { stroke: var(--g-blue); stroke-width: 3; stroke-linecap: round; }
+  .st-bbox { fill: color-mix(in srgb, var(--g-blue) 14%, var(--card)); stroke: var(--g-blue); stroke-width: 3; } .st-bbox.hl { fill: color-mix(in srgb, var(--g-curve) 30%, var(--card)); stroke: var(--g-curve); }
+  .st-bmed { stroke: var(--g-purple); stroke-width: 4.5; stroke-linecap: round; } .st-bmed.hl { stroke-width: 7; }
+  .st-hlb.o { fill: var(--g-curve); fill-opacity: .55; } .st-hlb.b { fill: var(--g-blue); fill-opacity: .4; }
+  /* ตารางแจกแจงความถี่ */
+  .st-ftw { width: 100%; overflow-x: auto; margin: 8px 0; -webkit-overflow-scrolling: touch; }
+  .st-ft { border-collapse: collapse; margin: 0 auto; font-size: 1.15rem; font-weight: 700; background: var(--card); }
+  .st-ft th, .st-ft td { border: 1.5px solid var(--border); padding: 5px 12px; text-align: center; white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .st-ft th { background: color-mix(in srgb, var(--g-blue) 12%, var(--card)); font-size: 1rem; line-height: 1.3; }
+  .st-ft td.hb, .st-ft tr.hb td { background: color-mix(in srgb, var(--g-blue) 22%, var(--card)); }
+  .st-ft td.ho, .st-ft tr.ho td { background: color-mix(in srgb, var(--g-curve) 26%, var(--card)); }
+  .st-ft td.hg, .st-ft tr.hg td { background: color-mix(in srgb, var(--g-green) 24%, var(--card)); }
+  .st-ft td.hp, .st-ft tr.hp td { background: color-mix(in srgb, var(--g-pink) 22%, var(--card)); }
+  .st-ft tr.st-sum td { border-top: 3px double var(--muted); background: color-mix(in srgb, var(--g-green) 10%, var(--card)); }
+  .st-tl5 { text-decoration: line-through; text-decoration-thickness: 2.5px; margin-right: .45em; }
+  .st-ft td[data-k="tally"] { text-align: left; min-width: 4.6em; letter-spacing: .12em; }
+  @media (max-width: 700px) {
+    .st-ft { font-size: .9rem; } .st-ft th { font-size: .78rem; } .st-ft th, .st-ft td { padding: 4px 6px; }
+  }
+  /* ═══ END ของกลางกลุ่มสถิติ ม.6 ═══ */
 /* ── theme:start — สร้างโดย tools/build_lessons.py ห้ามแก้มือ (แก้ที่สคริปต์แล้วรันใหม่) ── */
 :root{ --page:#A3237E; }
 :root[data-theme="light"]{
@@ -3099,6 +3156,572 @@ function makeObjRow(host, items0, o) {
   return w;
 }
 //  ═══ END ชุดของกลางกลุ่มหลักการนับและความน่าจะเป็น ม.5 ═══
+
+//  ═══ BEGIN ชุดของกลางกลุ่มสถิติ ม.6 ═══  (docs/design-statistics.md §1.2)
+//  ⚠️ เพิ่มท้ายไฟล์เท่านั้น — ห้ามแก้ของเดิมด้านบน (สื่อ 35 ชิ้นเดิมต้องไม่เปลี่ยน — มีแค่บล็อกนี้ที่เพิ่ม)
+//  ใช้ของกลางเดิม: mx / mn / tx / T / EASE / lerp / reducedMotion / makeAnimator / sv / LIVE
+//  ชื่อ const/function ระดับบนสุดที่เพิ่ม: stMean stMedian stModes stPos stAt stQ stVarP stVarS stGroup stFmt makeDotPlot makeFreqTable makeHistogram makeBoxPlot
+//        (+ ตัวช่วยภายใน _st… / _ST_…)
+//  คลาส CSS ที่เพิ่ม (base.css ท้ายไฟล์): .st-nb (กรอบค่าที่แทนลงสูตร) · .st-wrap .st-svg .st-dot .st-hit .st-bar .st-mk* .st-ft* .st-box* · hb ho hg hp (ไฮไลต์)
+//  (ห้ามใช้ .st-c / .st-r — เป็นชื่อ hook ใน lesson_complex-basics.js)
+//
+//  ── คำนวณจากข้อมูลดิบ (ไม่แตะ DOM) ──
+//  stMean(xs) · stMedian(xs) · stModes(xs)  คืนทุกค่าที่ซ้ำมากสุด เรียงน้อยไปมาก (ไม่มีค่าไหนซ้ำ → [])
+//  stPos(N, r, den = 1) = r(N + 1)/den  ตำแหน่งในข้อมูลที่เรียงแล้ว (นับจาก 1)
+//  stAt(sorted, pos)     "ต่ำ + (ทศนิยม)(สูง − ต่ำ)" คืน { lo, hi, frac, val } · pos นอก 1..N ถูกจำกัดเข้าช่วง
+//  stQ(xs, r, den)       เรียงเอง แล้ว stAt(sorted, stPos(N, r, den)).val  (Q: r/4 · D: r/10 · P: r/100)
+//  stVarP(xs) = Σ(x − x̄)²/N · stVarS(xs) = Σ(x − x̄)²/(N − 1)
+//  stGroup(classes, f)   classes = [[41,50],…] → { L, U (ขอบล่าง/บน 40.5/50.5), mid, cum, rel (%), N, I, mean, varP, q(r, den) }
+//        q(r, den) = สูตรบรรทัดเดียว L + (I/f)(rN/den − Σf_L) คืน { val, k (index ชั้น), L, sumFL, f, pos (= rN/den) }
+//  stFmt(x, d = 2)       คืน { text, approx } · จำนวนเต็ม (ภายใน 1e-9) ไม่มีจุด · ไม่ลงตัวปัด d ตำแหน่ง (approx = true เฉพาะเมื่อปัดจริง)
+//        ทศนิยมที่มีไม่ถึง d ตำแหน่งแสดงตามจริง (73.6 → "73.6") · คั่นหลักพันด้วย "," · ลบใช้ "−"
+//
+//  ── ตัววาด (ทุกตัว: ⚠️ แทนที่เนื้อหาเดิมของ host · ลงทะเบียน LIVE วาดใหม่ตามภาษา/ธีม/ความกว้าง · ที่ 375px ไม่ล้นแนวนอน ·
+//     ป้ายบนกราฟ ≥ 15px ที่กว้าง 900 (ที่จอแคบตัวหนังสือขยายเองให้ไม่เล็กกว่า ~12px) · เมธอดที่มี anim รับ anim (makeAnimator ของฉาก) เป็นพารามิเตอร์สุดท้าย
+//     ไม่ใส่ = ใช้ตัวเล่นภายใน (ถูกยกเลิกเมื่อเรียกอันใหม่) · reducedMotion → กระโดดไปสถานะปลาย) ──
+//  makeDotPlot(host, data, o)   แผนภาพจุด · o = { min, max, step (ขีดแกน), drag (ลากจุด), snap = 1, onChange(data) }
+//        คืน { el, markers(['mean','median','mode','q1','q3']) (เรียกอีกครั้ง = แทนที่ · [] = ล้าง), highlight(idxs, cls) (cls 'hb'|'ho'|'hg'|'hp'|null · idxs null = ทั้งหมด),
+//              set(data, anim) (จุดเลื่อนไปที่ใหม่ หมุดเลื่อนตาม), data() (สำเนาข้อมูลปัจจุบัน), pointEl(i) (วงกลมจุดที่ i — ใช้กับ flyTo),
+//              scale: { x(v) → พิกัด SVG, inv(px), left, right, min, max, step, W, ML, MR } }
+//        หมุด: mean เขียว "x̄ = …" · median ม่วง · mode ชมพู (ฐานนิยมหลายค่า = หลายหมุด) · q1/q3 ส้ม · ป้ายหมุดไม่ทับกัน (ซ้อนชั้นเมื่อใกล้กัน)
+//  makeFreqTable(host, g, o)    ตารางจาก stGroup · o.cols จาก 'class','tally' (รอยนับ),'f','mid','lower','cum','rel','fx','fx2','dev2' · o.hide = [คอลัมน์ที่ซ่อนตอนเริ่ม]
+//        คืน { el, showCol(key, anim) → Promise (หัวคอลัมน์โผล่ แล้วเติมทีละแถว), showSum(key) → Promise (แถว Σ โผล่ทีละช่อง · แถวรวมซ่อนจนเรียก),
+//              setNow(cols, sumCols) (คอลัมน์ที่โชว์ทันที · sumCols = ช่อง Σ ที่โชว์ทันที ไม่ใส่ = ไม่มี), markRow(i, cls), markCell(i, key, cls) (cls 'hb'|'ho'|'hg'|'hp'|null · i null = ล้างทั้งหมด),
+//              cellEl(i, key) (i = 'sum' → ช่อง Σ), focusCol(key) (เลื่อนกล่องตารางให้คอลัมน์นั้นอยู่กลางจอ — เรียกเองตอน showCol / markCell / setNow(ถึงคอลัมน์ขวาสุด)), set(g) }
+//        ตารางกว้างเกินให้เลื่อนในกล่องตัวเอง (overflow-x:auto) ไม่ใช่ทั้งหน้า
+//  makeHistogram(host, g, o)    ฮิสโทแกรมจาก stGroup · o = { mode: 'bar'|'polygon'|'ogive', hidden: true (แท่งเริ่มที่ 0 รอ grow()) }
+//        คืน { el, grow(anim) → Promise (แท่งงอกทีละชั้น), polygon(on, anim), ogive(on, anim) (แกน y ขยายเป็น N อัตโนมัติ · แท่งหายไป · เส้นต่อจุดทีละช่วง), ogivePts(k, anim) (แกน y = N แล้วต่อจุดโอไจฟ์ถึงจุดที่ k · 0..จำนวนชั้น+1), xLabels(on, anim) (เลขขอบชั้นบนแกน x · o.noXLabels เริ่มซ่อน) · o.ogiveAxis (เริ่มด้วยแกน y = N ไม่มีเส้น) · readOgive(v, false) = วาดทันที markClass(i, cls),
+//              marker(x, kind) (หมุดค่าบนแกน x · kind 'mean'|'median'|'mode'|'q1'|'q3' · x = null ลบหมุดชนิดนั้น), clearMarkers(), readOgive(cumVal, anim) → Promise (เส้นประจากแกน y ที่ cumVal ชนเส้นโอไจฟ์แล้วลงแกน x พร้อมป้ายค่า · ต้องอยู่โหมด ogive), clearRead(), set(g) }
+//  makeBoxPlot(host, five, o)   five = { min, q1, q2, q3, max } · o = { axis: scale ของ makeDotPlot (วางใต้กันให้ตรงเป๊ะ · ไม่ใส่ = สร้างแกนเอง ใช้ o.min/o.max), hidden: true (ซ่อนทุกส่วนรอ build()) }
+//        คืน { el, build(anim) → Promise (หนวดซ้าย → Q₁ → Q₂ (ม่วง) → Q₃ → หนวดขวา), showNow(), set(five, anim) (เลื่อน), highlight('iqr'|'range'|'q2'|null) }
+//        ป้ายห้าค่า (Min Q₁ Q₂ Q₃ Max = ค่า) ใต้แกน ไม่ทับกัน (ซ้อนชั้นเมื่อใกล้กัน)
+// ════════════════════════════════════════════════════════════════════════════
+
+// ───────── คำนวณ ─────────
+const _stSorted = xs => xs.slice().sort((a, b) => a - b);
+const stMean = xs => xs.reduce((s, x) => s + x, 0) / xs.length;
+const stMedian = xs => { const s = _stSorted(xs), n = s.length; return n % 2 ? s[(n - 1) / 2] : (s[n / 2 - 1] + s[n / 2]) / 2; };
+function stModes(xs) {
+  const m = new Map(); xs.forEach(x => m.set(x, (m.get(x) || 0) + 1));
+  let best = 0; m.forEach(c => { if (c > best) best = c; });
+  if (best <= 1) return [];
+  return [...m.keys()].filter(k => m.get(k) === best).sort((a, b) => a - b);
+}
+const stPos = (N, r, den) => r * (N + 1) / (den === undefined ? 1 : den);
+function stAt(sorted, pos) {
+  const n = sorted.length; pos = Math.min(Math.max(pos, 1), n);
+  let fl = Math.floor(pos + 1e-9), frac = pos - fl;
+  if (Math.abs(frac) < 1e-9) frac = 0;
+  if (fl >= n) { fl = n; frac = 0; }
+  const lo = sorted[fl - 1], hi = sorted[Math.min(fl, n - 1)];
+  return { lo, hi, frac, val: lo + frac * (hi - lo) };
+}
+const stQ = (xs, r, den) => { const s = _stSorted(xs); return stAt(s, stPos(s.length, r, den)).val; };
+const stVarP = xs => { const m = stMean(xs); return xs.reduce((s, x) => s + (x - m) * (x - m), 0) / xs.length; };
+const stVarS = xs => { const m = stMean(xs); return xs.reduce((s, x) => s + (x - m) * (x - m), 0) / (xs.length - 1); };
+function stGroup(classes, f) {
+  const L = classes.map(c => c[0] - 0.5), U = classes.map(c => c[1] + 0.5), mid = classes.map(c => (c[0] + c[1]) / 2);
+  const N = f.reduce((s, x) => s + x, 0), I = U[0] - L[0];
+  const cum = []; f.reduce((s, x, i) => (cum[i] = s + x), 0);
+  const rel = f.map(x => x / N * 100);
+  const mean = f.reduce((s, x, i) => s + x * mid[i], 0) / N;
+  const varP = f.reduce((s, x, i) => s + x * (mid[i] - mean) * (mid[i] - mean), 0) / N;
+  const q = (r, den) => {
+    const pos = r * N / den; let k = 0;
+    while (k < f.length - 1 && cum[k] < pos - 1e-9) k++;
+    const sumFL = k ? cum[k - 1] : 0, Ik = U[k] - L[k];
+    return { val: L[k] + (Ik / f[k]) * (pos - sumFL), k, L: L[k], sumFL, f: f[k], pos };
+  };
+  return { L, U, mid, cum, rel, N, I, mean, varP, q, f, classes };
+}
+function stFmt(x, d) {
+  d = d === undefined ? 2 : d;
+  if (!isFinite(x)) return { text: '—', approx: false };
+  const sep = s => s.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  const r = Math.round(x);
+  if (Math.abs(x - r) < 1e-9) return { text: (r < 0 ? '−' : '') + sep(String(Math.abs(r))), approx: false };
+  const k = Math.pow(10, d), rd = Math.round(Math.abs(x) * k) / k;
+  const approx = Math.abs(Math.abs(x) - rd) > 1e-9;
+  const s = approx ? rd.toFixed(d) : String(rd), p = s.split('.');
+  return { text: (x < 0 && rd !== 0 ? '−' : '') + sep(p[0]) + (p[1] ? '.' + p[1] : ''), approx };
+}
+
+// ───────── ตรวจตอนโหลด ─────────
+(() => {
+  const ok = (a, b, e) => Math.abs(a - b) < (e || 1e-6);
+  const g = stGroup([[41, 50], [51, 60], [61, 70], [71, 80], [81, 90], [91, 100]], [1, 2, 4, 6, 4, 3]);
+  console.assert(ok(g.mean, 75) && g.cum.join() === '1,3,7,13,17,20' && ok(g.q(1, 4).val, 65.5) && ok(g.q(2, 4).val, 75.5) && ok(g.q(3, 4).val, 85.5) && ok(g.q(3, 10).val, 68) && ok(g.q(90, 100).val, 93.8333, 1e-4) && ok(g.varP, 184.75), 'stGroup');
+  const a = [3, 5, 6, 8, 10, 12, 13, 15, 17, 18, 20], b = [12, 15, 18, 20, 23, 25, 27, 30, 34, 40];
+  console.assert(stQ(a, 1, 4) === 6 && stQ(a, 2, 4) === 12 && stQ(a, 3, 4) === 17, 'stQ A11');
+  console.assert(ok(stQ(b, 1, 4), 17.25) && ok(stQ(b, 3, 4), 31) && ok(stQ(b, 40, 100), 21.2) && ok(stQ(b, 7, 10), 29.1), 'stQ B10');
+  console.assert(ok(stVarP([2, 4, 4, 4, 5, 5, 7, 9]), 4) && ok(stVarS([6, 8, 10, 12, 14]), 10) && stMedian([34, 21, 40, 27, 30, 45]) === 32, 'var/median');
+  console.assert(stModes([2, 3, 3, 5, 5, 7]).join() === '3,5' && stModes([1, 4, 6, 9]).length === 0, 'stModes');
+  console.assert(stFmt(13.5913).text === '13.59' && stFmt(13.5913).approx && stFmt(1500).text === '1,500' && stFmt(-1.5).text === '−1.5' && stFmt(73.6).text === '73.6' && !stFmt(73.6).approx, 'stFmt');
+})();
+
+// ───────── ตัวช่วยวาดร่วม ─────────
+const _ST_W = 600, _ST_ML = 28, _ST_MR = 28;
+const _stFs = wrap => { const cw = wrap.clientWidth, sc = cw ? cw / _ST_W : 1; return Math.round(Math.min(24, Math.max(15, 12.5 / sc)) * 2) / 2; };
+const _stTw = (s, fs) => String(s).length * fs * .62 + 14;
+const _stClamp = (v, a, b) => Math.max(a, Math.min(b, v));
+function _stNice(range, n) {
+  const raw = range / n, mag = Math.pow(10, Math.floor(Math.log10(raw))), nm = raw / mag;
+  return (nm <= 1 ? 1 : nm <= 2 ? 2 : nm <= 5 ? 5 : 10) * mag;
+}
+// items = [{ x (กึ่งกลาง), w }] → [{ left, layer }] ตามลำดับเดิม ไม่ทับกัน
+function _stStack(items, lo, hi) {
+  const ord = items.map((_, i) => i).sort((a, b) => items[a].x - items[b].x), ends = [], res = [];
+  ord.forEach(i => {
+    const L = Math.max(lo, Math.min(hi - items[i].w, items[i].x - items[i].w / 2)); let k = 0;
+    while (ends[k] !== undefined && ends[k] + 4 > L) k++;
+    ends[k] = L + items[i].w; res[i] = { left: L, layer: k };
+  });
+  return res;
+}
+const _stLayers = r => r.reduce((m, q) => Math.max(m, q.layer + 1), 0);
+// ป้ายบนพื้นทึบ
+function _stLabel(parent, left, top, w, h, text, cls, fs) {
+  const g = sv('g', { class: 'st-lb ' + (cls || '') }, parent);
+  sv('rect', { x: left.toFixed(1), y: top.toFixed(1), width: w.toFixed(1), height: h.toFixed(1), rx: 6 }, g);
+  sv('text', { x: (left + w / 2).toFixed(1), y: (top + h / 2 + fs * .36).toFixed(1), 'text-anchor': 'middle', 'font-size': fs, text }, g);
+  return g;
+}
+function _stTicks(parent, X, vmin, vmax, step, y, fs, numbers) {
+  sv('line', { class: 'st-axis', x1: X(vmin), y1: y, x2: X(vmax), y2: y }, parent);
+  const n = Math.round((vmax - vmin) / step), pxStep = Math.abs(X(vmin + step) - X(vmin));
+  let longest = 1; for (let i = 0; i <= n; i++) longest = Math.max(longest, String(Math.round((vmin + i * step) * 1e6) / 1e6).length);
+  const every = Math.max(1, Math.ceil((longest * (fs - 1) * .62 + 10) / pxStep));
+  for (let i = 0; i <= n; i++) {
+    const v = Math.round((vmin + i * step) * 1e6) / 1e6, x = X(v);
+    sv('line', { class: 'st-axis', x1: x, y1: y, x2: x, y2: y + 6 }, parent);
+    if (numbers && i % every === 0) sv('text', { class: 'st-tick', x, y: y + 8 + fs, 'text-anchor': 'middle', 'font-size': fs - 1, text: mn(v) }, parent);
+  }
+}
+const _stEqTxt = f => (f.approx ? '≈ ' : '= ') + f.text;
+const _STK = {   // ชนิดหมุด → [สี, ป้าย]
+  mean: ['green', 'x̄'], median: ['purple', T('มัธยฐาน', 'Median')], mode: ['pink', T('ฐานนิยม', 'Mode')],
+  q1: ['orange', 'Q₁'], q3: ['orange', 'Q₃']
+};
+const _stKName = k => { const n = _STK[k][1]; return typeof n === 'string' ? n : tx(n); };
+const _stOwn = (w, st) => () => { st.A.kill(); st.A = makeAnimator(); return st.A; };
+const _stRun = (an, ms, fn) => { if (an === false || reducedMotion()) { fn(1); return Promise.resolve(); } return an.run(ms, fn, EASE.inOut); };
+const _stWait = (an, ms) => reducedMotion() ? Promise.resolve() : an.wait(ms);
+
+// ───────── แผนภาพจุด ─────────
+function makeDotPlot(host, data0, o0) {
+  const o = Object.assign({ snap: 1, drag: false }, o0 || {});
+  let data = data0.slice();
+  const lo0 = Math.min(...data), hi0 = Math.max(...data);
+  const vmin = o.min !== undefined ? o.min : Math.floor(lo0) - 1, vmax = o.max !== undefined ? o.max : Math.ceil(hi0) + 1, step = o.step || 1;
+  const left = _ST_ML, right = _ST_W - _ST_MR, DH = 160;
+  const X = v => left + (v - vmin) / (vmax - vmin) * (right - left), inv = px => vmin + (px - left) / (right - left) * (vmax - vmin);
+  const w = { _dead: false, scale: { x: X, inv, left, right, min: vmin, max: vmax, step, W: _ST_W, ML: _ST_ML, MR: _ST_MR } };
+  const S = { A: makeAnimator() }, own = _stOwn(w, S);
+  const wrap = document.createElement('div'); wrap.className = 'st-wrap'; host.innerHTML = ''; host.appendChild(wrap);
+  let mk = [], reserve = 0, fs = 15, svg = null, gMk = null, gMt = null, dotEls = [], hitEls = [], axisY = 0, H = 0, r = 8, drag = null, ctr = 0, itemsT = [];
+  const ord = data.map(() => ++ctr), hl = {};
+  const cur = { x: data.slice(), s: [], m: {} }, tgt = { x: data.slice(), s: [], m: {} };
+  const key = v => Math.round(v * 1e6);
+  const calcR = mxs => Math.max(3.5, Math.min(10, DH / (2 * Math.max(mxs, 5)), (right - left) / (vmax - vmin) * o.snap / 2 * .98));
+  function stacks() {
+    const cnt = {}, s = [];
+    data.map((_, i) => i).sort((a, b) => ord[a] - ord[b]).forEach(i => { const k = key(data[i]); s[i] = cnt[k] || 0; cnt[k] = s[i] + 1; });
+    return { s, max: Math.max(1, ...Object.values(cnt)) };
+  }
+  function targets() {
+    const items = [];
+    mk.forEach(k => {
+      if (k === 'mean') items.push({ id: 'mean', k, v: stMean(data) });
+      else if (k === 'median') items.push({ id: 'median', k, v: stMedian(data) });
+      else if (k === 'mode') stModes(data).forEach((v, j) => items.push({ id: 'mode' + j, k, v }));
+      else if (k === 'q1') items.push({ id: 'q1', k, v: stQ(data, 1, 4) });
+      else if (k === 'q3') items.push({ id: 'q3', k, v: stQ(data, 3, 4) });
+    });
+    return items;
+  }
+  const lblOf = it => it.k === 'mode' ? _stKName('mode') + ' ' + _stEqTxt(stFmt(it.v)) : _stKName(it.k) + ' ' + _stEqTxt(stFmt(it.v));
+  function stackOf(items, vals) {
+    return _stStack(items.map(it => { const t = lblOf(it); return { x: X(vals(it)), w: _stTw(t, fs) }; }), 2, _ST_W - 2);
+  }
+  function retarget() {
+    const st = stacks(); r = calcR(st.max);
+    tgt.x = data.slice(); tgt.s = st.s; itemsT = targets();
+    const m = {}; itemsT.forEach(it => { m[it.id] = it.v; if (cur.m[it.id] === undefined) cur.m[it.id] = it.v; });
+    Object.keys(cur.m).forEach(id => { if (m[id] === undefined) delete cur.m[id]; });
+    tgt.m = m;
+    if (cur.s.length !== data.length) cur.s = st.s.slice();
+    if (cur.x.length !== data.length) cur.x = data.slice();
+  }
+  function frame() {
+    if (!svg) return;
+    dotEls.forEach((c, i) => {
+      const cx = X(cur.x[i]).toFixed(2), cy = (axisY - r - 1 - cur.s[i] * 2 * r).toFixed(2);
+      c.setAttribute('cx', cx); c.setAttribute('cy', cy); c.setAttribute('r', r.toFixed(2));
+      hitEls[i].setAttribute('cx', cx); hitEls[i].setAttribute('cy', cy); hitEls[i].setAttribute('r', (r + 5).toFixed(2));
+    });
+    gMk.innerHTML = ''; gMt.innerHTML = '';
+    const lay = stackOf(itemsT, it => cur.m[it.id]), need = _stLayers(lay), lh = fs + 9;
+    if (need > reserve) { reserve = need; build(); return; }
+    itemsT.forEach((it, j) => {
+      const x = X(cur.m[it.id]), top = 4 + lay[j].layer * lh;
+      sv('line', { class: 'st-mkl ' + _STK[it.k][0], x1: x, y1: top + fs + 4, x2: x, y2: axisY }, gMk);
+    });
+    itemsT.forEach((it, j) => { const t = lblOf(it); _stLabel(gMt, lay[j].left, 4 + lay[j].layer * lh, _stTw(t, fs), fs + 5, t, 'st-mk ' + _STK[it.k][0], fs); });
+  }
+  function build() {
+    fs = _stFs(wrap);
+    const topZone = 8 + reserve * (fs + 9);
+    axisY = topZone + DH; H = axisY + fs + 22;
+    wrap.innerHTML = '';
+    svg = sv('svg', { class: 'st-svg', viewBox: `0 0 ${_ST_W} ${H}` }); wrap.appendChild(svg);
+    _stTicks(svg, X, vmin, vmax, step, axisY, fs, true);
+    gMk = sv('g', {}, svg);
+    const gD = sv('g', {}, svg), gH = sv('g', {}, svg);
+    gMt = sv('g', { 'pointer-events': 'none' }, svg);
+    dotEls = data.map((_, i) => sv('circle', { class: 'st-dot' + (hl[i] ? ' ' + hl[i] : ''), r }, gD));
+    hitEls = data.map((_, i) => {
+      const h = sv('circle', { class: 'st-hit' + (o.drag ? ' drag' : ''), fill: 'transparent' }, gH);
+      if (o.drag) {
+        h.addEventListener('pointerdown', e => { e.preventDefault(); drag = i; try { h.setPointerCapture(e.pointerId); } catch (_) {} });
+        h.addEventListener('pointermove', e => {
+          if (drag !== i) return;
+          const rect = svg.getBoundingClientRect(), px = (e.clientX - rect.left) * _ST_W / rect.width;
+          const v = Math.round(_stClamp(Math.round(inv(px) / o.snap) * o.snap, vmin, vmax) * 1e6) / 1e6;
+          if (v !== data[i]) { data[i] = v; ord[i] = ++ctr; cur.x[i] = v; retarget(); go(260, null, i); if (o.onChange) o.onChange(data.slice()); }
+        });
+        const up = () => { drag = null; };
+        h.addEventListener('pointerup', up); h.addEventListener('pointercancel', up);
+      }
+      return h;
+    });
+    frame();
+  }
+  function go(ms, anim, skip) {
+    const a = anim || own();
+    const fx = cur.x.slice(), fsx = cur.s.slice(), fm = Object.assign({}, cur.m);
+    return _stRun(a, ms, t => {
+      for (let i = 0; i < data.length; i++) { cur.x[i] = i === skip ? tgt.x[i] : lerp(fx[i], tgt.x[i], t); cur.s[i] = lerp(fsx[i], tgt.s[i], t); }
+      Object.keys(tgt.m).forEach(id => { cur.m[id] = fm[id] === undefined ? tgt.m[id] : lerp(fm[id], tgt.m[id], t); });
+      frame();
+    });
+  }
+  w.el = wrap;
+  w.data = () => data.slice();
+  w.markers = list => {
+    mk = (list || []).slice(); retarget(); reserve = 0;
+    const lay = stackOf(itemsT, it => it.v); reserve = _stLayers(lay);
+    Object.keys(cur.m).forEach(id => { cur.m[id] = tgt.m[id]; });
+    build(); return w;
+  };
+  w.highlight = (idxs, cls) => {
+    (idxs === null || idxs === undefined ? data.map((_, i) => i) : idxs).forEach(i => { if (cls) hl[i] = cls; else delete hl[i]; if (dotEls[i]) dotEls[i].setAttribute('class', 'st-dot' + (cls ? ' ' + cls : '')); });
+    return w;
+  };
+  w.set = (d, anim) => {
+    const same = d.length === data.length; data = d.slice();
+    if (!same) { while (ord.length < data.length) ord.push(++ctr); ord.length = data.length; cur.x = data.slice(); cur.s = []; retarget(); Object.keys(cur.m).forEach(id => { cur.m[id] = tgt.m[id]; }); build(); return Promise.resolve(); }
+    retarget(); return go(550, anim);
+  };
+  w.pointEl = i => dotEls[i];
+  w.refresh = () => { if (!wrap.isConnected) { w._dead = true; return; } build(); };
+  retarget(); build();
+  if (typeof ResizeObserver !== 'undefined') new ResizeObserver(() => { if (wrap.clientWidth && Math.abs(_stFs(wrap) - fs) >= .5) build(); }).observe(wrap);
+  LIVE.push(w);
+  return w;
+}
+
+// ───────── ตารางแจกแจงความถี่ ─────────
+const _stTally = n => { let h = ''; for (let k = 0; k < Math.floor(n / 5); k++) h += '<span class="st-tl5">||||</span>'; return h + '|'.repeat(n % 5); };
+const _STC = {   // คอลัมน์ → [หัวตาราง (HTML/T), ค่าของแถว i, ค่าแถวรวม]
+  class: [T('ชั้น', 'Class'), (g, i) => g.classes[i][0] + ' – ' + g.classes[i][1], () => 'Σ'],
+  tally: [T('รอยนับ', 'Tally'), (g, i) => _stTally(g.f[i]), null],
+  f: [T('ความถี่ <i>f</i>', 'Frequency <i>f</i>'), (g, i) => stFmt(g.f[i]).text, g => stFmt(g.N).text],
+  mid: [T('จุดกึ่งกลาง <i>x</i>', 'Midpoint <i>x</i>'), (g, i) => stFmt(g.mid[i]).text, null],
+  lower: [T('ขอบล่าง', 'Lower boundary'), (g, i) => stFmt(g.L[i]).text, null],
+  cum: [T('ความถี่สะสม', 'Cumulative frequency'), (g, i) => stFmt(g.cum[i]).text, null],
+  rel: [T('ความถี่สัมพัทธ์ (%)', 'Relative frequency (%)'), (g, i) => stFmt(g.rel[i]).text, () => '100'],
+  fx: [T('<i>fx</i>', '<i>fx</i>'), (g, i) => stFmt(g.f[i] * g.mid[i]).text, g => stFmt(g.f.reduce((s, f, i) => s + f * g.mid[i], 0)).text],
+  fx2: [T('<i>fx</i><sup>2</sup>', '<i>fx</i><sup>2</sup>'), (g, i) => stFmt(g.f[i] * g.mid[i] * g.mid[i]).text, g => stFmt(g.f.reduce((s, f, i) => s + f * g.mid[i] * g.mid[i], 0)).text],
+  dev2: [T('<i>f</i>(<i>x</i> − <i>x̄</i>)<sup>2</sup>', '<i>f</i>(<i>x</i> − <i>x̄</i>)<sup>2</sup>'), (g, i) => stFmt(g.f[i] * (g.mid[i] - g.mean) * (g.mid[i] - g.mean)).text, g => stFmt(g.f.reduce((s, f, i) => s + f * (g.mid[i] - g.mean) * (g.mid[i] - g.mean), 0)).text]
+};
+function makeFreqTable(host, g0, o0) {
+  const o = Object.assign({ cols: ['class', 'f'], hide: [] }, o0 || {});
+  let g = g0;
+  const cols = o.cols.slice(), w = { _dead: false }, S = { A: makeAnimator() }, own = _stOwn(w, S);
+  const shown = {}, sumShown = {}, rowCls = {}, cellCls = {};
+  cols.forEach(c => { shown[c] = o.hide.indexOf(c) < 0; });
+  const wrap = document.createElement('div'); wrap.className = 'st-ftw'; host.innerHTML = ''; host.appendChild(wrap);
+  let table = null, cells = {}, sumCells = {}, sumRow = null;
+  const hdTxt = c => tx(_STC[c][0]);
+  function applyVis() {
+    cols.forEach(c => {
+      const th = table.querySelector(`th[data-k="${c}"]`);
+      table.querySelectorAll(`[data-k="${c}"]`).forEach(e => { e.style.display = shown[c] ? '' : 'none'; });
+      if (th) th.style.visibility = '';
+    });
+    sumRow.style.display = cols.some(c => sumShown[c]) ? '' : 'none';
+    cols.forEach(c => { sumCells[c].style.visibility = (sumShown[c] || c === 'class') ? '' : 'hidden'; });
+    g.f.forEach((_, i) => cols.forEach(c => { cells[i + ':' + c].style.visibility = ''; }));
+  }
+  function applyCls() {
+    g.f.forEach((_, i) => {
+      table.rows[i + 1].className = rowCls[i] || '';
+      cols.forEach(c => { cells[i + ':' + c].className = cellCls[i + ':' + c] || ''; });
+    });
+  }
+  function build() {
+    wrap.innerHTML = ''; cells = {}; sumCells = {};
+    table = document.createElement('table'); table.className = 'st-ft';
+    const th = document.createElement('tr'); cols.forEach(c => { const e = document.createElement('th'); e.dataset.k = c; e.innerHTML = hdTxt(c); th.appendChild(e); });
+    const thead = document.createElement('thead'); thead.appendChild(th); table.appendChild(thead);
+    const tb = document.createElement('tbody');
+    g.f.forEach((_, i) => {
+      const tr = document.createElement('tr');
+      cols.forEach(c => { const e = document.createElement('td'); e.dataset.k = c; e.innerHTML = _STC[c][1](g, i); cells[i + ':' + c] = e; tr.appendChild(e); });
+      tb.appendChild(tr);
+    });
+    sumRow = document.createElement('tr'); sumRow.className = 'st-sum';
+    cols.forEach(c => { const e = document.createElement('td'); e.dataset.k = c; e.textContent = _STC[c][2] ? _STC[c][2](g) : ''; sumCells[c] = e; sumRow.appendChild(e); });
+    tb.appendChild(sumRow); table.appendChild(tb); wrap.appendChild(table);
+    applyVis(); applyCls();
+  }
+  w.el = wrap;
+  const focus = (key, smooth) => {
+    const e = table && table.querySelector(`th[data-k="${key}"]`);
+    if (!e || e.style.display === 'none' || wrap.scrollWidth <= wrap.clientWidth + 1) return;
+    const wr = wrap.getBoundingClientRect(), er = e.getBoundingClientRect(), dx = er.left - wr.left - (wr.width - er.width) / 2;
+    if (smooth && !reducedMotion() && wrap.scrollTo) wrap.scrollTo({ left: Math.max(0, wrap.scrollLeft + dx), behavior: 'smooth' }); else wrap.scrollLeft = Math.max(0, wrap.scrollLeft + dx);
+  };
+  w.focusCol = key => { focus(key, true); return w; };
+  w.showCol = (key, anim) => {
+    const a = anim || own(); shown[key] = true; applyVis(); focus(key, true);
+    const th = table.querySelector(`th[data-k="${key}"]`), n = g.f.length;
+    th.style.visibility = 'hidden'; g.f.forEach((_, i) => { cells[i + ':' + key].style.visibility = 'hidden'; });
+    if (reducedMotion()) { th.style.visibility = ''; g.f.forEach((_, i) => { cells[i + ':' + key].style.visibility = ''; }); return Promise.resolve(); }
+    return (async () => {
+      th.style.visibility = ''; await a.wait(300);
+      for (let i = 0; i < n; i++) { cells[i + ':' + key].style.visibility = ''; await a.wait(200); }
+    })();
+  };
+  w.showSum = (key, anim) => {
+    const a = anim || own(); sumShown[key] = true; applyVis();
+    if (!_STC[key][2]) return Promise.resolve();
+    sumCells[key].style.visibility = 'hidden';
+    return (async () => { await _stWait(a, 150); sumCells[key].style.visibility = ''; await _stWait(a, 250); })();
+  };
+  w.setNow = (cs, sums) => {
+    S.A.kill(); S.A = makeAnimator();
+    cols.forEach(c => { shown[c] = cs.indexOf(c) >= 0; sumShown[c] = !!(sums && sums.indexOf(c) >= 0); });
+    applyVis(); const last = cols.filter(c => shown[c]).pop(); if (last) focus(last, false); return w;
+  };
+  w.markRow = (i, cls) => { if (i === null || i === undefined) Object.keys(rowCls).forEach(k => delete rowCls[k]); else if (cls) rowCls[i] = cls; else delete rowCls[i]; applyCls(); return w; };
+  w.markCell = (i, key, cls) => { if (i === null || i === undefined) Object.keys(cellCls).forEach(k => delete cellCls[k]); else if (cls) { cellCls[i + ':' + key] = cls; focus(key, true); } else delete cellCls[i + ':' + key]; applyCls(); return w; };
+  w.cellEl = (i, key) => i === 'sum' ? sumCells[key] : cells[i + ':' + key];
+  w.set = g1 => { g = g1; build(); return w; };
+  w.refresh = () => { if (!wrap.isConnected) { w._dead = true; return; } build(); };
+  build();
+  LIVE.push(w);
+  return w;
+}
+
+// ───────── ฮิสโทแกรม ─────────
+function makeHistogram(host, g0, o0) {
+  const o = Object.assign({ mode: 'bar' }, o0 || {});
+  let g = g0;
+  const w = { _dead: false }, S = { A: makeAnimator() }, own = _stOwn(w, S);
+  const wrap = document.createElement('div'); wrap.className = 'st-wrap'; host.innerHTML = ''; host.appendChild(wrap);
+  const A_ = anim => anim === false ? false : (anim || own());
+  const niceTop = (v, n) => { const s = Math.max(1, _stNice(v, n)); return { step: s, top: Math.ceil(v * 1.12 / s - 1e-9) * s }; };
+  const ogTop = () => ({ step: Math.max(1, _stNice(g.N, 5)), top: g.N });
+  const yInfo = () => (st.ax || st.og > .5) ? ogTop() : niceTop(Math.max(...g.f), 5);
+  const npts = () => g.f.length + 1;
+  const st = { gp: g.f.map(() => o.hidden ? 0 : 1), poly: o.mode === 'polygon' ? 1 : 0, og: o.mode === 'ogive' ? 1 : 0, ax: o.mode === 'ogive' || !!o.ogiveAxis, ogN: o.mode === 'ogive' ? g.f.length + 1 : 0, xl: o.noXLabels ? 0 : 1, yv: 0, df: g.f.slice(), mk: [], cls: {} };
+  st.yv = yInfo().top;
+  let fs = 15, svg = null;
+  function draw() {
+    fs = _stFs(wrap);
+    const yi = yInfo(), W = _ST_W, ML = 48 + (fs - 15) * 1.2, MR = 18, lh = fs + 9;
+    // ป้ายหมุด
+    const items = st.mk.map(m => ({ m, t: _stKName(m.kind) + ' ' + _stEqTxt(stFmt(m.x)) }));
+    const x0 = g.L[0] - .75 * g.I, x1 = g.U[g.U.length - 1] + .75 * g.I;
+    const X = v => ML + (v - x0) / (x1 - x0) * (W - ML - MR);
+    const lay = _stStack(items.map(it => ({ x: X(it.m.x), w: _stTw(it.t, fs) })), 2, W - 2), nL = _stLayers(lay);
+    const MT = 30 + fs * .6 + nL * lh, MB = fs + 30, H = 340 + nL * lh;
+    const pB = H - MB, pH = pB - MT, Y = v => pB - v / st.yv * pH;
+    const f = st.df;
+    svg = sv('svg', { class: 'st-svg', viewBox: `0 0 ${W} ${H}` });
+    wrap.innerHTML = ''; wrap.appendChild(svg);
+    // ตาราง y
+    for (let y = 0; y <= st.yv + 1e-9; y += yi.step) {
+      const yy = Y(y);
+      sv('line', { class: 'st-grid', x1: ML, y1: yy, x2: W - MR, y2: yy }, svg);
+      sv('text', { class: 'st-tick', x: ML - 7, y: yy + fs * .36, 'text-anchor': 'end', 'font-size': fs - 1, text: stFmt(y).text }, svg);
+    }
+    sv('text', { class: 'st-ytl', x: 6, y: MT - fs * .64 - 9, 'font-size': fs, text: (st.ax || st.og > .5) ? tx(T('ความถี่สะสม', 'Cumulative f')) : 'f', 'font-style': (st.ax || st.og > .5) ? 'normal' : 'italic' }, svg);
+    // แท่ง
+    const gb = sv('g', { class: 'st-bars' + (st.poly > 0 ? ' faded' : '') }, svg), gm = sv('g', {}, svg), gp = sv('g', {}, svg), gl = sv('g', {}, svg);
+    const barA = st.ax ? 0 : 1 - st.og;
+    g.f.forEach((_, i) => {
+      const h = f[i] / st.yv * pH * st.gp[i], bx = X(g.L[i]), bw = X(g.U[i]) - bx;
+      if (barA > .02 && h > 0.1) sv('rect', { class: 'st-bar ' + (st.cls[i] || ''), x: bx.toFixed(2), y: (pB - h).toFixed(2), width: bw.toFixed(2), height: h.toFixed(2), style: `opacity:${barA}` }, gb);
+      if (barA > .02 && st.gp[i] > .98) {
+        const t = stFmt(f[i]).text, ww = _stTw(t, fs) - 2;
+        if (pB - h - (fs + 7) > MT - 6) _stLabel(gl, bx + bw / 2 - ww / 2, pB - h - fs - 8, ww, fs + 5, t, 'st-fl', fs);
+        else _stLabel(gl, bx + bw / 2 - ww / 2, pB - h + 3, ww, fs + 5, t, 'st-fl', fs);
+      }
+    });
+    // แกน x
+    sv('line', { class: 'st-axis', x1: ML, y1: pB, x2: W - MR, y2: pB }, svg);
+    sv('line', { class: 'st-axis', x1: ML, y1: pB, x2: ML, y2: MT - 6 }, svg);
+    const lblw = _stTw(stFmt(g.U[g.U.length - 1]).text, fs - 1) - 2, pxe = Math.abs(X(g.L[1] === undefined ? g.U[0] : g.L[1]) - X(g.L[0])), every = Math.max(1, Math.ceil(lblw / pxe));
+    const edges = g.L.concat([g.U[g.U.length - 1]]);
+    edges.forEach((e, i) => {
+      sv('line', { class: 'st-axis', x1: X(e), y1: pB, x2: X(e), y2: pB + 6 }, svg);
+      if (i % every === 0 && st.xl > .01) sv('text', { class: 'st-tick', x: X(e), y: pB + 8 + fs, 'text-anchor': 'middle', 'font-size': fs - 1, text: stFmt(e).text, style: `opacity:${st.xl}` }, svg);
+    });
+    items.forEach((it, j) => { sv('line', { class: 'st-mkl ' + _STK[it.m.kind][0], x1: X(it.m.x), y1: 4 + lay[j].layer * lh + fs + 4, x2: X(it.m.x), y2: pB }, gm); });
+    // รูปหลายเหลี่ยม
+    if (st.poly > 0.01) {
+      const pts = [[g.mid[0] - g.I, 0]].concat(g.mid.map((m, i) => [m, f[i] * st.gp[i]]), [[g.mid[g.mid.length - 1] + g.I, 0]]);
+      const d = pts.map((p, i) => (i ? 'L' : 'M') + X(p[0]).toFixed(1) + ' ' + Y(p[1]).toFixed(1)).join('');
+      sv('path', { class: 'st-line', d, pathLength: 1, 'stroke-dasharray': 1, 'stroke-dashoffset': (1 - st.poly).toFixed(3) }, gp);
+      pts.forEach(p => sv('circle', { class: 'st-pt', cx: X(p[0]).toFixed(1), cy: Y(p[1]).toFixed(1), r: 4.5, style: `opacity:${st.poly}` }, gp));
+    }
+    // ogive: ต่อจุดด้วยเส้นตรงทีละช่วง (st.ogN = จำนวนจุดที่โผล่แล้ว มีเศษ = ช่วงที่กำลังลาก)
+    if (st.ogN > 0.01) {
+      const all = [[g.L[0], 0]].concat(g.U.map((u, i) => [u, g.cum[i]])), nf = Math.min(all.length, Math.floor(st.ogN + 1e-9)), part = st.ogN - nf;
+      const pts = all.slice(0, nf), shown = pts.slice();
+      if (nf < all.length && part > 0.01 && nf >= 1) { const a = all[nf - 1], b = all[nf]; shown.push([lerp(a[0], b[0], part), lerp(a[1], b[1], part)]); }
+      if (shown.length > 1) sv('path', { class: 'st-line og', d: shown.map((p, i) => (i ? 'L' : 'M') + X(p[0]).toFixed(1) + ' ' + Y(p[1]).toFixed(1)).join('') }, gp);
+      pts.forEach((p, i) => {
+        sv('circle', { class: 'st-pt', cx: X(p[0]).toFixed(1), cy: Y(p[1]).toFixed(1), r: 4.5 }, gp);
+        if (i > 0) { const t = stFmt(p[1]).text, ww = _stTw(t, fs) - 2; _stLabel(gl, X(p[0]) - ww - 4, Y(p[1]) - fs - 4, ww, fs + 5, t, 'st-fl', fs); }
+      });
+    }
+    // เส้นอ่านค่าบนโอไจฟ์
+    if (st.rd && st.ogN >= npts() - 0.01) {
+      const rd = st.rd, xr = X(rd.x), yr = Y(rd.v);
+      sv('line', { class: 'st-rd', x1: ML, y1: yr, x2: ML + (xr - ML) * rd.p1, y2: yr }, gp);
+      if (rd.p2 > 0) sv('line', { class: 'st-rd', x1: xr, y1: yr, x2: xr, y2: yr + (pB - yr) * rd.p2 }, gp);
+      const ty = stFmt(rd.v).text, wy = _stTw(ty, fs) - 2;
+      _stLabel(gl, ML + 6, yr - fs - 9, wy, fs + 5, ty, 'st-rdl', fs);
+      if (rd.p2 >= 1) { const f2 = stFmt(rd.x), tx2 = (f2.approx ? '≈ ' : '') + f2.text, wx = _stTw(tx2, fs); _stLabel(gl, _stClamp(xr + 6, 2, W - wx - 2), pB - fs - 10, wx, fs + 5, tx2, 'st-rdl', fs); }
+    }
+    // หมุด
+    items.forEach((it, j) => { _stLabel(gl, lay[j].left, 4 + lay[j].layer * lh, _stTw(it.t, fs), fs + 5, it.t, 'st-mk ' + _STK[it.m.kind][0], fs); });
+  }
+  w.el = wrap;
+  w.grow = anim => {
+    if (anim === false) { st.gp = g.f.map(() => 1); draw(); return Promise.resolve(); }
+    const a = A_(anim); st.gp = g.f.map(() => 0); draw();
+    if (reducedMotion()) { st.gp = g.f.map(() => 1); draw(); return Promise.resolve(); }
+    return (async () => { for (let i = 0; i < g.f.length; i++) await a.run(380, t => { st.gp[i] = t; draw(); }, EASE.out); })();
+  };
+  w.polygon = (on, anim) => {
+    const a = A_(anim), from = st.poly, to = on ? 1 : 0;
+    return _stRun(a, 700, t => { st.poly = lerp(from, to, t); draw(); });
+  };
+  w.ogive = (on, anim) => {
+    const a = A_(anim), from = st.og, to = on ? 1 : 0, y0 = st.yv, n0 = st.ogN, n1 = on ? npts() : 0;
+    st.og = from; const yt = (on ? ogTop() : niceTop(Math.max(...g.f), 5)).top; if (!on) { st.rd = null; st.ax = false; }
+    return _stRun(a, 1400, t => { st.og = lerp(from, to, t); st.ogN = lerp(n0, n1, t); st.yv = lerp(y0, yt, t); draw(); }).then(() => { st.og = to; st.ogN = n1; st.ax = !!on; st.yv = yt; draw(); });
+  };
+  w.ogivePts = (k, anim) => {
+    const a = A_(anim), n0 = st.ogN; st.ax = true; st.og = 1; st.yv = ogTop().top;
+    return _stRun(a, Math.max(300, 450 * Math.abs(k - n0)), t => { st.ogN = lerp(n0, k, t); draw(); });
+  };
+  w.xLabels = (on, anim) => { const a = A_(anim), x0 = st.xl; return _stRun(a, 600, t => { st.xl = lerp(x0, on ? 1 : 0, t); draw(); }); };
+  w.readOgive = (cumVal, anim) => {
+    const a = anim === false ? null : A_(anim), pts = [[g.L[0], 0]].concat(g.U.map((u, i) => [u, g.cum[i]]));
+    let k = 1; while (k < pts.length - 1 && pts[k][1] < cumVal - 1e-9) k++;
+    const p0 = pts[k - 1], p1 = pts[k], x = p1[1] === p0[1] ? p0[0] : p0[0] + (cumVal - p0[1]) / (p1[1] - p0[1]) * (p1[0] - p0[0]);
+    st.rd = { v: cumVal, x, p1: 0, p2: 0 };
+    if (!a) { st.rd.p1 = st.rd.p2 = 1; draw(); return Promise.resolve(); }
+    draw();
+    return (async () => { await _stRun(a, 700, t => { st.rd.p1 = t; draw(); }); await _stRun(a, 700, t => { st.rd.p2 = t; draw(); }); })();
+  };
+  w.clearRead = () => { st.rd = null; draw(); return w; };
+  w.markClass = (i, cls) => { if (i === null || i === undefined) st.cls = {}; else if (cls) st.cls[i] = cls; else delete st.cls[i]; draw(); return w; };
+  w.marker = (x, kind) => { st.mk = st.mk.filter(m => m.kind !== kind); if (x !== null && x !== undefined) st.mk.push({ x, kind }); draw(); return w; };
+  w.clearMarkers = () => { st.mk = []; draw(); return w; };
+  w.set = g1 => { g = g1; st.rd = null; st.ogN = st.ogN > 0 ? npts() : 0; st.gp = g.f.map(() => 1); st.df = g.f.slice(); st.yv = yInfo().top; draw(); return w; };
+  w.refresh = () => { if (!wrap.isConnected) { w._dead = true; return; } draw(); };
+  draw();
+  if (typeof ResizeObserver !== 'undefined') new ResizeObserver(() => { if (wrap.clientWidth && Math.abs(_stFs(wrap) - fs) >= .5) draw(); }).observe(wrap);
+  LIVE.push(w);
+  return w;
+}
+
+// ───────── แผนภาพกล่อง ─────────
+function makeBoxPlot(host, five0, o0) {
+  const o = Object.assign({}, o0 || {});
+  const w = { _dead: false }, S = { A: makeAnimator() }, own = _stOwn(w, S);
+  const wrap = document.createElement('div'); wrap.className = 'st-wrap'; host.innerHTML = ''; host.appendChild(wrap);
+  const cur = Object.assign({}, five0), tgt = Object.assign({}, five0);
+  const sc = o.axis || (() => {
+    const vmin = o.min !== undefined ? o.min : Math.floor(five0.min) - 1, vmax = o.max !== undefined ? o.max : Math.ceil(five0.max) + 1, step = o.step || 1;
+    const left = _ST_ML, right = _ST_W - _ST_MR;
+    return { x: v => left + (v - vmin) / (vmax - vmin) * (right - left), left, right, min: vmin, max: vmax, step, own: true };
+  })();
+  const X = sc.x;
+  const p = o.hidden ? [0, 0, 0, 0, 0] : [1, 1, 1, 1, 1];
+  let hlp = null, fs = 15, svg = null;
+  const NAMES = [['Min', 'min'], ['Q₁', 'q1'], ['Q₂', 'q2'], ['Q₃', 'q3'], ['Max', 'max']];
+  function draw() {
+    fs = _stFs(wrap);
+    const BY = 52, BH = 38, W = _ST_W, axisY = BY + BH / 2 + 22;
+    // ป้ายค่า
+    const items = NAMES.map((n, i) => ({ i, t: n[0] + ' ' + _stEqTxt(stFmt(cur[n[1]])) }));
+    const lay = _stStack(items.map(it => ({ x: X(cur[NAMES[it.i][1]]), w: _stTw(it.t, fs) })), 2, W - 2), nL = _stLayers(lay), lh = fs + 9;
+    const H = axisY + (sc.own ? fs + 14 : 10) + nL * lh + 8;
+    svg = sv('svg', { class: 'st-svg', viewBox: `0 0 ${W} ${H}` }); wrap.innerHTML = ''; wrap.appendChild(svg);
+    _stTicks(svg, X, sc.min, sc.max, sc.step, axisY, fs, !!sc.own);
+    const cy = BY, top = BY - BH / 2, bot = BY + BH / 2, cap = 10;
+    const x = k => X(cur[k]), mid = (a, b, t) => lerp(a, b, t);
+    // ไฮไลต์
+    if (hlp === 'iqr') { sv('rect', { class: 'st-hlb o', x: x('q1'), y: top - 20, width: x('q3') - x('q1'), height: 9, rx: 3 }, svg); }
+    if (hlp === 'range') { sv('rect', { class: 'st-hlb b', x: x('min'), y: top - 20, width: x('max') - x('min'), height: 9, rx: 3 }, svg); }
+    // หนวดซ้าย
+    if (p[0] > 0) { sv('line', { class: 'st-bw', x1: x('min'), y1: cy, x2: mid(x('min'), x('q1'), p[0]), y2: cy }, svg); sv('line', { class: 'st-bw', x1: x('min'), y1: cy - cap, x2: x('min'), y2: cy + cap, style: `opacity:${p[0]}` }, svg); }
+    // กล่อง
+    if (p[3] > 0) {
+      const bw = x('q3') - x('q1');
+      sv('rect', { class: 'st-bbox' + (hlp === 'iqr' ? ' hl' : ''), x: x('q1'), y: top, width: Math.max(0, bw), height: BH, rx: 3, style: `opacity:${p[3]}` }, svg);
+    }
+    if (p[1] > 0) sv('line', { class: 'st-bw', x1: x('q1'), y1: top, x2: x('q1'), y2: bot, style: `opacity:${p[1]}` }, svg);
+    if (p[3] > 0) sv('line', { class: 'st-bw', x1: x('q3'), y1: top, x2: x('q3'), y2: bot, style: `opacity:${p[3]}` }, svg);
+    if (p[2] > 0) sv('line', { class: 'st-bmed' + (hlp === 'q2' ? ' hl' : ''), x1: x('q2'), y1: top - 3 * p[2], x2: x('q2'), y2: bot + 3 * p[2] }, svg);
+    // หนวดขวา
+    if (p[4] > 0) { sv('line', { class: 'st-bw', x1: x('q3'), y1: cy, x2: mid(x('q3'), x('max'), p[4]), y2: cy }, svg); sv('line', { class: 'st-bw', x1: x('max'), y1: cy - cap, x2: x('max'), y2: cy + cap, style: `opacity:${p[4]}` }, svg); }
+    // ป้ายค่าใต้แกน
+    const ly0 = axisY + (sc.own ? fs + 14 : 10);
+    items.forEach((it, j) => {
+      const k = NAMES[it.i][1], c = k === 'q2' ? 'purple' : (k === 'q1' || k === 'q3') ? 'orange' : 'blue', pi = [0, 1, 2, 3, 4][it.i];
+      if (p[pi] <= 0.01) return;
+      const ww = _stTw(it.t, fs), ty = ly0 + lay[j].layer * lh;
+      sv('line', { class: 'st-mkl ' + c, x1: X(cur[k]), y1: axisY, x2: X(cur[k]), y2: ty, style: `opacity:${p[pi]}` }, svg);
+      const gg = _stLabel(svg, lay[j].left, ty, ww, fs + 5, it.t, 'st-mk ' + c, fs); gg.style.opacity = p[pi];
+    });
+  }
+  w.el = wrap;
+  w.build = anim => {
+    const a = anim || own(); p.fill(0); draw();
+    if (reducedMotion()) { p.fill(1); draw(); return Promise.resolve(); }
+    return (async () => { for (const i of [0, 1, 2, 3, 4]) { await a.run(i === 0 || i === 4 ? 650 : 450, t => { p[i] = t; draw(); }, EASE.inOut); await a.wait(120); } })();
+  };
+  w.showNow = () => { S.A.kill(); S.A = makeAnimator(); p.fill(1); draw(); return w; };
+  w.set = (f, anim) => {
+    const a = anim || own(), from = Object.assign({}, cur); Object.assign(tgt, f);
+    return _stRun(a, 600, t => { ['min', 'q1', 'q2', 'q3', 'max'].forEach(k => { cur[k] = lerp(from[k], tgt[k], t); }); draw(); });
+  };
+  w.highlight = part => { hlp = part || null; draw(); return w; };
+  w.refresh = () => { if (!wrap.isConnected) { w._dead = true; return; } draw(); };
+  draw();
+  if (typeof ResizeObserver !== 'undefined') new ResizeObserver(() => { if (wrap.clientWidth && Math.abs(_stFs(wrap) - fs) >= .5) draw(); }).observe(wrap);
+  LIVE.push(w);
+  return w;
+}
+//  ═══ END ชุดของกลางกลุ่มสถิติ ม.6 ═══
 
 
 // ══════════════ เลขยกกำลัง (ชิ้น ① ฉบับจัดลำดับใหม่ v2) ══════════════
