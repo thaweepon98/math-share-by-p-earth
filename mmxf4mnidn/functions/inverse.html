@@ -19,7 +19,7 @@
   sub { font-size: .68em; line-height: 0; vertical-align: sub; font-weight: 800; }
   sup sup { font-size: .8em; }
 
-  header { background: linear-gradient(135deg, #1C3B22 0%, #2E5936 100%); color: white; padding: 28px 40px 20px; text-align: center; position: relative; overflow: hidden; }
+  header { background: var(--panel, #f1f4f7); color: var(--text); padding: 28px 40px 20px; text-align: center; position: relative; overflow: hidden; }
   header::before { content: ''; position: absolute; top: -60px; right: -60px; width: 200px; height: 200px; background: rgba(255,255,255,0.07); border-radius: 50%; }
   header h1 { font-size: 2rem; font-weight: 800; letter-spacing: .5px; }
   header p { font-size: 1rem; opacity: .85; margin-top: 4px; }
@@ -30,8 +30,8 @@
 
   nav { display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; padding: 20px 24px 0; background: white; border-bottom: 3px solid var(--border); }
   .tab-btn { padding: 10px 18px; border: none; background: transparent; border-radius: 10px 10px 0 0; font-family: 'Anuphan', sans-serif; font-size: 0.95rem; font-weight: 600; color: var(--muted); cursor: pointer; transition: all .25s; border-bottom: 3px solid transparent; margin-bottom: -3px; }
-  .tab-btn:hover { color: var(--primary); background: #E3F3D8; }
-  .tab-btn.active { color: var(--primary); border-bottom-color: var(--primary); background: #E3F3D8; }
+  .tab-btn:hover { color: var(--text); background: var(--raise, #e4e9ee); }
+  .tab-btn.active { color: var(--on-ink, #fff); border-bottom-color: transparent; background: var(--ink, #000); }
 
   main { max-width: 980px; margin: 0 auto; padding: 32px 20px 60px; }
   .tab-panel { display: none; animation: fadeIn .35s ease; }
@@ -40,24 +40,24 @@
   @keyframes rowIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
 
   .card { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); padding: 28px 32px; margin-bottom: 24px; }
-  .card-title { font-size: 1.25rem; font-weight: 700; color: var(--primary); margin-bottom: 12px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .card-title { font-size: 1.25rem; font-weight: 700; color: var(--text); margin-bottom: 12px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
   .card-title .icon { font-size: 1.5rem; }
   .intro { font-size: 1.02rem; line-height: 1.8; margin-bottom: 14px; }
-  .box-info { background: #EEF7E6; border-left: 4px solid var(--primary); border-radius: 10px; padding: 14px 18px; margin: 14px 0; line-height: 1.8; }
+  .box-info { background: var(--panel, #f1f4f7); border-left: 4px solid var(--primary); border-radius: 10px; padding: 14px 18px; margin: 14px 0; line-height: 1.8; }
   .box-warn { background: #FFF7ED; border-left: 4px solid var(--warning); border-radius: 10px; padding: 14px 18px; margin: 14px 0; line-height: 1.8; }
   .box-ok   { background: #ECFDF5; border-left: 4px solid var(--accent);  border-radius: 10px; padding: 14px 18px; margin: 14px 0; line-height: 1.8; }
-  .formula { background: linear-gradient(135deg,#1C3B22,#2E5936); color: white; border-radius: 12px; padding: 14px 24px; text-align: center; font-size: 1.3rem; font-weight: 700; margin: 14px 0; letter-spacing: .5px; display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 4px 18px; }
+  .formula { background: var(--strong, #1c1e21); color: white; border-radius: 16px; padding: 14px 24px; text-align: center; font-size: 1.3rem; font-weight: 700; margin: 14px 0; letter-spacing: .5px; display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 4px 18px; }
 
-  .btn { padding: 10px 24px; background: var(--primary); color: white; border: none; border-radius: 30px; font-family: 'Anuphan', sans-serif; font-size: 1rem; font-weight: 700; cursor: pointer; transition: background .2s, opacity .2s; }
-  .btn:hover:not(:disabled) { background: #2E5936; }
+  .btn { padding: 10px 24px; background: var(--ink, #000); color: var(--on-ink, #fff); border: 1px solid var(--ink, #000); border-radius: 100px; font-family: 'Anuphan', sans-serif; font-size: 1rem; font-weight: 700; cursor: pointer; transition: background .2s, opacity .2s; }
+  .btn:hover:not(:disabled) { background: var(--ink-hover, #2b3138); border-color: var(--ink-hover, #2b3138); }
   .btn:disabled { opacity: .4; cursor: not-allowed; }
-  .btn.ghost { background: white; color: var(--primary); border: 2px solid var(--primary); }
-  .btn.ghost:hover:not(:disabled) { background: #E3F3D8; }
+  .btn.ghost { background: transparent; color: var(--text); border: 1px solid var(--line, #ced0d4); }
+  .btn.ghost:hover:not(:disabled) { background: var(--raise, #e4e9ee); border-color: var(--line, #ced0d4); }
   .chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 6px 0; align-items: center; }
   .chips .chips-label { font-weight: 700; color: var(--muted); font-size: .95rem; margin-right: 2px; }
-  .chip { padding: 7px 16px; border: 2px solid var(--border); border-radius: 30px; background: #fff; font-family: 'Anuphan', sans-serif; font-weight: 700; font-size: 1rem; cursor: pointer; color: var(--text); display: inline-block; text-align: center; vertical-align: middle; line-height: 1.5; max-width: 100%; }  /* ไม่ใช้ flex: ตัวยกในชิปจะได้ไม่แยกเป็นก้อน */
-  .chip:hover { border-color: var(--primary); }
-  .chip.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+  .chip { padding: 7px 16px; border: 2px solid var(--border); border-radius: 30px; background: var(--card); font-family: 'Anuphan', sans-serif; font-weight: 700; font-size: 1rem; cursor: pointer; color: var(--text); display: inline-block; text-align: center; vertical-align: middle; line-height: 1.5; max-width: 100%; }  /* ไม่ใช้ flex: ตัวยกในชิปจะได้ไม่แยกเป็นก้อน */
+  .chip:hover { border-color: var(--text); }
+  .chip.active { background: var(--ink, #000); color: var(--on-ink, #fff); border-color: var(--ink, #000); }
 
   .frac { display: inline-flex; flex-direction: column; align-items: center; font-weight: 700; line-height: 1.15; vertical-align: middle; margin: 0 4px; }
   .frac .num { font-size: 1em; border-bottom: 2.5px solid currentColor; padding: 0 3px 2px; min-width: 18px; text-align: center; white-space: nowrap; }
@@ -76,12 +76,12 @@
   .wg-eq { text-align: center; font-size: 1.3rem; font-weight: 800; color: var(--primary); margin-top: 8px; line-height: 1.9; }
   .wg-eq.col { display: flex; flex-direction: column; align-items: flex-start; text-align: left; }
   .wg-eq.row { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 6px 14px; }
-  .wg-cap { background: #EEF7E6; border-left: 4px solid var(--primary); border-radius: 10px; padding: 12px 16px; line-height: 1.75; margin-top: 8px; }
+  .wg-cap { background: var(--panel, #f1f4f7); border-left: 4px solid var(--primary); border-radius: 10px; padding: 12px 16px; line-height: 1.75; margin-top: 8px; }
   .wg-nav { display: flex; justify-content: center; align-items: center; gap: 14px; margin-top: 12px; flex-wrap: wrap; }
   .wg-nav .btn { padding: 9px 22px; }
   .wg-cnt { font-weight: 700; color: var(--muted); min-width: 92px; text-align: center; }
   .two { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; align-items: start; }
-  .tile { border: 2px solid var(--border); border-radius: 12px; padding: 10px 14px; background: #fff; }
+  .tile { border: 2px solid var(--border); border-radius: 12px; padding: 10px 14px; background: var(--card); }
   .tile h4 { font-size: .95rem; color: var(--muted); margin-bottom: 6px; font-weight: 700; }
   .ans { background: #ECFDF5; border: 2px solid var(--accent-2); border-radius: 8px; padding: 2px 10px; color: #047857; font-weight: 800; white-space: nowrap; }
   .bad { background: #FFF1F2; border: 2px solid #E11D48; border-radius: 8px; padding: 2px 10px; color: #9F1239; font-weight: 800; white-space: nowrap; }
@@ -100,11 +100,11 @@
   .setrow { font-size: 1.15rem; font-weight: 700; line-height: 2; }
   .tbl { border-collapse: collapse; margin: 8px auto; font-weight: 700; }
   .tbl th, .tbl td { border: 2px solid var(--border); padding: 6px 14px; text-align: center; }
-  .tbl th { background: #EEF7E6; color: var(--primary); }
+  .tbl th { background: var(--panel, #f1f4f7); color: var(--text); }
   .tbl td.cur { background: #FEF3C7; }
   .tbl-scroll { overflow-x: auto; }
 
-  .wk-cell { position: relative; background: #fff; border: 2px solid var(--border); border-radius: 14px; padding: 12px 16px 12px 56px; margin-bottom: 12px; line-height: 1.9; }
+  .wk-cell { position: relative; background: var(--card); border: 2px solid var(--border); border-radius: 14px; padding: 12px 16px 12px 56px; margin-bottom: 12px; line-height: 1.9; }
   .wk-cell.fresh { animation: rowIn .5s ease; }
   .wk-cell.final { border-color: var(--accent-2); }
   .wk-cell .stepno { position: absolute; left: 14px; top: 14px; width: 28px; height: 28px; border-radius: 50%; background: var(--primary); color: #fff; font-size: .85rem; font-weight: 800; display: flex; align-items: center; justify-content: center; }
@@ -113,17 +113,17 @@
 
   .quiz-q { font-size: 1.1rem; font-weight: 600; margin-bottom: 12px; line-height: 1.8; }
   .quiz-opts { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 10px; }
-  .quiz-opt { padding: 10px 20px; border: 2px solid var(--border); border-radius: 30px; cursor: pointer; font-family: 'Anuphan', sans-serif; font-size: 1rem; font-weight: 600; transition: all .2s; background: white; display: inline-flex; align-items: center; min-height: 48px; color: var(--text); }
-  .quiz-opt:hover { border-color: var(--primary); color: var(--primary); }
+  .quiz-opt { padding: 10px 20px; border: 2px solid var(--border); border-radius: 30px; cursor: pointer; font-family: 'Anuphan', sans-serif; font-size: 1rem; font-weight: 600; transition: all .2s; background: var(--card); display: inline-flex; align-items: center; min-height: 48px; color: var(--text); }
+  .quiz-opt:hover { border-color: var(--text); color: var(--text); }
   .quiz-opt.correct { border-color: var(--accent); background: #ECFDF5; color: #047857; }
   .quiz-opt.wrong { border-color: var(--secondary); background: #FFF4EC; color: #BE185D; }
   .quiz-feedback { font-weight: 600; font-size: 1rem; min-height: 24px; line-height: 1.75; }
   .quiz-feedback.ok { color: #047857; }
   .quiz-feedback.err { color: #BE185D; }
-  .btn-next { margin-top: 10px; padding: 10px 28px; background: var(--primary); color: white; border: none; border-radius: 30px; font-family: 'Anuphan', sans-serif; font-size: 1rem; font-weight: 700; cursor: pointer; transition: background .2s; }
-  .btn-next:hover { background: #142B1A; }
-  .score-badge { display: inline-block; background: linear-gradient(135deg,#68EF3F,#1C3B22); color: white; border-radius: 30px; padding: 6px 20px; font-weight: 700; font-size: 1rem; }
-  .score-card { margin-top: 20px; background: linear-gradient(135deg,#1C3B22,#2E5936); color: white; border-radius: 16px; padding: 24px; text-align: center; }
+  .btn-next { margin-top: 10px; padding: 10px 28px; background: var(--ink, #000); color: var(--on-ink, #fff); border: none; border-radius: 100px; font-family: 'Anuphan', sans-serif; font-size: 1rem; font-weight: 700; cursor: pointer; transition: background .2s; }
+  .btn-next:hover { background: var(--ink-hover, #2b3138); }
+  .score-badge { display: inline-block; background: var(--ink, #000); color: var(--on-ink, #fff); border-radius: 30px; padding: 6px 20px; font-weight: 700; font-size: 1rem; }
+  .score-card { margin-top: 20px; background: var(--strong, #1c1e21); color: white; border-radius: 24px; padding: 24px; text-align: center; }
 
   /* ─── กราฟ SVG (สีใช้ชุด --g-* ของธีม จึงเปลี่ยนตามโหมดสว่าง/มืด) ─── */
   .plot { width: 100%; max-width: 560px; height: auto; display: block; margin: 8px auto; background: var(--card); border: 1.5px solid var(--border); border-radius: 12px; }
@@ -640,113 +640,109 @@
   }
   /* ═══ END ของกลางกลุ่มสถิติ ม.6 ═══ */
 /* ── theme:start — สร้างโดย tools/build_lessons.py ห้ามแก้มือ (แก้ที่สคริปต์แล้วรันใหม่) ── */
+/* ธีมชุดเดียวกับหน้าสารบัญ (tools/build_index.py · DESIGN.md หมวด Meta-inspired) — สีของเรื่องอยู่ที่ปกและในตัวบทเรียน กรอบหน้าเป็นสีกลาง */
 :root{ --page:#BE185D; }
 :root[data-theme="light"]{
-  --bg:#F4F4F1; --card:#FFFFFF; --text:#16181A; --muted:#5E6166; --border:#DEDED8;
+  --bg:#ffffff; --surface:#ffffff; --card:#ffffff; --panel:#f1f4f7; --raise:#e4e9ee;
+  --text:#1c1e21; --muted:#5d6c7b; --dim:#8595a4; --line:#ced0d4; --line-soft:#dee3e9; --border:#ced0d4;
+  --ink:#000000; --on-ink:#ffffff; --ink-hover:#2b3138; --link:#0064e0; --strong:#1c1e21; --shadow:none;
   --primary:color-mix(in srgb, var(--page) 86%, #000); --primary-2:color-mix(in srgb, var(--page) 62%, #000);
   --secondary:#C2540A; --secondary-light:#F2A15F; --accent:#68EF3F; --accent-2:#2E9E3F;
-  --shadow:0 2px 10px rgba(0,0,0,.07);
-  --strong:color-mix(in srgb, var(--page) 76%, #000); --chip:#E8E8E3; --chip-hover:#DCDCD5;
-  --hero:color-mix(in srgb, var(--page) 82%, #000);
   --g-x:#E53935; --g-y:#2E9E4F; --g-z:#3949AB; --g-curve:#F07400; --g-curve-fill:rgba(240,116,0,.12);
   --g-pink:#D81B60; --g-plane:rgba(60,190,200,.28); --g-cone:rgba(153,51,0,.20); --g-cone-line:rgba(153,51,0,.35);
   --g-blue:#1E66D0; --g-red:#D32F2F; --g-green:#2E9E4F; --g-purple:#7B3FC4; --g-orange:#E8710A; --g-teal:#0F8A80;
   --g-ring:#FFFFFF;
 }
 :root[data-theme="dark"]{
-  --bg:#121212; --card:#1C1C1C; --text:#FFFFFF; --muted:#B3B3B3; --border:#333333;
+  --bg:#0a1317; --surface:#0a1317; --card:#0a1317; --panel:#1c1e21; --raise:#2b3138;
+  --text:#ffffff; --muted:#9aa8b5; --dim:#6b7884; --line:#444950; --line-soft:#32383e; --border:#444950;
+  --ink:#ffffff; --on-ink:#000000; --ink-hover:#d5dbe1; --link:#4da3ff; --strong:#2b3138; --shadow:none;
   --primary:#ec79a9; --primary-2:#f19dc0;
   --secondary:#FFB37A; --secondary-light:#FFD0A8; --accent:#8AF25E; --accent-2:#5BD27E;
-  --shadow:0 8px 24px rgba(0,0,0,.5);
-  --strong:color-mix(in srgb, var(--page) 48%, #1C1C1C); --chip:#2A2A2A; --chip-hover:#353535;
-  --hero:color-mix(in srgb, var(--page) 62%, #000);
   --g-x:#FF6B6B; --g-y:#5BD27E; --g-z:#8C9BFF; --g-curve:#FFA040; --g-curve-fill:rgba(255,160,64,.16);
   --g-pink:#FF5C9A; --g-plane:rgba(90,220,230,.26); --g-cone:rgba(255,170,110,.18); --g-cone-line:rgba(255,170,110,.45);
   --g-blue:#6AA8FF; --g-red:#FF6B6B; --g-green:#5BD27E; --g-purple:#B48CFF; --g-orange:#FFA040; --g-teal:#4FD1C5;
-  --g-ring:#1C1C1C;
+  --g-ring:#0a1317;
 }
-html{ background:var(--bg); }
+html{ background:var(--bg); color-scheme:light; }
 html[data-theme="dark"]{ color-scheme:dark; }
 body{ font-family:'Anuphan',system-ui,sans-serif; background:var(--bg); color:var(--text); line-height:1.6; -webkit-font-smoothing:antialiased; }
+:focus-visible{ outline:2px solid var(--link); outline-offset:2px; }
 
-/* หัวหน้า: สีปกของเรื่อง + ปก */
+/* หัวหน้า: แผ่นสีอ่อนมุมโค้ง ตัวหนังสือเข้ม + ปกข้างชื่อ (สีของเรื่องอยู่ที่ปก) */
 header{
-  background:var(--hero); color:#fff; text-align:left;
-  display:grid; grid-template-columns:auto 1fr; column-gap:22px; align-items:end;
-  padding:62px 32px 26px;
+  background:var(--panel); color:var(--text); text-align:left; overflow:hidden;
+  display:grid; grid-template-columns:auto 1fr; column-gap:24px; align-items:end;
+  margin:8px 8px 0; padding:74px 32px 28px; border-radius:32px; box-shadow:none;
 }
 header::before, header::after{ display:none !important; }
 header > *:not(.lesson-cover):not(.back-link):not(.lang-toggle):not(.theme-toggle){ grid-column:2; }
-.lesson-cover{ grid-column:1; grid-row:1 / span 6; align-self:end; width:120px; aspect-ratio:1; border-radius:6px; overflow:hidden; box-shadow:0 8px 24px rgba(0,0,0,.45); }
+.lesson-cover{ grid-column:1; grid-row:1 / span 6; align-self:end; width:clamp(96px, 11vw, 136px); aspect-ratio:1; border-radius:16px; overflow:hidden; box-shadow:none; }
 .lesson-cover svg{ display:block; width:100%; height:100%; }
-header h1{ font-size:clamp(1.8rem, 4.2vw, 2.9rem); font-weight:700; letter-spacing:-.01em; line-height:1.25; margin:0; color:#fff; }
-header p{ font-size:1rem; opacity:.85; margin:6px 0 0; color:#fff; }
+header h1{ font-size:clamp(1.9rem, 4.4vw, 3.2rem); font-weight:500; letter-spacing:0; line-height:1.25; margin:0; color:var(--text); }
+header p{ font-size:1.02rem; opacity:1; margin:8px 0 0; color:var(--muted); line-height:1.55; }
 .back-link{
-  top:14px; left:20px; display:inline-flex; align-items:center; gap:6px;
-  padding:6px 14px; border-radius:999px; background:rgba(0,0,0,.32); color:#fff;
-  font-size:.88rem; font-weight:600; opacity:1; text-decoration:none;
+  position:absolute; top:16px; left:16px; z-index:2; display:inline-flex; align-items:center; gap:6px;
+  height:38px; padding:0 16px; border-radius:100px; background:var(--surface); color:var(--text);
+  box-shadow:inset 0 0 0 1px var(--line); font-size:.92rem; font-weight:700; opacity:1; text-decoration:none;
 }
-.back-link:hover{ background:rgba(0,0,0,.55); text-decoration:none; }
+.back-link:hover{ background:var(--raise); opacity:1; text-decoration:none; }
 .lang-toggle, .theme-toggle{
-  position:absolute; top:14px; height:34px; background:transparent; color:#fff;
-  border:1px solid rgba(255,255,255,.55); border-radius:999px; font-family:inherit; font-weight:700; font-size:.85rem; cursor:pointer; z-index:2;
+  position:absolute; top:16px; height:38px; border-radius:100px; font-family:inherit; font-weight:700; font-size:.88rem;
+  cursor:pointer; z-index:2; transition:transform .12s, background .12s;
 }
-.lang-toggle{ right:20px; padding:0 16px; }
-.theme-toggle{ right:86px; width:34px; padding:0; display:grid; place-items:center; }
+.lang-toggle{ right:16px; min-width:64px; padding:0 16px; background:var(--ink); color:var(--on-ink); border:1px solid var(--ink); }
+.lang-toggle:hover{ background:var(--ink); border-color:var(--ink); transform:scale(1.04); }
+.theme-toggle{ right:88px; width:38px; padding:0; display:grid; place-items:center; background:var(--surface); color:var(--text); border:1px solid var(--line); }
 .theme-toggle svg{ width:18px; height:18px; }
-.lang-toggle:hover, .theme-toggle:hover{ background:rgba(255,255,255,.14); border-color:#fff; }
-body > .lang-toggle, body > .theme-toggle{ position:fixed; top:14px; z-index:50; background:var(--card); color:var(--text); border-color:var(--border); box-shadow:var(--shadow); }
-body > .lang-toggle{ right:14px; } body > .theme-toggle{ right:80px; }
-body > .lang-toggle:hover, body > .theme-toggle:hover{ background:var(--chip); border-color:var(--text); }
-header:not(:has(.back-link)):not(:has(.lang-toggle)){ padding-top:28px; border-radius:8px; }
+.theme-toggle:hover{ background:var(--raise); border-color:var(--line); }
+body > .lang-toggle, body > .theme-toggle{ position:fixed; top:14px; z-index:50; }
+body > .lang-toggle{ right:14px; } body > .theme-toggle{ right:86px; }
+header:not(:has(.back-link)):not(:has(.lang-toggle)){ padding-top:28px; }
 
-/* แถบแท็บ: ชิปทรงแคปซูล */
-nav{ background:var(--bg); border-bottom:1px solid var(--border); padding:10px 16px; gap:8px; }
+/* แถบแท็บ: ชิปขอบบาง ตัวที่เลือก = สีหมึก (ดำ / โหมดมืดขาว) */
+nav{ background:var(--bg); border-bottom:0; padding:16px 16px 8px; gap:8px; box-shadow:none; }
 .tab-btn{
-  font-family:inherit; border:0; margin:0; border-radius:999px; padding:8px 16px;
-  background:var(--chip); color:var(--text); font-weight:600; font-size:.9rem;
+  font-family:inherit; border:0; margin:0; border-radius:100px; padding:8px 18px;
+  background:var(--surface); color:var(--text); box-shadow:inset 0 0 0 1px var(--line); font-weight:600; font-size:.95rem;
 }
-.tab-btn:hover{ background:var(--chip-hover); color:var(--text); }
-.tab-btn.active{ background:var(--text); color:var(--bg); border-bottom-color:transparent; }
+.tab-btn:hover{ background:var(--raise); color:var(--text); }
+.tab-btn.active{ background:var(--ink); color:var(--on-ink); box-shadow:none; border-bottom-color:transparent; }
 
-/* การ์ดและกล่อง */
-.card{ background:var(--card); border:1px solid var(--border); border-radius:8px; box-shadow:var(--shadow); }
+/* การ์ดและกล่อง: พื้นเรียบ ขอบ 1px ไม่มีเงา */
+.card{ background:var(--card); border:1px solid var(--line); border-radius:24px; box-shadow:none; }
 .card-title{ color:var(--text); font-size:1.2rem; }
 .card-title .icon{ display:none; }
 .desc-text{ color:var(--text); font-size:1rem; }
-.formula, .step.result, .stats{ background:var(--strong) !important; color:#fff; border-radius:8px; letter-spacing:0; }
+.formula, .step.result, .stats{ background:var(--strong) !important; color:#fff; border-radius:16px; letter-spacing:0; }
 .stat .k, .step-tag{ text-transform:none; letter-spacing:0; }
 
-/* ปุ่ม */
-.btn-action{ font-family:inherit; background:var(--text); color:var(--bg); }
-.btn-action.secondary{ background:transparent; color:var(--text); border:1px solid var(--muted); }
-.mode-btn{ font-family:inherit; border:1px solid var(--border); background:var(--card); color:var(--text); }
+/* ปุ่ม: หลัก = แคปซูลหมึก, รอง = แคปซูลขอบบาง */
+.btn-action{ font-family:inherit; background:var(--ink); color:var(--on-ink); border:1px solid var(--ink); border-radius:100px; }
+.btn-action:hover:not(:disabled){ background:var(--ink-hover); border-color:var(--ink-hover); }
+.btn-action.secondary{ background:transparent; color:var(--text); border:1px solid var(--line); }
+.btn-action.secondary:hover:not(:disabled){ background:var(--raise); }
+.mode-btn{ font-family:inherit; border:1px solid var(--line); background:var(--surface); color:var(--text); border-radius:100px; }
 .mode-btn:hover{ border-color:var(--text); color:var(--text); }
-.mode-btn.active{ background:var(--text); border-color:var(--text); color:var(--bg); }
-.quiz-opt{ border-radius:8px; }
+.mode-btn.active{ background:var(--ink); border-color:var(--ink); color:var(--on-ink); }
 input[type=range]{ accent-color:var(--primary); }
 
 @media (max-width:600px){
-  header{ padding:58px 16px 20px; column-gap:14px; }
-  .lesson-cover{ width:76px; }
-  .back-link{ left:12px; max-width:calc(100% - 150px); overflow:hidden; white-space:nowrap; text-overflow:ellipsis; display:block; }
-  .lang-toggle{ right:12px; }
-  .theme-toggle{ right:74px; }
-  nav{ flex-wrap:nowrap; overflow-x:auto; justify-content:flex-start; scrollbar-width:none; }
+  header{ margin:0; border-radius:0 0 24px 24px; padding:64px 16px 20px; column-gap:14px; }
+  .lesson-cover{ width:72px; border-radius:12px; }
+  header h1{ font-size:clamp(1.5rem, 7vw, 2rem); }
+  header p{ font-size:.95rem; }
+  .back-link{ top:14px; left:12px; height:36px; padding:0 14px; max-width:calc(100% - 150px); overflow:hidden; white-space:nowrap; text-overflow:ellipsis; display:block; line-height:36px; }
+  .lang-toggle, .theme-toggle{ top:14px; height:36px; }
+  .lang-toggle{ right:12px; min-width:58px; padding:0 12px; }
+  .theme-toggle{ right:78px; width:36px; }
+  nav{ flex-wrap:nowrap; overflow-x:auto; justify-content:flex-start; scrollbar-width:none; padding:12px 12px 6px; }
   nav .tab-btn{ flex:0 0 auto; white-space:nowrap; }   /* ชื่อแท็บบรรทัดเดียว ปัดแถบซ้าย-ขวาแทน (ไม่บีบจนตัดคำ) */
   nav::-webkit-scrollbar{ display:none; }
 }
 /* โหมดมืด: สีที่หน้านี้ฝังไว้เอง (สร้างอัตโนมัติ) */
-:root[data-theme="dark"] .box-info{background:#1f2e12}
 :root[data-theme="dark"] .box-warn{background:#281d0f}
 :root[data-theme="dark"] .box-ok{background:#102a1d}
-:root[data-theme="dark"] .btn{background:var(--strong)}
-:root[data-theme="dark"] .btn.ghost{background:#171717}
-:root[data-theme="dark"] .btn.ghost:hover:not(:disabled){background:#223614}
-:root[data-theme="dark"] .chip{background:#171717}
-:root[data-theme="dark"] .chip.active{background:var(--strong)}
-:root[data-theme="dark"] .wg-cap{background:#1f2e12}
-:root[data-theme="dark"] .tile{background:#171717}
 :root[data-theme="dark"] .ans{background:#102a1d;color:#a8f8e1}
 :root[data-theme="dark"] .bad{background:#270f10;color:#f49ab2}
 :root[data-theme="dark"] .hl{background:#383115}
@@ -758,17 +754,13 @@ input[type=range]{ accent-color:var(--primary); }
 :root[data-theme="dark"] .verdict.no{background:#270f10}
 :root[data-theme="dark"] .verdict.ok .mk{color:#99f1ba}
 :root[data-theme="dark"] .verdict.no .mk{color:#ef839b}
-:root[data-theme="dark"] .tbl th{background:#1f2e12}
 :root[data-theme="dark"] .tbl td.cur{background:#383115}
-:root[data-theme="dark"] .wk-cell{background:#171717}
 :root[data-theme="dark"] .wk-cell .stepno{background:var(--strong)}
 :root[data-theme="dark"] .wk-note{color:#bcc5d2}
-:root[data-theme="dark"] .quiz-opt{background:#171717}
 :root[data-theme="dark"] .quiz-opt.correct{background:#102a1d;color:#a8f8e1}
 :root[data-theme="dark"] .quiz-opt.wrong{background:#291a0f;color:#f18fb8}
 :root[data-theme="dark"] .quiz-feedback.ok{color:#a8f8e1}
 :root[data-theme="dark"] .quiz-feedback.err{color:#f18fb8}
-:root[data-theme="dark"] .btn-next{background:var(--strong)}
 :root[data-theme="dark"] .tool-inp{background:#171717}
 :root[data-theme="dark"] .mt-item.sel{background:var(--strong)}
 /* ── theme:end ── */
@@ -3766,6 +3758,33 @@ function injectCss() {
   .plot .try-hover { fill: none; stroke: var(--muted); stroke-width: 2; stroke-dasharray: 3 3; pointer-events: none; }
   .plot .try-hl { pointer-events: none; font-size: 12px; fill: var(--muted); }
   .rcv { margin-top: 6px; }
+  /* ฉาก 1A เครื่องจักรเดินย้อน + 2B ป้อนเลขจริงจับกฎ (ครูเลือก 2026-11-11) */
+  .sc-svg .iv-box1 { fill: var(--g-blue); } .sc-svg .iv-box2 { fill: var(--g-green); }
+  .sc-svg .iv-boxt { fill: #fff; font-size: 30px; font-weight: 800; }
+  .sc-svg .iv-arr { stroke-width: 4; fill: none; } .sc-svg .iv-arr.a1 { stroke: var(--g-blue); } .sc-svg .iv-arr.a2 { stroke: var(--g-green); }
+  .sc-svg .iv-hd1 { fill: var(--g-blue); } .sc-svg .iv-hd2 { fill: var(--g-green); }
+  .sc-svg .iv-ball circle { stroke-width: 3; } .sc-svg .iv-ball text { font-size: 28px; font-weight: 800; }
+  .sc-svg .iv-ball.bx circle { fill: color-mix(in srgb, var(--g-blue) 18%, var(--card)); stroke: var(--g-blue); }
+  .sc-svg .iv-ball.by circle { fill: color-mix(in srgb, var(--g-curve) 22%, var(--card)); stroke: var(--g-curve); }
+  .sc-svg .iv-lbl { font-size: 18px; font-weight: 700; } .sc-svg .iv-lbl.lx { fill: var(--g-blue); } .sc-svg .iv-lbl.ly { fill: var(--g-curve); }
+  .sc-svg .iv-ttl { font-size: 20px; font-weight: 800; } .sc-svg .iv-ttl.t1 { fill: var(--g-blue); } .sc-svg .iv-ttl.t2 { fill: var(--g-green); }
+  .iv-eq { min-height: 0; max-width: 600px; text-align: center; }
+  .iv-eq .sw-row { text-align: center; font-size: 1.7rem; line-height: 2.2; }
+  .iv-eq .sw-row .ans { display: inline-block; vertical-align: middle; padding: 8px 16px; line-height: 1.25; margin-left: 4px; }
+  .iv-eq .sw-row .ans .frac { margin: 0 2px; }
+  .iv-out .why { display: block; font-size: 1.15rem; font-weight: 600; margin-top: 8px; line-height: 1.7; color: var(--text); }
+  .iv-tbl { width: 100%; max-width: 600px; margin: 6px auto; border-collapse: separate; border-spacing: 0 6px; font-size: 1.75rem; font-weight: 800; text-align: center; }
+  .iv-tbl th { font-size: 1.25rem; padding: 8px 6px; background: color-mix(in srgb, var(--border) 60%, var(--card)); }
+  .iv-tbl th:first-child { border-radius: 10px 0 0 10px; } .iv-tbl th:last-child { border-radius: 0 10px 10px 0; }
+  .iv-tbl td { padding: 4px 6px; }
+  .iv-tbl .cl { color: var(--g-purple); } .iv-tbl td.cl { background: color-mix(in srgb, var(--g-purple) 12%, var(--card)); border-left: 3px dashed var(--g-purple); border-right: 3px dashed var(--g-purple); }
+  .iv-tbl .rule { font-size: 1.15rem; color: var(--g-curve); white-space: nowrap; }
+  .iv-tbl .q { color: var(--muted); }
+  .iv-prob { text-align: center; font-size: 1.7rem; font-weight: 800; margin: 2px 0 4px; }
+  .iv-out { text-align: center; font-size: 1.75rem; font-weight: 800; margin: 6px auto 0; padding: 8px 14px; max-width: 600px; border-radius: 12px; }
+  .iv-out.fin { background: color-mix(in srgb, var(--g-green) 18%, var(--card)); font-size: 2.1rem; }
+  /* ตัวเอียง f ไม่ให้หางชนวงเล็บ (ครูทักในร่างข้อ 15) — ใช้ทั้งหน้า */
+  main i { margin-right: .08em; }
   `;
   document.head.appendChild(s);
 }
@@ -3840,41 +3859,85 @@ const CONV_SCENES = [
     } }
 ];
 
-// ───────── แท็บ 1 การ์ด 2: ป้าย x กับ y ลอยสลับที่ แล้วจัดรูป ─────────
+// ───────── แท็บ 1 การ์ด 2 (แบบ 1A ที่ครูเลือก): เครื่องจักรเดินย้อน → สลับป้าย x ↔ y → จัดรูป ─────────
+// แถวบน f: x → ×3 → −5 → y · แถวล่าง f⁻¹: ของที่ f คายออกมา (1) กลายเป็นของที่เข้า เดินย้อน +5 → ÷3 ได้ 2
+// เหตุผลที่ต้องสลับ: เราเรียก "ของที่เข้า" ว่า x เสมอ — พอเดินย้อน ของที่เข้าคือ y เดิม จึงต้องสลับชื่อ
+const MJ = { W: 600, H: 300, y1: 82, y2: 222, xs: [62, 212, 362, 530], bw: 116, bh: 66 };
+function machBuild(root) {
+  const Q = MJ, m = {};
+  const svg = sv('svg', { class: 'sc-svg', viewBox: `0 0 ${Q.W} ${Q.H}` }, root);
+  const row = (y, top) => {
+    const g = sv('g', {}, svg), ops = top ? ['×3', '−5'] : ['÷3', '+5'], bc = top ? 'iv-box1' : 'iv-box2', ac = top ? 'a1' : 'a2', hc = top ? 'iv-hd1' : 'iv-hd2';
+    sv('text', { x: 14, y: y - 46, class: 'iv-ttl ' + (top ? 't1' : 't2'), text: tx(top ? T('f เดินหน้า', 'f runs forward') : T('f⁻¹ เดินย้อน: ของที่ออกมา กลายเป็นของที่เข้า', 'f⁻¹ runs backward: what came out goes in')) }, g);
+    [[0, 1], [1, 2], [2, 3]].forEach(([i, j]) => {
+      const xa = Q.xs[i] + (i === 0 ? 30 : Q.bw / 2 + 4), xb = Q.xs[j] - (j === 3 ? 32 : Q.bw / 2 + 4);
+      if (top) { sv('line', { class: 'iv-arr ' + ac, x1: xa, y1: y, x2: xb - 10, y2: y }, g); sv('polygon', { class: hc, points: `${xb},${y} ${xb - 13},${y - 8} ${xb - 13},${y + 8}` }, g); }
+      else { sv('line', { class: 'iv-arr ' + ac, x1: xa + 10, y1: y, x2: xb, y2: y }, g); sv('polygon', { class: hc, points: `${xa},${y} ${xa + 13},${y - 8} ${xa + 13},${y + 8}` }, g); }
+    });
+    [1, 2].forEach((i, n) => { sv('rect', { class: bc, x: Q.xs[i] - Q.bw / 2, y: y - Q.bh / 2, width: Q.bw, height: Q.bh, rx: 12 }, g); sv('text', { x: Q.xs[i], y: y + 11, 'text-anchor': 'middle', class: 'iv-boxt', text: ops[n] }, g); });
+    return g;
+  };
+  m.top = row(Q.y1, true); m.bot = row(Q.y2, false);
+  // ป้ายบทบาท: บนสุดเขียนใต้ลูกบอล "x (เข้า)" ซ้าย / "y (ออก)" ขวา · แถวล่างสลับกัน
+  const lbl = (x, y, cls, t) => sv('text', { x, y, 'text-anchor': 'middle', class: 'iv-lbl ' + cls, text: tx(t) }, svg);
+  m.l1 = [lbl(Q.xs[0], Q.y1 + 50, 'lx', T('x (เข้า)', 'x (in)')), lbl(Q.xs[3], Q.y1 + 50, 'ly', T('y (ออก)', 'y (out)'))];
+  m.l2 = [lbl(Q.xs[3], Q.y2 + 50, 'lx', T('ตอนนี้คือ x (เข้า)', 'now x (in)')), lbl(Q.xs[0] + 16, Q.y2 + 50, 'ly', T('ตอนนี้คือ y (ออก)', 'now y (out)'))];
+  // ลูกบอลคงที่ (ต้นทาง/ปลายทาง) + ลูกบอลวิ่ง
+  const ball = (x, y, v, c) => { const g = sv('g', { class: 'iv-ball ' + c }, svg); sv('circle', { cx: 0, cy: 0, r: 27 }, g); const t = sv('text', { x: 0, y: 10, 'text-anchor': 'middle', text: v }, g); g.setAttribute('transform', `translate(${x} ${y})`); g.set = (xx, yy, vv, op) => { g.setAttribute('transform', `translate(${xx.toFixed(1)} ${yy.toFixed(1)})`); if (vv !== undefined) t.textContent = vv; g.style.opacity = op === undefined ? 1 : op; }; return g; };
+  m.in1 = ball(Q.xs[0], Q.y1, '2', 'bx'); m.out1 = ball(Q.xs[3], Q.y1, '1', 'by');
+  m.in2 = ball(Q.xs[3], Q.y2, '1', 'bx'); m.out2 = ball(Q.xs[0], Q.y2, '2', 'by');
+  m.run = async (A, top, ms) => {
+    const y = top ? Q.y1 : Q.y2, xs = top ? Q.xs : [...Q.xs].reverse(), vals = top ? ['2', '6', '1'] : ['1', '6', '2'], b = top ? m.out1 : m.out2;
+    b.set(xs[0], y, vals[0], 1);
+    for (let i = 1; i < 4; i++) { const v = vals[Math.min(i - 1, 2)]; await A.run(ms, t => b.set(lerp(xs[i - 1], xs[i], t), y, i === 1 ? vals[0] : vals[i - 1]), EASE.inOut); if (i < 3) { b.set(xs[i], y, vals[i]); await A.wait(160); } }
+    b.set(xs[3], y, vals[2]);
+  };
+  m.pose = k => {
+    m.top.style.opacity = k >= 0 ? 1 : 0; m.l1.forEach(e => e.style.opacity = k >= 0 ? 1 : 0); m.in1.style.opacity = k >= 0 ? 1 : 0; m.out1.style.opacity = k >= 0 ? 1 : 0;
+    const b = k >= 1 ? 1 : 0; m.bot.style.opacity = b; m.l2.forEach(e => e.style.opacity = b); m.in2.style.opacity = b; m.out2.style.opacity = k >= 2 ? 1 : 0;
+  };
+  return m;
+}
 const Xs = `<span class="sw-x">${X}</span>`, Ys = `<span class="sw-y">${Y}</span>`;
 const SWR = [
-  `<i>f</i>(${X}) = 3${X} − 5`,
   `${Ys} = 3${Xs} − 5`,
   `${Xs} = 3${Ys} − 5`,
   `3${Ys} = ${Xs} + 5`,
   `${Ys} = ${frac(`${Xs} + 5`, '3')}`,
-  `${fi}(${X}) = ${ans(frac(`${X} + 5`, '3'))}`
+  `${fi}(${X}) = ${ans(frac(`${X} + 5`, '3'))}`,
+  `${fi}(1) = ${frac('1 + 5', '3')} = 2 ✓`
 ];
-const SWS = [{ rows: [0, 1], dim: [0] }, { rows: [1, 2], dim: [1] }, { rows: [2, 3, 4], dim: [2] }, { rows: [4, 5], dim: [4] }];
-function swDraw(el, sc, hideNew) {
-  el.innerHTML = '<div class="sw-box"></div>'; const box = el.firstChild, out = {};
+const SWS = [{ rows: [0], dim: [] }, { rows: [0, 1], dim: [0] }, { rows: [1, 2, 3], dim: [1] }, { rows: [3, 4, 5], dim: [3] }];
+function swFresh(S, k, hideNew) {
+  S.el.innerHTML = ''; const m = machBuild(S.el); m.pose(k);
+  const box = document.createElement('div'); box.className = 'sw-box iv-eq'; S.el.appendChild(box);
+  const out = {}, sc = SWS[k];
   sc.rows.forEach(i => { const r = document.createElement('div'); r.className = 'sw-row' + (sc.dim.includes(i) ? ' dim' : ''); r.innerHTML = SWR[i]; if (hideNew && !sc.dim.includes(i)) r.style.opacity = 0; box.appendChild(r); out[i] = r; });
-  return out;
+  m.rows = out; return m;
 }
 const SW_SCENES = [
-  { cap: T(`<i>f</i>(x) คือ "ผลลัพธ์" ของ <i>f</i> ดังนั้นเขียนเป็น <b>y</b> ได้เลย: y = 3x − 5 (x = อินพุต, y = เอาต์พุต)`, `<i>f</i>(x) is the output of <i>f</i>, so just write it as <b>y</b>: y = 3x − 5 (x = input, y = output).`),
-    end: S => { swDraw(S.el, SWS[0]); },
-    play: async S => { const r = swDraw(S.el, SWS[0], true); await fadeIn(S.anim, r[0], 1); r[0].style.opacity = .5; await S.anim.wait(250); await fadeIn(S.anim, r[1]); } },
-  { cap: T(`ย้อนกลับ = อินพุตกับเอาต์พุต<b>สลับบทบาท</b> → ป้าย x กับ y ลอยสลับที่กัน: x = 3y − 5`, `Going backwards = input and output <b>swap roles</b> → the labels x and y float past each other: x = 3y − 5.`),
-    end: S => { swDraw(S.el, SWS[1]); },
+  { cap: T(`เครื่อง <i>f</i> รับ <b>x</b> (ของที่เข้า) แล้ว ×3 −5 ได้ <b>y</b> (ของที่ออก): ลูกบอล 2 ออกมาเป็น 1 → เขียนได้ y = 3x − 5`, `Machine <i>f</i> takes <b>x</b> (what goes in), does ×3 then −5 and gives <b>y</b> (what comes out): ball 2 comes out as 1 → y = 3x − 5.`),
+    end: S => { swFresh(S, 0); },
+    play: async S => { const m = swFresh(S, 0, true), A = S.anim; m.out1.style.opacity = 0; await A.wait(250); await m.run(A, true, 520); await fadeIn(A, m.rows[0]); } },
+  { cap: T(`เดินย้อน: ของที่ <i>f</i> คายออกมา (1) กลายเป็น<b>ของที่เข้า</b> ของ <i>f</i><sup>−1</sup> — แต่เราเรียกของที่เข้าว่า <b>x</b> เสมอ ป้าย x กับ y จึงต้อง<b>สลับกัน</b>: x = 3y − 5`, `Going backwards: what <i>f</i> spat out (1) becomes <b>what goes into</b> <i>f</i><sup>−1</sup> — and we always call the input <b>x</b>, so the labels x and y must <b>swap</b>: x = 3y − 5.`),
+    end: S => { swFresh(S, 1); },
     play: async S => {
-      const r = swDraw(S.el, SWS[1], true), A = S.anim, row = r[2];
-      row.innerHTML = SWR[1]; await fadeIn(A, row, 380); await A.wait(500);
+      const m = swFresh(S, 1, true), A = S.anim, Q = MJ;
+      [m.bot, ...m.l2, m.in2].forEach(e => e.style.opacity = 0);
+      // ลูกบอล 1 ไหลจากปลายแถวบนลงมาเป็นต้นทางแถวล่าง
+      await A.run(700, t => { m.in2.set(Q.xs[3], lerp(Q.y1, Q.y2, t), '1', t); }, EASE.inOut);
+      await A.run(450, t => { m.bot.style.opacity = t; m.l2.forEach(e => e.style.opacity = t); }, EASE.lin);
+      const row = m.rows[1]; row.innerHTML = SWR[0]; await fadeIn(A, row, 380); await A.wait(400);
       const xs = row.querySelector('.sw-x'), ys = row.querySelector('.sw-y'), rx = xs.getBoundingClientRect(), ry = ys.getBoundingClientRect(), dx = (ry.left + ry.width / 2) - (rx.left + rx.width / 2);
       await A.run(1300, t => { const lift = Math.sin(Math.PI * t) * 26; xs.style.transform = `translate(${(dx * t).toFixed(1)}px, ${(-lift).toFixed(1)}px)`; ys.style.transform = `translate(${(-dx * t).toFixed(1)}px, ${lift.toFixed(1)}px)`; });
-      row.innerHTML = SWR[2];
+      row.innerHTML = SWR[1];
     } },
-  { cap: T(`จัดรูปให้ y อยู่คนเดียว: ย้าย −5 ไปบวกอีกฝั่ง → 3y = x + 5 · แล้วหารด้วย 3 → y = ${frac('x + 5', '3')}`, `Solve for y: move −5 across → 3y = x + 5 · then divide by 3 → y = ${frac('x + 5', '3')}.`),
-    end: S => { swDraw(S.el, SWS[2]); },
-    play: async S => { const r = swDraw(S.el, SWS[2], true), A = S.anim; await fadeIn(A, r[3]); await A.wait(450); await fadeIn(A, r[4]); } },
-  { cap: T(`y ตัวนี้คืออินเวอร์สของ f จึงเปลี่ยนชื่อกลับเป็น <i>f</i><sup>−1</sup>(x) = ${frac('x + 5', '3')} · ตรวจ: f(2) = 1 และ <i>f</i><sup>−1</sup>(1) = (1 + 5)/3 = 2 ✓`, `This y is the inverse of f, so rename it <i>f</i><sup>−1</sup>(x) = ${frac('x + 5', '3')} · check: f(2) = 1 and <i>f</i><sup>−1</sup>(1) = (1 + 5)/3 = 2 ✓.`),
-    end: S => { swDraw(S.el, SWS[3]); },
-    play: async S => { const r = swDraw(S.el, SWS[3], true); await fadeIn(S.anim, r[5], 600); } }
+  { cap: T(`จัดรูปให้ y อยู่คนเดียว = <b>ถอดเครื่องจากท้ายไปหน้า</b>: เครื่องสุดท้ายคือ −5 จึงถอดด้วย +5 → 3y = x + 5 · แล้วถอด ×3 ด้วย ÷3 → y = ${frac('x + 5', '3')} (ลูกบอล 1 → 6 → 2)`, `Solving for y = <b>undoing the machines from last to first</b>: the last one was −5, so +5 → 3y = x + 5 · then undo ×3 with ÷3 → y = ${frac('x + 5', '3')} (ball 1 → 6 → 2).`),
+    end: S => { swFresh(S, 2); },
+    play: async S => { const m = swFresh(S, 2, true), A = S.anim; m.out2.style.opacity = 1; await m.run(A, false, 520); await fadeIn(A, m.rows[2]); await A.wait(300); await fadeIn(A, m.rows[3]); } },
+  { cap: T(`y ตัวนี้คือเครื่องเดินย้อนของ f จึงตั้งชื่อว่า <i>f</i><sup>−1</sup>(x) = ${frac('x + 5', '3')} · ตรวจกับลูกบอล: <i>f</i>(2) = 1 และ <i>f</i><sup>−1</sup>(1) = 2 ✓`, `This y is the backward machine of f, so name it <i>f</i><sup>−1</sup>(x) = ${frac('x + 5', '3')} · check with the ball: <i>f</i>(2) = 1 and <i>f</i><sup>−1</sup>(1) = 2 ✓.`),
+    end: S => { swFresh(S, 3); },
+    play: async S => { const m = swFresh(S, 3, true), A = S.anim; await fadeIn(A, m.rows[4], 550); await fadeIn(A, m.rows[5], 450); } }
 ];
 
 // ตัวอย่างวิธีคิด (คงไว้: เป็น "ขั้น" ไม่ใช่ "ฉาก")
@@ -4220,31 +4283,56 @@ function lumpDraw(el, rows, dim, hideNew) {
   rows.forEach((h, i) => { const r = document.createElement('div'); r.className = 'sw-row' + (dim.includes(i) ? ' dim' : ''); r.innerHTML = h; if (hideNew && !dim.includes(i)) r.style.opacity = 0; box.appendChild(r); out.push(r); });
   return out;
 }
+// แบบ 2B ที่ครูเลือก: ป้อน x จริง → เห็นว่า f "ได้รับ" เลขในคอลัมน์ก้อน ไม่ใช่ x → จับกฎจาก ก้อน → ผล → ยืนยันด้วยพีชคณิต
+const XR = [0, 1, 2];
+const ruleTxt = (k, m) => `×${k < 0 ? '(' + mn(k) + ')' : k}${m === 0 ? '' : m < 0 ? ' − ' + Math.abs(m) : ' + ' + m}`;
+function lumpTable(p, c, k, hideNew) {
+  // k: 0 = มีแต่ x · 1 = เติมก้อนกับผล · 2 = โชว์กฎแต่ละแถว · 3 = เหมือน 2 (พีชคณิตอยู่ใต้ตาราง)
+  const en = EN(), lv = x => p.a * x + p.b, rv = x => p.c * x + p.d;
+  let h = `<div class="iv-prob">${c.prob}</div><table class="iv-tbl"><tr><th>x</th><th class="cl">${en ? 'lump' : 'ก้อน'} ${c.L}</th><th>${en ? 'output' : 'ผล'} ${polyHtml([p.d, p.c])}</th>${k >= 2 ? `<th>${en ? 'rule' : 'กฎ'}</th>` : ''}</tr>`;
+  XR.forEach(x => {
+    const show = k >= 1;
+    h += `<tr><td>${mn(x)}</td><td class="cl"${hideNew && k === 1 ? ' data-new="1"' : ''}>${show ? mn(lv(x)) : '<span class="q">?</span>'}</td><td${hideNew && k === 1 ? ' data-new="1"' : ''}>${show ? mn(rv(x)) : '<span class="q">?</span>'}</td>${k >= 2 ? `<td class="rule"${hideNew && k === 2 ? ' data-new="1"' : ''}><i>f</i>(${mn(lv(x))}) = ${mn(c.k)}·(${mn(lv(x))})${c.m === 0 ? '' : c.m < 0 ? ' − ' + Math.abs(c.m) : ' + ' + c.m} = ${mn(rv(x))} ✓</td>` : ''}</tr>`;
+  });
+  return h + '</table>';
+}
 function makeLump(host) {
   const w = { cur: 0 };
   host.innerHTML = '<div class="chips"></div><div class="lumpsc"></div>';
-  const P = () => trCalc(TRP[w.cur]), R = () => { const c = P(); return [c.r1, c.r2, c.r3]; };
+  const P = () => TRP[w.cur], C = () => trCalc(TRP[w.cur]);
+  const draw = (S, k, hideNew) => {
+    const p = P(), c = C();
+    S.el.innerHTML = lumpTable(p, c, Math.min(k, 3), hideNew);
+    if (k >= 2) {
+      // บอกเหตุผลของกฎ: อยากให้ก้อน (ax + b) กลายเป็น cx + d → คูณ k ให้พจน์ x ตรงกัน แล้วบวก/ลบส่วนที่ยังขาด (ครูขอ 2026-11-11)
+      const o = document.createElement('div'); o.className = 'iv-out';
+      const kk = polyHtml(pMul([c.k], [p.b, p.a])), out = polyHtml([p.d, p.c]), am = Math.abs(c.m);
+      const tail = c.m === 0 ? '' : tx(T(` · ยัง${c.m < 0 ? 'เกิน' : 'ขาด'}อยู่ ${am} จึง<b>${c.m < 0 ? 'ลบ' : 'บวก'} ${am}</b> ได้ ${out} พอดี`, ` · it is ${am} too ${c.m < 0 ? 'big' : 'small'}, so <b>${c.m < 0 ? 'subtract' : 'add'} ${am}</b> to land exactly on ${out}`));
+      o.innerHTML = tx(T(`กฎของ <i>f</i>: "ป้อนอะไรมา ${ruleTxt(c.k, c.m)}"`, `The rule of <i>f</i>: "whatever goes in, ${ruleTxt(c.k, c.m)}"`)) +
+        `<span class="why">` + tx(T(`ทำไม: เราอยากให้ก้อน ${c.lump(c.L)} กลายเป็น ${out} (ให้ใกล้เคียงกันที่สุด) — คูณก้อนด้วย <b>${mn(c.k)}</b> ให้พจน์ x ตรงกัน: ${mn(c.k)}(${c.L}) = ${kk}`,
+                                     `Why: we want the lump ${c.lump(c.L)} to turn into ${out} (as close as possible) — multiply the lump by <b>${mn(c.k)}</b> so the x-terms match: ${mn(c.k)}(${c.L}) = ${kk}`)) + tail + `</span>`;
+      if (hideNew && k === 2) o.style.opacity = 0; S.el.appendChild(o);
+    }
+    if (k >= 3) {
+      const kk = polyHtml(pMul([c.k], [p.b, p.a])), al = document.createElement('div'); al.className = 'iv-out';
+      al.innerHTML = tx(T(`ยืนยันด้วยพีชคณิต: ${polyHtml([p.d, p.c])} = ${c.k === 1 ? '' : mn(c.k)}(${c.lump(c.L)})${c.m === 0 ? '' : c.m < 0 ? ' − ' + Math.abs(c.m) : ' + ' + c.m}`, `Confirm with algebra: ${polyHtml([p.d, p.c])} = ${c.k === 1 ? '' : mn(c.k)}(${c.lump(c.L)})${c.m === 0 ? '' : c.m < 0 ? ' − ' + Math.abs(c.m) : ' + ' + c.m}`));
+      const fin = document.createElement('div'); fin.className = 'iv-out fin'; fin.innerHTML = `<i>f</i>(${X}) = ${polyHtml([c.m, c.k])}`;
+      if (hideNew) { al.style.opacity = 0; fin.style.opacity = 0; }
+      S.el.appendChild(al); S.el.appendChild(fin);
+    }
+  };
+  const fadeNew = async (S) => { const ns = [...S.el.querySelectorAll('[data-new]')]; ns.forEach(e => e.style.opacity = 0); for (const e of ns) await S.anim.run(160, t => { e.style.opacity = t; }, EASE.out); };
   const scenes = [
-    { cap: () => { const p = TRP[w.cur], c = P(); return tx(T(`โจทย์ <i>f</i>(${c.L}) = ${polyHtml([p.d, p.c])} · มอง (${c.L}) เป็น <b>"ก้อน"</b> เดียว (กล่องสีม่วง) — เป้าหมายคือให้ฝั่งขวาเป็น "ก้อน" ด้วย`, `Problem <i>f</i>(${c.L}) = ${polyHtml([p.d, p.c])} · treat (${c.L}) as a single <b>"lump"</b> (purple box) — the goal is to make the right-hand side a lump too.`)); },
-      end: S => { lumpDraw(S.el, R().slice(0, 1), []); },
-      play: async S => { const r = lumpDraw(S.el, R().slice(0, 1), [], true); await fadeIn(S.anim, r[0], 500); } },
-    { cap: () => { const p = TRP[w.cur], c = P(), kk = polyHtml(pMul([c.k], [p.b, p.a])); return tx(T(`จัดฝั่งขวาให้เป็นก้อนเดียวกัน: ${c.k === 1 ? '' : mn(c.k) + ' × '}(${c.L}) = ${kk}${c.m === 0 ? '' : ' จึงต้อง' + (c.m < 0 ? 'ลบ ' : 'บวก ') + Math.abs(c.m)} → ${polyHtml([p.d, p.c])} = ${c.k === 1 ? '' : mn(c.k)}(${c.L})${c.m === 0 ? '' : (c.m < 0 ? ' − ' : ' + ') + Math.abs(c.m)}`, `Make the right side contain the same lump: ${c.k === 1 ? '' : mn(c.k) + ' × '}(${c.L}) = ${kk}${c.m === 0 ? '' : ', so ' + (c.m < 0 ? 'subtract ' : 'add ') + Math.abs(c.m)} → ${polyHtml([p.d, p.c])} = ${c.k === 1 ? '' : mn(c.k)}(${c.L})${c.m === 0 ? '' : (c.m < 0 ? ' − ' : ' + ') + Math.abs(c.m)}.`)); },
-      end: S => { lumpDraw(S.el, R().slice(0, 2), [0]); },
-      play: async S => { const r = lumpDraw(S.el, R().slice(0, 2), [0], true); await fadeIn(S.anim, r[1], 600); } },
-    { cap: () => tx(T(`ตอนนี้เปลี่ยน "ก้อน" เป็น <b>x</b> ทุกที่ — กล่องยุบเหลือ x → <i>f</i>(x) = ${polyHtml([P().m, P().k])}`, `Now replace the lump by <b>x</b> everywhere — the boxes collapse to x → <i>f</i>(x) = ${polyHtml([P().m, P().k])}.`)),
-      end: S => { lumpDraw(S.el, R(), [1]); },
-      play: async S => {
-        const A = S.anim, r = lumpDraw(S.el, R(), [0, 1], true), rw = r[2];
-        rw.innerHTML = R()[1]; rw.className = 'sw-row'; await fadeIn(A, rw, 350); await A.wait(500);
-        const lumps = [...rw.querySelectorAll('.lump')], ws = lumps.map(l => l.offsetWidth - 0);
-        const tgt = lumps.map(l => { const c = l.cloneNode(true); c.innerHTML = X; c.style.cssText = 'position:absolute;visibility:hidden'; rw.appendChild(c); const v = c.offsetWidth; c.remove(); return v; });
-        lumps.forEach((l, i) => { l.style.width = ws[i] + 'px'; });
-        let swapped = false;
-        await A.run(1100, t => lumps.forEach((l, i) => { l.style.width = lerp(ws[i], tgt[i], t).toFixed(1) + 'px'; if (t > .5 && !swapped) { l.innerHTML = X; if (i === lumps.length - 1) swapped = true; } }), EASE.inOut);
-        await A.wait(350); rw.innerHTML = R()[2];
-      } }
+    { cap: () => { const c = C(); return tx(T(`โจทย์ ${c.prob} · สิ่งที่เข้าปาก <i>f</i> คือ <b>ก้อน</b> (${c.L}) ไม่ใช่ x — ลองป้อน x = 0, 1, 2 ดูว่า <i>f</i> ได้รับอะไร`, `Problem ${c.prob} · what goes into <i>f</i> is the <b>lump</b> (${c.L}), not x — feed in x = 0, 1, 2 and see what <i>f</i> actually receives.`)); },
+      end: S => draw(S, 0), play: async S => { draw(S, 0); await fadeIn(S.anim, S.el.firstChild, 450); } },
+    { cap: () => { const p = P(), lv = XR.map(x => mn(p.a * x + p.b)), rv = XR.map(x => mn(p.c * x + p.d)); return tx(T(`<i>f</i> ได้รับ ${lv[0]} คาย ${rv[0]} · ได้รับ ${lv[1]} คาย ${rv[1]} · ได้รับ ${lv[2]} คาย ${rv[2]} — <i>f</i> เห็นแต่เลขในคอลัมน์ก้อน (สีม่วง)`, `<i>f</i> receives ${lv[0]} and gives ${rv[0]} · receives ${lv[1]}, gives ${rv[1]} · receives ${lv[2]}, gives ${rv[2]} — <i>f</i> only ever sees the numbers in the (purple) lump column.`)); },
+      end: S => draw(S, 1), play: async S => { draw(S, 1, true); await fadeNew(S); } },
+    { cap: () => { const c = C(); return tx(T(`สืบหากฎจากหลักฐาน 3 แถว: ก้อน → ผล คือ "${ruleTxt(c.k, c.m)}" ทุกแถว ✓ — ที่มาของกฎคือทำให้ก้อนกลายเป็นผล (ดูกล่องใต้ตาราง)`, `Find the rule from the 3 rows of evidence: lump → output is "${ruleTxt(c.k, c.m)}" in every row ✓ — the rule comes from turning the lump into the output (see the box below).`)); },
+      end: S => draw(S, 2), play: async S => { draw(S, 2, true); await fadeNew(S); const o = S.el.querySelector('.iv-out'); if (o) await fadeIn(S.anim, o, 400); } },
+    { cap: () => { const c = C(); return tx(T(`ทางลัดที่ไม่ต้องเดา: จัดฝั่งขวาให้เห็นก้อน แล้ว<b>เปลี่ยนก้อนเป็น x</b> (ก้อนจะเป็นอะไรก็ได้ กฎเดิม) → <i>f</i>(x) = ${polyHtml([c.m, c.k])}`, `The shortcut without guessing: rewrite the right side in terms of the lump, then <b>replace the lump by x</b> (any input, same rule) → <i>f</i>(x) = ${polyHtml([c.m, c.k])}.`)); },
+      end: S => draw(S, 3), play: async S => { draw(S, 3, true); const o = [...S.el.querySelectorAll('.iv-out')]; await fadeIn(S.anim, o[1], 500); await S.anim.wait(250); await fadeIn(S.anim, o[2], 500); } }
   ];
-  const sc = makeScenes(host.querySelector('.lumpsc'), scenes, { prompt: T('เลือกโจทย์ แล้วกด ▶ ดู "ก้อน" ถูกจัดแล้วยุบเป็น x', 'Pick a problem, then press ▶ to see the "lump" appear and collapse into x') });
+  const sc = makeScenes(host.querySelector('.lumpsc'), scenes, { prompt: T('เลือกโจทย์ แล้วกด ▶ — ป้อนเลขจริงเข้าก้อน แล้วจับกฎของ f', 'Pick a problem, then press ▶ — feed real numbers into the lump and catch the rule of f') });
   w.render = () => {
     const c = host.querySelector('.chips');
     c.innerHTML = `<span class="chips-label">${EN() ? 'Problem' : 'โจทย์'}</span>` + TRP.map((p, i) => `<button class="chip${i === w.cur ? ' active' : ''}" data-i="${i}"><i>f</i>(${polyHtml([p.b, p.a])}) = ${polyHtml([p.d, p.c])}</button>`).join('');
@@ -4300,7 +4388,7 @@ function build() {
        <div class="formula" style="font-size:1.05rem;gap:6px 10px"><span>${d('① เขียน y = f(x)', '① write y = f(x)')}</span><span>→</span><span>${d('② สลับ x ↔ y', '② swap x ↔ y')}</span><span>→</span><span>${d('③ จัดรูปให้ y อยู่คนเดียว', '③ solve for y')}</span></div>`) +
     card('📌', d('ตัวอย่างวิธีคิด', 'Worked examples'), '<div id="w-met"></div>');
   makeScenes(document.getElementById('w-conv'), CONV_SCENES, { prompt: T('กด ▶ ทีละฉาก — ดูลูกบอลวิ่งไป แล้ววิ่งย้อนกลับ', 'Press ▶ one scene at a time — watch the ball roll forward, then back') });
-  makeScenes(document.getElementById('w-swp'), SW_SCENES, { prompt: T('กด ▶ ทีละฉาก — ดูป้าย x กับ y ลอยสลับที่', 'Press ▶ one scene at a time — watch the labels x and y swap places') });
+  makeScenes(document.getElementById('w-swp'), SW_SCENES, { prompt: T('กด ▶ ทีละฉาก — เครื่อง f เดินหน้า แล้วเดินย้อน ป้าย x กับ y จึงต้องสลับกัน', 'Press ▶ one scene at a time — machine f runs forward, then backward, so x and y must swap') });
   makeProblemSteps(document.getElementById('w-met'), T('โจทย์', 'Problem'), MET);
 
   document.getElementById('tab-graph').innerHTML =

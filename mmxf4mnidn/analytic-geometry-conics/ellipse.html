@@ -115,18 +115,74 @@ main{ max-width:760px; margin:0 auto; padding:16px 18px 0; }
 }
 .coord-input:focus{ outline:none; border-color:var(--primary); }
 
-.cone3d-wrap{ display:flex; justify-content:center; }
-.cone3d-wrap svg{
-  width:100%; max-width:520px; height:auto; touch-action:none; cursor:grab;
-  background:var(--bg); border-radius:12px; border:1px solid var(--border);
+/* cone3d:start */
+/* ── 3D cone + cutting-plane demo (วาดตาม GeoGebra ของครู · ต้นทาง tools/conic_cone3d/) ── */
+.cone3d{
+  --c3-bg:#FFFFFF; --c3-plate:rgba(0,0,0,.075); --c3-cone:rgba(0,120,0,.16); --c3-cone-edge:rgba(0,100,0,.10);
+  --c3-rim:#0B6B0B; --c3-plane:rgba(99,219,219,.30); --c3-plane-grid:rgba(30,140,150,.55);
+  --c3-axis:#7F00FF; --c3-gen:#D50000; --c3-curve:#FF7F00; --c3-x:#D32F2F; --c3-y:#1B7F1B; --c3-z:#1E3FD0;
+  --c3-text:#16181A; --c3-ring:#FFFFFF; --c3-O:#E53935; --c3-A:#F5C400; --c3-B:#E53935; --c3-box:#FFF1D6;
 }
-.cone3d-wrap svg:active{ cursor:grabbing; }
-.beta-row{ display:flex; align-items:center; gap:12px; margin:14px 0 4px; flex-wrap:wrap; }
-.beta-row label{ font-weight:700; color:var(--primary); font-size:.88rem; white-space:nowrap; }
-.beta-row input[type=range]{ flex:1; min-width:120px; accent-color:var(--primary); }
-.beta-row .val{ min-width:44px; text-align:right; font-weight:700; }
-.conic-badge{ display:inline-block; padding:5px 16px; border-radius:999px; font-weight:800; font-size:.9rem; background:#FF7F00; color:#3A1D00; margin-left:auto; }
-.rotate-hint{ text-align:center; font-size:.8rem; color:var(--muted); margin-top:8px; }
+:root[data-theme="dark"] .cone3d{
+  --c3-bg:#15181B; --c3-plate:rgba(255,255,255,.07); --c3-cone:rgba(90,210,110,.17); --c3-cone-edge:rgba(90,210,110,.10);
+  --c3-rim:#6FE07F; --c3-plane:rgba(90,220,230,.22); --c3-plane-grid:rgba(120,230,240,.45);
+  --c3-axis:#C08CFF; --c3-gen:#FF6B6B; --c3-curve:#FFA040; --c3-x:#FF6B6B; --c3-y:#5BD27E; --c3-z:#8C9BFF;
+  --c3-text:#F2F2F2; --c3-ring:#15181B; --c3-O:#FF6B6B; --c3-A:#FFD54A; --c3-B:#FF6B6B; --c3-box:#3A2F1A;
+}
+.cone3d{ margin-top:12px; }
+.c3-kinds{ display:flex; gap:8px; flex-wrap:wrap; justify-content:center; margin:4px 0 10px; }
+.c3-kind{
+  font:inherit; font-weight:700; font-size:.92rem; padding:7px 16px; border-radius:999px; cursor:pointer;
+  border:2px solid var(--border); background:var(--card); color:var(--text);
+}
+.c3-kind::before{ content:""; display:inline-block; width:.8em; height:.8em; margin-right:.45em; vertical-align:-.05em;
+  border:2px solid currentColor; border-radius:3px; }
+.c3-kind.active{ border-color:var(--c3-curve); background:color-mix(in srgb, var(--c3-curve) 16%, var(--card)); }
+.c3-kind.active::before{ background:var(--c3-curve); border-color:var(--c3-curve); }
+.c3-stage{ position:relative; max-width:640px; margin:0 auto; }
+.c3-stage svg{ display:block; width:100%; height:auto; touch-action:none; cursor:grab; border-radius:12px; border:1px solid var(--border); }
+.c3-stage svg:active{ cursor:grabbing; }
+.c3-how{
+  position:absolute; left:8px; top:8px; background:var(--c3-box); color:var(--c3-text);
+  padding:6px 12px; border-radius:6px; font-size:.95rem; line-height:1.45; pointer-events:none;
+}
+.c3-how i, .c3-rid i{ font-family:'Times New Roman',serif; font-weight:700; font-size:1.1em; }
+.c3-why{ text-align:center; font-weight:700; margin:10px 0 2px; color:var(--text); }
+.c3-sliders{ display:flex; flex-direction:column; gap:6px; max-width:560px; margin:8px auto 0; }
+.c3-row{ display:flex; align-items:center; gap:10px; font-size:.88rem; }
+.c3-rid{ min-width:11em; font-weight:700; color:var(--text); }
+.c3-row input{ flex:1; accent-color:var(--c3-curve); }
+.c3-val{ min-width:3.2em; text-align:right; font-weight:700; }
+#svg3D .c3-bg{ fill:var(--c3-bg); }
+#svg3D .c3-plate{ fill:var(--c3-plate); stroke:none; }
+#svg3D .c3-cone{ fill:var(--c3-cone); stroke:var(--c3-cone-edge); stroke-width:.6; }
+#svg3D .c3-plane{ fill:var(--c3-plane); stroke:var(--c3-plane-grid); stroke-width:.8; }
+#svg3D .c3-ax{ stroke-width:1.6; }
+#svg3D .c3-ax-x{ stroke:var(--c3-x); fill:var(--c3-x); } #svg3D .c3-axfill-x{ fill:var(--c3-x); } #svg3D .c3-axn-x{ fill:var(--c3-x); }
+#svg3D .c3-ax-y{ stroke:var(--c3-y); fill:var(--c3-y); } #svg3D .c3-axfill-y{ fill:var(--c3-y); } #svg3D .c3-axn-y{ fill:var(--c3-y); }
+#svg3D .c3-ax-z{ stroke:var(--c3-z); fill:var(--c3-z); } #svg3D .c3-axfill-z{ fill:var(--c3-z); } #svg3D .c3-axn-z{ fill:var(--c3-z); }
+#svg3D .c3-tick{ stroke:none; }
+#svg3D .c3-num{ font-size:10px; text-anchor:middle; opacity:.85; }
+#svg3D .c3-axl{ font-size:15px; font-weight:800; font-style:italic; text-anchor:middle; }
+#svg3D .c3-sil{ stroke:var(--c3-rim); stroke-width:1.2; opacity:.55; }
+#svg3D .c3-rim{ fill:none; stroke:var(--c3-rim); stroke-width:2; }
+#svg3D .c3-rim-back{ stroke-dasharray:5 4; }
+#svg3D .c3-axis{ stroke:var(--c3-axis); stroke-width:3; }
+#svg3D .c3-gen{ stroke:var(--c3-gen); stroke-width:3; }
+#svg3D .c3-curve{ fill:none; stroke:var(--c3-curve); stroke-width:5; stroke-linecap:round; stroke-linejoin:round; }
+#svg3D .c3-curve-pt{ fill:none; stroke:var(--c3-curve); stroke-width:5; }   /* รอยตัดเหลือจุดเดียว: วงส้มล้อมจุดยอด/จุด O */
+#svg3D .c3-vtx{ fill:var(--c3-text); stroke:var(--c3-ring); stroke-width:1.5; }
+#svg3D .c3-lbl{ font-size:14px; font-weight:700; paint-order:stroke; stroke:var(--c3-bg); stroke-width:3px; }
+#svg3D .c3-lbl-axis{ fill:var(--c3-axis); } #svg3D .c3-lbl-gen{ fill:var(--c3-gen); } #svg3D .c3-lbl-vtx{ fill:var(--c3-text); }
+#svg3D .c3-handle{ cursor:grab; }
+#svg3D .c3-hit{ fill:transparent; }
+#svg3D .c3-hdot{ stroke:var(--c3-ring); stroke-width:2; }
+#svg3D .c3-h-O .c3-hdot{ fill:var(--c3-O); } #svg3D .c3-h-A .c3-hdot{ fill:var(--c3-A); stroke:#6B5500; } #svg3D .c3-h-B .c3-hdot{ fill:var(--c3-B); }
+#svg3D .c3-hlbl{ font-size:17px; font-weight:700; font-style:italic; font-family:'Times New Roman',serif; fill:var(--c3-text); paint-order:stroke; stroke:var(--c3-bg); stroke-width:3px; }
+.rotate-row{ display:flex; align-items:center; justify-content:center; gap:10px; flex-wrap:wrap; margin-top:8px; }
+.c3-zoom{ display:inline-flex; align-items:center; gap:6px; } .c3-zoom .btn-action{ min-width:40px; padding:4px 12px; font-size:1.2rem; line-height:1.2; } .c3-zl{ font-weight:700; color:var(--muted); font-size:.85rem; }
+.rotate-hint{ text-align:center; font-size:.8rem; color:var(--muted); margin:0; }
+/* cone3d:end */
 
 .steps{ display:flex; flex-direction:column; gap:10px; margin-top:14px; }
 .step{ display:flex; gap:14px; align-items:center; flex-wrap:wrap; font-size:1rem; padding:2px 0; }
@@ -171,103 +227,134 @@ main{ max-width:760px; margin:0 auto; padding:16px 18px 0; }
   .card{ padding:14px 16px; }
   .tab-btn{ font-size:.78rem; padding:7px 11px; }
 }
+/* ── เครื่องหมายราก มีขีดคลุม (vinculum) ต่อจากหัวราก ครอบนิพจน์พอดี — ของกลาง class .rad
+      (ชื่อเดียวกับสื่อการแก้สมการ m4/real-numbers/equations.html) · √ วาดด้วย SVG ยืดตามความสูงนิพจน์ ── */
+.rad{ display:inline-flex; align-items:stretch; vertical-align:middle; white-space:nowrap; line-height:1.15; margin:0 .06em; }
+.rad > .rad-sym{ flex:none; width:.62em; height:auto; overflow:visible; }
+.rad > .rad-sym path{ fill:none; stroke:currentColor; stroke-width:max(2px, .1em); stroke-linejoin:round; stroke-linecap:round; vector-effect:non-scaling-stroke; }
+.rad > .rad-in{ border-top:max(2px, .1em) solid currentColor; padding:.12em .14em 0 .1em; display:inline-block; }
+.frac .den .rad, .frac .num .rad{ margin-top:.28em; }
+.gg-read{ text-align:center; font-weight:700; font-size:1.08rem; margin:10px auto 4px; padding:8px 12px; border-radius:10px; background:color-mix(in srgb, var(--g-curve) 10%, var(--card)); max-width:560px; }
+/* proof:start — แท็บพิสูจน์แบบเต็มจาก GeoGebra ของครู (ต้นทาง tools/conic_cone3d/proofs.py) */
+.pf{ display:flex; flex-direction:column; gap:12px; margin-top:12px; }
+.pf-step{ display:grid; grid-template-columns:36px 1fr; gap:4px 12px; align-items:start; padding:12px 14px; border:1.5px solid var(--border); border-radius:12px; background:var(--card); }
+.pf-no{ width:30px; height:30px; border-radius:50%; background:var(--primary); color:#fff; font-weight:800; display:flex; align-items:center; justify-content:center; font-size:.95rem; }
+.pf-why{ font-size:.98rem; line-height:1.7; color:var(--text); }
+.pf-eq{ grid-column:2; display:grid; grid-template-columns:auto auto auto auto; justify-content:start; column-gap:.5em; row-gap:8px; align-items:center; font-size:1.18rem; font-weight:600; margin-top:6px; overflow-x:auto; padding-bottom:2px; }
+.pf-eq .l{ justify-self:end; text-align:right; } .pf-eq .m{ font-weight:800; } .pf-eq .r{ justify-self:start; } .pf-eq .t{ font-size:.85rem; color:var(--muted); font-weight:700; padding-left:.8em; }
+.pf-box{ grid-column:2; margin-top:8px; padding:10px 14px; border-radius:10px; background:var(--strong, var(--primary)); color:#fff; font-weight:700; display:flex; flex-wrap:wrap; gap:6px 16px; align-items:center; }
+.pf-box .lab{ font-size:.85rem; opacity:.85; } .pf-box .eq{ font-size:1.25rem; }
+.pf-sec{ font-weight:800; font-size:1.05rem; margin:10px 0 0; color:var(--primary); }
+.pf .frac{ display:inline-flex; flex-direction:column; align-items:center; vertical-align:middle; margin:0 .15em; line-height:1.2; }
+.pf .frac .num{ padding:0 .15em .08em; border-bottom:2px solid currentColor; } .pf .frac .den{ padding:.08em .15em 0; }
+.pf-note{ grid-column:2; font-size:.88rem; color:var(--muted); margin-top:4px; }
+/* proof:end */
+.zoom2d{ display:flex; justify-content:center; align-items:center; gap:8px; margin:8px 0 0; } .zoom2d .btn-action{ min-width:40px; padding:4px 12px; font-size:1.2rem; line-height:1.2; } .zoom2d .zl{ font-weight:700; color:var(--muted); font-size:.85rem; }
 /* ── theme:start — สร้างโดย tools/build_lessons.py ห้ามแก้มือ (แก้ที่สคริปต์แล้วรันใหม่) ── */
+/* ธีมชุดเดียวกับหน้าสารบัญ (tools/build_index.py · DESIGN.md หมวด Meta-inspired) — สีของเรื่องอยู่ที่ปกและในตัวบทเรียน กรอบหน้าเป็นสีกลาง */
 :root{ --page:#9C1489; }
 :root[data-theme="light"]{
-  --bg:#F4F4F1; --card:#FFFFFF; --text:#16181A; --muted:#5E6166; --border:#DEDED8;
+  --bg:#ffffff; --surface:#ffffff; --card:#ffffff; --panel:#f1f4f7; --raise:#e4e9ee;
+  --text:#1c1e21; --muted:#5d6c7b; --dim:#8595a4; --line:#ced0d4; --line-soft:#dee3e9; --border:#ced0d4;
+  --ink:#000000; --on-ink:#ffffff; --ink-hover:#2b3138; --link:#0064e0; --strong:#1c1e21; --shadow:none;
   --primary:color-mix(in srgb, var(--page) 86%, #000); --primary-2:color-mix(in srgb, var(--page) 62%, #000);
   --secondary:#C2540A; --secondary-light:#F2A15F; --accent:#68EF3F; --accent-2:#2E9E3F;
-  --shadow:0 2px 10px rgba(0,0,0,.07);
-  --strong:color-mix(in srgb, var(--page) 76%, #000); --chip:#E8E8E3; --chip-hover:#DCDCD5;
-  --hero:color-mix(in srgb, var(--page) 82%, #000);
   --g-x:#E53935; --g-y:#2E9E4F; --g-z:#3949AB; --g-curve:#F07400; --g-curve-fill:rgba(240,116,0,.12);
   --g-pink:#D81B60; --g-plane:rgba(60,190,200,.28); --g-cone:rgba(153,51,0,.20); --g-cone-line:rgba(153,51,0,.35);
   --g-blue:#1E66D0; --g-red:#D32F2F; --g-green:#2E9E4F; --g-purple:#7B3FC4; --g-orange:#E8710A; --g-teal:#0F8A80;
   --g-ring:#FFFFFF;
 }
 :root[data-theme="dark"]{
-  --bg:#121212; --card:#1C1C1C; --text:#FFFFFF; --muted:#B3B3B3; --border:#333333;
+  --bg:#0a1317; --surface:#0a1317; --card:#0a1317; --panel:#1c1e21; --raise:#2b3138;
+  --text:#ffffff; --muted:#9aa8b5; --dim:#6b7884; --line:#444950; --line-soft:#32383e; --border:#444950;
+  --ink:#ffffff; --on-ink:#000000; --ink-hover:#d5dbe1; --link:#4da3ff; --strong:#2b3138; --shadow:none;
   --primary:#ec79dc; --primary-2:#f19de5;
   --secondary:#FFB37A; --secondary-light:#FFD0A8; --accent:#8AF25E; --accent-2:#5BD27E;
-  --shadow:0 8px 24px rgba(0,0,0,.5);
-  --strong:color-mix(in srgb, var(--page) 48%, #1C1C1C); --chip:#2A2A2A; --chip-hover:#353535;
-  --hero:color-mix(in srgb, var(--page) 62%, #000);
   --g-x:#FF6B6B; --g-y:#5BD27E; --g-z:#8C9BFF; --g-curve:#FFA040; --g-curve-fill:rgba(255,160,64,.16);
   --g-pink:#FF5C9A; --g-plane:rgba(90,220,230,.26); --g-cone:rgba(255,170,110,.18); --g-cone-line:rgba(255,170,110,.45);
   --g-blue:#6AA8FF; --g-red:#FF6B6B; --g-green:#5BD27E; --g-purple:#B48CFF; --g-orange:#FFA040; --g-teal:#4FD1C5;
-  --g-ring:#1C1C1C;
+  --g-ring:#0a1317;
 }
-html{ background:var(--bg); }
+html{ background:var(--bg); color-scheme:light; }
 html[data-theme="dark"]{ color-scheme:dark; }
 body{ font-family:'Anuphan',system-ui,sans-serif; background:var(--bg); color:var(--text); line-height:1.6; -webkit-font-smoothing:antialiased; }
+:focus-visible{ outline:2px solid var(--link); outline-offset:2px; }
 
-/* หัวหน้า: สีปกของเรื่อง + ปก */
+/* หัวหน้า: แผ่นสีอ่อนมุมโค้ง ตัวหนังสือเข้ม + ปกข้างชื่อ (สีของเรื่องอยู่ที่ปก) */
 header{
-  background:var(--hero); color:#fff; text-align:left;
-  display:grid; grid-template-columns:auto 1fr; column-gap:22px; align-items:end;
-  padding:62px 32px 26px;
+  background:var(--panel); color:var(--text); text-align:left; overflow:hidden;
+  display:grid; grid-template-columns:auto 1fr; column-gap:24px; align-items:end;
+  margin:8px 8px 0; padding:74px 32px 28px; border-radius:32px; box-shadow:none;
 }
 header::before, header::after{ display:none !important; }
 header > *:not(.lesson-cover):not(.back-link):not(.lang-toggle):not(.theme-toggle){ grid-column:2; }
-.lesson-cover{ grid-column:1; grid-row:1 / span 6; align-self:end; width:120px; aspect-ratio:1; border-radius:6px; overflow:hidden; box-shadow:0 8px 24px rgba(0,0,0,.45); }
+.lesson-cover{ grid-column:1; grid-row:1 / span 6; align-self:end; width:clamp(96px, 11vw, 136px); aspect-ratio:1; border-radius:16px; overflow:hidden; box-shadow:none; }
 .lesson-cover svg{ display:block; width:100%; height:100%; }
-header h1{ font-size:clamp(1.8rem, 4.2vw, 2.9rem); font-weight:700; letter-spacing:-.01em; line-height:1.25; margin:0; color:#fff; }
-header p{ font-size:1rem; opacity:.85; margin:6px 0 0; color:#fff; }
+header h1{ font-size:clamp(1.9rem, 4.4vw, 3.2rem); font-weight:500; letter-spacing:0; line-height:1.25; margin:0; color:var(--text); }
+header p{ font-size:1.02rem; opacity:1; margin:8px 0 0; color:var(--muted); line-height:1.55; }
 .back-link{
-  top:14px; left:20px; display:inline-flex; align-items:center; gap:6px;
-  padding:6px 14px; border-radius:999px; background:rgba(0,0,0,.32); color:#fff;
-  font-size:.88rem; font-weight:600; opacity:1; text-decoration:none;
+  position:absolute; top:16px; left:16px; z-index:2; display:inline-flex; align-items:center; gap:6px;
+  height:38px; padding:0 16px; border-radius:100px; background:var(--surface); color:var(--text);
+  box-shadow:inset 0 0 0 1px var(--line); font-size:.92rem; font-weight:700; opacity:1; text-decoration:none;
 }
-.back-link:hover{ background:rgba(0,0,0,.55); text-decoration:none; }
+.back-link:hover{ background:var(--raise); opacity:1; text-decoration:none; }
 .lang-toggle, .theme-toggle{
-  position:absolute; top:14px; height:34px; background:transparent; color:#fff;
-  border:1px solid rgba(255,255,255,.55); border-radius:999px; font-family:inherit; font-weight:700; font-size:.85rem; cursor:pointer; z-index:2;
+  position:absolute; top:16px; height:38px; border-radius:100px; font-family:inherit; font-weight:700; font-size:.88rem;
+  cursor:pointer; z-index:2; transition:transform .12s, background .12s;
 }
-.lang-toggle{ right:20px; padding:0 16px; }
-.theme-toggle{ right:86px; width:34px; padding:0; display:grid; place-items:center; }
+.lang-toggle{ right:16px; min-width:64px; padding:0 16px; background:var(--ink); color:var(--on-ink); border:1px solid var(--ink); }
+.lang-toggle:hover{ background:var(--ink); border-color:var(--ink); transform:scale(1.04); }
+.theme-toggle{ right:88px; width:38px; padding:0; display:grid; place-items:center; background:var(--surface); color:var(--text); border:1px solid var(--line); }
 .theme-toggle svg{ width:18px; height:18px; }
-.lang-toggle:hover, .theme-toggle:hover{ background:rgba(255,255,255,.14); border-color:#fff; }
-body > .lang-toggle, body > .theme-toggle{ position:fixed; top:14px; z-index:50; background:var(--card); color:var(--text); border-color:var(--border); box-shadow:var(--shadow); }
-body > .lang-toggle{ right:14px; } body > .theme-toggle{ right:80px; }
-body > .lang-toggle:hover, body > .theme-toggle:hover{ background:var(--chip); border-color:var(--text); }
-header:not(:has(.back-link)):not(:has(.lang-toggle)){ padding-top:28px; border-radius:8px; }
+.theme-toggle:hover{ background:var(--raise); border-color:var(--line); }
+body > .lang-toggle, body > .theme-toggle{ position:fixed; top:14px; z-index:50; }
+body > .lang-toggle{ right:14px; } body > .theme-toggle{ right:86px; }
+header:not(:has(.back-link)):not(:has(.lang-toggle)){ padding-top:28px; }
 
-/* แถบแท็บ: ชิปทรงแคปซูล */
-nav{ background:var(--bg); border-bottom:1px solid var(--border); padding:10px 16px; gap:8px; }
+/* แถบแท็บ: ชิปขอบบาง ตัวที่เลือก = สีหมึก (ดำ / โหมดมืดขาว) */
+nav{ background:var(--bg); border-bottom:0; padding:16px 16px 8px; gap:8px; box-shadow:none; }
 .tab-btn{
-  font-family:inherit; border:0; margin:0; border-radius:999px; padding:8px 16px;
-  background:var(--chip); color:var(--text); font-weight:600; font-size:.9rem;
+  font-family:inherit; border:0; margin:0; border-radius:100px; padding:8px 18px;
+  background:var(--surface); color:var(--text); box-shadow:inset 0 0 0 1px var(--line); font-weight:600; font-size:.95rem;
 }
-.tab-btn:hover{ background:var(--chip-hover); color:var(--text); }
-.tab-btn.active{ background:var(--text); color:var(--bg); border-bottom-color:transparent; }
+.tab-btn:hover{ background:var(--raise); color:var(--text); }
+.tab-btn.active{ background:var(--ink); color:var(--on-ink); box-shadow:none; border-bottom-color:transparent; }
 
-/* การ์ดและกล่อง */
-.card{ background:var(--card); border:1px solid var(--border); border-radius:8px; box-shadow:var(--shadow); }
+/* การ์ดและกล่อง: พื้นเรียบ ขอบ 1px ไม่มีเงา */
+.card{ background:var(--card); border:1px solid var(--line); border-radius:24px; box-shadow:none; }
 .card-title{ color:var(--text); font-size:1.2rem; }
 .card-title .icon{ display:none; }
 .desc-text{ color:var(--text); font-size:1rem; }
-.formula, .step.result, .stats{ background:var(--strong) !important; color:#fff; border-radius:8px; letter-spacing:0; }
+.formula, .step.result, .stats{ background:var(--strong) !important; color:#fff; border-radius:16px; letter-spacing:0; }
 .stat .k, .step-tag{ text-transform:none; letter-spacing:0; }
 
-/* ปุ่ม */
-.btn-action{ font-family:inherit; background:var(--text); color:var(--bg); }
-.btn-action.secondary{ background:transparent; color:var(--text); border:1px solid var(--muted); }
-.mode-btn{ font-family:inherit; border:1px solid var(--border); background:var(--card); color:var(--text); }
+/* ปุ่ม: หลัก = แคปซูลหมึก, รอง = แคปซูลขอบบาง */
+.btn-action{ font-family:inherit; background:var(--ink); color:var(--on-ink); border:1px solid var(--ink); border-radius:100px; }
+.btn-action:hover:not(:disabled){ background:var(--ink-hover); border-color:var(--ink-hover); }
+.btn-action.secondary{ background:transparent; color:var(--text); border:1px solid var(--line); }
+.btn-action.secondary:hover:not(:disabled){ background:var(--raise); }
+.mode-btn{ font-family:inherit; border:1px solid var(--line); background:var(--surface); color:var(--text); border-radius:100px; }
 .mode-btn:hover{ border-color:var(--text); color:var(--text); }
-.mode-btn.active{ background:var(--text); border-color:var(--text); color:var(--bg); }
-.quiz-opt{ border-radius:8px; }
+.mode-btn.active{ background:var(--ink); border-color:var(--ink); color:var(--on-ink); }
 input[type=range]{ accent-color:var(--primary); }
 
 @media (max-width:600px){
-  header{ padding:58px 16px 20px; column-gap:14px; }
-  .lesson-cover{ width:76px; }
-  .back-link{ left:12px; max-width:calc(100% - 150px); overflow:hidden; white-space:nowrap; text-overflow:ellipsis; display:block; }
-  .lang-toggle{ right:12px; }
-  .theme-toggle{ right:74px; }
-  nav{ flex-wrap:nowrap; overflow-x:auto; justify-content:flex-start; scrollbar-width:none; }
+  header{ margin:0; border-radius:0 0 24px 24px; padding:64px 16px 20px; column-gap:14px; }
+  .lesson-cover{ width:72px; border-radius:12px; }
+  header h1{ font-size:clamp(1.5rem, 7vw, 2rem); }
+  header p{ font-size:.95rem; }
+  .back-link{ top:14px; left:12px; height:36px; padding:0 14px; max-width:calc(100% - 150px); overflow:hidden; white-space:nowrap; text-overflow:ellipsis; display:block; line-height:36px; }
+  .lang-toggle, .theme-toggle{ top:14px; height:36px; }
+  .lang-toggle{ right:12px; min-width:58px; padding:0 12px; }
+  .theme-toggle{ right:78px; width:36px; }
+  nav{ flex-wrap:nowrap; overflow-x:auto; justify-content:flex-start; scrollbar-width:none; padding:12px 12px 6px; }
   nav .tab-btn{ flex:0 0 auto; white-space:nowrap; }   /* ชื่อแท็บบรรทัดเดียว ปัดแถบซ้าย-ขวาแทน (ไม่บีบจนตัดคำ) */
   nav::-webkit-scrollbar{ display:none; }
 }
+/* โหมดมืด: สีที่หน้านี้ฝังไว้เอง (สร้างอัตโนมัติ) */
+:root[data-theme="dark"] #svg3D .c3-h-A .c3-hdot{stroke:#f8e9ad}
+:root[data-theme="dark"] .pf-no{background:var(--strong)}
+:root[data-theme="dark"] .pf-box{background:var(--strong)}
 /* ── theme:end ── */
 </style>
 </head>
@@ -297,20 +384,29 @@ input[type=range]{ accent-color:var(--primary); }
   <div class="card">
     <div class="card-title"><span class="icon">🔺</span><span data-th="ภาคตัดกรวยคืออะไร" data-en="What Is a Conic Section?">ภาคตัดกรวยคืออะไร</span></div>
     <p class="desc-text" data-th="ภาคตัดกรวย (Conic Section) คือเส้นโค้งที่เกิดจากการใช้ระนาบตัดกรวยกลม 2 กรวยที่ต่อกันที่จุดยอด (กรวยคว่ำ-หงาย) รูปร่างของเส้นโค้งที่ได้ขึ้นอยู่กับมุมเอียงของระนาบเทียบกับแกนกรวยเพียงอย่างเดียว — ถ้าระนาบเอียงเล็กน้อยจนยังตัดผ่านกรวยข้างเดียวได้ครบทั้งวง จะได้ วงรี" data-en="A conic section is the curve formed where a plane slices through a double cone. The shape depends entirely on the plane's tilt relative to the axis — tilt it a little (but not enough to miss closing the loop on one nappe) and you get an ellipse.">ภาคตัดกรวย (Conic Section) คือเส้นโค้งที่เกิดจากการใช้ระนาบตัดกรวยกลม 2 กรวยที่ต่อกันที่จุดยอด (กรวยคว่ำ-หงาย) รูปร่างของเส้นโค้งที่ได้ขึ้นอยู่กับมุมเอียงของระนาบเทียบกับแกนกรวยเพียงอย่างเดียว — ถ้าระนาบเอียงเล็กน้อยจนยังตัดผ่านกรวยข้างเดียวได้ครบทั้งวง จะได้ วงรี</p>
-    <p class="desc-text" data-th="ลองลากแถบเลื่อนด้านล่างเพื่อปรับมุมเอียงของระนาบ (สีฟ้า) แล้วสังเกตว่าเส้นโค้งสีส้มที่ระนาบตัดผ่านกรวยเปลี่ยนรูปร่างไปอย่างไร — ลากบนภาพเพื่อหมุนมุมมองดูได้ด้วย" data-en="Try dragging the slider below to adjust the tilt of the plane (cyan) and watch how the orange curve changes shape. You can also drag on the image to rotate the view.">ลองลากแถบเลื่อนด้านล่างเพื่อปรับมุมเอียงของระนาบ (สีฟ้า) แล้วสังเกตว่าเส้นโค้งสีส้มที่ระนาบตัดผ่านกรวยเปลี่ยนรูปร่างไปอย่างไร — ลากบนภาพเพื่อหมุนมุมมองดูได้ด้วย</p>
+    <p class="desc-text" data-th="เลือกชนิดด้านบน แล้วลากจุด O, A, B บนภาพ (หรือแถบเลื่อนด้านล่าง) เพื่อปรับระนาบสีฟ้า สังเกตว่าเส้นโค้งสีส้มที่ระนาบตัดกรวยเปลี่ยนไปอย่างไร — ลากที่ว่างบนภาพเพื่อหมุนมุมมองดูได้" data-en="Pick a type above, then drag points O, A, B on the picture (or the sliders below) to move the cyan plane and watch how the orange cut changes. Drag empty space to rotate the view.">เลือกชนิดด้านบน แล้วลากจุด O, A, B บนภาพ (หรือแถบเลื่อนด้านล่าง) เพื่อปรับระนาบสีฟ้า สังเกตว่าเส้นโค้งสีส้มที่ระนาบตัดกรวยเปลี่ยนไปอย่างไร — ลากที่ว่างบนภาพเพื่อหมุนมุมมองดูได้</p>
 
-    <div class="beta-row">
-      <label data-th="มุมเอียงระนาบ β" data-en="Plane tilt β">มุมเอียงระนาบ β</label>
-      <input type="range" id="betaSlider" min="0" max="80" step="1" value="25" oninput="onBetaInput()">
-      <span class="val mono" id="betaVal">25°</span>
-      <span class="conic-badge" id="conicBadge">วงรี</span>
+    <!-- cone3d:start -->
+    <div class="cone3d">
+      <div class="c3-kinds" role="group">
+        <button type="button" class="c3-kind" data-kind="circle" onclick="setConeKind('circle')" data-th="วงกลม" data-en="Circle">วงกลม</button>
+        <button type="button" class="c3-kind" data-kind="ellipse" onclick="setConeKind('ellipse')" data-th="วงรี" data-en="Ellipse">วงรี</button>
+        <button type="button" class="c3-kind" data-kind="parabola" onclick="setConeKind('parabola')" data-th="พาราโบลา" data-en="Parabola">พาราโบลา</button>
+        <button type="button" class="c3-kind" data-kind="hyperbola" onclick="setConeKind('hyperbola')" data-th="ไฮเพอร์โบลา" data-en="Hyperbola">ไฮเพอร์โบลา</button>
+      </div>
+      <div class="c3-stage">
+        <svg id="svg3D" viewBox="0 0 600 520" role="img" aria-label="cone"></svg>
+        <div class="c3-how" id="c3How"></div>
+      </div>
+      <p class="c3-why" id="c3Why"></p>
+      <div class="c3-sliders" id="c3Sliders"></div>
+      <div class="rotate-row">
+        <p class="rotate-hint" data-th="ลากจุด O · A · B บนภาพเพื่อปรับระนาบ · ลากที่ว่างเพื่อหมุนมุมมอง 3 มิติ" data-en="Drag points O · A · B to move the plane · drag empty space to rotate the 3D view">ลากจุด O · A · B บนภาพเพื่อปรับระนาบ · ลากที่ว่างเพื่อหมุนมุมมอง 3 มิติ</p>
+        <span class="c3-zoom"><button type="button" class="btn-action secondary" onclick="cone3dZoom(1/1.2)" aria-label="zoom out">−</button><span class="c3-zl" data-th="ซูม" data-en="Zoom">ซูม</span><button type="button" class="btn-action secondary" onclick="cone3dZoom(1.2)" aria-label="zoom in">+</button></span>
+        <button class="btn-action secondary" onclick="resetView3D()" data-th="↺ มุมมองเริ่มต้น" data-en="↺ Reset view">↺ มุมมองเริ่มต้น</button>
+      </div>
     </div>
-
-    <div class="cone3d-wrap"><svg id="svg3D" viewBox="0 0 600 600"></svg></div>
-    <div class="rotate-row">
-      <p class="rotate-hint" data-th="ลากบนภาพเพื่อหมุนมุมมอง 3 มิติ" data-en="Drag on the image to rotate the 3D view">ลากบนภาพเพื่อหมุนมุมมอง 3 มิติ</p>
-      <button class="btn-action secondary" onclick="resetView3D()" data-th="↺ ตั้งกรวยตรง" data-en="↺ Stand Upright">↺ ตั้งกรวยตรง</button>
-    </div>
+    <!-- cone3d:end -->
   </div>
   <div class="next-row"><button class="btn-action" onclick="goTab('def')" data-th="ข้อต่อไป →" data-en="Next →">ข้อต่อไป →</button></div>
 </section>
@@ -326,7 +422,7 @@ input[type=range]{ accent-color:var(--primary); }
       <span class="frac"><span class="num">(y−k)²</span><span class="den">q²</span></span> = 1
     </div>
     <p class="formula-note" data-th="สมการรูปแบบมาตรฐาน เมื่อจุดศูนย์กลางอยู่ที่ (h,k) รัศมีตามแนวแกน x ยาว p หน่วย และรัศมีตามแนวแกน y ยาว q หน่วย (แกนที่ยาวกว่าคือแกนเอก)" data-en="Standard form, center at (h,k), semi-axis p along x and semi-axis q along y (whichever is longer is the major axis)">สมการรูปแบบมาตรฐาน เมื่อจุดศูนย์กลางอยู่ที่ (h,k) รัศมีตามแนวแกน x ยาว p หน่วย และรัศมีตามแนวแกน y ยาว q หน่วย (แกนที่ยาวกว่าคือแกนเอก)</p>
-    <div class="formula small">c = √(a² − b²) &nbsp; , &nbsp; e = c / a &nbsp; , &nbsp; 0 &lt; e &lt; 1</div>
+    <div class="formula small">c = <span class="rad"><svg class="rad-sym" viewBox="0 0 10 20" preserveAspectRatio="none" aria-hidden="true"><path d="M0.5 12.2 L2.6 10.8 L5.2 19.2 L9.6 0.6 L10.6 0.6"/></svg><span class="rad-in">a² − b²</span></span> &nbsp; , &nbsp; e = c / a &nbsp; , &nbsp; 0 &lt; e &lt; 1</div>
     <p class="formula-note" data-th="c คือระยะจากจุดศูนย์กลางถึงโฟกัส และ e คือความเยื้องศูนย์กลาง (eccentricity) — ยิ่ง e ใกล้ 0 วงรียิ่งกลม ยิ่ง e ใกล้ 1 วงรียิ่งแบน" data-en="c is the distance from center to focus, and e is the eccentricity — closer to 0 means more circular, closer to 1 means more flattened">c คือระยะจากจุดศูนย์กลางถึงโฟกัส และ e คือความเยื้องศูนย์กลาง (eccentricity) — ยิ่ง e ใกล้ 0 วงรียิ่งกลม ยิ่ง e ใกล้ 1 วงรียิ่งแบน</p>
   </div>
   <div class="card">
@@ -345,6 +441,8 @@ input[type=range]{ accent-color:var(--primary); }
     <div class="formula small mono" id="ellipseEqLive">(x−0)²/5² + (y−0)²/3² = 1</div>
     <div class="stats" id="statsEllipse"></div>
     <div class="plane-wrap"><svg id="svgEllipse" viewBox="0 0 600 600"></svg></div>
+    <div class="zoom2d"><button type="button" class="btn-action secondary" onclick="ellipsePlane.zoomBy(1/1.25);renderEllipse()" aria-label="zoom out">−</button><span class="zl" data-th="ซูม" data-en="Zoom">ซูม</span><button type="button" class="btn-action secondary" onclick="ellipsePlane.zoomBy(1.25);renderEllipse()" aria-label="zoom in">+</button></div>
+    <div class="gg-read" id="ellipseRead"></div>
     <p class="drag-hint" data-th="ลากจุดศูนย์กลาง C หรือจุดปลายแกนเอก/แกนโท (Hx, Hy) — สลับกันเป็นแกนเอกได้เองถ้าลากให้ยาวกว่า หรือจะพิมพ์พิกัดด้านล่างก็ได้" data-en="Drag the center C, or the ends of the axes (Hx, Hy) — whichever gets longer automatically becomes the major axis, or type coordinates below">ลากจุดศูนย์กลาง C หรือจุดปลายแกนเอก/แกนโท (Hx, Hy) — สลับกันเป็นแกนเอกได้เองถ้าลากให้ยาวกว่า หรือจะพิมพ์พิกัดด้านล่างก็ได้</p>
     <div class="coord-panel" id="coordsEllipse"></div>
   </div>
@@ -353,18 +451,13 @@ input[type=range]{ accent-color:var(--primary); }
 
 <!-- ══════════════ ④ พิสูจน์ ══════════════ -->
 <section id="tab-proof" class="tab-panel">
+  <!-- proof:start -->
   <div class="card">
-    <div class="card-title"><span class="icon">✍️</span><span data-th="พิสูจน์สมการวงรี" data-en="Deriving the Ellipse Equation">พิสูจน์สมการวงรี</span></div>
-    <p class="desc-text" data-th="ให้โฟกัสอยู่ที่ F₁(c,0) และ F₂(−c,0) และให้ P(x,y) เป็นจุดใดๆ บนวงรีที่ผลบวกระยะทางถึงโฟกัสทั้งสองเท่ากับ 2a หน่วยเสมอ (โดยที่ a &gt; c)" data-en="Let the foci be F₁(c,0) and F₂(−c,0), and let P(x,y) be any point on the ellipse where the sum of the distances to both foci is always 2a (with a > c).">ให้โฟกัสอยู่ที่ F₁(c,0) และ F₂(−c,0) และให้ P(x,y) เป็นจุดใดๆ บนวงรีที่ผลบวกระยะทางถึงโฟกัสทั้งสองเท่ากับ 2a หน่วยเสมอ (โดยที่ a &gt; c)</p>
-    <div class="steps">
-      <div class="step"><span class="step-tag" data-th="① นิยาม" data-en="① Definition">① นิยาม</span><span class="mono">PF₁ + PF₂ = 2a</span></div>
-      <div class="step"><span class="step-tag" data-th="② แทนสูตรระยะทาง" data-en="② Distance formula">② แทนสูตรระยะทาง</span><span class="mono"><span class="sqrt"><span class="radic">√</span><span class="radicand">(x−c)²+y²</span></span> + <span class="sqrt"><span class="radic">√</span><span class="radicand">(x+c)²+y²</span></span> = 2a</span></div>
-      <div class="step"><span class="step-tag" data-th="③ ย้ายข้าง ยกกำลังสอง" data-en="③ Isolate, square">③ ย้ายข้าง ยกกำลังสอง</span><span class="mono">4cx = 4a² − 4a<span class="sqrt"><span class="radic">√</span><span class="radicand">(x−c)²+y²</span></span></span></div>
-      <div class="step"><span class="step-tag" data-th="④ จัดรูป" data-en="④ Rearrange">④ จัดรูป</span><span class="mono">a<span class="sqrt"><span class="radic">√</span><span class="radicand">(x−c)²+y²</span></span> = a² − cx</span></div>
-      <div class="step"><span class="step-tag" data-th="⑤ ยกกำลังสองอีกครั้ง แทน b²=a²−c²" data-en="⑤ Square again, let b²=a²−c²">⑤ ยกกำลังสองอีกครั้ง แทน b²=a²−c²</span><span class="mono">b²x² + a²y² = a²b²</span></div>
-      <div class="step result"><span class="step-tag" data-th="⑥ หารด้วย a²b² → รูปมาตรฐาน" data-en="⑥ Divide by a²b² → standard form">⑥ หารด้วย a²b² → รูปมาตรฐาน</span><span class="mono">x²/a² + y²/b² = 1</span></div>
-    </div>
+    <div class="card-title"><span class="icon">✍️</span><span data-th="พิสูจน์สมการวงรี" data-en="Deriving the ellipse equation">พิสูจน์สมการวงรี</span></div>
+    <p class="desc-text" data-th="นิยามวงรี: ผลบวกระยะจากจุดบนวงรีถึงโฟกัสทั้งสองคงตัวเสมอ (เรียกค่านี้ว่า 2a) — เขียนระยะทั้งสองด้วยสูตร แล้วกำจัดรากทีละตัวด้วยการยกกำลังสอง" data-en="Definition: the sum of the distances from a point on the ellipse to the two foci is constant (call it 2a) — write both distances as formulas, then remove the roots one at a time by squaring.">นิยามวงรี: ผลบวกระยะจากจุดบนวงรีถึงโฟกัสทั้งสองคงตัวเสมอ (เรียกค่านี้ว่า 2a) — เขียนระยะทั้งสองด้วยสูตร แล้วกำจัดรากทีละตัวด้วยการยกกำลังสอง</p>
+    <div class="pf"><div class="pf-sec" data-th="ก. แกนเอกอยู่บนแกน x จุดศูนย์กลางที่จุดกำเนิด" data-en="A. Major axis on the x-axis, center at the origin">ก. แกนเอกอยู่บนแกน x จุดศูนย์กลางที่จุดกำเนิด</div><div class="pf-step"><div class="pf-no">1</div><div class="pf-why" data-th="ให้โฟกัสอยู่บนแกน x ที่ F₁(c, 0) และ F₂(−c, 0) ให้ P(x, y) เป็นจุดใดๆ บนวงรี ผลบวกระยะถึงโฟกัสทั้งสองคือ 2a หน่วย จากบทนิยาม 2a &gt; 2c นั่นคือ 0 &lt; c &lt; a" data-en="Put the foci on the x-axis at F₁(c, 0) and F₂(−c, 0); let P(x, y) be any point on the ellipse. The sum of the distances to the foci is 2a; by definition 2a &gt; 2c, so 0 &lt; c &lt; a.">ให้โฟกัสอยู่บนแกน x ที่ F₁(c, 0) และ F₂(−c, 0) ให้ P(x, y) เป็นจุดใดๆ บนวงรี ผลบวกระยะถึงโฟกัสทั้งสองคือ 2a หน่วย จากบทนิยาม 2a &gt; 2c นั่นคือ 0 &lt; c &lt; a</div><div class="pf-eq"><span class="l">PF₁ + PF₂</span><span class="m">=</span><span class="r">2a</span><span class="t"></span></div></div><div class="pf-step"><div class="pf-no">2</div><div class="pf-why" data-th="แทนระยะทั้งสองด้วยสูตรระยะห่างระหว่างจุด" data-en="Replace both distances with the distance formula.">แทนระยะทั้งสองด้วยสูตรระยะห่างระหว่างจุด</div><div class="pf-eq"><span class="l"><span class="rad"><svg class="rad-sym" viewBox="0 0 10 20" preserveAspectRatio="none" aria-hidden="true"><path d="M0.5 12.2 L2.6 10.8 L5.2 19.2 L9.6 0.6 L10.6 0.6"/></svg><span class="rad-in">(x − c)² + y²</span></span> + <span class="rad"><svg class="rad-sym" viewBox="0 0 10 20" preserveAspectRatio="none" aria-hidden="true"><path d="M0.5 12.2 L2.6 10.8 L5.2 19.2 L9.6 0.6 L10.6 0.6"/></svg><span class="rad-in">(x + c)² + y²</span></span></span><span class="m">=</span><span class="r">2a</span><span class="t"></span></div></div><div class="pf-step"><div class="pf-no">3</div><div class="pf-why" data-th="ย้ายรากตัวหนึ่งไปอีกข้าง ให้เหลือรากข้างละตัว จะได้ยกกำลังสองแล้วรากหายไปหนึ่งตัว" data-en="Move one root to the other side so each side has one root; squaring then removes one of them.">ย้ายรากตัวหนึ่งไปอีกข้าง ให้เหลือรากข้างละตัว จะได้ยกกำลังสองแล้วรากหายไปหนึ่งตัว</div><div class="pf-eq"><span class="l"><span class="rad"><svg class="rad-sym" viewBox="0 0 10 20" preserveAspectRatio="none" aria-hidden="true"><path d="M0.5 12.2 L2.6 10.8 L5.2 19.2 L9.6 0.6 L10.6 0.6"/></svg><span class="rad-in">(x − c)² + y²</span></span></span><span class="m">=</span><span class="r">2a − <span class="rad"><svg class="rad-sym" viewBox="0 0 10 20" preserveAspectRatio="none" aria-hidden="true"><path d="M0.5 12.2 L2.6 10.8 L5.2 19.2 L9.6 0.6 L10.6 0.6"/></svg><span class="rad-in">(x + c)² + y²</span></span></span><span class="t"></span></div></div><div class="pf-step"><div class="pf-no">4</div><div class="pf-why" data-th="ยกกำลังสองทั้งสองข้าง (ขวามือกระจายแบบ (A − B)² = A² − 2AB + B²)" data-en="Square both sides (expand the right side as (A − B)² = A² − 2AB + B²).">ยกกำลังสองทั้งสองข้าง (ขวามือกระจายแบบ (A − B)² = A² − 2AB + B²)</div><div class="pf-eq"><span class="l">(x − c)² + y²</span><span class="m">=</span><span class="r">4a² − 4a<span class="rad"><svg class="rad-sym" viewBox="0 0 10 20" preserveAspectRatio="none" aria-hidden="true"><path d="M0.5 12.2 L2.6 10.8 L5.2 19.2 L9.6 0.6 L10.6 0.6"/></svg><span class="rad-in">(x + c)² + y²</span></span> + (x + c)² + y²</span><span class="t"></span></div></div><div class="pf-step"><div class="pf-no">5</div><div class="pf-why" data-th="กระจายแล้วตัดพจน์ที่มีทั้งสองข้าง (x², c², y²) จัดให้รากอยู่ข้างเดียว" data-en="Expand, cancel the terms on both sides (x², c², y²), and isolate the root.">กระจายแล้วตัดพจน์ที่มีทั้งสองข้าง (x², c², y²) จัดให้รากอยู่ข้างเดียว</div><div class="pf-eq"><span class="l">x² − 2cx + c² + y²</span><span class="m">=</span><span class="r">4a² − 4a<span class="rad"><svg class="rad-sym" viewBox="0 0 10 20" preserveAspectRatio="none" aria-hidden="true"><path d="M0.5 12.2 L2.6 10.8 L5.2 19.2 L9.6 0.6 L10.6 0.6"/></svg><span class="rad-in">(x + c)² + y²</span></span> + x² + 2cx + c² + y²</span><span class="t"></span><span class="l">4a<span class="rad"><svg class="rad-sym" viewBox="0 0 10 20" preserveAspectRatio="none" aria-hidden="true"><path d="M0.5 12.2 L2.6 10.8 L5.2 19.2 L9.6 0.6 L10.6 0.6"/></svg><span class="rad-in">(x + c)² + y²</span></span></span><span class="m">=</span><span class="r">4a² + 4cx</span><span class="t"></span></div></div><div class="pf-step"><div class="pf-no">6</div><div class="pf-why" data-th="หารทั้งสองข้างด้วย 4 แล้วยกกำลังสองอีกรอบเพื่อกำจัดรากที่เหลือ" data-en="Divide by 4, then square again to remove the remaining root.">หารทั้งสองข้างด้วย 4 แล้วยกกำลังสองอีกรอบเพื่อกำจัดรากที่เหลือ</div><div class="pf-eq"><span class="l">a<span class="rad"><svg class="rad-sym" viewBox="0 0 10 20" preserveAspectRatio="none" aria-hidden="true"><path d="M0.5 12.2 L2.6 10.8 L5.2 19.2 L9.6 0.6 L10.6 0.6"/></svg><span class="rad-in">(x + c)² + y²</span></span></span><span class="m">=</span><span class="r">a² + cx</span><span class="t"></span><span class="l">a²[(x + c)² + y²]</span><span class="m">=</span><span class="r">(a² + cx)²</span><span class="t"></span></div></div><div class="pf-step"><div class="pf-no">7</div><div class="pf-why" data-th="กระจายทั้งสองข้าง แล้วตัด 2a²cx ที่มีทั้งสองข้าง" data-en="Expand both sides and cancel 2a²cx from both sides.">กระจายทั้งสองข้าง แล้วตัด 2a²cx ที่มีทั้งสองข้าง</div><div class="pf-eq"><span class="l">a²x² + 2a²cx + a²c² + a²y²</span><span class="m">=</span><span class="r">a⁴ + 2a²cx + c²x²</span><span class="t"></span><span class="l">a²x² − c²x² + a²y²</span><span class="m">=</span><span class="r">a⁴ − a²c²</span><span class="t"></span><span class="l">(a² − c²)x² + a²y²</span><span class="m">=</span><span class="r">a²(a² − c²)</span><span class="t">…(1)</span></div></div><div class="pf-step"><div class="pf-no">8</div><div class="pf-why" data-th="เพราะ 0 &lt; c &lt; a จึงได้ a² − c² &gt; 0 หารสมการ (1) ด้วย a²(a² − c²) ได้" data-en="Since 0 &lt; c &lt; a, a² − c² &gt; 0. Divide equation (1) by a²(a² − c²).">เพราะ 0 &lt; c &lt; a จึงได้ a² − c² &gt; 0 หารสมการ (1) ด้วย a²(a² − c²) ได้</div><div class="pf-eq"><span class="l"><span class="frac"><span class="num">x²</span><span class="den">a²</span></span> + <span class="frac"><span class="num">y²</span><span class="den">a² − c²</span></span></span><span class="m">=</span><span class="r">1</span><span class="t">…(2)</span></div></div><div class="pf-step"><div class="pf-no">9</div><div class="pf-why" data-th="ให้ b² = a² − c² โดยที่ b &gt; 0 เพราะ b² &lt; a² จึงได้ b &lt; a" data-en="Let b² = a² − c² with b &gt; 0. Since b² &lt; a², b &lt; a.">ให้ b² = a² − c² โดยที่ b &gt; 0 เพราะ b² &lt; a² จึงได้ b &lt; a</div><div class="pf-eq"><span class="l"><span class="frac"><span class="num">x²</span><span class="den">a²</span></span> + <span class="frac"><span class="num">y²</span><span class="den">b²</span></span></span><span class="m">=</span><span class="r">1</span><span class="t"></span></div><div class="pf-box"><span class="lab" data-th="สมการวงรี จุดศูนย์กลาง (0, 0) แกนเอกบนแกน x" data-en="Ellipse, center (0, 0), major axis on the x-axis">สมการวงรี จุดศูนย์กลาง (0, 0) แกนเอกบนแกน x</span><span class="eq"><span class="frac"><span class="num">x²</span><span class="den">a²</span></span> + <span class="frac"><span class="num">y²</span><span class="den">b²</span></span> = 1 ,  a > b > 0</span></div></div><div class="pf-step"><div class="pf-no">10</div><div class="pf-why" data-th="เลื่อนจุดศูนย์กลางไปที่ (h, k): แทน x ด้วย x − h และ y ด้วย y − k · ถ้าแกนเอกขนานแกน y ให้สลับ a² ไปอยู่ใต้พจน์ของ y" data-en="Move the center to (h, k): replace x by x − h and y by y − k · if the major axis is parallel to the y-axis, a² goes under the y-term.">เลื่อนจุดศูนย์กลางไปที่ (h, k): แทน x ด้วย x − h และ y ด้วย y − k · ถ้าแกนเอกขนานแกน y ให้สลับ a² ไปอยู่ใต้พจน์ของ y</div><div class="pf-eq"><span class="l"><span data-th="แกนเอกขนานแกน x" data-en="major axis ∥ x-axis">แกนเอกขนานแกน x</span></span><span class="m">:</span><span class="r"><span class="frac"><span class="num">(x − h)²</span><span class="den">a²</span></span> + <span class="frac"><span class="num">(y − k)²</span><span class="den">b²</span></span> = 1</span><span class="t"></span><span class="l"><span data-th="แกนเอกขนานแกน y" data-en="major axis ∥ y-axis">แกนเอกขนานแกน y</span></span><span class="m">:</span><span class="r"><span class="frac"><span class="num">(y − k)²</span><span class="den">a²</span></span> + <span class="frac"><span class="num">(x − h)²</span><span class="den">b²</span></span> = 1</span><span class="t"></span></div><div class="pf-note" data-th="ตัวส่วนที่มากกว่าคือ a² เสมอ (a &gt; b &gt; 0)" data-en="The larger denominator is always a² (a &gt; b &gt; 0)">ตัวส่วนที่มากกว่าคือ a² เสมอ (a &gt; b &gt; 0)</div></div><div class="pf-sec" data-th="ข. จุดยอด แกนเอก แกนโท และ a² = b² + c²" data-en="B. Vertices, axes and a² = b² + c²">ข. จุดยอด แกนเอก แกนโท และ a² = b² + c²</div><div class="pf-step"><div class="pf-no">11</div><div class="pf-why" data-th="หาจุดตัดแกน (ใช้ h = k = 0): ให้ y = 0 จะได้ x²/a² = 1 → x² = a² → x = −a หรือ x = a วงรีตัดแกน x ที่ (−a, 0) และ (a, 0) เรียกว่าจุดยอด ส่วนของเส้นตรงที่เชื่อมจุดยอดคือแกนเอก ยาว 2a หน่วย จุดกึ่งกลางคือจุดศูนย์กลาง" data-en="Intercepts (with h = k = 0): put y = 0 → x²/a² = 1 → x = −a or x = a. The ellipse meets the x-axis at (−a, 0) and (a, 0), the vertices; the segment joining them is the major axis, length 2a; its midpoint is the center.">หาจุดตัดแกน (ใช้ h = k = 0): ให้ y = 0 จะได้ x²/a² = 1 → x² = a² → x = −a หรือ x = a วงรีตัดแกน x ที่ (−a, 0) และ (a, 0) เรียกว่าจุดยอด ส่วนของเส้นตรงที่เชื่อมจุดยอดคือแกนเอก ยาว 2a หน่วย จุดกึ่งกลางคือจุดศูนย์กลาง</div></div><div class="pf-step"><div class="pf-no">12</div><div class="pf-why" data-th="ในทำนองเดียวกัน ให้ x = 0 จะได้ y = −b หรือ y = b ส่วนของเส้นตรงที่เชื่อม (0, −b) กับ (0, b) คือแกนโท ยาว 2b หน่วย และเพราะ 2a &gt; 2b แกนเอกจึงยาวกว่าแกนโท" data-en="Likewise put x = 0 → y = −b or y = b. The segment from (0, −b) to (0, b) is the minor axis, length 2b; since 2a &gt; 2b the major axis is longer.">ในทำนองเดียวกัน ให้ x = 0 จะได้ y = −b หรือ y = b ส่วนของเส้นตรงที่เชื่อม (0, −b) กับ (0, b) คือแกนโท ยาว 2b หน่วย และเพราะ 2a &gt; 2b แกนเอกจึงยาวกว่าแกนโท</div></div><div class="pf-step"><div class="pf-no">13</div><div class="pf-why" data-th="ที่ปลายแกนโท B₁(0, b) ระยะถึงโฟกัสทั้งสองเท่ากัน (สมมาตร) และรวมกันได้ 2a จึงข้างละ a พิจารณาสามเหลี่ยมมุมฉาก O–F₁–B₁ ตามทฤษฎีบทพีทาโกรัส" data-en="At the end of the minor axis B₁(0, b) the two focal distances are equal (by symmetry) and add to 2a, so each is a. In the right triangle O–F₁–B₁, Pythagoras gives:">ที่ปลายแกนโท B₁(0, b) ระยะถึงโฟกัสทั้งสองเท่ากัน (สมมาตร) และรวมกันได้ 2a จึงข้างละ a พิจารณาสามเหลี่ยมมุมฉาก O–F₁–B₁ ตามทฤษฎีบทพีทาโกรัส</div><div class="pf-eq"><span class="l">(B₁F₁)²</span><span class="m">=</span><span class="r">(OF₁)² + (OB₁)²</span><span class="t"></span><span class="l">a²</span><span class="m">=</span><span class="r">c² + b²</span><span class="t"></span></div><div class="pf-box"><span class="lab" data-th="ความสัมพันธ์ของ a, b, c ในวงรี" data-en="Relation of a, b, c for an ellipse">ความสัมพันธ์ของ a, b, c ในวงรี</span><span class="eq">a² = b² + c²</span></div></div><div class="pf-step"><div class="pf-no">14</div><div class="pf-why" data-th="ความเยื้องศูนย์กลาง e คืออัตราส่วนของ c ต่อ a โดย c = √(a² − b²)" data-en="The eccentricity e is the ratio of c to a, where c = √(a² − b²).">ความเยื้องศูนย์กลาง e คืออัตราส่วนของ c ต่อ a โดย c = √(a² − b²)</div><div class="pf-eq"><span class="l">e</span><span class="m">=</span><span class="r"><span class="frac"><span class="num">c</span><span class="den">a</span></span> ,  c = <span class="rad"><svg class="rad-sym" viewBox="0 0 10 20" preserveAspectRatio="none" aria-hidden="true"><path d="M0.5 12.2 L2.6 10.8 L5.2 19.2 L9.6 0.6 L10.6 0.6"/></svg><span class="rad-in">a² − b²</span></span> ,  0 < e < 1</span><span class="t"></span></div><div class="pf-note" data-th="e ใกล้ 0 วงรียิ่งกลมคล้ายวงกลม · e ใกล้ 1 วงรียิ่งแบน" data-en="e near 0: almost a circle · e near 1: very flat">e ใกล้ 0 วงรียิ่งกลมคล้ายวงกลม · e ใกล้ 1 วงรียิ่งแบน</div></div><div class="pf-sec" data-th="ค. สมการรูปแบบทั่วไป" data-en="C. General form">ค. สมการรูปแบบทั่วไป</div><div class="pf-step"><div class="pf-no">15</div><div class="pf-why" data-th="แกนเอกขนานแกน x: คูณ (x − h)²/a² + (y − k)²/b² = 1 ทั้งสมการด้วย a²b² แล้วกระจายและจัดรูป" data-en="Major axis parallel to x: multiply (x − h)²/a² + (y − k)²/b² = 1 by a²b², expand and rearrange.">แกนเอกขนานแกน x: คูณ (x − h)²/a² + (y − k)²/b² = 1 ทั้งสมการด้วย a²b² แล้วกระจายและจัดรูป</div><div class="pf-eq"><span class="l">b²(x − h)² + a²(y − k)²</span><span class="m">=</span><span class="r">a²b²</span><span class="t"></span><span class="l">b²x² − 2b²hx + b²h² + a²y² − 2a²ky + a²k²</span><span class="m">=</span><span class="r">a²b²</span><span class="t"></span><span class="l">b²x² + a²y² − 2b²hx − 2a²ky</span><span class="m">=</span><span class="r">a²b² − b²h² − a²k²</span><span class="t"></span></div><div class="pf-box"><span class="lab" data-th="แทน A = b², B = a², D = −2b²h, E = −2a²k, F = a²b² − b²h² − a²k²" data-en="Put A = b², B = a², D = −2b²h, E = −2a²k, F = a²b² − b²h² − a²k²">แทน A = b², B = a², D = −2b²h, E = −2a²k, F = a²b² − b²h² − a²k²</span><span class="eq">Ax² + By² + Dx + Ey = F</span></div></div><div class="pf-step"><div class="pf-no">16</div><div class="pf-why" data-th="แกนเอกขนานแกน y: ทำแบบเดียวกันกับ (y − k)²/a² + (x − h)²/b² = 1" data-en="Major axis parallel to y: do the same with (y − k)²/a² + (x − h)²/b² = 1.">แกนเอกขนานแกน y: ทำแบบเดียวกันกับ (y − k)²/a² + (x − h)²/b² = 1</div><div class="pf-eq"><span class="l">a²x² + b²y² − 2a²hx − 2b²ky</span><span class="m">=</span><span class="r">a²b² − a²h² − b²k²</span><span class="t"></span></div><div class="pf-box"><span class="lab" data-th="แทน A = a², B = b², D = −2a²h, E = −2b²k, F = a²b² − a²h² − b²k²" data-en="Put A = a², B = b², D = −2a²h, E = −2b²k, F = a²b² − a²h² − b²k²">แทน A = a², B = b², D = −2a²h, E = −2b²k, F = a²b² − a²h² − b²k²</span><span class="eq">Ax² + By² + Dx + Ey = F</span></div><div class="pf-note" data-th="วงรีมี AB &gt; 0 และ A ≠ B (ถ้า A = B จะเป็นวงกลม)" data-en="For an ellipse AB &gt; 0 and A ≠ B (A = B gives a circle)">วงรีมี AB &gt; 0 และ A ≠ B (ถ้า A = B จะเป็นวงกลม)</div></div></div>
   </div>
+  <!-- proof:end -->
   <div class="next-row"><button class="btn-action" onclick="goTab('quiz')" data-th="ข้อต่อไป →" data-en="Next →">ข้อต่อไป →</button></div>
 </section>
 
@@ -425,245 +518,434 @@ function fmt(n) {
   return Number.isInteger(r) ? String(r) : r.toFixed(2);
 }
 function statHTML(k, v) { return '<div class="stat"><div class="k">' + k + '</div><div class="v">' + v + '</div></div>'; }
-
-// ════════════════════════════════════════════════════════════
-// 3D module — double cone + tilted cutting plane (identical across the 4 conic pages)
-// ════════════════════════════════════════════════════════════
-const CONE_ALPHA_DEG = 34;
-const CONE_ALPHA = CONE_ALPHA_DEG * Math.PI / 180;
-const CONE_BETA_PARABOLA = 90 - CONE_ALPHA_DEG;
-const CONE_TMAX = 8;
-const CONE_PLANE_H = 3.4;
-const CONE_PLANE_R = 7.5;
-
-function coneDir(u) { return { x: Math.sin(CONE_ALPHA) * Math.cos(u), y: Math.sin(CONE_ALPHA) * Math.sin(u), z: Math.cos(CONE_ALPHA) }; }
-function rotateX3(p, a) { const c = Math.cos(a), s = Math.sin(a); return { x: p.x, y: p.y * c - p.z * s, z: p.y * s + p.z * c }; }
-function rotateY3(p, a) { const c = Math.cos(a), s = Math.sin(a); return { x: p.x * c + p.z * s, y: p.y, z: -p.x * s + p.z * c }; }
-function project3(p, view, cx, cy, scale) {
-  let q = rotateY3(p, view.rotY);
-  q = rotateX3(q, view.rotX);
-  return { px: cx + q.x * scale, py: cy - q.y * scale, z: q.z };
+// geo2d:start
+// ── ของกลางรูป 2 มิติแบบ GeoGebra ของครู (ป้ายกล่องสี · จุด P ลากไปตามเส้นโค้ง) — ฉีดด้วย tools/conic_cone3d/inject2d.py ──
+// สีตาม GeoGebra: P→โฟกัส ชมพู (พาราโบลา/วงรี) · เหลือง (ไฮเพอร์โบลา) · ไดเรกตริกซ์ เขียว · ลาตัสเรกตัม แดง · c เหลือง
+// · แกนตามขวาง ส้ม · แกนสังยุค แดง · กล่องโฟกัส/ค่า a b c ฟ้า · เส้นโค้งสีเข้ม (โหมดมืด theme-js ปรับให้เอง)
+const GG = { curve: 'var(--text)', pink: '#E0309A', green: '#1E9E3E', red: '#D32F2F', yellow: '#D9A400', yellowBg: '#FFF1A6', cyanBg: '#A6F0F4', purple: '#7B3FC4', purpleBg: '#E6D4FA', orange: '#F07400', ink: '#16181A' };
+function ggSeg(plane, A, B, color, w, dash) {
+  const a = plane.toPx(A.x, A.y), b = plane.toPx(B.x, B.y);
+  return '<line x1="' + a.px.toFixed(1) + '" y1="' + a.py.toFixed(1) + '" x2="' + b.px.toFixed(1) + '" y2="' + b.py.toFixed(1) + '" stroke="' + color + '" stroke-width="' + (w || 2.5) + '"' + (dash ? ' stroke-dasharray="' + dash + '"' : '') + ' stroke-linecap="round"/>';
 }
-function conePlaneBasis(betaDeg) {
-  const b = betaDeg * Math.PI / 180;
+// ป้ายกล่องสีแบบ GeoGebra: dx/dy เลื่อนจากจุด (px) · anchor = start/middle/end
+function ggBox(plane, pt, text, bg, fg, dx, dy, anchor) {
+  const p = plane.toPx(pt.x, pt.y), fs = 13, w = Math.max(24, [...text].length * 7.3 + 12), h = 21;
+  anchor = anchor || 'start';
+  const x0 = p.px + (dx || 0) - (anchor === 'middle' ? w / 2 : anchor === 'end' ? w : 0), y0 = p.py + (dy || 0) - h / 2;
+  return '<g class="gg-box"><rect x="' + x0.toFixed(1) + '" y="' + y0.toFixed(1) + '" width="' + w.toFixed(1) + '" height="' + h + '" rx="4" fill="' + bg + '"/>' +
+    '<text x="' + (x0 + w / 2).toFixed(1) + '" y="' + (y0 + 15).toFixed(1) + '" font-size="' + fs + '" font-weight="700" text-anchor="middle" fill="' + fg + '">' + text + '</text></g>';
+}
+function ggTxt(plane, pt, text, color, dx, dy, anchor, size) {
+  const p = plane.toPx(pt.x, pt.y);
+  return '<text x="' + (p.px + (dx || 0)).toFixed(1) + '" y="' + (p.py + (dy || 0)).toFixed(1) + '" font-size="' + (size || 13) + '" font-weight="800" text-anchor="' + (anchor || 'start') + '" fill="' + color + '" paint-order="stroke" stroke="var(--card)" stroke-width="3">' + text + '</text>';
+}
+function ggDot(plane, pt, color, r) { const p = plane.toPx(pt.x, pt.y); return '<circle cx="' + p.px.toFixed(1) + '" cy="' + p.py.toFixed(1) + '" r="' + (r || 4.5) + '" fill="' + color + '" stroke="var(--card)" stroke-width="1.5"/>'; }
+// จุด P บนเส้นโค้ง (ลากได้ตามเส้นโค้งเท่านั้น)
+function ggCurvePt(plane, P, color, label) {
+  const p = plane.toPx(P.x, P.y);
+  return '<g data-curve="1" style="cursor:grab"><circle cx="' + p.px.toFixed(1) + '" cy="' + p.py.toFixed(1) + '" r="18" fill="transparent"/>' +
+    '<circle cx="' + p.px.toFixed(1) + '" cy="' + p.py.toFixed(1) + '" r="7" fill="' + color + '" stroke="var(--card)" stroke-width="2"/>' +
+    '<text x="' + (p.px + 11).toFixed(1) + '" y="' + (p.py - 10).toFixed(1) + '" font-size="14" font-weight="800" fill="' + color + '" paint-order="stroke" stroke="var(--card)" stroke-width="3">' + label + '</text></g>';
+}
+function ggWireCurve(svgEl, plane, onMove) {
+  let on = false;
+  const toMath = e => { const p = svgEl.createSVGPoint(); p.x = e.clientX; p.y = e.clientY; const l = p.matrixTransform(svgEl.getScreenCTM().inverse()); return plane.toMath(l.x, l.y); };
+  svgEl.addEventListener('pointerdown', e => { if (!e.target.closest('[data-curve]')) return; on = true; svgEl.setPointerCapture(e.pointerId); e.preventDefault(); });
+  svgEl.addEventListener('pointermove', e => { if (on) onMove(toMath(e)); });
+  svgEl.addEventListener('pointerup', () => { on = false; });
+  svgEl.addEventListener('pointercancel', () => { on = false; });
+}
+const ggDist = (P, Q) => Math.hypot(P.x - Q.x, P.y - Q.y);
+const ggPt = (P) => '(' + fmt(P.x) + ', ' + fmt(P.y) + ')';
+// geo2d:end
+
+// cone3d:start
+// ════════════════════════════════════════════════════════════
+// 3D module — กรวยกลมสองชั้น + ระนาบตัด วาดตาม GeoGebra ของครู
+// (ไฟล์ "2.ความหมายของภาคตัดกรวย…ggb" หน้า 4–6: กรวยสูง 3 รัศมี 1.5 สีเขียว, แกนม่วง,
+//  เส้นกำเนิดแดง, ระนาบฟ้ามีตาราง, รอยตัดส้ม, ปุ่มเลือก 4 ชนิด, จุด O/A/B ลากปรับระนาบ)
+// ต้นทาง: tools/conic_cone3d/ — ฉีดเข้า 4 หน้าด้วย inject.py (ห้ามแก้ในหน้าตรงๆ)
+// ════════════════════════════════════════════════════════════
+const CONE_H = 3, CONE_R = 1.5;                       // ตาม GeoGebra: Cone(N, M, 1.5) สูง 3
+const CONE_TAN = CONE_R / CONE_H;                     // tan(มุมครึ่งยอด) = 0.5
+const CONE_ALPHA = Math.atan(CONE_TAN);               // ≈ 26.57° (GeoGebra โชว์ γ = 26.57°)
+const CONE_SIN = Math.sin(CONE_ALPHA), CONE_COS = Math.cos(CONE_ALPHA);
+const CONE_SVG_W = 600, CONE_SVG_H = 520, CONE_SCALE = 46;
+
+const CONE_TXT = {
+  th: { circle: 'วงกลม', ellipse: 'วงรี', parabola: 'พาราโบลา', hyperbola: 'ไฮเพอร์โบลา',
+        how: 'วิธีปรับระนาบ', O: 'ลากระนาบขึ้นลง', A: 'ลากระนาบทำมุม', B: 'ลากระนาบซ้ายขวา',
+        axis: 'แกน', gen: 'ตัวก่อกำเนิด', vtx: 'V (จุดยอด)',
+        why: { circle: 'ระนาบตั้งฉากกับแกน → รอยตัดเป็นวงกลม',
+               ellipse: 'ระนาบเอียง แต่ยังชันน้อยกว่าตัวก่อกำเนิด → ตัดกรวยชั้นเดียวเป็นวงปิด = วงรี',
+               parabola: 'ระนาบขนานกับตัวก่อกำเนิด (เส้นแดง) → ตัดกรวยชั้นเดียว ปลายเปิด = พาราโบลา',
+               hyperbola: 'ระนาบขนานกับแกน → ตัดกรวยทั้งสองชั้น ได้ 2 กิ่ง = ไฮเพอร์โบลา' },
+        degen: { circle: 'ระนาบผ่านจุดยอด → รอยตัดเหลือจุดเดียว (ภาคตัดกรวยลดรูป)', ellipse: 'ระนาบผ่านจุดยอด → รอยตัดเหลือจุดเดียว (ภาคตัดกรวยลดรูป)', parabola: 'ระนาบผ่านจุดยอดพอดี → ได้เส้นตรง 1 เส้น (ภาคตัดกรวยลดรูป)', hyperbola: 'ระนาบผ่านแกนพอดี → ได้เส้นตรง 2 เส้นตัดกันที่จุดยอด (ภาคตัดกรวยลดรูป)' } },
+  en: { circle: 'Circle', ellipse: 'Ellipse', parabola: 'Parabola', hyperbola: 'Hyperbola',
+        how: 'Adjust the plane', O: 'drag the plane up / down', A: 'drag to tilt the plane', B: 'drag the plane left / right',
+        axis: 'Axis', gen: 'Generator', vtx: 'V (Vertex)',
+        why: { circle: 'Plane perpendicular to the axis → the cut is a circle',
+               ellipse: 'Plane tilted, but less steep than a generator → closed curve on one nappe = ellipse',
+               parabola: 'Plane parallel to a generator (red line) → one nappe, open curve = parabola',
+               hyperbola: 'Plane parallel to the axis → cuts both nappes, two branches = hyperbola' },
+        degen: { circle: 'The plane passes through the vertex → the cut shrinks to a single point (degenerate conic)', ellipse: 'The plane passes through the vertex → the cut shrinks to a single point (degenerate conic)', parabola: 'The plane passes through the vertex → a single line (degenerate conic)', hyperbola: 'The plane contains the axis → two lines crossing at the vertex (degenerate conic)' } }
+};
+// พารามิเตอร์ของจุดลากแต่ละชนิด (ช่วงค่าเลือกให้รอยตัดอยู่ในกรวยที่สูง 3 เสมอ)
+const CONE_PARAMS = {
+  O: { min: -2.8, max: 2.8 },       // ความสูงของระนาบบนแกน (วงกลม) · ติดลบ = ตัดกรวยชั้นล่าง · 0 = ผ่านจุดยอด (เหลือจุดเดียว)
+  Oe: { min: -1.8, max: 1.8 },      // ความสูงของระนาบบนแกน (วงรี) · สมมาตรกับชั้นบน
+  A: { min: 0, max: 35 },           // มุมเอียงของระนาบ (องศา) — 35° ยังเป็นวงรีปิดในกรวยสูง 3
+  Bp: { min: -1.4, max: 1.4 },      // พาราโบลา: ระนาบ z = 2(x + b) · b < 0 ตัดกรวยชั้นล่าง · b = 0 ผ่านจุดยอด (ลดรูปเป็นเส้นตรง)
+  Bh: { min: -1.2, max: 1.2 }       // ไฮเพอร์โบลา: ระนาบ x = −b · b = 0 ผ่านแกน (ลดรูปเป็นเส้นตรงสองเส้นตัดกัน)
+};
+
+const cone3D = {
+  kind: 'ellipse',
+  view: { az: -60, el: 22, zoom: 1 },        // มุมกล้องเริ่มต้นแบบ GeoGebra (แกน x ชี้ล่างขวา, y ชี้บนขวา)
+  h: 2, he: 1.4, tilt: 15, bp: 0.8, bh: 0.5
+};
+
+function coneCam() {
+  const t = cone3D.view.az * Math.PI / 180, e = cone3D.view.el * Math.PI / 180;
   return {
-    n: { x: 0, y: -Math.sin(b), z: Math.cos(b) },
-    p0: { x: 0, y: 0, z: CONE_PLANE_H },
-    up: { x: 1, y: 0, z: 0 },
-    vp: { x: 0, y: Math.cos(b), z: Math.sin(b) },
-    betaRad: b
+    R: { x: -Math.sin(t), y: Math.cos(t), z: 0 },
+    U: { x: -Math.sin(e) * Math.cos(t), y: -Math.sin(e) * Math.sin(t), z: Math.cos(e) },
+    D: { x: Math.cos(e) * Math.cos(t), y: Math.cos(e) * Math.sin(t), z: Math.sin(e) }
   };
 }
-function coneIntersectionSegments(betaDeg, steps) {
-  steps = steps || 120;
-  const { n, p0 } = conePlaneBasis(betaDeg);
-  const numK = n.x * p0.x + n.y * p0.y + n.z * p0.z;
-  const segments = [];
-  let current = [];
-  let brokeAtStart = false;
-  for (let i = 0; i <= steps; i++) {
-    const u = (i / steps) * 2 * Math.PI;
-    const d = coneDir(u);
-    const denom = n.x * d.x + n.y * d.y + n.z * d.z;
-    let pt = null;
-    if (Math.abs(denom) >= 1e-4) {
-      const t = numK / denom;
-      if (Math.abs(t) <= CONE_TMAX) pt = { x: t * d.x, y: t * d.y, z: t * d.z };
-    }
-    if (!pt) {
-      if (i === 0) brokeAtStart = true;
-      if (current.length > 1) segments.push(current);
-      current = [];
-      continue;
-    }
-    current.push(pt);
-  }
-  const endedValid = current.length > 0;
-  if (current.length > 1) segments.push(current);
-  if (!brokeAtStart && endedValid && segments.length >= 2) {
-    const merged = segments[segments.length - 1].concat(segments[0]);
-    segments.splice(0, 1);
-    segments[segments.length - 1] = merged;
-  }
-  return segments;
+function dot3(a, b) { return a.x * b.x + a.y * b.y + a.z * b.z; }
+function add3(a, b, k) { return { x: a.x + b.x * k, y: a.y + b.y * k, z: a.z + b.z * k }; }
+function coneProj(p, cam) {
+  const sc = CONE_SCALE * (cone3D.view.zoom || 1);
+  return { px: CONE_SVG_W / 2 + dot3(p, cam.R) * sc, py: CONE_SVG_H * 0.52 - dot3(p, cam.U) * sc, d: dot3(p, cam.D) };
 }
-function classifyBeta(betaDeg) {
-  if (betaDeg < 1) return 'circle';
-  if (betaDeg < CONE_BETA_PARABOLA - 1.5) return 'ellipse';
-  if (betaDeg < CONE_BETA_PARABOLA + 1.5) return 'parabola';
-  return 'hyperbola';
-}
-const CONIC_LABEL = {
-  th: { circle: 'วงกลม', ellipse: 'วงรี', parabola: 'พาราโบลา', hyperbola: 'ไฮเพอร์โบลา' },
-  en: { circle: 'Circle', ellipse: 'Ellipse', parabola: 'Parabola', hyperbola: 'Hyperbola' }
-};
-function buildConeQuads(view, cx, cy, scale, ringsPerNappe, angularSteps) {
-  const quads = [];
-  for (let nappe = -1; nappe <= 1; nappe += 2) {
-    for (let ri = 0; ri < ringsPerNappe; ri++) {
-      const t0 = nappe * (CONE_TMAX * ri / ringsPerNappe);
-      const t1 = nappe * (CONE_TMAX * (ri + 1) / ringsPerNappe);
-      for (let ai = 0; ai < angularSteps; ai++) {
-        const u0 = (ai / angularSteps) * 2 * Math.PI, u1 = ((ai + 1) / angularSteps) * 2 * Math.PI;
-        const d0 = coneDir(u0), d1 = coneDir(u1);
-        const pts3 = [
-          { x: t0 * d0.x, y: t0 * d0.y, z: t0 * d0.z },
-          { x: t0 * d1.x, y: t0 * d1.y, z: t0 * d1.z },
-          { x: t1 * d1.x, y: t1 * d1.y, z: t1 * d1.z },
-          { x: t1 * d0.x, y: t1 * d0.y, z: t1 * d0.z }
-        ];
-        const proj = pts3.map(function (p) { return project3(p, view, cx, cy, scale); });
-        const avgZ = (proj[0].z + proj[1].z + proj[2].z + proj[3].z) / 4;
-        quads.push({ pts: proj, z: avgZ, kind: 'cone' });
-      }
-    }
-  }
-  return quads;
-}
-// Single-headed arrow marker + a coordinate-axis line through the origin, GeoGebra-style
-// (red/green/blue x/y/z) — gives the scene a spatial reference frame to read the tilt against.
-function axisArrowDefs(id, color) {
-  return '<defs><marker id="' + id + '" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="' + color + '"/></marker></defs>';
-}
-function axisSVG(dir, len, color, label, view, cx, cy, scale, markerId) {
-  const pos = project3({ x: dir.x * len, y: dir.y * len, z: dir.z * len }, view, cx, cy, scale);
-  const neg = project3({ x: -dir.x * len, y: -dir.y * len, z: -dir.z * len }, view, cx, cy, scale);
-  const lbl = project3({ x: dir.x * (len + 0.6), y: dir.y * (len + 0.6), z: dir.z * (len + 0.6) }, view, cx, cy, scale);
-  return axisArrowDefs(markerId, color) +
-    '<line x1="' + neg.px + '" y1="' + neg.py + '" x2="' + pos.px + '" y2="' + pos.py + '" stroke="' + color + '" stroke-width="1.5" marker-end="url(#' + markerId + ')"/>' +
-    '<text x="' + lbl.px + '" y="' + lbl.py + '" font-size="14" font-weight="800" font-style="italic" fill="' + color + '" text-anchor="middle">' + label + '</text>';
-}
-function render3D(svgId, betaDeg, view) {
-  const lang = getLang();
-  const svg = document.getElementById(svgId);
-  const cx = 300, cy = 330, scale = 29;
-  const quads = buildConeQuads(view, cx, cy, scale, 3, 20);
+function f1(n) { return Math.round(n * 10) / 10; }
+function f2(n) { return (Math.round(n * 100) / 100).toFixed(2).replace('-', '−'); }
 
-  const plane = conePlaneBasis(betaDeg);
-  const R = CONE_PLANE_R;
-  const corners3 = [
-    { x: plane.p0.x + plane.up.x * R + plane.vp.x * R, y: plane.p0.y + plane.up.y * R + plane.vp.y * R, z: plane.p0.z + plane.up.z * R + plane.vp.z * R },
-    { x: plane.p0.x - plane.up.x * R + plane.vp.x * R, y: plane.p0.y - plane.up.y * R + plane.vp.y * R, z: plane.p0.z - plane.up.z * R + plane.vp.z * R },
-    { x: plane.p0.x - plane.up.x * R - plane.vp.x * R, y: plane.p0.y - plane.up.y * R - plane.vp.y * R, z: plane.p0.z - plane.up.z * R - plane.vp.z * R },
-    { x: plane.p0.x + plane.up.x * R - plane.vp.x * R, y: plane.p0.y + plane.up.y * R - plane.vp.y * R, z: plane.p0.z + plane.up.z * R - plane.vp.z * R }
-  ];
-  const planeProj = corners3.map(function (p) { return project3(p, view, cx, cy, scale); });
-  const planeZ = (planeProj[0].z + planeProj[1].z + planeProj[2].z + planeProj[3].z) / 4;
-  quads.push({ pts: planeProj, z: planeZ, kind: 'plane' });
+// ระนาบของชนิดปัจจุบัน: n·p = k, จุดกลางแผ่น c, แกนในระนาบ e1 (ทิศ y) กับ e2, จุดลาก
+function conePlane() {
+  const s = cone3D;
+  if (s.kind === 'circle') {
+    return { n: { x: 0, y: 0, z: 1 }, k: s.h, c: { x: 0, y: 0, z: s.h }, e2: { x: 1, y: 0, z: 0 },
+      handles: [{ id: 'O', p: { x: 0, y: 0, z: s.h } }] };
+  }
+  if (s.kind === 'ellipse') {
+    const f = s.tilt * Math.PI / 180;                 // ระนาบ z = h + x·tan f (เอียงรอบแกน y แบบ GeoGebra)
+    const n = { x: -Math.sin(f), y: 0, z: Math.cos(f) };
+    const e2 = { x: Math.cos(f), y: 0, z: Math.sin(f) };
+    const O = { x: 0, y: 0, z: s.he };
+    return { n: n, k: s.he * Math.cos(f), c: O, e2: e2,
+      handles: [{ id: 'O', p: O }, { id: 'A', p: add3(O, e2, 2.2) }] };
+  }
+  if (s.kind === 'parabola') {
+    // ขนานกับตัวก่อกำเนิด x = z/2 (y = 0): ระนาบ z = 2(x + b)  ⇔  2x − z = −2b
+    const len = Math.sqrt(5);
+    const n = { x: 2 / len, y: 0, z: -1 / len };
+    const e2 = { x: 1 / len, y: 0, z: 2 / len };
+    const B = { x: -s.bp, y: 0, z: 0 };
+    return { n: n, k: -2 * s.bp / len, c: add3(B, e2, s.bp >= 0 ? 1.5 : -1.5), e2: e2, handles: [{ id: 'B', p: { x: -s.bp, y: -2.8, z: 0 } }] };
+  }
+  // hyperbola: ระนาบ x = −b (ขนานกับแกน)
+  const B = { x: -s.bh, y: 0, z: 0 };
+  return { n: { x: -1, y: 0, z: 0 }, k: s.bh, c: B, e2: { x: 0, y: 0, z: 1 }, handles: [{ id: 'B', p: add3(B, { x: 0, y: -1, z: 0 }, 3.2) }] };
+}
 
-  quads.sort(function (a, b) { return a.z - b.z; });
+// รอยตัดระนาบกับกรวยสองชั้นที่สูงจำกัด |z| ≤ 3: ตามตัวก่อกำเนิดแต่ละมุม u
+// จุด t·(sinα cos u, sinα sin u, cosα) อยู่บนระนาบเมื่อ t = k / (n·d) (แก้ตรง) — ถ้า |t cosα| > 3 ก็หลุดกรวย
+function coneCurve(pl) {
+  const N = 720, out = [];
+  if (Math.abs(pl.k) < 1e-6) {
+    // n·d(u) = 0 ⇔ (n.x cos u + n.y sin u)·sinα = −n.z cosα — ตัวก่อกำเนิดที่ตกอยู่ในระนาบทั้งเส้น
+    const A = pl.n.x * CONE_SIN, Bq = pl.n.y * CONE_SIN, Cq = -pl.n.z * CONE_COS, rr = Math.hypot(A, Bq);
+    if (rr < 1e-9 || Math.abs(Cq / rr) > 1 + 1e-9) return out;
+    const ph = Math.atan2(Bq, A), dd = Math.acos(Math.max(-1, Math.min(1, Cq / rr))), T = CONE_H / CONE_COS;
+    [ph + dd, ph - dd].forEach(function (u, i) {
+      if (i === 1 && dd < 1e-6) return;
+      const d = { x: CONE_SIN * Math.cos(u), y: CONE_SIN * Math.sin(u), z: CONE_COS };
+      out.push([add3({ x: 0, y: 0, z: 0 }, d, -T), add3({ x: 0, y: 0, z: 0 }, d, T)]);
+    });
+    return out;
+  }
+  function at(u) {
+    const d = { x: CONE_SIN * Math.cos(u), y: CONE_SIN * Math.sin(u), z: CONE_COS };
+    const den = dot3(pl.n, d);
+    if (Math.abs(den) < 1e-9) return null;
+    const t = pl.k / den;
+    const z = t * CONE_COS;
+    if (Math.abs(z) > CONE_H + 1e-9) return null;
+    return { x: t * d.x, y: t * d.y, z: z };
+  }
+  // ตัดปลายที่ขอบกรวยให้พอดีด้วยการแบ่งครึ่งช่วง
+  function edge(uIn, uOut) {
+    for (let i = 0; i < 40; i++) { const m = (uIn + uOut) / 2; if (at(m)) uIn = m; else uOut = m; }
+    return at(uIn);
+  }
+  let cur = [], prevU = null, prevOk = false, first = null;
+  for (let i = 0; i <= N; i++) {
+    const u = -Math.PI + (i / N) * 2 * Math.PI;
+    const p = at(u);
+    if (p) {
+      if (!prevOk && prevU !== null) cur.push(edge(u, prevU));
+      cur.push(p);
+    } else if (prevOk) {
+      cur.push(edge(prevU, u));
+      out.push(cur); cur = [];
+    }
+    prevOk = !!p; prevU = u;
+  }
+  if (cur.length) out.push(cur);
+  // u = −π กับ u = π คือมุมเดียวกัน — ถ้าเส้นแรกกับเส้นสุดท้ายต่อกันที่รอยต่อ ให้รวมเป็นเส้นเดียว
+  if (out.length > 1 && at(-Math.PI)) { const last = out.pop(); out[0] = last.concat(out[0]); }
+  return out;
+}
 
-  const parts = [];
-  quads.forEach(function (q) {
-    const fill = q.kind === 'plane' ? 'rgba(99,219,219,0.28)' : 'rgba(153,51,0,0.22)';
-    const pointsStr = q.pts.map(function (p) { return p.px + ',' + p.py; }).join(' ');
-    parts.push('<polygon points="' + pointsStr + '" fill="' + fill + '" stroke="none"/>');
+// วงกลม/วงรี: ระนาบผ่านจุดยอด → รอยตัดเหลือจุดเดียว
+function coneIsPoint() {
+  const s = cone3D;
+  return (s.kind === 'circle' && Math.abs(s.h) < 0.05) || (s.kind === 'ellipse' && Math.abs(s.he) < 0.05);
+}
+
+function coneSVG() {
+  const lang = getLang(), L = CONE_TXT[lang];
+  const cam = coneCam(), P = function (p) { return coneProj(p, cam); };
+  const pl = conePlane();
+  const faces = [];
+  function quad(pts3, cls) {
+    const pr = pts3.map(P);
+    faces.push({ d: (pr[0].d + pr[1].d + pr[2].d + pr[3].d) / 4, s: '<polygon class="' + cls + '" points="' + pr.map(function (q) { return q.px.toFixed(1) + ',' + q.py.toFixed(1); }).join(' ') + '"/>' });
+  }
+  // แผ่นพื้น xy (plate ของ GeoGebra)
+  const PL = 6, PG = 6;
+  for (let i = 0; i < PG; i++) for (let j = 0; j < PG; j++) {
+    const x0 = -PL + 2 * PL * i / PG, x1 = -PL + 2 * PL * (i + 1) / PG, y0 = -PL + 2 * PL * j / PG, y1 = -PL + 2 * PL * (j + 1) / PG;
+    quad([{ x: x0, y: y0, z: 0 }, { x: x1, y: y0, z: 0 }, { x: x1, y: y1, z: 0 }, { x: x0, y: y1, z: 0 }], 'c3-plate');
+  }
+  // ผิวกรวย 2 ชั้น
+  const RINGS = 4, SEG = 36;
+  [-1, 1].forEach(function (sg) {
+    for (let r = 0; r < RINGS; r++) for (let a = 0; a < SEG; a++) {
+      const z0 = sg * CONE_H * r / RINGS, z1 = sg * CONE_H * (r + 1) / RINGS;
+      const u0 = 2 * Math.PI * a / SEG, u1 = 2 * Math.PI * (a + 1) / SEG;
+      const pt = function (z, u) { const rr = Math.abs(z) * CONE_TAN; return { x: rr * Math.cos(u), y: rr * Math.sin(u), z: z }; };
+      quad([pt(z0, u0), pt(z0, u1), pt(z1, u1), pt(z1, u0)], 'c3-cone');
+    }
+  });
+  // ระนาบตัด เป็นตาราง (เส้นขอบช่อง = เส้นตารางแบบ GeoGebra)
+  const e1 = { x: 0, y: 1, z: 0 }, PS = 4.2, PN = 8;
+  for (let i = 0; i < PN; i++) for (let j = 0; j < PN; j++) {
+    const a0 = -PS + 2 * PS * i / PN, a1 = -PS + 2 * PS * (i + 1) / PN, b0 = -PS + 2 * PS * j / PN, b1 = -PS + 2 * PS * (j + 1) / PN;
+    const q = function (a, b) { return add3(add3(pl.c, e1, a), pl.e2, b); };
+    quad([q(a0, b0), q(a1, b0), q(a1, b1), q(a0, b1)], 'c3-plane');
+  }
+  faces.sort(function (a, b) { return a.d - b.d; });
+
+  const out = [];
+  const W = CONE_SVG_W, H = CONE_SVG_H;
+  out.push('<rect class="c3-bg" x="0" y="0" width="' + W + '" height="' + H + '"/>');
+  faces.forEach(function (f) { out.push(f.s); });
+
+  function line(a, b, cls, extra) {
+    const p = P(a), q = P(b);
+    return '<line class="' + cls + '" x1="' + p.px.toFixed(1) + '" y1="' + p.py.toFixed(1) + '" x2="' + q.px.toFixed(1) + '" y2="' + q.py.toFixed(1) + '"' + (extra || '') + '/>';
+  }
+  function text(p3, s, cls, dx, dy) {
+    const p = P(p3);
+    return '<text class="' + cls + '" x="' + (p.px + (dx || 0)).toFixed(1) + '" y="' + (p.py + (dy || 0)).toFixed(1) + '">' + s + '</text>';
+  }
+  // แกนพิกัด x แดง / y เขียว / z น้ำเงิน มีขีดและตัวเลข
+  [['x', { x: 1, y: 0, z: 0 }, 7], ['y', { x: 0, y: 1, z: 0 }, 7], ['z', { x: 0, y: 0, z: 1 }, 4.4]].forEach(function (ax) {
+    const nm = ax[0], dv = ax[1], len = ax[2];
+    out.push(line(add3({ x: 0, y: 0, z: 0 }, dv, -len), add3({ x: 0, y: 0, z: 0 }, dv, len), 'c3-ax c3-ax-' + nm, ' marker-end="url(#c3arr-' + nm + ')"'));
+    for (let k = -Math.floor(len - 0.5); k <= Math.floor(len - 0.5); k++) {
+      if (k === 0) continue;
+      const tp = add3({ x: 0, y: 0, z: 0 }, dv, k);
+      const pp = P(tp);
+      out.push('<circle class="c3-tick c3-ax-' + nm + '" cx="' + pp.px.toFixed(1) + '" cy="' + pp.py.toFixed(1) + '" r="1.8"/>');
+      out.push(text(tp, String(k).replace('-', '−'), 'c3-num c3-axn-' + nm, nm === 'z' ? -12 : 0, nm === 'z' ? 4 : 13));
+    }
+    out.push(text(add3({ x: 0, y: 0, z: 0 }, dv, len + 0.35), nm, 'c3-axl c3-axn-' + nm, 0, 4));
   });
 
-  // Coordinate axes (x/y/z) for spatial reference — drawn on top of the translucent cone fill.
-  const AX_LEN = CONE_TMAX + 0.5;
-  parts.push(axisSVG({ x: 1, y: 0, z: 0 }, AX_LEN, '#E53935', 'x', view, cx, cy, scale, 'axisX'));
-  parts.push(axisSVG({ x: 0, y: 1, z: 0 }, AX_LEN, '#2E9E4F', 'y', view, cx, cy, scale, 'axisY'));
-  parts.push(axisSVG({ x: 0, y: 0, z: 1 }, AX_LEN, '#3949AB', 'z', view, cx, cy, scale, 'axisZ'));
-
-  const genCount = 16;
-  for (let gi = 0; gi < genCount; gi++) {
-    const u = (gi / genCount) * 2 * Math.PI;
-    const d = coneDir(u);
-    const p1 = project3({ x: -CONE_TMAX * d.x, y: -CONE_TMAX * d.y, z: -CONE_TMAX * d.z }, view, cx, cy, scale);
-    const p2 = project3({ x: CONE_TMAX * d.x, y: CONE_TMAX * d.y, z: CONE_TMAX * d.z }, view, cx, cy, scale);
-    parts.push('<line x1="' + p1.px + '" y1="' + p1.py + '" x2="' + p2.px + '" y2="' + p2.py + '" stroke="rgba(153,51,0,0.35)" stroke-width="1"/>');
-  }
-
-  const axP1 = project3({ x: 0, y: 0, z: -CONE_TMAX }, view, cx, cy, scale);
-  const axP2 = project3({ x: 0, y: 0, z: CONE_TMAX }, view, cx, cy, scale);
-  parts.push('<line x1="' + axP1.px + '" y1="' + axP1.py + '" x2="' + axP2.px + '" y2="' + axP2.py + '" stroke="var(--muted)" stroke-width="1" stroke-dasharray="4 4"/>');
-  const axLbl = project3({ x: 0.55, y: 0, z: CONE_TMAX * 0.4 }, view, cx, cy, scale);
-  parts.push('<text x="' + axLbl.px + '" y="' + axLbl.py + '" font-size="12" font-weight="700" fill="var(--muted)">' + (lang === 'en' ? 'Axis' : 'แกน') + '</text>');
-
-  // One highlighted generator line (a slant line through both nappes) — matches how the
-  // teacher's original GeoGebra file calls out a "generator" (ตัวก่อกำเนิด) of the cone.
-  const gd = coneDir(0);
-  const genP1 = project3({ x: -CONE_TMAX * gd.x, y: -CONE_TMAX * gd.y, z: -CONE_TMAX * gd.z }, view, cx, cy, scale);
-  const genP2 = project3({ x: CONE_TMAX * gd.x, y: CONE_TMAX * gd.y, z: CONE_TMAX * gd.z }, view, cx, cy, scale);
-  parts.push('<line x1="' + genP1.px + '" y1="' + genP1.py + '" x2="' + genP2.px + '" y2="' + genP2.py + '" stroke="#D81B60" stroke-width="2" stroke-dasharray="8 5"/>');
-  const genLbl = project3({ x: CONE_TMAX * 1.06 * gd.x, y: CONE_TMAX * 1.06 * gd.y, z: CONE_TMAX * 1.06 * gd.z }, view, cx, cy, scale);
-  parts.push('<text x="' + genLbl.px + '" y="' + genLbl.py + '" font-size="12" font-weight="700" fill="#D81B60" text-anchor="middle">' + (lang === 'en' ? 'Generator' : 'ตัวก่อกำเนิด') + '</text>');
-
-  // Vertex (apex) marker + label
-  const vPt = project3({ x: 0, y: 0, z: 0 }, view, cx, cy, scale);
-  parts.push('<circle cx="' + vPt.px + '" cy="' + vPt.py + '" r="4" fill="var(--text)" stroke="white" stroke-width="1.5"/>');
-  parts.push('<text x="' + (vPt.px + 8) + '" y="' + (vPt.py - 8) + '" font-size="13" font-weight="800" font-style="italic" fill="var(--text)">V</text>');
-
-  const segments = coneIntersectionSegments(betaDeg);
-  segments.forEach(function (seg) {
-    const projPts = seg.map(function (p) { return project3(p, view, cx, cy, scale); });
-    const d = 'M' + projPts.map(function (p) { return p.px + ',' + p.py; }).join(' L');
-    parts.push('<path d="' + d + '" fill="none" stroke="#FF7F00" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>');
+  // เส้นขอบกรวย (silhouette) + วงขอบบน/ล่าง (ครึ่งหลังเส้นประ)
+  const camDz = cam.D.z, rho = Math.sqrt(cam.D.x * cam.D.x + cam.D.y * cam.D.y);
+  const th = Math.atan2(cam.D.y, cam.D.x);
+  [-1, 1].forEach(function (sg) {
+    const c = sg * CONE_TAN * camDz / Math.max(rho, 1e-6);
+    if (Math.abs(c) <= 1) {
+      [th + Math.acos(c), th - Math.acos(c)].forEach(function (u) {
+        out.push(line({ x: 0, y: 0, z: 0 }, { x: CONE_R * Math.cos(u), y: CONE_R * Math.sin(u), z: sg * CONE_H }, 'c3-sil'));
+      });
+    }
+    // ครึ่งที่หันเข้าหากล้องเป็นเส้นทึบ ครึ่งหลังเป็นเส้นประ (แบบ GeoGebra)
+    let fPath = '', bPath = '', lastF = null;
+    for (let a = 0; a <= 72; a++) {
+      const u = 2 * Math.PI * a / 72, p3 = { x: CONE_R * Math.cos(u), y: CONE_R * Math.sin(u), z: sg * CONE_H };
+      // ขอบปากกรวยที่หันเข้าหากล้อง (มองลงไปในปากกรวย) เห็นครบทั้งวง
+      const p = P(p3), isF = sg * cam.D.z > 0 || (p3.x * cam.D.x + p3.y * cam.D.y) >= 0;
+      const xy = p.px.toFixed(1) + ',' + p.py.toFixed(1);
+      if (isF) fPath += (lastF === true ? 'L' : 'M') + xy; else bPath += (lastF === false ? 'L' : 'M') + xy;
+      lastF = isF;
+    }
+    out.push('<path class="c3-rim c3-rim-back" d="' + bPath + '"/><path class="c3-rim" d="' + fPath + '"/>');
   });
 
-  svg.innerHTML = parts.join('');
+  // แกนกรวย (ม่วง) + ตัวก่อกำเนิด (แดง) + จุดยอด
+  out.push(line({ x: 0, y: 0, z: -5.2 }, { x: 0, y: 0, z: 5.2 }, 'c3-axis'));
+  const g = { x: CONE_SIN, y: 0, z: CONE_COS }, gl = 5.6 / CONE_COS;
+  out.push(line(add3({ x: 0, y: 0, z: 0 }, g, -gl), add3({ x: 0, y: 0, z: 0 }, g, gl), 'c3-gen'));
+  out.push(text({ x: 0, y: 0, z: 3.7 }, L.axis, 'c3-lbl c3-lbl-axis', 10, 0));
+  out.push(text(add3({ x: 0, y: 0, z: 0 }, g, 4.7 / CONE_COS), L.gen, 'c3-lbl c3-lbl-gen', 8, 0));
+  const v = P({ x: 0, y: 0, z: 0 });
+  out.push('<circle class="c3-vtx" cx="' + v.px.toFixed(1) + '" cy="' + v.py.toFixed(1) + '" r="4"/>');
+  out.push(text({ x: 0, y: 0, z: 0 }, L.vtx, 'c3-lbl c3-lbl-vtx', 9, coneIsPoint() ? 26 : -6));   // จุดเดียว: ย้ายป้าย V ลงมาไม่ให้ชนป้าย O
+
+  // รอยตัด (ส้ม) — วงกลม/วงรีที่ระนาบผ่านจุดยอด (|ค่า| < 0.05) เหลือจุดเดียวที่จุดยอด
+  const pointCut = coneIsPoint();
+  if (pointCut) out.push('<circle class="c3-curve-pt" cx="' + v.px.toFixed(1) + '" cy="' + v.py.toFixed(1) + '" r="13"/>');
+  else coneCurve(pl).forEach(function (seg) {
+    if (seg.length < 2) return;
+    out.push('<path class="c3-curve" d="M' + seg.map(function (p3) { const p = P(p3); return p.px.toFixed(1) + ',' + p.py.toFixed(1); }).join('L') + '"/>');
+  });
+
+  // จุดลาก O / A / B
+  pl.handles.forEach(function (h) {
+    const p = P(h.p);
+    out.push('<g class="c3-handle c3-h-' + h.id + '" data-h="' + h.id + '"><circle class="c3-hit" cx="' + p.px.toFixed(1) + '" cy="' + p.py.toFixed(1) + '" r="18"/>' +
+      '<circle class="c3-hdot" cx="' + p.px.toFixed(1) + '" cy="' + p.py.toFixed(1) + '" r="7"/>' +
+      '<text class="c3-hlbl" x="' + (p.px + 11).toFixed(1) + '" y="' + (p.py - 9).toFixed(1) + '">' + h.id + '</text></g>');
+  });
+
+  const defs = '<defs>' + ['x', 'y', 'z'].map(function (nm) {
+    return '<marker id="c3arr-' + nm + '" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="c3-axfill-' + nm + '" d="M0,0 L10,5 L0,10 z"/></marker>';
+  }).join('') + '</defs>';
+  return defs + out.join('');
 }
-function wireRotate3D(svgId, view, redraw) {
-  const svg = document.getElementById(svgId);
-  let dragging = false, lastX = 0, lastY = 0, rafId = null;
+
+function redraw3D() {
+  const lang = getLang(), L = CONE_TXT[lang], s = cone3D;
+  const svg = document.getElementById('svg3D');
+  svg.setAttribute('viewBox', '0 0 ' + CONE_SVG_W + ' ' + CONE_SVG_H);
+  svg.innerHTML = coneSVG();
+  document.querySelectorAll('.c3-kind').forEach(function (b) {
+    b.classList.toggle('active', b.dataset.kind === s.kind);
+    b.setAttribute('aria-pressed', b.dataset.kind === s.kind ? 'true' : 'false');
+  });
+  // กล่อง "วิธีปรับระนาบ" มุมซ้ายบน (เหมือนกล่องข้อความใน GeoGebra)
+  const ids = s.kind === 'ellipse' ? ['A', 'O'] : s.kind === 'circle' ? ['O'] : ['B'];
+  document.getElementById('c3How').innerHTML = '<b>' + L.how + '</b>' + ids.map(function (id) { return '<div><i>' + id + '</i> ' + L[id] + '</div>'; }).join('');
+  const degen = coneIsPoint() || (s.kind === 'parabola' && Math.abs(s.bp) < 0.02) || (s.kind === 'hyperbola' && Math.abs(s.bh) < 0.02);
+  document.getElementById('c3Why').textContent = degen ? L.degen[s.kind] : L.why[s.kind];
+  // แถบเลื่อนสำรอง (ใช้แทนการลากจุดได้)
+  const rows = [];
+  function row(id, key, val, unit, step) {
+    const r = CONE_PARAMS[key];
+    rows.push('<label class="c3-row"><span class="c3-rid"><i>' + id + '</i> ' + L[id] + '</span><input type="range" min="' + r.min + '" max="' + r.max + '" step="' + step + '" value="' + val + '" data-key="' + key + '" oninput="cone3dSlide(this)"><span class="mono c3-val">' + val + unit + '</span></label>');
+  }
+  if (s.kind === 'circle') row('O', 'O', f1(s.h), '', 0.1);
+  if (s.kind === 'ellipse') { row('A', 'A', Math.round(s.tilt), '°', 1); row('O', 'Oe', f1(s.he), '', 0.1); }
+  if (s.kind === 'parabola') row('B', 'Bp', f2(s.bp), '', 0.01);
+  if (s.kind === 'hyperbola') row('B', 'Bh', f2(s.bh), '', 0.01);
+  const host = document.getElementById('c3Sliders'), sig = s.kind + '|' + lang;
+  if (host.dataset.sig !== sig) { host.innerHTML = rows.join(''); host.dataset.sig = sig; }
+  else {
+    const vals = { O: [s.h, ''], Oe: [s.he, ''], A: [s.tilt, '°'], Bp: [s.bp, ''], Bh: [s.bh, ''] };
+    host.querySelectorAll('input[data-key]').forEach(function (el) {
+      const v = vals[el.dataset.key]; if (!v) return;
+      if (document.activeElement !== el) el.value = v[0];
+      el.nextElementSibling.textContent = (el.dataset.key === 'A' ? Math.round(v[0]) : el.dataset.key[0] === 'B' ? f2(v[0]) : f1(v[0])) + v[1];
+    });
+  }
+}
+function cone3dSetKey(key, v) {
+  const r = CONE_PARAMS[key];
+  v = Math.max(r.min, Math.min(r.max, v));
+  if (key === 'O') cone3D.h = v; else if (key === 'Oe') cone3D.he = v; else if (key === 'A') cone3D.tilt = v;
+  else if (key === 'Bp') cone3D.bp = v; else if (key === 'Bh') cone3D.bh = v;
+}
+function cone3dSlide(el) { cone3dSetKey(el.dataset.key, parseFloat(el.value)); redraw3D(); }
+function setConeKind(kind) { cone3D.kind = kind; redraw3D(); }
+function resetView3D() { cone3D.view.az = -60; cone3D.view.el = 22; cone3D.view.zoom = 1; redraw3D(); }
+// ปุ่มซูม ขยาย/ย่อรูปกรวย
+function cone3dZoom(f) { cone3D.view.zoom = Math.max(0.5, Math.min(2.2, (cone3D.view.zoom || 1) * f)); redraw3D(); }
+
+// ลากจุด O/A/B: เทียบการเลื่อนนิ้ว/เมาส์กับทิศที่จุดนั้นวิ่งบนจอเมื่อค่าเปลี่ยน (หาอนุพันธ์เชิงตัวเลข)
+// ลากที่ว่าง = หมุนมุมมอง
+(function wireCone3D() {
+  const svg = document.getElementById('svg3D');
   svg.style.touchAction = 'none';
+  let mode = null, lastX = 0, lastY = 0, key = null, raf = null;
+  function keyOf(id) {
+    const k = cone3D.kind;
+    if (id === 'O') return k === 'ellipse' ? 'Oe' : 'O';
+    if (id === 'A') return 'A';
+    return k === 'parabola' ? 'Bp' : 'Bh';
+  }
+  function getVal(k) { return k === 'O' ? cone3D.h : k === 'Oe' ? cone3D.he : k === 'A' ? cone3D.tilt : k === 'Bp' ? cone3D.bp : cone3D.bh; }
+  function handleScreen(id) {
+    const h = conePlane().handles.filter(function (x) { return x.id === id; })[0];
+    return coneProj(h.p, coneCam());
+  }
+  function toSvg(e) {
+    const m = svg.getScreenCTM();
+    if (!m) return { x: e.clientX, y: e.clientY };
+    const pt = svg.createSVGPoint(); pt.x = e.clientX; pt.y = e.clientY;
+    const q = pt.matrixTransform(m.inverse()); return { x: q.x, y: q.y };
+  }
   svg.addEventListener('pointerdown', function (e) {
-    dragging = true; lastX = e.clientX; lastY = e.clientY;
+    const hEl = e.target.closest && e.target.closest('.c3-handle');
+    const p = toSvg(e);
+    lastX = p.x; lastY = p.y;
+    if (hEl) { mode = 'handle'; key = keyOf(hEl.dataset.h); key = { k: key, id: hEl.dataset.h }; }
+    else mode = 'rotate';
     svg.setPointerCapture(e.pointerId);
+    e.preventDefault();
   });
   svg.addEventListener('pointermove', function (e) {
-    if (!dragging) return;
-    const dx = e.clientX - lastX, dy = e.clientY - lastY;
-    lastX = e.clientX; lastY = e.clientY;
-    view.rotY += dx * 0.014;
-    view.rotX = Math.max(-1.3, Math.min(1.3, view.rotX - dy * 0.014));
-    // Coalesce bursts of pointermove events into one redraw per animation frame — the
-    // cone re-render (quad sort + innerHTML rebuild) is too heavy to run on every single
-    // move event, which is what made dragging feel laggy/hard to control.
-    if (rafId === null) rafId = requestAnimationFrame(function () { rafId = null; redraw(); });
+    if (!mode) return;
+    const p = toSvg(e), dx = p.x - lastX, dy = p.y - lastY;
+    lastX = p.x; lastY = p.y;
+    if (mode === 'rotate') {
+      cone3D.view.az -= dx * 0.45;
+      cone3D.view.el = Math.max(-30, Math.min(85, cone3D.view.el + dy * 0.45));
+    } else {
+      const k = key.k, v0 = getVal(k), r = CONE_PARAMS[k], eps = (r.max - r.min) * 0.01;
+      // วัดทิศที่จุดวิ่งบนจอ "โดยไม่ตัดขอบช่วง" — ถ้าตัดขอบ ตอนค่าอยู่ปลายช่วงจะวัดได้ 0 แล้วลากต่อไม่ได้ (บั๊กที่ครูเจอ)
+      const raw = function (v) { if (k === 'O') cone3D.h = v; else if (k === 'Oe') cone3D.he = v; else if (k === 'A') cone3D.tilt = v; else if (k === 'Bp') cone3D.bp = v; else cone3D.bh = v; };
+      raw(v0 - eps / 2); const a = handleScreen(key.id);
+      raw(v0 + eps / 2); const b = handleScreen(key.id);
+      raw(v0);
+      const gx = (b.px - a.px) / eps, gy = (b.py - a.py) / eps, g2 = gx * gx + gy * gy;
+      if (g2 > 1e-6) cone3dSetKey(k, v0 + (dx * gx + dy * gy) / g2);
+    }
+    if (raf === null) raf = requestAnimationFrame(function () { raf = null; redraw3D(); });
   });
-  function stop() { dragging = false; }
+  function stop() { mode = null; }
   svg.addEventListener('pointerup', stop);
   svg.addEventListener('pointercancel', stop);
-}
-
-const cone3D = { view: { rotX: -1.2, rotY: 0 }, betaDeg: 25 };
-function redraw3D() {
-  render3D('svg3D', cone3D.betaDeg, cone3D.view);
-  const kind = classifyBeta(cone3D.betaDeg);
-  document.getElementById('conicBadge').textContent = CONIC_LABEL[getLang()][kind];
-  document.getElementById('betaVal').textContent = cone3D.betaDeg + '°';
-}
-function onBetaInput() {
-  cone3D.betaDeg = parseFloat(document.getElementById('betaSlider').value);
-  redraw3D();
-}
-// rotY=0 makes the cone's axis project perfectly vertical on screen for any rotX (the x
-// after rotateY is sin(rotY)*... which is exactly 0 there) — but dragging to EXACTLY 0 by
-// feel is nearly impossible, so give a one-click way to snap to the upright view.
-function resetView3D() {
-  cone3D.view.rotX = -1.2;
-  cone3D.view.rotY = 0;
-  redraw3D();
-}
-wireRotate3D('svg3D', cone3D.view, redraw3D);
+})();
+// cone3d:end
 
 // ════════════════════════════════════════════════════════════
 // 2D coordinate-plane module
 // ════════════════════════════════════════════════════════════
 function makePlane(opts) {
+  // zoom2d: กรอบพิกัดซูมได้ (ซูม 1 = −6..6 · ขยายสูงสุด 2 เท่า · ย่อสุด 0.5 เท่า = −12..12) — ต้นทาง tools/conic_cone3d/zoom2d.py
   opts = opts || {};
   const svgSize = opts.svgSize || 600, pad = opts.pad || 46;
-  const xMin = opts.xMin != null ? opts.xMin : -6, xMax = opts.xMax != null ? opts.xMax : 6;
-  const yMin = opts.yMin != null ? opts.yMin : -6, yMax = opts.yMax != null ? opts.yMax : 6;
-  const scale = Math.min((svgSize - 2 * pad) / (xMax - xMin), (svgSize - 2 * pad) / (yMax - yMin));
-  return {
-    svgSize: svgSize, pad: pad, xMin: xMin, xMax: xMax, yMin: yMin, yMax: yMax, scale: scale,
-    toPx: function (x, y) { return { px: pad + (x - xMin) * scale, py: svgSize - pad - (y - yMin) * scale }; },
-    toMath: function (px, py) { return { x: xMin + (px - pad) / scale, y: yMin + (svgSize - pad - py) / scale }; },
-    clamp: function (x, y) { return { x: Math.min(xMax - 0.2, Math.max(xMin + 0.2, x)), y: Math.min(yMax - 0.2, Math.max(yMin + 0.2, y)) }; }
+  const base = { xMin: opts.xMin != null ? opts.xMin : -6, xMax: opts.xMax != null ? opts.xMax : 6, yMin: opts.yMin != null ? opts.yMin : -6, yMax: opts.yMax != null ? opts.yMax : 6 };
+  const pl = { svgSize: svgSize, pad: pad, zoom: 1 };
+  pl.setZoom = function (z) {
+    pl.zoom = Math.max(0.5, Math.min(2, z));
+    const cx = (base.xMin + base.xMax) / 2, cy = (base.yMin + base.yMax) / 2, hx = (base.xMax - base.xMin) / 2 / pl.zoom, hy = (base.yMax - base.yMin) / 2 / pl.zoom;
+    pl.xMin = cx - hx; pl.xMax = cx + hx; pl.yMin = cy - hy; pl.yMax = cy + hy;
+    pl.scale = Math.min((svgSize - 2 * pad) / (pl.xMax - pl.xMin), (svgSize - 2 * pad) / (pl.yMax - pl.yMin));
   };
+  pl.zoomBy = function (f) { pl.setZoom(pl.zoom * f); };
+  pl.toPx = function (x, y) { return { px: pad + (x - pl.xMin) * pl.scale, py: svgSize - pad - (y - pl.yMin) * pl.scale }; };
+  pl.toMath = function (px, py) { return { x: pl.xMin + (px - pad) / pl.scale, y: pl.yMin + (svgSize - pad - py) / pl.scale }; };
+  pl.clamp = function (x, y) { return { x: Math.min(pl.xMax - 0.2, Math.max(pl.xMin + 0.2, x)), y: Math.min(pl.yMax - 0.2, Math.max(pl.yMin + 0.2, y)) }; };
+  pl.setZoom(1);
+  return pl;
 }
 function gridSVG(plane) {
   const parts = [];
@@ -671,12 +953,12 @@ function gridSVG(plane) {
   for (let x = Math.ceil(plane.xMin); x <= Math.floor(plane.xMax); x++) {
     const a = plane.toPx(x, plane.yMin), b = plane.toPx(x, plane.yMax);
     parts.push('<line x1="' + a.px + '" y1="' + a.py + '" x2="' + b.px + '" y2="' + b.py + '" stroke="var(--border)" stroke-width="' + (x === 0 ? 2 : 1) + '"/>');
-    if (x !== 0) parts.push('<text x="' + a.px + '" y="' + (origin.py + 16) + '" font-size="11" fill="var(--muted)" text-anchor="middle">' + x + '</text>');
+    if (x !== 0 && (plane.zoom >= 0.75 || x % 2 === 0)) parts.push('<text x="' + a.px + '" y="' + (origin.py + 16) + '" font-size="11" fill="var(--muted)" text-anchor="middle">' + x + '</text>');
   }
   for (let y = Math.ceil(plane.yMin); y <= Math.floor(plane.yMax); y++) {
     const a = plane.toPx(plane.xMin, y), b = plane.toPx(plane.xMax, y);
     parts.push('<line x1="' + a.px + '" y1="' + a.py + '" x2="' + b.px + '" y2="' + b.py + '" stroke="var(--border)" stroke-width="' + (y === 0 ? 2 : 1) + '"/>');
-    if (y !== 0) parts.push('<text x="' + (origin.px - 8) + '" y="' + (a.py + 4) + '" font-size="11" fill="var(--muted)" text-anchor="end">' + y + '</text>');
+    if (y !== 0 && (plane.zoom >= 0.75 || y % 2 === 0)) parts.push('<text x="' + (origin.px - 8) + '" y="' + (a.py + 4) + '" font-size="11" fill="var(--muted)" text-anchor="end">' + y + '</text>');
   }
   return parts.join('');
 }
@@ -774,6 +1056,7 @@ function syncCoordPanel(containerId, points) {
 // larger automatically becomes the major axis.
 // ════════════════════════════════════════════════════════════
 const ellipsePts = { C: { x: 0, y: 0 }, Hx: { x: 5, y: 0 }, Hy: { x: 0, y: 3 } };
+const ellipseQ = { th: 2.3 };   // จุด P บนวงรี (มุมพารามิเตอร์)
 const ellipsePlane = makePlane({});
 function renderEllipse() {
   const lang = getLang();
@@ -788,7 +1071,7 @@ function renderEllipse() {
   const cPx = ellipsePlane.toPx(C.x, C.y);
   const rxPx = p * ellipsePlane.scale, ryPx = q * ellipsePlane.scale;
   const parts = [gridSVG(ellipsePlane)];
-  parts.push('<ellipse cx="' + cPx.px + '" cy="' + cPx.py + '" rx="' + rxPx + '" ry="' + ryPx + '" fill="rgba(255,127,0,0.12)" stroke="#FF7F00" stroke-width="2.5"/>');
+  parts.push('<ellipse cx="' + cPx.px + '" cy="' + cPx.py + '" rx="' + rxPx + '" ry="' + ryPx + '" fill="none" stroke="' + GG.curve + '" stroke-width="2.5"/>');
   const xAx1 = { x: C.x - p, y: C.y }, xAx2 = { x: C.x + p, y: C.y };
   const yAx1 = { x: C.x, y: C.y - q }, yAx2 = { x: C.x, y: C.y + q };
   const majorSeg = majorIsX ? [xAx1, xAx2] : [yAx1, yAx2];
@@ -806,8 +1089,21 @@ function renderEllipse() {
   const f1px = ellipsePlane.toPx(F1.x, F1.y), f2px = ellipsePlane.toPx(F2.x, F2.y);
   parts.push('<text x="' + (f1px.px + 8) + '" y="' + (f1px.py - 6) + '" font-size="12" font-weight="800" fill="var(--secondary)">F&#8321;</text>');
   parts.push('<text x="' + (f2px.px - 8) + '" y="' + (f2px.py - 6) + '" font-size="12" font-weight="800" text-anchor="end" fill="var(--secondary)">F&#8322;</text>');
+  // ── แบบ GeoGebra ของครู: P บนวงรี เส้นชมพูไปโฟกัสทั้งสอง + ป้ายพิกัดจุดยอด/โฟกัส + กล่องค่า a b c ──
+  const Pq = { x: C.x + p * Math.cos(ellipseQ.th), y: C.y + q * Math.sin(ellipseQ.th) };
+  const d1 = ggDist(Pq, F1), d2 = ggDist(Pq, F2);
+  parts.push(ggSeg(ellipsePlane, Pq, F1, GG.pink, 2.6) + ggSeg(ellipsePlane, Pq, F2, GG.pink, 2.6));
+  parts.push(ggBox(ellipsePlane, { x: (Pq.x + F1.x) / 2, y: (Pq.y + F1.y) / 2 }, 'PF₁ = ' + fmt(d1), GG.purpleBg, GG.ink, 0, -14, 'middle'));
+  parts.push(ggBox(ellipsePlane, { x: (Pq.x + F2.x) / 2, y: (Pq.y + F2.y) / 2 }, 'PF₂ = ' + fmt(d2), GG.purpleBg, GG.ink, 0, -14, 'middle'));
+  const ua = majorIsX ? { x: 1, y: 0 } : { x: 0, y: 1 }, ub = majorIsX ? { x: 0, y: 1 } : { x: 1, y: 0 };
+  const A1 = { x: C.x + a * ua.x, y: C.y + a * ua.y }, A2 = { x: C.x - a * ua.x, y: C.y - a * ua.y }, B1 = { x: C.x + b * ub.x, y: C.y + b * ub.y }, B2 = { x: C.x - b * ub.x, y: C.y - b * ub.y };
+  [[A1, 'A₁'], [A2, 'A₂'], [B1, 'B₁'], [B2, 'B₂']].forEach(function (z) { parts.push(ggDot(ellipsePlane, z[0], GG.ink, 4.5)); parts.push(ggTxt(ellipsePlane, z[0], z[1] + ' ' + ggPt(z[0]), 'var(--text)', z[0].x < C.x - 0.01 ? -8 : 8, z[0].y < C.y - 0.01 ? 20 : (z[0].y > C.y + 0.01 ? -24 : 22), z[0].x < C.x - 0.01 ? 'end' : 'start', 12)); });
+  [[F1, 'F₁'], [F2, 'F₂']].forEach(function (z) { parts.push(ggTxt(ellipsePlane, z[0], ggPt(z[0]), 'var(--secondary)', 0, -12, 'middle', 11)); });
+  parts.push(ggBox(ellipsePlane, { x: ellipsePlane.xMin, y: ellipsePlane.yMax }, 'a = ' + fmt(a) + ', b = ' + fmt(b) + ', c = ' + fmt(c), GG.cyanBg, GG.ink, 8, 14));
   parts.push(markerSVG(ellipsePlane, C, 'var(--primary)', 5));
   parts.push(pointSVG(ellipsePlane, 'C', C, 'var(--primary)', 'C'));
+  parts.push(ggCurvePt(ellipsePlane, Pq, GG.pink, 'P'));
+  document.getElementById('ellipseRead').innerHTML = 'PF₁ + PF₂ = ' + fmt(d1) + ' + ' + fmt(d2) + ' = <b>' + fmt(d1 + d2) + '</b> = 2a ' + (lang === 'en' ? '(drag P along the ellipse — the sum never changes)' : '(ลากจุด P ไปตามวงรี — ผลบวกไม่เปลี่ยน)');
   parts.push(pointSVG(ellipsePlane, 'Hx', ellipsePts.Hx, 'var(--accent-2)', 'Hx'));
   parts.push(pointSVG(ellipsePlane, 'Hy', ellipsePts.Hy, 'var(--accent-2)', 'Hy'));
   document.getElementById('svgEllipse').innerHTML = parts.join('');
@@ -825,6 +1121,10 @@ function renderEllipse() {
   syncCoordPanel('coordsEllipse', ellipsePts);
 }
 wireDrag(document.getElementById('svgEllipse'), ellipsePlane, ellipsePts, renderEllipse);
+ggWireCurve(document.getElementById('svgEllipse'), ellipsePlane, function (m) {
+  const C = ellipsePts.C, p = Math.max(0.3, Math.abs(ellipsePts.Hx.x - C.x)), q = Math.max(0.3, Math.abs(ellipsePts.Hy.y - C.y));
+  ellipseQ.th = Math.atan2((m.y - C.y) / q, (m.x - C.x) / p); renderEllipse();
+});
 document.getElementById('coordsEllipse').innerHTML = coordPanelHTML([
   { id: 'C', label: 'C', color: 'var(--primary)' },
   { id: 'Hx', label: 'Hx', color: 'var(--accent-2)' },
@@ -847,10 +1147,10 @@ function renderSumDemo() {
   const d1 = distance(P, F1), d2 = distance(P, F2);
   const c0 = sumDemoPlane.toPx(0, 0);
   const parts = [gridSVG(sumDemoPlane)];
-  parts.push('<ellipse cx="' + c0.px + '" cy="' + c0.py + '" rx="' + (a * sumDemoPlane.scale) + '" ry="' + (b * sumDemoPlane.scale) + '" fill="rgba(255,127,0,0.08)" stroke="#FF7F00" stroke-width="2"/>');
+  parts.push('<ellipse cx="' + c0.px + '" cy="' + c0.py + '" rx="' + (a * sumDemoPlane.scale) + '" ry="' + (b * sumDemoPlane.scale) + '" fill="none" stroke="' + GG.curve + '" stroke-width="2.5"/>');
   const p1 = sumDemoPlane.toPx(P.x, P.y), f1 = sumDemoPlane.toPx(F1.x, F1.y), f2 = sumDemoPlane.toPx(F2.x, F2.y);
-  parts.push('<line x1="' + p1.px + '" y1="' + p1.py + '" x2="' + f1.px + '" y2="' + f1.py + '" stroke="var(--secondary)" stroke-width="2.5" stroke-dasharray="6 4"/>');
-  parts.push('<line x1="' + p1.px + '" y1="' + p1.py + '" x2="' + f2.px + '" y2="' + f2.py + '" stroke="var(--secondary)" stroke-width="2.5" stroke-dasharray="6 4"/>');
+  parts.push('<line x1="' + p1.px + '" y1="' + p1.py + '" x2="' + f1.px + '" y2="' + f1.py + '" stroke="' + GG.pink + '" stroke-width="2.6"/>');
+  parts.push('<line x1="' + p1.px + '" y1="' + p1.py + '" x2="' + f2.px + '" y2="' + f2.py + '" stroke="' + GG.pink + '" stroke-width="2.6"/>');
   parts.push(markerSVG(sumDemoPlane, F1, 'var(--primary)'));
   parts.push(markerSVG(sumDemoPlane, F2, 'var(--primary)'));
   parts.push('<text x="' + (f1.px + 8) + '" y="' + (f1.py - 6) + '" font-size="12" font-weight="800" fill="var(--primary)">F&#8321;</text>');

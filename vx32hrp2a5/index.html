@@ -124,109 +124,115 @@
 
   @media (max-width: 600px) { header h1 { font-size: 1.2rem; } .card { padding: 16px 14px; } .tab-btn { font-size: .82rem; padding: 8px 12px; } }
 /* ── theme:start — สร้างโดย tools/build_lessons.py ห้ามแก้มือ (แก้ที่สคริปต์แล้วรันใหม่) ── */
+/* ธีมชุดเดียวกับหน้าสารบัญ (tools/build_index.py · DESIGN.md หมวด Meta-inspired) — สีของเรื่องอยู่ที่ปกและในตัวบทเรียน กรอบหน้าเป็นสีกลาง */
 :root{ --page:#283593; }
 :root[data-theme="light"]{
-  --bg:#F4F4F1; --card:#FFFFFF; --text:#16181A; --muted:#5E6166; --border:#DEDED8;
+  --bg:#ffffff; --surface:#ffffff; --card:#ffffff; --panel:#f1f4f7; --raise:#e4e9ee;
+  --text:#1c1e21; --muted:#5d6c7b; --dim:#8595a4; --line:#ced0d4; --line-soft:#dee3e9; --border:#ced0d4;
+  --ink:#000000; --on-ink:#ffffff; --ink-hover:#2b3138; --link:#0064e0; --strong:#1c1e21; --shadow:none;
   --primary:color-mix(in srgb, var(--page) 86%, #000); --primary-2:color-mix(in srgb, var(--page) 62%, #000);
   --secondary:#C2540A; --secondary-light:#F2A15F; --accent:#68EF3F; --accent-2:#2E9E3F;
-  --shadow:0 2px 10px rgba(0,0,0,.07);
-  --strong:color-mix(in srgb, var(--page) 76%, #000); --chip:#E8E8E3; --chip-hover:#DCDCD5;
-  --hero:color-mix(in srgb, var(--page) 82%, #000);
   --g-x:#E53935; --g-y:#2E9E4F; --g-z:#3949AB; --g-curve:#F07400; --g-curve-fill:rgba(240,116,0,.12);
   --g-pink:#D81B60; --g-plane:rgba(60,190,200,.28); --g-cone:rgba(153,51,0,.20); --g-cone-line:rgba(153,51,0,.35);
   --g-blue:#1E66D0; --g-red:#D32F2F; --g-green:#2E9E4F; --g-purple:#7B3FC4; --g-orange:#E8710A; --g-teal:#0F8A80;
   --g-ring:#FFFFFF;
 }
 :root[data-theme="dark"]{
-  --bg:#121212; --card:#1C1C1C; --text:#FFFFFF; --muted:#B3B3B3; --border:#333333;
+  --bg:#0a1317; --surface:#0a1317; --card:#0a1317; --panel:#1c1e21; --raise:#2b3138;
+  --text:#ffffff; --muted:#9aa8b5; --dim:#6b7884; --line:#444950; --line-soft:#32383e; --border:#444950;
+  --ink:#ffffff; --on-ink:#000000; --ink-hover:#d5dbe1; --link:#4da3ff; --strong:#2b3138; --shadow:none;
   --primary:#8791de; --primary-2:#a7afe7;
   --secondary:#FFB37A; --secondary-light:#FFD0A8; --accent:#8AF25E; --accent-2:#5BD27E;
-  --shadow:0 8px 24px rgba(0,0,0,.5);
-  --strong:color-mix(in srgb, var(--page) 48%, #1C1C1C); --chip:#2A2A2A; --chip-hover:#353535;
-  --hero:color-mix(in srgb, var(--page) 62%, #000);
   --g-x:#FF6B6B; --g-y:#5BD27E; --g-z:#8C9BFF; --g-curve:#FFA040; --g-curve-fill:rgba(255,160,64,.16);
   --g-pink:#FF5C9A; --g-plane:rgba(90,220,230,.26); --g-cone:rgba(255,170,110,.18); --g-cone-line:rgba(255,170,110,.45);
   --g-blue:#6AA8FF; --g-red:#FF6B6B; --g-green:#5BD27E; --g-purple:#B48CFF; --g-orange:#FFA040; --g-teal:#4FD1C5;
-  --g-ring:#1C1C1C;
+  --g-ring:#0a1317;
 }
-html{ background:var(--bg); }
+html{ background:var(--bg); color-scheme:light; }
 html[data-theme="dark"]{ color-scheme:dark; }
 body{ font-family:'Anuphan',system-ui,sans-serif; background:var(--bg); color:var(--text); line-height:1.6; -webkit-font-smoothing:antialiased; }
+:focus-visible{ outline:2px solid var(--link); outline-offset:2px; }
 
-/* หัวหน้า: สีปกของเรื่อง + ปก */
+/* หัวหน้า: แผ่นสีอ่อนมุมโค้ง ตัวหนังสือเข้ม + ปกข้างชื่อ (สีของเรื่องอยู่ที่ปก) */
 header{
-  background:var(--hero); color:#fff; text-align:left;
-  display:grid; grid-template-columns:auto 1fr; column-gap:22px; align-items:end;
-  padding:62px 32px 26px;
+  background:var(--panel); color:var(--text); text-align:left; overflow:hidden;
+  display:grid; grid-template-columns:auto 1fr; column-gap:24px; align-items:end;
+  margin:8px 8px 0; padding:74px 32px 28px; border-radius:32px; box-shadow:none;
 }
 header::before, header::after{ display:none !important; }
 header > *:not(.lesson-cover):not(.back-link):not(.lang-toggle):not(.theme-toggle){ grid-column:2; }
-.lesson-cover{ grid-column:1; grid-row:1 / span 6; align-self:end; width:120px; aspect-ratio:1; border-radius:6px; overflow:hidden; box-shadow:0 8px 24px rgba(0,0,0,.45); }
+.lesson-cover{ grid-column:1; grid-row:1 / span 6; align-self:end; width:clamp(96px, 11vw, 136px); aspect-ratio:1; border-radius:16px; overflow:hidden; box-shadow:none; }
 .lesson-cover svg{ display:block; width:100%; height:100%; }
-header h1{ font-size:clamp(1.8rem, 4.2vw, 2.9rem); font-weight:700; letter-spacing:-.01em; line-height:1.25; margin:0; color:#fff; }
-header p{ font-size:1rem; opacity:.85; margin:6px 0 0; color:#fff; }
+header h1{ font-size:clamp(1.9rem, 4.4vw, 3.2rem); font-weight:500; letter-spacing:0; line-height:1.25; margin:0; color:var(--text); }
+header p{ font-size:1.02rem; opacity:1; margin:8px 0 0; color:var(--muted); line-height:1.55; }
 .back-link{
-  top:14px; left:20px; display:inline-flex; align-items:center; gap:6px;
-  padding:6px 14px; border-radius:999px; background:rgba(0,0,0,.32); color:#fff;
-  font-size:.88rem; font-weight:600; opacity:1; text-decoration:none;
+  position:absolute; top:16px; left:16px; z-index:2; display:inline-flex; align-items:center; gap:6px;
+  height:38px; padding:0 16px; border-radius:100px; background:var(--surface); color:var(--text);
+  box-shadow:inset 0 0 0 1px var(--line); font-size:.92rem; font-weight:700; opacity:1; text-decoration:none;
 }
-.back-link:hover{ background:rgba(0,0,0,.55); text-decoration:none; }
+.back-link:hover{ background:var(--raise); opacity:1; text-decoration:none; }
 .lang-toggle, .theme-toggle{
-  position:absolute; top:14px; height:34px; background:transparent; color:#fff;
-  border:1px solid rgba(255,255,255,.55); border-radius:999px; font-family:inherit; font-weight:700; font-size:.85rem; cursor:pointer; z-index:2;
+  position:absolute; top:16px; height:38px; border-radius:100px; font-family:inherit; font-weight:700; font-size:.88rem;
+  cursor:pointer; z-index:2; transition:transform .12s, background .12s;
 }
-.lang-toggle{ right:20px; padding:0 16px; }
-.theme-toggle{ right:86px; width:34px; padding:0; display:grid; place-items:center; }
+.lang-toggle{ right:16px; min-width:64px; padding:0 16px; background:var(--ink); color:var(--on-ink); border:1px solid var(--ink); }
+.lang-toggle:hover{ background:var(--ink); border-color:var(--ink); transform:scale(1.04); }
+.theme-toggle{ right:88px; width:38px; padding:0; display:grid; place-items:center; background:var(--surface); color:var(--text); border:1px solid var(--line); }
 .theme-toggle svg{ width:18px; height:18px; }
-.lang-toggle:hover, .theme-toggle:hover{ background:rgba(255,255,255,.14); border-color:#fff; }
-body > .lang-toggle, body > .theme-toggle{ position:fixed; top:14px; z-index:50; background:var(--card); color:var(--text); border-color:var(--border); box-shadow:var(--shadow); }
-body > .lang-toggle{ right:14px; } body > .theme-toggle{ right:80px; }
-body > .lang-toggle:hover, body > .theme-toggle:hover{ background:var(--chip); border-color:var(--text); }
-header:not(:has(.back-link)):not(:has(.lang-toggle)){ padding-top:28px; border-radius:8px; }
+.theme-toggle:hover{ background:var(--raise); border-color:var(--line); }
+body > .lang-toggle, body > .theme-toggle{ position:fixed; top:14px; z-index:50; }
+body > .lang-toggle{ right:14px; } body > .theme-toggle{ right:86px; }
+header:not(:has(.back-link)):not(:has(.lang-toggle)){ padding-top:28px; }
 
-/* แถบแท็บ: ชิปทรงแคปซูล */
-nav{ background:var(--bg); border-bottom:1px solid var(--border); padding:10px 16px; gap:8px; }
+/* แถบแท็บ: ชิปขอบบาง ตัวที่เลือก = สีหมึก (ดำ / โหมดมืดขาว) */
+nav{ background:var(--bg); border-bottom:0; padding:16px 16px 8px; gap:8px; box-shadow:none; }
 .tab-btn{
-  font-family:inherit; border:0; margin:0; border-radius:999px; padding:8px 16px;
-  background:var(--chip); color:var(--text); font-weight:600; font-size:.9rem;
+  font-family:inherit; border:0; margin:0; border-radius:100px; padding:8px 18px;
+  background:var(--surface); color:var(--text); box-shadow:inset 0 0 0 1px var(--line); font-weight:600; font-size:.95rem;
 }
-.tab-btn:hover{ background:var(--chip-hover); color:var(--text); }
-.tab-btn.active{ background:var(--text); color:var(--bg); border-bottom-color:transparent; }
+.tab-btn:hover{ background:var(--raise); color:var(--text); }
+.tab-btn.active{ background:var(--ink); color:var(--on-ink); box-shadow:none; border-bottom-color:transparent; }
 
-/* การ์ดและกล่อง */
-.card{ background:var(--card); border:1px solid var(--border); border-radius:8px; box-shadow:var(--shadow); }
+/* การ์ดและกล่อง: พื้นเรียบ ขอบ 1px ไม่มีเงา */
+.card{ background:var(--card); border:1px solid var(--line); border-radius:24px; box-shadow:none; }
 .card-title{ color:var(--text); font-size:1.2rem; }
 .card-title .icon{ display:none; }
 .desc-text{ color:var(--text); font-size:1rem; }
-.formula, .step.result, .stats{ background:var(--strong) !important; color:#fff; border-radius:8px; letter-spacing:0; }
+.formula, .step.result, .stats{ background:var(--strong) !important; color:#fff; border-radius:16px; letter-spacing:0; }
 .stat .k, .step-tag{ text-transform:none; letter-spacing:0; }
 
-/* ปุ่ม */
-.btn-action{ font-family:inherit; background:var(--text); color:var(--bg); }
-.btn-action.secondary{ background:transparent; color:var(--text); border:1px solid var(--muted); }
-.mode-btn{ font-family:inherit; border:1px solid var(--border); background:var(--card); color:var(--text); }
+/* ปุ่ม: หลัก = แคปซูลหมึก, รอง = แคปซูลขอบบาง */
+.btn-action{ font-family:inherit; background:var(--ink); color:var(--on-ink); border:1px solid var(--ink); border-radius:100px; }
+.btn-action:hover:not(:disabled){ background:var(--ink-hover); border-color:var(--ink-hover); }
+.btn-action.secondary{ background:transparent; color:var(--text); border:1px solid var(--line); }
+.btn-action.secondary:hover:not(:disabled){ background:var(--raise); }
+.mode-btn{ font-family:inherit; border:1px solid var(--line); background:var(--surface); color:var(--text); border-radius:100px; }
 .mode-btn:hover{ border-color:var(--text); color:var(--text); }
-.mode-btn.active{ background:var(--text); border-color:var(--text); color:var(--bg); }
-.quiz-opt{ border-radius:8px; }
+.mode-btn.active{ background:var(--ink); border-color:var(--ink); color:var(--on-ink); }
 input[type=range]{ accent-color:var(--primary); }
 
 @media (max-width:600px){
-  header{ padding:58px 16px 20px; column-gap:14px; }
-  .lesson-cover{ width:76px; }
-  .back-link{ left:12px; max-width:calc(100% - 150px); overflow:hidden; white-space:nowrap; text-overflow:ellipsis; display:block; }
-  .lang-toggle{ right:12px; }
-  .theme-toggle{ right:74px; }
-  nav{ flex-wrap:nowrap; overflow-x:auto; justify-content:flex-start; scrollbar-width:none; }
+  header{ margin:0; border-radius:0 0 24px 24px; padding:64px 16px 20px; column-gap:14px; }
+  .lesson-cover{ width:72px; border-radius:12px; }
+  header h1{ font-size:clamp(1.5rem, 7vw, 2rem); }
+  header p{ font-size:.95rem; }
+  .back-link{ top:14px; left:12px; height:36px; padding:0 14px; max-width:calc(100% - 150px); overflow:hidden; white-space:nowrap; text-overflow:ellipsis; display:block; line-height:36px; }
+  .lang-toggle, .theme-toggle{ top:14px; height:36px; }
+  .lang-toggle{ right:12px; min-width:58px; padding:0 12px; }
+  .theme-toggle{ right:78px; width:36px; }
+  nav{ flex-wrap:nowrap; overflow-x:auto; justify-content:flex-start; scrollbar-width:none; padding:12px 12px 6px; }
   nav .tab-btn{ flex:0 0 auto; white-space:nowrap; }   /* ชื่อแท็บบรรทัดเดียว ปัดแถบซ้าย-ขวาแทน (ไม่บีบจนตัดคำ) */
   nav::-webkit-scrollbar{ display:none; }
 }
+/* สีกรอบธีมเก่าที่หน้านี้ฝังไว้เอง → โทเคนธีมใหม่ ทั้ง 2 โหมด (สร้างอัตโนมัติ) */
+:root[data-theme] .box-info{background:var(--panel)}
+:root[data-theme] .btn-play{background:var(--ink);color:var(--on-ink);border-color:var(--ink)}
+:root[data-theme] .squeeze .q{background:var(--raise)}
 /* โหมดมืด: สีที่หน้านี้ฝังไว้เอง (สร้างอัตโนมัติ) */
-:root[data-theme="dark"] .box-info{background:#1f2e12}
 :root[data-theme="dark"] .rect-bar{fill:rgba(130,230,200,0.35)}
 :root[data-theme="dark"] .area-fill{fill:rgba(200,229,205,0.16)}
 :root[data-theme="dark"] .round-limit input[type="range"]::-webkit-slider-thumb{background:var(--strong);border:2px solid #333333}
 :root[data-theme="dark"] .round-limit input[type="range"]::-moz-range-thumb{border:2px solid #333333;background:var(--strong)}
-:root[data-theme="dark"] .btn-play{background:var(--strong)}
 :root[data-theme="dark"] .formula-live .hl{background:#2c1117}
 :root[data-theme="dark"] .formula-live .hlA{background:#123024;color:#a5f2db}
 :root[data-theme="dark"] .bridge{background:#2a1e10}
@@ -234,7 +240,6 @@ input[type=range]{ accent-color:var(--primary); }
 :root[data-theme="dark"] .fig-controls input[type="range"]::-webkit-slider-thumb{background:var(--strong);border:2px solid #333333}
 :root[data-theme="dark"] .fig-controls input[type="range"]::-moz-range-thumb{border:2px solid #333333;background:var(--strong)}
 :root[data-theme="dark"] .squeeze .m{color:#abe1c6}
-:root[data-theme="dark"] .squeeze .q{background:#223614}
 :root[data-theme="dark"] .squeeze .M{color:#ecaf90}
 :root[data-theme="dark"] .squeeze .case{color:#ecaf90}
 :root[data-theme="dark"] .squeeze .case.ends{color:#abe1c6}
@@ -254,12 +259,12 @@ input[type=range]{ accent-color:var(--primary); }
   <div class="lesson-cover" aria-hidden="true"><svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"><rect width="120" height="120" fill="#283593"/><circle cx="12" cy="110" r="46" fill="#000" fill-opacity=".14"/><g fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><rect x="18" y="52.5" width="12" height="47.5" fill="#fff" fill-opacity=".22" stroke-width="1.5"/><rect x="30" y="43.1" width="12" height="56.9" fill="#fff" fill-opacity=".22" stroke-width="1.5"/><rect x="42" y="37.4" width="12" height="62.6" fill="#fff" fill-opacity=".22" stroke-width="1.5"/><rect x="54" y="36.1" width="12" height="63.9" fill="#fff" fill-opacity=".22" stroke-width="1.5"/><rect x="66" y="39.6" width="12" height="60.4" fill="#fff" fill-opacity=".22" stroke-width="1.5"/><rect x="78" y="47.3" width="12" height="52.7" fill="#fff" fill-opacity=".22" stroke-width="1.5"/><rect x="90" y="57.9" width="12" height="42.1" fill="#fff" fill-opacity=".22" stroke-width="1.5"/><path d="M8 100 L112 100"/><path d="M10.0,60.0 L11.2,58.8 L12.5,57.6 L13.8,56.4 L15.0,55.2 L16.2,54.1 L17.5,53.0 L18.8,51.8 L20.0,50.7 L21.2,49.7 L22.5,48.7 L23.8,47.6 L25.0,46.7 L26.2,45.7 L27.5,44.8 L28.8,44.0 L30.0,43.1 L31.2,42.3 L32.5,41.6 L33.8,40.9 L35.0,40.2 L36.2,39.6 L37.5,39.0 L38.8,38.5 L40.0,38.0 L41.2,37.6 L42.5,37.2 L43.8,36.9 L45.0,36.6 L46.2,36.4 L47.5,36.2 L48.8,36.1 L50.0,36.0 L51.2,36.0 L52.5,36.0 L53.8,36.1 L55.0,36.3 L56.2,36.4 L57.5,36.7 L58.8,37.0 L60.0,37.3 L61.2,37.7 L62.5,38.1 L63.8,38.6 L65.0,39.2 L66.2,39.7 L67.5,40.4 L68.8,41.0 L70.0,41.7 L71.2,42.5 L72.5,43.3 L73.8,44.1 L75.0,45.0 L76.2,45.9 L77.5,46.9 L78.8,47.8 L80.0,48.9 L81.2,49.9 L82.5,51.0 L83.8,52.1 L85.0,53.2 L86.2,54.3 L87.5,55.5 L88.8,56.7 L90.0,57.9 L91.2,59.1 L92.5,60.3 L93.8,61.5 L95.0,62.8 L96.2,64.0 L97.5,65.3 L98.8,66.5 L100.0,67.8 L101.2,69.0 L102.5,70.2 L103.8,71.5 L105.0,72.7 L106.2,73.9 L107.5,75.1 L108.8,76.3 L110.0,77.5" stroke-width="4"/></g></svg></div>
   <button id="themeToggle" class="theme-toggle" type="button" onclick="toggleTheme()" title="สลับโหมดสว่าง/มืด" aria-label="สลับโหมดสว่าง/มืด"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6"/></svg></button>
   <button id="langToggle" class="lang-toggle" onclick="toggleLang()">EN</button>
-  <h1 data-th="▦ ปริพันธ์จำกัดเขตและทฤษฎีบทหลักมูล" data-en="▦ Definite Integrals & the FTC">▦ ปริพันธ์จำกัดเขตและทฤษฎีบทหลักมูล</h1>
+  <h1 data-th="ปริพันธ์จำกัดเขตและทฤษฎีบทหลักมูล" data-en="Definite Integrals & the FTC">ปริพันธ์จำกัดเขตและทฤษฎีบทหลักมูล</h1>
   <p data-th="ผลรวมรีมันน์ • ทฤษฎีบทหลักมูลของแคลคูลัส • การประมาณค่าเชิงตัวเลข" data-en="Riemann sums • The Fundamental Theorem of Calculus • Numerical integration">ผลรวมรีมันน์ • ทฤษฎีบทหลักมูลของแคลคูลัส • การประมาณค่าเชิงตัวเลข</p>
 </header>
 
 <nav>
-  <button class="tab-btn active" data-tab="riemann" onclick="showTab('riemann', this)" data-th="▦ ผลรวมรีมันน์" data-en="▦ Riemann Sums">▦ ผลรวมรีมันน์</button>
+  <button class="tab-btn active" data-tab="riemann" onclick="showTab('riemann', this)" data-th="ผลรวมรีมันน์" data-en="Riemann Sums">ผลรวมรีมันน์</button>
   <button class="tab-btn" data-tab="ftc" onclick="showTab('ftc', this)" data-th="ทฤษฎีบทหลักมูล" data-en="Fundamental Theorem">ทฤษฎีบทหลักมูล</button>
   <button class="tab-btn" data-tab="proof" onclick="showTab('proof', this)" data-th="พิสูจน์ทฤษฎีบท" data-en="The Proofs">พิสูจน์ทฤษฎีบท</button>
 </nav>

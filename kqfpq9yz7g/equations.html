@@ -66,9 +66,34 @@
   .align .r { justify-self: start; }
   .align .full { grid-column: 1 / -1; }
 
-  /* พจน์ที่ "ถูกย้าย" — กระโดดเข้ามาเน้นสี */
-  .mv { display: inline-block; background: #FFE8CC; color: #C2570C; border-radius: 6px; padding: 0 6px; font-weight: 800; animation: hop .9s ease; }
-  @keyframes hop { 0% { transform: translate(-46px,-16px); opacity: 0; } 55% { transform: translate(0,-10px); opacity: 1; } 100% { transform: none; } }
+  /* สองกรณีคู่กันในบรรทัดเดียว คั่นด้วย "และ" (ครูสั่ง 2026-11-11) */
+  .align2 { display: grid; grid-template-columns: repeat(7, auto); justify-content: start; column-gap: .55em; row-gap: 3px; align-items: center; margin: 4px 0; }
+  .align2 .l { justify-self: end; text-align: right; }
+  .align2 .m { justify-self: center; font-weight: 700; }
+  .align2 .r { justify-self: start; }
+  .align2 .and { padding: 0 1.1em; font-weight: 700; color: var(--muted); }
+  .align2 .and::before { content: "และ"; }
+  html[lang="en"] .align2 .and::before { content: "and"; }
+
+
+  /* พจน์ที่ "ถูกย้าย" — วิ่งข้ามเครื่องหมาย = จริงๆ ตามลูกศรโค้ง เครื่องหมายกลับกลางทาง (ครูสั่ง 2026-11-11) */
+  .mv { display: inline-block; background: #FFE8CC; color: #C2570C; border-radius: 6px; padding: 0 6px; font-weight: 800; }
+  .mv > template { display: none; }
+  .mv.flying { visibility: hidden; }
+  .mv-fly { position: absolute; z-index: 5; pointer-events: none; background: #FFE8CC; color: #C2570C; border: 2px solid #C2570C; border-radius: 8px; padding: 0 7px; font-weight: 800; white-space: nowrap; transform: translate(-50%, -50%); }
+  /* ตัวอย่างย้ายข้าง: สมการตัวใหญ่ ให้เห็นพจน์วิ่งข้าม = ชัดจากหลังห้อง */
+  #tab-mv .wk-cell .align { font-size: 1.55rem; margin: 30px 0 6px; column-gap: .45em; }
+  #genOut .align { font-size: 1.3rem; margin-top: 26px; }
+  .mv-arc { position: absolute; left: 0; top: 0; overflow: visible; pointer-events: none; z-index: 4; }
+  .mv-arc path { fill: none; stroke: #C2570C; stroke-width: 2.4; stroke-dasharray: 6 4; }
+  .mv-arc polygon { fill: #C2570C; }
+
+  /* เครื่องหมายราก มีขีดคลุม (vinculum) ต่อจากตัวราก ครอบนิพจน์พอดี — ของกลาง class .rad (ใช้ชื่อเดียวกับสื่อเรขาคณิตวิเคราะห์) */
+  .rad { display: inline-flex; align-items: stretch; vertical-align: middle; white-space: nowrap; line-height: 1.15; margin: 0 .06em; }
+  .rad > .rad-sym { flex: none; width: .62em; height: auto; overflow: visible; }
+  .rad > .rad-sym path { fill: none; stroke: currentColor; stroke-width: max(2px, .1em); stroke-linejoin: round; stroke-linecap: round; vector-effect: non-scaling-stroke; }
+  .rad > .rad-in { border-top: max(2px, .1em) solid currentColor; padding: .12em .14em 0 .1em; display: inline-block; }
+  .frac .den .rad, .frac .num .rad { margin-top: .28em; }
 
   .tools { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px; margin: 14px 0; }
   .tool { border: 2px solid var(--border); border-radius: 14px; padding: 12px 14px; text-align: center; background: #fff; line-height: 1.7; }
@@ -117,6 +142,43 @@
   .btn-next:hover { background: #142B1A; }
   .score-badge { display: inline-block; background: linear-gradient(135deg,#68EF3F,#1C3B22); color: white; border-radius: 30px; padding: 6px 20px; font-weight: 700; font-size: 1rem; }
 
+
+  /* ── แท็บการแก้สมการ/ย้ายข้าง (2026-11-12) — สีใช้ var(--g-*) ให้ได้ทั้งโหมดสว่างและมืด ── */
+  svg.scale, svg.conv { display: block; width: 100%; max-width: 820px; height: auto; margin: 0 auto; }
+  .sc-wrap { margin: 6px 0 4px; }
+  .sc-beam, .sc-pan { transition: transform 1s cubic-bezier(.35, 1.35, .5, 1); }
+  .sc-item { animation: scPop .4s ease; }
+  @keyframes scPop { from { opacity: 0; } to { opacity: 1; } }
+  .sc-balloon { animation: scPop .4s ease, scBob 3s ease-in-out infinite .4s; }
+  @keyframes scBob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
+  .sc-item.blink rect { animation: scBlink .9s ease-in-out infinite; }
+  @keyframes scBlink { 0%, 100% { opacity: 1; } 50% { opacity: .25; } }
+  .sc-burst { animation: scBurst .7s ease-out forwards; }
+  @keyframes scBurst { from { opacity: 1; } to { opacity: 0; } }
+  @media (prefers-reduced-motion: reduce) { .sc-beam, .sc-pan { transition: none; } .sc-item, .sc-balloon, .sc-item.blink rect, .sc-burst { animation: none; } }
+  .sc-eq { font-size: 1.6rem; font-weight: 800; text-align: center; margin: 6px 0 2px; min-height: 2.2rem; }
+  .sc-eq small { font-size: 1rem; font-weight: 600; color: var(--muted); }
+  .sc-cap { text-align: center; line-height: 1.8; min-height: 3.4em; margin-bottom: 4px; }
+  .pr-fb { border-radius: 12px; padding: 12px 16px; margin: 10px 0; line-height: 1.8; border: 1px solid var(--line); }
+  .pr-fb.ok { border-left: 5px solid var(--g-green); }
+  .pr-fb.bad { border-left: 5px solid var(--g-orange); }
+  .pl-ctl { display: grid; gap: 8px; margin: 12px auto; max-width: 560px; }
+  .pl-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .pl-lab { min-width: 108px; font-weight: 700; }
+  .pl-row .btn { min-width: 64px; min-height: 42px; padding: 6px 18px; }
+  .pl-status { display: inline-block; padding: 4px 16px; border-radius: 100px; font-weight: 800; border: 2px solid var(--line); }
+  .pl-status.ok { border-color: var(--g-green); color: var(--g-green); }
+  .pl-status.bad { border-color: var(--g-orange); color: var(--g-orange); }
+  .both { color: var(--g-orange); background: var(--g-curve-fill); border-radius: 6px; padding: 0 5px; font-weight: 800; }
+  .cancel { text-decoration: line-through; text-decoration-color: var(--g-red); text-decoration-thickness: 3px; opacity: .6; }
+  .cmp { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-items: start; }
+  .cmp-h { font-weight: 800; margin-bottom: 8px; color: var(--muted); }
+  .cmp .wk-cell { padding-left: 16px; }
+  .wk-cell.dim .align { opacity: .4; transition: opacity .6s; }
+  .tool .why { font-size: .95rem; font-weight: 400; color: var(--muted); line-height: 1.6; margin-top: 4px; }
+  #tab-eq .wk-cell .align { font-size: 1.45rem; margin: 8px 0 6px; }
+  @media (max-width: 700px) { .cmp { grid-template-columns: 1fr; } .sc-eq { font-size: 1.4rem; } }
+
   @media (max-width: 700px) {
     header h1 { font-size: 1.4rem; }
     .card { padding: 20px 14px; }
@@ -124,118 +186,130 @@
     .wk-cell { padding-left: 46px; }
   }
 /* ── theme:start — สร้างโดย tools/build_lessons.py ห้ามแก้มือ (แก้ที่สคริปต์แล้วรันใหม่) ── */
+/* ธีมชุดเดียวกับหน้าสารบัญ (tools/build_index.py · DESIGN.md หมวด Meta-inspired) — สีของเรื่องอยู่ที่ปกและในตัวบทเรียน กรอบหน้าเป็นสีกลาง */
 :root{ --page:#2F6FD0; }
 :root[data-theme="light"]{
-  --bg:#F4F4F1; --card:#FFFFFF; --text:#16181A; --muted:#5E6166; --border:#DEDED8;
+  --bg:#ffffff; --surface:#ffffff; --card:#ffffff; --panel:#f1f4f7; --raise:#e4e9ee;
+  --text:#1c1e21; --muted:#5d6c7b; --dim:#8595a4; --line:#ced0d4; --line-soft:#dee3e9; --border:#ced0d4;
+  --ink:#000000; --on-ink:#ffffff; --ink-hover:#2b3138; --link:#0064e0; --strong:#1c1e21; --shadow:none;
   --primary:color-mix(in srgb, var(--page) 86%, #000); --primary-2:color-mix(in srgb, var(--page) 62%, #000);
   --secondary:#C2540A; --secondary-light:#F2A15F; --accent:#68EF3F; --accent-2:#2E9E3F;
-  --shadow:0 2px 10px rgba(0,0,0,.07);
-  --strong:color-mix(in srgb, var(--page) 76%, #000); --chip:#E8E8E3; --chip-hover:#DCDCD5;
-  --hero:color-mix(in srgb, var(--page) 82%, #000);
   --g-x:#E53935; --g-y:#2E9E4F; --g-z:#3949AB; --g-curve:#F07400; --g-curve-fill:rgba(240,116,0,.12);
   --g-pink:#D81B60; --g-plane:rgba(60,190,200,.28); --g-cone:rgba(153,51,0,.20); --g-cone-line:rgba(153,51,0,.35);
   --g-blue:#1E66D0; --g-red:#D32F2F; --g-green:#2E9E4F; --g-purple:#7B3FC4; --g-orange:#E8710A; --g-teal:#0F8A80;
   --g-ring:#FFFFFF;
 }
 :root[data-theme="dark"]{
-  --bg:#121212; --card:#1C1C1C; --text:#FFFFFF; --muted:#B3B3B3; --border:#333333;
+  --bg:#0a1317; --surface:#0a1317; --card:#0a1317; --panel:#1c1e21; --raise:#2b3138;
+  --text:#ffffff; --muted:#9aa8b5; --dim:#6b7884; --line:#444950; --line-soft:#32383e; --border:#444950;
+  --ink:#ffffff; --on-ink:#000000; --ink-hover:#d5dbe1; --link:#4da3ff; --strong:#2b3138; --shadow:none;
   --primary:#82a9e3; --primary-2:#a3c0ea;
   --secondary:#FFB37A; --secondary-light:#FFD0A8; --accent:#8AF25E; --accent-2:#5BD27E;
-  --shadow:0 8px 24px rgba(0,0,0,.5);
-  --strong:color-mix(in srgb, var(--page) 48%, #1C1C1C); --chip:#2A2A2A; --chip-hover:#353535;
-  --hero:color-mix(in srgb, var(--page) 62%, #000);
   --g-x:#FF6B6B; --g-y:#5BD27E; --g-z:#8C9BFF; --g-curve:#FFA040; --g-curve-fill:rgba(255,160,64,.16);
   --g-pink:#FF5C9A; --g-plane:rgba(90,220,230,.26); --g-cone:rgba(255,170,110,.18); --g-cone-line:rgba(255,170,110,.45);
   --g-blue:#6AA8FF; --g-red:#FF6B6B; --g-green:#5BD27E; --g-purple:#B48CFF; --g-orange:#FFA040; --g-teal:#4FD1C5;
-  --g-ring:#1C1C1C;
+  --g-ring:#0a1317;
 }
-html{ background:var(--bg); }
+html{ background:var(--bg); color-scheme:light; }
 html[data-theme="dark"]{ color-scheme:dark; }
 body{ font-family:'Anuphan',system-ui,sans-serif; background:var(--bg); color:var(--text); line-height:1.6; -webkit-font-smoothing:antialiased; }
+:focus-visible{ outline:2px solid var(--link); outline-offset:2px; }
 
-/* หัวหน้า: สีปกของเรื่อง + ปก */
+/* หัวหน้า: แผ่นสีอ่อนมุมโค้ง ตัวหนังสือเข้ม + ปกข้างชื่อ (สีของเรื่องอยู่ที่ปก) */
 header{
-  background:var(--hero); color:#fff; text-align:left;
-  display:grid; grid-template-columns:auto 1fr; column-gap:22px; align-items:end;
-  padding:62px 32px 26px;
+  background:var(--panel); color:var(--text); text-align:left; overflow:hidden;
+  display:grid; grid-template-columns:auto 1fr; column-gap:24px; align-items:end;
+  margin:8px 8px 0; padding:74px 32px 28px; border-radius:32px; box-shadow:none;
 }
 header::before, header::after{ display:none !important; }
 header > *:not(.lesson-cover):not(.back-link):not(.lang-toggle):not(.theme-toggle){ grid-column:2; }
-.lesson-cover{ grid-column:1; grid-row:1 / span 6; align-self:end; width:120px; aspect-ratio:1; border-radius:6px; overflow:hidden; box-shadow:0 8px 24px rgba(0,0,0,.45); }
+.lesson-cover{ grid-column:1; grid-row:1 / span 6; align-self:end; width:clamp(96px, 11vw, 136px); aspect-ratio:1; border-radius:16px; overflow:hidden; box-shadow:none; }
 .lesson-cover svg{ display:block; width:100%; height:100%; }
-header h1{ font-size:clamp(1.8rem, 4.2vw, 2.9rem); font-weight:700; letter-spacing:-.01em; line-height:1.25; margin:0; color:#fff; }
-header p{ font-size:1rem; opacity:.85; margin:6px 0 0; color:#fff; }
+header h1{ font-size:clamp(1.9rem, 4.4vw, 3.2rem); font-weight:500; letter-spacing:0; line-height:1.25; margin:0; color:var(--text); }
+header p{ font-size:1.02rem; opacity:1; margin:8px 0 0; color:var(--muted); line-height:1.55; }
 .back-link{
-  top:14px; left:20px; display:inline-flex; align-items:center; gap:6px;
-  padding:6px 14px; border-radius:999px; background:rgba(0,0,0,.32); color:#fff;
-  font-size:.88rem; font-weight:600; opacity:1; text-decoration:none;
+  position:absolute; top:16px; left:16px; z-index:2; display:inline-flex; align-items:center; gap:6px;
+  height:38px; padding:0 16px; border-radius:100px; background:var(--surface); color:var(--text);
+  box-shadow:inset 0 0 0 1px var(--line); font-size:.92rem; font-weight:700; opacity:1; text-decoration:none;
 }
-.back-link:hover{ background:rgba(0,0,0,.55); text-decoration:none; }
+.back-link:hover{ background:var(--raise); opacity:1; text-decoration:none; }
 .lang-toggle, .theme-toggle{
-  position:absolute; top:14px; height:34px; background:transparent; color:#fff;
-  border:1px solid rgba(255,255,255,.55); border-radius:999px; font-family:inherit; font-weight:700; font-size:.85rem; cursor:pointer; z-index:2;
+  position:absolute; top:16px; height:38px; border-radius:100px; font-family:inherit; font-weight:700; font-size:.88rem;
+  cursor:pointer; z-index:2; transition:transform .12s, background .12s;
 }
-.lang-toggle{ right:20px; padding:0 16px; }
-.theme-toggle{ right:86px; width:34px; padding:0; display:grid; place-items:center; }
+.lang-toggle{ right:16px; min-width:64px; padding:0 16px; background:var(--ink); color:var(--on-ink); border:1px solid var(--ink); }
+.lang-toggle:hover{ background:var(--ink); border-color:var(--ink); transform:scale(1.04); }
+.theme-toggle{ right:88px; width:38px; padding:0; display:grid; place-items:center; background:var(--surface); color:var(--text); border:1px solid var(--line); }
 .theme-toggle svg{ width:18px; height:18px; }
-.lang-toggle:hover, .theme-toggle:hover{ background:rgba(255,255,255,.14); border-color:#fff; }
-body > .lang-toggle, body > .theme-toggle{ position:fixed; top:14px; z-index:50; background:var(--card); color:var(--text); border-color:var(--border); box-shadow:var(--shadow); }
-body > .lang-toggle{ right:14px; } body > .theme-toggle{ right:80px; }
-body > .lang-toggle:hover, body > .theme-toggle:hover{ background:var(--chip); border-color:var(--text); }
-header:not(:has(.back-link)):not(:has(.lang-toggle)){ padding-top:28px; border-radius:8px; }
+.theme-toggle:hover{ background:var(--raise); border-color:var(--line); }
+body > .lang-toggle, body > .theme-toggle{ position:fixed; top:14px; z-index:50; }
+body > .lang-toggle{ right:14px; } body > .theme-toggle{ right:86px; }
+header:not(:has(.back-link)):not(:has(.lang-toggle)){ padding-top:28px; }
 
-/* แถบแท็บ: ชิปทรงแคปซูล */
-nav{ background:var(--bg); border-bottom:1px solid var(--border); padding:10px 16px; gap:8px; }
+/* แถบแท็บ: ชิปขอบบาง ตัวที่เลือก = สีหมึก (ดำ / โหมดมืดขาว) */
+nav{ background:var(--bg); border-bottom:0; padding:16px 16px 8px; gap:8px; box-shadow:none; }
 .tab-btn{
-  font-family:inherit; border:0; margin:0; border-radius:999px; padding:8px 16px;
-  background:var(--chip); color:var(--text); font-weight:600; font-size:.9rem;
+  font-family:inherit; border:0; margin:0; border-radius:100px; padding:8px 18px;
+  background:var(--surface); color:var(--text); box-shadow:inset 0 0 0 1px var(--line); font-weight:600; font-size:.95rem;
 }
-.tab-btn:hover{ background:var(--chip-hover); color:var(--text); }
-.tab-btn.active{ background:var(--text); color:var(--bg); border-bottom-color:transparent; }
+.tab-btn:hover{ background:var(--raise); color:var(--text); }
+.tab-btn.active{ background:var(--ink); color:var(--on-ink); box-shadow:none; border-bottom-color:transparent; }
 
-/* การ์ดและกล่อง */
-.card{ background:var(--card); border:1px solid var(--border); border-radius:8px; box-shadow:var(--shadow); }
+/* การ์ดและกล่อง: พื้นเรียบ ขอบ 1px ไม่มีเงา */
+.card{ background:var(--card); border:1px solid var(--line); border-radius:24px; box-shadow:none; }
 .card-title{ color:var(--text); font-size:1.2rem; }
 .card-title .icon{ display:none; }
 .desc-text{ color:var(--text); font-size:1rem; }
-.formula, .step.result, .stats{ background:var(--strong) !important; color:#fff; border-radius:8px; letter-spacing:0; }
+.formula, .step.result, .stats{ background:var(--strong) !important; color:#fff; border-radius:16px; letter-spacing:0; }
 .stat .k, .step-tag{ text-transform:none; letter-spacing:0; }
 
-/* ปุ่ม */
-.btn-action{ font-family:inherit; background:var(--text); color:var(--bg); }
-.btn-action.secondary{ background:transparent; color:var(--text); border:1px solid var(--muted); }
-.mode-btn{ font-family:inherit; border:1px solid var(--border); background:var(--card); color:var(--text); }
+/* ปุ่ม: หลัก = แคปซูลหมึก, รอง = แคปซูลขอบบาง */
+.btn-action{ font-family:inherit; background:var(--ink); color:var(--on-ink); border:1px solid var(--ink); border-radius:100px; }
+.btn-action:hover:not(:disabled){ background:var(--ink-hover); border-color:var(--ink-hover); }
+.btn-action.secondary{ background:transparent; color:var(--text); border:1px solid var(--line); }
+.btn-action.secondary:hover:not(:disabled){ background:var(--raise); }
+.mode-btn{ font-family:inherit; border:1px solid var(--line); background:var(--surface); color:var(--text); border-radius:100px; }
 .mode-btn:hover{ border-color:var(--text); color:var(--text); }
-.mode-btn.active{ background:var(--text); border-color:var(--text); color:var(--bg); }
-.quiz-opt{ border-radius:8px; }
+.mode-btn.active{ background:var(--ink); border-color:var(--ink); color:var(--on-ink); }
 input[type=range]{ accent-color:var(--primary); }
 
 @media (max-width:600px){
-  header{ padding:58px 16px 20px; column-gap:14px; }
-  .lesson-cover{ width:76px; }
-  .back-link{ left:12px; max-width:calc(100% - 150px); overflow:hidden; white-space:nowrap; text-overflow:ellipsis; display:block; }
-  .lang-toggle{ right:12px; }
-  .theme-toggle{ right:74px; }
-  nav{ flex-wrap:nowrap; overflow-x:auto; justify-content:flex-start; scrollbar-width:none; }
+  header{ margin:0; border-radius:0 0 24px 24px; padding:64px 16px 20px; column-gap:14px; }
+  .lesson-cover{ width:72px; border-radius:12px; }
+  header h1{ font-size:clamp(1.5rem, 7vw, 2rem); }
+  header p{ font-size:.95rem; }
+  .back-link{ top:14px; left:12px; height:36px; padding:0 14px; max-width:calc(100% - 150px); overflow:hidden; white-space:nowrap; text-overflow:ellipsis; display:block; line-height:36px; }
+  .lang-toggle, .theme-toggle{ top:14px; height:36px; }
+  .lang-toggle{ right:12px; min-width:58px; padding:0 12px; }
+  .theme-toggle{ right:78px; width:36px; }
+  nav{ flex-wrap:nowrap; overflow-x:auto; justify-content:flex-start; scrollbar-width:none; padding:12px 12px 6px; }
   nav .tab-btn{ flex:0 0 auto; white-space:nowrap; }   /* ชื่อแท็บบรรทัดเดียว ปัดแถบซ้าย-ขวาแทน (ไม่บีบจนตัดคำ) */
   nav::-webkit-scrollbar{ display:none; }
 }
+/* สีกรอบธีมเก่าที่หน้านี้ฝังไว้เอง → โทเคนธีมใหม่ ทั้ง 2 โหมด (สร้างอัตโนมัติ) */
+:root[data-theme] .box-info{background:var(--panel)}
+:root[data-theme] .btn{background:var(--ink);color:var(--on-ink);border-color:var(--ink)}
+:root[data-theme] .btn:hover:not(:disabled){background:var(--ink-hover);color:var(--on-ink);border-color:var(--ink)}
+:root[data-theme] .btn.ghost{background:transparent;color:var(--text);border-color:var(--line)}
+:root[data-theme] .btn.ghost:hover:not(:disabled){background:var(--raise)}
+:root[data-theme] .chip.active{background:var(--ink);color:var(--on-ink);border-color:var(--ink)}
+:root[data-theme] .readout{background:var(--panel)}
+:root[data-theme] .case-tbl th{background:var(--panel)}
+:root[data-theme] .btn-next{background:var(--ink);color:var(--on-ink);border-color:var(--ink)}
+:root[data-theme] .btn-next:hover{background:var(--ink-hover);color:var(--on-ink);border-color:var(--ink)}
+:root[data-theme] .score-badge{background:var(--strong)}
 /* โหมดมืด: สีที่หน้านี้ฝังไว้เอง (สร้างอัตโนมัติ) */
 :root[data-theme="dark"]{--pos:#a8f8e1;--pos-bg:#102a1d;--neg:#f18fb8;--neg-bg:#291a0f}
-:root[data-theme="dark"] .box-info{background:#1f2e12}
 :root[data-theme="dark"] .box-warn{background:#281d0f}
 :root[data-theme="dark"] .box-ok{background:#102a1d}
-:root[data-theme="dark"] .btn{background:var(--strong)}
-:root[data-theme="dark"] .btn.ghost{background:#171717}
-:root[data-theme="dark"] .btn.ghost:hover:not(:disabled){background:#223614}
 :root[data-theme="dark"] .chip{background:#171717}
-:root[data-theme="dark"] .chip.active{background:var(--strong)}
 :root[data-theme="dark"] .mv{background:#362714;color:#f6b88d}
+:root[data-theme="dark"] .mv-fly{background:#362714;color:#f6b88d}
+:root[data-theme="dark"] .mv-arc path{stroke:#f6b88d}
+:root[data-theme="dark"] .mv-arc polygon{fill:#f6b88d}
 :root[data-theme="dark"] .tool{background:#171717}
 :root[data-theme="dark"] .ck{background:#171717}
 :root[data-theme="dark"] .ck.done{background:#14260e}
-:root[data-theme="dark"] .readout{background:#1f2e12}
-:root[data-theme="dark"] .case-tbl th{background:#1f2e12}
 :root[data-theme="dark"] .case-tbl tr.live td{background:#261b0f}
 :root[data-theme="dark"] .wk-cell{background:#171717}
 :root[data-theme="dark"] .wk-cell .stepno{background:var(--strong)}
@@ -244,7 +318,6 @@ input[type=range]{ accent-color:var(--primary); }
 :root[data-theme="dark"] .quiz-opt.wrong{background:#291a0f;color:#f18fb8}
 :root[data-theme="dark"] .quiz-feedback.ok{color:#a8f8e1}
 :root[data-theme="dark"] .quiz-feedback.err{color:#f18fb8}
-:root[data-theme="dark"] .btn-next{background:var(--strong)}
 /* ── theme:end ── */
 </style>
 </head>
@@ -256,12 +329,13 @@ input[type=range]{ accent-color:var(--primary); }
   <button id="themeToggle" class="theme-toggle" type="button" onclick="toggleTheme()" title="สลับโหมดสว่าง/มืด" aria-label="สลับโหมดสว่าง/มืด"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6"/></svg></button>
   <button id="langToggle" class="lang-toggle" onclick="toggleLang()">EN</button>
   <h1 data-th="การแก้สมการ" data-en="Solving Equations">การแก้สมการ</h1>
-  <p data-th="ย้ายข้าง • ภาพในฝัน 3 ข้อ • สูตรกำลังสอง • สมการเศษส่วน • ทริกรากซ้อนราก • ม.4" data-en="Moving terms • the 3 dream-image rules • quadratic formula • rational equations • nested radicals">ย้ายข้าง • ภาพในฝัน 3 ข้อ • สูตรกำลังสอง • สมการเศษส่วน • ทริกรากซ้อนราก • ม.4</p>
+  <p data-th="การแก้สมการ • ย้ายข้าง • สมการพหุนามดีกรี 2 ขึ้นไป • สูตรกำลังสอง • สมการเศษส่วน • ทริกรากซ้อนราก • ม.4" data-en="Solving equations • moving terms • polynomial equations of degree 2 and up • quadratic formula • rational equations • nested radicals">การแก้สมการ • ย้ายข้าง • สมการพหุนามดีกรี 2 ขึ้นไป • สูตรกำลังสอง • สมการเศษส่วน • ทริกรากซ้อนราก • ม.4</p>
 </header>
 
 <nav>
-  <button class="tab-btn active" onclick="showTab('mv')" data-th="ย้ายข้าง" data-en="Moving Terms">ย้ายข้าง</button>
-  <button class="tab-btn" onclick="showTab('dr')" data-th="ภาพในฝัน" data-en="Dream Image">ภาพในฝัน</button>
+  <button class="tab-btn active" onclick="showTab('eq')" data-th="การแก้สมการ" data-en="Solving Equations">การแก้สมการ</button>
+  <button class="tab-btn" onclick="showTab('mv')" data-th="ย้ายข้าง" data-en="Moving Terms">ย้ายข้าง</button>
+  <button class="tab-btn" onclick="showTab('dr')" data-th="สมการพหุนามดีกรี 2 ขึ้นไป" data-en="Polynomial Equations (Degree 2 and Up)">สมการพหุนามดีกรี 2 ขึ้นไป</button>
   <button class="tab-btn" onclick="showTab('qd')" data-th="สูตรกำลังสอง" data-en="Quadratic Formula">สูตรกำลังสอง</button>
   <button class="tab-btn" onclick="showTab('fr')" data-th="สมการเศษส่วน" data-en="Rational Equations">สมการเศษส่วน</button>
   <button class="tab-btn" onclick="showTab('tr')" data-th="ทริก" data-en="Tricks">ทริก</button>
@@ -269,7 +343,8 @@ input[type=range]{ accent-color:var(--primary); }
 </nav>
 
 <main>
-  <section id="tab-mv" class="tab-panel active"></section>
+  <section id="tab-eq" class="tab-panel active"></section>
+  <section id="tab-mv" class="tab-panel"></section>
   <section id="tab-dr" class="tab-panel"></section>
   <section id="tab-qd" class="tab-panel"></section>
   <section id="tab-fr" class="tab-panel"></section>
@@ -311,7 +386,7 @@ function toggleLang() {
 }
 // เนื้อหาแท็บสร้างจาก JS ทั้งหมด จึงวาดใหม่ตอนสลับภาษา (ค่าที่ตั้งไว้เก็บในตัวแปร ขั้นที่เปิดไว้คงเดิม)
 function onLangChange() { renderAll(); refreshQuizLang(); }
-function renderAll() { renderMove(); renderDream(); renderQuad(); renderFrac(); renderTrick(); }
+function renderAll() { renderEq(); renderMove(); renderDream(); renderQuad(); renderFrac(); renderTrick(); }
 
 // เข้าแท็บที่มีตัวแสดงขั้นตอนทีไร เริ่มที่ 0 ขั้นเสมอ (ยังไม่เฉลย)
 function showTab(id) {
@@ -319,7 +394,7 @@ function showTab(id) {
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
   document.getElementById('tab-' + id).classList.add('active');
   event.target.classList.add('active');
-  if (['mv', 'dr', 'fr', 'tr'].includes(id)) { resetWkAll(); renderAll(); }
+  if (['eq', 'mv', 'dr', 'fr', 'tr'].includes(id)) { resetWkAll(); resetScenes(); renderAll(); }
 }
 
 // ══════════════ ตัวช่วย ══════════════
@@ -330,7 +405,75 @@ const tx = v => typeof v === 'string' ? v : v[getLang()];
 const al = rows => `<div class="align">${rows.map(r => Array.isArray(r)
   ? `<span class="l">${r[0]}</span><span class="m">${r[1]}</span><span class="r">${r[2]}</span>` : `<span class="full">${r}</span>`).join('')}</div>`;
 const P = s => `<div>${s}</div>`;
-const mv = s => `<span class="mv">${s}</span>`;
+
+// สองกรณีคู่กัน: แต่ละแถว = [[ซ้าย, เครื่องหมาย, ขวา], [ซ้าย, เครื่องหมาย, ขวา]] → "กรณีแรก  และ  กรณีที่สอง" (และ/and สลับตามภาษาด้วย CSS)
+const al2 = rows => `<div class="align2">${rows.map(([a, b]) =>
+  `<span class="l">${a[0]}</span><span class="m">${a[1]}</span><span class="r">${a[2]}</span><span class="and"></span><span class="l">${b[0]}</span><span class="m">${b[1]}</span><span class="r">${b[2]}</span>`).join('')}</div>`;
+// mv(ผลลัพธ์, รูปเดิมก่อนย้าย, ที่มา, ระหว่างทาง?) — พจน์ที่ย้ายข้าง
+// ที่มา: 'end' = ต่อท้ายฝั่งซ้าย (เช่น +8 ใน 4x + 8) · 'start' = สัมประสิทธิ์หน้าตัวแปร (เช่น 4 ใน 4x) · 'den' = ตัวส่วนของฝั่งซ้าย
+// ระหว่างทาง = ป้ายหลังกลับเครื่องหมาย (ไม่ใส่ = ใช้ผลลัพธ์) เช่น ×4 → ÷4 แล้วตกลงไปเป็นตัวส่วน 4
+const mv = (s, from, side, mid) => from === undefined ? `<span class="mv">${s}</span>`
+  : `<span class="mv" data-side="${side || 'end'}">${s}<template class="mvf">${from}</template>${mid ? `<template class="mvt">${mid}</template>` : ''}</span>`;
+// ราก: เครื่องหมาย √ วาดด้วย SVG ยืดตามความสูงนิพจน์ + ขีดคลุมต่อจากหัวราก
+const rad = s => `<span class="rad"><svg class="rad-sym" viewBox="0 0 10 20" preserveAspectRatio="none" aria-hidden="true"><path d="M0.5 12.2 L2.6 10.8 L5.2 19.2 L9.6 0.6 L10.6 0.6"/></svg><span class="rad-in">${s}</span></span>`;
+// ลูกศรโค้งข้าม "=" + ป้ายพจน์บินตามลูกศร (เครื่องหมายกลับตอนข้าม =) · fresh = เล่นแอนิเมชัน, ไม่ fresh = วาดลูกศรนิ่ง
+function mvGeom(m) {
+  const cell = m.closest('.wk-cell, .readout, #genOut') || m.parentNode, row = m.closest('.align');
+  if (!row) return null;
+  const idx = [...row.children].indexOf(m.closest('.align > span'));
+  const base = idx - idx % 3, L = row.children[base], E = row.children[base + 1];
+  const cr = cell.getBoundingClientRect(), side = m.dataset.side;
+  let src = L.getBoundingClientRect();
+  // 'den' = ตัวส่วนที่เคยอยู่ใต้ฝั่งซ้าย (บรรทัดก่อนหน้า) → เริ่มจากใต้ฝั่งซ้าย
+  const er = E.getBoundingClientRect(), tr = m.getBoundingClientRect();
+  const S = side === 'end' ? { x: src.right - cr.left + 14, y: src.top + src.height / 2 - cr.top }
+    : side === 'start' ? { x: src.left - cr.left + 6, y: src.top + src.height / 2 - cr.top }
+    : { x: src.left + src.width / 2 - cr.left, y: src.bottom - cr.top + 10 };
+  const Tt = { x: tr.left + tr.width / 2 - cr.left, y: tr.top + tr.height / 2 - cr.top };
+  const top = Math.min(S.y, Tt.y, er.top - cr.top) - Math.max(26, er.height * 1.1);
+  const C = { x: er.left + er.width / 2 - cr.left, y: top };
+  return { cell, S, T: Tt, C };
+}
+function mvArc(g) {
+  const { S, T, C } = g, ns = 'http://www.w3.org/2000/svg';
+  const svg = document.createElementNS(ns, 'svg'); svg.setAttribute('class', 'mv-arc');
+  svg.setAttribute('width', g.cell.clientWidth); svg.setAttribute('height', g.cell.clientHeight);
+  const p = document.createElementNS(ns, 'path'); p.setAttribute('d', `M${S.x},${S.y} Q${C.x},${C.y} ${T.x},${T.y - 10}`); svg.appendChild(p);
+  // หัวลูกศรตามทิศปลายเส้น
+  const dx = T.x - C.x, dy = (T.y - 10) - C.y, L = Math.hypot(dx, dy) || 1, ux = dx / L, uy = dy / L, hx = T.x, hy = T.y - 10;
+  const a = document.createElementNS(ns, 'polygon');
+  a.setAttribute('points', `${hx + ux * 4},${hy + uy * 4} ${hx - ux * 8 - uy * 5},${hy - uy * 8 + ux * 5} ${hx - ux * 8 + uy * 5},${hy - uy * 8 - ux * 5}`);
+  svg.appendChild(a); g.cell.appendChild(svg); return svg;
+}
+// play = เล่นแอนิเมชันเฉพาะตอนเผยทีละขั้น (กด "เผยทั้งหมด" = วาดลูกศรนิ่งทุกขั้น)
+function mvAnimate(root, play) {
+  const reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  root.querySelectorAll('.mv[data-side]').forEach(m => {
+    const g = mvGeom(m); if (!g) return;
+    if (getComputedStyle(g.cell).position === 'static') g.cell.style.position = 'relative';
+    const fresh = !!m.closest('.wk-cell.fresh');
+    const arc = mvArc(g);
+    if (!fresh || reduce || !play) return;
+    const from = m.querySelector('.mvf').innerHTML, mid = m.querySelector('.mvt'), clone = m.cloneNode(true);
+    clone.querySelectorAll('template').forEach(t => t.remove());
+    const to = mid ? mid.innerHTML : clone.innerHTML;
+    const fly = document.createElement('span'); fly.className = 'mv-fly'; fly.innerHTML = from; g.cell.appendChild(fly);
+    m.classList.add('flying'); arc.style.opacity = 0;
+    const t0 = performance.now(), D = 1500, W0 = 450;
+    const P = t => ({ x: (1 - t) * (1 - t) * g.S.x + 2 * (1 - t) * t * g.C.x + t * t * g.T.x, y: (1 - t) * (1 - t) * g.S.y + 2 * (1 - t) * t * g.C.y + t * t * g.T.y });
+    let flipped = false;
+    const step = now => {
+      if (!fly.isConnected) return;
+      const e = now - t0;
+      const t = Math.max(0, Math.min(1, (e - W0) / D)), k = t < .5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+      const p = P(k); fly.style.left = p.x + 'px'; fly.style.top = p.y + 'px';
+      arc.style.opacity = Math.min(1, e / W0);
+      if (!flipped && k > .5) { flipped = true; fly.innerHTML = to; fly.animate && fly.animate([{ transform: 'translate(-50%,-50%) scale(1.35)' }, { transform: 'translate(-50%,-50%) scale(1)' }], 380); }
+      if (t < 1) requestAnimationFrame(step); else { fly.remove(); m.classList.remove('flying'); }
+    };
+    requestAnimationFrame(step);
+  });
+}
 const sgn = v => v.toString().replace('-', '−');
 const fmt = v => (Math.round(v * 1000) / 1000).toString().replace('-', '−');
 const gcd = (a, b) => { a = Math.abs(a); b = Math.abs(b); return b === 0 ? a : gcd(b, a % b); };
@@ -370,6 +513,8 @@ const WK = {};
 const wkShown = {};
 function addWk(key, w) { WK[key] = w; wkShown[key] = 0; }
 function resetWkAll() { Object.keys(WK).forEach(k => wkShown[k] = 0); }
+// ตัวเล่นฉาก/ทายก่อนเฉลย/เทียบวิธีเต็ม-ลัด/เล่นเองตาชั่ง: เข้าแท็บทีไรเริ่มใหม่ (ยังไม่เฉลย)
+function resetScenes() { Object.keys(SCI).forEach(k => { SCI[k] = 0; clearTimeout(SCT[k]); }); Object.keys(PRS).forEach(k => delete PRS[k]); MC.k = 0; plReset(); }
 function wkHtml(key, prev) {
   const w = WK[key], en = EN(), n = w.steps.length;
   let h = `<div class="card" id="wk-${key}">
@@ -388,7 +533,7 @@ function wkHtml(key, prev) {
     </div></div>`;
   return h;
 }
-function wkRender(key, prev) { const el = document.getElementById('wk-' + key); if (el) el.outerHTML = wkHtml(key, prev); }
+function wkRender(key, prev) { const el = document.getElementById('wk-' + key); if (el) { el.outerHTML = wkHtml(key, prev); mvAnimate(document.getElementById('wk-' + key), wkShown[key] - prev === 1); } }
 function wkNext(k) { const p = wkShown[k]; if (wkShown[k] < WK[k].steps.length) wkShown[k]++; wkRender(k, p); }
 function wkAll(k) { const p = wkShown[k]; wkShown[k] = WK[k].steps.length; wkRender(k, p); }
 function wkReset(k) { wkShown[k] = 0; wkRender(k, 0); }
@@ -400,47 +545,407 @@ function chipRow(kind, labels) {
 }
 function setSel(kind, n) { SEL[kind] = n; resetWkAll(); renderAll(); }
 
-// ═══════════════════════ TAB 1: ย้ายข้าง ═══════════════════════
-// แต่ละขั้น = คำอธิบายสั้นๆ + สมการหนึ่งบรรทัด (พจน์ที่เพิ่งย้ายกระโดดเข้ามาเน้นสีส้ม)
+// ═══════════════════════ ตาชั่ง SVG (แท็บ "การแก้สมการ") ═══════════════════════
+// สถานะตาชั่ง st = { L:{x,w,b}, R:{x,w,b}, xv, flt?, blink? } · x=กล่อง x · w=ตุ้ม(+1) · b=ลูกโป่ง(−1) · xv=น้ำหนักจริงของกล่อง x (ตาชั่ง "รู้" แต่เราไม่บอก)
+// แขนเอียงตามผลต่างน้ำหนักจริง · ตัวตาชั่งสร้างครั้งเดียวแล้วอัปเดตทีหลัง เพื่อให้แขนเอียงแบบมีแอนิเมชัน
+const SC = { W: 800, H: 430, PX: 400, PY: 90, BL: 270, D: 220, PAN: 134 };
+const S0 = { x: 0, w: 0, b: 0 };
+const scNet = (s, xv) => s.x * xv + s.w - s.b;
+const scAngle = st => Math.max(-13, Math.min(13, (scNet(st.R, st.xv) - scNet(st.L, st.xv)) * 3));
+// ขนาดชิ้น (หน่วย viewBox 800 กว้าง): กล่อง 56 · ตุ้มรัศมี 15 · ลูกโป่ง 34×42 — ที่การ์ดกว้าง 800px ตุ้มโตราว 30px ตัวเลขสูง ≥ 17px
+const BOXW = 56, BSP = 62, WR = 15, WSP = 32, WPER = 7;
+function scBox(cx, y, cls) {
+  return `<g class="sc-item ${cls || ''}"><rect x="${cx - BOXW / 2}" y="${y}" width="${BOXW}" height="${BOXW}" rx="9" fill="var(--g-blue)"/><text x="${cx}" y="${y + 40}" text-anchor="middle" font-size="36" font-weight="800" font-style="italic" fill="var(--g-ring)">x</text></g>`;
+}
+function scWeight(cx, y) {
+  return `<g class="sc-item"><circle cx="${cx}" cy="${y}" r="${WR}" fill="var(--g-orange)"/><text x="${cx}" y="${y + 6}" text-anchor="middle" font-size="18" font-weight="800" fill="var(--g-ring)">1</text></g>`;
+}
+function scPanItems(s, st) {
+  const D = SC.D, nB = s.x, nW = s.w, nL = s.b, flt = !!st.flt, lift = flt ? 30 : 0, p = [];
+  let top = D;
+  if (nB && nW && !flt && nB * BSP + nW * WSP <= 2 * SC.PAN - 14) {   // กล่องกับตุ้มเรียงแถวเดียวกัน
+    let x = -(nB * BSP + nW * WSP) / 2;
+    for (let i = 0; i < nB; i++) { p.push(scBox(x + BSP / 2, D - BOXW, st.blink ? 'blink' : '')); x += BSP; }
+    for (let i = 0; i < nW; i++) { p.push(scWeight(x + WSP / 2, D - WR - 1)); x += WSP; }
+    top = D - BOXW;
+  } else {
+    if (nB) {
+      for (let i = 0; i < nB; i++) {
+        const cx = (i - (nB - 1) / 2) * BSP;
+        p.push(scBox(cx, D - BOXW - lift, st.blink ? 'blink' : ''));
+        if (flt) p.push(`<text x="${cx}" y="${D - 6}" text-anchor="middle" font-size="26" font-weight="800" fill="var(--g-purple)">↑</text>`);
+      }
+      top = D - BOXW - lift;
+    }
+    const rows = Math.ceil(nW / WPER);
+    for (let j = 0; j < nW; j++) {
+      const r = Math.floor(j / WPER), cnt = Math.min(WPER, nW - r * WPER), cx = (j % WPER - (cnt - 1) / 2) * WSP;
+      p.push(scWeight(cx, top - WR - 2 - r * (2 * WR + 2)));
+    }
+    top -= rows * (2 * WR + 2) + (rows ? 2 : 0);
+  }
+  for (let j = 0; j < nL; j++) {                                      // ลูกโป่งลอยเหนือกองของ ผูกเชือกลงมาที่กอง
+    let cx, cy, tx = 0;
+    if (st.groups) { const g = Math.floor(j / 2); tx = (g - (st.groups - 1) / 2) * BSP; cx = tx + (j % 2 ? 1 : -1) * 15; cy = top - 54; }   // แบ่งกลุ่ม: ลูกโป่งคู่ละกลุ่ม
+    else { const r = Math.floor(j / 8), cnt = Math.min(8, nL - r * 8); cx = (j % 8 - (cnt - 1) / 2) * 33; cy = top - 54 - r * 48; }
+    p.push(`<g class="sc-item sc-balloon" style="animation-delay:${(j % 5) * -0.5}s"><path d="M${cx} ${cy + 19} L${tx} ${top}" stroke="var(--muted)" stroke-width="1.6" fill="none"/><ellipse cx="${cx}" cy="${cy}" rx="15" ry="19" fill="var(--g-purple)"/><text x="${cx}" y="${cy + 5}" text-anchor="middle" font-size="14" font-weight="800" fill="var(--g-ring)">−1</text></g>`);
+  }
+  if (st.groups) for (let g = 1; g < st.groups; g++) {                // เส้นประแบ่ง 4 กลุ่มเท่ากัน
+    const dx = (g - st.groups / 2) * BSP;
+    p.push(`<line x1="${dx}" y1="${D - 150}" x2="${dx}" y2="${D}" stroke="var(--g-orange)" stroke-width="3" stroke-dasharray="7 6" stroke-linecap="round"/>`);
+  }
+  if (s.pop) p.push(`<g class="sc-burst">${[0, 1, 2, 3, 4, 5, 6, 7].map(i => { const a = i * Math.PI / 4; return `<line x1="${(Math.cos(a) * 18).toFixed(1)}" y1="${(D - 60 + Math.sin(a) * 18).toFixed(1)}" x2="${(Math.cos(a) * 46).toFixed(1)}" y2="${(D - 60 + Math.sin(a) * 46).toFixed(1)}" stroke="var(--g-purple)" stroke-width="4" stroke-linecap="round"/>`; }).join('')}</g>`);
+  return p.join('');
+}
+function scPans(id, st) {
+  const a = scAngle(st) * Math.PI / 180, B = SC.BL, D = SC.D;
+  return ['L', 'R'].map(sd => {
+    const sg = sd === 'L' ? -1 : 1;
+    return `<g class="sc-pan" id="${id}-p${sd}" style="transform:translate(${(sg * B * Math.cos(a)).toFixed(1)}px,${(sg * B * Math.sin(a)).toFixed(1)}px)">
+      <path d="M0 0 L${-SC.PAN + 8} ${D} M0 0 L${SC.PAN - 8} ${D}" stroke="var(--dim)" stroke-width="3" fill="none"/>
+      <rect x="${-SC.PAN}" y="${D}" width="${2 * SC.PAN}" height="11" rx="5.5" fill="var(--text)" opacity=".75"/>
+      <g id="${id}-i${sd}">${scPanItems(st[sd], st)}</g></g>`;
+  }).join('');
+}
+function scaleHtml(id, st) {
+  const B = SC.BL;
+  return `<svg class="scale" id="${id}" viewBox="0 0 ${SC.W} ${SC.H}" role="img" aria-label="${EN() ? 'balance scale' : 'ตาชั่งสองแขน'}">
+    <path d="M${SC.PX} ${SC.PY} L${SC.PX} 398" stroke="var(--dim)" stroke-width="8" stroke-linecap="round"/>
+    <rect x="${SC.PX - 70}" y="396" width="140" height="12" rx="6" fill="var(--text)" opacity=".75"/>
+    <g transform="translate(${SC.PX} ${SC.PY})">
+      <g class="sc-beam" id="${id}-beam" style="transform:rotate(${scAngle(st)}deg)"><rect x="${-B - 8}" y="-6" width="${2 * B + 16}" height="12" rx="6" fill="var(--text)"/></g>
+      <g id="${id}-pans">${scPans(id, st)}</g>
+      <circle cx="0" cy="0" r="11" fill="var(--g-orange)" stroke="var(--g-ring)" stroke-width="2"/>
+    </g></svg>`;
+}
+function scaleUpdate(id, st) {
+  const beam = document.getElementById(id + '-beam'), pans = document.getElementById(id + '-pans');
+  if (!beam || !pans) return;
+  const a = scAngle(st) * Math.PI / 180, B = SC.BL;
+  beam.style.transform = `rotate(${scAngle(st)}deg)`;
+  ['L', 'R'].forEach(sd => {
+    const sg = sd === 'L' ? -1 : 1, pan = document.getElementById(id + '-p' + sd);
+    pan.style.transform = `translate(${(sg * B * Math.cos(a)).toFixed(1)}px,${(sg * B * Math.sin(a)).toFixed(1)}px)`;
+    document.getElementById(id + '-i' + sd).innerHTML = scPanItems(st[sd], st);
+  });
+}
+// ข้อความสมการของข้างหนึ่งของตาชั่ง (ไม่ใช้กับลูกโป่ง)
+function sideTxt(s) {
+  const parts = [];
+  if (s.x) parts.push(s.x === 1 ? 'x' : s.x + 'x');
+  if (s.w) parts.push(String(s.w));
+  return parts.length ? parts.join(' + ') : '0';
+}
+
+// ═══════════════════════ สายพาน (ถอดรองเท้าก่อนถุงเท้า) ═══════════════════════
+// cv = { nodes:[{t,st?}], ops:[{t,st?}], dir:'fwd'|'rev', tags?:[T] } · st: 'hot' ส้ม · 'on' น้ำเงิน · 'ans' เขียว
+function convHtml(cv) {
+  const m = cv.nodes.length, W = 700, H = 190, nw = m <= 3 ? 104 : 86, ow = m <= 3 ? 92 : 74, y = 110;
+  const gap = (W - 40 - (m * nw + (m - 1) * ow)) / (2 * (m - 1)), rev = cv.dir === 'rev';
+  const col = rev ? 'var(--g-orange)' : 'var(--g-blue)';
+  const nodeX = [], opX = []; let x = 20;
+  for (let i = 0; i < m; i++) { nodeX.push(x); x += nw; if (i < m - 1) { x += gap; opX.push(x); x += ow + gap; } }
+  const arrow = (a, b) => {                       // เส้นลูกศรจาก a ไป b ตามทิศของสายพาน
+    const hx = rev ? a : b, dir = rev ? -1 : 1;
+    return `<line x1="${a}" y1="${y}" x2="${b}" y2="${y}" stroke="${col}" stroke-width="3.5"/><polygon points="${hx},${y} ${hx - 9 * dir},${y - 7} ${hx - 9 * dir},${y + 7}" fill="${col}"/>`;
+  };
+  let s = `<svg class="conv" viewBox="0 0 ${W} ${H}" role="img" aria-label="${EN() ? 'operation chain' : 'สายพานการดำเนินการ'}">`;
+  for (let i = 0; i < m - 1; i++) s += arrow(nodeX[i] + nw, opX[i]) + arrow(opX[i] + ow, nodeX[i + 1]);
+  cv.nodes.forEach((n, i) => {
+    const t = String(n.t).length > 5 ? 19 : 25, ans = n.st === 'ans';
+    s += `<rect x="${nodeX[i]}" y="${y - 28}" width="${nw}" height="56" rx="14" fill="${ans ? 'var(--g-green)' : 'var(--panel)'}" stroke="${ans ? 'var(--g-green)' : 'var(--line)'}" stroke-width="2"/><text x="${nodeX[i] + nw / 2}" y="${y + 9}" text-anchor="middle" font-size="${t}" font-weight="800" fill="${ans ? 'var(--g-ring)' : 'var(--text)'}">${n.t}</text>`;
+  });
+  cv.ops.forEach((o, i) => {
+    const hot = o.st === 'hot', on = o.st === 'on', fill = hot ? 'var(--g-orange)' : on ? 'var(--g-blue)' : 'var(--panel)';
+    s += `<rect x="${opX[i]}" y="${y - 25}" width="${ow}" height="50" rx="10" fill="${fill}" stroke="${hot ? 'var(--g-orange)' : on ? 'var(--g-blue)' : 'var(--line)'}" stroke-width="2"/><text x="${opX[i] + ow / 2}" y="${y + 9}" text-anchor="middle" font-size="24" font-weight="800" fill="${hot || on ? 'var(--g-ring)' : 'var(--text)'}">${o.t}</text>`;
+    if (cv.tags && cv.tags[i]) s += `<text x="${opX[i] + ow / 2}" y="${y - 42}" text-anchor="middle" font-size="17" font-weight="700" fill="${hot ? 'var(--g-orange)' : 'var(--muted)'}">${tx(cv.tags[i])}</text>`;
+  });
+  return s + '</svg>';
+}
+
+// ═══════════════════════ ตัวเล่นฉาก ▶ (ใช้ร่วมกัน) ═══════════════════════
+// scenes[i] = { st | cv, eq:T, cap:T, then?:{delay, st|cv, eq?, cap?} } — ฉากเล่าด้วยภาพ ◀ ▶ ย้อน/เล่นซ้ำได้
+const SCI = {}, SCD = {}, SCT = {};
+function sceneCard(key, title, scenes, o) {
+  o = o || {}; SCD[key] = { scenes, o };
+  const i = SCI[key] || 0, s = scenes[i], n = scenes.length, en = EN();
+  return `<div class="card" id="scn-${key}">
+    <div class="card-title"><span>${tx(title)}</span></div>
+    ${o.intro ? `<p class="intro">${tx(o.intro)}</p>` : ''}
+    <div class="sc-wrap" id="sw-${key}">${o.kind === 'conv' ? convHtml(s.cv) : scaleHtml('sv-' + key, s.st)}</div>
+    <div class="sc-eq" id="se-${key}">${tx(s.eq)}</div>
+    <div class="sc-cap" id="sp-${key}">${tx(s.cap)}</div>
+    <div class="btn-row">
+      <button class="btn ghost" id="sbp-${key}" onclick="sceneGo('${key}',-1)">${en ? '◀ Back' : '◀ ย้อน'}</button>
+      <button class="btn" id="sbn-${key}" onclick="sceneGo('${key}',1)">${en ? 'Next scene ▶' : 'ฉากถัดไป ▶'} (<span id="sn-${key}">${i + 1}/${n}</span>)</button>
+      <button class="btn ghost" id="sbr-${key}" onclick="sceneGo('${key}',0)">${en ? '↺ Restart' : '↺ เริ่มใหม่'}</button>
+    </div>
+    ${o.after ? `<div class="box-info">${tx(o.after)}</div>` : ''}
+  </div>`;
+}
+function sceneApply(key, x) {
+  const o = SCD[key].o;
+  if (x.eq) document.getElementById('se-' + key).innerHTML = tx(x.eq);
+  if (x.cap) document.getElementById('sp-' + key).innerHTML = tx(x.cap);
+  if (o.kind === 'conv') { if (x.cv) document.getElementById('sw-' + key).innerHTML = convHtml(x.cv); }
+  else if (x.st) scaleUpdate('sv-' + key, x.st);
+}
+function sceneShow(key) {
+  const d = SCD[key]; if (!d) return;
+  const i = SCI[key] || 0, s = d.scenes[i], n = d.scenes.length;
+  clearTimeout(SCT[key]);
+  sceneApply(key, s);
+  if (s.then) SCT[key] = setTimeout(() => { if ((SCI[key] || 0) === i) sceneApply(key, s.then); }, s.then.delay || 1800);
+  const q = id => document.getElementById(id + '-' + key);
+  if (q('sn')) q('sn').textContent = (i + 1) + '/' + n;
+  if (q('sbp')) q('sbp').disabled = i === 0;
+  if (q('sbn')) q('sbn').disabled = i === n - 1;
+}
+function sceneGo(key, d) {
+  const n = SCD[key].scenes.length;
+  SCI[key] = d === 0 ? 0 : Math.max(0, Math.min(n - 1, (SCI[key] || 0) + d));
+  sceneShow(key);
+}
+
+// ═══════════════════════ ทายก่อนเฉลย (ใช้ร่วมกัน · ไม่นับคะแนน) ═══════════════════════
+// PRD[key] = { title, intro?, items:[{ q:T, opts:[T|string], ans, why:T, scale?:{before,after}, eq0?:T, eq1?:T, reveal?:()=>html }] }
+const PRS = {}, PRD = {};
+function prdHtml(key, animate) {
+  const d = PRD[key], st = PRS[key] || (PRS[key] = { i: 0, pick: null }), it = d.items[st.i], en = EN();
+  const done = st.pick !== null, ok = st.pick === it.ans;
+  let h = `<div class="card" id="prd-${key}"><div class="card-title"><span>${tx(d.title)}</span></div>`;
+  if (d.intro) h += `<p class="intro">${tx(d.intro)}</p>`;
+  h += `<div class="chips">${d.items.map((_, i) => `<button class="chip ${st.i === i ? 'active' : ''}" onclick="prdSel('${key}',${i})">${en ? 'Question' : 'ข้อ'} ${i + 1}</button>`).join('')}</div>`;
+  h += `<div class="quiz-q">${tx(it.q)}</div>`;
+  if (it.scale) h += `<div class="sc-wrap">${scaleHtml('pv-' + key, done && !animate ? it.scale.after : it.scale.before)}</div>`;
+  if (it.eq0) h += `<div class="sc-eq" id="pe-${key}">${tx(done ? it.eq1 : it.eq0)}</div>`;
+  h += `<div class="quiz-opts">${it.opts.map((o, i) => `<button class="quiz-opt ${done ? (i === it.ans ? 'correct' : i === st.pick ? 'wrong' : '') : ''}" ${done ? 'disabled style="pointer-events:none"' : ''} onclick="prdPick('${key}',${i})">${tx(o)}</button>`).join('')}</div>`;
+  if (done) {
+    h += `<div class="pr-fb ${ok ? 'ok' : 'bad'}"><b>${ok ? (en ? '✅ Right!' : '✅ ทายถูก!') : (en ? '❌ Not quite —' : '❌ ยังไม่ใช่ —')}</b> ${tx(it.why)}</div>`;
+    if (it.reveal) h += `<div class="sc-wrap">${it.reveal()}</div>`;
+    h += `<div class="btn-row"><button class="btn ghost" onclick="prdSel('${key}',${st.i})">${en ? '↺ Guess again' : '↺ ทายใหม่'}</button></div>`;
+  }
+  return h + '</div>';
+}
+function prdRender(key, animate) {
+  const el = document.getElementById('prd-' + key); if (!el) return;
+  el.outerHTML = prdHtml(key, animate);
+  const it = PRD[key].items[PRS[key].i];
+  if (animate && it.scale) requestAnimationFrame(() => requestAnimationFrame(() => scaleUpdate('pv-' + key, it.scale.after)));
+}
+function prdPick(key, n) { PRS[key].pick = n; prdRender(key, true); }
+function prdSel(key, i) { PRS[key] = { i, pick: null }; prdRender(key, false); }
+
+// ═══════════════════════ เล่นเอง: หยิบ-ใส่ตุ้ม ═══════════════════════
+const PL = { L: { x: 1, w: 3, b: 0 }, R: { x: 0, w: 5, b: 0 }, xv: 2 };
+const PLMAX = 12;
+function plReset() { PL.L = { x: 1, w: 3, b: 0 }; PL.R = { x: 0, w: 5, b: 0 }; }
+function plAct(side, d) {
+  const sides = side === 'B' ? ['L', 'R'] : [side];
+  if (sides.some(s => PL[s].w + d < 0 || PL[s].w + d > PLMAX)) return;
+  sides.forEach(s => PL[s].w += d);
+  plSync();
+}
+function plSync() {
+  scaleUpdate('sv-play', plState());
+  const eq = document.getElementById('pe-play'), stt = document.getElementById('ps-play'), en = EN();
+  const bal = scNet(PL.L, PL.xv) === scNet(PL.R, PL.xv);
+  if (eq) eq.innerHTML = `${sideTxt(PL.L)} ${bal ? '=' : '≠'} ${sideTxt(PL.R)}`;
+  if (stt) { stt.className = 'pl-status ' + (bal ? 'ok' : 'bad'); stt.textContent = bal ? (en ? 'Balanced ✓' : 'สมดุล ✓') : (en ? 'Not balanced ✗' : 'ไม่สมดุล ✗'); }
+  document.querySelectorAll('#plCtl button[data-s]').forEach(b => {
+    const sides = b.dataset.s === 'B' ? ['L', 'R'] : [b.dataset.s], d = +b.dataset.d;
+    b.disabled = sides.some(s => PL[s].w + d < 0 || PL[s].w + d > PLMAX);
+  });
+  document.querySelectorAll('#plCtl .pl-why').forEach(w => {
+    const sides = w.dataset.s === 'B' ? ['L', 'R'] : [w.dataset.s];
+    w.textContent = sides.some(s => PL[s].w === 0) ? (en ? '(no weight to remove)' : '(ไม่มีตุ้มให้หยิบออก)') : sides.some(s => PL[s].w === PLMAX) ? (en ? '(pan is full)' : '(ถาดเต็มแล้ว)') : '';
+  });
+}
+const plState = () => ({ L: PL.L, R: PL.R, xv: PL.xv });
+function plHtml() {
+  const en = EN();
+  const row = (s, th, e) => `<div class="pl-row"><span class="pl-lab">${en ? e : th}</span>
+    <button class="btn ghost" data-s="${s}" data-d="1" onclick="plAct('${s}',1)">+1</button>
+    <button class="btn ghost" data-s="${s}" data-d="-1" onclick="plAct('${s}',-1)">−1</button>
+    <span class="pl-why note" data-s="${s}"></span></div>`;
+  return `<div class="card" id="pl-card">
+    <div class="card-title"><span>${en ? 'Play: add and remove weights' : 'เล่นเอง: ลองหยิบ-ใส่ตุ้มดู'}</span></div>
+    <p class="intro">${en ? 'Box x is still a mystery, but the scale knows its real weight. Find a way to change the weights so the scale stays balanced.' : 'กล่อง x ยังเป็นปริศนา แต่ตาชั่งรู้น้ำหนักจริงของมัน ลองเพิ่ม-เอาตุ้มออก แล้วหาวิธีที่ตาชั่งยังสมดุล'}</p>
+    <div class="sc-wrap">${scaleHtml('sv-play', plState())}</div>
+    <div class="sc-eq" id="pe-play"></div>
+    <div style="text-align:center"><span class="pl-status" id="ps-play"></span></div>
+    <div id="plCtl" class="pl-ctl">${row('L', 'ซ้าย', 'Left')}${row('R', 'ขวา', 'Right')}${row('B', 'ทั้งสองข้าง', 'Both sides')}</div>
+    <div class="btn-row"><button class="btn ghost" onclick="plReset();plSync()">${en ? '↺ Restart' : '↺ เริ่มใหม่'}</button></div>
+    <div class="box-info">${en ? '<b>Do the same to both sides → still equal</b><br>This is the <b>property of equality</b> for real numbers: if a = b then a + c = b + c and ac = bc (and a ÷ c = b ÷ c when c ≠ 0).' : '<b>ทำสองข้างเหมือนกัน → ยังเท่ากัน</b><br>นี่คือ <b>สมบัติการเท่ากัน</b> ของจำนวนจริง: ถ้า a = b แล้ว a + c = b + c และ ac = bc (และ a ÷ c = b ÷ c เมื่อ c ≠ 0)'}</div>
+  </div>`;
+}
+
+// ═══════════════════════ TAB 1: การแก้สมการ ═══════════════════════
+const BAL = (L, R, xv, extra) => Object.assign({ L: Object.assign({}, S0, L), R: Object.assign({}, S0, R), xv }, extra || {});
+const S1_ST = BAL({ x: 1, w: 3 }, { w: 5 }, 2);
+const SCENES_EQ1 = [
+  { st: S1_ST, eq: T('x + 3 = 5', 'x + 3 = 5'),
+    cap: T('เครื่องหมาย <b>=</b> แปลว่า "สองข้างหนักเท่ากัน" ตาชั่งจึงนิ่งสมดุล — ไม่ได้แปลว่า "คำตอบคือ"', 'The sign <b>=</b> means "both sides weigh the same", so the scale rests level — it does not mean "the answer is"') },
+  { st: Object.assign({}, S1_ST, { blink: true }), eq: T('x + 3 = 5', 'x + 3 = 5'),
+    cap: T('<b>x</b> คือ <b>กล่องปริศนา</b> ยังไม่รู้ว่าหนักเท่าไร · แก้สมการ = สืบหาน้ำหนักของกล่อง<br><small>เหมือนคนร้ายเงาดำในโคนัน — ยังไม่เห็นหน้า แต่รู้แน่ว่ามีตัวตนอยู่</small>',
+      '<b>x</b> is a <b>mystery box</b> — we do not know its weight yet · solving the equation = finding out how much the box weighs<br><small>Like the shadowy culprit in Detective Conan: no face yet, but definitely there</small>') },
+  { st: S1_ST, eq: T('x + 3 = 5', 'x + 3 = 5'),
+    cap: T('โจทย์ที่ถามคือ: <b>ทำอย่างไรให้เหลือกล่อง x อยู่ข้างเดียว โดยที่ตาชั่งยังสมดุล?</b>', 'The question: <b>how can we leave box x alone on one side while the scale stays balanced?</b>') }
+];
+PRD.p2 = { title: T('กฎเหล็ก: ทำอะไรกับข้างหนึ่ง ต้องทำกับอีกข้างเหมือนกัน', 'Golden rule: whatever you do to one side, do the same to the other'),
+  intro: T('ดูภาพก่อน แล้วทายว่าตาชั่งจะเป็นอย่างไร จึงกดดูเฉลย', 'Look at the picture, guess what the scale will do, then reveal'),
+  items: [
+    { q: T('จาก <b>x + 3 = 5</b> หยิบตุ้ม 3 ลูกออกจาก <b>ข้างซ้ายข้างเดียว</b> ตาชั่งเป็นอย่างไร?', 'From <b>x + 3 = 5</b>, take 3 weights off the <b>left side only</b>. What does the scale do?'),
+      opts: [T('เอียงลงซ้าย', 'Tips left'), T('ยังสมดุล', 'Stays balanced'), T('เอียงลงขวา', 'Tips right')], ans: 2,
+      scale: { before: S1_ST, after: BAL({ x: 1 }, { w: 5 }, 2) }, eq0: T('x + 3 = 5', 'x + 3 = 5'), eq1: T('x ≠ 5', 'x ≠ 5'),
+      why: T('ซ้ายเหลือแค่กล่อง x แต่ขวายังมีตุ้ม 5 ลูก ขวาหนักกว่าจึงเอียงลงขวา — สมการ x = 5 <b>ไม่จริงแล้ว</b> (ทำข้างเดียว สมการพัง)', 'The left now has only box x, but the right still has 5 weights, so the right is heavier — the equation x = 5 is <b>no longer true</b> (change one side only and it breaks)') },
+    { q: T('หยิบตุ้ม 3 ลูกออกจาก <b>ทั้งสองข้าง</b> ตาชั่งเป็นอย่างไร?', 'Take 3 weights off <b>both sides</b>. What does the scale do?'),
+      opts: [T('ยังสมดุล', 'Stays balanced'), T('เอียงลงซ้าย', 'Tips left'), T('เอียงลงขวา', 'Tips right')], ans: 0,
+      scale: { before: S1_ST, after: BAL({ x: 1 }, { w: 2 }, 2) }, eq0: T('x + 3 = 5', 'x + 3 = 5'), eq1: T('x = 2', 'x = 2'),
+      why: T('ซ้ายเบาลง 3 ขวาก็เบาลง 3 เท่ากัน จึงยังสมดุล — เหลือ <b>x = 2</b> กล่อง x อยู่ข้างเดียวแล้ว!', 'The left gets 3 lighter and so does the right, so it stays balanced — leaving <b>x = 2</b>, box x alone at last!') },
+    { q: T('จาก <b>2x = 6</b> (กล่อง 2 ใบเท่ากับตุ้ม 6 ลูก) แบ่งครึ่ง <b>ทั้งสองข้าง</b> ตาชั่งเป็นอย่างไร?', 'From <b>2x = 6</b> (2 boxes equal 6 weights), cut <b>both sides</b> in half. What does the scale do?'),
+      opts: [T('เอียงลงซ้าย', 'Tips left'), T('เอียงลงขวา', 'Tips right'), T('ยังสมดุล', 'Stays balanced')], ans: 2,
+      scale: { before: BAL({ x: 2 }, { w: 6 }, 3), after: BAL({ x: 1 }, { w: 3 }, 3) }, eq0: T('2x = 6', '2x = 6'), eq1: T('x = 3', 'x = 3'),
+      why: T('แบ่งครึ่งทั้งสองข้าง: กล่อง 1 ใบเท่ากับตุ้ม 3 ลูก → <b>x = 3</b> · กฎเดียวกันใช้ได้กับการ <b>คูณ/หาร</b> ด้วย ไม่ใช่แค่บวก/ลบ', 'Halve both sides: 1 box equals 3 weights → <b>x = 3</b> · the same rule works for <b>multiplying/dividing</b>, not just adding/subtracting') }
+  ] };
+
+const SCENES_EQ3 = [
+  { st: BAL({ w: 1, b: 1 }, {}, 2), eq: T('(+1) + (−1) = 0', '(+1) + (−1) = 0'),
+    cap: T('<b>ตุ้ม = +1</b> ถ่วงลง · <b>ลูกโป่ง = −1</b> ดึงขึ้น · ตุ้ม 1 ลูกผูกกับลูกโป่ง 1 ลูกหักล้างกันพอดี = 0 เรียกว่า <b>คู่หักล้าง</b> — ตาชั่งนิ่ง', '<b>Weight = +1</b> pulls down · <b>balloon = −1</b> pulls up · one weight tied to one balloon cancel exactly = 0, called a <b>cancelling pair</b> — the scale stays level'),
+    then: { delay: 2000, st: BAL({ pop: true }, {}, 2), eq: T('0 = 0', '0 = 0'), cap: T('ป๊อป! คู่หักล้างหายไปเหลือ 0', 'Pop! The pair vanishes — nothing left (0)') } },
+  { st: BAL({ x: 1, b: 2 }, { w: 3 }, 5), eq: T('x − 2 = 3', 'x − 2 = 3'),
+    cap: T('ซ้าย: กล่อง x กับลูกโป่ง 2 ลูก (−2) · ขวา: ตุ้ม 3 ลูก · สมดุล', 'Left: box x and 2 balloons (−2) · right: 3 weights · balanced') },
+  { st: BAL({ x: 1, b: 2, w: 2 }, { w: 5 }, 5), eq: T('x − 2 + 2 = 3 + 2', 'x − 2 + 2 = 3 + 2'),
+    cap: T('อยากกำจัดลูกโป่ง 2 ลูก → <b>เติมตุ้ม 2 ลูกทั้งสองข้าง</b> ซ้ายเกิดคู่หักล้าง 2 คู่ (ตุ้มผูกลูกโป่ง) ตาชั่งยังสมดุล', 'To get rid of the 2 balloons → <b>add 2 weights to both sides</b>. The left gets 2 cancelling pairs, and the scale stays balanced') },
+  { st: BAL({ x: 1 }, { w: 5 }, 5), eq: T('x = 5', 'x = 5'),
+    cap: T('คู่หักล้างหายหมด เหลือ <b>x = 5</b> · กำจัด −2 ด้วยการ <b>บวก 2</b> (ตัวตรงข้าม)', 'The pairs are gone, leaving <b>x = 5</b> · we removed −2 by <b>adding 2</b> (its opposite)') },
+  { st: BAL({ x: 4, w: 8 }, {}, -2), eq: T('4x + 8 = 0', '4x + 8 = 0'),
+    cap: T('ซ้าย: กล่อง 4 ใบ + ตุ้ม 8 ลูก · ขวา: ว่าง (0) · สมดุล แปลว่าซ้ายรวมแล้ว <b>หนัก 0</b>', 'Left: 4 boxes + 8 weights · right: empty (0) · balanced means the left <b>weighs 0 in total</b>') },
+  { st: BAL({ x: 4, w: 8, b: 8 }, { b: 8 }, -2), eq: T('4x + 8 − 8 = 0 − 8', '4x + 8 − 8 = 0 − 8'),
+    cap: T('<b>เติมลูกโป่ง 8 ลูกทั้งสองข้าง</b> ซ้าย: ตุ้ม 8 ผูกลูกโป่ง 8 หักล้างหมด · ขวา: ว่างเปล่า เหลือลูกโป่ง 8 ลูก', '<b>Add 8 balloons to both sides</b>. Left: 8 weights pair off with 8 balloons · right: nothing but 8 balloons'),
+    then: { delay: 2200, st: BAL({ x: 4 }, { b: 8 }, -2), eq: T('4x = −8', '4x = −8'), cap: T('ซ้ายเหลือกล่อง 4 ใบ ขวาเหลือลูกโป่ง 8 ลูก → <b>4x = −8</b>', 'Left: 4 boxes, right: 8 balloons → <b>4x = −8</b>') } },
+  { st: BAL({ x: 4 }, { b: 8 }, -2, { groups: 4 }), eq: T('4x ÷ 4 = −8 ÷ 4', '4x ÷ 4 = −8 ÷ 4'),
+    cap: T('<b>แบ่ง 4 ส่วนเท่ากันทั้งสองข้าง</b> ทุกกลุ่มมีกล่อง 1 ใบ เท่ากับลูกโป่ง 2 ลูก', '<b>Split both sides into 4 equal parts</b> — every group has 1 box equal to 2 balloons') },
+  { st: BAL({ x: 1 }, { b: 2 }, -2, { flt: true }), eq: T('x = −2', 'x = −2'),
+    cap: T('เหลือ 1 กลุ่ม: กล่อง x ใบนี้ <b>เบากว่าอากาศ</b> มันดึงขึ้นเท่ากับลูกโป่ง 2 ลูก → <b>x = −2</b>', 'One group left: this box is <b>lighter than air</b> — it pulls up as much as 2 balloons → <b>x = −2</b>') }
+];
+
+// การ์ด 4: สมการเผยทีละบรรทัด (ใช้ตัวแสดงขั้นตอนกลาง wk)
+const BOTH = s => `<span class="both">${s}</span>`;
+addWk('eq4', { title: T('ทำลายสิ่งที่เกาะ x ด้วย "ตัวตรงข้าม"', 'Remove what clings to x with "opposites"'),
+  prob: '4x + 8 = 0',
+  head: () => `<p class="intro">${EN() ? 'These are not rules to memorise — they are the <i>reason</i>. Each pair is chosen so that what clings to x turns into 0 (for + and −) or 1 (for × and ÷).' : 'ไม่ใช่กฎให้ท่อง แต่เป็น <b>เหตุผล</b> — เลือกตัวตรงข้ามที่ทำให้ของที่เกาะ x กลายเป็น 0 (บวก/ลบ) หรือ 1 (คูณ/หาร)'}</p>
+    <table class="case-tbl"><tr><th>${EN() ? 'Pair' : 'คู่ตรงข้าม'}</th><th>${EN() ? 'Leaves' : 'เหลือ'}</th><th>${EN() ? 'Why it works' : 'เพราะอะไร'}</th></tr>
+      <tr><td><b>+ a</b> ${EN() ? 'with' : 'คู่กับ'} <b>− a</b></td><td><b>0</b></td><td>${EN() ? 'Adding 0 changes nothing (additive identity) · −a is the additive inverse of a' : 'บวก 0 ไม่เปลี่ยนค่า (เอกลักษณ์การบวก) · −a คือตัวผกผันการบวกของ a'}</td></tr>
+      <tr><td><b>× a</b> ${EN() ? 'with' : 'คู่กับ'} <b>÷ a</b></td><td><b>1</b></td><td>${EN() ? 'Multiplying by 1 changes nothing (multiplicative identity) · 1/a is the multiplicative inverse of a, <b>a ≠ 0</b>' : 'คูณ 1 ไม่เปลี่ยนค่า (เอกลักษณ์การคูณ) · 1/a คือตัวผกผันการคูณของ a, <b>a ≠ 0</b>'}</td></tr></table>
+    <div class="box-info">${EN() ? 'This is a property of the real numbers you study in M.4 — solving an equation means using inverses to turn whatever clings to x into 0 or 1.' : 'นี่คือสมบัติของจำนวนจริงที่ ม.4 เรียนอยู่ — การแก้สมการคือการใช้ตัวผกผันทำให้ของที่เกาะ x กลายเป็น 0 หรือ 1'}</div>`,
+  steps: [
+    { h: T(P('ลบ 8 <b>ทั้งสองข้าง</b> (+8 คู่กับ −8 เหลือ 0)') + al([['4x + 8 ' + BOTH('− 8'), '=', '0 ' + BOTH('− 8')]]), P('Subtract 8 from <b>both sides</b> (+8 with −8 leaves 0)') + al([['4x + 8 ' + BOTH('− 8'), '=', '0 ' + BOTH('− 8')]])) },
+    { h: T(P('ฝั่งซ้ายเหลือ 4x') + al([['4x', '=', '−8']]), P('The left is just 4x') + al([['4x', '=', '−8']])) },
+    { h: T(P('หาร 4 <b>ทั้งสองข้าง</b> (×4 คู่กับ ÷4 เหลือ 1)') + al([[frac('4x', BOTH('4')), '=', frac('−8', BOTH('4'))]]), P('Divide <b>both sides</b> by 4 (×4 with ÷4 leaves 1)') + al([[frac('4x', BOTH('4')), '=', frac('−8', BOTH('4'))]])) },
+    { h: T(P('ได้คำตอบ') + al([['x', '=', '−2']]), P('The answer') + al([['x', '=', '−2']])) },
+    { h: T(P('ตรวจ: แทน x = −2') + al([['4(−2) + 8', '=', '−8 + 8 = 0 ✓']]), P('Check: put in x = −2') + al([['4(−2) + 8', '=', '−8 + 8 = 0 ✓']])) }
+  ] });
+
+// การ์ด 5: ถอดรองเท้าก่อนถุงเท้า
+const CVN = (t, st) => ({ t, st }), CVO = (t, st) => ({ t, st });
+const SOCKS = [T('ถุงเท้า', 'sock'), T('รองเท้า', 'shoe')];
+const SCENES_EQ5 = [
+  { cv: { nodes: [CVN('x'), CVN('2x'), CVN('11')], ops: [CVO('× 2', 'on'), CVO('+ 3', 'on')], dir: 'fwd', tags: SOCKS },
+    eq: T('2x + 3 = 11', '2x + 3 = 11'), cap: T('เดินหน้า: x ถูก <b>คูณ 2</b> ก่อน แล้ว <b>บวก 3</b> ทีหลัง ได้ 11 — เหมือน<b>สวมถุงเท้าก่อน แล้วสวมรองเท้า</b>', 'Forward: x is <b>multiplied by 2</b> first, then <b>3 is added</b>, giving 11 — like <b>putting on the sock first, then the shoe</b>') },
+  { cv: { nodes: [CVN('x'), CVN('2x'), CVN('11')], ops: [CVO('× 2'), CVO('+ 3', 'hot')], dir: 'fwd', tags: [SOCKS[0], T('ถอดก่อน!', 'off first!')] },
+    eq: T('2x + 3 = 11', '2x + 3 = 11'), cap: T('จะย้อนกลับ ต้องถอดสิ่งที่สวม<b>ทีหลัง</b>ก่อน — <b>ถอดรองเท้าก่อน</b> (ตัว + 3 ไฮไลต์)', 'To go back, take off what went on <b>last</b> first — <b>shoe off first</b> (the + 3 is highlighted)') },
+  { cv: { nodes: [CVN('4'), CVN('8'), CVN('11')], ops: [CVO('÷ 2', 'on'), CVO('− 3', 'on')], dir: 'rev' },
+    eq: T('11 − 3 = 8 · 8 ÷ 2 = 4', '11 − 3 = 8 · 8 ÷ 2 = 4'), cap: T('เดินย้อน: <b>11 → [− 3] → 8 → [÷ 2] → 4</b> แต่ละขั้นคือการทำ<b>ทั้งสองข้าง</b>', 'Going back: <b>11 → [− 3] → 8 → [÷ 2] → 4</b>, each step done to <b>both sides</b>') },
+  { cv: { nodes: [CVN('x = 4', 'ans'), CVN('8'), CVN('11')], ops: [CVO('÷ 2', 'on'), CVO('− 3', 'on')], dir: 'rev' },
+    eq: T('x = 4 &nbsp; <small>ตรวจ: 2(4) + 3 = 11 ✓</small>', 'x = 4 &nbsp; <small>check: 2(4) + 3 = 11 ✓</small>'),
+    cap: T('<b>แกะตัวที่อยู่ไกล x ก่อน แล้วค่อยเข้ามาหาตัวที่ติด x</b>', '<b>Peel off the part farthest from x first, then work inward to the part touching x</b>') }
+];
+const eq5Extra = T('ถ้าถอดผิดลำดับล่ะ? หาร 2 ก่อนก็ได้ แต่ต้องหาร<b>ทุกพจน์</b>: ' + frac('2x + 3', '2') + ' = ' + frac('11', '2') + ' → x + ' + frac('3', '2') + ' = ' + frac('11', '2') + ' ถูกเหมือนกัน แต่เกิดเศษส่วนโดยไม่จำเป็น',
+  'What if we peel in the wrong order? Dividing by 2 first also works, but we must divide <b>every term</b>: ' + frac('2x + 3', '2') + ' = ' + frac('11', '2') + ' → x + ' + frac('3', '2') + ' = ' + frac('11', '2') + ' — still right, but it creates fractions we did not need');
+
+// การ์ด 6: ทายก่อนว่าจะแกะอะไรก่อน
+PRD.p6 = { title: T('ทายก่อน: จะแกะอะไรก่อน', 'Guess first: what do we peel first?'),
+  intro: T('ดูสมการ ทายว่าต้องแกะตัวไหนก่อน (ไม่นับคะแนน)', 'Look at the equation and guess which part to peel first (no score)'),
+  items: [
+    { q: T('<b>' + frac('5x + 1', '2') + ' = 3</b> ต้องแกะตัวไหนก่อน?', 'In <b>' + frac('5x + 1', '2') + ' = 3</b>, which part do we peel first?'),
+      opts: [T('แกะ ÷ 2', 'Peel ÷ 2'), T('แกะ + 1', 'Peel + 1'), T('แกะ × 5', 'Peel × 5')], ans: 0,
+      why: T('<b>÷ 2</b> เป็นสิ่งที่ทำ<b>หลังสุด</b> (อยู่นอกสุด) จึงแกะก่อน: คูณ 2 ทั้งสองข้าง → 5x + 1 = 6 → 5x = 5 → x = 1 · ตรวจ: (5·1 + 1) ÷ 2 = 3 ✓', '<b>÷ 2</b> is done <b>last</b> (outermost), so it comes off first: multiply both sides by 2 → 5x + 1 = 6 → 5x = 5 → x = 1 · check: (5·1 + 1) ÷ 2 = 3 ✓'),
+      reveal: () => convHtml({ nodes: [CVN('x'), CVN('5x'), CVN('5x + 1'), CVN('3')], ops: [CVO('× 5'), CVO('+ 1'), CVO('÷ 2', 'hot')], dir: 'fwd', tags: [T('', ''), T('', ''), T('แกะก่อน', 'first')] }) },
+    { q: T('<b>3(x − 4) = 6</b> ต้องแกะตัวไหนก่อน?', 'In <b>3(x − 4) = 6</b>, which part do we peel first?'),
+      opts: [T('แกะ − 4', 'Peel − 4'), T('แกะ × 3', 'Peel × 3')], ans: 1,
+      why: T('<b>× 3</b> อยู่นอกวงเล็บ เป็นสิ่งที่ทำ<b>หลังสุด</b> จึงแกะก่อน: หาร 3 ทั้งสองข้าง → x − 4 = 2 → x = 6 · ตรวจ: 3(6 − 4) = 6 ✓', '<b>× 3</b> sits outside the brackets and is done <b>last</b>, so it comes off first: divide both sides by 3 → x − 4 = 2 → x = 6 · check: 3(6 − 4) = 6 ✓'),
+      reveal: () => convHtml({ nodes: [CVN('x'), CVN('x − 4'), CVN('6')], ops: [CVO('− 4'), CVO('× 3', 'hot')], dir: 'fwd', tags: [T('', ''), T('แกะก่อน', 'first')] }) }
+  ] };
+
+function renderEq() {
+  document.getElementById('tab-eq').innerHTML =
+    sceneCard('s1', T('สมการคือตาชั่งที่สมดุล', 'An equation is a balanced scale'), SCENES_EQ1) +
+    prdHtml('p2') + plHtml() +
+    sceneCard('s3', T('ตาชั่งลูกโป่ง: เมื่อมีจำนวนลบ', 'The balloon scale: when negatives appear'), SCENES_EQ3,
+      { after: T('ตาชั่งเป็นแค่<b>ภาพช่วยคิด</b> จากนี้ใช้สัญลักษณ์ได้เลย — กฎเดียวกันใช้ได้กับ<b>ทุกจำนวนจริง</b>', 'The scale is only a <b>thinking aid</b> — from here we can use symbols. The same rule works for <b>every real number</b>.') }) +
+    wkHtml('eq4', 0) +
+    sceneCard('s5', T('แกะจากชั้นนอกเข้าหา x: ถอดรองเท้าก่อนถุงเท้า', 'Peel from the outside in: shoes off before socks'), SCENES_EQ5, { kind: 'conv', after: eq5Extra }) +
+    prdHtml('p6');
+  ['s1', 's3', 's5'].forEach(sceneShow);
+  plSync();
+}
+
+// ═══════════════════════ TAB 2: ย้ายข้าง (ทางลัดของการทำสองข้าง) ═══════════════════════
+// การ์ด 1: เทียบวิธีเต็ม (ซ้าย) กับวิธีลัด (ขวา) — พจน์ +8 บินข้าม = เป็น −8 ด้วย mv()/mvAnimate()
+const MC = { k: 0 };
+function mcHtml(prev) {
+  const en = EN(), k = MC.k;
+  const cell = (cls, inner, born) => `<div class="wk-cell ${cls || ''}${born > prev ? ' fresh' : ''}">${inner}</div>`;
+  const cancel = s => `<span class="cancel">${s}</span>`;
+  // k = จำนวนขั้นที่กดแล้ว (0–4) · บรรทัดตั้งต้นขึ้นทั้งสองคอลัมน์ตั้งแต่ k = 0
+  const Lc = [
+    cell('', al([['4x + 8', '=', '0']]), 0),
+    cell(k >= 2 ? 'dim' : '', al([[k >= 2 ? '4x ' + cancel('+ 8 − 8') : '4x + 8 ' + BOTH('− 8'), '=', '0 ' + BOTH('− 8')]]), 1),
+    cell('', al([['4x', '=', '−8']]), 2),
+    cell(k >= 4 ? 'dim' : '', al([[frac('4x', BOTH('4')), '=', frac('−8', BOTH('4'))]]), 3),
+    cell('', al([['x', '=', '−2']]), 4)
+  ].filter((_, i) => k >= i);
+  const Rc = [cell('', al([['4x + 8', '=', '0']]), 0)];
+  if (k >= 2) Rc.push(cell('', al([['4x', '=', mv('−8', '+8')]]), 2));
+  if (k >= 4) Rc.push(cell('', al([['x', '=', frac('−8', mv('4', '×4', 'start', '÷4')) + ' = −2']]), 4));
+  const msg = [];
+  if (k >= 2) msg.push(en ? '+8 does not really jump across. We just <b>subtract 8 from both sides</b> and skip writing the middle line.' : '+8 ไม่ได้กระโดดข้ามจริงๆ เราแค่ <b>ลบ 8 ทั้งสองข้าง</b> แล้วไม่เขียนบรรทัดกลาง');
+  if (k >= 4) msg.push(en ? 'Same for ×4 → ÷4: we just <b>divide both sides by 4</b> and skip the middle line.' : '×4 → ÷4 ก็เหมือนกัน: เราแค่ <b>หาร 4 ทั้งสองข้าง</b> แล้วข้ามบรรทัดกลาง');
+  return `<div class="card" id="mc-card">
+    <div class="card-title"><span>${en ? 'Moving terms is a shortcut for working on both sides' : 'ย้ายข้างคือทางลัดของการทำสองข้าง'}</span></div>
+    <p class="intro">${en ? 'Left: the full method. Right: the shortcut. Press ▶ and watch the middle lines disappear.' : 'ซ้าย: วิธีเต็ม · ขวา: วิธีลัด กด ▶ แล้วดูบรรทัดกลางที่หายไป'}</p>
+    <div class="cmp"><div><div class="cmp-h">${en ? 'Full method (both sides)' : 'วิธีเต็ม (ทำสองข้าง)'}</div>${Lc.join('')}</div>
+    <div><div class="cmp-h">${en ? 'Shortcut (move terms)' : 'วิธีลัด (ย้ายข้าง)'}</div>${Rc.join('')}</div></div>
+    ${msg.map(m => `<div class="box-info">${m}</div>`).join('')}
+    <div class="btn-row">
+      <button class="btn" onclick="mcNext()" ${k >= 4 ? 'disabled' : ''}>${en ? 'Next ▶' : 'ถัดไป ▶'} (${k}/4)</button>
+      <button class="btn ghost" onclick="mcReset()" ${k === 0 ? 'disabled' : ''}>${en ? '↺ Restart' : '↺ เริ่มใหม่'}</button>
+    </div></div>`;
+}
+function mcRender(prev, play) {
+  const el = document.getElementById('mc-card'); if (!el) return;
+  el.outerHTML = mcHtml(prev);
+  if (MC.k > 0 && document.getElementById('tab-mv').classList.contains('active')) mvAnimate(document.getElementById('mc-card'), play);
+}
+function mcNext() { const p = MC.k; if (MC.k < 4) MC.k++; mcRender(p, true); }
+function mcReset() { MC.k = 0; mcRender(0, false); }
+
+// การ์ด 3: ตัวอย่าง 3 ข้อ (ตัวเดินขั้นและแอนิเมชันเดิม)
 const MOVES = [
   { prob: '4x + 8 = 0', steps: [
-    [T('ย้าย +8 ไปอีกข้าง → กลายเป็น −8', 'Move +8 across → it becomes −8'), '4x', mv('−8')],
-    [T('ย้าย ×4 ไปอีกข้าง → กลายเป็น ÷4', 'Move ×4 across → it becomes ÷4'), 'x', '−' + mv(frac('8', '4'))],
+    [T('ย้าย +8 ไปอีกข้าง → กลายเป็น −8', 'Move +8 across → it becomes −8'), '4x', mv('−8', '+8')],
+    [T('ย้าย ×4 ไปอีกข้าง → กลายเป็น ÷4 (ลงไปเป็นตัวส่วน)', 'Move ×4 across → it becomes ÷4 (drops into the denominator)'), 'x', frac('−8', mv('4', '×4', 'start', '÷4'))],
     [T('คำนวณ', 'Simplify'), 'x', '−2'] ] },
-  { prob: '3x − 6 = 0', steps: [
-    [T('ย้าย −6 ไปอีกข้าง → กลายเป็น +6', 'Move −6 across → it becomes +6'), '3x', mv('6')],
-    [T('ย้าย ×3 ไปอีกข้าง → กลายเป็น ÷3', 'Move ×3 across → it becomes ÷3'), 'x', mv(frac('6', '3'))],
-    [T('คำนวณ', 'Simplify'), 'x', '2'] ] },
-  { prob: frac('2x', '3') + ' − 3 = 1', steps: [
-    [T('ย้าย −3 ไปอีกข้าง → กลายเป็น +3', 'Move −3 across → it becomes +3'), frac('2x', '3'), '1 + ' + mv('3')],
-    [T('คำนวณ', 'Simplify'), frac('2x', '3'), '4'],
-    [T('ย้าย ÷3 ไปอีกข้าง → กลายเป็น ×3', 'Move ÷3 across → it becomes ×3'), '2x', '4 × ' + mv('3')],
-    [T('คำนวณ', 'Simplify'), '2x', '12'],
-    [T('ย้าย ×2 ไปอีกข้าง → กลายเป็น ÷2', 'Move ×2 across → it becomes ÷2'), 'x', mv(frac('12', '2'))],
-    [T('คำนวณ', 'Simplify'), 'x', '6'] ] },
-  { prob: frac('4x', '3') + ' − 1 = 3', steps: [
-    [T('ย้าย −1 ไปอีกข้าง → กลายเป็น +1', 'Move −1 across → it becomes +1'), frac('4x', '3'), '3 + ' + mv('1')],
-    [T('คำนวณ', 'Simplify'), frac('4x', '3'), '4'],
-    [T('ย้าย ÷3 ไปอีกข้าง → กลายเป็น ×3', 'Move ÷3 across → it becomes ×3'), '4x', '4 × ' + mv('3')],
-    [T('คำนวณ', 'Simplify'), '4x', '12'],
-    [T('ย้าย ×4 ไปอีกข้าง → กลายเป็น ÷4', 'Move ×4 across → it becomes ÷4'), 'x', mv(frac('12', '4'))],
-    [T('คำนวณ', 'Simplify'), 'x', '3'] ] },
   { prob: frac('5x + 1', '2') + ' = 3', steps: [
-    [T('ย้าย ÷2 ไปอีกข้าง → กลายเป็น ×2 (ทั้งก้อนบนเศษ)', 'Move ÷2 across → it becomes ×2 (the whole numerator)'), '5x + 1', '3 × ' + mv('2')],
+    [T('ย้าย ÷2 ไปอีกข้าง → กลายเป็น ×2 (ทั้งก้อนบนเศษ)', 'Move ÷2 across → it becomes ×2 (the whole numerator)'), '5x + 1', '3 ' + mv('× 2', '÷ 2', 'den')],
     [T('คำนวณ', 'Simplify'), '5x + 1', '6'],
-    [T('ย้าย +1 ไปอีกข้าง → กลายเป็น −1', 'Move +1 across → it becomes −1'), '5x', '6 − ' + mv('1')],
+    [T('ย้าย +1 ไปอีกข้าง → กลายเป็น −1', 'Move +1 across → it becomes −1'), '5x', '6 ' + mv('− 1', '+ 1')],
     [T('คำนวณ', 'Simplify'), '5x', '5'],
-    [T('ย้าย ×5 ไปอีกข้าง → กลายเป็น ÷5', 'Move ×5 across → it becomes ÷5'), 'x', mv(frac('5', '5'))],
+    [T('ย้าย ×5 ไปอีกข้าง → กลายเป็น ÷5', 'Move ×5 across → it becomes ÷5'), 'x', frac('5', mv('5', '×5', 'start', '÷5'))],
     [T('คำนวณ', 'Simplify'), 'x', '1'] ] },
-  { prob: '⭐ ' + frac('7x + 2', '2') + ' = 8', steps: [
-    [T('ย้าย ÷2 ไปอีกข้าง → กลายเป็น ×2', 'Move ÷2 across → it becomes ×2'), '7x + 2', '8 × ' + mv('2')],
-    [T('คำนวณ', 'Simplify'), '7x + 2', '16'],
-    [T('ย้าย +2 ไปอีกข้าง → กลายเป็น −2', 'Move +2 across → it becomes −2'), '7x', '16 − ' + mv('2')],
-    [T('คำนวณ', 'Simplify'), '7x', '14'],
-    [T('ย้าย ×7 ไปอีกข้าง → กลายเป็น ÷7', 'Move ×7 across → it becomes ÷7'), 'x', mv(frac('14', '7'))],
-    [T('คำนวณ', 'Simplify'), 'x', '2'] ] },
   { prob: frac('2', '3') + ' · x = 1', steps: [
-    [T('ย้ายเศษส่วนไปอีกข้าง → กลับเศษส่วน (คูณด้วยส่วนกลับ)', 'Move a fraction across → flip it (multiply by the reciprocal)'), 'x', mv(frac('3', '2')) + ' × 1'],
+    [T('ย้ายเศษส่วนไปอีกข้าง → กลับเศษส่วน (คูณด้วยส่วนกลับ)', 'Move a fraction across → flip it (multiply by the reciprocal)'), 'x', mv(frac('3', '2'), frac('2', '3'), 'start') + ' × 1'],
     [T('คำนวณ', 'Simplify'), 'x', frac('3', '2')] ] },
 ];
 MOVES.forEach((m, i) => addWk('mv' + (i + 1), {
@@ -449,38 +954,60 @@ MOVES.forEach((m, i) => addWk('mv' + (i + 1), {
   steps: m.steps.map((s, idx) => { const echo = idx === 0 ? P('<b>' + m.prob + '</b>') : '';
     return { h: T(echo + P('<small>' + s[0].th + '</small>') + al([[s[1], '=', s[2]]]), echo + P('<small>' + s[0].en + '</small>') + al([[s[1], '=', s[2]]])) }; }) }));
 
-// ตัวสร้างเอง: ax + b = c
-const GN = { a: 2, b: 8, c: 0 };
+// การ์ด 4: กับดักของทางลัด (ทายก่อนเฉลย · แสดงตัวเลขหักล้าง)
+PRD.p9 = { title: T('กับดักของทางลัด', 'Traps of the shortcut'),
+  intro: T('ทางลัดใช้พลาดได้ ทายก่อนว่าวิธีของน้องถูกไหม แล้วดูตัวเลขที่หักล้าง', 'The shortcut can be misused. Guess whether each student is right, then check the numbers.'),
+  items: [
+    { q: T('<b>−3x = 12</b> น้อง A ทำว่า "ย้าย ×(−3) ไปเป็นหาร ได้ x = ' + frac('12', '3') + ' = 4" ถูกไหม?', 'For <b>−3x = 12</b>, student A says "moving ×(−3) gives x = ' + frac('12', '3') + ' = 4". Right?'),
+      opts: [T('ถูก', 'Right'), T('ผิด', 'Wrong')], ans: 1,
+      why: T('ย้าย ×(−3) ข้ามไปเป็น <b>÷(−3)</b> ทั้งก้อน เครื่องหมายลบไปด้วย: x = ' + frac('12', '−3') + ' = <b>−4</b><br>หักล้าง: ถ้า x = 4 จะได้ −3(4) = −12 ≠ 12 ✗ · ถ้า x = −4 จะได้ −3(−4) = 12 ✓<br><small>ย้ายข้ามเปลี่ยน "การดำเนินการ" (คูณ → หาร) ไม่ได้เปลี่ยนเครื่องหมายของตัวเลข</small>',
+        'Moving ×(−3) across gives <b>÷(−3)</b> as a whole — the minus sign goes with it: x = ' + frac('12', '−3') + ' = <b>−4</b><br>Contradiction: x = 4 gives −3(4) = −12 ≠ 12 ✗ · x = −4 gives −3(−4) = 12 ✓<br><small>Moving across changes the <i>operation</i> (× → ÷); it does not flip the sign of the number</small>') },
+    { q: T('<b>2x + 6 = 10</b> น้อง B ทำว่า "หาร 2 ทั้งสองข้าง ได้ x + 6 = 5" ถูกไหม?', 'For <b>2x + 6 = 10</b>, student B says "divide both sides by 2 to get x + 6 = 5". Right?'),
+      opts: [T('ถูก', 'Right'), T('ผิด', 'Wrong')], ans: 1,
+      why: T('หารทั้งสองข้างคือหาร <b>ทุกพจน์</b>: (2x + 6) ÷ 2 = x + 3 จึงได้ x + 3 = 5 → x = <b>2</b><br>หักล้าง: x + 6 = 5 ให้ x = −1 แต่ 2(−1) + 6 = 4 ≠ 10 ✗ · ส่วน x = 2: 2(2) + 6 = 10 ✓', 'Dividing both sides means dividing <b>every term</b>: (2x + 6) ÷ 2 = x + 3, so x + 3 = 5 → x = <b>2</b><br>Contradiction: x + 6 = 5 gives x = −1, but 2(−1) + 6 = 4 ≠ 10 ✗ · while x = 2: 2(2) + 6 = 10 ✓') },
+    { q: T('<b>x² = 3x</b> น้อง C ทำว่า "หารด้วย x ทั้งสองข้าง ได้ x = 3" ครบไหม?', 'For <b>x² = 3x</b>, student C says "divide both sides by x to get x = 3". Complete?'),
+      opts: [T('ครบ', 'Complete'), T('ไม่ครบ', 'Not complete')], ans: 1,
+      why: T('คำตอบคือ <b>x = 0 และ x = 3</b> · หารด้วย x ได้เมื่อ x ≠ 0 เท่านั้น จึงทำ x = 0 หายไป (0² = 3·0 เป็นจริง ✓)<br>วิธีที่ถูก: ย้ายมาให้ขวาเป็น 0 แล้วแยกตัวประกอบ x(x − 3) = 0 → ดูแท็บ "สมการพหุนามดีกรี 2 ขึ้นไป"', 'The solutions are <b>x = 0 and x = 3</b> · dividing by x is only allowed when x ≠ 0, so x = 0 was lost (0² = 3·0 is true ✓)<br>The right way: bring everything to one side so the other is 0, then factor x(x − 3) = 0 → see the tab "Polynomial Equations"') }
+  ] };
+
+// การ์ด 5: ลองเอง a·x + b = c (สวิตช์ 2 โหมด)
+const GN = { a: 2, b: 8, c: 0, mode: 'move' };
 function term(a, v) { return a === 1 ? v : a === -1 ? '−' + v : sgn(a) + v; }
+function setGenMode(m) { GN.mode = m; document.querySelectorAll('#genMode .chip').forEach(c => c.classList.toggle('active', c.dataset.m === m)); updateGen(); }
 function renderMove() {
   const en = EN();
-  const exLabels = ['4x + 8 = 0', '3x − 6 = 0', frac('2x', '3') + ' − 3 = 1', frac('4x', '3') + ' − 1 = 3', frac('5x + 1', '2') + ' = 3', '⭐ ' + frac('7x + 2', '2') + ' = 8', frac('2', '3') + ' · x = 1'];
-  document.getElementById('tab-mv').innerHTML = `
+  const exLabels = ['4x + 8 = 0', frac('5x + 1', '2') + ' = 3', frac('2', '3') + ' · x = 1'];
+  document.getElementById('tab-mv').innerHTML = mcHtml(MC.k) + `
     <div class="card">
-      <div class="card-title"><span class="icon">↔️</span><span>${en ? 'Moving terms' : 'หลักการย้ายข้าง'}</span></div>
+      <div class="card-title"><span>${en ? 'The three pairs we use most' : 'สามคู่ที่ใช้บ่อย'}</span></div>
       <div class="intro">
         <div>${en ? '<b>Rule ①</b> Move things until only the variable is left on one side' : '<b>หลักการ ①</b> ย้ายให้เหลือแค่ตัวแปรข้างเดียว'}</div>
-        <div>${en ? '<b>Rule ②</b> Start moving from the term <b>farthest</b> from the variable, then work inward' : '<b>หลักการ ②</b> เวลาย้าย ให้เริ่มจากตัวที่ <b>ไกลตัวแปร</b> ก่อน แล้วค่อยเข้ามาหาตัวที่ใกล้ตัวแปร'}</div>
+        <div>${en ? '<b>Rule ②</b> Start with the term <b>farthest</b> from the variable, then work inward (shoes off before socks — see the Solving tab)' : '<b>หลักการ ②</b> เริ่มจากตัวที่ <b>ไกลตัวแปร</b> ก่อน (ถอดรองเท้าก่อนถุงเท้า — ดูแท็บการแก้สมการ)'}</div>
       </div>
       <div class="tools">
-        <div class="tool"><div class="big"><span class="swap">+ ⇄ −</span></div>${en ? 'plus becomes minus' : 'บวก กลายเป็น ลบ'}</div>
-        <div class="tool"><div class="big"><span class="swap">× ⇄ ÷</span></div>${en ? 'times becomes divide' : 'คูณ กลายเป็น หาร'}</div>
-        <div class="tool"><div class="big"><span class="swap">${frac('2', '3')} ⇄ ${frac('3', '2')}</span></div>${en ? 'a fraction is flipped' : 'เศษส่วน ต้องกลับเศษส่วน'}</div>
+        <div class="tool"><div class="big"><span class="swap">+ ⇄ −</span></div>${en ? 'plus becomes minus' : 'บวก กลายเป็น ลบ'}<div class="why">${en ? 'because we add/subtract the same number on both sides' : 'เพราะบวก/ลบจำนวนเดียวกันทั้งสองข้าง'}</div></div>
+        <div class="tool"><div class="big"><span class="swap">× ⇄ ÷</span></div>${en ? 'times becomes divide' : 'คูณ กลายเป็น หาร'}<div class="why">${en ? 'because we multiply/divide both sides by the same number (never 0)' : 'เพราะคูณ/หารด้วยจำนวนเดียวกันทั้งสองข้าง (จำนวนนั้นต้องไม่เป็น 0)'}</div></div>
+        <div class="tool"><div class="big"><span class="swap">${frac('2', '3')} ⇄ ${frac('3', '2')}</span></div>${en ? 'a fraction is flipped' : 'เศษส่วน ต้องกลับเศษส่วน'}<div class="why">${en ? 'because we multiply both sides by the reciprocal (' : 'เพราะคูณด้วยส่วนกลับทั้งสองข้าง ('}${frac('2', '3')} × ${frac('3', '2')} = 1)</div></div>
       </div>
     </div>
     <div class="card">
-      <div class="card-title"><span class="icon">📝</span><span>${en ? 'Pick an example' : 'เลือกตัวอย่าง'}</span></div>
+      <div class="card-title"><span>${en ? 'Pick an example' : 'ตัวอย่าง: ย้ายข้างทีละขั้น'}</span></div>
       ${chipRow('mv', exLabels)}
     </div>` +
-    wkHtml('mv' + SEL.mv, 0) + `
+    wkHtml('mv' + SEL.mv, 0) + prdHtml('p9') + `
     <div class="card">
-      <div class="card-title"><span class="icon">🎛️</span><span>${en ? 'Try your own: a·x + b = c' : 'ลองเอง: a·x + b = c'}</span></div>
+      <div class="card-title"><span>${en ? 'Try your own: a·x + b = c' : 'ลองเอง: a·x + b = c'}</span></div>
+      <div class="chips" id="genMode">
+        <button class="chip ${GN.mode === 'full' ? 'active' : ''}" data-m="full" onclick="setGenMode('full')">${en ? 'Full (both sides)' : 'แบบเต็ม (ทำสองข้าง)'}</button>
+        <button class="chip ${GN.mode === 'move' ? 'active' : ''}" data-m="move" onclick="setGenMode('move')">${en ? 'Moving terms' : 'แบบย้ายข้าง'}</button>
+      </div>
       <div class="slider-row"><b>a =</b><input type="range" id="gA" min="-5" max="5" step="1" value="${GN.a}" oninput="GN.a=parseFloat(this.value);updateGen()"><span class="slider-val" id="gAv"></span></div>
       <div class="slider-row"><b>b =</b><input type="range" id="gB" min="-9" max="9" step="1" value="${GN.b}" oninput="GN.b=parseFloat(this.value);updateGen()"><span class="slider-val" id="gBv"></span></div>
       <div class="slider-row"><b>c =</b><input type="range" id="gC" min="-9" max="9" step="1" value="${GN.c}" oninput="GN.c=parseFloat(this.value);updateGen()"><span class="slider-val" id="gCv"></span></div>
       <div id="genOut"></div>
     </div>`;
   updateGen();
+  if (MC.k > 0 && document.getElementById('tab-mv').classList.contains('active')) mvAnimate(document.getElementById('mc-card'), false);
 }
 function updateGen() {
   const out = document.getElementById('genOut');
@@ -492,13 +1019,28 @@ function updateGen() {
   let h = `<div class="formula">${left} = ${sgn(c)}</div>`;
   // เขียนโจทย์ตั้งต้นซ้ำอีกครั้งก่อนเริ่มย้ายข้างขั้นแรก (ถ้ามีขั้นให้ย้ายจริง)
   if (b !== 0 || a !== 1) h += al([[left, '=', sgn(c)]]);
-  if (b !== 0) h += P('<small>' + (b > 0 ? (en ? `Move +${b} across → it becomes −${b}` : `ย้าย +${b} ไปอีกข้าง → กลายเป็น −${b}`) : (en ? `Move −${-b} across → it becomes +${-b}` : `ย้าย −${-b} ไปอีกข้าง → กลายเป็น +${-b}`)) + '</small>') + al([[term(a, 'x'), '=', mv(c - b < 0 ? '−' + Math.abs(c - b) : c - b)]]);
-  if (a !== 1) h += P('<small>' + (en ? `Move ×${sgn(a)} across → it becomes ÷${sgn(a)}` : `ย้าย ×${sgn(a)} ไปอีกข้าง → กลายเป็น ÷${sgn(a)}`) + '</small>') + al([['x', '=', mv(frac(sgn(c - b), sgn(a)))]]);
+  const ab = Math.abs(b), pa = a < 0 ? `(${sgn(a)})` : sgn(a);
+  if (GN.mode === 'full') {                                         // แบบเต็ม: เห็นบรรทัดกลางครบ (ทำสองข้าง)
+    if (b !== 0) {
+      const op = b > 0 ? '− ' + ab : '+ ' + ab;
+      h += P('<small>' + (b > 0 ? (en ? `Subtract ${ab} from both sides` : `ลบ ${ab} ทั้งสองข้าง`) : (en ? `Add ${ab} to both sides` : `บวก ${ab} ทั้งสองข้าง`)) + '</small>');
+      h += al([[left + ' ' + BOTH(op), '=', sgn(c) + ' ' + BOTH(op)], [term(a, 'x'), '=', sgn(c - b)]]);
+    }
+    if (a !== 1) h += P('<small>' + (en ? `Divide both sides by ${pa}` : `หารทั้งสองข้างด้วย ${pa}`) + '</small>') + al([[frac(term(a, 'x'), BOTH(sgn(a))), '=', frac(sgn(c - b), BOTH(sgn(a)))]]);
+  } else {
+    if (b !== 0) {
+      h += P('<small>' + (b > 0 ? (en ? `Move +${b} across → it becomes −${b}` : `ย้าย +${b} ไปอีกข้าง → กลายเป็น −${b}`) : (en ? `Move −${ab} across → it becomes +${ab}` : `ย้าย −${ab} ไปอีกข้าง → กลายเป็น +${ab}`)) + '</small>');
+      if (c === 0) h += al([[term(a, 'x'), '=', mv(b > 0 ? '−' + ab : '+' + ab, b > 0 ? '+' + ab : '−' + ab)]]);
+      else h += al([[term(a, 'x'), '=', sgn(c) + ' ' + mv(b > 0 ? '− ' + ab : '+ ' + ab, b > 0 ? '+ ' + ab : '− ' + ab)], [term(a, 'x'), '=', sgn(c - b)]]);
+    }
+    if (a !== 1) h += P('<small>' + (en ? `Move ×${pa} across → it becomes ÷${pa}` : `ย้าย ×${pa} ไปอีกข้าง → กลายเป็น ÷${pa}`) + '</small>') + al([['x', '=', frac(sgn(c - b), mv(sgn(a), '×' + pa, 'start', '÷' + pa))]]);
+  }
   h += `<div class="readout">${en ? 'Answer' : 'ตอบ'}: <b>x = ${rf(c - b, a)}</b> &nbsp; <small>${en ? 'check' : 'ตรวจ'}: ${sgn(a)}(${rf(c - b, a)}) ${b >= 0 ? '+' : '−'} ${Math.abs(b)} = ${sgn(c)} ✓</small></div>`;
   out.innerHTML = h;
+  mvAnimate(out);
 }
 
-// ═══════════════════════ TAB 2: ภาพในฝัน 3 ข้อ ═══════════════════════
+// ═══════════════════════ TAB 2: สมการพหุนามดีกรี 2 ขึ้นไป (จัดรูป 3 ข้อก่อนหาค่าวิกฤต) ═══════════════════════
 const DREAMS_TH = ['ขวามือ = 0', 'แยกแฟกเตอร์ให้ x กำลัง 1', 'หน้า x สปส. ต้องเป็นบวก'];
 const DREAMS_EN = ['Right side = 0', 'Factor so every x has power 1', 'The x-coefficient must be positive'];
 function dreamHead(steps) {
@@ -513,17 +1055,17 @@ const DRSTEPS = [
   [ { tick: 1, h: T(P('ขวามือเป็น 0 อยู่แล้ว ' + tk(1)) + al([['x² − 3x + 2', '=', '0']]), P('The right side is already 0 ' + tk(1)) + al([['x² − 3x + 2', '=', '0']])) },
     { tick: 2, h: T(P('แยกตัวประกอบ ' + tk(2)) + al([['(x − 1)(x − 2)', '=', '0']]), P('Factor ' + tk(2)) + al([['(x − 1)(x − 2)', '=', '0']])) },
     { tick: 3, h: T(P('หน้า x ของทุกวงเล็บเป็นบวก ' + tk(3)), P('The x-coefficient of every bracket is positive ' + tk(3))) },
-    { h: T(P('ค่าวิกฤต: ให้แต่ละวงเล็บ = 0') + al([['x − 1', '=', '0'], ['x − 2', '=', '0']]) + al([['x', '=', '1'], ['x', '=', '2']]), P('Critical values: set each bracket to 0') + al([['x − 1', '=', '0'], ['x − 2', '=', '0']]) + al([['x', '=', '1'], ['x', '=', '2']])) },
+    { h: T(P('ค่าวิกฤต: ให้แต่ละวงเล็บ = 0') + al2([[['x − 1', '=', '0'], ['x − 2', '=', '0']], [['x', '=', '1'], ['x', '=', '2']]]), P('Critical values: set each bracket to 0') + al2([[['x − 1', '=', '0'], ['x − 2', '=', '0']], [['x', '=', '1'], ['x', '=', '2']]])) },
     { h: T(P('เขียนคำตอบเป็นเซต: <b>{1, 2}</b>'), P('Write the answer as a set: <b>{1, 2}</b>')), vis: () => numberLine({ min: -2, max: 4, points: [{ v: 1 }, { v: 2 }] }) } ],
   [ { tick: 1, h: T(P('ย้าย 3 ไปอีกข้าง ให้ขวามือเป็น 0 ' + tk(1)) + al([['2x² − x', '=', '3'], ['2x² − x − 3', '=', '0']]), P('Move 3 across so the right side is 0 ' + tk(1)) + al([['2x² − x', '=', '3'], ['2x² − x − 3', '=', '0']])) },
     { tick: 2, h: T(P('แยกตัวประกอบ ' + tk(2)) + al([['(2x − 3)(x + 1)', '=', '0']]), P('Factor ' + tk(2)) + al([['(2x − 3)(x + 1)', '=', '0']])) },
     { tick: 3, h: T(P('หน้า x ของทั้งสองวงเล็บเป็นบวก (2 และ 1) ' + tk(3)), P('Both x-coefficients are positive (2 and 1) ' + tk(3))) },
-    { h: T(P('ค่าวิกฤต') + al([['2x − 3', '=', '0'], ['x + 1', '=', '0']]) + al([['x', '=', frac('3', '2')], ['x', '=', '−1']]), P('Critical values') + al([['2x − 3', '=', '0'], ['x + 1', '=', '0']]) + al([['x', '=', frac('3', '2')], ['x', '=', '−1']])) },
+    { h: T(P('ค่าวิกฤต') + al2([[['2x − 3', '=', '0'], ['x + 1', '=', '0']], [['x', '=', frac('3', '2')], ['x', '=', '−1']]]), P('Critical values') + al2([[['2x − 3', '=', '0'], ['x + 1', '=', '0']], [['x', '=', frac('3', '2')], ['x', '=', '−1']]])) },
     { h: T(P('ตอบ: <b>{−1, ' + frac('3', '2') + '}</b>'), P('Answer: <b>{−1, ' + frac('3', '2') + '}</b>')), vis: () => numberLine({ min: -3, max: 4, points: [{ v: -1 }, { v: 1.5 }], labels: [{ v: 1.5, n: '3', d: '2' }] }) } ],
   [ { tick: 1, h: T(P('ขวามือเป็น 0 อยู่แล้ว ' + tk(1)) + al([['−x² + x + 6', '=', '0']]), P('The right side is already 0 ' + tk(1)) + al([['−x² + x + 6', '=', '0']])) },
     { tick: 3, h: T(P('หน้า x² ติดลบ! คูณ −1 ทั้งสมการให้เป็นบวก ' + tk(3)) + al([['−x² + x + 6', '=', '0'], ['x² − x − 6', '=', '0']]), P('The x² coefficient is negative! Multiply the whole equation by −1 ' + tk(3)) + al([['−x² + x + 6', '=', '0'], ['x² − x − 6', '=', '0']])) },
     { tick: 2, h: T(P('แยกตัวประกอบ ' + tk(2)) + al([['(x − 3)(x + 2)', '=', '0']]), P('Factor ' + tk(2)) + al([['(x − 3)(x + 2)', '=', '0']])) },
-    { h: T(P('ค่าวิกฤต') + al([['x − 3', '=', '0'], ['x + 2', '=', '0']]) + al([['x', '=', '3'], ['x', '=', '−2']]), P('Critical values') + al([['x − 3', '=', '0'], ['x + 2', '=', '0']]) + al([['x', '=', '3'], ['x', '=', '−2']])) },
+    { h: T(P('ค่าวิกฤต') + al2([[['x − 3', '=', '0'], ['x + 2', '=', '0']], [['x', '=', '3'], ['x', '=', '−2']]]), P('Critical values') + al2([[['x − 3', '=', '0'], ['x + 2', '=', '0']], [['x', '=', '3'], ['x', '=', '−2']]])) },
     { h: T(P('ตอบ: <b>{−2, 3}</b>'), P('Answer: <b>{−2, 3}</b>')), vis: () => numberLine({ min: -4, max: 5, points: [{ v: -2 }, { v: 3 }] }) } ],
   [ { tick: 1, h: T(P('ขวามือเป็น 0 อยู่แล้ว ' + tk(1)) + al([['(x + 1)(x − 2)(2x + 1)', '=', '0']]), P('The right side is already 0 ' + tk(1)) + al([['(x + 1)(x − 2)(2x + 1)', '=', '0']])) },
     { tick: 2, h: T(P('แยกตัวประกอบเรียบร้อยแล้ว (x ทุกตัวกำลัง 1) ' + tk(2)), P('Already factored (every x has power 1) ' + tk(2))) },
@@ -534,13 +1076,13 @@ const DRSTEPS = [
 ];
 const DREXP = ['x² − 3x + 2 = 0', '2x² − x = 3', '−x² + x + 6 = 0', '(x + 1)(x − 2)(2x + 1) = 0'];
 DRSTEPS.forEach((st, i) => addWk('dr' + (i + 1), {
-  title: T('ตัวอย่างภาพในฝัน', 'Dream-image example'), prob: DREXP[i], head: dreamHead(st), steps: dSteps(st) }));
+  title: T('ตัวอย่างสมการพหุนาม', 'Polynomial equation example'), prob: DREXP[i], head: dreamHead(st), steps: dSteps(st) }));
 function renderDream() {
   const en = EN();
   document.getElementById('tab-dr').innerHTML = `
     <div class="card">
-      <div class="card-title"><span class="icon">💭</span><span>${en ? 'The 3 dream-image rules for solving equations' : 'ภาพในฝัน 3 ข้อ ก่อนหาค่าวิกฤต'}</span></div>
-      <p class="intro">${en ? 'Before you find the critical values, make the equation look like the "dream image". Each step ticks a rule below.' : 'ก่อนจะหาค่าวิกฤต ต้องทำสมการให้เป็น "ภาพในฝัน" ให้ได้ก่อน แต่ละขั้นที่เผยจะติ๊กข้อที่ทำสำเร็จให้'}</p>
+      <div class="card-title"><span class="icon">💭</span><span>${en ? 'Polynomial equations of degree 2 and up: 3 things to set up before the critical values' : 'สมการพหุนามดีกรี 2 ขึ้นไป: จัดรูป 3 ข้อก่อนหาค่าวิกฤต'}</span></div>
+      <p class="intro">${en ? 'Before you find the critical values, set the equation up so all 3 points below hold. Each step ticks the point it achieves.' : 'ก่อนจะหาค่าวิกฤต ต้องจัดสมการให้ครบ 3 ข้อด้านล่างก่อน แต่ละขั้นที่เผยจะติ๊กข้อที่ทำสำเร็จให้'}</p>
       <div class="intro">${[1, 2, 3].map(t => `<div><b>${['①', '②', '③'][t - 1]}</b> ${en ? DREAMS_EN[t - 1] : DREAMS_TH[t - 1]}</div>`).join('')}</div>
       <div class="box-info">${en ? '💡 Critical value = the x that makes a bracket 0, e.g. (x − 3) = 0 gives x = 3.' : '💡 ค่าวิกฤต คือค่า x ที่ทำให้วงเล็บเป็น 0 เช่น (x − 3) = 0 ได้ x = 3'}</div>
       <div class="chips">${DREXP.map((e, i) => `<button class="chip ${SEL.dr === i + 1 ? 'active' : ''}" onclick="setSel('dr', ${i + 1})">${e}</button>`).join('')}</div>
@@ -559,7 +1101,7 @@ function renderQuad() {
     <div class="card">
       <div class="card-title"><span class="icon">📈</span><span>${en ? 'The quadratic formula & the discriminant' : 'สูตรกำลังสอง และค่า b² − 4ac'}</span></div>
       <p class="intro">${en ? 'If you cannot factor <b>ax² + bx + c = 0</b>, use the formula. Move the sliders and watch the parabola meet (or miss) the x-axis.' : 'ถ้าแยกตัวประกอบ <b>ax² + bx + c = 0</b> ไม่ได้ ให้ใช้สูตร เลื่อนสไลเดอร์แล้วดูพาราโบลาตัดแกน x (หรือไม่ตัด)'}</p>
-      <div class="formula">x = ${frac('−b ± √(b² − 4ac)', '2a')}</div>
+      <div class="formula">x = ${frac('−b ± ' + rad('b² − 4ac'), '2a')}</div>
       <div class="chips"><span style="align-self:center;font-weight:700;">${en ? 'Presets:' : 'ตัวอย่าง:'}</span>${pre}</div>
       <div class="slider-row"><b>a =</b><input type="range" id="qA" min="0" max="5" step="1" value="${Q.ai}" oninput="Q.ai=parseFloat(this.value);updateQuad()"><span class="slider-val" id="qAv"></span></div>
       <div class="slider-row"><b>b =</b><input type="range" id="qB" min="-8" max="8" step="1" value="${Q.b}" oninput="Q.b=parseFloat(this.value);updateQuad()"><span class="slider-val" id="qBv"></span></div>
@@ -594,14 +1136,14 @@ function updateQuad() {
   if (D < 0) ans = en ? 'No real solution — the parabola never touches the x-axis' : 'ไม่มีคำตอบ (ในจำนวนจริง) — พาราโบลาไม่แตะแกน x';
   else if (D === 0) ans = `x = ${rf(-b, 2 * a)} <span class="note">(${en ? 'one solution' : 'คำตอบเดียว'})</span>`;
   else if (perfect) ans = `x = ${rf(-b + sq, 2 * a)} ${en ? 'or' : 'หรือ'} x = ${rf(-b - sq, 2 * a)}`;
-  else ans = `x ≈ ${fmt((-b + sq) / (2 * a))} ${en ? 'or' : 'หรือ'} x ≈ ${fmt((-b - sq) / (2 * a))} <span class="note">(${en ? 'exact: ' : 'ค่าจริง: '}${frac(sgn(-b) + ' ± √' + D, sgn(2 * a))})</span>`;
+  else ans = `x ≈ ${fmt((-b + sq) / (2 * a))} ${en ? 'or' : 'หรือ'} x ≈ ${fmt((-b - sq) / (2 * a))} <span class="note">(${en ? 'exact: ' : 'ค่าจริง: '}${frac(sgn(-b) + ' ± ' + rad(D), sgn(2 * a))})</span>`;
   out.innerHTML = `
     <div class="formula">${term(a, 'x²')}${bt}${ct} = 0</div>
     ${quadSvg(a, b, c, D)}
     <div class="readout">
       ${en ? 'Substitute' : 'แทนค่า'} a = ${sgn(a)}, b = ${sgn(b)}, c = ${sgn(c)}:<br>
       b² − 4ac = (${sgn(b)})² − 4(${sgn(a)})(${sgn(c)}) = <b>${sgn(D)}</b><br>
-      ${D >= 0 ? `x = ${frac('−(' + sgn(b) + ') ± √' + D, '2(' + sgn(a) + ')')}` : ''}
+      ${D >= 0 ? `x = ${frac('−(' + sgn(b) + ') ± ' + rad(D), '2(' + sgn(a) + ')')}` : ''}
       ${D >= 0 ? '<br>' : ''}<b>${en ? 'Answer' : 'ตอบ'}: ${ans}</b>
     </div>
     <table class="case-tbl">
@@ -617,13 +1159,13 @@ addWk('fr1', { title: T('สมการ P(x)/Q(x) = 0 : ห้ามลืม�
   intro: T('เศษส่วน = 0 ได้ก็ต่อเมื่อ <b>เศษ = 0</b> แต่ <b>ส่วนต้องไม่เป็น 0</b> — ต้องตัดคำตอบที่ทำให้ส่วนเป็น 0 ทิ้ง', 'A fraction is 0 only when the <b>numerator = 0</b>, but the <b>denominator must not be 0</b> — throw away any answer that zeroes it'),
   steps: [
     { h: T(P('ให้เศษ = 0 แล้วแยกตัวประกอบ') + al([['x² − 4', '=', '0'], ['(x − 2)(x + 2)', '=', '0']]), P('Set the numerator to 0 and factor') + al([['x² − 4', '=', '0'], ['(x − 2)(x + 2)', '=', '0']])) },
-    { h: T(P('ค่าวิกฤตของเศษ') + al([['x', '=', '2'], ['x', '=', '−2']]), P('Critical values of the numerator') + al([['x', '=', '2'], ['x', '=', '−2']])) },
+    { h: T(P('ค่าวิกฤตของเศษ') + al2([[['x', '=', '2'], ['x', '=', '−2']]]), P('Critical values of the numerator') + al2([[['x', '=', '2'], ['x', '=', '−2']]])) },
     { h: T(P('เช็กส่วนต้องไม่เป็น 0') + al([['x − 2', '≠', '0'], ['x', '≠', '2']]) + P('x = 2 ทำให้ส่วนเป็น 0 ✗ ตัดทิ้ง'), P('The denominator must not be 0') + al([['x − 2', '≠', '0'], ['x', '≠', '2']]) + P('x = 2 makes the denominator 0 ✗ reject')) },
     { h: T(P('เหลือ x = −2 &nbsp;ตรวจ: ' + frac('(−2)² − 4', '−2 − 2') + ' = ' + frac('0', '−4') + ' = 0 ✓<br>ตอบ: <b>{−2}</b>'), P('Only x = −2 remains &nbsp;Check: ' + frac('(−2)² − 4', '−2 − 2') + ' = ' + frac('0', '−4') + ' = 0 ✓<br>Answer: <b>{−2}</b>')), vis: () => numberLine({ min: -4, max: 4, points: [{ v: -2 }] }) } ] });
 addWk('fr2', { title: T('อีกตัวอย่าง', 'Another example'), prob: frac('x² − x − 6', 'x + 2') + ' = 0',
   steps: [
     { h: T(P('ให้เศษ = 0 แล้วแยกตัวประกอบ') + al([['x² − x − 6', '=', '0'], ['(x − 3)(x + 2)', '=', '0']]), P('Set the numerator to 0 and factor') + al([['x² − x − 6', '=', '0'], ['(x − 3)(x + 2)', '=', '0']])) },
-    { h: T(P('ค่าวิกฤตของเศษ') + al([['x', '=', '3'], ['x', '=', '−2']]), P('Critical values of the numerator') + al([['x', '=', '3'], ['x', '=', '−2']])) },
+    { h: T(P('ค่าวิกฤตของเศษ') + al2([[['x', '=', '3'], ['x', '=', '−2']]]), P('Critical values of the numerator') + al2([[['x', '=', '3'], ['x', '=', '−2']]])) },
     { h: T(P('เช็กส่วนต้องไม่เป็น 0') + al([['x + 2', '≠', '0'], ['x', '≠', '−2']]) + P('x = −2 ทำให้ส่วนเป็น 0 ✗ ตัดทิ้ง'), P('The denominator must not be 0') + al([['x + 2', '≠', '0'], ['x', '≠', '−2']]) + P('x = −2 makes the denominator 0 ✗ reject')) },
     { h: T(P('ตอบ: <b>{3}</b>'), P('Answer: <b>{3}</b>')), vis: () => numberLine({ min: -4, max: 5, points: [{ v: 3 }] }) } ] });
 addWk('op1', { title: T('บวก/ลบ: ทำส่วนให้เท่ากันก่อน', 'Add/subtract: common denominator first'), prob: frac('2x + 1', '3') + ' + ' + frac('x − 1', '4'),
@@ -661,13 +1203,13 @@ function renderFrac() {
 }
 
 // ═══════════════════════ TAB 5: ทริก ═══════════════════════
-addWk('rt1', { title: T('ทริกรากซ้อนราก: √(a + b + 2√(ab)) = √a + √b', 'Nested radical trick: √(a + b + 2√(ab)) = √a + √b'), prob: '√(5 + √24)',
-  intro: T('มองว่ารูทข้างในคือ 2√(ab) แล้วหาสองจำนวนที่ <b>บวกกัน</b> ได้ตัวหน้า และ <b>คูณกัน</b> ได้ตัวในรูท', 'Read the inner radical as 2√(ab), then find two numbers that <b>add</b> to the front term and <b>multiply</b> to the number under the root'),
+addWk('rt1', { title: T('ทริกรากซ้อนราก: ' + rad('a + b + 2' + rad('ab')) + ' = ' + rad('a') + ' + ' + rad('b'), 'Nested radical trick: ' + rad('a + b + 2' + rad('ab')) + ' = ' + rad('a') + ' + ' + rad('b')), prob: rad('5 + ' + rad('24')),
+  intro: T('มองว่ารูทข้างในคือ 2' + rad('ab') + ' แล้วหาสองจำนวนที่ <b>บวกกัน</b> ได้ตัวหน้า และ <b>คูณกัน</b> ได้ตัวในรูท', 'Read the inner radical as 2' + rad('ab') + ', then find two numbers that <b>add</b> to the front term and <b>multiply</b> to the number under the root'),
   steps: [
-    { h: T(P('ดึง 2 ออกมาให้อยู่หน้ารูท: √24 = 2√6') + al([['√(5 + √24)', '=', '√(5 + 2√6)']]), P('Pull out a 2: √24 = 2√6') + al([['√(5 + √24)', '=', '√(5 + 2√6)']])) },
+    { h: T(P('ดึง 2 ออกมาให้อยู่หน้ารูท: ' + rad('24') + ' = 2' + rad('6')) + al([[rad('5 + ' + rad('24')), '=', rad('5 + 2' + rad('6'))]]), P('Pull out a 2: ' + rad('24') + ' = 2' + rad('6')) + al([[rad('5 + ' + rad('24')), '=', rad('5 + 2' + rad('6'))]])) },
     { h: T(P('หาสองจำนวนที่ <b>บวกกัน = 5</b> และ <b>คูณกัน = 6</b>') + al([['2 + 3', '=', '5'], ['2 × 3', '=', '6']]) + P('ได้ 2 และ 3'), P('Find two numbers that <b>add to 5</b> and <b>multiply to 6</b>') + al([['2 + 3', '=', '5'], ['2 × 3', '=', '6']]) + P('They are 2 and 3')) },
-    { h: T(P('เขียน 5 = 2 + 3 และ 6 = 2 × 3') + al([['√(5 + 2√6)', '=', '√(2 + 3 + 2√(2 · 3))']]), P('Write 5 = 2 + 3 and 6 = 2 × 3') + al([['√(5 + 2√6)', '=', '√(2 + 3 + 2√(2 · 3))']])) },
-    { h: T(P('ใช้สูตร √(a + b + 2√(ab)) = √a + √b') + al([['', '=', '√2 + √3']]) + P('ตรวจ: √(5 + √24) ≈ 3.146 และ √2 + √3 ≈ 3.146 ✓'), P('Use √(a + b + 2√(ab)) = √a + √b') + al([['', '=', '√2 + √3']]) + P('Check: √(5 + √24) ≈ 3.146 and √2 + √3 ≈ 3.146 ✓')) } ] });
+    { h: T(P('เขียน 5 = 2 + 3 และ 6 = 2 × 3') + al([[rad('5 + 2' + rad('6')), '=', rad('2 + 3 + 2' + rad('2 · 3'))]]), P('Write 5 = 2 + 3 and 6 = 2 × 3') + al([[rad('5 + 2' + rad('6')), '=', rad('2 + 3 + 2' + rad('2 · 3'))]])) },
+    { h: T(P('ใช้สูตร ' + rad('a + b + 2' + rad('ab')) + ' = ' + rad('a') + ' + ' + rad('b')) + al([['', '=', rad('2') + ' + ' + rad('3')]]) + P('ตรวจ: ' + rad('5 + ' + rad('24')) + ' ≈ 3.146 และ ' + rad('2') + ' + ' + rad('3') + ' ≈ 3.146 ✓'), P('Use ' + rad('a + b + 2' + rad('ab')) + ' = ' + rad('a') + ' + ' + rad('b')) + al([['', '=', rad('2') + ' + ' + rad('3')]]) + P('Check: ' + rad('5 + ' + rad('24')) + ' ≈ 3.146 and ' + rad('2') + ' + ' + rad('3') + ' ≈ 3.146 ✓')) } ] });
 const RT = { p: 2, q: 3 };
 const RS = { n: 2, r: [1, 2, -3], k: 1 };
 function polyStr(co) {
@@ -685,7 +1227,7 @@ function renderTrick() {
     body = wkHtml('rt1', 0) + `
       <div class="card">
         <div class="card-title"><span class="icon">🎛️</span><span>${en ? 'Try your own' : 'ลองเอง'}</span></div>
-        <p class="intro">${en ? 'Pick two numbers p and q. The machine builds √((p + q) + 2√(pq)) and unwraps it.' : 'เลือกสองจำนวน p และ q ระบบจะสร้าง √((p + q) + 2√(pq)) แล้วแกะให้ดู'}</p>
+        <p class="intro">${en ? 'Pick two numbers p and q. The machine builds ' + rad('(p + q) + 2' + rad('pq')) + ' and unwraps it.' : 'เลือกสองจำนวน p และ q ระบบจะสร้าง ' + rad('(p + q) + 2' + rad('pq')) + ' แล้วแกะให้ดู'}</p>
         <div class="slider-row"><b>p =</b><input type="range" id="rP" min="1" max="9" step="1" value="${RT.p}" oninput="RT.p=parseFloat(this.value);updateRt()"><span class="slider-val" id="rPv"></span></div>
         <div class="slider-row"><b>q =</b><input type="range" id="rQ" min="1" max="9" step="1" value="${RT.q}" oninput="RT.q=parseFloat(this.value);updateRt()"><span class="slider-val" id="rQv"></span></div>
         <div id="rtOut"></div>
@@ -719,12 +1261,12 @@ function updateRt() {
   const plus = Math.sqrt(s + 2 * Math.sqrt(n)), plusAns = Math.sqrt(p) + Math.sqrt(q);
   const minus = Math.sqrt(s - 2 * Math.sqrt(n)), minusAns = Math.abs(Math.sqrt(q) - Math.sqrt(p));
   out.innerHTML = `
-    <div class="formula">√(${s} + 2√${n}) &nbsp;=&nbsp; ?</div>
+    <div class="formula">${rad(s + ' + 2' + rad(n))} &nbsp;=&nbsp; ?</div>
     ${al([[`${p} + ${q}`, '=', s], [`${p} × ${q}`, '=', n]])}
     <div class="readout">
-      √(${s} + 2√${n}) = √(${p} + ${q} + 2√(${p} · ${q})) = <b>√${p} + √${q}</b><br>
+      ${rad(s + ' + 2' + rad(n))} = ${rad(p + ' + ' + q + ' + 2' + rad(p + ' · ' + q))} = <b>${rad(p)} + ${rad(q)}</b><br>
       <small>${en ? 'check' : 'ตรวจ'}: ${fmt(plus)} = ${fmt(plusAns)} ✓</small><br><br>
-      ${en ? 'With a minus sign:' : 'ถ้าเป็นเครื่องหมายลบ:'} √(${s} − 2√${n}) = <b>|√${p} − √${q}|</b> ${en ? '(always the bigger root minus the smaller)' : '(เอาตัวใหญ่ลบตัวเล็ก ให้ได้ค่าบวก)'}<br>
+      ${en ? 'With a minus sign:' : 'ถ้าเป็นเครื่องหมายลบ:'} ${rad(s + ' − 2' + rad(n))} = <b>|${rad(p)} − ${rad(q)}|</b> ${en ? '(always the bigger root minus the smaller)' : '(เอาตัวใหญ่ลบตัวเล็ก ให้ได้ค่าบวก)'}<br>
       <small>${en ? 'check' : 'ตรวจ'}: ${fmt(minus)} = ${fmt(minusAns)} ✓</small>
     </div>`;
 }
@@ -751,24 +1293,30 @@ function updateRs() {
 
 // ═══════════════════════ แบบฝึกหัด ═══════════════════════
 const quizData = [
+  { q_th: 'ข้อใดทำให้สมการ x + 3 = 5 ยัง <b>เป็นจริงอยู่</b> (ทำแล้วสมการไม่พัง)?', q_en: 'Which action keeps the equation x + 3 = 5 <b>true</b>?', opts: ['บวก 5 เฉพาะข้างซ้าย', 'คูณ 3 ทั้งสองข้าง', 'ลบ 2 เฉพาะข้างขวา', 'หารข้างซ้ายด้วย 2 และหารข้างขวาด้วย 3'], opts_en: ['Add 5 to the left side only', 'Multiply both sides by 3', 'Subtract 2 from the right side only', 'Divide the left by 2 and the right by 3'], ans: 1,
+    exp_th: 'ต้องทำ <b>เหมือนกันทั้งสองข้าง</b> จึงยังเท่ากัน — คูณ 3 ทั้งสองข้างได้ 3x + 9 = 15 ซึ่งยังจริงเมื่อ x = 2', exp_en: 'It must be done <b>identically to both sides</b> — multiplying both by 3 gives 3x + 9 = 15, still true for x = 2' },
+  { q_th: 'ใน 3x − 5 = 10 ควร <b>แกะ</b> ตัวไหนก่อน?', q_en: 'In 3x − 5 = 10, which part should you <b>peel</b> first?', opts: ['แกะ − 5 ก่อน (บวก 5 ทั้งสองข้าง)', 'แกะ × 3 ก่อน (หาร 3 ทั้งสองข้าง)', 'ลบ 10 ทั้งสองข้าง', 'บวก 10 ทั้งสองข้าง'], opts_en: ['Peel − 5 first (add 5 to both sides)', 'Peel × 3 first (divide both sides by 3)', 'Subtract 10 from both sides', 'Add 10 to both sides'], ans: 0,
+    exp_th: 'x ถูกคูณ 3 ก่อน แล้วค่อยลบ 5 ทีหลัง จึงแกะ <b>− 5</b> (ตัวนอกสุด) ก่อน: 3x = 15 แล้ว x = 5', exp_en: 'x was multiplied by 3 first and had 5 taken away last, so peel <b>− 5</b> (the outermost) first: 3x = 15, then x = 5' },
+  { q_th: 'ทำไมย้าย +7 ไปอีกข้างของ = แล้วกลายเป็น −7?', q_en: 'Why does moving +7 across the = sign turn it into −7?', opts: ['เพราะเป็นกฎที่ต้องท่องจำ', 'เพราะเราลบ 7 ทั้งสองข้าง แล้วไม่เขียนบรรทัดกลาง', 'เพราะ 7 เป็นบวก จึงต้องกลับเป็นลบเสมอ', 'เพราะสมการเปลี่ยนค่าเมื่อข้ามเครื่องหมาย ='], opts_en: ['Because it is a rule to memorise', 'Because we subtract 7 from both sides and skip the middle line', 'Because a positive number always flips to negative', 'Because the equation changes value across ='], ans: 1,
+    exp_th: 'ย้ายข้างคือ <b>ทางลัดของการทำสองข้าง</b>: x + 7 = c ลบ 7 ทั้งสองข้างได้ x = c − 7', exp_en: 'Moving terms is a <b>shortcut for working on both sides</b>: from x + 7 = c, subtract 7 from both sides to get x = c − 7' },
   { q_th: '4x + 8 = 0 ได้ x เท่ากับข้อใด?', q_en: 'What is x in 4x + 8 = 0?', opts: ['−2', '2', '−8', '8'], ans: 0,
     exp_th: 'ย้าย +8 เป็น −8 ได้ 4x = −8 แล้วย้าย ×4 เป็น ÷4 ได้ x = −2', exp_en: 'Move +8 to get 4x = −8, then move ×4 to get x = −2' },
   { q_th: 'เมื่อย้าย "÷3" ไปอีกข้างของเครื่องหมาย = จะกลายเป็นอะไร?', q_en: 'When you move "÷3" across the = sign, what does it become?', opts: ['× 3', '÷ 3', '+ 3', '− 3'], ans: 0,
     exp_th: 'คูณกับหารเป็นคู่ตรงข้ามกัน ย้ายข้างแล้วสลับกัน', exp_en: 'Multiply and divide are opposites, so they swap when moved' },
   { q_th: frac('5x + 1', '2') + ' = 3 ได้ x เท่ากับข้อใด?', q_en: 'What is x in ' + frac('5x + 1', '2') + ' = 3?', opts: ['1', '2', frac('5', '2'), frac('7', '5')], ans: 0,
     exp_th: 'ย้าย ÷2 เป็น ×2 ได้ 5x + 1 = 6 แล้ว 5x = 5 จึง x = 1', exp_en: 'Move ÷2 to get 5x + 1 = 6, then 5x = 5 so x = 1' },
-  { q_th: 'ภาพในฝันข้อแรกบอกให้ทำขวามือของสมการให้เป็นอะไรก่อนแยกตัวประกอบ?', q_en: 'The first dream-image rule says to make the right side equal what before factoring?', opts: ['0', '1', 'x', 'ไม่ต้องทำอะไร'], opts_en: ['0', '1', 'x', 'Nothing'], ans: 0,
+  { q_th: 'ก่อนแยกตัวประกอบสมการพหุนาม ข้อแรกต้องทำขวามือของสมการให้เป็นอะไร?', q_en: 'Before factoring a polynomial equation, what must the right side be made equal to first?', opts: ['0', '1', 'x', 'ไม่ต้องทำอะไร'], opts_en: ['0', '1', 'x', 'Nothing'], ans: 0,
     exp_th: 'ต้องให้ขวามือเป็น 0 เพื่อใช้หลัก "คูณกันได้ 0 ตัวใดตัวหนึ่งเป็น 0"', exp_en: 'It must be 0 so we can use "a product is 0 only if one factor is 0"' },
   { q_th: '−x² + x + 6 = 0 ควรทำอย่างไรก่อนแยกตัวประกอบ?', q_en: 'What should you do to −x² + x + 6 = 0 before factoring?', opts: ['คูณ −1 ทั้งสมการ ให้หน้า x² เป็นบวก', 'ยกกำลังสองทั้งสองข้าง', 'หารด้วย x', 'ไม่ต้องทำอะไร'], opts_en: ['Multiply everything by −1 so the x² coefficient is positive', 'Square both sides', 'Divide by x', 'Nothing'], ans: 0,
-    exp_th: 'ภาพในฝันข้อ ③ หน้า x ต้องเป็นบวก จึงได้ x² − x − 6 = 0 และ (x − 3)(x + 2) = 0', exp_en: 'Rule ③: the x coefficient must be positive, giving x² − x − 6 = 0 and (x − 3)(x + 2) = 0' },
+    exp_th: 'ข้อ ③ หน้า x ต้องเป็นบวก จึงได้ x² − x − 6 = 0 และ (x − 3)(x + 2) = 0', exp_en: 'Point ③: the x coefficient must be positive, giving x² − x − 6 = 0 and (x − 3)(x + 2) = 0' },
   { q_th: '(x + 1)(x − 2)(2x + 1) = 0 มีคำตอบคือข้อใด?', q_en: 'What are the solutions of (x + 1)(x − 2)(2x + 1) = 0?', opts: ['{−1, 2, −' + frac('1', '2') + '}', '{1, −2, ' + frac('1', '2') + '}', '{−1, 2}', '{−1, 2, 1}'], ans: 0,
     exp_th: 'ให้แต่ละวงเล็บ = 0: x = −1, x = 2, และ 2x + 1 = 0 ได้ x = −' + frac('1', '2'), exp_en: 'Set each bracket to 0: x = −1, x = 2, and 2x + 1 = 0 gives x = −' + frac('1', '2') },
   { q_th: 'x² + x + 1 = 0 มีคำตอบเป็นจำนวนจริงกี่ตัว?', q_en: 'How many real solutions does x² + x + 1 = 0 have?', opts: ['0 ตัว', '1 ตัว', '2 ตัว', 'ไม่สามารถบอกได้'], opts_en: ['0', '1', '2', 'Cannot tell'], ans: 0,
     exp_th: 'b² − 4ac = 1 − 4 = −3 &lt; 0 จึงไม่มีคำตอบในจำนวนจริง', exp_en: 'b² − 4ac = 1 − 4 = −3 &lt; 0, so there is no real solution' },
   { q_th: frac('x² − 4', 'x − 2') + ' = 0 มีคำตอบคือข้อใด?', q_en: 'What is the solution of ' + frac('x² − 4', 'x − 2') + ' = 0?', opts: ['{2}', '{−2}', '{−2, 2}', 'ไม่มีคำตอบ'], opts_en: ['{2}', '{−2}', '{−2, 2}', 'No solution'], ans: 1,
     exp_th: 'เศษ = 0 ได้ x = ±2 แต่ x = 2 ทำให้ส่วนเป็น 0 ต้องตัดทิ้ง เหลือ {−2}', exp_en: 'Numerator = 0 gives x = ±2, but x = 2 zeroes the denominator, leaving {−2}' },
-  { q_th: '√(5 + √24) เท่ากับข้อใด?', q_en: 'What does √(5 + √24) equal?', opts: ['√2 + √3', '√5 + √24', '√3 − √2', '5'], ans: 0,
-    exp_th: '√24 = 2√6 และ 2 + 3 = 5, 2 × 3 = 6 จึงได้ √2 + √3', exp_en: '√24 = 2√6 and 2 + 3 = 5, 2 × 3 = 6, so the answer is √2 + √3' },
+  { q_th: rad('5 + ' + rad('24')) + ' เท่ากับข้อใด?', q_en: 'What does ' + rad('5 + ' + rad('24')) + ' equal?', opts: [rad('2') + ' + ' + rad('3'), rad('5') + ' + ' + rad('24'), rad('3') + ' − ' + rad('2'), '5'], ans: 0,
+    exp_th: rad('24') + ' = 2' + rad('6') + ' และ 2 + 3 = 5, 2 × 3 = 6 จึงได้ ' + rad('2') + ' + ' + rad('3'), exp_en: rad('24') + ' = 2' + rad('6') + ' and 2 + 3 = 5, 2 × 3 = 6, so the answer is ' + rad('2') + ' + ' + rad('3') },
   { q_th: 'ผลบวกของคำตอบของ 2x² − 6x + 1 = 0 เท่ากับเท่าใด?', q_en: 'What is the sum of the roots of 2x² − 6x + 1 = 0?', opts: ['3', '−3', frac('1', '2'), '6'], ans: 0,
     exp_th: 'ผลบวก = −b/a = −(−6)/2 = 3', exp_en: 'Sum = −b/a = −(−6)/2 = 3' },
 ];

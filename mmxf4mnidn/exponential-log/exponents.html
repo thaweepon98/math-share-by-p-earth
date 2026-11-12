@@ -19,7 +19,7 @@
   sub { font-size: .68em; line-height: 0; vertical-align: sub; font-weight: 800; }
   sup sup { font-size: .8em; }
 
-  header { background: linear-gradient(135deg, #1C3B22 0%, #2E5936 100%); color: white; padding: 28px 40px 20px; text-align: center; position: relative; overflow: hidden; }
+  header { background: var(--panel, #f1f4f7); color: var(--text); padding: 28px 40px 20px; text-align: center; position: relative; overflow: hidden; }
   header::before { content: ''; position: absolute; top: -60px; right: -60px; width: 200px; height: 200px; background: rgba(255,255,255,0.07); border-radius: 50%; }
   header h1 { font-size: 2rem; font-weight: 800; letter-spacing: .5px; }
   header p { font-size: 1rem; opacity: .85; margin-top: 4px; }
@@ -30,8 +30,8 @@
 
   nav { display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; padding: 20px 24px 0; background: white; border-bottom: 3px solid var(--border); }
   .tab-btn { padding: 10px 18px; border: none; background: transparent; border-radius: 10px 10px 0 0; font-family: 'Anuphan', sans-serif; font-size: 0.95rem; font-weight: 600; color: var(--muted); cursor: pointer; transition: all .25s; border-bottom: 3px solid transparent; margin-bottom: -3px; }
-  .tab-btn:hover { color: var(--primary); background: #E3F3D8; }
-  .tab-btn.active { color: var(--primary); border-bottom-color: var(--primary); background: #E3F3D8; }
+  .tab-btn:hover { color: var(--text); background: var(--raise, #e4e9ee); }
+  .tab-btn.active { color: var(--on-ink, #fff); border-bottom-color: transparent; background: var(--ink, #000); }
 
   main { max-width: 980px; margin: 0 auto; padding: 32px 20px 60px; }
   .tab-panel { display: none; animation: fadeIn .35s ease; }
@@ -40,24 +40,24 @@
   @keyframes rowIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
 
   .card { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); padding: 28px 32px; margin-bottom: 24px; }
-  .card-title { font-size: 1.25rem; font-weight: 700; color: var(--primary); margin-bottom: 12px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .card-title { font-size: 1.25rem; font-weight: 700; color: var(--text); margin-bottom: 12px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
   .card-title .icon { font-size: 1.5rem; }
   .intro { font-size: 1.02rem; line-height: 1.8; margin-bottom: 14px; }
-  .box-info { background: #EEF7E6; border-left: 4px solid var(--primary); border-radius: 10px; padding: 14px 18px; margin: 14px 0; line-height: 1.8; }
+  .box-info { background: var(--panel, #f1f4f7); border-left: 4px solid var(--primary); border-radius: 10px; padding: 14px 18px; margin: 14px 0; line-height: 1.8; }
   .box-warn { background: #FFF7ED; border-left: 4px solid var(--warning); border-radius: 10px; padding: 14px 18px; margin: 14px 0; line-height: 1.8; }
   .box-ok   { background: #ECFDF5; border-left: 4px solid var(--accent);  border-radius: 10px; padding: 14px 18px; margin: 14px 0; line-height: 1.8; }
-  .formula { background: linear-gradient(135deg,#1C3B22,#2E5936); color: white; border-radius: 12px; padding: 14px 24px; text-align: center; font-size: 1.3rem; font-weight: 700; margin: 14px 0; letter-spacing: .5px; display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 4px 18px; }
+  .formula { background: var(--strong, #1c1e21); color: white; border-radius: 16px; padding: 14px 24px; text-align: center; font-size: 1.3rem; font-weight: 700; margin: 14px 0; letter-spacing: .5px; display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 4px 18px; }
 
-  .btn { padding: 10px 24px; background: var(--primary); color: white; border: none; border-radius: 30px; font-family: 'Anuphan', sans-serif; font-size: 1rem; font-weight: 700; cursor: pointer; transition: background .2s, opacity .2s; }
-  .btn:hover:not(:disabled) { background: #2E5936; }
+  .btn { padding: 10px 24px; background: var(--ink, #000); color: var(--on-ink, #fff); border: 1px solid var(--ink, #000); border-radius: 100px; font-family: 'Anuphan', sans-serif; font-size: 1rem; font-weight: 700; cursor: pointer; transition: background .2s, opacity .2s; }
+  .btn:hover:not(:disabled) { background: var(--ink-hover, #2b3138); border-color: var(--ink-hover, #2b3138); }
   .btn:disabled { opacity: .4; cursor: not-allowed; }
-  .btn.ghost { background: white; color: var(--primary); border: 2px solid var(--primary); }
-  .btn.ghost:hover:not(:disabled) { background: #E3F3D8; }
+  .btn.ghost { background: transparent; color: var(--text); border: 1px solid var(--line, #ced0d4); }
+  .btn.ghost:hover:not(:disabled) { background: var(--raise, #e4e9ee); border-color: var(--line, #ced0d4); }
   .chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 6px 0; align-items: center; }
   .chips .chips-label { font-weight: 700; color: var(--muted); font-size: .95rem; margin-right: 2px; }
-  .chip { padding: 7px 16px; border: 2px solid var(--border); border-radius: 30px; background: #fff; font-family: 'Anuphan', sans-serif; font-weight: 700; font-size: 1rem; cursor: pointer; color: var(--text); display: inline-block; text-align: center; vertical-align: middle; line-height: 1.5; max-width: 100%; }  /* ไม่ใช้ flex: ตัวยกในชิปจะได้ไม่แยกเป็นก้อน */
-  .chip:hover { border-color: var(--primary); }
-  .chip.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+  .chip { padding: 7px 16px; border: 2px solid var(--border); border-radius: 30px; background: var(--card); font-family: 'Anuphan', sans-serif; font-weight: 700; font-size: 1rem; cursor: pointer; color: var(--text); display: inline-block; text-align: center; vertical-align: middle; line-height: 1.5; max-width: 100%; }  /* ไม่ใช้ flex: ตัวยกในชิปจะได้ไม่แยกเป็นก้อน */
+  .chip:hover { border-color: var(--text); }
+  .chip.active { background: var(--ink, #000); color: var(--on-ink, #fff); border-color: var(--ink, #000); }
 
   .frac { display: inline-flex; flex-direction: column; align-items: center; font-weight: 700; line-height: 1.15; vertical-align: middle; margin: 0 4px; }
   .frac .num { font-size: 1em; border-bottom: 2.5px solid currentColor; padding: 0 3px 2px; min-width: 18px; text-align: center; white-space: nowrap; }
@@ -76,12 +76,12 @@
   .wg-eq { text-align: center; font-size: 1.3rem; font-weight: 800; color: var(--primary); margin-top: 8px; line-height: 1.9; }
   .wg-eq.col { display: flex; flex-direction: column; align-items: flex-start; text-align: left; }
   .wg-eq.row { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 6px 14px; }
-  .wg-cap { background: #EEF7E6; border-left: 4px solid var(--primary); border-radius: 10px; padding: 12px 16px; line-height: 1.75; margin-top: 8px; }
+  .wg-cap { background: var(--panel, #f1f4f7); border-left: 4px solid var(--primary); border-radius: 10px; padding: 12px 16px; line-height: 1.75; margin-top: 8px; }
   .wg-nav { display: flex; justify-content: center; align-items: center; gap: 14px; margin-top: 12px; flex-wrap: wrap; }
   .wg-nav .btn { padding: 9px 22px; }
   .wg-cnt { font-weight: 700; color: var(--muted); min-width: 92px; text-align: center; }
   .two { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; align-items: start; }
-  .tile { border: 2px solid var(--border); border-radius: 12px; padding: 10px 14px; background: #fff; }
+  .tile { border: 2px solid var(--border); border-radius: 12px; padding: 10px 14px; background: var(--card); }
   .tile h4 { font-size: .95rem; color: var(--muted); margin-bottom: 6px; font-weight: 700; }
   .ans { background: #ECFDF5; border: 2px solid var(--accent-2); border-radius: 8px; padding: 2px 10px; color: #047857; font-weight: 800; white-space: nowrap; }
   .bad { background: #FFF1F2; border: 2px solid #E11D48; border-radius: 8px; padding: 2px 10px; color: #9F1239; font-weight: 800; white-space: nowrap; }
@@ -100,11 +100,11 @@
   .setrow { font-size: 1.15rem; font-weight: 700; line-height: 2; }
   .tbl { border-collapse: collapse; margin: 8px auto; font-weight: 700; }
   .tbl th, .tbl td { border: 2px solid var(--border); padding: 6px 14px; text-align: center; }
-  .tbl th { background: #EEF7E6; color: var(--primary); }
+  .tbl th { background: var(--panel, #f1f4f7); color: var(--text); }
   .tbl td.cur { background: #FEF3C7; }
   .tbl-scroll { overflow-x: auto; }
 
-  .wk-cell { position: relative; background: #fff; border: 2px solid var(--border); border-radius: 14px; padding: 12px 16px 12px 56px; margin-bottom: 12px; line-height: 1.9; }
+  .wk-cell { position: relative; background: var(--card); border: 2px solid var(--border); border-radius: 14px; padding: 12px 16px 12px 56px; margin-bottom: 12px; line-height: 1.9; }
   .wk-cell.fresh { animation: rowIn .5s ease; }
   .wk-cell.final { border-color: var(--accent-2); }
   .wk-cell .stepno { position: absolute; left: 14px; top: 14px; width: 28px; height: 28px; border-radius: 50%; background: var(--primary); color: #fff; font-size: .85rem; font-weight: 800; display: flex; align-items: center; justify-content: center; }
@@ -113,17 +113,17 @@
 
   .quiz-q { font-size: 1.1rem; font-weight: 600; margin-bottom: 12px; line-height: 1.8; }
   .quiz-opts { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 10px; }
-  .quiz-opt { padding: 10px 20px; border: 2px solid var(--border); border-radius: 30px; cursor: pointer; font-family: 'Anuphan', sans-serif; font-size: 1rem; font-weight: 600; transition: all .2s; background: white; display: inline-flex; align-items: center; min-height: 48px; color: var(--text); }
-  .quiz-opt:hover { border-color: var(--primary); color: var(--primary); }
+  .quiz-opt { padding: 10px 20px; border: 2px solid var(--border); border-radius: 30px; cursor: pointer; font-family: 'Anuphan', sans-serif; font-size: 1rem; font-weight: 600; transition: all .2s; background: var(--card); display: inline-flex; align-items: center; min-height: 48px; color: var(--text); }
+  .quiz-opt:hover { border-color: var(--text); color: var(--text); }
   .quiz-opt.correct { border-color: var(--accent); background: #ECFDF5; color: #047857; }
   .quiz-opt.wrong { border-color: var(--secondary); background: #FFF4EC; color: #BE185D; }
   .quiz-feedback { font-weight: 600; font-size: 1rem; min-height: 24px; line-height: 1.75; }
   .quiz-feedback.ok { color: #047857; }
   .quiz-feedback.err { color: #BE185D; }
-  .btn-next { margin-top: 10px; padding: 10px 28px; background: var(--primary); color: white; border: none; border-radius: 30px; font-family: 'Anuphan', sans-serif; font-size: 1rem; font-weight: 700; cursor: pointer; transition: background .2s; }
-  .btn-next:hover { background: #142B1A; }
-  .score-badge { display: inline-block; background: linear-gradient(135deg,#68EF3F,#1C3B22); color: white; border-radius: 30px; padding: 6px 20px; font-weight: 700; font-size: 1rem; }
-  .score-card { margin-top: 20px; background: linear-gradient(135deg,#1C3B22,#2E5936); color: white; border-radius: 16px; padding: 24px; text-align: center; }
+  .btn-next { margin-top: 10px; padding: 10px 28px; background: var(--ink, #000); color: var(--on-ink, #fff); border: none; border-radius: 100px; font-family: 'Anuphan', sans-serif; font-size: 1rem; font-weight: 700; cursor: pointer; transition: background .2s; }
+  .btn-next:hover { background: var(--ink-hover, #2b3138); }
+  .score-badge { display: inline-block; background: var(--ink, #000); color: var(--on-ink, #fff); border-radius: 30px; padding: 6px 20px; font-weight: 700; font-size: 1rem; }
+  .score-card { margin-top: 20px; background: var(--strong, #1c1e21); color: white; border-radius: 24px; padding: 24px; text-align: center; }
 
   /* ─── กราฟ SVG (สีใช้ชุด --g-* ของธีม จึงเปลี่ยนตามโหมดสว่าง/มืด) ─── */
   .plot { width: 100%; max-width: 560px; height: auto; display: block; margin: 8px auto; background: var(--card); border: 1.5px solid var(--border); border-radius: 12px; }
@@ -640,113 +640,109 @@
   }
   /* ═══ END ของกลางกลุ่มสถิติ ม.6 ═══ */
 /* ── theme:start — สร้างโดย tools/build_lessons.py ห้ามแก้มือ (แก้ที่สคริปต์แล้วรันใหม่) ── */
+/* ธีมชุดเดียวกับหน้าสารบัญ (tools/build_index.py · DESIGN.md หมวด Meta-inspired) — สีของเรื่องอยู่ที่ปกและในตัวบทเรียน กรอบหน้าเป็นสีกลาง */
 :root{ --page:#A3237E; }
 :root[data-theme="light"]{
-  --bg:#F4F4F1; --card:#FFFFFF; --text:#16181A; --muted:#5E6166; --border:#DEDED8;
+  --bg:#ffffff; --surface:#ffffff; --card:#ffffff; --panel:#f1f4f7; --raise:#e4e9ee;
+  --text:#1c1e21; --muted:#5d6c7b; --dim:#8595a4; --line:#ced0d4; --line-soft:#dee3e9; --border:#ced0d4;
+  --ink:#000000; --on-ink:#ffffff; --ink-hover:#2b3138; --link:#0064e0; --strong:#1c1e21; --shadow:none;
   --primary:color-mix(in srgb, var(--page) 86%, #000); --primary-2:color-mix(in srgb, var(--page) 62%, #000);
   --secondary:#C2540A; --secondary-light:#F2A15F; --accent:#68EF3F; --accent-2:#2E9E3F;
-  --shadow:0 2px 10px rgba(0,0,0,.07);
-  --strong:color-mix(in srgb, var(--page) 76%, #000); --chip:#E8E8E3; --chip-hover:#DCDCD5;
-  --hero:color-mix(in srgb, var(--page) 82%, #000);
   --g-x:#E53935; --g-y:#2E9E4F; --g-z:#3949AB; --g-curve:#F07400; --g-curve-fill:rgba(240,116,0,.12);
   --g-pink:#D81B60; --g-plane:rgba(60,190,200,.28); --g-cone:rgba(153,51,0,.20); --g-cone-line:rgba(153,51,0,.35);
   --g-blue:#1E66D0; --g-red:#D32F2F; --g-green:#2E9E4F; --g-purple:#7B3FC4; --g-orange:#E8710A; --g-teal:#0F8A80;
   --g-ring:#FFFFFF;
 }
 :root[data-theme="dark"]{
-  --bg:#121212; --card:#1C1C1C; --text:#FFFFFF; --muted:#B3B3B3; --border:#333333;
+  --bg:#0a1317; --surface:#0a1317; --card:#0a1317; --panel:#1c1e21; --raise:#2b3138;
+  --text:#ffffff; --muted:#9aa8b5; --dim:#6b7884; --line:#444950; --line-soft:#32383e; --border:#444950;
+  --ink:#ffffff; --on-ink:#000000; --ink-hover:#d5dbe1; --link:#4da3ff; --strong:#2b3138; --shadow:none;
   --primary:#e481c7; --primary-2:#eba3d6;
   --secondary:#FFB37A; --secondary-light:#FFD0A8; --accent:#8AF25E; --accent-2:#5BD27E;
-  --shadow:0 8px 24px rgba(0,0,0,.5);
-  --strong:color-mix(in srgb, var(--page) 48%, #1C1C1C); --chip:#2A2A2A; --chip-hover:#353535;
-  --hero:color-mix(in srgb, var(--page) 62%, #000);
   --g-x:#FF6B6B; --g-y:#5BD27E; --g-z:#8C9BFF; --g-curve:#FFA040; --g-curve-fill:rgba(255,160,64,.16);
   --g-pink:#FF5C9A; --g-plane:rgba(90,220,230,.26); --g-cone:rgba(255,170,110,.18); --g-cone-line:rgba(255,170,110,.45);
   --g-blue:#6AA8FF; --g-red:#FF6B6B; --g-green:#5BD27E; --g-purple:#B48CFF; --g-orange:#FFA040; --g-teal:#4FD1C5;
-  --g-ring:#1C1C1C;
+  --g-ring:#0a1317;
 }
-html{ background:var(--bg); }
+html{ background:var(--bg); color-scheme:light; }
 html[data-theme="dark"]{ color-scheme:dark; }
 body{ font-family:'Anuphan',system-ui,sans-serif; background:var(--bg); color:var(--text); line-height:1.6; -webkit-font-smoothing:antialiased; }
+:focus-visible{ outline:2px solid var(--link); outline-offset:2px; }
 
-/* หัวหน้า: สีปกของเรื่อง + ปก */
+/* หัวหน้า: แผ่นสีอ่อนมุมโค้ง ตัวหนังสือเข้ม + ปกข้างชื่อ (สีของเรื่องอยู่ที่ปก) */
 header{
-  background:var(--hero); color:#fff; text-align:left;
-  display:grid; grid-template-columns:auto 1fr; column-gap:22px; align-items:end;
-  padding:62px 32px 26px;
+  background:var(--panel); color:var(--text); text-align:left; overflow:hidden;
+  display:grid; grid-template-columns:auto 1fr; column-gap:24px; align-items:end;
+  margin:8px 8px 0; padding:74px 32px 28px; border-radius:32px; box-shadow:none;
 }
 header::before, header::after{ display:none !important; }
 header > *:not(.lesson-cover):not(.back-link):not(.lang-toggle):not(.theme-toggle){ grid-column:2; }
-.lesson-cover{ grid-column:1; grid-row:1 / span 6; align-self:end; width:120px; aspect-ratio:1; border-radius:6px; overflow:hidden; box-shadow:0 8px 24px rgba(0,0,0,.45); }
+.lesson-cover{ grid-column:1; grid-row:1 / span 6; align-self:end; width:clamp(96px, 11vw, 136px); aspect-ratio:1; border-radius:16px; overflow:hidden; box-shadow:none; }
 .lesson-cover svg{ display:block; width:100%; height:100%; }
-header h1{ font-size:clamp(1.8rem, 4.2vw, 2.9rem); font-weight:700; letter-spacing:-.01em; line-height:1.25; margin:0; color:#fff; }
-header p{ font-size:1rem; opacity:.85; margin:6px 0 0; color:#fff; }
+header h1{ font-size:clamp(1.9rem, 4.4vw, 3.2rem); font-weight:500; letter-spacing:0; line-height:1.25; margin:0; color:var(--text); }
+header p{ font-size:1.02rem; opacity:1; margin:8px 0 0; color:var(--muted); line-height:1.55; }
 .back-link{
-  top:14px; left:20px; display:inline-flex; align-items:center; gap:6px;
-  padding:6px 14px; border-radius:999px; background:rgba(0,0,0,.32); color:#fff;
-  font-size:.88rem; font-weight:600; opacity:1; text-decoration:none;
+  position:absolute; top:16px; left:16px; z-index:2; display:inline-flex; align-items:center; gap:6px;
+  height:38px; padding:0 16px; border-radius:100px; background:var(--surface); color:var(--text);
+  box-shadow:inset 0 0 0 1px var(--line); font-size:.92rem; font-weight:700; opacity:1; text-decoration:none;
 }
-.back-link:hover{ background:rgba(0,0,0,.55); text-decoration:none; }
+.back-link:hover{ background:var(--raise); opacity:1; text-decoration:none; }
 .lang-toggle, .theme-toggle{
-  position:absolute; top:14px; height:34px; background:transparent; color:#fff;
-  border:1px solid rgba(255,255,255,.55); border-radius:999px; font-family:inherit; font-weight:700; font-size:.85rem; cursor:pointer; z-index:2;
+  position:absolute; top:16px; height:38px; border-radius:100px; font-family:inherit; font-weight:700; font-size:.88rem;
+  cursor:pointer; z-index:2; transition:transform .12s, background .12s;
 }
-.lang-toggle{ right:20px; padding:0 16px; }
-.theme-toggle{ right:86px; width:34px; padding:0; display:grid; place-items:center; }
+.lang-toggle{ right:16px; min-width:64px; padding:0 16px; background:var(--ink); color:var(--on-ink); border:1px solid var(--ink); }
+.lang-toggle:hover{ background:var(--ink); border-color:var(--ink); transform:scale(1.04); }
+.theme-toggle{ right:88px; width:38px; padding:0; display:grid; place-items:center; background:var(--surface); color:var(--text); border:1px solid var(--line); }
 .theme-toggle svg{ width:18px; height:18px; }
-.lang-toggle:hover, .theme-toggle:hover{ background:rgba(255,255,255,.14); border-color:#fff; }
-body > .lang-toggle, body > .theme-toggle{ position:fixed; top:14px; z-index:50; background:var(--card); color:var(--text); border-color:var(--border); box-shadow:var(--shadow); }
-body > .lang-toggle{ right:14px; } body > .theme-toggle{ right:80px; }
-body > .lang-toggle:hover, body > .theme-toggle:hover{ background:var(--chip); border-color:var(--text); }
-header:not(:has(.back-link)):not(:has(.lang-toggle)){ padding-top:28px; border-radius:8px; }
+.theme-toggle:hover{ background:var(--raise); border-color:var(--line); }
+body > .lang-toggle, body > .theme-toggle{ position:fixed; top:14px; z-index:50; }
+body > .lang-toggle{ right:14px; } body > .theme-toggle{ right:86px; }
+header:not(:has(.back-link)):not(:has(.lang-toggle)){ padding-top:28px; }
 
-/* แถบแท็บ: ชิปทรงแคปซูล */
-nav{ background:var(--bg); border-bottom:1px solid var(--border); padding:10px 16px; gap:8px; }
+/* แถบแท็บ: ชิปขอบบาง ตัวที่เลือก = สีหมึก (ดำ / โหมดมืดขาว) */
+nav{ background:var(--bg); border-bottom:0; padding:16px 16px 8px; gap:8px; box-shadow:none; }
 .tab-btn{
-  font-family:inherit; border:0; margin:0; border-radius:999px; padding:8px 16px;
-  background:var(--chip); color:var(--text); font-weight:600; font-size:.9rem;
+  font-family:inherit; border:0; margin:0; border-radius:100px; padding:8px 18px;
+  background:var(--surface); color:var(--text); box-shadow:inset 0 0 0 1px var(--line); font-weight:600; font-size:.95rem;
 }
-.tab-btn:hover{ background:var(--chip-hover); color:var(--text); }
-.tab-btn.active{ background:var(--text); color:var(--bg); border-bottom-color:transparent; }
+.tab-btn:hover{ background:var(--raise); color:var(--text); }
+.tab-btn.active{ background:var(--ink); color:var(--on-ink); box-shadow:none; border-bottom-color:transparent; }
 
-/* การ์ดและกล่อง */
-.card{ background:var(--card); border:1px solid var(--border); border-radius:8px; box-shadow:var(--shadow); }
+/* การ์ดและกล่อง: พื้นเรียบ ขอบ 1px ไม่มีเงา */
+.card{ background:var(--card); border:1px solid var(--line); border-radius:24px; box-shadow:none; }
 .card-title{ color:var(--text); font-size:1.2rem; }
 .card-title .icon{ display:none; }
 .desc-text{ color:var(--text); font-size:1rem; }
-.formula, .step.result, .stats{ background:var(--strong) !important; color:#fff; border-radius:8px; letter-spacing:0; }
+.formula, .step.result, .stats{ background:var(--strong) !important; color:#fff; border-radius:16px; letter-spacing:0; }
 .stat .k, .step-tag{ text-transform:none; letter-spacing:0; }
 
-/* ปุ่ม */
-.btn-action{ font-family:inherit; background:var(--text); color:var(--bg); }
-.btn-action.secondary{ background:transparent; color:var(--text); border:1px solid var(--muted); }
-.mode-btn{ font-family:inherit; border:1px solid var(--border); background:var(--card); color:var(--text); }
+/* ปุ่ม: หลัก = แคปซูลหมึก, รอง = แคปซูลขอบบาง */
+.btn-action{ font-family:inherit; background:var(--ink); color:var(--on-ink); border:1px solid var(--ink); border-radius:100px; }
+.btn-action:hover:not(:disabled){ background:var(--ink-hover); border-color:var(--ink-hover); }
+.btn-action.secondary{ background:transparent; color:var(--text); border:1px solid var(--line); }
+.btn-action.secondary:hover:not(:disabled){ background:var(--raise); }
+.mode-btn{ font-family:inherit; border:1px solid var(--line); background:var(--surface); color:var(--text); border-radius:100px; }
 .mode-btn:hover{ border-color:var(--text); color:var(--text); }
-.mode-btn.active{ background:var(--text); border-color:var(--text); color:var(--bg); }
-.quiz-opt{ border-radius:8px; }
+.mode-btn.active{ background:var(--ink); border-color:var(--ink); color:var(--on-ink); }
 input[type=range]{ accent-color:var(--primary); }
 
 @media (max-width:600px){
-  header{ padding:58px 16px 20px; column-gap:14px; }
-  .lesson-cover{ width:76px; }
-  .back-link{ left:12px; max-width:calc(100% - 150px); overflow:hidden; white-space:nowrap; text-overflow:ellipsis; display:block; }
-  .lang-toggle{ right:12px; }
-  .theme-toggle{ right:74px; }
-  nav{ flex-wrap:nowrap; overflow-x:auto; justify-content:flex-start; scrollbar-width:none; }
+  header{ margin:0; border-radius:0 0 24px 24px; padding:64px 16px 20px; column-gap:14px; }
+  .lesson-cover{ width:72px; border-radius:12px; }
+  header h1{ font-size:clamp(1.5rem, 7vw, 2rem); }
+  header p{ font-size:.95rem; }
+  .back-link{ top:14px; left:12px; height:36px; padding:0 14px; max-width:calc(100% - 150px); overflow:hidden; white-space:nowrap; text-overflow:ellipsis; display:block; line-height:36px; }
+  .lang-toggle, .theme-toggle{ top:14px; height:36px; }
+  .lang-toggle{ right:12px; min-width:58px; padding:0 12px; }
+  .theme-toggle{ right:78px; width:36px; }
+  nav{ flex-wrap:nowrap; overflow-x:auto; justify-content:flex-start; scrollbar-width:none; padding:12px 12px 6px; }
   nav .tab-btn{ flex:0 0 auto; white-space:nowrap; }   /* ชื่อแท็บบรรทัดเดียว ปัดแถบซ้าย-ขวาแทน (ไม่บีบจนตัดคำ) */
   nav::-webkit-scrollbar{ display:none; }
 }
 /* โหมดมืด: สีที่หน้านี้ฝังไว้เอง (สร้างอัตโนมัติ) */
-:root[data-theme="dark"] .box-info{background:#1f2e12}
 :root[data-theme="dark"] .box-warn{background:#281d0f}
 :root[data-theme="dark"] .box-ok{background:#102a1d}
-:root[data-theme="dark"] .btn{background:var(--strong)}
-:root[data-theme="dark"] .btn.ghost{background:#171717}
-:root[data-theme="dark"] .btn.ghost:hover:not(:disabled){background:#223614}
-:root[data-theme="dark"] .chip{background:#171717}
-:root[data-theme="dark"] .chip.active{background:var(--strong)}
-:root[data-theme="dark"] .wg-cap{background:#1f2e12}
-:root[data-theme="dark"] .tile{background:#171717}
 :root[data-theme="dark"] .ans{background:#102a1d;color:#a8f8e1}
 :root[data-theme="dark"] .bad{background:#270f10;color:#f49ab2}
 :root[data-theme="dark"] .hl{background:#383115}
@@ -758,17 +754,13 @@ input[type=range]{ accent-color:var(--primary); }
 :root[data-theme="dark"] .verdict.no{background:#270f10}
 :root[data-theme="dark"] .verdict.ok .mk{color:#99f1ba}
 :root[data-theme="dark"] .verdict.no .mk{color:#ef839b}
-:root[data-theme="dark"] .tbl th{background:#1f2e12}
 :root[data-theme="dark"] .tbl td.cur{background:#383115}
-:root[data-theme="dark"] .wk-cell{background:#171717}
 :root[data-theme="dark"] .wk-cell .stepno{background:var(--strong)}
 :root[data-theme="dark"] .wk-note{color:#bcc5d2}
-:root[data-theme="dark"] .quiz-opt{background:#171717}
 :root[data-theme="dark"] .quiz-opt.correct{background:#102a1d;color:#a8f8e1}
 :root[data-theme="dark"] .quiz-opt.wrong{background:#291a0f;color:#f18fb8}
 :root[data-theme="dark"] .quiz-feedback.ok{color:#a8f8e1}
 :root[data-theme="dark"] .quiz-feedback.err{color:#f18fb8}
-:root[data-theme="dark"] .btn-next{background:var(--strong)}
 :root[data-theme="dark"] .tool-inp{background:#171717}
 :root[data-theme="dark"] .mt-item.sel{background:var(--strong)}
 /* ── theme:end ── */
@@ -3880,7 +3872,7 @@ function rvRows() {
     { f: `${pwr(A_, M_)} × ${pwr(A_, N_)} = ${pwr(A_, M_ + ' + ' + N_)}`,
       vis: rvT('2', 3, 'b') + rvT('2', 2, 'o') + `<span class="rz-it">= ${mx(pwr('2', 3) + ' · ' + pwr('2', 2) + ' = ' + pwr('2', 5))}</span>`,
       note: T('แผ่น 2 สามแผ่น ต่อกับอีกสองแผ่น รวมห้าแผ่น (เลขชี้กำลังบวกกัน)', '3 tiles joined to 2 tiles make 5 tiles (the exponents add)') },
-    { f: `${frac(pwr(A_, M_), pwr(A_, N_))} = ${pwr(A_, M_ + ' − ' + N_)}`,
+    { f: `${frac(pwr(A_, M_), pwr(A_, N_))} = ${pwr(A_, M_ + ' − ' + N_)} &nbsp;<span style="font-size:.8em">(<i>a</i> ≠ 0)</span>`,
       vis: frac(rvT('2', 5, 'b', i => i < 2 ? .22 : 1), rvT('2', 2, 'o', rvDim)) + `<span class="rz-it">= ${mx(pwr('2', 3))}</span>`,
       note: T('แผ่นบนกับแผ่นล่างตัดกันทีละคู่ (แผ่นจาง) เหลือ 3 แผ่น', 'Top and bottom tiles cancel in pairs (faded) — 3 tiles are left') },
     { f: `${pwr('(' + pwr(A_, M_) + ')', N_)} = ${pwr(A_, M_ + N_)}`,
@@ -3889,13 +3881,13 @@ function rvRows() {
     { f: `${pwr('(' + A_ + B_ + ')', M_)} = ${pwr(A_, M_)}${pwr(B_, M_)}`,
       vis: rzTiles('2·3', 2, 'g', { size: 46 }) + `<span class="rz-it">${mx(x2 + ' · ' + x3 + ' = (2 · 3)<sup>' + X + '</sup> = ' + x6)}</span>`,
       note: T('ตัวอย่างของครู · x = 2: 4 · 9 = 36 = 6²', 'The teacher’s example · x = 2: 4 · 9 = 36 = 6²') },
-    { f: `${pwr('(' + frac(A_, B_) + ')', M_)} = ${frac(pwr(A_, M_), pwr(B_, M_))}`,
+    { f: `${pwr('(' + frac(A_, B_) + ')', M_)} = ${frac(pwr(A_, M_), pwr(B_, M_))} &nbsp;<span style="font-size:.8em">(<i>b</i> ≠ 0)</span>`,
       vis: frac(rvT('2', 2, 'b'), rvT('3', 2, 'o')) + `<span class="rz-it">= ${mx(pwr('(' + frac(2, 3) + ')', 2) + ' = ' + frac(pwr('2', 2), pwr('3', 2)) + ' = ' + frac(4, 9))}</span>`,
       note: T('ยกกำลังทั้งเศษและส่วน', 'The power goes on both the top and the bottom') },
     { f: `${pwr(A_, 0)} = 1 &nbsp;<span style="font-size:.8em">(<i>a</i> ≠ 0)</span>`,
       vis: frac(rvT('2', 3, 'b', rvDim), rvT('2', 3, 'o', rvDim)) + `<span class="rz-it">= 1 &nbsp;= ${mx(pwr('2', 3) + ' ÷ ' + pwr('2', 3) + ' = ' + pwr('2', 0))}</span>`,
       note: T('ตัดหมดทุกคู่ แล้วเหลือ 1 (ไม่ใช่ 0) จึง a⁰ = 1', 'Every pair cancels and 1 is left (not 0), so a⁰ = 1') },
-    { f: `${pwr(A_, '−' + N_)} = ${frac(1, pwr(A_, N_))}`,
+    { f: `${pwr(A_, '−' + N_)} = ${frac(1, pwr(A_, N_))} &nbsp;<span style="font-size:.8em">(<i>a</i> ≠ 0)</span>`,
       vis: frac(rvT('2', 2, 'b', rvDim), rvT('2', 5, 'o', i => i < 2 ? .22 : 1)) + `<span class="rz-it">= ${mx(frac(1, pwr('2', 3)) + ' = ' + pwr('2', '−3') + ' = ' + frac(1, 8))}</span>`,
       note: T('ล่างเหลือ 3 แผ่น จึงอยู่ใต้ 1 เป็นเศษส่วน', '3 tiles are left on the bottom, so they sit under 1 as a fraction') }
   ];
@@ -3928,7 +3920,13 @@ const RV_PRED = [
     html: done => rvSide(T('ซ้าย', 'Left'), `<span class="rz-it" style="font-size:1.4rem;font-weight:800">${pwr('2', '−3')} =</span>` + frac(1, rzTiles('2', 3, 'b', { size: 30 })), done ? mx(frac(1, 8)) : '', true) +
       `<div class="rv-vs${done ? ' no' : ''}">${done ? '≠' : '?'}</div>` + rvSide(T('ขวา', 'Right'), `<span class="rz-it" style="font-size:1.6rem;font-weight:800">−8</span>`, done ? tx(T('ติดลบ', 'negative')) : '', true),
     why: T(`เลขชี้กำลังติดลบหมายถึงกลับเป็นเศษส่วน ${pwr('2', '−3')} = ${frac(1, pwr('2', 3))} = ${frac(1, 8)} · ไม่ได้ทำให้ค่าติดลบ (แผ่นฐานทุกแผ่นเป็น 2 บวก)`,
-      `A negative exponent means flip into a fraction: ${pwr('2', '−3')} = ${frac(1, pwr('2', 3))} = ${frac(1, 8)} · it does not make the value negative (every base tile is a positive 2).`) }
+      `A negative exponent means flip into a fraction: ${pwr('2', '−3')} = ${frac(1, pwr('2', 3))} = ${frac(1, 8)} · it does not make the value negative (every base tile is a positive 2).`) },
+  { chip: mx(pwr('(' + frac(2, 3) + ')', '−2') + ' = ' + pwr('(' + frac(3, 2) + ')', 2)), a: 0,
+    q: T(`สองฝั่งของ ${mx(pwr('(' + frac(2, 3) + ')', '−2') + ' = ' + pwr('(' + frac(3, 2) + ')', 2))} เท่ากันไหม`, `Are the two sides of ${mx(pwr('(' + frac(2, 3) + ')', '−2') + ' = ' + pwr('(' + frac(3, 2) + ')', 2))} equal?`),
+    html: done => rvSide(T('ซ้าย', 'Left'), `<span class="rz-it" style="font-size:1.4rem;font-weight:800">${pwr('(' + frac(2, 3) + ')', '−2')}</span>`, done ? mx('1 ÷ ' + pwr('(' + frac(2, 3) + ')', 2) + ' = 1 ÷ ' + frac(4, 9) + ' = ' + frac(9, 4)) : '') +
+      `<div class="rv-vs${done ? ' ok' : ''}">${done ? '=' : '?'}</div>` + rvSide(T('ขวา', 'Right'), `<span class="rz-it" style="font-size:1.4rem;font-weight:800">${pwr('(' + frac(3, 2) + ')', 2)}</span>`, done ? mx(pwr('(' + frac(3, 2) + ')', 2) + ' = ' + frac(9, 4)) : ''),
+    why: T(`เลขชี้กำลังลบ = กลับเป็นส่วน · ถ้าฐานเป็นเศษส่วน การกลับคือ<b>สลับเศษกับส่วน</b> แล้วเลขชี้กำลังกลายเป็นบวก: ${pwr('(' + frac(2, 3) + ')', '−2')} = ${pwr('(' + frac(3, 2) + ')', 2)} = ${frac(9, 4)} (เชื่อมกับข้อ 7 ในตาราง)`,
+      `A negative exponent means flip · when the base is a fraction, flipping means <b>swapping top and bottom</b>, and the exponent becomes positive: ${pwr('(' + frac(2, 3) + ')', '−2')} = ${pwr('(' + frac(3, 2) + ')', 2)} = ${frac(9, 4)} (this links to Law 7 in the table).`) }
 ];
 
 // ═══════════════════════════════════════════════════════════════
@@ -3983,12 +3981,12 @@ const exPredItem = c => ({ chip: mx(c.chipH), draw: (el, ctx) => {
   el.innerHTML = `<div class="rz-stage" style="min-height:0">${rzLine([c.big], 'lg')}<div class="rz-note">${tx(c.need)}</div>${done ? c.reveal : ''}</div>`;
 }, qs: [{ q: c.q, o: c.o, a: c.ans, why: c.why }] });
 const UN_PRED = [
-  { chipH: pwr('16', frac(1, 4)), big: pwr('16', frac(1, 4)) + ' = ?', need: T('หา x ที่ x⁴ = 16', 'Find x with x⁴ = 16'),
+  { chipH: pwr('16', frac(1, 4)), big: pwr('16', frac(1, 4)) + ' = ?', need: T('หา x ที่ไม่ติดลบ ซึ่ง x⁴ = 16', 'Find the non-negative x with x⁴ = 16'),
     reveal: rzLine([rzTiles('2', 4, 'b', { size: 34 }), mx('2 · 2 · 2 · 2 = 16 ✓')], 'sm'),
     q: T(`${pwr('16', frac(1, 4))} มีค่าเท่าใด`, `What is ${pwr('16', frac(1, 4))}?`),
     o: ['4', '2', '±2', '8'], ans: 1,
-    why: T(`จำนวนที่ยกกำลัง 4 แล้วได้ 16 คือ 2 เพราะ 2 · 2 · 2 · 2 = 16 · n = 4 เป็นเลขคู่ คำตอบเป็นค่าบวกตัวเดียว (ไม่ใช่ ±2)`,
-      `The number whose 4th power is 16 is 2, since 2 · 2 · 2 · 2 = 16 · n = 4 is even, so the answer is the single positive value (not ±2).`) },
+    why: T(`จำนวนที่ยกกำลัง 4 แล้วได้ 16 คือ 2 เพราะ 2 · 2 · 2 · 2 = 16 · สมการ x⁴ = 16 มี<b>สองคำตอบ</b>คือ 2 กับ −2 แต่สัญลักษณ์ ${pwr('16', frac(1, 4))} หมายถึง<b>จำนวนเดียว</b> คือตัวที่ไม่ติดลบ จึงตอบ 2 (ไม่ใช่ ±2)`,
+      `The number whose 4th power is 16 is 2, since 2 · 2 · 2 · 2 = 16 · the equation x⁴ = 16 has <b>two solutions</b>, 2 and −2, but the symbol ${pwr('16', frac(1, 4))} stands for <b>one number</b>, the non-negative one, so the answer is 2 (not ±2).`) },
   { chipH: pwr('27', frac(1, 3)), big: pwr('27', frac(1, 3)) + ' = ?', need: T('หา x ที่ x³ = 27', 'Find x with x³ = 27'),
     reveal: rzLine([rzTiles('3', 3, 'b', { size: 34 }), mx('3 · 3 · 3 = 27 ✓')], 'sm'),
     q: T(`${pwr('27', frac(1, 3))} มีค่าเท่าใด`, `What is ${pwr('27', frac(1, 3))}?`),
@@ -4064,6 +4062,15 @@ function frPredDraw(el, ctx) {
     card(2, 3, true, tx(T(`ตัวส่วน 3 → รากที่ 3 ของ −8 = ?`, `denominator 3 → the cube root of −8 = ?`)),
       `${tx(T('✓ ใช้ได้', '✓ can use it'))}<br>∛(−8) = −2 ${tx(T('แล้ว', 'then'))} (−2)² = 4`) + '</div>';
 }
+// ทายก่อน (−8)^(2/6): สองเส้นทางคู่กัน ภาพขึ้นก่อน ยังไม่โชว์ผลลัพธ์
+function frNegDraw(el, ctx) {
+  const done = ctx.done[0];
+  const card = (title, line, q, a, ok) => `<div class="rz-card${done ? (ok ? ' ok' : ' no') : ''}"><div style="font-weight:700;margin-bottom:4px">${tx(title)}</div><div class="rz-line">${line}</div><div class="rz-q">${done ? a : q}</div></div>`;
+  el.innerHTML = '<div class="rz-stage" style="min-height:0">' + rzLine([frPow('(−8)', 2, 6)], 'lg') + '<div class="rz-cards">' +
+    card(T('เส้นทาง A: ยกกำลัง 2 ก่อน แล้วถอดรากที่ 6', 'Path A: square first, then take the 6th root'), nrt(6, '(−8)<sup>2</sup>'), '?', mx(nrt(6, '64') + ' = 2'), false) +
+    card(T('เส้นทาง B: ทำ 2/6 เป็น 1/3 ก่อน', 'Path B: reduce 2/6 to 1/3 first'), frPow('(−8)', 1, 3), '?', mx(nrt(3, '(−8)') + ' = −2'), true) + '</div>' +
+    (done ? `<div class="rz-note">${tx(T(`สองเส้นทางไม่ตรงกัน (2 กับ −2) จึงต้องมีข้อตกลง: <b>ทำเป็นเศษส่วนอย่างต่ำก่อน</b> → ได้ −2 · ถ้าฐานเป็นบวกไม่มีปัญหานี้: ${pwr('8', frac(2, 6))} = ${pwr('8', frac(1, 3))} = 2 ทั้งสองเส้นทาง`, `The two paths disagree (2 versus −2), so we need an agreement: <b>reduce the fraction to lowest terms first</b> → −2 · a positive base has no such problem: ${pwr('8', frac(2, 6))} = ${pwr('8', frac(1, 3))} = 2 on both paths`))}</div>` : '') + '</div>';
+}
 const FR_PRED = [
   { chip: mx(pwr('(−8)', frac(3, 2))), draw: frPredDraw, qs: [{
     q: T(`${pwr('(−8)', frac(3, 2))} ใช้สมบัติข้อ 8 (ตัวส่วน = ราก ตัวเศษ = กำลัง) ได้ไหม`, `Can ${pwr('(−8)', frac(3, 2))} use property 8 (denominator = root, numerator = power)?`),
@@ -4074,8 +4081,69 @@ const FR_PRED = [
     q: T(`${pwr('(−8)', frac(2, 3))} มีค่าเท่าใด`, `What is ${pwr('(−8)', frac(2, 3))}?`),
     o: ['4', '−4', T('ไม่นิยาม', 'Undefined'), '16'], a: 0,
     why: T(`ตัวส่วน 3 ต้องหา ∛(−8) = −2 ซึ่งเป็นจำนวนจริง จึงใช้สมบัติข้อ 8 ได้ → (−2)² = 4 · กำลังสองของจำนวนลบกลับเป็นบวก`,
-      `The denominator 3 needs ∛(−8) = −2, which is real, so property 8 applies → (−2)² = 4 · squaring a negative number gives a positive one.`) }] }
+      `The denominator 3 needs ∛(−8) = −2, which is real, so property 8 applies → (−2)² = 4 · squaring a negative number gives a positive one.`) }] },
+  { chip: mx(pwr('(−8)', frac(2, 6))), draw: frNegDraw, qs: [{
+    q: T(`${pwr('(−8)', frac(2, 6))} มีค่าเท่าใด`, `What is ${pwr('(−8)', frac(2, 6))}?`),
+    o: ['2', '−2', T('ไม่นิยาม', 'Undefined'), '4'], a: 1,
+    why: T(`เส้นทาง A ได้ ${nrt(6, '64')} = 2 · เส้นทาง B ได้ ${nrt(3, '(−8)')} = −2 ทั้งที่ ${frac(2, 6)} = ${frac(1, 3)} · สองเส้นทางไม่ตรงกัน จึงต้องตกลงให้ <b>ทำ m/n เป็นเศษส่วนอย่างต่ำก่อนเสมอ</b> → ${pwr('(−8)', frac(1, 3))} = −2`,
+      `Path A gives ${nrt(6, '64')} = 2 · path B gives ${nrt(3, '(−8)')} = −2, even though ${frac(2, 6)} = ${frac(1, 3)} · the paths disagree, so we agree to <b>always reduce m/n to lowest terms first</b> → ${pwr('(−8)', frac(1, 3))} = −2`) }] }
 ];
+
+// ── แท็บ 3 (เพิ่ม) · อีกทางหนึ่ง: เขียนฐานเป็นแผ่นฐานเดียวกัน (8^(2/3) = (2³)^(2/3) = 2²) ──
+// st = { k (0–3), p (0–1) }
+function fbPaint(el, st) {
+  const k = st.k, p = st.p, B8 = frPow('(' + pwr('2', 3) + ')', 2, 3);
+  let h = '<div class="rz-stage">';
+  if (k === 0) {
+    h += rzLine([frPow('8', 2, 3) + ' = ?'], 'lg');
+    h += `<div class="rz-note">${tx(T('8 ไม่ใช่ฐานที่เล็กที่สุด — ลองแตกเป็นแผ่นฐาน', '8 is not the smallest base — try breaking it into base tiles'))}</div>`;
+  }
+  if (k === 1) {
+    h += rzLine([frPow('8', 2, 3)], 'lg');
+    h += rzLine([mx('8 = 2 · 2 · 2 = ' + pwr('2', 3))], 'sm', clamp01(p * 6));
+    h += rzTiles('2', 3, 'b', { op: rzPop(clamp01(p * 1.6), 3), size: 40 });
+    h += rzLine([frPow('8', 2, 3), '= ' + B8], '', [1, clamp01(p * 4 - 2.6)]);
+  }
+  if (k >= 2) {
+    const q = k === 2 ? p : 1;
+    h += rzLine([frPow('8', 2, 3), '= ' + B8], '');
+    h += `<div class="rz-pills">${rzPill('o', lawChip(3) + ' ' + mx(pwr('(' + pwr(A_, M_) + ')', N_) + ' = ' + pwr(A_, M_ + ' × ' + N_)), clamp01(q * 5))}</div>`;
+    h += rzLine(['= ' + pwr('2', '3 × ' + frac(2, 3))], '', clamp01(q * 4 - 1));
+    h += rzLine(['= ' + pwr('2', 2)], '', clamp01(q * 4 - 2));
+    h += rzTiles('2', 2, 'o', { op: rzPop(clamp01(q * 3 - 1.4), 2), size: 40 });
+  }
+  if (k === 3) {
+    h += rzLine([mx('= 4')], 'lg', clamp01(p * 3));
+    h += `<div class="rz-pills">${rzPill('g', tx(T(`ตรงกับวิธี “ตัวส่วนคือราก ตัวเศษคือกำลัง” ด้านบน: (∛8)² = 2² = 4`, `Same as “the denominator is the root, the numerator is the power” above: (∛8)² = 2² = 4`)), clamp01(p * 3 - 1))}</div>`;
+    h += `<div class="rz-note" style="opacity:${clamp01(p * 3 - 2)}">${tx(T('ฐานเป็นบวก ใช้ข้อ 3 ได้เต็มที่ — ทำฐานให้เป็นตัวเดียวกัน แล้วคิดที่เลขชี้กำลัง', 'With a positive base, law 3 works fully — make the bases the same, then work on the exponents'))}</div>`;
+  }
+  el.innerHTML = h + '</div>';
+}
+const fbAnim = (k, ms) => S => S.anim.run(ms, t => fbPaint(S.el, { k, p: t }), EASE.lin);
+const FB_SCENES = [
+  { cap: T(`<b>${pwr('8', frac(2, 3))}</b> — วิธีบนคือถอดรากแล้วยกกำลัง ยังมีอีกทาง: ทำฐานให้เป็นแผ่นฐานตัวเล็กที่สุดก่อน กด ▶`,
+      `<b>${pwr('8', frac(2, 3))}</b> — the method above takes a root, then a power. There is another way: first break the base into its smallest base tile. Press ▶`),
+    end: S => fbPaint(S.el, { k: 0, p: 1 }) },
+  { cap: T(`<b>แตก 8 เป็นแผ่นฐาน</b> — 8 = 2 · 2 · 2 คือแผ่น 2 สามแผ่น = ${pwr('2', 3)} จึงเขียน ${pwr('8', frac(2, 3))} = ${pwr('(' + pwr('2', 3) + ')', frac(2, 3))}`,
+      `<b>Break 8 into base tiles</b> — 8 = 2 · 2 · 2 is three tiles of 2 = ${pwr('2', 3)}, so ${pwr('8', frac(2, 3))} = ${pwr('(' + pwr('2', 3) + ')', frac(2, 3))}`),
+    end: S => fbPaint(S.el, { k: 1, p: 1 }), play: fbAnim(1, 3000) },
+  { cap: T(`<b>ใช้ข้อ 3: เลขชี้กำลังคูณกัน</b> — 3 × ${frac(2, 3)} = 2 จึงเหลือ ${pwr('2', 2)} คือแผ่น 2 สองแผ่น`,
+      `<b>Use law 3: the exponents multiply</b> — 3 × ${frac(2, 3)} = 2, leaving ${pwr('2', 2)}, which is two tiles of 2`),
+    end: S => fbPaint(S.el, { k: 2, p: 1 }), play: fbAnim(2, 3000) },
+  { cap: T(`<b>ได้ ${pwr('2', 2)} = 4</b> — ตรงกับวิธี “ตัวส่วนคือราก ตัวเศษคือกำลัง” ด้านบน · ฐานเป็นบวก ใช้ข้อ 3 ได้เต็มที่`,
+      `<b>We get ${pwr('2', 2)} = 4</b> — the same as the “denominator is the root, numerator is the power” method above · with a positive base, law 3 works fully`),
+    end: S => fbPaint(S.el, { k: 3, p: 1 }), play: fbAnim(3, 2600) }
+];
+// ทายก่อน 9^(3/2): เขียนเป็นฐาน 3
+const FB_PRED = { chip: mx(pwr('9', frac(3, 2))), draw: (el, ctx) => {
+  const done = ctx.done[0];
+  el.innerHTML = '<div class="rz-stage" style="min-height:0">' + rzLine([pwr('9', frac(3, 2)) + ' = ?'], 'lg') +
+    `<div class="rz-note">${tx(T('เขียน 9 เป็นแผ่นฐาน 3 (9 = 3 · 3) แล้วใช้ข้อ 3', 'Write 9 as base tiles of 3 (9 = 3 · 3), then use law 3'))}</div>` +
+    (done ? rzLine([pwr('(' + pwr('3', 2) + ')', frac(3, 2)), '= ' + pwr('3', '2 × ' + frac(3, 2)), '= ' + pwr('3', 3), '= 27'], 'sm') + rzTiles('3', 3, 'b', { size: 34 }) : '') + '</div>';
+}, qs: [{ q: T(`${pwr('9', frac(3, 2))} เขียนเป็นฐาน 3 แล้วได้เท่าใด`, `Written with base 3, what is ${pwr('9', frac(3, 2))}?`),
+  o: ['27', '9', '13.5', '81'], a: 0,
+  why: T(`${pwr('(' + pwr('3', 2) + ')', frac(3, 2))} = ${pwr('3', '2 × ' + frac(3, 2))} = ${pwr('3', 3)} = 27 · ตรวจด้วยวิธีเดิม: ตัวส่วน 2 → √9 = 3 · ตัวเศษ 3 → 3³ = 27 · ถ้าได้ 13.5 คือเอา 9 × ${frac(3, 2)}`,
+    `${pwr('(' + pwr('3', 2) + ')', frac(3, 2))} = ${pwr('3', '2 × ' + frac(3, 2))} = ${pwr('3', 3)} = 27 · check with the earlier method: denominator 2 → √9 = 3 · numerator 3 → 3³ = 27 · getting 13.5 means multiplying 9 × ${frac(3, 2)}`) }] };
 
 // เกมจับคู่ 6 คู่
 const FR_PAIRS = [
@@ -4207,8 +4275,21 @@ const RL_PRED = { chip: mx(pwr('3', '√2') + ' · ' + pwr('3', '2 − √2')), 
   why: T(`สมบัติข้อ 1 ใช้ได้กับเลขชี้กำลังจำนวนจริง (ฐานบวก): เลขชี้กำลังบวกกัน √2 + (2 − √2) = 2 → ${pwr('3', 2)} = 9 · √2 หักล้างกันเอง จึงได้จำนวนเต็ม`,
     `Property 1 works for real exponents (positive base): the exponents add, √2 + (2 − √2) = 2 → ${pwr('3', 2)} = 9 · the √2 parts cancel, leaving a whole number.`) }] };
 
+// ทายก่อน ((−2)²)^(1/2): กับดัก — ข้อ 3 พังเมื่อฐานติดลบ (ต้องเห็น 2 กับ −2 หักล้างกัน)
+const RLN_PRED = { chip: mx(pwr('(' + pwr('(−2)', 2) + ')', frac(1, 2))), draw: (el, ctx) => {
+  const done = ctx.done[0];
+  const card = (title, line, q, a, ok) => `<div class="rz-card${done ? (ok ? ' ok' : ' no') : ''}"><div style="font-weight:700;margin-bottom:4px">${tx(title)}</div><div class="rz-q">${done ? a : q}</div></div>`;
+  el.innerHTML = '<div class="rz-stage" style="min-height:0">' + rzLine([pwr('(' + pwr('(−2)', 2) + ')', frac(1, 2)) + ' = ?'], 'lg') + '<div class="rz-cards">' +
+    card(T('คิดในวงเล็บก่อน', 'Work inside the bracket first'), '', tx(T('(−2)² = ? แล้ว…', '(−2)² = ? then…')), mx(pwr('(−2)', 2) + ' = 4') + '<br>' + mx(pwr('4', frac(1, 2)) + ' = 2') + ' ✓', true) +
+    card(T('ใช้ข้อ 3 เอาเลขชี้กำลังคูณกัน', 'Use law 3: multiply the exponents'), '', tx(T('(−2)<sup>2 · ½</sup> = ?', '(−2)<sup>2 · ½</sup> = ?')), mx(pwr('(−2)', '2 · ' + frac(1, 2)) + ' = ' + pwr('(−2)', 1) + ' = −2') + ' ✗', false) + '</div>' +
+    (done ? `<div class="rz-note">${tx(T(`สองเส้นทางได้ <b>2</b> กับ <b>−2</b> ไม่ตรงกัน → <b>ข้อ 3 พังเมื่อฐานติดลบ</b> นี่คือเหตุผลของเงื่อนไข a &gt; 0<br>โดยทั่วไป ${pwr('(' + pwr(A_, 2) + ')', frac(1, 2))} = √(${pwr(A_, 2)}) = |a| · <a href="../real-numbers/absolute-value.html">ดูเรื่องค่าสัมบูรณ์</a>`, `The two paths give <b>2</b> and <b>−2</b> — they disagree → <b>law 3 breaks for a negative base</b>, which is why we need a &gt; 0<br>In general ${pwr('(' + pwr(A_, 2) + ')', frac(1, 2))} = √(${pwr(A_, 2)}) = |a| · <a href="../real-numbers/absolute-value.html">see Absolute Value</a>`))}</div>` : '') + '</div>';
+}, qs: [{ q: T(`${pwr('(' + pwr('(−2)', 2) + ')', frac(1, 2))} มีค่าเท่าใด`, `What is ${pwr('(' + pwr('(−2)', 2) + ')', frac(1, 2))}?`),
+  o: ['−2', '2', T('ไม่นิยาม', 'Undefined'), '4'], a: 1,
+  why: T(`คิดในวงเล็บก่อน: (−2)² = 4 แล้ว ${pwr('4', frac(1, 2))} = 2 ✓ · ถ้าใช้ข้อ 3 จะได้ ${pwr('(−2)', '2 · ' + frac(1, 2))} = (−2)¹ = −2 ✗ (ขัดกับ 2) · ข้อ 3 ใช้ได้เมื่อฐานเป็นบวกเท่านั้น`,
+    `Inside the bracket first: (−2)² = 4, then ${pwr('4', frac(1, 2))} = 2 ✓ · law 3 would give ${pwr('(−2)', '2 · ' + frac(1, 2))} = (−2)¹ = −2 ✗ (contradicting 2) · law 3 needs a positive base.`) }] };
+
 // ═══════════════════════════════════════════════════════════════
-//  แบบฝึกหัด 8 ข้อ (แต่งใหม่)
+//  แบบฝึกหัด 11 ข้อ (แต่งใหม่)
 // ═══════════════════════════════════════════════════════════════
 const QUIZ = [
   { q: T(`ค่าของ ${frac(pwr('3', 2) + ' · ' + pwr('3', 5), pwr('3', 4))} เท่ากับเท่าใด`, `What is ${frac(pwr('3', 2) + ' · ' + pwr('3', 5), pwr('3', 4))} equal to?`),
@@ -4246,7 +4327,15 @@ const QUIZ = [
   { q: T(`${pwr('3', '√5')} · ${pwr('3', '1 − √5')} เท่ากับเท่าใด`, `What is ${pwr('3', '√5')} · ${pwr('3', '1 − √5')} equal to?`),
     o: ['3', '9', '1', pwr('3', '√5')], a: 0,
     e: T(`คูณกันเลขชี้กำลังบวกกัน: √5 + (1 − √5) = 1 → 3¹ = 3 · √5 หักล้างกันเอง`,
-      `Multiplying adds the exponents: √5 + (1 − √5) = 1 → 3¹ = 3 · the √5 parts cancel.`) }
+      `Multiplying adds the exponents: √5 + (1 − √5) = 1 → 3¹ = 3 · the √5 parts cancel.`) },
+  { q: T(`${pwr('(' + frac(3, 5) + ')', '−2')} มีค่าเท่าใด`, `What is ${pwr('(' + frac(3, 5) + ')', '−2')}?`),
+    o: ['−' + frac(9, 25), frac(9, 25), frac(25, 9), '−' + frac(25, 9)], a: 2,
+    e: T(`เลขชี้กำลังลบ = กลับเป็นส่วน ฐานเป็นเศษส่วนก็<b>สลับเศษกับส่วน</b> แล้วเลขชี้กำลังเป็นบวก: ${pwr('(' + frac(3, 5) + ')', '−2')} = ${pwr('(' + frac(5, 3) + ')', 2)} = ${frac(25, 9)} · เครื่องหมายลบที่เลขชี้กำลังไม่ทำให้ค่าติดลบ`,
+      `A negative exponent means flip; for a fractional base that means <b>swapping top and bottom</b>, and the exponent becomes positive: ${pwr('(' + frac(3, 5) + ')', '−2')} = ${pwr('(' + frac(5, 3) + ')', 2)} = ${frac(25, 9)} · a minus in the exponent does not make the value negative.`) },
+  { q: T(`ถ้า a = −5 แล้ว ${pwr('(' + pwr(A_, 2) + ')', frac(1, 2))} เท่ากับเท่าใด`, `If a = −5, what is ${pwr('(' + pwr(A_, 2) + ')', frac(1, 2))}?`),
+    o: ['5', '−5', '25', d('ไม่เป็นจำนวนจริง', 'Not a real number')], a: 0,
+    e: T(`คิดในวงเล็บก่อน: a² = 25 แล้ว ${pwr('25', frac(1, 2))} = 5 · ห้ามคูณเลขชี้กำลัง 2 · ½ = 1 (จะได้ −5 ซึ่งผิด) เพราะฐานติดลบ · โดยทั่วไป ${pwr('(' + pwr(A_, 2) + ')', frac(1, 2))} = |a|`,
+      `Inside the bracket first: a² = 25, then ${pwr('25', frac(1, 2))} = 5 · do not multiply the exponents 2 · ½ = 1 (that gives −5, which is wrong) because the base is negative · in general ${pwr('(' + pwr(A_, 2) + ')', frac(1, 2))} = |a|.`) }
 ];
 
 // ═══════════════════════════════════════════════════════════════
@@ -4267,7 +4356,7 @@ function build() {
   document.getElementById('tab-unit').innerHTML =
     card('🔍', d('เลขชี้กำลัง 1/n คืออะไร', 'What is an exponent of 1/n?'),
       `<div id="w-un"></div>
-       <div class="formula"><span>${pwr(A_, frac(1, N_))} = ${B_} &nbsp;${d('เมื่อ', 'when')}&nbsp; ${pwr(B_, N_)} = ${A_}</span><span>${d('เขียนแทนด้วย', 'also written')} ${nrt(N_, A_)}</span></div>
+       <div class="formula"><span>${pwr(A_, frac(1, N_))} = ${B_} &nbsp;${d('เมื่อ', 'when')}&nbsp; ${pwr(B_, N_)} = ${A_}</span><span>${d('เขียนแทนด้วย', 'also written')} ${nrt(N_, A_)}</span><span>${d('และเมื่อ <i>n</i> เป็นจำนวนคู่ ให้เลือก <i>b</i> ≥ 0', 'and when <i>n</i> is even, choose <i>b</i> ≥ 0')}</span></div>
        <div class="box-info">${d('<b>n คู่</b> → ต้องใช้ a ≥ 0 (คำตอบเป็นค่าบวก) · <b>n คี่</b> → ใช้ a ติดลบได้ · รากที่ n ละเอียดๆ ดูที่ชิ้น “รากที่ n”', '<b>n even</b> → a must be ≥ 0 (the answer is the positive value) · <b>n odd</b> → a may be negative · see the “nth Roots” piece for the full story')}</div>`) +
     card('🔮', d('ทายก่อน: เลขชี้กำลัง 1/n', 'Guess first: an exponent of 1/n'), '<div id="w-unp"></div>');
   makeScenes(document.getElementById('w-un'), UN_SCENES, { prompt: T(`กด ▶ ทีละฉาก — ดูว่า ${pwr('9', frac(1, 2))} และ ${pwr('8', frac(1, 3))} หมายถึงจำนวนอะไร`, `Press ▶ one scene at a time — see which numbers ${pwr('9', frac(1, 2))} and ${pwr('8', frac(1, 3))} stand for`) });
@@ -4277,12 +4366,18 @@ function build() {
   document.getElementById('tab-frac').innerHTML =
     card('🍰', d(`เลขชี้กำลัง m/n: ตัวส่วนคือราก ตัวเศษคือกำลัง`, 'Exponent m/n: the denominator is the root, the numerator is the power'),
       `<div id="w-fr"></div>
-       <div class="formula"><span>${pwr(A_, frac(M_, N_))} = ${nrt(N_, pwr(A_, M_))}</span><span>${d('ใช้ได้เมื่อ', 'valid when')} ${nrt(N_, A_)} ∈ ${RR}</span></div>`) +
+       <div class="formula"><span>${pwr(A_, frac(M_, N_))} = ${nrt(N_, pwr(A_, M_))}</span><span>${d('ใช้ได้เมื่อ', 'valid when')} ${nrt(N_, A_)} ∈ ${RR}</span><span>${d('และ', 'and')} ${frac(M_, N_)} ${d('เป็นเศษส่วนอย่างต่ำ', 'is in lowest terms')}</span></div>`) +
     card('🔮', d('ทายก่อน: คำนวณ m/n', 'Guess first: evaluating m/n'), '<div id="w-frc"></div>') +
+    card('🧱', d('อีกทางหนึ่ง: เขียนฐานเป็นแผ่นฐานเดียวกัน', 'Another way: write the base as the same base tile'),
+      `<div id="w-fbs"></div><div class="sc-prompt" style="margin-top:14px">${d('ลองเอง — เขียนเป็นฐาน 3', 'Try it — write it with base 3')}</div><div id="w-fbp"></div>
+       <div class="box-info">${d('ฐานเป็นบวก ใช้ข้อ 3 ได้เต็มที่ — ทำฐานให้เป็นตัวเดียวกัน แล้วคิดที่เลขชี้กำลัง · นี่คือเครื่องมือหลักของชิ้นสมการเอกซ์โพเนนเชียล', 'With a positive base, law 3 works fully — make the bases the same, then work on the exponents · this is the main tool of the exponential equations piece')}</div>
+       <div style="text-align:center;margin-top:12px"><a class="btn ghost" style="display:inline-block;text-decoration:none" href="./equations-inequalities.html" data-th="ไปชิ้นสมการเอกซ์โพเนนเชียล →" data-en="Go to the exponential equations piece →">ไปชิ้นสมการเอกซ์โพเนนเชียล →</a></div>`) +
     card('🔮', d('ทายก่อน: ฐานติดลบ', 'Guess first: a negative base'), '<div id="w-frp"></div>') +
     card('🧩', d('เกมจับคู่: เลขชี้กำลังเศษส่วนกับราก', 'Matching game: fractional exponents and roots'), '<div id="w-frm"></div>');
   makeScenes(document.getElementById('w-fr'), FR_SCENES, { prompt: T(`กด ▶ ทีละฉาก — ดู ${pwr('8', frac(2, 3))} ถูกแยกเป็นรากกับกำลัง`, `Press ▶ one scene at a time — watch ${pwr('8', frac(2, 3))} split into a root and a power`) });
   makePredict(document.getElementById('w-frc'), FR_CALC.map(exPredItem), { label: T('โจทย์', 'Problem'), prompt: T('เลือกโจทย์ แล้วทาย — ตัวส่วนคือราก ตัวเศษคือกำลัง', 'Pick a problem and guess — the denominator is the root, the numerator is the power') });
+  makeScenes(document.getElementById('w-fbs'), FB_SCENES, { prompt: T(`กด ▶ ทีละฉาก — ดู ${pwr('8', frac(2, 3))} ถูกเขียนเป็นแผ่นฐาน 2`, `Press ▶ one scene at a time — watch ${pwr('8', frac(2, 3))} rewritten with base tiles of 2`) });
+  makePredict(document.getElementById('w-fbp'), [FB_PRED], { label: T('โจทย์', 'Problem'), prompt: T('เขียนฐานเป็นตัวเดียวกันก่อน แล้วทาย', 'Write the base as the same tile first, then guess') });
   makePredict(document.getElementById('w-frp'), FR_PRED, { label: T('ฐานติดลบ', 'Negative base'), prompt: T('ดูสองการ์ดคู่กัน แล้วทาย — ตัวส่วนต่างกันจะเกิดอะไรขึ้น', 'Look at the two cards side by side and guess — what does a different denominator change?') });
   makeMatch(document.getElementById('w-frm'), FR_PAIRS, { prompt: T('กดเลขชี้กำลังเศษส่วนทางซ้าย แล้วกดรูปรากที่เท่ากันทางขวา', 'Tap a fractional exponent on the left, then the equal radical on the right'),
     hint: T('ตัวส่วนบอกรากที่เท่าไร ตัวเศษบอกกำลัง · ถ้ามีเครื่องหมายลบให้กลับเป็นส่วนก่อน', 'The denominator gives the root, the numerator the power · a minus sign flips it into a fraction first') });
@@ -4292,8 +4387,10 @@ function build() {
     card('🔢', d('เลขชี้กำลังเป็นจำนวนจริง เช่น 2<sup>√2</sup>', 'A real exponent such as 2<sup>√2</sup>'),
       `<div id="w-rl"></div>
        <div class="formula"><span>${pwr(A_, X)} · ${pwr(A_, Y)} = ${pwr(A_, X + ' + ' + Y)}</span><span>${pwr('(' + pwr(A_, X) + ')', Y)} = ${pwr(A_, X + Y)}</span><span>${d('สมบัติข้อ 1–7 ใช้ได้เมื่อ', 'Laws 1–7 still work when')} a &gt; 0, ${X}, ${Y} ∈ ${RR}</span></div>`) +
+    card('⚠️', d('ทายก่อน: ถ้าฐานติดลบ สมบัติยังใช้ได้ไหม', 'Guess first: does the law still work for a negative base?'), '<div id="w-rln"></div>') +
     card('🔮', d('ทายก่อน: ตัดกันเองของ √2', 'Guess first: the √2 parts cancel'), '<div id="w-rlp"></div>');
   makeScenes(document.getElementById('w-rl'), RL_SCENES, { prompt: T(`กด ▶ ทีละฉาก — ดู ${pwr('2', '√2')} ถูกไล่เข้าหาด้วยทศนิยม แล้วกราฟถูกเติมให้เต็ม`, `Press ▶ one scene at a time — see ${pwr('2', '√2')} approached by decimals, then the graph filled in`) });
+  makePredict(document.getElementById('w-rln'), [RLN_PRED], { label: T('โจทย์', 'Problem'), prompt: T('ดูสองเส้นทางคู่กัน แล้วทายว่าได้ค่าเท่าใด', 'Look at the two paths side by side and guess the value') });
   makePredict(document.getElementById('w-rlp'), [RL_PRED], { label: T('โจทย์', 'Problem'), prompt: T('ดูความยาวของเลขชี้กำลังสองท่อน แล้วทายผลคูณ', 'Look at the two pieces of the exponent and guess the product') });
 
   // ── แท็บ 5 ──

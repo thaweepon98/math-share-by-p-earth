@@ -68,6 +68,21 @@
   .align .r { justify-self: start; }
   .align .full { grid-column: 1 / -1; }
 
+  /* สองกรณีคู่กันในบรรทัดเดียว คั่นด้วย "และ" (ครูสั่ง 2026-11-11) */
+  .align2 { display: grid; grid-template-columns: repeat(7, auto); justify-content: start; column-gap: .55em; row-gap: 3px; align-items: center; margin: 4px 0; }
+  .align2 .l { justify-self: end; text-align: right; }
+  .align2 .m { justify-self: center; font-weight: 700; }
+  .align2 .r { justify-self: start; }
+  .align2 .and { padding: 0 1.1em; font-weight: 700; color: var(--muted); }
+  .align2 .and::before { content: "และ"; }
+  html[lang="en"] .align2 .and::before { content: "and"; }
+
+  /* เส้นจำนวนแสดง ∩ ของสองช่วง */
+  svg.il { display: block; width: 100%; max-width: 560px; height: auto; margin: 6px auto 0; }
+  .il-leg { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px 14px; font-size: .85rem; margin-top: 2px; }
+  .il-leg i { display: inline-block; width: 22px; height: 6px; border-radius: 3px; vertical-align: middle; margin-right: 5px; }
+  .il-empty { text-align: center; font-weight: 800; color: #BE185D; margin-top: 2px; }
+
   svg.nl { display: block; width: 100%; max-width: 700px; height: auto; margin: 0 auto; touch-action: none; }
   .drag-track { cursor: grab; }
   .readout { background: #EEF7E6; border-left: 4px solid var(--primary); border-radius: 10px; padding: 14px 18px; margin-top: 12px; line-height: 1.9; font-size: 1.05rem; }
@@ -117,114 +132,124 @@
     .wk-cell { padding-left: 46px; }
   }
 /* ── theme:start — สร้างโดย tools/build_lessons.py ห้ามแก้มือ (แก้ที่สคริปต์แล้วรันใหม่) ── */
+/* ธีมชุดเดียวกับหน้าสารบัญ (tools/build_index.py · DESIGN.md หมวด Meta-inspired) — สีของเรื่องอยู่ที่ปกและในตัวบทเรียน กรอบหน้าเป็นสีกลาง */
 :root{ --page:#0B5DBF; }
 :root[data-theme="light"]{
-  --bg:#F4F4F1; --card:#FFFFFF; --text:#16181A; --muted:#5E6166; --border:#DEDED8;
+  --bg:#ffffff; --surface:#ffffff; --card:#ffffff; --panel:#f1f4f7; --raise:#e4e9ee;
+  --text:#1c1e21; --muted:#5d6c7b; --dim:#8595a4; --line:#ced0d4; --line-soft:#dee3e9; --border:#ced0d4;
+  --ink:#000000; --on-ink:#ffffff; --ink-hover:#2b3138; --link:#0064e0; --strong:#1c1e21; --shadow:none;
   --primary:color-mix(in srgb, var(--page) 86%, #000); --primary-2:color-mix(in srgb, var(--page) 62%, #000);
   --secondary:#C2540A; --secondary-light:#F2A15F; --accent:#68EF3F; --accent-2:#2E9E3F;
-  --shadow:0 2px 10px rgba(0,0,0,.07);
-  --strong:color-mix(in srgb, var(--page) 76%, #000); --chip:#E8E8E3; --chip-hover:#DCDCD5;
-  --hero:color-mix(in srgb, var(--page) 82%, #000);
   --g-x:#E53935; --g-y:#2E9E4F; --g-z:#3949AB; --g-curve:#F07400; --g-curve-fill:rgba(240,116,0,.12);
   --g-pink:#D81B60; --g-plane:rgba(60,190,200,.28); --g-cone:rgba(153,51,0,.20); --g-cone-line:rgba(153,51,0,.35);
   --g-blue:#1E66D0; --g-red:#D32F2F; --g-green:#2E9E4F; --g-purple:#7B3FC4; --g-orange:#E8710A; --g-teal:#0F8A80;
   --g-ring:#FFFFFF;
 }
 :root[data-theme="dark"]{
-  --bg:#121212; --card:#1C1C1C; --text:#FFFFFF; --muted:#B3B3B3; --border:#333333;
+  --bg:#0a1317; --surface:#0a1317; --card:#0a1317; --panel:#1c1e21; --raise:#2b3138;
+  --text:#ffffff; --muted:#9aa8b5; --dim:#6b7884; --line:#444950; --line-soft:#32383e; --border:#444950;
+  --ink:#ffffff; --on-ink:#000000; --ink-hover:#d5dbe1; --link:#4da3ff; --strong:#2b3138; --shadow:none;
   --primary:#79adec; --primary-2:#9dc3f1;
   --secondary:#FFB37A; --secondary-light:#FFD0A8; --accent:#8AF25E; --accent-2:#5BD27E;
-  --shadow:0 8px 24px rgba(0,0,0,.5);
-  --strong:color-mix(in srgb, var(--page) 48%, #1C1C1C); --chip:#2A2A2A; --chip-hover:#353535;
-  --hero:color-mix(in srgb, var(--page) 62%, #000);
   --g-x:#FF6B6B; --g-y:#5BD27E; --g-z:#8C9BFF; --g-curve:#FFA040; --g-curve-fill:rgba(255,160,64,.16);
   --g-pink:#FF5C9A; --g-plane:rgba(90,220,230,.26); --g-cone:rgba(255,170,110,.18); --g-cone-line:rgba(255,170,110,.45);
   --g-blue:#6AA8FF; --g-red:#FF6B6B; --g-green:#5BD27E; --g-purple:#B48CFF; --g-orange:#FFA040; --g-teal:#4FD1C5;
-  --g-ring:#1C1C1C;
+  --g-ring:#0a1317;
 }
-html{ background:var(--bg); }
+html{ background:var(--bg); color-scheme:light; }
 html[data-theme="dark"]{ color-scheme:dark; }
 body{ font-family:'Anuphan',system-ui,sans-serif; background:var(--bg); color:var(--text); line-height:1.6; -webkit-font-smoothing:antialiased; }
+:focus-visible{ outline:2px solid var(--link); outline-offset:2px; }
 
-/* หัวหน้า: สีปกของเรื่อง + ปก */
+/* หัวหน้า: แผ่นสีอ่อนมุมโค้ง ตัวหนังสือเข้ม + ปกข้างชื่อ (สีของเรื่องอยู่ที่ปก) */
 header{
-  background:var(--hero); color:#fff; text-align:left;
-  display:grid; grid-template-columns:auto 1fr; column-gap:22px; align-items:end;
-  padding:62px 32px 26px;
+  background:var(--panel); color:var(--text); text-align:left; overflow:hidden;
+  display:grid; grid-template-columns:auto 1fr; column-gap:24px; align-items:end;
+  margin:8px 8px 0; padding:74px 32px 28px; border-radius:32px; box-shadow:none;
 }
 header::before, header::after{ display:none !important; }
 header > *:not(.lesson-cover):not(.back-link):not(.lang-toggle):not(.theme-toggle){ grid-column:2; }
-.lesson-cover{ grid-column:1; grid-row:1 / span 6; align-self:end; width:120px; aspect-ratio:1; border-radius:6px; overflow:hidden; box-shadow:0 8px 24px rgba(0,0,0,.45); }
+.lesson-cover{ grid-column:1; grid-row:1 / span 6; align-self:end; width:clamp(96px, 11vw, 136px); aspect-ratio:1; border-radius:16px; overflow:hidden; box-shadow:none; }
 .lesson-cover svg{ display:block; width:100%; height:100%; }
-header h1{ font-size:clamp(1.8rem, 4.2vw, 2.9rem); font-weight:700; letter-spacing:-.01em; line-height:1.25; margin:0; color:#fff; }
-header p{ font-size:1rem; opacity:.85; margin:6px 0 0; color:#fff; }
+header h1{ font-size:clamp(1.9rem, 4.4vw, 3.2rem); font-weight:500; letter-spacing:0; line-height:1.25; margin:0; color:var(--text); }
+header p{ font-size:1.02rem; opacity:1; margin:8px 0 0; color:var(--muted); line-height:1.55; }
 .back-link{
-  top:14px; left:20px; display:inline-flex; align-items:center; gap:6px;
-  padding:6px 14px; border-radius:999px; background:rgba(0,0,0,.32); color:#fff;
-  font-size:.88rem; font-weight:600; opacity:1; text-decoration:none;
+  position:absolute; top:16px; left:16px; z-index:2; display:inline-flex; align-items:center; gap:6px;
+  height:38px; padding:0 16px; border-radius:100px; background:var(--surface); color:var(--text);
+  box-shadow:inset 0 0 0 1px var(--line); font-size:.92rem; font-weight:700; opacity:1; text-decoration:none;
 }
-.back-link:hover{ background:rgba(0,0,0,.55); text-decoration:none; }
+.back-link:hover{ background:var(--raise); opacity:1; text-decoration:none; }
 .lang-toggle, .theme-toggle{
-  position:absolute; top:14px; height:34px; background:transparent; color:#fff;
-  border:1px solid rgba(255,255,255,.55); border-radius:999px; font-family:inherit; font-weight:700; font-size:.85rem; cursor:pointer; z-index:2;
+  position:absolute; top:16px; height:38px; border-radius:100px; font-family:inherit; font-weight:700; font-size:.88rem;
+  cursor:pointer; z-index:2; transition:transform .12s, background .12s;
 }
-.lang-toggle{ right:20px; padding:0 16px; }
-.theme-toggle{ right:86px; width:34px; padding:0; display:grid; place-items:center; }
+.lang-toggle{ right:16px; min-width:64px; padding:0 16px; background:var(--ink); color:var(--on-ink); border:1px solid var(--ink); }
+.lang-toggle:hover{ background:var(--ink); border-color:var(--ink); transform:scale(1.04); }
+.theme-toggle{ right:88px; width:38px; padding:0; display:grid; place-items:center; background:var(--surface); color:var(--text); border:1px solid var(--line); }
 .theme-toggle svg{ width:18px; height:18px; }
-.lang-toggle:hover, .theme-toggle:hover{ background:rgba(255,255,255,.14); border-color:#fff; }
-body > .lang-toggle, body > .theme-toggle{ position:fixed; top:14px; z-index:50; background:var(--card); color:var(--text); border-color:var(--border); box-shadow:var(--shadow); }
-body > .lang-toggle{ right:14px; } body > .theme-toggle{ right:80px; }
-body > .lang-toggle:hover, body > .theme-toggle:hover{ background:var(--chip); border-color:var(--text); }
-header:not(:has(.back-link)):not(:has(.lang-toggle)){ padding-top:28px; border-radius:8px; }
+.theme-toggle:hover{ background:var(--raise); border-color:var(--line); }
+body > .lang-toggle, body > .theme-toggle{ position:fixed; top:14px; z-index:50; }
+body > .lang-toggle{ right:14px; } body > .theme-toggle{ right:86px; }
+header:not(:has(.back-link)):not(:has(.lang-toggle)){ padding-top:28px; }
 
-/* แถบแท็บ: ชิปทรงแคปซูล */
-nav{ background:var(--bg); border-bottom:1px solid var(--border); padding:10px 16px; gap:8px; }
+/* แถบแท็บ: ชิปขอบบาง ตัวที่เลือก = สีหมึก (ดำ / โหมดมืดขาว) */
+nav{ background:var(--bg); border-bottom:0; padding:16px 16px 8px; gap:8px; box-shadow:none; }
 .tab-btn{
-  font-family:inherit; border:0; margin:0; border-radius:999px; padding:8px 16px;
-  background:var(--chip); color:var(--text); font-weight:600; font-size:.9rem;
+  font-family:inherit; border:0; margin:0; border-radius:100px; padding:8px 18px;
+  background:var(--surface); color:var(--text); box-shadow:inset 0 0 0 1px var(--line); font-weight:600; font-size:.95rem;
 }
-.tab-btn:hover{ background:var(--chip-hover); color:var(--text); }
-.tab-btn.active{ background:var(--text); color:var(--bg); border-bottom-color:transparent; }
+.tab-btn:hover{ background:var(--raise); color:var(--text); }
+.tab-btn.active{ background:var(--ink); color:var(--on-ink); box-shadow:none; border-bottom-color:transparent; }
 
-/* การ์ดและกล่อง */
-.card{ background:var(--card); border:1px solid var(--border); border-radius:8px; box-shadow:var(--shadow); }
+/* การ์ดและกล่อง: พื้นเรียบ ขอบ 1px ไม่มีเงา */
+.card{ background:var(--card); border:1px solid var(--line); border-radius:24px; box-shadow:none; }
 .card-title{ color:var(--text); font-size:1.2rem; }
 .card-title .icon{ display:none; }
 .desc-text{ color:var(--text); font-size:1rem; }
-.formula, .step.result, .stats{ background:var(--strong) !important; color:#fff; border-radius:8px; letter-spacing:0; }
+.formula, .step.result, .stats{ background:var(--strong) !important; color:#fff; border-radius:16px; letter-spacing:0; }
 .stat .k, .step-tag{ text-transform:none; letter-spacing:0; }
 
-/* ปุ่ม */
-.btn-action{ font-family:inherit; background:var(--text); color:var(--bg); }
-.btn-action.secondary{ background:transparent; color:var(--text); border:1px solid var(--muted); }
-.mode-btn{ font-family:inherit; border:1px solid var(--border); background:var(--card); color:var(--text); }
+/* ปุ่ม: หลัก = แคปซูลหมึก, รอง = แคปซูลขอบบาง */
+.btn-action{ font-family:inherit; background:var(--ink); color:var(--on-ink); border:1px solid var(--ink); border-radius:100px; }
+.btn-action:hover:not(:disabled){ background:var(--ink-hover); border-color:var(--ink-hover); }
+.btn-action.secondary{ background:transparent; color:var(--text); border:1px solid var(--line); }
+.btn-action.secondary:hover:not(:disabled){ background:var(--raise); }
+.mode-btn{ font-family:inherit; border:1px solid var(--line); background:var(--surface); color:var(--text); border-radius:100px; }
 .mode-btn:hover{ border-color:var(--text); color:var(--text); }
-.mode-btn.active{ background:var(--text); border-color:var(--text); color:var(--bg); }
-.quiz-opt{ border-radius:8px; }
+.mode-btn.active{ background:var(--ink); border-color:var(--ink); color:var(--on-ink); }
 input[type=range]{ accent-color:var(--primary); }
 
 @media (max-width:600px){
-  header{ padding:58px 16px 20px; column-gap:14px; }
-  .lesson-cover{ width:76px; }
-  .back-link{ left:12px; max-width:calc(100% - 150px); overflow:hidden; white-space:nowrap; text-overflow:ellipsis; display:block; }
-  .lang-toggle{ right:12px; }
-  .theme-toggle{ right:74px; }
-  nav{ flex-wrap:nowrap; overflow-x:auto; justify-content:flex-start; scrollbar-width:none; }
+  header{ margin:0; border-radius:0 0 24px 24px; padding:64px 16px 20px; column-gap:14px; }
+  .lesson-cover{ width:72px; border-radius:12px; }
+  header h1{ font-size:clamp(1.5rem, 7vw, 2rem); }
+  header p{ font-size:.95rem; }
+  .back-link{ top:14px; left:12px; height:36px; padding:0 14px; max-width:calc(100% - 150px); overflow:hidden; white-space:nowrap; text-overflow:ellipsis; display:block; line-height:36px; }
+  .lang-toggle, .theme-toggle{ top:14px; height:36px; }
+  .lang-toggle{ right:12px; min-width:58px; padding:0 12px; }
+  .theme-toggle{ right:78px; width:36px; }
+  nav{ flex-wrap:nowrap; overflow-x:auto; justify-content:flex-start; scrollbar-width:none; padding:12px 12px 6px; }
   nav .tab-btn{ flex:0 0 auto; white-space:nowrap; }   /* ชื่อแท็บบรรทัดเดียว ปัดแถบซ้าย-ขวาแทน (ไม่บีบจนตัดคำ) */
   nav::-webkit-scrollbar{ display:none; }
 }
+/* สีกรอบธีมเก่าที่หน้านี้ฝังไว้เอง → โทเคนธีมใหม่ ทั้ง 2 โหมด (สร้างอัตโนมัติ) */
+:root[data-theme] .box-info{background:var(--panel)}
+:root[data-theme] .btn{background:var(--ink);color:var(--on-ink);border-color:var(--ink)}
+:root[data-theme] .btn:hover:not(:disabled){background:var(--ink-hover);color:var(--on-ink);border-color:var(--ink)}
+:root[data-theme] .btn.ghost{background:transparent;color:var(--text);border-color:var(--line)}
+:root[data-theme] .btn.ghost:hover:not(:disabled){background:var(--raise)}
+:root[data-theme] .chip.active{background:var(--ink);color:var(--on-ink);border-color:var(--ink)}
+:root[data-theme] .readout{background:var(--panel)}
+:root[data-theme] .case-tbl th{background:var(--panel)}
+:root[data-theme] .btn-next{background:var(--ink);color:var(--on-ink);border-color:var(--ink)}
+:root[data-theme] .btn-next:hover{background:var(--ink-hover);color:var(--on-ink);border-color:var(--ink)}
+:root[data-theme] .score-badge{background:var(--strong)}
 /* โหมดมืด: สีที่หน้านี้ฝังไว้เอง (สร้างอัตโนมัติ) */
 :root[data-theme="dark"]{--pos:#a8f8e1;--pos-bg:#102a1d;--neg:#f18fb8;--neg-bg:#291a0f}
-:root[data-theme="dark"] .box-info{background:#1f2e12}
 :root[data-theme="dark"] .box-warn{background:#281d0f}
 :root[data-theme="dark"] .box-ok{background:#102a1d}
-:root[data-theme="dark"] .btn{background:var(--strong)}
-:root[data-theme="dark"] .btn.ghost{background:#171717}
-:root[data-theme="dark"] .btn.ghost:hover:not(:disabled){background:#223614}
 :root[data-theme="dark"] .chip{background:#171717}
-:root[data-theme="dark"] .chip.active{background:var(--strong)}
-:root[data-theme="dark"] .readout{background:#1f2e12}
-:root[data-theme="dark"] .case-tbl th{background:#1f2e12}
+:root[data-theme="dark"] .il-empty{color:#f18fb8}
 :root[data-theme="dark"] .case-tbl tr.live td, :root[data-theme="dark"] .case-tbl td.live{background:#261b0f}
 :root[data-theme="dark"] .prop{background:#171717}
 :root[data-theme="dark"] .prop.ok{background:#14260e}
@@ -237,7 +262,6 @@ input[type=range]{ accent-color:var(--primary); }
 :root[data-theme="dark"] .quiz-opt.wrong{background:#291a0f;color:#f18fb8}
 :root[data-theme="dark"] .quiz-feedback.ok{color:#a8f8e1}
 :root[data-theme="dark"] .quiz-feedback.err{color:#f18fb8}
-:root[data-theme="dark"] .btn-next{background:var(--strong)}
 /* ── theme:end ── */
 </style>
 </head>
@@ -321,13 +345,55 @@ const tx = v => typeof v === 'string' ? v : v[getLang()];
 const al = rows => `<div class="align">${rows.map(r => Array.isArray(r)
   ? `<span class="l">${r[0]}</span><span class="m">${r[1]}</span><span class="r">${r[2]}</span>` : `<span class="full">${r}</span>`).join('')}</div>`;
 const P = s => `<div>${s}</div>`;
+
+// สองกรณีคู่กัน: แต่ละแถว = [[ซ้าย, เครื่องหมาย, ขวา], [ซ้าย, เครื่องหมาย, ขวา]] → "กรณีแรก  และ  กรณีที่สอง" (และ/and สลับตามภาษาด้วย CSS)
+const al2 = rows => `<div class="align2">${rows.map(([a, b]) =>
+  `<span class="l">${a[0]}</span><span class="m">${a[1]}</span><span class="r">${a[2]}</span><span class="and"></span><span class="l">${b[0]}</span><span class="m">${b[1]}</span><span class="r">${b[2]}</span>`).join('')}</div>`;
+
+// เส้นจำนวน "∩": ชั้นบน = ช่วงคำตอบที่แก้ได้ (น้ำเงิน) · ชั้นกลาง = ช่วงของกรณี (ส้ม) · บนแกน = ส่วนร่วม (เขียว)
+// spec: { min, max, sol:{a,b,ac,bc}, cas:{a,b,ac,bc}, res:{a,b,ac,bc}|null, labels:[{v,n,d,neg}] } (a/b เป็น ±Infinity ได้)
+function interLine(spec) {
+  const W = 560, pad = 22, y1 = 20, y2 = 44, ay = 74, lab = (spec.labels || []).length, H = lab ? 128 : 102;
+  const { min, max } = spec, en = getLang() === 'en';
+  const X = v => v === -Infinity ? pad - 12 : v === Infinity ? W - pad + 12 : pad + (v - min) * (W - 2 * pad) / (max - min);
+  let s = `<svg class="il" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">`;
+  const band = (r, y, col, w) => {
+    const a = X(r.a), b = X(r.b);
+    let t = `<line x1="${a}" y1="${y}" x2="${b}" y2="${y}" stroke="${col}" stroke-width="${w}" stroke-linecap="butt"/>`;
+    if (r.a === -Infinity) t += `<polygon points="${a - 6},${y} ${a + 4},${y - 6} ${a + 4},${y + 6}" fill="${col}"/>`;
+    else t += `<circle cx="${a}" cy="${y}" r="6" fill="${r.ac ? col : '#fff'}" stroke="${col}" stroke-width="2.4"/>`;
+    if (r.b === Infinity) t += `<polygon points="${b + 6},${y} ${b - 4},${y - 6} ${b - 4},${y + 6}" fill="${col}"/>`;
+    else t += `<circle cx="${b}" cy="${y}" r="6" fill="${r.bc ? col : '#fff'}" stroke="${col}" stroke-width="2.4"/>`;
+    return t;
+  };
+  // เส้นประนำสายตาจากปลายช่วงลงมาที่แกน
+  [spec.sol, spec.cas].forEach((r, i) => [r.a, r.b].forEach(v => { if (isFinite(v)) s += `<line x1="${X(v)}" y1="${i ? y2 : y1}" x2="${X(v)}" y2="${ay}" stroke="#94A3B8" stroke-width="1.2" stroke-dasharray="3,3"/>`; }));
+  s += `<line x1="${pad - 12}" y1="${ay}" x2="${W - pad + 12}" y2="${ay}" stroke="#94A3B8" stroke-width="2"/>`;
+  for (let v = Math.ceil(min); v <= Math.floor(max); v++) {
+    s += `<line x1="${X(v)}" y1="${ay - 5}" x2="${X(v)}" y2="${ay + 5}" stroke="#CBD5E0"/>`;
+    s += `<text x="${X(v)}" y="${ay + 21}" text-anchor="middle" font-size="15" fill="#4A5568">${String(v).replace('-', '−')}</text>`;
+  }
+  (spec.labels || []).forEach(l => {
+    const x = X(l.v), c = '#1C3B22', y0 = ay + 36;
+    s += `<text x="${x - 12}" y="${y0 + 6}" text-anchor="middle" font-size="12" font-weight="700" fill="${c}">${l.neg ? '−' : ''}</text>`;
+    s += `<text x="${x}" y="${y0}" text-anchor="middle" font-size="12" font-weight="700" fill="${c}">${l.n}</text>`;
+    s += `<line x1="${x - 9}" y1="${y0 + 3}" x2="${x + 9}" y2="${y0 + 3}" stroke="${c}" stroke-width="1.4"/>`;
+    s += `<text x="${x}" y="${y0 + 15}" text-anchor="middle" font-size="12" font-weight="700" fill="${c}">${l.d}</text>`;
+  });
+  s += band(spec.sol, y1, '#2563EB', 6) + band(spec.cas, y2, '#EA580C', 6);
+  if (spec.res) s += band(spec.res, ay, '#16A34A', 9);
+  s += '</svg>';
+  const leg = `<div class="il-leg"><span><i style="background:#2563EB"></i>${en ? 'answer found' : 'คำตอบที่แก้ได้'}</span><span><i style="background:#EA580C"></i>${en ? 'this case' : 'ช่วงของกรณีนี้'}</span><span><i style="background:#16A34A"></i>${en ? 'overlap (∩)' : 'ส่วนร่วม (∩)'}</span></div>`;
+  const empty = spec.res ? '' : `<div class="il-empty">${en ? 'The two intervals do not overlap → ∅' : 'สองช่วงไม่ทับกันเลย → ∅'}</div>`;
+  return s + leg + empty;
+}
 const fmt = v => (Math.round(v * 1000) / 1000).toString().replace('-', '−');
 const sgn = v => v.toString().replace('-', '−');
 const NS = 'http://www.w3.org/2000/svg';
 
 // เส้นจำนวน SVG (กว้าง 560): points, ranges(±Infinity ได้), signs, labels เศษส่วนบน/ล่าง, marker, arcs (ระยะ)
 function numberLine(spec) {
-  const W = 560, pad = 20, ay = 58, H = 116;
+  const W = 560, pad = 20, ay = spec.arcs ? 84 : 58, H = spec.arcs ? 142 : 116;
   const { min, max } = spec;
   const X = v => pad + (v - min) * (W - 2 * pad) / (max - min);
   let s = `<svg class="nl" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">`;
@@ -340,7 +406,8 @@ function numberLine(spec) {
   (spec.arcs || []).forEach(a => {
     const x1 = X(a.a), x2 = X(a.b), mx = (x1 + x2) / 2, up = 30 + Math.min(20, Math.abs(x2 - x1) / 8);
     s += `<path d="M${x1},${ay - 8} Q${mx},${ay - 8 - up * 1.6} ${x2},${ay - 8}" fill="none" stroke="#FF8A3D" stroke-width="2.5" stroke-dasharray="5,3"/>`;
-    s += `<text x="${mx}" y="${ay - 12 - up * 0.8}" text-anchor="middle" font-size="14" font-weight="800" fill="#C2570C">${a.t}</text>`;
+    // ป้ายระยะอยู่เหนือยอดโค้ง (ยอดของ Bézier กำลังสอง = ay − 8 − 0.8·up) ตัวใหญ่ + ขอบสีพื้นการ์ด ให้อ่านออกทั้งสองโหมด
+    s += `<text x="${mx}" y="${ay - 16 - up * 0.8}" text-anchor="middle" font-size="22" font-weight="800" fill="#C2410C" style="paint-order:stroke;stroke:var(--card);stroke-width:5px;stroke-linejoin:round">${a.t}</text>`;
   });
   (spec.labels || []).forEach(l => {
     const x = X(l.v), c = '#1C3B22', y0 = ay + 34;
@@ -521,16 +588,16 @@ const WK = {
   eq1a: { title: T('แบบที่ 1: |□| = a', 'Type 1: |□| = a'), prob: '|x − 3| = 5',
     intro: T('ค่าสัมบูรณ์ = a (a &gt; 0) คือ "ห่างจากตัวข้างใน a หน่วย" จึงมีสองคำตอบ: บวกและลบ', 'Absolute value = a (a &gt; 0) means "a units away", so there are two answers: + and −'),
     steps: [
-      { h: T(P('แยกเป็น 2 กรณี (ข้างในเท่ากับ a หรือ −a)') + al([['x − 3', '=', '5'], ['x − 3', '=', '−5']]), P('Split into 2 cases (inside equals a or −a)') + al([['x − 3', '=', '5'], ['x − 3', '=', '−5']])) },
-      { h: T(P('ย้ายข้างแต่ละกรณี') + al([['x', '=', '8'], ['x', '=', '−2']]), P('Solve each case') + al([['x', '=', '8'], ['x', '=', '−2']])) },
+      { h: T(P('แยกเป็น 2 กรณี (ข้างในเท่ากับ −a หรือ a)') + al2([[['x − 3', '=', '−5'], ['x − 3', '=', '5']]]), P('Split into 2 cases (inside equals −a or a)') + al2([[['x − 3', '=', '−5'], ['x − 3', '=', '5']]])) },
+      { h: T(P('ย้ายข้างแต่ละกรณี') + al2([[['x', '=', '−2'], ['x', '=', '8']]]), P('Solve each case') + al2([[['x', '=', '−2'], ['x', '=', '8']]])) },
       { h: T(P('ตอบ: <b>{−2, 8}</b> — ห่างจาก 3 ไปทางซ้ายและขวาข้างละ 5 หน่วย'), P('Answer: <b>{−2, 8}</b> — 5 units left and right of 3')),
         vis: () => numberLine({ min: -4, max: 10, points: [{ v: -2 }, { v: 8 }], marker: 3, arcs: [{ a: 3, b: 8, t: '5' }, { a: 3, b: -2, t: '5' }] }) },
     ] },
   eq1b: { title: T('แบบที่ 1 (มี x ทั้งสองข้าง): ต้องตรวจคำตอบ', 'Type 1 with x on both sides: check your answers'), prob: '|x − 1| = 2x + 1',
     intro: T('ถ้าขวามือมี x ด้วย ต้องเอาคำตอบไปแทนในโจทย์เสมอ เพราะค่าสัมบูรณ์ไม่มีทางเท่ากับจำนวนลบ', 'If x also appears on the right, always substitute the answers back — an absolute value can never equal a negative'),
     steps: [
-      { h: T(P('แยกเป็น 2 กรณี') + al([['x − 1', '=', '2x + 1'], ['x − 1', '=', '−(2x + 1)']]), P('Split into 2 cases') + al([['x − 1', '=', '2x + 1'], ['x − 1', '=', '−(2x + 1)']])) },
-      { h: T(P('แก้แต่ละกรณี') + al([['−2', '=', 'x'], ['3x', '=', '0']]) + al([['x', '=', '−2'], ['x', '=', '0']]), P('Solve each case') + al([['−2', '=', 'x'], ['3x', '=', '0']]) + al([['x', '=', '−2'], ['x', '=', '0']])) },
+      { h: T(P('แยกเป็น 2 กรณี') + al2([[['x − 1', '=', '2x + 1'], ['x − 1', '=', '−(2x + 1)']]]), P('Split into 2 cases') + al2([[['x − 1', '=', '2x + 1'], ['x − 1', '=', '−(2x + 1)']]])) },
+      { h: T(P('แก้แต่ละกรณี') + al2([[['−2', '=', 'x'], ['3x', '=', '0']], [['x', '=', '−2'], ['x', '=', '0']]]), P('Solve each case') + al2([[['−2', '=', 'x'], ['3x', '=', '0']], [['x', '=', '−2'], ['x', '=', '0']]])) },
       { h: T(P('<b>ตรวจคำตอบในโจทย์เดิม</b>') + al([['x = −2:  |−2 − 1|', '=', '3'], ['2(−2) + 1', '=', '−3']]) + P('3 ≠ −3 ✗ ตัดทิ้ง') + al([['x = 0:  |0 − 1|', '=', '1'], ['2(0) + 1', '=', '1']]) + P('1 = 1 ✓ ใช้ได้'),
              P('<b>Check in the original problem</b>') + al([['x = −2:  |−2 − 1|', '=', '3'], ['2(−2) + 1', '=', '−3']]) + P('3 ≠ −3 ✗ reject') + al([['x = 0:  |0 − 1|', '=', '1'], ['2(0) + 1', '=', '1']]) + P('1 = 1 ✓ valid')) },
       { h: T(P('ตอบ: <b>{0}</b> &nbsp;<small>(ด้านขวา 2x + 1 ต้อง ≥ 0 จึงต้อง x ≥ −' + frac('1', '2') + ')</small>'), P('Answer: <b>{0}</b> &nbsp;<small>(the right side 2x + 1 must be ≥ 0, so x ≥ −' + frac('1', '2') + ')</small>')),
@@ -540,9 +607,9 @@ const WK = {
     intro: T('ยกกำลังสองทั้งสองข้างได้เลย (ทั้งสองข้างไม่ติดลบ) แล้วย้ายมาข้างเดียวใช้ u²&nbsp;−&nbsp;v² = (u&nbsp;−&nbsp;v)(u&nbsp;+&nbsp;v)', 'Square both sides (both are non-negative), move everything left and use u²&nbsp;−&nbsp;v² = (u&nbsp;−&nbsp;v)(u&nbsp;+&nbsp;v)'),
     steps: [
       { h: T(P('ยกกำลังสองทั้งสองข้าง') + al([['(2x − 1)²', '=', '(x + 4)²']]), P('Square both sides') + al([['(2x − 1)²', '=', '(x + 4)²']])) },
-      { h: T(P('ย้ายมาข้างเดียว แล้วแยกด้วย u²&nbsp;−&nbsp;v² = (u&nbsp;−&nbsp;v)(u&nbsp;+&nbsp;v)') + al([['(2x − 1)² − (x + 4)²', '=', '0']]) + P('ให้ u = 2x − 1 และ v = x + 4') + al([['u − v', '=', 'x − 5'], ['u + v', '=', '3x + 3'], ['(x − 5)(3x + 3)', '=', '0']]),
-             P('Move to one side, then factor with u²&nbsp;−&nbsp;v² = (u&nbsp;−&nbsp;v)(u&nbsp;+&nbsp;v)') + al([['(2x − 1)² − (x + 4)²', '=', '0']]) + P('Let u = 2x − 1 and v = x + 4') + al([['u − v', '=', 'x − 5'], ['u + v', '=', '3x + 3'], ['(x − 5)(3x + 3)', '=', '0']])) },
-      { h: T(P('ให้แต่ละวงเล็บ = 0') + al([['x − 5', '=', '0'], ['3x + 3', '=', '0']]) + al([['x', '=', '5'], ['x', '=', '−1']]), P('Set each bracket to 0') + al([['x − 5', '=', '0'], ['3x + 3', '=', '0']]) + al([['x', '=', '5'], ['x', '=', '−1']])) },
+      { h: T(P('ย้ายมาข้างเดียว') + al([['(2x − 1)² − (x + 4)²', '=', '0']]) + P('<b>แผน:</b> ซ้ายมือเป็นรูป u² − v² จะใช้ u² − v² = (u − v)(u + v)') + P('ให้ u = 2x − 1 และ v = x + 4 แล้วหา u + v และ u − v') + al([['u + v', '=', '(2x − 1) + (x + 4) = 3x + 3'], ['u − v', '=', '(2x − 1) − (x + 4) = x − 5']]) + P('แทนใน (u − v)(u + v) = 0') + al([['(x − 5)(3x + 3)', '=', '0']]),
+             P('Move to one side') + al([['(2x − 1)² − (x + 4)²', '=', '0']]) + P('<b>Plan:</b> the left side has the form u² − v², so use u² − v² = (u − v)(u + v)') + P('Let u = 2x − 1 and v = x + 4, then find u + v and u − v') + al([['u + v', '=', '(2x − 1) + (x + 4) = 3x + 3'], ['u − v', '=', '(2x − 1) − (x + 4) = x − 5']]) + P('Substitute into (u − v)(u + v) = 0') + al([['(x − 5)(3x + 3)', '=', '0']])) },
+      { h: T(P('ให้แต่ละวงเล็บ = 0') + al2([[['x − 5', '=', '0'], ['3x + 3', '=', '0']], [['x', '=', '5'], ['x', '=', '−1']]]), P('Set each bracket to 0') + al2([[['x − 5', '=', '0'], ['3x + 3', '=', '0']], [['x', '=', '5'], ['x', '=', '−1']]])) },
       { h: T(P('ตรวจคำตอบ') + al([['x = 5:  |2(5) − 1|', '=', '9'], ['|5 + 4|', '=', '9']]) + al([['x = −1:  |2(−1) − 1|', '=', '3'], ['|−1 + 4|', '=', '3']]) + P('เท่ากันทั้งคู่ ✓ ตอบ: <b>{−1, 5}</b>'),
              P('Check') + al([['x = 5:  |2(5) − 1|', '=', '9'], ['|5 + 4|', '=', '9']]) + al([['x = −1:  |2(−1) − 1|', '=', '3'], ['|−1 + 4|', '=', '3']]) + P('both equal ✓ Answer: <b>{−1, 5}</b>')),
         vis: () => numberLine({ min: -3, max: 7, points: [{ v: -1 }, { v: 5 }] }) },
@@ -565,16 +632,16 @@ const WK = {
     intro: T('อสมการก็ยกกำลังสองทั้งสองข้างได้ เพราะทั้งสองข้างไม่ติดลบ — แล้วแก้ต่อด้วย u²&nbsp;−&nbsp;v²', 'Inequalities can also be squared, since both sides are non-negative — then use u²&nbsp;−&nbsp;v²'),
     steps: [
       { h: T(P('ยกกำลังสองทั้งสองข้าง') + al([['(x − 1)²', '&lt;', '(x + 3)²']]), P('Square both sides') + al([['(x − 1)²', '&lt;', '(x + 3)²']])) },
-      { h: T(P('ย้ายข้างแล้วแยก u²&nbsp;−&nbsp;v² โดย u = x − 1 และ v = x + 3') + al([['(x − 1)² − (x + 3)²', '&lt;', '0'], ['u − v', '=', '−4'], ['u + v', '=', '2x + 2'], ['(−4)(2x + 2)', '&lt;', '0'], ['2x + 2', '&gt;', '0'], ['x', '&gt;', '−1']]) + P('<small>(หารด้วย −4 จึงกลับเครื่องหมาย)</small>'),
-             P('Move and factor with u²&nbsp;−&nbsp;v², where u = x − 1 and v = x + 3') + al([['(x − 1)² − (x + 3)²', '&lt;', '0'], ['u − v', '=', '−4'], ['u + v', '=', '2x + 2'], ['(−4)(2x + 2)', '&lt;', '0'], ['2x + 2', '&gt;', '0'], ['x', '&gt;', '−1']]) + P('<small>(dividing by −4 flips the sign)</small>')) },
+      { h: T(P('ย้ายมาข้างเดียว <b>แผน:</b> ใช้ u² − v² = (u − v)(u + v) โดย u = x − 1 และ v = x + 3') + al([['(x − 1)² − (x + 3)²', '&lt;', '0'], ['u + v', '=', '2x + 2'], ['u − v', '=', '−4'], ['(−4)(2x + 2)', '&lt;', '0'], ['2x + 2', '&gt;', '0'], ['x', '&gt;', '−1']]) + P('<small>(หารด้วย −4 จึงกลับเครื่องหมาย)</small>'),
+             P('Move to one side. <b>Plan:</b> use u² − v² = (u − v)(u + v) with u = x − 1 and v = x + 3') + al([['(x − 1)² − (x + 3)²', '&lt;', '0'], ['u + v', '=', '2x + 2'], ['u − v', '=', '−4'], ['(−4)(2x + 2)', '&lt;', '0'], ['2x + 2', '&gt;', '0'], ['x', '&gt;', '−1']]) + P('<small>(dividing by −4 flips the sign)</small>')) },
       { h: T(P('ตอบ: <b>(−1, ∞)</b> &nbsp;<small>ลองเช็ก x = 0: |0 − 1| = 1 &lt; |0 + 3| = 3 ✓</small>'), P('Answer: <b>(−1, ∞)</b> &nbsp;<small>Check x = 0: |0 − 1| = 1 &lt; |0 + 3| = 3 ✓</small>')),
         vis: () => numberLine({ min: -5, max: 5, ranges: [{ a: -1, b: Infinity, ac: false }] }) },
     ] },
   in2b: { title: T('แบบที่ 2 (ได้ + − +)', 'Type 2 (giving + − +)'), prob: '|2x − 1| ≥ |x + 2|',
     intro: T('ถ้าหลังยกกำลังสองได้สมการกำลังสอง ก็กลับไปใช้แผนภาพเครื่องหมาย + − + ตามที่เรียนมา', 'If squaring leaves a quadratic, go back to the + − + sign chart'),
     steps: [
-      { h: T(P('ยกกำลังสอง ย้ายข้าง แล้วแยก u²&nbsp;−&nbsp;v² โดย u = 2x − 1 และ v = x + 2') + al([['(2x − 1)²', '≥', '(x + 2)²'], ['(2x − 1)² − (x + 2)²', '≥', '0'], ['u − v', '=', 'x − 3'], ['u + v', '=', '3x + 1'], ['(x − 3)(3x + 1)', '≥', '0']]),
-             P('Square, move, and factor with u²&nbsp;−&nbsp;v², where u = 2x − 1 and v = x + 2') + al([['(2x − 1)²', '≥', '(x + 2)²'], ['(2x − 1)² − (x + 2)²', '≥', '0'], ['u − v', '=', 'x − 3'], ['u + v', '=', '3x + 1'], ['(x − 3)(3x + 1)', '≥', '0']])) },
+      { h: T(P('ยกกำลังสองแล้วย้ายมาข้างเดียว <b>แผน:</b> ใช้ u² − v² = (u − v)(u + v) โดย u = 2x − 1 และ v = x + 2') + al([['(2x − 1)²', '≥', '(x + 2)²'], ['(2x − 1)² − (x + 2)²', '≥', '0'], ['u + v', '=', '3x + 1'], ['u − v', '=', 'x − 3'], ['(x − 3)(3x + 1)', '≥', '0']]),
+             P('Square and move to one side. <b>Plan:</b> use u² − v² = (u − v)(u + v) with u = 2x − 1 and v = x + 2') + al([['(2x − 1)²', '≥', '(x + 2)²'], ['(2x − 1)² − (x + 2)²', '≥', '0'], ['u + v', '=', '3x + 1'], ['u − v', '=', 'x − 3'], ['(x − 3)(3x + 1)', '≥', '0']])) },
       { h: T(P('ค่าวิกฤต x = 3 และ x = −' + frac('1', '3') + ' → วาด <b>+ − +</b> แล้วเลือก + (เพราะ ≥)'), P('Critical values x = 3 and x = −' + frac('1', '3') + ' → draw <b>+ − +</b> and pick + (because ≥)')),
         vis: () => numberLine({ min: -4, max: 6, points: [{ v: -1 / 3 }, { v: 3 }], labels: [{ v: -1 / 3, neg: true, n: '1', d: '3' }], signs: [{ v: -2, t: '+', c: 'pos' }, { v: 1.3, t: '−', c: 'neg' }, { v: 4.5, t: '+', c: 'pos' }] }) },
       { h: T(P('ตอบ: <b>(−∞, −' + frac('1', '3') + '] ∪ [3, ∞)</b>'), P('Answer: <b>(−∞, −' + frac('1', '3') + '] ∪ [3, ∞)</b>')),
@@ -586,11 +653,14 @@ const WK = {
       { h: T(P('ค่าวิกฤต 0 และ 2 → แบ่ง 3 กรณี: ① x ≤ 0 &nbsp; ② 0 &lt; x &lt; 2 &nbsp; ③ x ≥ 2'), P('Critical values 0 and 2 → 3 cases: ① x ≤ 0 &nbsp; ② 0 &lt; x &lt; 2 &nbsp; ③ x ≥ 2')),
         vis: () => numberLine({ min: -4, max: 6, points: [{ v: 0, closed: false }, { v: 2, closed: false }], signs: [{ v: -2, t: '①', c: 'n' }, { v: 1, t: '②', c: 'n' }, { v: 4, t: '③', c: 'n' }] }) },
       { h: T(P('<b>① x ≤ 0</b>') + al([['−x − (x − 2)', '&lt;', '4'], ['−2x + 2', '&lt;', '4'], ['−2x', '&lt;', '2'], ['x', '&gt;', '−1']]) + P('(−1, ∞) <b>∩</b> (−∞, 0] = (−1, 0]'),
-             P('<b>① x ≤ 0</b>') + al([['−x − (x − 2)', '&lt;', '4'], ['−2x + 2', '&lt;', '4'], ['−2x', '&lt;', '2'], ['x', '&gt;', '−1']]) + P('(−1, ∞) <b>∩</b> (−∞, 0] = (−1, 0]')) },
-      { h: T(P('<b>② 0 &lt; x &lt; 2</b>') + al([['x − (x − 2)', '&lt;', '4'], ['2', '&lt;', '4']]) + P('จริงเสมอ → ได้ทั้งช่วง (0, 2)'),
-             P('<b>② 0 &lt; x &lt; 2</b>') + al([['x − (x − 2)', '&lt;', '4'], ['2', '&lt;', '4']]) + P('always true → the whole interval (0, 2)')) },
+             P('<b>① x ≤ 0</b>') + al([['−x − (x − 2)', '&lt;', '4'], ['−2x + 2', '&lt;', '4'], ['−2x', '&lt;', '2'], ['x', '&gt;', '−1']]) + P('(−1, ∞) <b>∩</b> (−∞, 0] = (−1, 0]')),
+        vis: () => interLine({ min: -4, max: 6, sol: { a: -1, b: Infinity, ac: false }, cas: { a: -Infinity, b: 0, bc: true }, res: { a: -1, b: 0, ac: false, bc: true } }) },
+      { h: T(P('<b>② 0 &lt; x &lt; 2</b>') + al([['x − (x − 2)', '&lt;', '4'], ['2', '&lt;', '4']]) + P('จริงเสมอ (ทุกจำนวนจริง) <b>∩</b> (0, 2) → ได้ทั้งช่วง (0, 2)'),
+             P('<b>② 0 &lt; x &lt; 2</b>') + al([['x − (x − 2)', '&lt;', '4'], ['2', '&lt;', '4']]) + P('always true (all reals) <b>∩</b> (0, 2) → the whole interval (0, 2)')),
+        vis: () => interLine({ min: -4, max: 6, sol: { a: -Infinity, b: Infinity }, cas: { a: 0, b: 2, ac: false, bc: false }, res: { a: 0, b: 2, ac: false, bc: false } }) },
       { h: T(P('<b>③ x ≥ 2</b>') + al([['x + (x − 2)', '&lt;', '4'], ['2x − 2', '&lt;', '4'], ['2x', '&lt;', '6'], ['x', '&lt;', '3']]) + P('(−∞, 3) <b>∩</b> [2, ∞) = [2, 3)'),
-             P('<b>③ x ≥ 2</b>') + al([['x + (x − 2)', '&lt;', '4'], ['2x − 2', '&lt;', '4'], ['2x', '&lt;', '6'], ['x', '&lt;', '3']]) + P('(−∞, 3) <b>∩</b> [2, ∞) = [2, 3)')) },
+             P('<b>③ x ≥ 2</b>') + al([['x + (x − 2)', '&lt;', '4'], ['2x − 2', '&lt;', '4'], ['2x', '&lt;', '6'], ['x', '&lt;', '3']]) + P('(−∞, 3) <b>∩</b> [2, ∞) = [2, 3)')),
+        vis: () => interLine({ min: -4, max: 6, sol: { a: -Infinity, b: 3, bc: false }, cas: { a: 2, b: Infinity, ac: true }, res: { a: 2, b: 3, ac: true, bc: false } }) },
       { h: T(P('นำทุกกรณีมา <b>∪</b> กัน: (−1, 0] ∪ (0, 2) ∪ [2, 3) ตอบ: <b>(−1, 3)</b>'), P('Take the <b>∪</b>: (−1, 0] ∪ (0, 2) ∪ [2, 3) Answer: <b>(−1, 3)</b>')),
         vis: () => numberLine({ min: -4, max: 6, ranges: [{ a: -1, b: 3, ac: false, bc: false }] }) },
     ] },

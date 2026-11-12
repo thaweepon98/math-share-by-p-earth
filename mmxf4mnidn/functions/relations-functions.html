@@ -19,7 +19,7 @@
   sub { font-size: .68em; line-height: 0; vertical-align: sub; font-weight: 800; }
   sup sup { font-size: .8em; }
 
-  header { background: linear-gradient(135deg, #1C3B22 0%, #2E5936 100%); color: white; padding: 28px 40px 20px; text-align: center; position: relative; overflow: hidden; }
+  header { background: var(--panel, #f1f4f7); color: var(--text); padding: 28px 40px 20px; text-align: center; position: relative; overflow: hidden; }
   header::before { content: ''; position: absolute; top: -60px; right: -60px; width: 200px; height: 200px; background: rgba(255,255,255,0.07); border-radius: 50%; }
   header h1 { font-size: 2rem; font-weight: 800; letter-spacing: .5px; }
   header p { font-size: 1rem; opacity: .85; margin-top: 4px; }
@@ -30,8 +30,8 @@
 
   nav { display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; padding: 20px 24px 0; background: white; border-bottom: 3px solid var(--border); }
   .tab-btn { padding: 10px 18px; border: none; background: transparent; border-radius: 10px 10px 0 0; font-family: 'Anuphan', sans-serif; font-size: 0.95rem; font-weight: 600; color: var(--muted); cursor: pointer; transition: all .25s; border-bottom: 3px solid transparent; margin-bottom: -3px; }
-  .tab-btn:hover { color: var(--primary); background: #E3F3D8; }
-  .tab-btn.active { color: var(--primary); border-bottom-color: var(--primary); background: #E3F3D8; }
+  .tab-btn:hover { color: var(--text); background: var(--raise, #e4e9ee); }
+  .tab-btn.active { color: var(--on-ink, #fff); border-bottom-color: transparent; background: var(--ink, #000); }
 
   main { max-width: 980px; margin: 0 auto; padding: 32px 20px 60px; }
   .tab-panel { display: none; animation: fadeIn .35s ease; }
@@ -40,24 +40,24 @@
   @keyframes rowIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
 
   .card { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); padding: 28px 32px; margin-bottom: 24px; }
-  .card-title { font-size: 1.25rem; font-weight: 700; color: var(--primary); margin-bottom: 12px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .card-title { font-size: 1.25rem; font-weight: 700; color: var(--text); margin-bottom: 12px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
   .card-title .icon { font-size: 1.5rem; }
   .intro { font-size: 1.02rem; line-height: 1.8; margin-bottom: 14px; }
-  .box-info { background: #EEF7E6; border-left: 4px solid var(--primary); border-radius: 10px; padding: 14px 18px; margin: 14px 0; line-height: 1.8; }
+  .box-info { background: var(--panel, #f1f4f7); border-left: 4px solid var(--primary); border-radius: 10px; padding: 14px 18px; margin: 14px 0; line-height: 1.8; }
   .box-warn { background: #FFF7ED; border-left: 4px solid var(--warning); border-radius: 10px; padding: 14px 18px; margin: 14px 0; line-height: 1.8; }
   .box-ok   { background: #ECFDF5; border-left: 4px solid var(--accent);  border-radius: 10px; padding: 14px 18px; margin: 14px 0; line-height: 1.8; }
-  .formula { background: linear-gradient(135deg,#1C3B22,#2E5936); color: white; border-radius: 12px; padding: 14px 24px; text-align: center; font-size: 1.3rem; font-weight: 700; margin: 14px 0; letter-spacing: .5px; display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 4px 18px; }
+  .formula { background: var(--strong, #1c1e21); color: white; border-radius: 16px; padding: 14px 24px; text-align: center; font-size: 1.3rem; font-weight: 700; margin: 14px 0; letter-spacing: .5px; display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 4px 18px; }
 
-  .btn { padding: 10px 24px; background: var(--primary); color: white; border: none; border-radius: 30px; font-family: 'Anuphan', sans-serif; font-size: 1rem; font-weight: 700; cursor: pointer; transition: background .2s, opacity .2s; }
-  .btn:hover:not(:disabled) { background: #2E5936; }
+  .btn { padding: 10px 24px; background: var(--ink, #000); color: var(--on-ink, #fff); border: 1px solid var(--ink, #000); border-radius: 100px; font-family: 'Anuphan', sans-serif; font-size: 1rem; font-weight: 700; cursor: pointer; transition: background .2s, opacity .2s; }
+  .btn:hover:not(:disabled) { background: var(--ink-hover, #2b3138); border-color: var(--ink-hover, #2b3138); }
   .btn:disabled { opacity: .4; cursor: not-allowed; }
-  .btn.ghost { background: white; color: var(--primary); border: 2px solid var(--primary); }
-  .btn.ghost:hover:not(:disabled) { background: #E3F3D8; }
+  .btn.ghost { background: transparent; color: var(--text); border: 1px solid var(--line, #ced0d4); }
+  .btn.ghost:hover:not(:disabled) { background: var(--raise, #e4e9ee); border-color: var(--line, #ced0d4); }
   .chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 6px 0; align-items: center; }
   .chips .chips-label { font-weight: 700; color: var(--muted); font-size: .95rem; margin-right: 2px; }
-  .chip { padding: 7px 16px; border: 2px solid var(--border); border-radius: 30px; background: #fff; font-family: 'Anuphan', sans-serif; font-weight: 700; font-size: 1rem; cursor: pointer; color: var(--text); display: inline-block; text-align: center; vertical-align: middle; line-height: 1.5; max-width: 100%; }  /* ไม่ใช้ flex: ตัวยกในชิปจะได้ไม่แยกเป็นก้อน */
-  .chip:hover { border-color: var(--primary); }
-  .chip.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+  .chip { padding: 7px 16px; border: 2px solid var(--border); border-radius: 30px; background: var(--card); font-family: 'Anuphan', sans-serif; font-weight: 700; font-size: 1rem; cursor: pointer; color: var(--text); display: inline-block; text-align: center; vertical-align: middle; line-height: 1.5; max-width: 100%; }  /* ไม่ใช้ flex: ตัวยกในชิปจะได้ไม่แยกเป็นก้อน */
+  .chip:hover { border-color: var(--text); }
+  .chip.active { background: var(--ink, #000); color: var(--on-ink, #fff); border-color: var(--ink, #000); }
 
   .frac { display: inline-flex; flex-direction: column; align-items: center; font-weight: 700; line-height: 1.15; vertical-align: middle; margin: 0 4px; }
   .frac .num { font-size: 1em; border-bottom: 2.5px solid currentColor; padding: 0 3px 2px; min-width: 18px; text-align: center; white-space: nowrap; }
@@ -76,12 +76,12 @@
   .wg-eq { text-align: center; font-size: 1.3rem; font-weight: 800; color: var(--primary); margin-top: 8px; line-height: 1.9; }
   .wg-eq.col { display: flex; flex-direction: column; align-items: flex-start; text-align: left; }
   .wg-eq.row { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 6px 14px; }
-  .wg-cap { background: #EEF7E6; border-left: 4px solid var(--primary); border-radius: 10px; padding: 12px 16px; line-height: 1.75; margin-top: 8px; }
+  .wg-cap { background: var(--panel, #f1f4f7); border-left: 4px solid var(--primary); border-radius: 10px; padding: 12px 16px; line-height: 1.75; margin-top: 8px; }
   .wg-nav { display: flex; justify-content: center; align-items: center; gap: 14px; margin-top: 12px; flex-wrap: wrap; }
   .wg-nav .btn { padding: 9px 22px; }
   .wg-cnt { font-weight: 700; color: var(--muted); min-width: 92px; text-align: center; }
   .two { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; align-items: start; }
-  .tile { border: 2px solid var(--border); border-radius: 12px; padding: 10px 14px; background: #fff; }
+  .tile { border: 2px solid var(--border); border-radius: 12px; padding: 10px 14px; background: var(--card); }
   .tile h4 { font-size: .95rem; color: var(--muted); margin-bottom: 6px; font-weight: 700; }
   .ans { background: #ECFDF5; border: 2px solid var(--accent-2); border-radius: 8px; padding: 2px 10px; color: #047857; font-weight: 800; white-space: nowrap; }
   .bad { background: #FFF1F2; border: 2px solid #E11D48; border-radius: 8px; padding: 2px 10px; color: #9F1239; font-weight: 800; white-space: nowrap; }
@@ -100,11 +100,11 @@
   .setrow { font-size: 1.15rem; font-weight: 700; line-height: 2; }
   .tbl { border-collapse: collapse; margin: 8px auto; font-weight: 700; }
   .tbl th, .tbl td { border: 2px solid var(--border); padding: 6px 14px; text-align: center; }
-  .tbl th { background: #EEF7E6; color: var(--primary); }
+  .tbl th { background: var(--panel, #f1f4f7); color: var(--text); }
   .tbl td.cur { background: #FEF3C7; }
   .tbl-scroll { overflow-x: auto; }
 
-  .wk-cell { position: relative; background: #fff; border: 2px solid var(--border); border-radius: 14px; padding: 12px 16px 12px 56px; margin-bottom: 12px; line-height: 1.9; }
+  .wk-cell { position: relative; background: var(--card); border: 2px solid var(--border); border-radius: 14px; padding: 12px 16px 12px 56px; margin-bottom: 12px; line-height: 1.9; }
   .wk-cell.fresh { animation: rowIn .5s ease; }
   .wk-cell.final { border-color: var(--accent-2); }
   .wk-cell .stepno { position: absolute; left: 14px; top: 14px; width: 28px; height: 28px; border-radius: 50%; background: var(--primary); color: #fff; font-size: .85rem; font-weight: 800; display: flex; align-items: center; justify-content: center; }
@@ -113,17 +113,17 @@
 
   .quiz-q { font-size: 1.1rem; font-weight: 600; margin-bottom: 12px; line-height: 1.8; }
   .quiz-opts { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 10px; }
-  .quiz-opt { padding: 10px 20px; border: 2px solid var(--border); border-radius: 30px; cursor: pointer; font-family: 'Anuphan', sans-serif; font-size: 1rem; font-weight: 600; transition: all .2s; background: white; display: inline-flex; align-items: center; min-height: 48px; color: var(--text); }
-  .quiz-opt:hover { border-color: var(--primary); color: var(--primary); }
+  .quiz-opt { padding: 10px 20px; border: 2px solid var(--border); border-radius: 30px; cursor: pointer; font-family: 'Anuphan', sans-serif; font-size: 1rem; font-weight: 600; transition: all .2s; background: var(--card); display: inline-flex; align-items: center; min-height: 48px; color: var(--text); }
+  .quiz-opt:hover { border-color: var(--text); color: var(--text); }
   .quiz-opt.correct { border-color: var(--accent); background: #ECFDF5; color: #047857; }
   .quiz-opt.wrong { border-color: var(--secondary); background: #FFF4EC; color: #BE185D; }
   .quiz-feedback { font-weight: 600; font-size: 1rem; min-height: 24px; line-height: 1.75; }
   .quiz-feedback.ok { color: #047857; }
   .quiz-feedback.err { color: #BE185D; }
-  .btn-next { margin-top: 10px; padding: 10px 28px; background: var(--primary); color: white; border: none; border-radius: 30px; font-family: 'Anuphan', sans-serif; font-size: 1rem; font-weight: 700; cursor: pointer; transition: background .2s; }
-  .btn-next:hover { background: #142B1A; }
-  .score-badge { display: inline-block; background: linear-gradient(135deg,#68EF3F,#1C3B22); color: white; border-radius: 30px; padding: 6px 20px; font-weight: 700; font-size: 1rem; }
-  .score-card { margin-top: 20px; background: linear-gradient(135deg,#1C3B22,#2E5936); color: white; border-radius: 16px; padding: 24px; text-align: center; }
+  .btn-next { margin-top: 10px; padding: 10px 28px; background: var(--ink, #000); color: var(--on-ink, #fff); border: none; border-radius: 100px; font-family: 'Anuphan', sans-serif; font-size: 1rem; font-weight: 700; cursor: pointer; transition: background .2s; }
+  .btn-next:hover { background: var(--ink-hover, #2b3138); }
+  .score-badge { display: inline-block; background: var(--ink, #000); color: var(--on-ink, #fff); border-radius: 30px; padding: 6px 20px; font-weight: 700; font-size: 1rem; }
+  .score-card { margin-top: 20px; background: var(--strong, #1c1e21); color: white; border-radius: 24px; padding: 24px; text-align: center; }
 
   /* ─── กราฟ SVG (สีใช้ชุด --g-* ของธีม จึงเปลี่ยนตามโหมดสว่าง/มืด) ─── */
   .plot { width: 100%; max-width: 560px; height: auto; display: block; margin: 8px auto; background: var(--card); border: 1.5px solid var(--border); border-radius: 12px; }
@@ -640,113 +640,109 @@
   }
   /* ═══ END ของกลางกลุ่มสถิติ ม.6 ═══ */
 /* ── theme:start — สร้างโดย tools/build_lessons.py ห้ามแก้มือ (แก้ที่สคริปต์แล้วรันใหม่) ── */
+/* ธีมชุดเดียวกับหน้าสารบัญ (tools/build_index.py · DESIGN.md หมวด Meta-inspired) — สีของเรื่องอยู่ที่ปกและในตัวบทเรียน กรอบหน้าเป็นสีกลาง */
 :root{ --page:#B45309; }
 :root[data-theme="light"]{
-  --bg:#F4F4F1; --card:#FFFFFF; --text:#16181A; --muted:#5E6166; --border:#DEDED8;
+  --bg:#ffffff; --surface:#ffffff; --card:#ffffff; --panel:#f1f4f7; --raise:#e4e9ee;
+  --text:#1c1e21; --muted:#5d6c7b; --dim:#8595a4; --line:#ced0d4; --line-soft:#dee3e9; --border:#ced0d4;
+  --ink:#000000; --on-ink:#ffffff; --ink-hover:#2b3138; --link:#0064e0; --strong:#1c1e21; --shadow:none;
   --primary:color-mix(in srgb, var(--page) 86%, #000); --primary-2:color-mix(in srgb, var(--page) 62%, #000);
   --secondary:#C2540A; --secondary-light:#F2A15F; --accent:#68EF3F; --accent-2:#2E9E3F;
-  --shadow:0 2px 10px rgba(0,0,0,.07);
-  --strong:color-mix(in srgb, var(--page) 76%, #000); --chip:#E8E8E3; --chip-hover:#DCDCD5;
-  --hero:color-mix(in srgb, var(--page) 82%, #000);
   --g-x:#E53935; --g-y:#2E9E4F; --g-z:#3949AB; --g-curve:#F07400; --g-curve-fill:rgba(240,116,0,.12);
   --g-pink:#D81B60; --g-plane:rgba(60,190,200,.28); --g-cone:rgba(153,51,0,.20); --g-cone-line:rgba(153,51,0,.35);
   --g-blue:#1E66D0; --g-red:#D32F2F; --g-green:#2E9E4F; --g-purple:#7B3FC4; --g-orange:#E8710A; --g-teal:#0F8A80;
   --g-ring:#FFFFFF;
 }
 :root[data-theme="dark"]{
-  --bg:#121212; --card:#1C1C1C; --text:#FFFFFF; --muted:#B3B3B3; --border:#333333;
+  --bg:#0a1317; --surface:#0a1317; --card:#0a1317; --panel:#1c1e21; --raise:#2b3138;
+  --text:#ffffff; --muted:#9aa8b5; --dim:#6b7884; --line:#444950; --line-soft:#32383e; --border:#444950;
+  --ink:#ffffff; --on-ink:#000000; --ink-hover:#d5dbe1; --link:#4da3ff; --strong:#2b3138; --shadow:none;
   --primary:#ecab79; --primary-2:#f1c19d;
   --secondary:#FFB37A; --secondary-light:#FFD0A8; --accent:#8AF25E; --accent-2:#5BD27E;
-  --shadow:0 8px 24px rgba(0,0,0,.5);
-  --strong:color-mix(in srgb, var(--page) 48%, #1C1C1C); --chip:#2A2A2A; --chip-hover:#353535;
-  --hero:color-mix(in srgb, var(--page) 62%, #000);
   --g-x:#FF6B6B; --g-y:#5BD27E; --g-z:#8C9BFF; --g-curve:#FFA040; --g-curve-fill:rgba(255,160,64,.16);
   --g-pink:#FF5C9A; --g-plane:rgba(90,220,230,.26); --g-cone:rgba(255,170,110,.18); --g-cone-line:rgba(255,170,110,.45);
   --g-blue:#6AA8FF; --g-red:#FF6B6B; --g-green:#5BD27E; --g-purple:#B48CFF; --g-orange:#FFA040; --g-teal:#4FD1C5;
-  --g-ring:#1C1C1C;
+  --g-ring:#0a1317;
 }
-html{ background:var(--bg); }
+html{ background:var(--bg); color-scheme:light; }
 html[data-theme="dark"]{ color-scheme:dark; }
 body{ font-family:'Anuphan',system-ui,sans-serif; background:var(--bg); color:var(--text); line-height:1.6; -webkit-font-smoothing:antialiased; }
+:focus-visible{ outline:2px solid var(--link); outline-offset:2px; }
 
-/* หัวหน้า: สีปกของเรื่อง + ปก */
+/* หัวหน้า: แผ่นสีอ่อนมุมโค้ง ตัวหนังสือเข้ม + ปกข้างชื่อ (สีของเรื่องอยู่ที่ปก) */
 header{
-  background:var(--hero); color:#fff; text-align:left;
-  display:grid; grid-template-columns:auto 1fr; column-gap:22px; align-items:end;
-  padding:62px 32px 26px;
+  background:var(--panel); color:var(--text); text-align:left; overflow:hidden;
+  display:grid; grid-template-columns:auto 1fr; column-gap:24px; align-items:end;
+  margin:8px 8px 0; padding:74px 32px 28px; border-radius:32px; box-shadow:none;
 }
 header::before, header::after{ display:none !important; }
 header > *:not(.lesson-cover):not(.back-link):not(.lang-toggle):not(.theme-toggle){ grid-column:2; }
-.lesson-cover{ grid-column:1; grid-row:1 / span 6; align-self:end; width:120px; aspect-ratio:1; border-radius:6px; overflow:hidden; box-shadow:0 8px 24px rgba(0,0,0,.45); }
+.lesson-cover{ grid-column:1; grid-row:1 / span 6; align-self:end; width:clamp(96px, 11vw, 136px); aspect-ratio:1; border-radius:16px; overflow:hidden; box-shadow:none; }
 .lesson-cover svg{ display:block; width:100%; height:100%; }
-header h1{ font-size:clamp(1.8rem, 4.2vw, 2.9rem); font-weight:700; letter-spacing:-.01em; line-height:1.25; margin:0; color:#fff; }
-header p{ font-size:1rem; opacity:.85; margin:6px 0 0; color:#fff; }
+header h1{ font-size:clamp(1.9rem, 4.4vw, 3.2rem); font-weight:500; letter-spacing:0; line-height:1.25; margin:0; color:var(--text); }
+header p{ font-size:1.02rem; opacity:1; margin:8px 0 0; color:var(--muted); line-height:1.55; }
 .back-link{
-  top:14px; left:20px; display:inline-flex; align-items:center; gap:6px;
-  padding:6px 14px; border-radius:999px; background:rgba(0,0,0,.32); color:#fff;
-  font-size:.88rem; font-weight:600; opacity:1; text-decoration:none;
+  position:absolute; top:16px; left:16px; z-index:2; display:inline-flex; align-items:center; gap:6px;
+  height:38px; padding:0 16px; border-radius:100px; background:var(--surface); color:var(--text);
+  box-shadow:inset 0 0 0 1px var(--line); font-size:.92rem; font-weight:700; opacity:1; text-decoration:none;
 }
-.back-link:hover{ background:rgba(0,0,0,.55); text-decoration:none; }
+.back-link:hover{ background:var(--raise); opacity:1; text-decoration:none; }
 .lang-toggle, .theme-toggle{
-  position:absolute; top:14px; height:34px; background:transparent; color:#fff;
-  border:1px solid rgba(255,255,255,.55); border-radius:999px; font-family:inherit; font-weight:700; font-size:.85rem; cursor:pointer; z-index:2;
+  position:absolute; top:16px; height:38px; border-radius:100px; font-family:inherit; font-weight:700; font-size:.88rem;
+  cursor:pointer; z-index:2; transition:transform .12s, background .12s;
 }
-.lang-toggle{ right:20px; padding:0 16px; }
-.theme-toggle{ right:86px; width:34px; padding:0; display:grid; place-items:center; }
+.lang-toggle{ right:16px; min-width:64px; padding:0 16px; background:var(--ink); color:var(--on-ink); border:1px solid var(--ink); }
+.lang-toggle:hover{ background:var(--ink); border-color:var(--ink); transform:scale(1.04); }
+.theme-toggle{ right:88px; width:38px; padding:0; display:grid; place-items:center; background:var(--surface); color:var(--text); border:1px solid var(--line); }
 .theme-toggle svg{ width:18px; height:18px; }
-.lang-toggle:hover, .theme-toggle:hover{ background:rgba(255,255,255,.14); border-color:#fff; }
-body > .lang-toggle, body > .theme-toggle{ position:fixed; top:14px; z-index:50; background:var(--card); color:var(--text); border-color:var(--border); box-shadow:var(--shadow); }
-body > .lang-toggle{ right:14px; } body > .theme-toggle{ right:80px; }
-body > .lang-toggle:hover, body > .theme-toggle:hover{ background:var(--chip); border-color:var(--text); }
-header:not(:has(.back-link)):not(:has(.lang-toggle)){ padding-top:28px; border-radius:8px; }
+.theme-toggle:hover{ background:var(--raise); border-color:var(--line); }
+body > .lang-toggle, body > .theme-toggle{ position:fixed; top:14px; z-index:50; }
+body > .lang-toggle{ right:14px; } body > .theme-toggle{ right:86px; }
+header:not(:has(.back-link)):not(:has(.lang-toggle)){ padding-top:28px; }
 
-/* แถบแท็บ: ชิปทรงแคปซูล */
-nav{ background:var(--bg); border-bottom:1px solid var(--border); padding:10px 16px; gap:8px; }
+/* แถบแท็บ: ชิปขอบบาง ตัวที่เลือก = สีหมึก (ดำ / โหมดมืดขาว) */
+nav{ background:var(--bg); border-bottom:0; padding:16px 16px 8px; gap:8px; box-shadow:none; }
 .tab-btn{
-  font-family:inherit; border:0; margin:0; border-radius:999px; padding:8px 16px;
-  background:var(--chip); color:var(--text); font-weight:600; font-size:.9rem;
+  font-family:inherit; border:0; margin:0; border-radius:100px; padding:8px 18px;
+  background:var(--surface); color:var(--text); box-shadow:inset 0 0 0 1px var(--line); font-weight:600; font-size:.95rem;
 }
-.tab-btn:hover{ background:var(--chip-hover); color:var(--text); }
-.tab-btn.active{ background:var(--text); color:var(--bg); border-bottom-color:transparent; }
+.tab-btn:hover{ background:var(--raise); color:var(--text); }
+.tab-btn.active{ background:var(--ink); color:var(--on-ink); box-shadow:none; border-bottom-color:transparent; }
 
-/* การ์ดและกล่อง */
-.card{ background:var(--card); border:1px solid var(--border); border-radius:8px; box-shadow:var(--shadow); }
+/* การ์ดและกล่อง: พื้นเรียบ ขอบ 1px ไม่มีเงา */
+.card{ background:var(--card); border:1px solid var(--line); border-radius:24px; box-shadow:none; }
 .card-title{ color:var(--text); font-size:1.2rem; }
 .card-title .icon{ display:none; }
 .desc-text{ color:var(--text); font-size:1rem; }
-.formula, .step.result, .stats{ background:var(--strong) !important; color:#fff; border-radius:8px; letter-spacing:0; }
+.formula, .step.result, .stats{ background:var(--strong) !important; color:#fff; border-radius:16px; letter-spacing:0; }
 .stat .k, .step-tag{ text-transform:none; letter-spacing:0; }
 
-/* ปุ่ม */
-.btn-action{ font-family:inherit; background:var(--text); color:var(--bg); }
-.btn-action.secondary{ background:transparent; color:var(--text); border:1px solid var(--muted); }
-.mode-btn{ font-family:inherit; border:1px solid var(--border); background:var(--card); color:var(--text); }
+/* ปุ่ม: หลัก = แคปซูลหมึก, รอง = แคปซูลขอบบาง */
+.btn-action{ font-family:inherit; background:var(--ink); color:var(--on-ink); border:1px solid var(--ink); border-radius:100px; }
+.btn-action:hover:not(:disabled){ background:var(--ink-hover); border-color:var(--ink-hover); }
+.btn-action.secondary{ background:transparent; color:var(--text); border:1px solid var(--line); }
+.btn-action.secondary:hover:not(:disabled){ background:var(--raise); }
+.mode-btn{ font-family:inherit; border:1px solid var(--line); background:var(--surface); color:var(--text); border-radius:100px; }
 .mode-btn:hover{ border-color:var(--text); color:var(--text); }
-.mode-btn.active{ background:var(--text); border-color:var(--text); color:var(--bg); }
-.quiz-opt{ border-radius:8px; }
+.mode-btn.active{ background:var(--ink); border-color:var(--ink); color:var(--on-ink); }
 input[type=range]{ accent-color:var(--primary); }
 
 @media (max-width:600px){
-  header{ padding:58px 16px 20px; column-gap:14px; }
-  .lesson-cover{ width:76px; }
-  .back-link{ left:12px; max-width:calc(100% - 150px); overflow:hidden; white-space:nowrap; text-overflow:ellipsis; display:block; }
-  .lang-toggle{ right:12px; }
-  .theme-toggle{ right:74px; }
-  nav{ flex-wrap:nowrap; overflow-x:auto; justify-content:flex-start; scrollbar-width:none; }
+  header{ margin:0; border-radius:0 0 24px 24px; padding:64px 16px 20px; column-gap:14px; }
+  .lesson-cover{ width:72px; border-radius:12px; }
+  header h1{ font-size:clamp(1.5rem, 7vw, 2rem); }
+  header p{ font-size:.95rem; }
+  .back-link{ top:14px; left:12px; height:36px; padding:0 14px; max-width:calc(100% - 150px); overflow:hidden; white-space:nowrap; text-overflow:ellipsis; display:block; line-height:36px; }
+  .lang-toggle, .theme-toggle{ top:14px; height:36px; }
+  .lang-toggle{ right:12px; min-width:58px; padding:0 12px; }
+  .theme-toggle{ right:78px; width:36px; }
+  nav{ flex-wrap:nowrap; overflow-x:auto; justify-content:flex-start; scrollbar-width:none; padding:12px 12px 6px; }
   nav .tab-btn{ flex:0 0 auto; white-space:nowrap; }   /* ชื่อแท็บบรรทัดเดียว ปัดแถบซ้าย-ขวาแทน (ไม่บีบจนตัดคำ) */
   nav::-webkit-scrollbar{ display:none; }
 }
 /* โหมดมืด: สีที่หน้านี้ฝังไว้เอง (สร้างอัตโนมัติ) */
-:root[data-theme="dark"] .box-info{background:#1f2e12}
 :root[data-theme="dark"] .box-warn{background:#281d0f}
 :root[data-theme="dark"] .box-ok{background:#102a1d}
-:root[data-theme="dark"] .btn{background:var(--strong)}
-:root[data-theme="dark"] .btn.ghost{background:#171717}
-:root[data-theme="dark"] .btn.ghost:hover:not(:disabled){background:#223614}
-:root[data-theme="dark"] .chip{background:#171717}
-:root[data-theme="dark"] .chip.active{background:var(--strong)}
-:root[data-theme="dark"] .wg-cap{background:#1f2e12}
-:root[data-theme="dark"] .tile{background:#171717}
 :root[data-theme="dark"] .ans{background:#102a1d;color:#a8f8e1}
 :root[data-theme="dark"] .bad{background:#270f10;color:#f49ab2}
 :root[data-theme="dark"] .hl{background:#383115}
@@ -758,17 +754,13 @@ input[type=range]{ accent-color:var(--primary); }
 :root[data-theme="dark"] .verdict.no{background:#270f10}
 :root[data-theme="dark"] .verdict.ok .mk{color:#99f1ba}
 :root[data-theme="dark"] .verdict.no .mk{color:#ef839b}
-:root[data-theme="dark"] .tbl th{background:#1f2e12}
 :root[data-theme="dark"] .tbl td.cur{background:#383115}
-:root[data-theme="dark"] .wk-cell{background:#171717}
 :root[data-theme="dark"] .wk-cell .stepno{background:var(--strong)}
 :root[data-theme="dark"] .wk-note{color:#bcc5d2}
-:root[data-theme="dark"] .quiz-opt{background:#171717}
 :root[data-theme="dark"] .quiz-opt.correct{background:#102a1d;color:#a8f8e1}
 :root[data-theme="dark"] .quiz-opt.wrong{background:#291a0f;color:#f18fb8}
 :root[data-theme="dark"] .quiz-feedback.ok{color:#a8f8e1}
 :root[data-theme="dark"] .quiz-feedback.err{color:#f18fb8}
-:root[data-theme="dark"] .btn-next{background:var(--strong)}
 :root[data-theme="dark"] .tool-inp{background:#171717}
 :root[data-theme="dark"] .mt-item.sel{background:var(--strong)}
 /* ── theme:end ── */
@@ -782,13 +774,12 @@ input[type=range]{ accent-color:var(--primary); }
   <button id="themeToggle" class="theme-toggle" type="button" onclick="toggleTheme()" title="สลับโหมดสว่าง/มืด" aria-label="สลับโหมดสว่าง/มืด"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6"/></svg></button>
   <button id="langToggle" class="lang-toggle" onclick="toggleLang()">EN</button>
   <h1 data-th="ความสัมพันธ์และฟังก์ชัน" data-en="Relations and Functions">ความสัมพันธ์และฟังก์ชัน</h1>
-  <p data-th="จากเซต → คู่อันดับ → ความสัมพันธ์ → ฟังก์ชัน • 4 เสาหลัก • หนึ่งต่อหนึ่ง/ทั่วถึง • นับจำนวนฟังก์ชัน • ม.4" data-en="From sets → ordered pairs → relations → functions • four representations • one-to-one / onto • counting functions">จากเซต → คู่อันดับ → ความสัมพันธ์ → ฟังก์ชัน • 4 เสาหลัก • หนึ่งต่อหนึ่ง/ทั่วถึง • นับจำนวนฟังก์ชัน • ม.4</p>
+  <p data-th="จากเซต → คู่อันดับ → ความสัมพันธ์ → ฟังก์ชัน • ตรวจสอบฟังก์ชัน • หนึ่งต่อหนึ่ง/ทั่วถึง • นับจำนวนฟังก์ชัน • ม.4" data-en="From sets → ordered pairs → relations → functions • testing functions • one-to-one / onto • counting functions">จากเซต → คู่อันดับ → ความสัมพันธ์ → ฟังก์ชัน • ตรวจสอบฟังก์ชัน • หนึ่งต่อหนึ่ง/ทั่วถึง • นับจำนวนฟังก์ชัน • ม.4</p>
 </header>
 
 <nav>
   <button class="tab-btn active" onclick="showTab('ladder', this)" data-th="จากเซตสู่ฟังก์ชัน" data-en="From Sets to Functions">จากเซตสู่ฟังก์ชัน</button>
   <button class="tab-btn" onclick="showTab('build', this)" data-th="สร้างความสัมพันธ์เอง" data-en="Build a Relation">สร้างความสัมพันธ์เอง</button>
-  <button class="tab-btn" onclick="showTab('pillars', this)" data-th="4 เสาหลัก" data-en="Four Representations">4 เสาหลัก</button>
   <button class="tab-btn" onclick="showTab('check', this)" data-th="ตรวจสอบฟังก์ชัน" data-en="Is It a Function?">ตรวจสอบฟังก์ชัน</button>
   <button class="tab-btn" onclick="showTab('types', this)" data-th="หนึ่งต่อหนึ่ง / ทั่วถึง" data-en="One-to-one / Onto">หนึ่งต่อหนึ่ง / ทั่วถึง</button>
   <button class="tab-btn" onclick="showTab('count', this)" data-th="นับจำนวนฟังก์ชัน" data-en="Counting Functions">นับจำนวนฟังก์ชัน</button>
@@ -798,7 +789,6 @@ input[type=range]{ accent-color:var(--primary); }
 <main>
   <section id="tab-ladder" class="tab-panel active"></section>
   <section id="tab-build" class="tab-panel"></section>
-  <section id="tab-pillars" class="tab-panel"></section>
   <section id="tab-check" class="tab-panel"></section>
   <section id="tab-types" class="tab-panel"></section>
   <section id="tab-count" class="tab-panel"></section>
@@ -3876,10 +3866,12 @@ const LADDER_SCENES = [
     } }
 ];
 
-// ───────── แท็บ 2: ตัวสร้างความสัมพันธ์ (คลิกชิปคู่อันดับใน A × B) ─────────
+// ───────── แท็บ 2: ตัวสร้างความสัมพันธ์ (ลากจากตัวหน้าใน A ไปหาตัวหลังใน B — ครูสั่ง 2026-11-11) ─────────
+// ลาก 1 ครั้ง = 1 คู่อันดับ (เกิดลูกศร) · ทางสำรอง: แตะตัวหน้าแล้วแตะตัวหลัง · แตะลูกศรเพื่อลบคู่นั้น
+// ใช้ mapDiagram ของกลางวาดภาพ แล้วซ้อนชั้นรับการลาก — พิกัดตรงกับ mapDiagram (xa = 96, xb = 324, ระยะห่าง 40)
 function makeBuilder(host) {
   const A = ['1', '2', '3'], B = ['a', 'b', 'c'];
-  const w = { on: new Set(['0,0', '1,1', '2,2']) };
+  const w = { on: new Set(['0,0', '1,1', '2,2']), sel: null };
   const PRE = [
     { l: T('ฟังก์ชัน', 'A function'), s: ['0,0', '1,1', '2,2'] },
     { l: T('y ซ้ำ (ยังเป็นฟังก์ชัน)', 'Repeated y (still a function)'), s: ['0,1', '1,1', '2,1'] },
@@ -3887,19 +3879,59 @@ function makeBuilder(host) {
     { l: T('x บางตัวไม่มีคู่', 'An x with no pair'), s: ['0,0', '2,1'] },
     { l: T('ล้างทั้งหมด', 'Clear all'), s: [] }
   ];
-  host.innerHTML = `<div class="two"><div><div class="tile"><h4></h4><div class="gridhost"></div></div><div class="setrow rel"></div></div><div><div class="mdhost"></div></div></div><div class="vd"></div><div class="chips pre"></div>`;
+  host.innerHTML = `<div class="two"><div><div class="mdhost bld"></div><div class="sc-prompt bldhint"></div></div><div><div class="setrow rel"></div><div class="vd"></div></div></div><div class="chips pre"></div>`;
   const q = s => host.querySelector(s);
+  const n = Math.max(A.length, B.length), H = 46 + n * 40, XA = 96, XB = 324, MID = H / 2 + 6;
+  const ya = i => MID + (i - (A.length - 1) / 2) * 40, yb = j => MID + (j - (B.length - 1) / 2) * 40;
+  const NS = 'http://www.w3.org/2000/svg';
+  const mk = (tag, at, par) => { const e = document.createElementNS(NS, tag); for (const k in at) e.setAttribute(k, at[k]); if (par) par.appendChild(e); return e; };
+  const hitA = p => A.findIndex((_, i) => Math.hypot(p.x - XA, p.y - ya(i)) < 24);
+  const hitB = p => B.findIndex((_, j) => Math.hypot(p.x - XB, p.y - yb(j)) < 26);
+  const toggle = (i, j) => { const k = i + ',' + j; if (!w.on.has(k)) w.on.add(k); w.sel = null; w.render(); };
   w.render = () => {
     q('.pre').innerHTML = `<span class="chips-label">${EN() ? 'Presets' : 'ลองตัวอย่าง'}</span>` + PRE.map((p, i) => `<button class="chip" data-i="${i}">${tx(p.l)}</button>`).join('');
-    q('.pre').querySelectorAll('.chip').forEach(c => c.onclick = () => { w.on = new Set(PRE[+c.dataset.i].s); w.render(); });
-    q('h4').textContent = EN() ? 'Tap pairs in A × B (rows = x, columns = y)' : 'กดเลือกคู่อันดับใน A × B (แถว = x, คอลัมน์ = y)';
-    let g = `<div class="pg" style="grid-template-columns:repeat(${B.length + 1},auto)"><span></span>${B.map(b => `<span class="pgh">${b}</span>`).join('')}`;
-    A.forEach((a, i) => { g += `<span class="pgh">${a}</span>`; B.forEach((b, j) => { g += `<button data-k="${i},${j}" class="${w.on.has(i + ',' + j) ? 'on' : ''}">${pr(a, b)}</button>`; }); });
-    q('.gridhost').innerHTML = g + '</div>';
-    q('.gridhost').querySelectorAll('button').forEach(b => b.onclick = () => { const k = b.dataset.k; w.on.has(k) ? w.on.delete(k) : w.on.add(k); w.render(); });
+    q('.pre').querySelectorAll('.chip').forEach(c => c.onclick = () => { w.on = new Set(PRE[+c.dataset.i].s); w.sel = null; w.render(); });
+    q('.bldhint').textContent = tx(T('ลากจากตัวหน้า (ใน A) ไปปล่อยที่ตัวหลัง (ใน B) = 1 คู่อันดับ · แตะตัวหน้าแล้วแตะตัวหลังก็ได้ · แตะลูกศรเพื่อลบ',
+      'Drag from a first entry (in A) and drop on a second entry (in B) = 1 ordered pair · or tap one then the other · tap an arrow to delete it'));
     const pairs = [...w.on].map(k => k.split(',').map(Number)).sort((p, r) => p[0] - r[0] || p[1] - r[1]);
     q('.rel').innerHTML = `${I('r')} = ${setStr(pairs.map(p => pr(A[p[0]], B[p[1]])))} &nbsp;<span class="ptag">${EN() ? 'pairs chosen' : 'เลือกแล้ว'} ${pairs.length} / ${A.length * B.length}</span>`;
-    q('.mdhost').innerHTML = mapDiagram(A, B, pairs, { flag: true });
+    const mh = q('.mdhost');
+    mh.innerHTML = mapDiagram(A, B, pairs, { flag: true });
+    const svg = mh.querySelector('svg');
+    svg.style.touchAction = 'none'; svg.style.cursor = 'pointer'; svg.style.maxWidth = '520px';
+    // ชั้นรับการลบ: เส้นใสหนาทับลูกศรแต่ละเส้น
+    pairs.forEach(p => {
+      const ln = mk('line', { x1: XA + 15, y1: ya(p[0]), x2: XB - 17, y2: yb(p[1]), stroke: 'transparent', 'stroke-width': 16, 'data-k': p[0] + ',' + p[1], class: 'bld-hit' }, svg);
+      ln.style.cursor = 'pointer';
+    });
+    // ตัวหน้าที่ถูกแตะเลือกไว้ (ทางสำรองแบบแตะ-แตะ)
+    if (w.sel !== null) mk('circle', { cx: XA, cy: ya(w.sel), r: 20, fill: 'none', stroke: 'var(--g-curve)', 'stroke-width': 4, 'stroke-dasharray': '5 4' }, svg);
+    const rubber = mk('line', { class: 'md-arr o', x1: 0, y1: 0, x2: 0, y2: 0, 'stroke-dasharray': '7 5', 'stroke-width': 3.2 }, svg);
+    rubber.style.display = 'none';
+    const pt = e => { const m = svg.getScreenCTM(); const P = svg.createSVGPoint(); P.x = e.clientX; P.y = e.clientY; const r = P.matrixTransform(m.inverse()); return { x: r.x, y: r.y }; };
+    let drag = null;
+    svg.onpointerdown = e => {
+      const p = pt(e), i = hitA(p);
+      if (i >= 0) { drag = { i, moved: false }; svg.setPointerCapture(e.pointerId); rubber.setAttribute('x1', XA + 15); rubber.setAttribute('y1', ya(i)); rubber.setAttribute('x2', p.x); rubber.setAttribute('y2', p.y); e.preventDefault(); return; }
+      const j = hitB(p);
+      if (j >= 0) { if (w.sel !== null) toggle(w.sel, j); return; }
+      const hl = e.target.closest && e.target.closest('.bld-hit');
+      if (hl) { w.on.delete(hl.dataset.k); w.sel = null; w.render(); return; }
+      if (w.sel !== null) { w.sel = null; w.render(); }
+    };
+    svg.onpointermove = e => {
+      if (!drag) return;
+      const p = pt(e);
+      if (!drag.moved && Math.hypot(p.x - XA, p.y - ya(drag.i)) > 12) { drag.moved = true; rubber.style.display = ''; }
+      rubber.setAttribute('x2', p.x); rubber.setAttribute('y2', p.y);
+    };
+    svg.onpointerup = e => {
+      if (!drag) return;
+      const p = pt(e), j = hitB(p), d0 = drag; drag = null; rubber.style.display = 'none';
+      if (d0.moved) { if (j >= 0) toggle(d0.i, j); }
+      else { w.sel = w.sel === d0.i ? null : d0.i; w.render(); }
+    };
+    svg.onpointercancel = () => { drag = null; rubber.style.display = 'none'; };
     const outc = A.map((_, i) => pairs.filter(p => p[0] === i).length);
     const multi = A.filter((_, i) => outc[i] > 1), none = A.filter((_, i) => outc[i] === 0);
     const isFn = multi.length === 0, fromAB = isFn && none.length === 0;
@@ -3910,110 +3942,6 @@ function makeBuilder(host) {
     else msg = tx(T(`x แต่ละตัวที่ถูกใช้ได้ y ค่าเดียว จึง<b>เป็นฟังก์ชัน</b>` + (fromAB ? ' และใช้ x ครบทุกตัวใน A จึงเป็น <b>ฟังก์ชันจาก A ไป B</b>' : ` — แต่ x = ${none.join(', ')} ไม่มีคู่ จึงยังไม่เป็น "ฟังก์ชันจาก A ไป B" (โดเมนเหลือแค่ ${setStr(Dm)})`),
       `Every used x gets exactly one y, so it <b>is a function</b>` + (fromAB ? ', and it uses every x in A, so it is a <b>function from A to B</b>' : ` — but x = ${none.join(', ')} has no pair, so it is not a function "from A to B" (its domain is only ${setStr(Dm)})`)));
     q('.vd').innerHTML = `<div class="verdict ${isFn && pairs.length ? 'ok' : 'no'}"><span class="mk">${isFn && pairs.length ? '✓' : isFn ? '·' : '✗'}</span><div>${msg}${isFn && pairs.length ? `<br>${I('D')}<sub>r</sub> = ${setStr(Dm)} &nbsp; ${I('R')}<sub>r</sub> = ${setStr(Rn)}` : ''}</div></div>`;
-  };
-  w.refresh = () => w.render();
-  LIVE.push(w); w.render();
-}
-
-// ───────── แท็บ 3: 4 เสาหลัก (4 ฉาก) ─────────
-const PILLARS = [
-  { id: 'lin', eq: 'y = 2x − 1', dom: [1, 2, 3, 4], f: x => 2 * x - 1 },
-  { id: 'sq', eq: 'y = x²', dom: [-2, -1, 0, 1, 2], f: x => x * x },
-  { id: 'abs', eq: 'y = |x| − 1', dom: [-2, -1, 0, 1, 2], f: x => Math.abs(x) - 1 }
-];
-const PW = { W: 500, H: 392, chipY: 34, dx: 66, rx: 198, gap: 44, cy: 214, g0: 282, g1: 490, gt: 92, gb: 342, xmin: -3, xmax: 5, ymin: -2, ymax: 8 };
-let PCL_N = 0;
-function pillarBuild(root, p) {
-  const W = PW, m = {}, n = p.dom.length;
-  const ys = [...new Set(p.dom.map(p.f))].sort((a, b) => a - b), pairs = p.dom.map(x => [x, p.f(x)]);
-  const svg = m.svg = sv('svg', { class: 'sc-svg', viewBox: `0 0 ${W.W} ${W.H}` }, root);
-  const GX = x => W.g0 + (x - W.xmin) / (W.xmax - W.xmin) * (W.g1 - W.g0), GY = y => W.gb - (y - W.ymin) / (W.ymax - W.ymin) * (W.gb - W.gt);
-  const yD = i => W.cy + (i - (n - 1) / 2) * W.gap, yR = j => W.cy + (j - (ys.length - 1) / 2) * W.gap;
-  // ③ กราฟ
-  m.gG = sv('g', {}, svg);
-  for (let x = W.xmin; x <= W.xmax; x++) sv('line', { class: 'sc-grid', x1: GX(x), y1: W.gt, x2: GX(x), y2: W.gb }, m.gG);
-  for (let y = W.ymin; y <= W.ymax; y++) sv('line', { class: 'sc-grid', x1: W.g0, y1: GY(y), x2: W.g1, y2: GY(y) }, m.gG);
-  sv('path', { class: 'sc-axis', d: `M${W.g0} ${GY(0)} H${W.g1 + 4} M${GX(0)} ${W.gb} V${W.gt - 4}` }, m.gG);
-  for (let x = W.xmin + 1; x < W.xmax; x++) if (x) sv('text', { class: 'sc-tick', x: GX(x), y: GY(0) + 14, 'text-anchor': 'middle', text: mn(x) }, m.gG);
-  for (let y = W.ymin + 1; y < W.ymax; y++) if (y) sv('text', { class: 'sc-tick', x: GX(0) - 5, y: GY(y) + 4, 'text-anchor': 'end', text: mn(y) }, m.gG);
-  sv('text', { class: 'sc-tick', x: W.g1 + 2, y: GY(0) - 6, text: 'x', 'font-style': 'italic' }, m.gG); sv('text', { class: 'sc-tick', x: GX(0) + 6, y: W.gt - 4, text: 'y', 'font-style': 'italic' }, m.gG);
-  // เส้นประนำสายตา (เปิดเผยด้วยกรอบตัดที่ค่อยๆ กว้างขึ้น)
-  const cid = 'pcl' + (++PCL_N);
-  const defs = sv('defs', {}, svg); m.clip = sv('rect', { x: W.g0, y: W.gt, width: 0, height: W.gb - W.gt }, sv('clipPath', { id: cid }, defs));
-  let dd = ''; for (let i = 0; i <= 160; i++) { const x = W.xmin + (W.xmax - W.xmin) * i / 160; dd += (i ? 'L' : 'M') + GX(x).toFixed(1) + ' ' + GY(p.f(x)).toFixed(1); }
-  m.guide = sv('path', { class: 'sc-guide', d: dd, 'clip-path': `url(#${cid})` }, svg);
-  // ② แผนภาพ
-  m.gD = sv('g', {}, svg);
-  [[W.dx, 'D'], [W.rx, 'R']].forEach(([cx, nm]) => { sv('ellipse', { class: 'sc-set', cx, cy: W.cy, rx: 42, ry: 118 }, m.gD); sv('text', { x: cx, y: 82, 'text-anchor': 'middle', class: 'sc-big', text: nm }, m.gD); });
-  p.dom.forEach((x, i) => { const g = sv('g', { class: 'sc-node' }, m.gD); sv('circle', { cx: W.dx, cy: yD(i), r: 15 }, g); sv('text', { x: W.dx, y: yD(i) + 6, 'text-anchor': 'middle', text: mn(x) }, g); });
-  ys.forEach((y, j) => { const g = sv('g', { class: 'sc-node' }, m.gD); sv('circle', { cx: W.rx, cy: yR(j), r: 15 }, g); sv('text', { x: W.rx, y: yR(j) + 6, 'text-anchor': 'middle', text: mn(y) }, g); });
-  m.arr = pairs.map(([x, y], i) => svArrow(svg));
-  const ax1 = W.dx + 18, ax2 = W.rx - 20;
-  m.arrow = (i, t) => m.arr[i].set(ax1, yD(i), ax2, yR(ys.indexOf(pairs[i][1])), t);
-  m.mid = i => [(ax1 + ax2) / 2, (yD(i) + yR(ys.indexOf(pairs[i][1]))) / 2];
-  m.gpos = i => [GX(pairs[i][0]), GY(pairs[i][1])];
-  // ① ชิปคู่อันดับ (แถวบนสุด)
-  const cx = i => W.W / 2 + (i - (n - 1) / 2) * 86;
-  m.chips = pairs.map(([x, y], i) => svChip(svg, pr(mn(x), mn(y)), '', 78, 30));
-  m.cx = cx; m.cx0 = i => W.W / 2 + (i - (n - 1) / 2) * 94; m.cy0 = 196; m.s0 = 1.15;   // ฉาก ① จัดชิปไว้กลางภาพ แล้วฉาก ② ค่อยเลื่อนขึ้นบน
-  m.dots = pairs.map(() => sv('circle', { class: 'sc-dot', r: 6.5, cx: 0, cy: 0, style: 'opacity:0' }, svg));
-  m.eq = sv('text', { x: W.W / 2, y: 376, 'text-anchor': 'middle', class: 'sc-big', text: `${p.eq} ,  x ∈ ${setStr(p.dom.map(mn))}`, style: 'opacity:0' }, svg);
-  const op = (e, v) => { e.style.opacity = v; };
-  m.pose = k => {
-    m.chips.forEach((c, i) => { if (k === 0) c.at(m.cx0(i), m.cy0, m.s0, 1); else c.at(cx(i), W.chipY, 1, .35); });
-    op(m.gD, k === 1 ? 1 : k >= 2 ? .28 : 0);
-    m.arr.forEach((a, i) => m.arrow(i, k >= 1 ? 1 : 0));
-    op(m.gG, k >= 2 ? 1 : 0);
-    m.dots.forEach((d, i) => { const [x, y] = m.gpos(i); d.setAttribute('cx', x); d.setAttribute('cy', y); op(d, k >= 2 ? 1 : 0); });
-    m.clip.setAttribute('width', k >= 3 ? W.g1 - W.g0 : 0); op(m.eq, k >= 3 ? 1 : 0);
-  };
-  return m;
-}
-function makePillars(host) {
-  const w = { cur: 0 };
-  host.innerHTML = '<div class="chips"></div><div class="plsc"></div>';
-  const fresh = (S, k) => { S.el.innerHTML = ''; const m = pillarBuild(S.el, PILLARS[w.cur]); m.pose(k); return m; };
-  const scenes = [
-    { cap: T('<b>① คู่อันดับ</b> — เขียน <i>f</i> ทีละคู่ (x, y): x คือตัวหน้า y คือตัวหลังที่ได้จาก <i>f</i>', '<b>① Ordered pairs</b> — write <i>f</i> as pairs (x, y): x is the first entry, y the value <i>f</i> gives.'),
-      end: S => { fresh(S, 0); },
-      play: async S => { const m = fresh(S, -1), A = S.anim; m.chips.forEach(c => c.at(0, 0, 1, 0)); for (let i = 0; i < m.chips.length; i++) { await A.run(380, t => m.chips[i].at(m.cx0(i), m.cy0, lerp(.2, m.s0, t), Math.min(1, t * 3)), EASE.back); await A.wait(120); } } },
-    { cap: T('<b>② แผนภาพ</b> — คู่อันดับแต่ละคู่กลายเป็น <b>ลูกศรหนึ่งเส้น</b> จาก x ใน D ไปหา y ใน R', '<b>② Mapping diagram</b> — each pair becomes <b>one arrow</b> from x in D to y in R.'),
-      end: S => { fresh(S, 1); },
-      play: async S => {
-        const m = fresh(S, 0), A = S.anim; m.gD.style.opacity = 0; m.arr.forEach((a, i) => m.arrow(i, 0));
-        await A.run(600, t => m.chips.forEach((c, i) => c.at(lerp(m.cx0(i), m.cx(i), t), lerp(m.cy0, PW.chipY, t), lerp(m.s0, 1, t), lerp(1, .35, t))));
-        await A.run(450, t => { m.gD.style.opacity = t; }, EASE.lin);
-        const cp = m.chips.map(() => null);
-        await Promise.all(m.chips.map(async (c, i) => {
-          await A.wait(i * 330);
-          const tmp = svChip(m.svg, c.g.textContent, '', 78, 30), [mx, my] = m.mid(i);
-          await Promise.all([A.run(520, t => tmp.at(lerp(m.cx(i), mx, t), lerp(PW.chipY, my, t), lerp(1, .4, t), t > .8 ? 1 - (t - .8) / .2 : 1)), A.run(520, t => m.arrow(i, t), EASE.out)]);
-          tmp.g.remove();
-        }));
-      } },
-    { cap: T('<b>③ กราฟ</b> — ลูกศรแต่ละเส้นยุบลงเป็น <b>จุดหนึ่งจุด</b> (x, y) บนระนาบ', '<b>③ Graph</b> — each arrow collapses into <b>one point</b> (x, y) on the plane.'),
-      end: S => { fresh(S, 2); },
-      play: async S => {
-        const m = fresh(S, 1), A = S.anim; m.gG.style.opacity = 0; m.dots.forEach(d => { d.style.opacity = 0; });
-        await Promise.all([A.run(450, t => { m.gG.style.opacity = t; m.gD.style.opacity = lerp(1, .28, t); }, EASE.lin)]);
-        await Promise.all(m.dots.map(async (d, i) => {
-          await A.wait(i * 300); const [mx, my] = m.mid(i), [gx, gy] = m.gpos(i);
-          await A.run(700, t => { d.setAttribute('cx', lerp(mx, gx, t)); d.setAttribute('cy', lerp(my, gy, t)); d.style.opacity = Math.min(1, t * 4); m.arr[i].g.style.opacity = 1 - Math.min(1, t * 2); });
-        }));
-      } },
-    { cap: T('<b>④ สมการ</b> — จุดเรียงกันจนเห็นกฎ: สมการบอก "วิธีสร้าง y จาก x" แทน x ทีละตัวก็ได้คู่อันดับกลับมาครบ', '<b>④ Equation</b> — the points line up and reveal the rule: the equation is the "recipe for y from x" — substitute each x to get the pairs back.'),
-      end: S => { fresh(S, 3); },
-      play: async S => {
-        const m = fresh(S, 2), A = S.anim; m.eq.style.opacity = 0;
-        await A.run(900, t => m.clip.setAttribute('width', (PW.g1 - PW.g0) * t), EASE.inOut);
-        await A.run(450, t => { m.eq.style.opacity = t; }, EASE.lin);
-      } }
-  ];
-  const sc = makeScenes(host.querySelector('.plsc'), scenes, { prompt: T('เลือกฟังก์ชัน แล้วกด ▶ ดูฟังก์ชันตัวเดียวกันทีละเสา', 'Pick a function, then press ▶ to see the same function one pillar at a time') });
-  w.render = () => {
-    const c = host.querySelector('.chips');
-    c.innerHTML = `<span class="chips-label">${EN() ? 'Function' : 'ฟังก์ชัน'}</span>` + PILLARS.map((p, i) => `<button class="chip${i === w.cur ? ' active' : ''}" data-i="${i}">${p.eq} , x ∈ ${setStr(p.dom.map(mn))}</button>`).join('');
-    c.querySelectorAll('.chip').forEach(b => b.onclick = () => { w.cur = +b.dataset.i; w.render(); sc.go(sc.k, true); });
   };
   w.refresh = () => w.render();
   LIVE.push(w); w.render();
@@ -4158,7 +4086,7 @@ function typeItem(t, n) {
 // ───────── แท็บ 6: นับจำนวนฟังก์ชัน — เหลือเฉพาะ n(B)^n(A) ─────────
 function makeCounter(host) {
   const w = { a: 3, b: 3, img: [0, 0, 0], run: null, tw: [], ye: [] };
-  host.innerHTML = '<div class="sc-prompt"></div><div class="plh"></div><div class="wg-nav"><span class="wg-cnt ck" style="min-width:170px"></span><button class="btn ghost cplay"></button></div><div class="formula cf"></div><div class="two">' + sliderRow('n(A) =', 'na', 1, 4, 1, 3) + sliderRow('n(B) =', 'nb', 1, 4, 1, 3) + '</div>';
+  host.innerHTML = '<div class="sc-prompt"></div><div class="plh"></div><div class="setrow cset" style="text-align:center;font-size:1.35rem"></div><div class="wg-nav"><span class="wg-cnt ck" style="min-width:170px"></span><button class="btn ghost cplay"></button></div><div class="formula cf"></div><div class="two">' + sliderRow('n(A) =', 'na', 1, 4, 1, 3) + sliderRow('n(B) =', 'nb', 1, 4, 1, 3) + '</div>';
   const q = s => host.querySelector(s), sa = q('#na'), sb = q('#nb');
   const H = 300, XA = 100, XB = 376;
   const yA = i => 144 + (i - (w.a - 1) / 2) * 62, yB = j => 144 + (j - (w.b - 1) / 2) * 58;
@@ -4167,6 +4095,7 @@ function makeCounter(host) {
   const paintInfo = () => {
     const N = total(), k = code() + 1;
     q('.ck').textContent = EN() ? `Function ${k} of ${N}` : `ฟังก์ชันที่ ${k} จาก ${N}`;
+    q('.cset').innerHTML = `${I('f')} = ${setStr(w.img.map((j, i) => pr('1234'[i], 'abcd'[j])))}`;   // ฟังก์ชันที่เห็นอยู่ เขียนเป็นเซตคู่อันดับ อัปเดตทุกแบบ
     const prod = Array(w.a).fill(w.b).join(' × ');
     q('.cf').innerHTML = `<span>${I('n')}(${I('B')})<sup>${I('n')}(${I('A')})</sup> = ` + (w.a > 1 ? `${prod} = ` : '') + `${w.b}<sup>${w.a}</sup> = <span class="fm-n">${N}</span></span>`;   // ห่อด้วย <span> เดียว: .formula เป็น flex ถ้าไม่ห่อ ตัวยกจะแยกเป็นก้อน
     const pl = q('.cplay'); pl.disabled = N > 27; pl.textContent = w.run ? (EN() ? '■ Stop' : '■ หยุด') : (EN() ? '▶ Show every function' : '▶ ไล่ดูทุกแบบ'); pl.title = N > 27 ? (EN() ? 'Available when there are at most 27 functions' : 'ไล่ได้เมื่อมีไม่เกิน 27 ฟังก์ชัน') : '';
@@ -4252,16 +4181,10 @@ function build() {
 
   document.getElementById('tab-build').innerHTML =
     card('🧩', d('สร้างความสัมพันธ์จาก A × B', 'Build a relation from A × B'),
-      `<div class="sc-prompt">${d('กดเลือกชิปคู่อันดับ แล้วดูลูกศรกับคำตัดสินเปลี่ยนตามทันที', 'Tap ordered-pair chips and watch the arrows and the verdict follow')}</div><div id="w-build"></div>
-       <div class="box-info">${d('ลองให้ <b>ลูกศรออกจาก x ตัวเดียวสองเส้น</b> — วงของ x จะเป็นสีแดง และหน้านี้จะบอกว่าไม่เป็นฟังก์ชัน', 'Try making <b>two arrows leave one x</b> — its circle turns red and the verdict says it is not a function.')}</div>`);
+      `<div id="w-build"></div>
+       <div class="box-info">${d('ลองลาก <b>ลูกศรออกจาก x ตัวเดียวสองเส้น</b> — วงของ x จะเป็นสีแดง และหน้านี้จะบอกว่าไม่เป็นฟังก์ชัน', 'Try dragging <b>two arrows out of one x</b> — its circle turns red and the verdict says it is not a function.')}</div>`);
   makeBuilder(document.getElementById('w-build'));
 
-  document.getElementById('tab-pillars').innerHTML =
-    card('🏛️', d('4 เสาหลักของฟังก์ชัน', 'Four ways to show the same function'),
-      `<div id="w-pillars"></div>
-       <div class="formula" style="font-size:1.05rem;gap:6px 10px"><span>${d('คู่อันดับ', 'ordered pairs')}</span><span>→</span><span>${d('แผนภาพ', 'diagram')}</span><span>→</span><span>${d('กราฟ', 'graph')}</span><span>→</span><span>${d('สมการ', 'equation')}</span></div>
-       <div class="box-info"><b>${d('ทำไมต้องรู้ทั้ง 4 แบบ', 'Why know all four')}</b><br>${d('• <b>ตรวจสอบฟังก์ชัน</b> ง่ายที่สุดที่แผนภาพหรือกราฟ (ดูลูกศร / เส้นตั้ง)<br>• <b>หาอินเวอร์ส</b> ทำที่สมการ: สลับ x, y แล้วจัดรูป (ดูสื่อฟังก์ชันผกผัน)', '• <b>Checking a function</b> is easiest on a diagram or graph (arrows / vertical line)<br>• <b>Finding the inverse</b> is done on the equation: swap x, y and solve (see the Inverse Functions medium)')}</div>`);
-  makePillars(document.getElementById('w-pillars'));
 
   document.getElementById('tab-check').innerHTML =
     card('🔍', d('ตรวจจากคู่อันดับ: ดู "ตัวหน้า" ซ้ำไหม', 'From pairs: does a first entry repeat?'),
