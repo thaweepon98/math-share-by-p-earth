@@ -763,6 +763,42 @@ input[type=range]{ accent-color:var(--primary); }
 :root[data-theme="dark"] .quiz-feedback.err{color:#f18fb8}
 :root[data-theme="dark"] .tool-inp{background:#171717}
 :root[data-theme="dark"] .mt-item.sel{background:var(--strong)}
+  /* ═══ ปากกาสี (คู่กับ tools/pen_ink.js · build_lessons.py ใส่ให้ทุกหน้า) — สีปุ่มใช้โทเคน --g-* เปลี่ยนตามโหมดสว่าง/มืดเอง ═══ */
+  #penCanvas { position: fixed; inset: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 9000; }
+  .pen-bar { position: fixed; right: 18px; bottom: 18px; z-index: 9001; display: flex; align-items: center; gap: 6px; padding: 6px;
+    background: var(--card, #fff); border: 1px solid var(--line, #ced0d4); border-radius: 999px; box-shadow: 0 6px 22px rgba(0,0,0,.16);
+    touch-action: manipulation; user-select: none; -webkit-user-select: none; }
+  .pen-bar:not(.open) { padding: 4px; }
+  .pen-tools { display: none; align-items: center; gap: 4px; padding-left: 4px; }
+  .pen-bar.open .pen-tools { display: flex; }
+  .pen-bar button { width: 40px; height: 40px; border-radius: 50%; border: none; background: transparent; color: var(--text, #1c1e21);
+    display: inline-flex; align-items: center; justify-content: center; cursor: pointer; padding: 0; flex: none; }
+  .pen-bar button:hover { background: var(--raise, #e4e9ee); }
+  .pen-bar svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
+  .pen-bar .pen-main { background: var(--ink, #000); color: var(--on-ink, #fff); }
+  .pen-bar .pen-main:hover { background: var(--ink-hover, #2b3138); }
+  .pen-bar .pen-btn.sel { background: var(--ink, #000); color: var(--on-ink, #fff); }
+  .pen-sw span { width: 22px; height: 22px; border-radius: 50%; display: block; box-shadow: inset 0 0 0 1px rgba(0,0,0,.18); transition: transform .15s; }
+  .pen-sw.sel span { transform: scale(1.12); box-shadow: 0 0 0 2px var(--card, #fff), 0 0 0 4px var(--text, #1c1e21); }
+  .pen-c-red span { background: var(--g-red, #D32F2F); }
+  .pen-c-blue span { background: var(--g-blue, #1E66D0); }
+  .pen-c-green span { background: var(--g-green, #2E9E4F); }
+  .pen-c-yellow span { background: #FFC400; }
+  .pen-c-ink span { background: var(--ink, #000); }
+  .pen-sep { width: 1px; height: 26px; background: var(--line, #ced0d4); margin: 0 4px; }
+  html.pen-on body, html.pen-on body * { cursor: crosshair; }
+  html.pen-on.pen-erase body, html.pen-on.pen-erase body * { cursor: cell; }
+  html.pen-on .pen-bar, html.pen-on .pen-bar * { cursor: pointer; }
+  html.pen-finger { touch-action: none; }
+  html.pen-on body { -webkit-user-select: none; user-select: none; }
+  @media (max-width: 560px) {
+    .pen-bar { right: 8px; bottom: 8px; gap: 2px; }
+    .pen-bar button { width: 32px; height: 32px; }
+    .pen-sw span { width: 19px; height: 19px; }
+    .pen-sep { margin: 0 1px; }
+  }
+  @media print { #penCanvas, .pen-bar { display: none !important; } }
+  /* ═══ END ปากกาสี ═══ */
 /* ── theme:end ── */
 </style>
 </head>
@@ -1189,6 +1225,7 @@ function makeScenes(host, scenes, o) {
   const stop = () => { if (w.anim) w.anim.kill(); w.anim = null; w.playing = false; };
   w.go = (k, play) => {
     stop(); w.k = Math.max(0, Math.min(scenes.length - 1, k));
+    host.dataset.scene = w.k; // ปากกาสีใช้ผูกเส้นกับฉาก (เปลี่ยนฉาก = เส้นของฉากเดิมซ่อน)
     const sc = scenes[w.k];
     if (play && sc.play && !reducedMotion()) {
       const anim = makeAnimator(), kk = w.k; w.anim = anim; w.playing = true;
@@ -4404,6 +4441,218 @@ window.addEventListener('load', () => {
   build();
   applyLang(getLang());
 });
+</script>
+<script id="pen-js">
+//  ═══ ปากกาสี (ขีดเขียนทับสื่อ) — tools/build_lessons.py ใส่ให้ทุกหน้าสื่อเป็นสคริปต์ id=pen-js (ห้ามแก้ในหน้า แก้ไฟล์นี้แล้วรันสคริปต์ใหม่) ═══
+// ปุ่มปากกามุมล่างขวา · คีย์ P เปิด/ปิด (ดูตำแหน่งปุ่ม ใช้ได้ทั้งแป้นไทย) · Esc ปิด · Ctrl+Z ย้อน
+// เส้นผูกกับกล่องที่เริ่มขีด (.card / section / main ที่ใกล้ที่สุด) → เลื่อนจอแล้วเส้นตามเนื้อหา, แท็บถูกซ่อน = เส้นซ่อน
+//   + ผูกกับฉากของ makeScenes ใน lesson_kit (host.dataset.scene) → เปลี่ยนฉาก เส้นซ่อน กลับมาฉากเดิมเส้นยังอยู่
+//   เส้นไม่ได้บันทึกถาวร (รีเฟรชหน้า = หาย) · ไม่พึ่งโค้ดของหน้า (ภาษาอ่านจาก <html lang>)
+// อุปกรณ์: เมาส์/ปากกา stylus ขีดได้ · นิ้วขีดได้จนกว่าจะเห็นปากกา stylus ครั้งแรก จากนั้นนิ้วกลับไปเลื่อนจอ/ลากของในฉาก (กันฝ่ามือ)
+// สีอ่านจาก --g-red/--g-blue/--g-green/--ink ทุกครั้งที่วาด → สลับโหมดมืดแล้วสีเปลี่ยนตาม
+(function () {
+  if (window.__penInk) return; window.__penInk = true;
+  const COLORS = [['red', '--g-red', '#D32F2F', 'แดง', 'Red'], ['blue', '--g-blue', '#1E66D0', 'น้ำเงิน', 'Blue'],
+    ['green', '--g-green', '#2E9E4F', 'เขียว', 'Green'], ['yellow', null, '#FFC400', 'เหลือง', 'Yellow'], ['ink', '--ink', '#000000', 'ดำ/ขาว', 'Black/White']];
+  const S = { on: false, tool: 'pen', color: 'red', strokes: [], hist: [], sawPen: false, cur: null, eraseDel: null, id: null, eatUntil: 0 };
+  const ICON = {
+    pen: '<svg viewBox="0 0 24 24"><path d="M4 20l1.2-4.6L16.5 4.1a2 2 0 0 1 2.8 0l.6.6a2 2 0 0 1 0 2.8L8.6 18.8 4 20z"/><path d="M14.5 6.1l3.4 3.4"/></svg>',
+    hl: '<svg viewBox="0 0 24 24"><path d="M9 14l-3 3v3h6l1-1"/><path d="M9 14l7.5-9.5a2 2 0 0 1 2.9-.3l.4.4a2 2 0 0 1-.3 2.9L10 15z"/><path d="M14 20h6"/></svg>',
+    eraser: '<svg viewBox="0 0 24 24"><path d="M8.5 20H20"/><path d="M4.6 15.4l9.9-9.9a2 2 0 0 1 2.8 0l2.2 2.2a2 2 0 0 1 0 2.8L12 18H7.2z"/><path d="M9 11l5 5"/></svg>',
+    undo: '<svg viewBox="0 0 24 24"><path d="M9 14L4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 0 11H11"/></svg>',
+    clear: '<svg viewBox="0 0 24 24"><path d="M4 7h16"/><path d="M10 11v6M14 11v6"/><path d="M5.5 7l1 13h11l1-13"/><path d="M9 7V4h6v3"/></svg>',
+    close: '<svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>'
+  };
+  const LBL = { pen: ['ปากกา (P)', 'Pen (P)'], hl: ['ปากกาเน้นข้อความ', 'Highlighter'], eraser: ['ยางลบ (ลบทีละเส้น)', 'Eraser (whole stroke)'],
+    undo: ['ย้อนกลับ (Ctrl+Z)', 'Undo (Ctrl+Z)'], clear: ['ล้างเส้นในหน้านี้', 'Clear this view'], close: ['ปิดปากกา (Esc)', 'Close pen (Esc)'] };
+  const isEn = () => document.documentElement.lang === 'en';
+  const L = k => LBL[k][isEn() ? 1 : 0];
+
+  let cv, ctx, bar, dpr = 1, W = 0, H = 0, queued = false;
+  const colorOf = c => { const d = COLORS.find(x => x[0] === c) || COLORS[0]; if (d[1]) { const v = getComputedStyle(document.documentElement).getPropertyValue(d[1]).trim(); if (v) return v; } return d[2]; };
+  const visible = s => s.anchor.isConnected && s.anchor.getClientRects().length > 0 && (!s.host || (s.host.isConnected && s.host.dataset.scene === s.scene));
+
+  function resize() {
+    dpr = window.devicePixelRatio || 1; W = window.innerWidth; H = window.innerHeight;
+    cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr); paint();
+  }
+  function schedule() { if (queued || (!S.strokes.length && !S.cur)) return; queued = true; requestAnimationFrame(() => { queued = false; paint(); }); }
+  function strokePath(s, ox, oy, perSeg) {
+    const p = s.pts, n = p.length;
+    if (n === 1) { ctx.beginPath(); ctx.arc(ox + p[0][0], oy + p[0][1], s.w * (perSeg ? .4 + p[0][2] * 1.2 : 1) / 2, 0, Math.PI * 2); ctx.fill(); return; }
+    if (!perSeg) {
+      ctx.beginPath(); ctx.moveTo(ox + p[0][0], oy + p[0][1]);
+      for (let i = 1; i < n - 1; i++) ctx.quadraticCurveTo(ox + p[i][0], oy + p[i][1], ox + (p[i][0] + p[i + 1][0]) / 2, oy + (p[i][1] + p[i + 1][1]) / 2);
+      ctx.lineTo(ox + p[n - 1][0], oy + p[n - 1][1]); ctx.stroke(); return;
+    }
+    let sx = p[0][0], sy = p[0][1];
+    for (let i = 1; i < n; i++) {
+      const last = i === n - 1, ex = last ? p[i][0] : (p[i][0] + p[i + 1][0]) / 2, ey = last ? p[i][1] : (p[i][1] + p[i + 1][1]) / 2;
+      ctx.lineWidth = s.w * (.4 + p[i][2] * 1.2);
+      ctx.beginPath(); ctx.moveTo(ox + sx, oy + sy);
+      if (last) ctx.lineTo(ox + ex, oy + ey); else ctx.quadraticCurveTo(ox + p[i][0], oy + p[i][1], ox + ex, oy + ey);
+      ctx.stroke(); sx = ex; sy = ey;
+    }
+  }
+  function paint() {
+    if (!ctx) return;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.clearRect(0, 0, W, H);
+    const rects = new Map();
+    for (const s of S.strokes) {
+      if (!s.pts.length || !visible(s)) continue;
+      let r = rects.get(s.anchor); if (!r) { r = s.anchor.getBoundingClientRect(); rects.set(s.anchor, r); }
+      const c = colorOf(s.color);
+      ctx.save(); ctx.lineCap = 'round'; ctx.lineJoin = 'round'; ctx.strokeStyle = c; ctx.fillStyle = c;
+      if (s.tool === 'hl') { ctx.globalAlpha = .32; ctx.lineWidth = s.w; strokePath(s, r.left, r.top, false); }
+      else strokePath(s, r.left, r.top, true);
+      ctx.restore();
+    }
+  }
+
+  // ── รับการขีด ──
+  const inBar = e => e.target && e.target.closest && e.target.closest('#penBar');
+  function claims(e) {
+    if (!S.on || inBar(e)) return false;
+    if (e.pointerType === 'pen') { if (!S.sawPen) { S.sawPen = true; syncMode(); } return true; }
+    if (e.pointerType === 'mouse') return e.button === 0;
+    return e.pointerType === 'touch' && !S.sawPen;
+  }
+  const swallow = e => { if (e.cancelable) e.preventDefault(); e.stopImmediatePropagation(); };
+  // ยางลบ: ลากผ่านเส้นไหน ลบทั้งเส้น — เช็คระยะจาก "แนวที่ลาก" (จุดก่อน→จุดนี้) ถึงทุกช่วงของเส้น ลากเร็วก็ไม่พลาด
+  const segDist = (px, py, ax, ay, bx, by) => { const dx = bx - ax, dy = by - ay, l = dx * dx + dy * dy, t = l ? Math.max(0, Math.min(1, ((px - ax) * dx + (py - ay) * dy) / l)) : 0; return Math.hypot(px - ax - t * dx, py - ay - t * dy); };
+  let eLast = null;
+  function eraseAt(x, y) {
+    const from = eLast || [x, y], steps = Math.max(1, Math.ceil(Math.hypot(x - from[0], y - from[1]) / 6)), rects = new Map();
+    eLast = [x, y];
+    for (let i = S.strokes.length - 1; i >= 0; i--) {
+      const s = S.strokes[i]; if (!visible(s)) continue;
+      let r = rects.get(s.anchor); if (!r) { r = s.anchor.getBoundingClientRect(); rects.set(s.anchor, r); }
+      const pad = 10 + s.w / 2, p = s.pts;
+      let hit = false;
+      for (let k = 0; k <= steps && !hit; k++) {
+        const qx = from[0] + (x - from[0]) * k / steps - r.left, qy = from[1] + (y - from[1]) * k / steps - r.top;
+        for (let j = 0; j < p.length && !hit; j++) { const b = p[Math.min(j + 1, p.length - 1)]; hit = segDist(qx, qy, p[j][0], p[j][1], b[0], b[1]) < pad; }
+      }
+      if (hit) { S.strokes.splice(i, 1); S.eraseDel.push(s); }
+    }
+    paint();
+  }
+  function addPts(e) {
+    const s = S.cur, r = s.anchor.getBoundingClientRect();
+    const co = e.getCoalescedEvents ? e.getCoalescedEvents() : [];
+    for (const ev of (co.length ? co : [e])) {
+      const x = ev.clientX - r.left, y = ev.clientY - r.top, last = s.pts[s.pts.length - 1];
+      if (last && Math.hypot(x - last[0], y - last[1]) < 1.2) continue;
+      s.pts.push([x, y, ev.pointerType === 'pen' && ev.pressure > 0 ? ev.pressure : .5]);
+    }
+  }
+  window.addEventListener('pointerdown', e => {
+    if (!claims(e) || S.id !== null) return;
+    swallow(e); S.id = e.pointerId;
+    if (S.tool === 'eraser') { S.eraseDel = []; eLast = null; eraseAt(e.clientX, e.clientY); return; }
+    const under = document.elementFromPoint(e.clientX, e.clientY);
+    const anchor = (under && under.closest('.card, section, main')) || document.querySelector('main') || document.body;
+    const host = under && under.closest('[data-scene]');
+    S.cur = { anchor, host: host || null, scene: host ? host.dataset.scene : null, tool: S.tool, color: S.color, w: S.tool === 'hl' ? 20 : 3.6, pts: [] };
+    S.strokes.push(S.cur); addPts(e); paint();
+  }, true);
+  window.addEventListener('pointermove', e => {
+    if (e.pointerId !== S.id) return;
+    swallow(e);
+    if (S.cur) { addPts(e); schedule(); } else if (S.eraseDel) eraseAt(e.clientX, e.clientY);
+  }, true);
+  const end = e => {
+    if (e.pointerId !== S.id) return;
+    swallow(e); S.id = null; S.eatUntil = Date.now() + 250;
+    if (S.cur) { S.hist.push({ add: S.cur }); S.cur = null; }
+    if (S.eraseDel) { if (S.eraseDel.length) S.hist.push({ del: S.eraseDel }); S.eraseDel = null; }
+    paint();
+  };
+  window.addEventListener('pointerup', end, true);
+  window.addEventListener('pointercancel', end, true);
+  // ขีดเสร็จแล้วอย่าให้ "คลิก" หลุดไปกดปุ่ม/ชิปที่อยู่ใต้เส้น
+  window.addEventListener('click', e => { if (S.on && Date.now() < S.eatUntil && !inBar(e)) swallow(e); }, true);
+  // iPad: ปากกา Apple Pencil ลากแล้วจอเลื่อน → กันเฉพาะสัมผัสที่มาจากปากกา (นิ้วยังเลื่อนจอได้)
+  const isStylus = e => Array.prototype.some.call(e.touches, t => t.touchType === 'stylus');
+  window.addEventListener('touchstart', e => {
+    if (!S.on || inBar(e) || !isStylus(e)) return;
+    e.preventDefault(); if (!S.sawPen) { S.sawPen = true; syncMode(); }
+  }, { capture: true, passive: false });
+  window.addEventListener('touchmove', e => { if (S.on && isStylus(e)) e.preventDefault(); }, { capture: true, passive: false });
+
+  // ── ประวัติ ──
+  function undo() {
+    const h = S.hist.pop(); if (!h) return;
+    if (h.add) { const i = S.strokes.indexOf(h.add); if (i >= 0) S.strokes.splice(i, 1); }
+    if (h.del) S.strokes.push(...h.del);
+    paint();
+  }
+  function clearView() {
+    const del = S.strokes.filter(visible); if (!del.length) return;
+    S.strokes = S.strokes.filter(s => !del.includes(s)); S.hist.push({ del }); paint();
+  }
+
+  // ── แถบเครื่องมือ ──
+  function syncMode() {
+    const root = document.documentElement;
+    root.classList.toggle('pen-on', S.on);
+    root.classList.toggle('pen-finger', S.on && !S.sawPen);
+    root.classList.toggle('pen-erase', S.on && S.tool === 'eraser');
+    if (!bar) return;
+    bar.classList.toggle('open', S.on);
+    bar.querySelectorAll('.pen-sw').forEach(b => b.classList.toggle('sel', S.tool !== 'eraser' && b.dataset.c === S.color));
+    bar.querySelector('[data-t="hl"]').classList.toggle('sel', S.tool === 'hl');
+    bar.querySelector('[data-t="eraser"]').classList.toggle('sel', S.tool === 'eraser');
+    const m = bar.querySelector('.pen-main'); m.setAttribute('aria-pressed', S.on ? 'true' : 'false');
+    m.innerHTML = S.on ? ICON.close : ICON.pen;
+  }
+  function setOn(v) { S.on = v; if (!v) { S.id = null; S.cur = null; S.eraseDel = null; } syncMode(); relabel(); }
+  function relabel() {
+    if (!bar) return;
+    bar.querySelectorAll('[data-l]').forEach(b => { const k = b.dataset.l; const t = k === 'main' ? (S.on ? L('close') : L('pen')) : L(k); b.title = t; b.setAttribute('aria-label', t); });
+    bar.querySelectorAll('.pen-sw').forEach(b => { const d = COLORS.find(x => x[0] === b.dataset.c); const t = isEn() ? d[4] : d[3]; b.title = t; b.setAttribute('aria-label', t); });
+  }
+  function build() {
+    cv = document.createElement('canvas'); cv.id = 'penCanvas'; cv.setAttribute('aria-hidden', 'true');
+    ctx = cv.getContext('2d'); document.body.appendChild(cv);
+    bar = document.createElement('div'); bar.id = 'penBar'; bar.className = 'pen-bar';
+    bar.innerHTML = '<div class="pen-tools">'
+      + COLORS.map(c => `<button type="button" class="pen-sw pen-c-${c[0]}" data-c="${c[0]}"><span></span></button>`).join('')
+      + '<span class="pen-sep"></span>'
+      + `<button type="button" class="pen-btn" data-t="hl" data-l="hl">${ICON.hl}</button>`
+      + `<button type="button" class="pen-btn" data-t="eraser" data-l="eraser">${ICON.eraser}</button>`
+      + `<button type="button" class="pen-btn" data-a="undo" data-l="undo">${ICON.undo}</button>`
+      + `<button type="button" class="pen-btn" data-a="clear" data-l="clear">${ICON.clear}</button>`
+      + '</div>'
+      + `<button type="button" class="pen-main" data-l="main" aria-pressed="false">${ICON.pen}</button>`;
+    document.body.appendChild(bar);
+    bar.addEventListener('click', e => {
+      const b = e.target.closest('button'); if (!b) return;
+      if (b.classList.contains('pen-main')) { setOn(!S.on); return; }
+      if (b.dataset.c) { S.color = b.dataset.c; if (S.tool === 'eraser') S.tool = 'pen'; }
+      else if (b.dataset.t) S.tool = S.tool === b.dataset.t ? 'pen' : b.dataset.t;
+      else if (b.dataset.a === 'undo') undo();
+      else if (b.dataset.a === 'clear') clearView();
+      syncMode();
+    });
+    resize(); syncMode(); relabel();
+    window.addEventListener('resize', resize);
+    window.addEventListener('scroll', schedule, true);
+    window.addEventListener('themechange', () => paint());
+    new MutationObserver(schedule).observe(document.documentElement, { subtree: true, childList: true, attributes: true, attributeFilter: ['class', 'data-scene', 'data-theme', 'style'] });
+    if (typeof ResizeObserver !== 'undefined') new ResizeObserver(schedule).observe(document.body);
+    new MutationObserver(relabel).observe(document.documentElement, { attributes: true, attributeFilter: ['lang'] });
+  }
+  document.addEventListener('keydown', e => {
+    const t = e.target, typing = t && (t.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName));
+    if (typing) return;
+    if (e.code === 'KeyP' && !e.ctrlKey && !e.metaKey && !e.altKey) { e.preventDefault(); setOn(!S.on); }
+    else if (e.key === 'Escape' && S.on) setOn(false);
+    else if (S.on && (e.ctrlKey || e.metaKey) && e.code === 'KeyZ' && !e.shiftKey) { e.preventDefault(); undo(); }
+  });
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', build); else build();
+})();
+//  ═══ END ปากกาสี ═══
 </script>
 <script id="theme-js">
 // ── ปุ่มสลับโหมดสว่าง/มืด (สร้างโดย tools/build_lessons.py) — จำค่าไว้ใน localStorage 'siteTheme' ──
