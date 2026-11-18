@@ -3791,18 +3791,28 @@ function drawItems(el, items, upto, freshFrom) {
   el.innerHTML = '';
   items.slice(0, upto).forEach((it, i) => el.appendChild(itemEl(it, freshFrom !== undefined && i >= freshFrom)));
 }
-// ชุดฉากที่แต่ละฉาก = รายการบรรทัด (ฉากแรกนิ่ง) · stage = { items: [...], keep: 1 (บรรทัดที่อยู่ก่อนเริ่มเล่น) , cap }
+// ชุดฉาก "ที่มา": กด ▶ หนึ่งครั้ง = โผล่ 1 บรรทัด (เฟรมละบรรทัด) · บรรทัดจาง (dim) ที่นำหน้าบรรทัดหลักจะโผล่พร้อมบรรทัดหลักนั้น
+// stage = { cap, items: [...], minH } · ทุกบรรทัดของขั้นเดียวกันใช้คำบรรยายเดียวกัน
 function lineScenes(stages, o) {
   o = o || {};
   const paint = (S, st, upto, fresh) => { S.el.style.minHeight = (o.minH || 150) + 'px'; drawItems(S.el, st.items, upto, fresh); };
-  return stages.map((st, k) => ({
-    cap: st.cap,
-    end: S => paint(S, st, st.items.length),
-    play: k === 0 ? undefined : async S => {
-      const keep = st.keep || 1; paint(S, st, keep);
-      for (let i = keep; i < st.items.length; i++) { await S.anim.wait(900); S.el.appendChild(itemEl(st.items[i], true)); }
-    }
-  }));
+  const out = [];
+  stages.forEach((st, k) => {
+    const counts = st.items.map((it, i) => it.dim ? null : i + 1).filter(c => c !== null);
+    if (!counts.length) counts.push(st.items.length);
+    counts.forEach((c, j) => {
+      const prev = j === 0 ? Math.max(0, c - 1) : counts[j - 1];
+      out.push({
+        cap: st.cap,
+        end: S => paint(S, st, c),
+        play: (k === 0 && j === 0) ? undefined : async S => {
+          paint(S, st, prev); await S.anim.wait(j === 0 ? 350 : 200);
+          for (let i = prev; i < c; i++) { S.el.appendChild(itemEl(st.items[i], true)); if (i < c - 1) await S.anim.wait(350); }
+        }
+      });
+    });
+  });
+  return out;
 }
 // สองคอลัมน์: ซ้ายภาพ ขวาบรรทัด
 const stage2 = el => { el.innerHTML = '<div class="tg-split"><div class="tg-L"></div><div class="tg-R"></div></div>'; return { L: el.querySelector('.tg-L'), R: el.querySelector('.tg-R') }; };
@@ -3838,7 +3848,8 @@ const f3 = v => { const s = (Math.round(v * 1000) / 1000).toFixed(3); return mn(
 const PY_TH = 0.9;
 const PY_LN = [                                                   // [ฉากที่โผล่, เนื้อหา, กล่องสูตร?]
   [1, () => `<span class="mx">P = (${X}, ${Y})</span>`], [1, () => `<span class="mx">OP = ${RR}</span>`],
-  [2, () => `<span class="mx">${X} = ${RR} cos ${TH}</span>`], [2, () => `<span class="mx">${Y} = ${RR} sin ${TH}</span>`],
+  [2, () => `<span class="mx">cos ${TH} = ${fr(X, RR)}</span>`], [2, () => `<span class="mx">${X} = ${RR} cos ${TH}</span>`],
+  [2, () => `<span class="mx">sin ${TH} = ${fr(Y, RR)}</span>`], [2, () => `<span class="mx">${Y} = ${RR} sin ${TH}</span>`],
   [3, () => `<span class="mx">${RR}<sup>2</sup> = ${X}<sup>2</sup> + ${Y}<sup>2</sup></span>`],
   [3, () => `<span class="mx">${RR}<sup>2</sup> = ${RR}<sup>2</sup> ${s2(TH)} + ${RR}<sup>2</sup> ${c2(TH)}</span>`],
   [4, () => idn(4) + `<span class="mx">${s2(TH)} + ${c2(TH)} = 1</span>`, true]
@@ -3847,27 +3858,34 @@ const pyRead = th => { const sn = Math.sin(th), cs = Math.cos(th); return `<span
 // วาดฉาก st (1–4): ซ้ายวงกลม + 'tri' ขวาบรรทัดสะสม · cnt = จำนวนบรรทัดที่โชว์ (ไม่ใส่ = ครบของฉากนั้น)
 function pyDraw(S, st, th, cnt) {
   const s = stage2(S.el), lines = PY_LN.filter(l => l[0] <= st);
-  const uc = makeUnitCircle(s.L, { theta: th, show: ['tri'], rLabel: sI('r'), pLabel: 'P', readout: st >= 4 ? pyRead : [],
-    triLabels: st >= 2 ? { x: `${sI('r')} cos ${sI('θ')}`, y: `${sI('r')} sin ${sI('θ')}`, r: sI('r') } : { x: sI('x'), y: sI('y'), r: sI('r') } });
+  const uc = makeUnitCircle(s.L, { theta: th, show: ['tri', 'arc'], rLabel: sI('r'), pLabel: 'P', readout: st >= 4 ? pyRead : [],
+    triLabels: (cnt === undefined ? lines.length : cnt) >= 8 ? { x: `${sI('r')} cos ${sI('θ')}`, y: `${sI('r')} sin ${sI('θ')}`, r: sI('r') } : { x: sI('x'), y: sI('y'), r: sI('r') } });
   const items = lines.map(l => ({ h: l[1], f: !!l[2] }));
   drawItems(s.R, items, cnt === undefined ? items.length : cnt);
   return { uc, R: s.R, items, base: lines.filter(l => l[0] < st).length };
 }
-const PY_SC = [1, 2, 3, 4].map(st => ({
-  cap: () => tx([
+// กด ▶ ทีละบรรทัด (เฟรมละบรรทัด) · คำบรรยายของขั้นเดียวกันคงเดิม
+const PY_CAP = st => () => tx(PY_CAPS()[st - 1]);
+const PY_CAPS = () => [
+
     T(`วงกลมรัศมี ${RR} มีจุด P(${X}, ${Y}) อยู่บนวงกลม (ลองลากจุด P ได้) · กด ▶ ดูว่า sin²${TH} + cos²${TH} = 1 มาจากไหน`, `A circle of radius ${RR} with a point P(${X}, ${Y}) on it (try dragging P) · press ▶ to see where sin²${TH} + cos²${TH} = 1 comes from`),
     T(`ขาของสามเหลี่ยมมุมฉาก: cos ${TH} = ${mx(fr(X, RR))} จึง ${X} = ${RR} cos ${TH} · sin ${TH} = ${mx(fr(Y, RR))} จึง ${Y} = ${RR} sin ${TH}`, `The legs of the right triangle: cos ${TH} = ${mx(fr(X, RR))} so ${X} = ${RR} cos ${TH} · sin ${TH} = ${mx(fr(Y, RR))} so ${Y} = ${RR} sin ${TH}`),
     T(`ด้านยาวสุดของสามเหลี่ยมมุมฉากคือ ${RR} → พีทาโกรัส ${RR}² = ${X}² + ${Y}² แล้วแทน ${X}, ${Y} ลงไป`, `The longest side of the right triangle is ${RR} → Pythagoras gives ${RR}² = ${X}² + ${Y}², then substitute ${X} and ${Y}`),
     T(`หารทั้งสมการด้วย ${RR}² (${RR}² ตัดหายไปหมด) ได้ <b>sin²${TH} + cos²${TH} = 1</b> · ลองลากจุด P — ค่านี้เป็น 1.000 เสมอ`, `Divide the whole equation by ${RR}² (every ${RR}² cancels) to get <b>sin²${TH} + cos²${TH} = 1</b> · drag P — the value is always 1.000`)
-  ][st - 1]),
-  end: S => { pyDraw(S, st, PY_TH); },
-  play: st === 1 ? undefined : async S => {
-    const m = pyDraw(S, st, 0.35, 0), n0 = m.items.length - PY_LN.filter(l => l[0] === st).length;
-    drawItems(m.R, m.items, n0);
-    await m.uc.animateTo(PY_TH, 900, S.anim);
-    for (let i = n0; i < m.items.length; i++) { await S.anim.wait(700); m.R.appendChild(itemEl(m.items[i], true)); }
+];
+const PY_SC = [1, 2, 3, 4].flatMap(st => PY_LN.filter(l => l[0] === st).map((_, c) => ({
+  cap: PY_CAP(st),
+  end: S => { const base = PY_LN.filter(l => l[0] < st).length; pyDraw(S, st, PY_TH, base + c + 1); },
+  play: (st === 1 && c === 0) ? undefined : async S => {
+    const base = PY_LN.filter(l => l[0] < st).length;
+    if (c === 0 && st > 1) {
+      const m = pyDraw(S, st, 0.35, 0); drawItems(m.R, m.items, base);
+      await m.uc.animateTo(PY_TH, 900, S.anim); await S.anim.wait(300); m.R.appendChild(itemEl(m.items[base], true));
+    } else {
+      const m = pyDraw(S, st, PY_TH, base + c); await S.anim.wait(300); m.R.appendChild(itemEl(m.items[base + c], true));
+    }
   }
-}));
+})));
 
 // ── ข้อ 5, 6: หารทั้งสมการ ──
 const dv = (c, h) => `<span style="color:color-mix(in srgb, var(--g-${c}) 75%, var(--text))">${h}</span>`;
@@ -3938,7 +3956,7 @@ const SUM_SC = [
     end: S => sumDraw(S, 1), play: async S => { sumDraw(S, 1); await sumPulse(S); } },
   { cap: () => tx(T(`<b>cos: cos cos, sin sin</b> เครื่องหมาย <span class="bad">ต่าง</span> (± ข้างหน้าเป็นบวก ตรงกลางกลายเป็นลบ จึงเขียน ∓)`, `<b>cos: cos cos, sin sin</b> — the sign is <span class="bad">opposite</span> (plus in front, minus in the middle, written ∓)`)),
     end: S => sumDraw(S, 2), play: async S => { sumDraw(S, 2); await sumPulse(S); } },
-  { cap: () => tx(T(`<b>tan: บน ± เหมือน</b> ข้างหน้า · <b>ล่าง 1 ∓ tan tan</b> ต่างจากข้างหน้า`, `<b>tan: the top has the same ±</b> as in front · <b>the bottom is 1 ∓ tan tan</b>, the opposite`)),
+  { cap: () => tx(T(`<b>tan: tan เหมือนกัน หาร 1 ต่าง tan คูณกัน</b> — บน ± เหมือนข้างหน้า · ล่างเป็น 1 แล้วเครื่องหมายต่าง ตามด้วย tan tan`, `<b>tan: same tan, over 1, opposite sign, tan times tan</b> — the top has the same ± as in front · the bottom is 1, then the opposite sign, then tan tan`)),
     end: S => sumDraw(S, 3), play: async S => { sumDraw(S, 3); await sumPulse(S); } }
 ];
 
@@ -3999,18 +4017,27 @@ const DA = [
     items: [{ h: () => `<span class="mx">tan(${X} + ${Y})</span> = ${mx(fr(`tan ${X} + tan ${Y}`, `1 − tan ${X} tan ${Y}`))}`, dim: true }, { h: () => `<span class="mx">tan(${X} + ${rd(X)})</span> = ${mx(fr(`tan ${X} + tan ${rd(X)}`, `1 − tan ${X} tan ${rd(X)}`))}` }, { h: () => rd(ti('เปลี่ยน y เป็น x → x + x = 2x มุมจึงเป็น 2 เท่า', 'Change y into x → x + x = 2x, so the angle is doubled')) }, { h: () => idn(15) + `<span class="mx">tan 2${X}</span> = ${mx(fr(`2 tan ${X}`, `1 − ${t2(X)}`))}`, f: true }] }
 ];
 const F1 = () => `${fmn(1)}<span class="mx">cos 2${X}</span> = ${mx(c2(X) + ' − ' + s2(X))}`, F2 = () => `${fmn(2)}<span class="mx">cos 2${X}</span> = ${mx('1 − 2' + s2(X))}`, F3 = () => `${fmn(3)}<span class="mx">cos 2${X}</span> = ${mx('2' + c2(X) + ' − 1')}`;
+// กล่องสีครอบนิพจน์ที่ถูกแทน (o = ส้ม · b = น้ำเงิน) — ใช้ในฉาก "ที่มา" ทั้งแท็บ (คำสั่งครู: ครอบกล่องสีตัวที่ถูกแทน บอกเลขข้อของสูตรที่ใช้)
+const bxc = (c, h) => { const g = c === 'o' ? 'curve' : 'blue'; return `<span style="display:inline-block;border:2px solid var(--g-${g});border-radius:8px;padding:0 6px;background:color-mix(in srgb, var(--g-${g}) 22%, transparent)">${h}</span>`; };
+const eqL = rhs => `<span class="mx">cos 2${X}</span> = ${mx(rhs)}`;                    // cos 2x = … (เขียนเต็มฝั่งซ้ายทุกบรรทัด)
+const F1x = (a, b) => `${fmn(1)}${eqL(a + ' − ' + b)}`;
+const N4 = () => idn(4) + `<span class="mx">${s2(X)} + ${c2(X)} = 1</span>`;
 const DB = [
-  { cap: () => tx(T(`cos 2${X} = cos²${X} − sin²${X} คือ <b>แบบที่ 1</b> ของข้อ 14 — ยังมีแบบที่ 2 และ 3 ใช้ sin²${X} + cos²${X} = 1 (ข้อ 4) แปลงให้เหลือฟังก์ชันเดียว · กด ▶`, `cos 2${X} = cos²${X} − sin²${X} is <b>form 1</b> of No. 14 — forms 2 and 3 come from sin²${X} + cos²${X} = 1 (No. 4), leaving just one function · press ▶`)),
-    items: [{ h: () => idn(14) + F1(), f: true }, { h: () => idn(4) + `<span class="mx">${s2(X)} + ${c2(X)} = 1</span>` }] },
-  { cap: () => tx(T(`แทน ${mx(c2(X) + ' = 1 − ' + s2(X))} → เหลือ sin อย่างเดียว: <b>แบบที่ 2</b> cos 2${X} = 1 − 2 sin²${X}`, `Replace ${mx(c2(X) + ' = 1 − ' + s2(X))} → only sin is left: <b>form 2</b>, cos 2${X} = 1 − 2 sin²${X}`)),
-    items: [{ h: F1, dim: true }, { h: () => `<span class="mx">${c2(X)} = 1 − ${s2(X)}</span>` }, { h: () => `<span class="mx">cos 2${X}</span> = ${mx('(1 − ' + s2(X) + ') − ' + s2(X))}` }, { h: () => idn(14) + F2(), f: true }] },
-  { cap: () => tx(T(`แทน ${mx(s2(X) + ' = 1 − ' + c2(X))} → เหลือ cos อย่างเดียว: <b>แบบที่ 3</b> cos 2${X} = 2 cos²${X} − 1`, `Replace ${mx(s2(X) + ' = 1 − ' + c2(X))} → only cos is left: <b>form 3</b>, cos 2${X} = 2 cos²${X} − 1`)),
-    items: [{ h: F1, dim: true }, { h: () => `<span class="mx">${s2(X)} = 1 − ${c2(X)}</span>` }, { h: () => `<span class="mx">cos 2${X}</span> = ${mx(c2(X) + ' − (1 − ' + c2(X) + ')')}` }, { h: () => idn(14) + F3(), f: true }] },
+  { cap: () => tx(T(`แบบที่ 1 ของข้อ 14: cos 2${X} = cos²${X} − sin²${X} มีทั้ง sin และ cos · จะใช้ข้อ 4 (sin²${X} + cos²${X} = 1) ทำให้เหลือฟังก์ชันเดียว · กด ▶`, `Form 1 of No. 14: cos 2${X} = cos²${X} − sin²${X} has both sin and cos · we will use No. 4 (sin²${X} + cos²${X} = 1) to leave just one function · press ▶`)),
+    items: [{ h: () => idn(14) + F1(), f: true }, { h: N4 }] },
+  { cap: () => tx(T(`จากข้อ 4 ย้าย sin²${X} ไปอีกข้าง → <b>cos²${X} = 1 − sin²${X}</b> (กล่องส้มคือ cos²${X} ที่จะถูกแทน)`, `From No. 4 move sin²${X} to the other side → <b>cos²${X} = 1 − sin²${X}</b> (the orange box is the cos²${X} we are about to replace)`)),
+    items: [{ h: () => F1x(bxc('o', c2(X)), s2(X)), dim: true }, { h: N4 }, { h: () => `<span class="mx">${bxc('o', c2(X))} = 1 − ${s2(X)}</span>` }], keep: 2 },
+  { cap: () => tx(T(`แทน cos²${X} ด้วย (1 − sin²${X}) แล้วรวม −sin²${X} สองตัว → <b>cos 2${X} = 1 − 2 sin²${X}</b> คือแบบที่ 2 (ข้อ 14)`, `Replace cos²${X} with (1 − sin²${X}) and combine the two −sin²${X} → <b>cos 2${X} = 1 − 2 sin²${X}</b>, form 2 of No. 14`)),
+    items: [{ h: () => F1x(bxc('o', c2(X)), s2(X)), dim: true }, { h: () => `<span class="mx">${bxc('o', c2(X))} = 1 − ${s2(X)}</span>`, dim: true }, { h: () => eqL(bxc('o', '(1 − ' + s2(X) + ')') + ' − ' + s2(X)) }, { h: () => eqL('1 − 2' + s2(X)) }, { h: () => idn(14) + F2(), f: true }], keep: 2 },
+  { cap: () => tx(T(`กลับไปข้อ 4 ย้าย cos²${X} ไปอีกข้าง → <b>sin²${X} = 1 − cos²${X}</b> (กล่องน้ำเงินคือ sin²${X} ที่จะถูกแทน)`, `Back to No. 4, move cos²${X} to the other side → <b>sin²${X} = 1 − cos²${X}</b> (the blue box is the sin²${X} we are about to replace)`)),
+    items: [{ h: () => F1x(c2(X), bxc('b', s2(X))), dim: true }, { h: N4 }, { h: () => `<span class="mx">${bxc('b', s2(X))} = 1 − ${c2(X)}</span>` }], keep: 2 },
+  { cap: () => tx(T(`แทน sin²${X} ด้วย (1 − cos²${X}) กระจายเครื่องหมายลบเข้าวงเล็บ แล้วรวม cos²${X} → <b>cos 2${X} = 2 cos²${X} − 1</b> คือแบบที่ 3 (ข้อ 14)`, `Replace sin²${X} with (1 − cos²${X}), spread the minus sign through the bracket and combine → <b>cos 2${X} = 2 cos²${X} − 1</b>, form 3 of No. 14`)),
+    items: [{ h: () => F1x(c2(X), bxc('b', s2(X))), dim: true }, { h: () => `<span class="mx">${bxc('b', s2(X))} = 1 − ${c2(X)}</span>`, dim: true }, { h: () => eqL(c2(X) + ' − ' + bxc('b', '(1 − ' + c2(X) + ')')) }, { h: () => eqL(c2(X) + ' − 1 + ' + c2(X)) }, { h: () => eqL('2' + c2(X) + ' − 1') }, { h: () => idn(14) + F3(), f: true }], keep: 2 },
   { cap: () => tx(T(`ย้ายข้างแบบที่ 3 ได้ <b>cos²${X} = ½(1 + cos 2${X})</b> (ข้อ 16) · ย้ายข้างแบบที่ 2 ได้ <b>sin²${X} = ½(1 − cos 2${X})</b> (ข้อ 17)`, `Rearranging form 3 gives <b>cos²${X} = ½(1 + cos 2${X})</b> (No. 16) · rearranging form 2 gives <b>sin²${X} = ½(1 − cos 2${X})</b> (No. 17)`)),
-    items: [{ h: F3, dim: true }, { h: () => `<span class="mx">2${c2(X)}</span> = ${mx('1 + cos 2' + X)}` }, { h: () => idn(16) + `<span class="mx">${c2(X)}</span> = ${mx(fr(1, 2) + '(1 + cos 2' + X + ')')}` + fromForm(3), f: true },
-      { h: F2, dim: true }, { h: () => `<span class="mx">2${s2(X)}</span> = ${mx('1 − cos 2' + X)}` }, { h: () => idn(17) + `<span class="mx">${s2(X)}</span> = ${mx(fr(1, 2) + '(1 − cos 2' + X + ')')}` + fromForm(2), f: true }] }
+    items: [{ h: () => `<span class="mx">${'2' + c2(X) + ' − 1'}</span> = <span class="mx">cos 2${X}</span>`, dim: true }, { h: () => `<span class="mx">${'2' + c2(X)}</span> = ${mx('1 + cos 2' + X)}` }, { h: () => idn(16) + `<span class="mx">${c2(X)}</span> = ${mx(fr(1, 2) + '(1 + cos 2' + X + ')')}` + fromForm(3), f: true },
+      { h: () => `<span class="mx">${'1 − 2' + s2(X)}</span> = <span class="mx">cos 2${X}</span>`, dim: true }, { h: () => `<span class="mx">${'2' + s2(X)}</span> = ${mx('1 − cos 2' + X)}` }, { h: () => idn(17) + `<span class="mx">${s2(X)}</span> = ${mx(fr(1, 2) + '(1 − cos 2' + X + ')')}` + fromForm(2), f: true }], keep: 1 }
 ];
-const DB_SC = lineScenes(DB, { minH: 260 });
+const DB_SC = lineScenes(DB, { minH: 330 });
 const DA_SC = lineScenes(DA, { minH: 200 });
 
 // ตัวอย่าง: sin θ = 3/5, θ มุมแหลม
@@ -4203,6 +4230,156 @@ const QUIZ = [
 ];
 
 // ═══════════════════════════════════════════════════════════════
+//  ที่มา (รอบแก้ตามลายมือครู): sin 3x · cos 3x · tan 3x · บวก↔คูณ · sin(x + y) จากภาพ
+// ═══════════════════════════════════════════════════════════════
+const sA = a => `sin ${a}`, cA = a => `cos ${a}`, tA = a => `tan ${a}`;
+const ln_ = (h, o) => Object.assign({ h: typeof h === 'function' ? h : () => h }, o || {});
+const note = (th, en) => ln_(() => `<span style="font-size:.72em;font-weight:700;opacity:.85">${ti(th, en)}</span>`, { dim: true });
+
+// ── ข้อ 9: ที่มาของ sin 3x (ข้อ 18) ──
+const T3 = [
+  { cap: () => tx(T(`แยก 3${X} เป็น 2${X} + ${X} เพราะเรารู้สูตรของ 2${X} แล้ว · กด ▶`, `Split 3${X} into 2${X} + ${X}, because we already know the formulas for 2${X} · press ▶`)),
+    items: [ln_(() => `<span class="mx">sin 3${X}</span> = <span class="mx">sin(2${X} + ${X})</span>`)] },
+  { cap: () => tx(T(`ใช้ข้อ 10 (ผลบวกมุม) กับ 2${X} และ ${X}`, `Use No. 10 (sum of angles) on 2${X} and ${X}`)),
+    items: [ln_(() => `<span class="mx">sin 3${X}</span> = <span class="mx">sin(2${X} + ${X})</span>`, { dim: true }), ln_(() => idn(10) + `<span class="mx">sin 3${X}</span> = ${mx(sA('2' + X) + ' ' + cA(X))} + ${mx(cA('2' + X) + ' ' + sA(X))}`)], keep: 1 },
+  { cap: () => tx(T(`แทน sin 2${X} ด้วยข้อ 13 และ cos 2${X} ด้วยข้อ 14 แบบที่ 2 — เลือกแบบที่มีแต่ sin เพราะคำตอบอยากได้ sin ล้วน`, `Replace sin 2${X} by No. 13 and cos 2${X} by No. 14 form 2 — we pick the form with only sin because we want an answer in sin alone`)),
+    items: [ln_(() => `<span class="mx">sin 3${X}</span> = ${mx(bxc('o', sA('2' + X)) + ' ' + cA(X))} + ${mx(bxc('b', cA('2' + X)) + ' ' + sA(X))}`, { dim: true }), ln_(() => idn(13) + `<span class="mx">${bxc('o', sA('2' + X))}</span> = ${mx('2 sin ' + X + ' cos ' + X)}`), ln_(() => idn(14) + `<span class="mx">${bxc('b', cA('2' + X))}</span> = ${mx('1 − 2' + s2(X))}`),
+      ln_(() => `<span class="mx">sin 3${X}</span> = ${mx(bxc('o', '(2 sin ' + X + ' cos ' + X + ')') + ' ' + cA(X))} + ${mx(bxc('b', '(1 − 2' + s2(X) + ')') + ' ' + sA(X))}`)], keep: 1 },
+  { cap: () => tx(T(`คูณเข้าไป (cos ${X} × cos ${X} = cos²${X})`, `Multiply out (cos ${X} × cos ${X} = cos²${X})`)),
+    items: [ln_(() => `<span class="mx">sin 3${X}</span> = ${mx('2 sin ' + X + ' cos<sup>2</sup>' + X + ' + sin ' + X + ' − 2sin<sup>3</sup>' + X)}`)] },
+  { cap: () => tx(T(`แทน cos²${X} = 1 − sin²${X} (ข้อ 4) เพื่อให้เหลือ sin อย่างเดียว แล้วกระจาย`, `Replace cos²${X} = 1 − sin²${X} (No. 4) so only sin is left, then expand`)),
+    items: [ln_(() => idn(4) + `<span class="mx">${bxc('o', c2(X))}</span> = ${mx('1 − ' + s2(X))}`), ln_(() => `<span class="mx">sin 3${X}</span> = ${mx('2 sin ' + X + bxc('o', '(1 − ' + s2(X) + ')') + ' + sin ' + X + ' − 2sin<sup>3</sup>' + X)}`), ln_(() => `<span class="mx">sin 3${X}</span> = ${mx('2 sin ' + X + ' − 2sin<sup>3</sup>' + X + ' + sin ' + X + ' − 2sin<sup>3</sup>' + X)}`)], keep: 1 },
+  { cap: () => tx(T(`รวมพจน์ที่เหมือนกัน: sin ${X} สองตัวได้ 3 sin ${X} · −2sin³${X} สองตัวได้ −4sin³${X} → สูตรข้อ 18`, `Combine like terms: two sin ${X} make 3 sin ${X} · two −2sin³${X} make −4sin³${X} → formula No. 18`)),
+    items: [ln_(() => `<span class="mx">sin 3${X}</span> = ${mx('2 sin ' + X + ' − 2sin<sup>3</sup>' + X + ' + sin ' + X + ' − 2sin<sup>3</sup>' + X)}`, { dim: true }), ln_(() => idn(18) + `<span class="mx">sin 3${X}</span> = ${mx('3 sin ' + X + ' − 4sin<sup>3</sup>' + X)}`, { f: true })], keep: 1 }
+];
+const T3_SC = lineScenes(T3, { minH: 260 });
+const Q3 = () => [{ label: T('cos 3x', 'cos 3x'), rows: () => [
+  { h: `<span class="mx">cos 3${X}</span> = <span class="mx">cos(2${X} + ${X})</span>`, n: tx(T('แยก 3x เป็น 2x + x เหมือน sin', 'Split 3x into 2x + x, just like sin')) },
+  { h: `<span class="mx">cos 3${X}</span> = ${mx(cA('2' + X) + ' ' + cA(X) + ' − ' + sA('2' + X) + ' ' + sA(X))}`, n: tx(T('ข้อ 11', 'No. 11')) },
+  { h: `<span class="mx">cos 3${X}</span> = ${mx('(2' + c2(X) + ' − 1) cos ' + X + ' − (2 sin ' + X + ' cos ' + X + ') sin ' + X)}`, n: tx(T('แทน cos 2x = 2cos²x − 1 (ข้อ 14 แบบที่ 3) และ sin 2x = 2 sin x cos x (ข้อ 13) — เลือกแบบที่มีแต่ cos เพราะอยากได้ cos ล้วน', 'Replace cos 2x = 2cos²x − 1 (No. 14 form 3) and sin 2x = 2 sin x cos x (No. 13) — form 3 because we want cos alone')) },
+  { h: `<span class="mx">cos 3${X}</span> = ${mx('2cos<sup>3</sup>' + X + ' − cos ' + X + ' − 2' + s2(X) + ' cos ' + X)}`, n: tx(T('คูณเข้าไป', 'Multiply out')) },
+  { h: `<span class="mx">cos 3${X}</span> = ${mx('2cos<sup>3</sup>' + X + ' − cos ' + X + ' − 2(1 − ' + c2(X) + ') cos ' + X)}`, n: tx(T('แทน sin²x = 1 − cos²x (ข้อ 4)', 'Replace sin²x = 1 − cos²x (No. 4)')) },
+  { h: `<span class="mx">cos 3${X}</span> = ${mx('2cos<sup>3</sup>' + X + ' − cos ' + X + ' − 2cos ' + X + ' + 2cos<sup>3</sup>' + X)}`, n: tx(T('กระจาย', 'Expand')) },
+  { h: ansB(`${idn(19)}<span class="mx">cos 3${X}</span> = ${mx('4cos<sup>3</sup>' + X + ' − 3cos ' + X)}`), n: tx(T('รวมพจน์ที่เหมือนกัน', 'Combine like terms')) }
+] }, { label: T('tan 3x', 'tan 3x'), rows: () => {
+  const t2f = fr('2 ' + tA(X), '1 − ' + t2(X));
+  return [
+    { h: `<span class="mx">tan 3${X}</span> = <span class="mx">tan(2${X} + ${X})</span>`, n: tx(T('แยก 3x เป็น 2x + x', 'Split 3x into 2x + x')) },
+    { h: `<span class="mx">tan 3${X}</span> = ${mx(fr(tA('2' + X) + ' + ' + tA(X), '1 − ' + tA('2' + X) + ' ' + tA(X)))}`, n: tx(T('ข้อ 12', 'No. 12')) },
+    { h: `<span class="mx">tan 3${X}</span> = ${mx(fr(t2f + ' + ' + tA(X), '1 − ' + t2f + ' ' + tA(X)))}`, n: tx(T('แทน tan 2x = 2tan x ÷ (1 − tan²x) (ข้อ 15)', 'Replace tan 2x = 2tan x ÷ (1 − tan²x) (No. 15)')) },
+    { h: `<span class="mx">tan 3${X}</span> = ${mx(fr('2 ' + tA(X) + ' + ' + tA(X) + '(1 − ' + t2(X) + ')', '(1 − ' + t2(X) + ') − 2' + t2(X)))}`, n: tx(T('คูณทั้งเศษและส่วนด้วย (1 − tan²x) เพื่อกำจัดเศษส่วนซ้อน', 'Multiply top and bottom by (1 − tan²x) to clear the nested fractions')) },
+    { h: ansB(`${idn(20)}<span class="mx">tan 3${X}</span> = ${mx(fr('3 ' + tA(X) + ' − tan<sup>3</sup>' + X, '1 − 3' + t2(X)))}`), n: tx(T('เศษ: 2tan x + tan x − tan³x = 3tan x − tan³x · ส่วน: 1 − tan²x − 2tan²x = 1 − 3tan²x', 'Top: 2tan x + tan x − tan³x = 3tan x − tan³x · bottom: 1 − tan²x − 2tan²x = 1 − 3tan²x')) }
+  ];
+} }];
+
+// ── ข้อ 10: ที่มาของบวก↔คูณ (ข้อ 21–28) · ใช้ A, B ไม่ชนกับ x, y ที่สองชุดสูตรใช้คนละความหมาย ──
+const AA = I('A'), BB = I('B'), sAB = (op, k) => `sin(${AA} ${op} ${BB})`;
+const strike = h => `<span style="color:color-mix(in srgb, var(--g-red) 75%, var(--text));text-decoration:line-through;text-decoration-thickness:2.5px;font-weight:800">${h}</span>`;
+const sin1 = (sgn, strikeA, strikeB) => `<span class="mx">sin(${AA} ${sgn} ${BB})</span> = ${mx(strikeA ? strike('sin ' + AA + ' cos ' + BB) : 'sin ' + AA + ' cos ' + BB)} ${sgn} ${mx(strikeB ? strike('cos ' + AA + ' sin ' + BB) : 'cos ' + AA + ' sin ' + BB)}`;
+const cos1 = (sgn, o) => `<span class="mx">cos(${AA} ${sgn} ${BB})</span> = ${mx('cos ' + AA + ' cos ' + BB)} ${sgn === '+' ? '−' : '+'} ${mx('sin ' + AA + ' sin ' + BB)}`;
+const half = (a, op, b) => fr(a + ' ' + op + ' ' + b, 2);
+const SPD = [
+  { cap: () => tx(T(`เขียนข้อ 10 สองแบบซ้อนกัน (บวก กับ ลบ) — ทั้งหมดนี้อาศัยแค่ข้อ 10–11 · กด ▶`, `Write No. 10 in both forms, one above the other (plus and minus) — everything here uses only No. 10–11 · press ▶`)),
+    items: [ln_(() => idn(10) + sin1('+')), ln_(() => sin1('−'))] },
+  { cap: () => tx(T(`<b>บวก</b>สองบรรทัด: cos ${AA} sin ${BB} มี + กับ − จึงหักล้างกัน (ขีดฆ่า) → เหลือ 2 sin ${AA} cos ${BB} · หาร 2 ได้ <b>ข้อ 25</b>`, `<b>Add</b> the two lines: cos ${AA} sin ${BB} has a + and a − so it cancels (struck out) → 2 sin ${AA} cos ${BB} is left · divide by 2 to get <b>No. 25</b>`)),
+    items: [ln_(() => sin1('+', false, true), { dim: true }), ln_(() => sin1('−', false, true), { dim: true }), ln_(() => `<span class="mx">sin(${AA} + ${BB}) + sin(${AA} − ${BB})</span> = ${mx('2 sin ' + AA + ' cos ' + BB)}`), ln_(() => idn(25) + `<span class="mx">sin ${AA} cos ${BB}</span> = ${mx(fr(1, 2) + '[sin(' + AA + ' + ' + BB + ') + sin(' + AA + ' − ' + BB + ')]')}`, { f: true })], keep: 2 },
+  { cap: () => tx(T(`<b>ลบ</b>สองบรรทัด → sin ${AA} cos ${BB} หักล้าง ได้ <b>ข้อ 26</b> · ข้อ 11 ทำแบบเดียวกัน: บวก → <b>ข้อ 27</b> · ลบ → <b>ข้อ 28</b> (เครื่องหมาย − สีแดงคือกับดัก)`, `<b>Subtract</b> the two lines → sin ${AA} cos ${BB} cancels, giving <b>No. 26</b> · No. 11 works the same way: add → <b>No. 27</b> · subtract → <b>No. 28</b> (the red − is the trap)`)),
+    items: [ln_(() => sin1('+', true, false), { dim: true }), ln_(() => sin1('−', true, false), { dim: true }), ln_(() => `<span class="mx">sin(${AA} + ${BB}) − sin(${AA} − ${BB})</span> = ${mx('2 cos ' + AA + ' sin ' + BB)}`), ln_(() => idn(26) + `<span class="mx">cos ${AA} sin ${BB}</span> = ${mx(fr(1, 2) + '[sin(' + AA + ' + ' + BB + ') − sin(' + AA + ' − ' + BB + ')]')}`, { f: true }),
+      ln_(() => cos1('+'), { dim: true }), ln_(() => cos1('−'), { dim: true }), ln_(() => idn(27) + `<span class="mx">cos(${AA} + ${BB}) + cos(${AA} − ${BB})</span> = ${mx('2 cos ' + AA + ' cos ' + BB)}`, { f: true }), ln_(() => idn(28) + `<span class="mx">cos(${AA} + ${BB}) − cos(${AA} − ${BB})</span> = ${mx(rd('−') + '2 sin ' + AA + ' sin ' + BB)}`, { f: true })], keep: 4 },
+  { cap: () => tx(T(`ตั้งชื่อใหม่ ${X} = ${AA} + ${BB} และ ${Y} = ${AA} − ${BB} → บวกกันได้ ${X} + ${Y} = 2${AA} จึง ${AA} = ${mx(half(X, '+', Y))} · ลบกันได้ ${X} − ${Y} = 2${BB} จึง ${BB} = ${mx(half(X, '−', Y))}`, `Rename ${X} = ${AA} + ${BB} and ${Y} = ${AA} − ${BB} → adding gives ${X} + ${Y} = 2${AA} so ${AA} = ${mx(half(X, '+', Y))} · subtracting gives ${X} − ${Y} = 2${BB} so ${BB} = ${mx(half(X, '−', Y))}`)),
+    items: [ln_(() => `<span class="mx">${X} = ${AA} + ${BB}</span> , <span class="mx">${Y} = ${AA} − ${BB}</span>`), ln_(() => `<span class="mx">${X} + ${Y} = 2${AA}</span> → <span class="mx">${AA} = ${half(X, '+', Y)}</span>`), ln_(() => `<span class="mx">${X} − ${Y} = 2${BB}</span> → <span class="mx">${BB} = ${half(X, '−', Y)}</span>`)], keep: 1 },
+  { cap: () => tx(T(`แทน ${AA} + ${BB} = ${X} และ ${AA} − ${BB} = ${Y}, ${AA} กับ ${BB} ด้วยครึ่งผลบวก/ผลต่างในผลของฉาก 2 → <b>ข้อ 21</b> · ข้อ 22–24 ได้จากฉาก 3 แบบเดียวกัน`, `Substitute ${AA} + ${BB} = ${X}, ${AA} − ${BB} = ${Y} and the half-sum / half-difference for ${AA}, ${BB} into the result of scene 2 → <b>No. 21</b> · No. 22–24 come from scene 3 the same way`)),
+    items: [ln_(() => `<span class="mx">sin(${AA} + ${BB}) + sin(${AA} − ${BB})</span> = ${mx('2 sin ' + AA + ' cos ' + BB)}`, { dim: true }), ln_(() => idn(21) + `<span class="mx">sin ${X} + sin ${Y}</span> = ${mx('2 sin' + lp + half(X, '+', Y) + rp + ' cos' + lp + half(X, '−', Y) + rp)}`, { f: true }),
+      ln_(() => idn(22) + `<span class="mx">sin ${X} − sin ${Y}</span> = ${mx('2 cos' + lp + half(X, '+', Y) + rp + ' sin' + lp + half(X, '−', Y) + rp)}`, { f: true }), ln_(() => idn(23) + `<span class="mx">cos ${X} + cos ${Y}</span> = ${mx('2 cos' + lp + half(X, '+', Y) + rp + ' cos' + lp + half(X, '−', Y) + rp)}`, { f: true }), ln_(() => idn(24) + `<span class="mx">cos ${X} − cos ${Y}</span> = ${mx(rd('−') + '2 sin' + lp + half(X, '+', Y) + rp + ' sin' + lp + half(X, '−', Y) + rp)}`, { f: true })], keep: 2 }
+];
+const SPD_SC = lineScenes(SPD, { minH: 330 });
+
+// ── ข้อ 32: ที่มาของ sin(x + y) และ cos(x + y) จากภาพสี่เหลี่ยมผืนผ้า (x = 35°, y = 25°) ──
+const ital = s => s.replace(/(^|[^A-Za-z])([xy])(?![A-Za-z])/g, '$1<tspan font-style="italic">$2</tspan>');
+// st = { rot: 0–1 (หมุนสามเหลี่ยมเขียวจาก 0 ถึง x) · frame · blue · orange · tl: 0/1 · labs: [[ข้อความ, x, y, anchor, class]] ในหน่วยโลก (หน่วยวงกลม) + ออฟเซ็ตพิกเซล }
+function geoSvg(st) {
+  const x = 35 * Math.PI / 180, y = 25 * Math.PI / 180, S = 330, ox = 104, oy = 330, f = v => (+v).toFixed(1), W = 470, H = 372;
+  const px = v => ox + v * S, py = v => oy - v * S, a = (st.rot === undefined ? 1 : st.rot) * x;
+  const P = [Math.cos(y) * Math.cos(a), Math.cos(y) * Math.sin(a)], Q = [P[0] - Math.sin(y) * Math.sin(a), P[1] + Math.sin(y) * Math.cos(a)];
+  const Fx = Math.cos(x) * Math.cos(y), top = Math.sin(x + y), O = [0, 0], F = [P[0], 0], R = [P[0], Q[1]], L = [0, Q[1]];
+  const pt = p => f(px(p[0])) + ',' + f(py(p[1])), poly = (ps, g, op) => `<polygon points="${ps.map(pt).join(' ')}" style="fill:color-mix(in srgb, var(--g-${g}) ${op}%, transparent);stroke:var(--g-${g});stroke-width:2.6;stroke-linejoin:round"/>`;
+  const line = (p, q, extra) => `<line x1="${f(px(p[0]))}" y1="${f(py(p[1]))}" x2="${f(px(q[0]))}" y2="${f(py(q[1]))}" style="${extra}"/>`;
+  const halo = 'paint-order:stroke;stroke:var(--card);stroke-width:4px;stroke-linejoin:round';
+  let s = line([-0.06, 0], [1.05, 0], 'stroke:var(--muted);stroke-width:1.6');
+  if (st.frame && !st.only) s += `<rect x="${f(px(0))}" y="${f(py(top))}" width="${f(Fx * S)}" height="${f(top * S)}" style="fill:none;stroke:var(--text);stroke-width:2.4;stroke-dasharray:7 5;opacity:${st.frame}"/>`;
+  if (st.tl && !st.only) s += poly([O, L, Q], 'purple', 22);
+  if (st.orange && !st.only) s += poly([P, R, Q], 'curve', 30);
+  if (st.blue) s += poly([O, F, P], 'blue', 26);
+  if (!st.only) {
+    s += poly([O, P, Q], 'green', st.blue || st.orange || st.tl ? 12 : 26);
+    s += line(O, Q, 'stroke:var(--g-green);stroke-width:3;stroke-linecap:round');
+  } else s += line(O, P, 'stroke:var(--g-green);stroke-width:3.4;stroke-linecap:round');
+  s += `<circle cx="${f(px(0))}" cy="${f(py(0))}" r="4" style="fill:var(--text)"/>`;
+  const sq = (c, d1, d2) => `<path d="M${f(px(c[0]) + d1[0] * 11)} ${f(py(c[1]) - d1[1] * 11)} L${f(px(c[0]) + (d1[0] + d2[0]) * 11)} ${f(py(c[1]) - (d1[1] + d2[1]) * 11)} L${f(px(c[0]) + d2[0] * 11)} ${f(py(c[1]) - d2[1] * 11)}" style="fill:none;stroke:var(--muted);stroke-width:1.6"/>`;
+  if (st.blue) s += sq(F, [-1, 0], [0, 1]);
+  if (!st.only) s += sq(P, [-Math.cos(a), -Math.sin(a)], [-Math.sin(a), Math.cos(a)]);
+  const lab = (t, X0, Y0, anc, cls) => `<text class="pl-lbl ${cls}" x="${f(X0)}" y="${f(Y0)}" text-anchor="${anc}" style="font-size:15px;font-weight:800;${halo}">${ital(t)}</text>`;
+  const mid = (p, q) => [(px(p[0]) + px(q[0])) / 2, (py(p[1]) + py(q[1])) / 2];
+  (st.labs || []).forEach(l => {
+    const ref = { OQ: [O, Q], OP: [O, P], PQ: [P, Q], OF: [O, F], FP: [F, P], PR: [P, R], QR: [Q, R], OL: [O, L], LQ: [L, Q], FR: [F, R] }[l[0]], m = mid(ref[0], ref[1]);
+    s += lab(l[1], m[0] + l[2], m[1] + l[3], l[4] || 'middle', l[5]);
+  });
+  const arc = (r, a0, a1, col) => `<path d="M${f(px(0) + r * Math.cos(a0))} ${f(py(0) - r * Math.sin(a0))} A${r} ${r} 0 0 0 ${f(px(0) + r * Math.cos(a1))} ${f(py(0) - r * Math.sin(a1))}" style="fill:none;stroke:var(--g-${col});stroke-width:2.6"/>`;
+  (st.arcs || []).forEach(k => {
+    if (k === 'x') s += arc(64, 0, a, 'blue') + lab('x', px(0) + 82 * Math.cos(a / 2), py(0) - 82 * Math.sin(a / 2) + 5, 'middle', 'b');
+    if (k === 'y') s += arc(96, a, a + y, 'green') + lab('y', px(0) + 112 * Math.cos(a + y / 2), py(0) - 112 * Math.sin(a + y / 2) + 5, 'middle', 'g');
+    if (k === 'xy') s += arc(150, 0, a + y, 'purple') + lab('x + y', px(0) + 178 * Math.cos((a + y) / 2), py(0) - 178 * Math.sin((a + y) / 2) + 5, 'middle', 'p');
+  });
+  // ชื่อจุด (O, P, Q เสมอ · F เมื่อมีสามเหลี่ยมฟ้า · R เมื่อมีสามเหลี่ยมส้ม · L เมื่อมีสามเหลี่ยมม่วง)
+  const nm = (t, p, dx, dy, anc) => `<text x="${f(px(p[0]) + dx)}" y="${f(py(p[1]) + dy)}" text-anchor="${anc}" style="font-size:17px;font-weight:800;fill:var(--text);${halo}">${t}</text>`;
+  s += nm('O', O, -12, 20, 'end') + nm('P', P, 10, 20, 'start') + (st.only ? '' : nm('Q', Q, 0, -12, 'middle'));
+  if (st.blue) s += nm('F', F, 0, 22, 'middle');
+  if (st.orange || st.tl) s += nm('R', R, 10, -8, 'start');
+  if (st.tl) s += nm('L', L, -10, -8, 'end');
+  return `<svg class="sc-svg" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">${s}</svg>`;
+}
+const GEO_L = [
+  ln_(() => `<span class="mx">OQ = 1</span>`), ln_(() => `<span class="mx">OP = cos ${Y}</span>`), ln_(() => `<span class="mx">PQ = sin ${Y}</span>`)
+];
+function geoBuild(S, st, items, fresh) { const s = stage2(S.el); s.L.innerHTML = geoSvg(st); drawItems(s.R, items, items.length, fresh); return s; }
+const GEO_ST = [
+  { st: { rot: 0, labs: [['OQ', '1', -14, -8, 'end', 'g'], ['OP', 'cos y', 0, 24, 'middle', 'b'], ['PQ', 'sin y', 8, 5, 'start', 'o']], arcs: [] }, items: () => GEO_L },
+  { st: { rot: 1, frame: 1, blue: 1, arcs: ['x', 'y', 'xy'] }, items: () => [ln_(() => `<span class="mx">${X}</span> + <span class="mx">${Y}</span> = <span class="mx">∠${ti('ที่ O', ' at O')}</span>`)] },
+  { st: { rot: 1, only: 1, blue: 1, arcs: ['x'], labs: [['OP', 'r = cos y', -10, -8, 'end', 'g']] },
+    items: () => [ln_(() => `<span class="mx">${ti('ฉาก OP', 'hypotenuse OP')} = r = cos ${Y}</span>`), ln_(() => `<span class="mx">${ti('มุมที่ O', 'angle at O')} = θ = ${X}</span>`),
+      ln_(() => `<span class="mx">OF = r cos θ = cos ${Y} · cos ${X}</span>`), ln_(() => `<span class="mx">FP = r sin θ = cos ${Y} · sin ${X}</span>`)] },
+  { st: { rot: 1, frame: 1, blue: 1, labs: [['OF', 'cos x cos y', 0, 24, 'middle', 'b'], ['FP', 'sin x cos y', 8, 5, 'start', 'b'], ['OP', 'cos y', -10, -8, 'end', 'g']] }, items: () => [ln_(() => `<span class="mx">OF = cos ${X} cos ${Y}</span>`), ln_(() => `<span class="mx">FP = sin ${X} cos ${Y}</span>`)] },
+  { st: { rot: 1, frame: 1, blue: 1, orange: 1, labs: [['PR', 'cos x sin y', 8, 5, 'start', 'o'], ['QR', 'sin x sin y', -6, -26, 'middle', 'o'], ['PQ', 'sin y', -10, 8, 'end', 'g']] }, items: () => [ln_(() => `<span class="mx">PR = cos ${X} sin ${Y}</span>`), ln_(() => `<span class="mx">QR = sin ${X} sin ${Y}</span>`)] },
+  { st: { rot: 1, frame: 1, blue: 1, orange: 1, tl: 1, arcs: ['xy'], labs: [['OL', 'sin(x + y)', -8, 5, 'end', 'p'], ['FR', 'FP + PR', 12, 5, 'start', 'r']] }, items: () => [ln_(() => `<span class="mx">sin(${X} + ${Y})</span> = ${ti('ขอบซ้าย', 'left edge')}`), ln_(() => `${ti('ขอบขวา', 'right edge')} = FP + PR`), ln_(() => idn(10) + `<span class="mx">sin(${X} + ${Y})</span> = ${mx('sin ' + X + ' cos ' + Y + ' + cos ' + X + ' sin ' + Y)}`, { f: true })] },
+  { st: { rot: 1, frame: 1, blue: 1, orange: 1, tl: 1, labs: [['LQ', 'cos(x + y)', 0, -9, 'middle', 'p'], ['QR', 'sin x sin y', -6, -26, 'middle', 'o'], ['OF', 'cos x cos y', 0, 24, 'middle', 'b']] }, items: () => [ln_(() => `<span class="mx">cos(${X} + ${Y}) + sin ${X} sin ${Y} = cos ${X} cos ${Y}</span>`), ln_(() => idn(11) + `<span class="mx">cos(${X} + ${Y})</span> = ${mx('cos ' + X + ' cos ' + Y + ' − sin ' + X + ' sin ' + Y)}`, { f: true })] }
+];
+const GEO_CAP = [
+  () => tx(T(`สามเหลี่ยมมุมฉากสีเขียวที่ด้านยาวสุด OQ ยาว 1 และมีมุม ${Y} ที่ O → ขาทั้งสองคือ cos ${Y} กับ sin ${Y} · กด ▶`, `A green right triangle whose longest side OQ is 1 long and has angle ${Y} at O → its two legs are cos ${Y} and sin ${Y} · press ▶`)),
+  () => tx(T(`ยกสามเหลี่ยมเขียวให้เอียงขึ้นอีกมุม ${X} (มีสามเหลี่ยมฟ้ามุม ${X} รองข้างล่าง) → มุมที่ O รวมเป็น ${X} + ${Y} แล้วตีกรอบสี่เหลี่ยมผืนผ้ารอบรูป`, `Tilt the green triangle up by another angle ${X} (a blue triangle with angle ${X} sits underneath) → the angle at O becomes ${X} + ${Y}; now draw a rectangle round the picture`)),
+  () => tx(T(`แยกสามเหลี่ยมฟ้า O-F-P มาดูตัวเดียว: <b>ด้านฉาก OP = cos ${Y}</b> (เพราะ OP เป็นขาชิดของสามเหลี่ยมเขียวที่ฉากยาว 1) และมุมที่ O คือ ${X} → ใช้สูตรข้อ 1 ที่พิสูจน์แล้ว (${X} = r cos θ, ${Y} = r sin θ) โดย r = cos ${Y}, θ = ${X}`, `Take the blue triangle O-F-P on its own: <b>its hypotenuse OP = cos ${Y}</b> (OP is the adjacent leg of the green triangle whose hypotenuse is 1) and its angle at O is ${X} → use the formula just proved (x = r cos θ, y = r sin θ) with r = cos ${Y}, θ = ${X}`)),
+  () => tx(T(`สามเหลี่ยมฟ้า O-F-P (ด้านยาวสุด cos ${Y} มุม ${X}): ขานอน = cos ${Y} · cos ${X} = <b>cos ${X} cos ${Y}</b> · ขาตั้ง = cos ${Y} · sin ${X} = <b>sin ${X} cos ${Y}</b>`, `The blue triangle O-F-P (longest side cos ${Y}, angle ${X}): the horizontal leg = cos ${Y} · cos ${X} = <b>cos ${X} cos ${Y}</b> · the upright leg = cos ${Y} · sin ${X} = <b>sin ${X} cos ${Y}</b>`)),
+  () => tx(T(`สามเหลี่ยมส้มขวาบน (ด้านยาวสุด sin ${Y}): มุมที่ P เท่ากับ ${X} เพราะขาของมันตั้งฉากกับขาของสามเหลี่ยมฟ้า → ขาตั้ง = <b>cos ${X} sin ${Y}</b> · ขานอน = <b>sin ${X} sin ${Y}</b>`, `The orange triangle at top right (longest side sin ${Y}): its angle at P equals ${X} because its legs are perpendicular to the legs of the blue triangle → upright leg = <b>cos ${X} sin ${Y}</b> · horizontal leg = <b>sin ${X} sin ${Y}</b>`)),
+  () => tx(T(`สามเหลี่ยมม่วงซ้ายบน (ด้านยาวสุด OQ = 1 มุมที่ Q = ${X} + ${Y} เป็นมุมแย้ง) → ขาตั้งซ้าย = <b>sin(${X} + ${Y})</b> = ความสูงของกรอบ = ขอบขวา = FP + PR → <b>ข้อ 10</b>`, `The purple triangle at top left (longest side OQ = 1, angle at Q = ${X} + ${Y} as an alternate angle) → its upright leg = <b>sin(${X} + ${Y})</b> = the height of the frame = the right edge = FP + PR → <b>No. 10</b>`)),
+  () => tx(T(`ขอบบน = LQ + QR = cos(${X} + ${Y}) + sin ${X} sin ${Y} เท่ากับขอบล่าง cos ${X} cos ${Y} → ย้ายข้างได้ <b>ข้อ 11</b>`, `The top edge = LQ + QR = cos(${X} + ${Y}) + sin ${X} sin ${Y} equals the bottom edge cos ${X} cos ${Y} → rearrange to get <b>No. 11</b>`))
+];
+const GEO_SC = GEO_ST.flatMap((g, k) => g.items().map((_, c) => ({
+  cap: GEO_CAP[k],
+  end: S => { geoBuild(S, g.st, g.items().slice(0, c + 1)); },
+  play: (k === 0 && c === 0) ? undefined : async S => {
+    if (c > 0) { geoBuild(S, g.st, g.items().slice(0, c)); await S.anim.wait(250); const s = S.el.querySelector('.tg-R'); s.appendChild(itemEl(g.items()[c], true)); return; }
+    if (k === 1) {
+      const s = stage2(S.el);
+      await S.anim.run(1300, t => { s.L.innerHTML = geoSvg({ rot: t, arcs: [] }); }, EASE.inOut);
+      await S.anim.run(700, t => { s.L.innerHTML = geoSvg({ rot: 1, blue: t > 0.5 ? 1 : 0, frame: t, arcs: [] }); }, EASE.out);
+      geoBuild(S, g.st, [], false); await S.anim.wait(300); geoBuild(S, g.st, g.items().slice(0, 1), true);
+    } else {
+      const prev = GEO_ST[k - 1]; geoBuild(S, prev.st, prev.items()); await S.anim.wait(450);
+      geoBuild(S, g.st, g.items().slice(0, 1), true);
+    }
+  }
+})));
+
+// ═══════════════════════════════════════════════════════════════
 //  ประกอบหน้า
 // ═══════════════════════════════════════════════════════════════
 function build() {
@@ -4217,10 +4394,13 @@ function build() {
 
   // ── แท็บ 2: ผลบวกมุม ──
   document.getElementById('tab-sum').innerHTML =
-    card('➕', d('ผลบวก/ผลต่างของมุม', 'Sum and difference of angles') + ' ' + idn('10–12'), '<div id="w-sm"></div>') +
+    card('📐', d('ที่มาของ sin(x + y) และ cos(x + y)', 'Where sin(x + y) and cos(x + y) come from') + ' ' + idn('10, 11'),
+      `<div id="w-gm"></div><div class="box-info">${d('ผลต่าง: แทน y ด้วย −y แล้วใช้ sin(−y) = −sin y, cos(−y) = cos y (ข้อ 7–8) · tan: เอา sin หารด้วย cos แล้วหารทั้งเศษและส่วนด้วย cos x cos y · ภาพนี้วาดได้เมื่อ x + y น้อยกว่า 90° แต่สูตรจริงกับทุกมุม', 'Difference: replace y by −y and use sin(−y) = −sin y, cos(−y) = cos y (No. 7–8) · tan: divide sin by cos, then divide top and bottom by cos x cos y · this picture works when x + y is less than 90°, but the formulas hold for every angle')}</div>`) +
+    card('➕', d('ทริกจำสูตรผลบวก/ผลต่างของมุม', 'Memory tricks for the sum and difference formulas') + ' ' + idn('10–12'), '<div id="w-sm"></div>') +
     card('🖐️', d('ลองทำ: เลือกเครื่องหมาย', 'Try it: choose the sign'), '<div id="w-sg"></div>') +
     card('📐', d('ตัวอย่าง: sin(5π/12)', 'Example: sin(5π/12)'), `<div class="sc-prompt">${d('แยกมุมเป็นมุมพิเศษสองมุมบวกกัน แล้วใช้ข้อ 10', 'Split the angle into two special angles, then use No. 10')}</div><div id="w-se"></div>`) +
     card('🔮', d('ทายก่อน: cos(π/12)', 'Guess first: cos(π/12)'), '<div id="w-sp"></div>');
+  makeScenes(document.getElementById('w-gm'), GEO_SC, { prompt: T('กด ▶ ทีละฉาก — ดูสี่เหลี่ยมผืนผ้าเผยสูตร', 'Press ▶ one scene at a time — watch the rectangle reveal the formulas') });
   makeScenes(document.getElementById('w-sm'), SUM_SC, { prompt: T('กด ▶ ทีละสูตร — ดูคู่ฟังก์ชันและเครื่องหมายที่กะพริบ', 'Press ▶ one formula at a time — watch the blinking pairs and signs') });
   makeSignTry(document.getElementById('w-sg'));
   exampleBox(document.getElementById('w-se'), el => { el.innerHTML = barSvg({ n: 5, cls: ['blue', 'blue', 'blue', 'orange', 'orange'], over: [{ a: 0, b: 5, t: radText(5, 12), c: 'g' }], under: [{ a: 0, b: 3, t: radText(1, 4), c: 'b' }, { a: 3, b: 5, t: radText(1, 6), c: 'o' }] }); }, EXS_ROWS, true);
@@ -4239,10 +4419,14 @@ function build() {
 
   // ── แท็บ 4: มุม 3 เท่า ──
   document.getElementById('tab-triple').innerHTML =
-    card('3️⃣', d('เช็คสูตรมุม 3 เท่าด้วย θ = π/6', 'Test the triple-angle formula with θ = π/6') + ' ' + idn(18), `<div id="w-tr"></div><div class="formula" style="${FSTYLE}"><span>${idn(18)}<span class="mx">sin 3${TH}</span> = ${mx('3 sin ' + TH + ' − 4 sin<sup>3</sup>' + TH)}</span><span>${idn(19)}<span class="mx">cos 3${TH}</span> = ${mx('4 cos<sup>3</sup>' + TH + ' − 3 cos ' + TH)}</span><span>${idn(20)}<span class="mx">tan 3${TH}</span> = ${mx(fr('3 tan ' + TH + ' − tan<sup>3</sup>' + TH, '1 − 3' + t2(TH)))}</span></div>`) +
+    card('🧮', d('ที่มาของ sin 3x', 'Where sin 3x comes from') + ' ' + idn(18), '<div id="w-t3"></div>') +
+    card('🧮', d('cos 3x และ tan 3x: ทำแบบเดียวกัน', 'cos 3x and tan 3x: the same method') + ' ' + idn('19, 20'), '<div id="w-q3"></div>') +
+    card('3️⃣', d('ตรวจสูตรด้วย θ = π/6', 'Check the formula with θ = π/6') + ' ' + idn(18), `<div id="w-tr"></div><div class="formula" style="${FSTYLE}"><span>${idn(18)}<span class="mx">sin 3${TH}</span> = ${mx('3 sin ' + TH + ' − 4 sin<sup>3</sup>' + TH)}</span><span>${idn(19)}<span class="mx">cos 3${TH}</span> = ${mx('4 cos<sup>3</sup>' + TH + ' − 3 cos ' + TH)}</span><span>${idn(20)}<span class="mx">tan 3${TH}</span> = ${mx(fr('3 tan ' + TH + ' − tan<sup>3</sup>' + TH, '1 − 3' + t2(TH)))}</span></div>`) +
     card('🖐️', d('ลองทำ: ลาก θ ดูสองข้างเท่ากัน', 'Try it: drag θ and watch both sides agree') + ' ' + idn('18, 19'), '<div id="w-tt"></div>') +
     card('📐', d('ตัวอย่าง: sin θ = 1/3', 'Example: sin θ = 1/3'), '<div id="w-te"></div>') +
     card('🔮', d('ทายก่อน: cos π จากข้อ 19', 'Guess first: cos π from No. 19'), '<div id="w-tp"></div>');
+  makeScenes(document.getElementById('w-t3'), T3_SC, { prompt: T('กด ▶ ทีละฉาก — ดูกล่องสีที่ถูกแทน', 'Press ▶ one scene at a time — watch the coloured boxes get replaced') });
+  makeProblemSteps(document.getElementById('w-q3'), T('เลือกสูตร', 'Choose a formula'), Q3());
   makeScenes(document.getElementById('w-tr'), TR_SC, { prompt: T('กด ▶ ทีละฉาก — ดูสองข้างของข้อ 18', 'Press ▶ one scene at a time — compare the two sides of No. 18') });
   makeTripleTry(document.getElementById('w-tt'));
   makeSteps(document.getElementById('w-te'), EXT_ROWS);
@@ -4250,11 +4434,13 @@ function build() {
 
   // ── แท็บ 5: บวก ↔ คูณ ──
   document.getElementById('tab-prod').innerHTML =
+    card('🧭', d('ที่มา: เอาสูตรข้อ 10–11 มาบวกลบกัน', 'Where they come from: add and subtract No. 10–11') + ' ' + idn('21–28'), '<div id="w-pd"></div>') +
     card('🔁', d('ผลบวก/ผลต่าง → ผลคูณ', 'Sum or difference → product') + ' ' + idn('21–24'), '<div id="w-p1"></div>') +
     card('📐', d('ตัวอย่าง: sin(5π/12) + sin(π/12)', 'Example: sin(5π/12) + sin(π/12)'), '<div id="w-p1e"></div>') +
     card('🔄', d('ผลคูณ → ผลบวก/ผลต่าง', 'Product → sum or difference') + ' ' + idn('25–28'), '<div id="w-p2"></div>') +
     card('📐', d('ตัวอย่าง: cos(5π/12) cos(π/12)', 'Example: cos(5π/12) cos(π/12)'), '<div id="w-p2e"></div>') +
     card('🧩', d('เกมจับคู่: ข้อ 21–28', 'Matching game: No. 21–28'), '<div id="w-pm"></div>');
+  makeScenes(document.getElementById('w-pd'), SPD_SC, { prompt: T('กด ▶ ทีละฉาก — ดูพจน์ที่หักล้างกัน', 'Press ▶ one scene at a time — watch the terms that cancel') });
   makeScenes(document.getElementById('w-p1'), SP_SC, { prompt: T('กด ▶ ทีละฉาก — ดูสีของแต่ละก้อน', 'Press ▶ one scene at a time — see the colour of each piece') });
   makeSteps(document.getElementById('w-p1e'), EXP1_ROWS);
   makeScenes(document.getElementById('w-p2'), PS_SC, { prompt: T('กด ▶ ทีละฉาก — ดูสีของแต่ละก้อน', 'Press ▶ one scene at a time — see the colour of each piece') });

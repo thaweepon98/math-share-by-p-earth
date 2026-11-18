@@ -3803,6 +3803,7 @@ function syInjectCss() {
   if (document.getElementById('sy-css')) return;
   const s = document.createElement('style'); s.id = 'sy-css';
   s.textContent = `
+  .tsup { font-size: .86em; font-weight: 800; margin-left: .06em; }
   .cl-yellow { --cc: ${SYY}; }
   .mat-grid { row-gap: .32em; }
   .mx-calc .mx-tag { font-size: 1.1rem; }
@@ -3819,6 +3820,21 @@ function syInjectCss() {
   .mc.hq { background: color-mix(in srgb, var(--g-purple) 24%, transparent); box-shadow: inset 0 0 0 2px var(--g-purple); }
   .mx-g { display: inline-flex; align-items: center; gap: 6px 10px; flex-wrap: nowrap; }
   .mx-nw { white-space: nowrap; }
+  .sy-ln { display: block; text-align: center; padding: 4px 0; line-height: 2; }
+  .sy-qwrap { padding: 2px 0; }
+  .sy-eqlist { display: flex; flex-direction: column; align-items: center; gap: 2px; font-size: 1.3rem; font-weight: 800; }
+  .sy-cm { font-weight: 800; padding: 0 .28em; border-radius: 7px; }
+  .sy-cm.p { background: color-mix(in srgb, var(--g-purple) 24%, var(--card)); box-shadow: inset 0 0 0 2px var(--g-purple); }
+  .sy-cm.o { background: color-mix(in srgb, var(--g-curve) 26%, var(--card)); box-shadow: inset 0 0 0 2px var(--g-curve); }
+  .ar-note { font-size: .95rem; color: var(--muted); font-weight: 600; margin-top: 4px; text-align: center; line-height: 1.6; }
+  .ar-calc { text-align: center; }
+  .ar-sent { font-weight: 700; line-height: 1.7; }
+  .rq-cmd { text-align: center; min-height: 2em; margin: 2px 0 6px; }
+  .rq-h { text-align: center; font-weight: 800; color: var(--muted); margin-bottom: 4px; }
+  .rq-eqs { display: flex; flex-direction: column; align-items: center; gap: 10px; font-size: 1.45rem; font-weight: 800; min-height: 4.2em; justify-content: center; }
+  .rq-eq { white-space: nowrap; }
+  .rq-split .mx-row { justify-content: center; }
+  .sy-ltr { transition: opacity .2s; }
   /* ระบบสมการ (ตารางจัดแนว) */
   .sy-eqs { display: inline-grid; gap: 4px 6px; align-items: center; justify-items: center; font-size: 1.5rem; font-weight: 800; margin: 6px auto; padding: 8px 14px; border-radius: 14px; border: 2px solid var(--border); }
   .sy-eqs > span { padding: 1px 6px; border-radius: 8px; line-height: 1.35; white-space: nowrap; transition: background .2s, box-shadow .2s; }
@@ -4390,6 +4406,121 @@ const CR_SC = [
     } }
 ];
 
+// ═══════════════════════════════════════════════════════════════
+//  ข้อ 24 · คราเมอร์ใหม่: (ก) ที่มา — กำจัดตัวแปรแล้วเจอ det · (ข) เห็นภาพ — ยืดแล้วเลื่อน พื้นที่โตขึ้น x เท่า · (ค) ฉากคำนวณเดิม (CR_SC)
+//  ตัวอย่างใหม่: 2x + y = 5, x + 3y = 5 → A = [[2, 1], [1, 3]], B = (5, 5), det A = 5, คำตอบ (2, 1)
+//  ฉากละ 1 บรรทัดคิดใหม่ (syLineScenes) · เลขทุกตัวคำนวณจาก mDet / Q แล้วเทียบกับสเปก (throw ถ้าไม่ตรง)
+// ═══════════════════════════════════════════════════════════════
+const CQ_A = [[2, 1], [1, 3]], CQ_B = [[5], [5]], CQ_AQ = _mQ(CQ_A);
+const CQ_D = mDet(CQ_AQ), CQ_NX = _mQ([[5, 1], [5, 3]]), CQ_NY = _mQ([[2, 5], [1, 5]]), CQ_DX = mDet(CQ_NX), CQ_DY = mDet(CQ_NY);
+if (!(qEq(CQ_D, 5) && qEq(CQ_DX, 10) && qEq(CQ_DY, 5) && qEq(qDiv(CQ_DX, CQ_D), 2) && qEq(qDiv(CQ_DY, CQ_D), 1))) throw new Error('CQ numbers');
+// syLineScenes(cap, build, n): n ฉาก ฉาก k วาด build(el, k) ที่มีบรรทัดที่ 1..k · แอนิเมชัน = บรรทัดใหม่ (data-ln = k) ค่อยๆ โผล่ · cap = T | () => html | k => html
+function syLineScenes(cap, build, n, first) {
+  const capOf = k => () => { const c = typeof cap === 'function' ? cap(k) : cap; return typeof c === 'string' ? c : tx(c); };
+  return Array.from({ length: n }, (_, i) => {
+    const k = i + 1;
+    return { cap: capOf(k), end: S => { build(S.el, k); },
+      play: async S => { build(S.el, k - 1); await S.anim.wait(250); build(S.el, k); const ln = S.el.querySelector(`[data-ln="${k}"]`); if (ln) { ln.style.opacity = 0; await S.anim.run(600, t => { ln.style.opacity = t; }, EASE.out); ln.style.opacity = ''; } } };
+  });
+}
+const sqLn = (k, h) => `<div class="sy-ln" data-ln="${k}">${h}</div>`;
+const sqRows = (rows, k) => rows.slice(0, k).map((h, i) => sqLn(i + 1, h)).join('');
+// ตัวเลขคงสีตามที่มา: ตัวคูณของสมการ 1 = สปส. y ของสมการ 2 (ม่วง) · ตัวคูณของสมการ 2 = สปส. y ของสมการ 1 (ส้ม)
+const cm = (c, t) => `<span class="sy-cm ${c}">${t}</span>`;
+function cqBuild(el, k) {
+  const m3 = cm('p', 3), m1 = cm('o', 1);
+  const mA = (cls) => matHtml(CQ_AQ, { name: '<i>A</i>', key: 'A', cls });
+  const mN = (M, cls) => matHtml(M, { br: '|', cls });
+  const detA = `<span class="mx">det <i>A</i> = ${mN(CQ_AQ, (i, j) => (i === j ? 'hr' : 'hg'))} = (2)(3) − (1)(1) = <b>5</b></span>`;
+  const rows = [
+    /* 1 */ `<div class="sy-eqlist"><span class="mx">2<i>x</i> + <i>y</i> = 5</span><span class="mx"><i>x</i> + 3<i>y</i> = 5</span></div>`,
+    /* 2 */ `<span class="mx">(1) × ${m3}:&nbsp; (2·${m3})<i>x</i> + (1·${m3})<i>y</i> = 5·${m3}</span>`,
+    /* 3 */ `<span class="mx">(2) × ${m1}:&nbsp; (1·${m1})<i>x</i> + (3·${m1})<i>y</i> = ${m1}·5</span>`,
+    /* 4 */ `<span class="mx">(1) − (2):&nbsp; (2·3 − 1·1)<i>x</i> = 5·3 − 1·5</span>`,
+    /* 5 */ `<div class="mx-row">${mA((i, j) => (i === j ? 'hr' : 'hg'))}<span class="mx">${xtag('red', tx(T('คูณลง', 'down')))} 2·3 ${xtag('green', tx(T('คูณขึ้น', 'up')))} 1·1 → <i>det A</i> = <b>5</b></span></div>`,
+    /* 6 */ `<div class="mx-row"><span class="mx">5·3 − 1·5 = ${mN(CQ_NX, (i, j) => (j === 0 ? 'ho' : ''))} = <b>10</b></span></div><div class="ar-note">${tx(T('= det ของ A ที่<b>หลักของ x ถูกแทนด้วย B</b> (5, 5)', '= the det of A with the <b>x column replaced by B</b> (5, 5)'))}</div>`,
+    /* 7 */ `<span class="mx"><i>x</i> = ${frac('10', '5')} = <b>2</b></span>`,
+    /* 8 */ `<span class="mx">${tx(T('กำจัด <i>x</i>:', 'Eliminate <i>x</i>:'))} (2·3 − 1·1)<i>y</i> = 2·5 − 5·1</span>`,
+    /* 9 */ `<div class="mx-row"><span class="mx">2·5 − 5·1 = ${mN(CQ_NY, (i, j) => (j === 1 ? 'ho' : ''))} = <b>5</b> → <i>y</i> = ${frac('5', '5')} = <b>1</b></span></div>`,
+    /* 10 */ `<div class="formula" style="margin:6px 0"><span><i>x</i> = ${frac(tx(T('det (แทนหลัก x ด้วย B)', 'det (column x replaced by B)')), 'det <i>A</i>')}</span><span><i>y</i> = ${frac(tx(T('det (แทนหลัก y ด้วย B)', 'det (column y replaced by B)')), 'det <i>A</i>')}</span></div>`
+  ];
+  el.innerHTML = `<div class="sy-qwrap">${sqRows(rows, k)}</div>`;
+  xgroup(el);
+}
+const CQ_CAPS = [
+  ['แก้ระบบด้วย<b>กำจัดตัวแปร</b>แบบที่เคยทำ แต่คราวนี้<b>ยังไม่คูณเลขให้เสร็จ</b> จะได้เห็นว่าเลขมาจากไหน · กด ▶', 'Solve by the <b>elimination</b> you already know — but this time <b>do not finish the multiplying</b>, so we can see where each number comes from · press ▶'],
+  ['อยากกำจัด <i>y</i>: คูณสมการ (1) ด้วย <b>3</b> (สปส. ของ y ในสมการ 2) — ตัวเลขที่คูณเข้าไปคงเป็นสีม่วง', 'To eliminate <i>y</i>: multiply equation (1) by <b>3</b> (the coefficient of y in equation 2) — the multiplier stays purple'],
+  ['คูณสมการ (2) ด้วย <b>1</b> (สปส. ของ y ในสมการ 1) — ตัวเลขที่คูณเข้าไปคงเป็นสีส้ม · ตอนนี้ y ทั้งสองสมการเป็น 3y เท่ากัน', 'Multiply equation (2) by <b>1</b> (the coefficient of y in equation 1) — the multiplier stays orange · now both equations have 3y'],
+  ['ลบกัน <i>y</i> หายไป: (2·3 − 1·1)x = 5·3 − 1·5 — ยัง<b>ไม่คูณเลข</b> ให้ดูว่าเลขแต่ละตัวมาจากไหน', 'Subtract and the <i>y</i> vanishes: (2·3 − 1·1)x = 5·3 − 1·5 — still <b>not multiplied out</b>, so we can see where each number comes from'],
+  ['ฝั่งซ้าย <b>2·3 − 1·1</b> คือ คูณลง ลบ คูณขึ้น ของ A → <b>det A</b> = 5', 'The left side <b>2·3 − 1·1</b> is down-minus-up of A → <b>det A</b> = 5'],
+  ['ฝั่งขวา <b>5·3 − 1·5</b> ก็คือ det ของ A ที่ <b>หลักของ x ถูกแทนด้วย B</b> → 10', 'The right side <b>5·3 − 1·5</b> is also a det — of A with the <b>x column replaced by B</b> → 10'],
+  ['ได้ <b>x = 10 ÷ 5 = 2</b> (det ใหม่ ÷ det เดิม)', 'So <b>x = 10 ÷ 5 = 2</b> (new det ÷ old det)'],
+  ['กำจัด <i>x</i> แบบเดียวกัน (คูณสมการ (1) ด้วย 1 และสมการ (2) ด้วย 2 แล้วลบ) → (2·3 − 1·1)y = 2·5 − 5·1', 'Eliminate <i>x</i> the same way (multiply (1) by 1 and (2) by 2, then subtract) → (2·3 − 1·1)y = 2·5 − 5·1'],
+  ['ขวา = det ของ A ที่<b>หลักของ y ถูกแทนด้วย B</b> = 5 → <b>y = 5 ÷ 5 = 1</b>', 'The right = the det of A with the <b>y column replaced by B</b> = 5 → <b>y = 5 ÷ 5 = 1</b>'],
+  ['<b>กฎของคราเมอร์ก็คือการกำจัดตัวแปรที่ทำไว้ล่วงหน้า</b> — เลยได้สูตร x = det(แทนหลัก x ด้วย B) ÷ det A', '<b>Cramer’s rule is just elimination done in advance</b> — which gives x = det(x column replaced by B) ÷ det A']
+];
+const CQ_SC = syLineScenes(k => tx(T(CQ_CAPS[k - 1][0], CQ_CAPS[k - 1][1])), cqBuild, 10);
+
+// ── (ข) เห็นภาพ: กราฟ x 0–7, y 0–9 · หลัก 1 = (2, 1) น้ำเงิน · หลัก 2 = (1, 3) ส้ม · B = (5, 5) แดง ──
+function syGeoMount(el, o) {
+  el.innerHTML = '<div class="tg-split"><div class="tg-L"><div class="ar-plot"></div></div><div class="tg-R"><div class="mx-calc ar-calc"></div></div></div>';
+  const s = o.s, pl = new Plot({ w: 2 * 28 + o.xmax * s, h: 2 * 28 + o.ymax * s, xmin: 0, xmax: o.xmax, ymin: 0, ymax: o.ymax, pad: 28, gx: 1, gy: 1, lx: 1, ly: 1 });
+  const box = el.querySelector('.ar-plot'); box.innerHTML = pl.svg().replace(/<\/svg>$/, '<g class="ar-dyn"></g></svg>');
+  const dyn = box.querySelector('.ar-dyn'), X = x => pl.X(x), Y = y => pl.Y(y), pts = ps => ps.map(p => X(p[0]) + ',' + Y(p[1])).join(' ');
+  const outline = { blue: 'var(--g-blue)', orange: 'var(--g-curve)', red: 'var(--g-red)', green: 'var(--g-green)' };
+  const arrow = (a, b, cls, p) => {
+    const bx_ = a[0] + (b[0] - a[0]) * p, by_ = a[1] + (b[1] - a[1]) * p, L = Math.hypot(X(bx_) - X(a[0]), Y(by_) - Y(a[1])); if (L < 4) return '';
+    const ux = (X(bx_) - X(a[0])) / L, uy = (Y(by_) - Y(a[1])) / L, hl = 13, hx = X(bx_) - ux * hl, hy = Y(by_) - uy * hl;
+    return `<line class="pl-c ${cls}" style="stroke-width:3.6" x1="${X(a[0])}" y1="${Y(a[1])}" x2="${hx.toFixed(1)}" y2="${hy.toFixed(1)}"/><polygon class="${cls.replace('s-', 'f-')}" points="${X(bx_)},${Y(by_)} ${(hx - uy * 6).toFixed(1)},${(hy + ux * 6).toFixed(1)} ${(hx + uy * 6).toFixed(1)},${(hy - ux * 6).toFixed(1)}"/>`;
+  };
+  return {
+    // items: { t: 'poly', pts, col, op, dash, sw } | { t: 'arrow', a, b, cls, p } | { t: 'lab', at, html, cl, dx, dy } | { t: 'line', a, b, col, dash }
+    paint(items) {
+      let g = '';
+      items.forEach(it => {
+        if (it.t === 'poly') g += `<polygon style="fill:${it.fill ? `color-mix(in srgb, ${it.col} ${it.op === undefined ? 20 : it.op}%, transparent)` : 'none'};stroke:${it.col};stroke-width:${it.sw || 2.6};stroke-linejoin:round;${it.dash ? 'stroke-dasharray:6 5;' : ''}opacity:${it.alpha === undefined ? 1 : it.alpha}" points="${pts(it.pts)}"/>`;
+        else if (it.t === 'line') g += `<line style="stroke:${it.col};stroke-width:2.4;${it.dash ? 'stroke-dasharray:6 5;' : ''}" x1="${X(it.a[0])}" y1="${Y(it.a[1])}" x2="${X(it.b[0])}" y2="${Y(it.b[1])}"/>`;
+        else if (it.t === 'arrow') g += arrow(it.a, it.b, it.cls, it.p === undefined ? 1 : it.p);
+        else g += `<text class="pl-lbl ${it.cl || ''}" style="font-size:${it.fs || 14}px;paint-order:stroke;stroke:var(--card);stroke-width:4px;stroke-linejoin:round" x="${X(it.at[0]) + (it.dx || 0)}" y="${Y(it.at[1]) + (it.dy || 0)}" text-anchor="${it.anchor || 'start'}">${it.html}</text>`;
+      });
+      dyn.innerHTML = g;
+    },
+    calc(h) { el.querySelector('.ar-calc').innerHTML = typeof h === 'function' ? h() : (h || ''); }
+  };
+}
+const CV_O = [0, 0], CV_C1 = [2, 1], CV_C2 = [1, 3], CV_B = [5, 5], CV_C1X = [4, 2], CV_SH = [6, 8];
+const cvPoly = (pts, col, op, o) => Object.assign({ t: 'poly', pts, col, fill: true, op }, o || {});
+const cvArrows = (p1, p2, pb) => [{ t: 'arrow', a: CV_O, b: CV_C1, cls: 's-blue', p: p1 }, { t: 'arrow', a: CV_O, b: CV_C2, cls: 's-orange', p: p2 }, { t: 'arrow', a: CV_O, b: CV_B, cls: 's-red', p: pb }];
+const cvLabs = (c1 = true, c2 = true, b = true) => [c1 && { t: 'lab', at: CV_C1, html: '(2, 1)', cl: 'b', dx: 10, dy: 16 }, c2 && { t: 'lab', at: CV_C2, html: '(1, 3)', cl: 'o', dx: -10, dy: -8, anchor: 'end' }, b && { t: 'lab', at: CV_B, html: 'B = (5, 5)', cl: 'r', dx: 10, dy: -6 }].filter(Boolean);
+const PARA = (a, b) => [CV_O, a, [a[0] + b[0], a[1] + b[1]], b];
+const CV_ST = [
+  { items: () => [...cvArrows(1, 1, 1), ...cvLabs()], calc: () => `<span class="mx"><i>x</i>·(2, 1) + <i>y</i>·(1, 3) = (5, 5)</span>` },
+  { items: () => [cvPoly(PARA(CV_C1, CV_C2), 'var(--g-green)', 20), ...cvArrows(1, 1, 1), ...cvLabs(), { t: 'lab', at: [1.5, 2], html: tx(T('พื้นที่ = 5', 'area = 5')), cl: 'g', fs: 15, anchor: 'middle', dy: 4 }], calc: () => `<span class="mx">${tx(T('พื้นที่', 'area'))} = det <i>A</i> = <b>5</b></span><div class="ar-note">${tx(T('(อ้างการ์ด "det คือพื้นที่" ในสื่อ det)', '(see the "det is an area" card in the det lesson)'))}</div>` },
+  { items: () => [cvPoly(PARA(CV_C1, CV_C2), 'var(--g-green)', 10, { dash: true, fill: true, alpha: .7 }), cvPoly(PARA(CV_C1X, CV_C2), 'var(--g-green)', 24), { t: 'arrow', a: CV_O, b: CV_C1X, cls: 's-blue' }, { t: 'arrow', a: CV_O, b: CV_C2, cls: 's-orange' }, { t: 'lab', at: CV_C1X, html: '2 × (2, 1) = (4, 2)', cl: 'b', dx: 8, dy: 16 }, { t: 'lab', at: CV_C2, html: '(1, 3)', cl: 'o', dx: -10, dy: -8, anchor: 'end' }, { t: 'lab', at: [2.5, 2.5], html: tx(T('พื้นที่ = 10', 'area = 10')), cl: 'g', fs: 15, anchor: 'middle', dy: 4 }], calc: () => `<span class="mx">${tx(T('พื้นที่', 'area'))} = <i>x</i> × det <i>A</i> = 2 × 5 = <b>10</b></span>` },
+  { items: () => [cvPoly(PARA(CV_C1X, CV_C2), 'var(--g-green)', 10, { dash: true, alpha: .6 }), cvPoly(PARA(CV_B, CV_C2), 'var(--g-green)', 24), { t: 'line', a: CV_C1X, b: CV_B, col: 'var(--g-red)', dash: true }, { t: 'arrow', a: CV_O, b: CV_B, cls: 's-red' }, { t: 'arrow', a: CV_O, b: CV_C2, cls: 's-orange' }, { t: 'lab', at: CV_B, html: 'B = (5, 5)', cl: 'r', dx: 10, dy: -6 }, { t: 'lab', at: [3, 4.8], html: tx(T('พื้นที่ = 10 (เท่าเดิม)', 'area = 10 (unchanged)')), cl: 'g', fs: 15, anchor: 'middle' }], calc: () => `<div class="ar-sent">${tx(T('เลื่อนด้านบนตามแนวหลัก 2 (บวก <i>y</i> เท่าของ (1, 3)): ฐานเดิม สูงเดิม → พื้นที่ยัง <b>10</b>', 'Slide the top side along column 2 (add <i>y</i> times (1, 3)): same base, same height → the area is still <b>10</b>'))}</div>` },
+  { items: () => [cvPoly(PARA(CV_B, CV_C2), 'var(--g-green)', 24), { t: 'arrow', a: CV_O, b: CV_B, cls: 's-red' }, { t: 'arrow', a: CV_O, b: CV_C2, cls: 's-orange' }, { t: 'lab', at: CV_B, html: 'B = (5, 5)', cl: 'r', dx: 10, dy: -6 }, { t: 'lab', at: [3, 4.8], html: tx(T('พื้นที่ = 10', 'area = 10')), cl: 'g', fs: 15, anchor: 'middle' }], calc: () => `<span class="mx">det(<i>B</i>, ${tx(T('หลัก 2', 'column 2'))}) = <i>x</i> · det <i>A</i> → <i>x</i> = ${frac('10', '5')} = <b>2</b></span>` }
+];
+const CV_CAPS = [
+  ['มองระบบเป็นลูกศร: <b>x·(หลัก 1) + y·(หลัก 2) = B</b> — ต้องใช้หลัก 1 กี่เท่า หลัก 2 กี่เท่า จึงไปถึง B · กด ▶', 'See the system as arrows: <b>x·(column 1) + y·(column 2) = B</b> — how many of column 1 and of column 2 reach B · press ▶'],
+  ['สี่เหลี่ยมด้านขนานของหลัก 1 กับหลัก 2 มีพื้นที่ = <b>det A</b> = 5', 'The parallelogram of column 1 and column 2 has area = <b>det A</b> = 5'],
+  ['<b>ยืดหลัก 1 เป็น x เท่า</b> (ที่นี่ 2 เท่า → (4, 2)) สี่เหลี่ยมยาวขึ้น พื้นที่ = <b>x × det A</b>', '<b>Stretch column 1 by x</b> (here 2 times → (4, 2)) — the parallelogram gets longer, area = <b>x × det A</b>'],
+  ['<b>เลื่อนด้านบนไปตามแนวหลัก 2</b> ปลายลูกศรไปถึง B · ฐานเดิม สูงเดิม <b>พื้นที่ไม่เปลี่ยน</b> → ได้สี่เหลี่ยมของ (B, หลัก 2)', '<b>Slide the top side along column 2</b> until the tip reaches B · same base, same height, so the <b>area does not change</b> → the parallelogram of (B, column 2)'],
+  ['ดังนั้น <b>det(B, หลัก 2) = x × det A</b> → <b>x = det ใหม่ ÷ det เดิม = 10 ÷ 5 = 2</b>', 'So <b>det(B, column 2) = x × det A</b> → <b>x = new det ÷ old det = 10 ÷ 5 = 2</b>']
+];
+// ตรวจเรขาคณิตกับ mDet: พื้นที่สี่เหลี่ยมด้านขนาน = |det|
+{ const ar = (a, b) => Math.abs(a[0] * b[1] - a[1] * b[0]); if (!(ar(CV_C1, CV_C2) === 5 && ar(CV_C1X, CV_C2) === 10 && ar(CV_B, CV_C2) === 10 && CV_C1X[0] + CV_C2[0] === CV_B[0] + 0 && CV_C1X[1] + CV_C2[1] === CV_B[1] + 0)) throw new Error('CV geometry'); }
+const CV_SC = CV_ST.map((st, k) => ({ cap: () => tx(T(CV_CAPS[k][0], CV_CAPS[k][1])),
+  end: S => { const g = syGeoMount(S.el, { xmax: 7, ymax: 9, s: 40 }); g.paint(st.items()); g.calc(() => st.calc() + (k === 4 ? `<div class="ar-note">${tx(T('ภาพนี้เลือกเลขบวกให้ดูง่าย ถ้า x หรือ det ติดลบ รูปจะพลิกด้าน แต่สูตรยังจริง (ดูที่มาจากการกำจัดตัวแปร)', 'This picture uses positive numbers to keep it simple; if x or the det is negative the shape flips over, but the formula is still true (see the elimination derivation)'))}</div>` : '')); },
+  play: async S => {
+    const g = syGeoMount(S.el, { xmax: 7, ymax: 9, s: 40 });
+    if (k === 0) { await S.anim.run(700, t => g.paint([...cvArrows(t, 0, 0)])); await S.anim.run(700, t => g.paint([...cvArrows(1, t, 0)])); await S.anim.run(800, t => g.paint([...cvArrows(1, 1, t)])); g.paint(st.items()); g.calc(st.calc); return; }
+    g.paint(CV_ST[k - 1].items()); g.calc(CV_ST[k - 1].calc); await S.anim.wait(400);
+    if (k === 2) await S.anim.run(1000, t => { const c = [lerp(2, 4, t), lerp(1, 2, t)]; g.paint([cvPoly(PARA(CV_C1, CV_C2), 'var(--g-green)', 10, { dash: true, alpha: .7 }), cvPoly(PARA(c, CV_C2), 'var(--g-green)', 24), { t: 'arrow', a: CV_O, b: c, cls: 's-blue' }, { t: 'arrow', a: CV_O, b: CV_C2, cls: 's-orange' }]); }, EASE.inOut);
+    if (k === 3) await S.anim.run(1100, t => { const c = [lerp(4, 5, t), lerp(2, 5, t)]; g.paint([cvPoly(PARA(CV_C1X, CV_C2), 'var(--g-green)', 10, { dash: true, alpha: .6 }), cvPoly(PARA(c, CV_C2), 'var(--g-green)', 24), { t: 'arrow', a: CV_O, b: c, cls: t > .98 ? 's-red' : 's-blue' }, { t: 'arrow', a: CV_O, b: CV_C2, cls: 's-orange' }]); }, EASE.inOut);
+    if (k === 1) await S.anim.run(800, t => g.paint([cvPoly(PARA(CV_C1, CV_C2), 'var(--g-green)', 20 * t), ...cvArrows(1, 1, 1), ...cvLabs()]));
+    g.paint(st.items()); g.calc(st.calc); await S.anim.wait(150);
+  } }));
+
 // ทายก่อน: det เดิม = 0 ใช้คราเมอร์ได้ไหม
 function crPredItem() {
   const A0 = [[2, 4], [1, 2]], B0 = [[6], [5]];
@@ -4650,6 +4781,57 @@ const RW_SC = [
     end: S => syRsEnd(S.el, RW_C[4], 2, RW_OPS[3], { cellCls: (i, j) => j < 2 ? 'hg' : '', calc: `<span class="mx-tag cl-green">x = ${qHtml(RW_C[4][0][2])}</span> <span class="mx-tag cl-green">y = ${qHtml(RW_C[4][1][2])}</span>` }),
     play: async S => { await syPlayOp(S, RW_C[3], 2, RW_OPS[3]); syRsEnd(S.el, RW_C[4], 2, RW_OPS[3], { cellCls: (i, j) => j < 2 ? 'hg' : '', calc: `<span class="mx-tag cl-green">x = ${qHtml(RW_C[4][0][2])}</span> <span class="mx-tag cl-green">y = ${qHtml(RW_C[4][1][2])}</span>` }); } }
 ];
+// ═══════════════════════════════════════════════════════════════
+//  ข้อ 25 · ที่มา: คำสั่งแถวคือการกำจัดตัวแปรที่ไม่เขียนตัวแปร — ซ้าย = สมการ · ขวา = เมทริกซ์แต่งเติม (ตัวอย่างและลำดับคำสั่งเดียวกับ RW_SC)
+//  RW_C[k] = เมทริกซ์แต่งเติมหลังคำสั่งที่ k (คำนวณจาก syApply) · สมการซ้ายอ่านจากแถวของเมทริกซ์ตรงๆ จึงไม่มีทางเพี้ยน
+// ═══════════════════════════════════════════════════════════════
+// สมการหนึ่งบรรทัดจากแถว [a b | c] · letters = ความโปร่งของ x, y, + และ = (1 = เห็นเต็ม) · เครื่องหมายลบติดกับตัวเลขเสมอ
+function rqEq(row, letters) {
+  const op = letters === undefined ? 1 : letters, ltr = t => `<span class="sy-ltr" style="opacity:${op}">${t}</span>`;
+  let s = '', first = true;
+  for (let j = 0; j < 2; j++) {
+    const c = _toQ(row[j]); if (qIsZero(c)) continue;
+    const neg = c.n < 0, ab = neg ? qNeg(c) : c;
+    s += first ? (neg ? '−' : '') : (neg ? ' −' : ltr(' + ')); first = false;
+    s += (qEq(ab, 1) ? '' : qHtml(ab)) + ltr(syVi(j));
+  }
+  return `<span class="mx rq-eq">${s || '0'}${ltr(' = ')}${qHtml(row[2])}</span>`;
+}
+// scene k (0–4): M = เมทริกซ์ที่แสดง · cmd = คำสั่งที่เพิ่งทำ (HTML) · letters = ความโปร่งของตัวอักษรในสมการ · hl = แถวที่เพิ่งเปลี่ยน
+function rqBuild(el, M, o) {
+  o = o || {};
+  const cls = (i, j) => (o.hl !== undefined && o.hl === i ? 'hg' : '');
+  el.innerHTML = `<div class="rq-cmd">${o.cmd || ''}</div><div class="tg-split rq-split"><div class="tg-L"><div class="rq-h">${tx(T('สมการ', 'equations'))}</div><div class="rq-eqs">${rqEq(M[0], o.letters)}${rqEq(M[1], o.letters)}</div></div><div class="tg-R"><div class="rq-h">${tx(T('เมทริกซ์แต่งเติม', 'augmented matrix'))}</div><div class="mx-row">${matHtml(M, { aug: 2, cls })}</div></div></div><div class="mx-calc rq-calc">${o.calc || ''}</div>`;
+  xgroup(el);
+}
+const rqSwap = `${rwTag(`${SYR(0)} ↔ ${SYR(1)}`)}`;
+const RQ_ST = [
+  { M: RW_C[0], o: { letters: .14 } },
+  { M: RW_C[1], o: { cmd: rwTag(`${SYR(0)} ↔ ${SYR(1)}`), hl: undefined } },
+  { M: RW_C[2], o: { cmd: rwTag(`${SYR(1)} + (−2)${SYR(0)}`), hl: 1 } },
+  { M: RW_C[3], o: { cmd: rwTag(`(${frac(1, 7)})${SYR(1)}`), hl: 1 } },
+  { M: RW_C[4], o: { cmd: rwTag(`${SYR(0)} + 2${SYR(1)}`), hl: 0 } }
+];
+// ตรวจกับสมการจริง: แต่ละขั้นสมการบนจอต้องมีคำตอบเดิม (−1, 3) · ขั้นสุดท้ายซ้ายเป็น I
+{ RW_C.forEach(M => { const x = Q(-1), y = Q(3); [0, 1].forEach(r => { if (!qEq(qAdd(qMul(M[r][0], x), qMul(M[r][1], y)), M[r][2])) throw new Error('RQ solution'); }); }); if (!mEq(RW_C[4].map(r => r.slice(0, 2)), [[Q(1), Q(0)], [Q(0), Q(1)]])) throw new Error('RQ identity'); }
+const RQ_CAPS = [
+  ['<b>เมทริกซ์แต่งเติมคือสมการที่เก็บไว้แต่ตัวเลข</b> — ตัวอักษร x, y และเครื่องหมาย = จางหาย เหลือ [2 3 | 7] กับ [1 −2 | −7] · กด ▶', 'The <b>augmented matrix is the equations with only the numbers kept</b> — the letters x, y and the = sign fade away, leaving [2 3 | 7] and [1 −2 | −7] · press ▶'],
+  ['<b>สลับลำดับสมการ</b> ↔ <b>R₁ ↔ R₂</b> — สลับบรรทัด คำตอบไม่เปลี่ยน', '<b>Swap the order of the equations</b> ↔ <b>R₁ ↔ R₂</b> — swapping lines does not change the solution'],
+  ['<b>สมการ 2 ลบ 2 เท่าของสมการ 1</b>: 7y = 21 ↔ <b>R₂ + (−2)R₁</b> ได้ [0 7 | 21] — นี่คือ<b>การกำจัด x</b> นั่นเอง', '<b>Equation 2 minus 2 times equation 1</b>: 7y = 21 ↔ <b>R₂ + (−2)R₁</b> gives [0 7 | 21] — this is <b>eliminating x</b>'],
+  ['<b>หารสมการ 2 ด้วย 7</b>: y = 3 ↔ <b>(1/7)R₂</b> ได้ [0 1 | 3]', '<b>Divide equation 2 by 7</b>: y = 3 ↔ <b>(1/7)R₂</b> gives [0 1 | 3]'],
+  ['<b>สมการ 1 บวก 2 เท่าของสมการ 2</b>: x = −1 ↔ <b>R₁ + 2R₂</b> ได้ [1 0 | −1] · ซ้ายเป็น<b>เมทริกซ์เอกลักษณ์</b> = สมการเหลือ x = −1, y = 3 อ่านคำตอบได้เลย', '<b>Equation 1 plus 2 times equation 2</b>: x = −1 ↔ <b>R₁ + 2R₂</b> gives [1 0 | −1] · the left side is the <b>identity matrix</b>, so the equations read x = −1, y = 3 — the answer is right there']
+];
+const RQ_SC = RQ_ST.map((st, k) => ({ cap: () => tx(T(RQ_CAPS[k][0], RQ_CAPS[k][1])),
+  end: S => rqBuild(S.el, st.M, Object.assign({}, st.o, k === 4 ? { calc: `<span class="mx-tag cl-green">x = ${qHtml(RW_C[4][0][2])}</span> <span class="mx-tag cl-green">y = ${qHtml(RW_C[4][1][2])}</span>` } : {})),
+  play: async S => {
+    if (k === 0) { rqBuild(S.el, st.M, { letters: 1 }); await S.anim.wait(700); await S.anim.run(1100, t => rqBuild(S.el, st.M, { letters: lerp(1, .14, t) }), EASE.inOut); return; }
+    const prev = RQ_ST[k - 1];
+    rqBuild(S.el, prev.M, k === 1 ? { letters: 1 } : Object.assign({}, prev.o, { letters: 1 })); await S.anim.wait(700);
+    rqBuild(S.el, st.M, Object.assign({}, st.o, { letters: 1 })); await S.anim.wait(500);
+    const calc = k === 4 ? `<span class="mx-tag cl-green">x = ${qHtml(RW_C[4][0][2])}</span> <span class="mx-tag cl-green">y = ${qHtml(RW_C[4][1][2])}</span>` : '';
+    rqBuild(S.el, st.M, Object.assign({}, st.o, { letters: 1, calc }));
+  } }));
+
 // ระบบพิเศษ: ไม่มีคำตอบ / มีมากมาย
 function rwSpecialScenes(M0, meaning, capEnd) {
   const op = { t: 'add', i: 1, j: 0, k: Q(-2) }, M1 = syApply(M0, op);
@@ -4708,7 +4890,7 @@ function riPredItems() {
     { chip: T('ขวาคืออะไร', 'What is the right side'), draw: (el, ctx) => {
       el.innerHTML = xrow(matHtml(_mQ(A).map((r, i) => r.concat(mId(2)[i])), { aug: 2 }), xop('→'), matHtml(ctx.done[0] ? [[1, 0, ...inv[0]], [0, 1, ...inv[1]]] : [[1, 0, null, null], [0, 1, null, null]], { aug: 2, cls: (i, j) => ctx.done[0] && j >= 2 ? 'hg' : '' }));
     }, qs: [{
-      q: T('ทำคำสั่งแถวจนซ้ายเป็น I แล้ว ด้านขวาคือข้อใด', 'After row commands turn the left side into I, what is the right side'), o: [matHtml(inv, { name: '<i>A</i><sup>−1</sup>' }), matHtml(A, { name: '<i>A</i>' }), matHtml(mScale(A, -1), { name: '−<i>A</i>' }), matHtml(mT(A), { name: '<i>A</i><sup>t</sup>' })], a: 0,
+      q: T('ทำคำสั่งแถวจนซ้ายเป็น I แล้ว ด้านขวาคือข้อใด', 'After row commands turn the left side into I, what is the right side'), o: [matHtml(inv, { name: '<i>A</i><sup>−1</sup>' }), matHtml(A, { name: '<i>A</i>' }), matHtml(mScale(A, -1), { name: '−<i>A</i>' }), matHtml(mT(A), { name: '<i>A</i><sup class="tsup">t</sup>' })], a: 0,
       why: T('[A | I] → [I | A⁻¹] เสมอ: คำสั่งแถวชุดที่เปลี่ยน A เป็น I คือการคูณ A⁻¹ ทางซ้าย จึงเปลี่ยน I เป็น A⁻¹ · ตัวอื่นคือ A, −A และ Aᵗ ซึ่งไม่ใช่ตัวผกผันการคูณ', '[A | I] → [I | A⁻¹] always: the commands that turn A into I amount to multiplying by A⁻¹ on the left, so they turn I into A⁻¹ · the others are A, −A and Aᵗ, none of which is the multiplicative inverse')
     }] },
     { chip: T('ซ้ายเป็น I ไม่ได้', 'Cannot reach I'), draw: (el, ctx) => {
@@ -4818,10 +5000,14 @@ function build() {
 
   // ── แท็บ 3: คราเมอร์ ──
   el('tab-cramer').innerHTML =
-    card('🧷', d('แทนหลักด้วย B แล้วหารด้วย det เดิม', 'Replace a column by B, divide by the old det'),
+    card('🧪', d('ที่มา: กำจัดตัวแปรแล้วเจอ det', 'Where it comes from: eliminate an unknown and meet the det'), '<div id="w-cq"></div>') +
+    card('📐', d('เห็นภาพ: ยืดแล้วเลื่อน พื้นที่โตขึ้น x เท่า', 'See it: stretch, then slide — the area grows x times'), '<div id="w-cv"></div><div class="ar-note">' + d('แนวคิดยืดแล้วเลื่อน อ้างอิง: 3Blue1Brown, <i>Essence of Linear Algebra</i> ตอน “Cramer’s rule, explained geometrically” — <a href="https://www.3blue1brown.com/lessons/cramers-rule" target="_blank" rel="noopener">3blue1brown.com/lessons/cramers-rule</a>', 'The stretch-and-slide idea: 3Blue1Brown, <i>Essence of Linear Algebra</i>, “Cramer’s rule, explained geometrically” — <a href="https://www.3blue1brown.com/lessons/cramers-rule" target="_blank" rel="noopener">3blue1brown.com/lessons/cramers-rule</a>') + '</div>') +
+    card('🧷', d('พาทำ: แทนหลักด้วย B แล้วหารด้วย det เดิม', 'Walk through: replace a column by B, divide by the old det'),
       fm(`<i>x</i> = ${d('det ใหม่', 'new det')} ÷ ${d('det เดิม', 'old det')}`) + '<div id="w-cr"></div>') +
     card('🔮', d('ทายก่อน: det เดิม = 0', 'Guess first: old det = 0'), '<div id="w-cp"></div>') +
     card('🖐️', d('ลองทำ: เลือกตัวแปร แล้วดูหลัก B เลื่อนเข้า (2 และ 3 ตัวแปร)', 'Try it: pick an unknown and watch B slide in (2 and 3 unknowns)'), '<div id="w-ct"></div>');
+  scenes('w-cq', CQ_SC, T('กด ▶ ทีละฉาก — กำจัดตัวแปรโดยยังไม่คูณเลขให้เสร็จ', 'Press ▶ one scene at a time — eliminate without multiplying the numbers out yet'));
+  scenes('w-cv', CV_SC, T('กด ▶ ทีละฉาก — หลักของ A คือลูกศร ดูพื้นที่ตอนยืดและเลื่อน', 'Press ▶ one scene at a time — the columns of A are arrows; watch the area as it stretches and slides'));
   scenes('w-cr', CR_SC, T('กด ▶ ทีละฉาก — ดูหลักของ B บินไปแทนหลักของตัวแปร', 'Press ▶ one scene at a time — watch the column of B replace an unknown’s column'));
   makePredict(el('w-cp'), [crPredItem()], { prompt: T('ดู det เดิมของระบบนี้ แล้วทายว่าใช้คราเมอร์ได้ไหม', 'Look at the old det of this system and guess whether Cramer’s rule works') });
   makeCramerTry(el('w-ct'));
@@ -4829,6 +5015,7 @@ function build() {
   // ── แท็บ 4: ดำเนินการตามแถว ──
   const cmdBox = (n, f, note) => `<div class="sy-cmdbox"><div class="cn">${n}</div><div class="cf">${f}</div><div>${note}</div></div>`;
   el('tab-rows').innerHTML =
+    card('🧭', d('ที่มา: คำสั่งแถวคือการกำจัดตัวแปรที่ไม่เขียนตัวแปร', 'Where it comes from: row commands are elimination without writing the unknowns'), '<div id="w-rq"></div>') +
     card('🛠️', d('คำสั่งที่ทำได้ 3 แบบ (คำตอบของระบบไม่เปลี่ยน)', 'Three allowed commands (the solution never changes)'),
       `<div class="sy-card2">${cmdBox(d('สลับแถว', 'Swap rows'), `${SYR(0)} ↔ ${SYR(1)}`, d('แถวสองแถวสลับที่กัน', 'two rows trade places'))}${cmdBox(d('คูณแถว', 'Scale a row'), `<i>k</i>${SYR(0)}`, d('คูณหรือหารด้วยเลขที่ <b>ไม่เป็น 0</b>', 'multiply or divide by a <b>non-zero</b> number'))}${cmdBox(d('บวกแถว', 'Add rows'), `${SYR(0)} + <i>k</i>${SYR(1)}`, d('<b>ผลไปอยู่ตัวหน้า</b> (แทนที่ R₁)', 'the <b>result goes to the front one</b> (it replaces R₁)'))}</div>`) +
     card('🎬', d('ตัวอย่างตามชีท: ทำให้ซ้ายเป็น I', 'The sheet’s example: make the left side I'), '<div id="w-rw"></div>') +
@@ -4836,6 +5023,7 @@ function build() {
     card('🕹️', d('ลองทำ: เครื่องมือดำเนินการตามแถว', 'Try it: the row-operations machine'), '<div id="w-rt"></div>') +
     card('🚫', d('ระบบที่ไม่มีคำตอบ', 'A system with no solution'), '<div id="w-rn"></div>') +
     card('♾️', d('ระบบที่มีคำตอบมากมาย', 'A system with infinitely many solutions'), '<div id="w-ri"></div>');
+  scenes('w-rq', RQ_SC, T('กด ▶ ทีละฉาก — สมการกับเมทริกซ์แต่งเติมเดินคู่กัน', 'Press ▶ one scene at a time — the equations and the augmented matrix side by side'));
   scenes('w-rw', RW_SC, T('กด ▶ ทีละฉาก — 1 คำสั่ง = 1 ฉาก', 'Press ▶ one scene at a time — one command per scene'));
   makePredict(el('w-rp'), [rwPredItem()], { prompt: T('ดูเมทริกซ์แต่งเติม แล้วทายคำสั่งที่ทำให้ช่องแดงเป็น 0', 'Look at the augmented matrix and guess the command that makes the red entry 0') });
   sySolver(el('w-rt'), { mode: 'solve', prompt: T('เลือกคำสั่ง แถว และตัวคูณ แล้วกด “ทำเลย” — ทำให้ซ้ายเป็น I · ติดตรงไหนกด 💡 ใบ้ · ผิดกด ↶ ย้อน', 'Pick a command, rows and multiplier, then press “Do it” — turn the left side into I · stuck? press 💡 Hint · slipped? press ↶ Undo'),

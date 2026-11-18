@@ -3769,6 +3769,19 @@ const xs = list => `${X} = ${list.map(p => rad(p[0], p[1])).join(', ')}`;   // x
 const fm = (...spans) => `<div class="formula">${spans.map(s => `<span>${s}</span>`).join('')}</div>`;
 const NT = (th, en) => T(th, en);
 
+// แตกฉากที่โผล่หลายบรรทัดพร้อมกัน เป็นหลายฉาก (กด ▶ ทีละบรรทัด): วาดฉากเต็มแล้วซ่อนบรรทัดที่ยังไม่ถึง
+//   k0 = จำนวนบรรทัดที่เห็นในฉากแรกของชุดที่แตก · total = ทั้งหมด · sel = ตัวเลือกบรรทัด (เรียงตามลำดับที่โผล่)
+function splitScene(sc, k0, total, sel) {
+  const trim = (S, k) => { const els = S.el.querySelectorAll(sel); els.forEach((e, i) => { e.style.display = i < k ? '' : 'none'; }); return els; };
+  const out = [];
+  for (let k = k0; k <= total; k++) out.push({
+    cap: sc.cap, end: S => { sc.end(S); trim(S, k); },
+    play: async S => { S.el.innerHTML = ''; sc.end(S); const els = trim(S, k - 1); await S.anim.wait(300); const e = els[k - 1]; if (e) { e.style.display = ''; e.style.animation = 'rowIn .45s ease'; } }
+  });
+  return out;
+}
+const splitScenes = (arr, specs, sel) => arr.flatMap((sc, i) => { const sp = specs.find(x => x[0] === i); return sp ? splitScene(sc, sp[1], sp[2], sp[3] || sel) : [sc]; });
+
 const NM = { o: T('ข้าม', 'opposite'), a: T('ชิด', 'adjacent'), h: T('ฉาก', 'hypotenuse') };
 const K = { o: () => `<span class="hlb">${tx(NM.o)}</span>`, a: () => `<span class="hl">${tx(NM.a)}</span>`, h: () => `<span class="hlg">${tx(NM.h)}</span>` };
 const KW = {
@@ -3795,6 +3808,20 @@ const IE_CSS = `
 .ie-rd .verdict { margin-top: 4px; }
 .plot text.pl-tick, .plot text.pl-lbl { paint-order: stroke; stroke: var(--card); stroke-width: 3.5px; stroke-linejoin: round; }
 .formula .fm-sp { opacity: .85; font-size: 1.02rem; }
+.ab-stage { min-height: 250px; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 14px; padding: 10px 0; }
+.ab-stage.fresh { animation: rowIn .45s ease; }
+.ab-row { display: flex; align-items: center; justify-content: center; gap: 12px 16px; flex-wrap: wrap; font-size: clamp(1.25rem, 5vw, 1.9rem); font-weight: 800; }
+.ab-box { border: 2.5px solid var(--primary); border-radius: 16px; padding: 10px 22px; min-width: 86px; text-align: center; background: var(--card); }
+.ab-box.ab-q { border-style: dashed; color: var(--muted); }
+.ab-arr { display: inline-flex; flex-direction: column; align-items: center; line-height: 1; color: var(--muted); }
+.ab-arr small { font-size: .62em; font-weight: 700; margin-bottom: 2px; }
+.ab-arr b { font-size: 1.4em; }
+.ab-or { font-size: .8em; color: var(--muted); }
+.ab-cnt { font-size: .62em; font-weight: 700; color: var(--muted); }
+.ab-chip { border: 2px solid var(--g-blue); border-radius: 999px; padding: 4px 14px; font-size: .82em; background: color-mix(in srgb, var(--g-blue) 14%, var(--card)); animation: rowIn .45s ease; }
+.ab-note { font-size: 1.05rem; font-weight: 700; color: var(--muted); }
+.ab-lines { display: flex; flex-direction: column; align-items: center; }
+.ab-stage .formula { margin-top: 6px; }
 `;
 
 // ── วงกลมหนึ่งหน่วยขนาดมาตรฐานของชิ้นนี้ (กว้าง 440 สูง 360 รัศมี 118.1 → ตรงกับ Plot ที่ ymin/ymax = ±1.27 สูง 360 pad 30) ──
@@ -3844,22 +3871,43 @@ const A_S5 = { th: PI / 4, show: ['band'], band: [-PI / 2, PI / 2],
   lines: R => { lineEl(R, ans(`${ac('tan', 1)} = ${rad(1, 4)}`)); lineEl(R, mx(`${rad(-1, 2)} &lt; ${ac('tan', X)} &lt; ${rad(1, 2)}`));
     noteEl(R, tx(T('ครึ่งวงขวา แต่ไม่รวมปลาย ±π/2 เพราะ tan หาค่าไม่ได้ที่นั่น', 'The right half, but without the ends ±π/2, where tan is undefined'))); } };
 
+// ── การ์ด 1: arcsin คืออะไร — ถามย้อนกลับ (ฉาก 1–4 และ 6 เป็นกล่อง DOM ตัวใหญ่ · ฉาก 5 เป็นวงกลม) ──
+const abBox = (h, c) => `<span class="ab-box${c ? ' ' + c : ''}">${h}</span>`;
+const abArr = (lab, back) => `<span class="ab-arr"><small>${lab}</small><b>${back ? '←' : '→'}</b></span>`;
+const abHalf = () => mx(fr(1, 2));
+function abStage(S, html, fresh) { S.el.innerHTML = `<div class="ab-stage${fresh ? ' fresh' : ''}">${html}</div>`; }
+const abFwd = () => `<div class="ab-row">${abBox(radDeg(1, 6))}${abArr('sin')}${abBox(abHalf())}</div><div class="ab-note">${tx(T('รู้มุม → หาค่า', 'angle known → find the value'))}</div>`;
+const abBack = (lines) => `<div class="ab-row">${abBox(tx(T('มุม', 'angle')) + ' <b>?</b>', 'ab-q')}${abArr('arcsin', true)}${abBox(abHalf())}</div>`
+  + (lines ? `<div class="ab-lines"><div class="tg-line fresh">${ac('sin', fr(1, 2))} = ${TH}</div><div class="tg-line fresh">sin ${TH} = ${fr(1, 2)}</div></div>` : '');
+const abSqrt = (two) => `<div class="ab-row">${mx(`${X}<sup>2</sup> = 9`)}<span class="ab-arr"><b>→</b></span>${mx(`${X} = 3`)}${two ? `<span class="ab-or">${tx(T('หรือ', 'or'))}</span>${mx(`${X} = −3`)}` : ''}${two ? `<span class="ab-cnt">${tx(T('2 คำตอบ', '2 answers'))}</span>` : ''}</div>`;
+const abRoot = (on) => on ? `<div class="ab-row">${mx(`${sr(9)} = 3`)}<span class="ab-cnt">${tx(T('ตกลงกันว่าตอบตัวเดียว', 'agreed: just one answer'))}</span></div>` : '';
+const abChips = (n) => `<div class="ab-row">${mx(`sin ${TH} = ${fr(1, 2)}`)}<span class="ab-arr"><b>→</b></span>${[radDeg(1, 6), radDeg(5, 6), radDeg(13, 6), mx('…')].slice(0, n).map(h => `<span class="ab-chip">${h}</span>`).join('')}</div>`;
+const abTrap = () => `<div class="ab-row">${mx(`${ac('sin', 'sin ' + rad(5, 6))} = ${ac('sin', fr(1, 2))} = ${rad(1, 6)}`)}</div><div class="ab-note">${tx(T(`ไม่ใช่ ${rad(5, 6)} — ตอบเฉพาะมุมในครึ่งวงขวา`, `not ${rad(5, 6)} — only an angle in the right half`))}</div>`
+  + `<div class="formula"><span>${mx(`${ac('sin', 'sin ' + X)} = ${X}`)} ${tx(T('เมื่อ', 'when'))} ${mx(`${rad(-1, 2)} ≤ ${X} ≤ ${rad(1, 2)}`)}</span><span>${mx(`sin(${AF.sin} ${X}) = ${X}`)} ${tx(T('เมื่อ', 'when'))} ${mx(`−1 ≤ ${X} ≤ 1`)}</span></div>`;
 const ARC_SC = [
-  { cap: () => tx(T(`${ac('sin', fr(1, 2))} = ${TH} เป็นเพียงสัญลักษณ์ที่บอกว่า sin ${TH} = ${mx(fr(1, 2))} แต่ยังไม่รู้ ${TH} · เส้นนอน y = ${mx(fr(1, 2))} คือทุกจุดที่ sin ได้ ${mx(fr(1, 2))} · กด ▶`,
-    `${ac('sin', fr(1, 2))} = ${TH} is only a symbol saying sin ${TH} = ${mx(fr(1, 2))}, with ${TH} still unknown · the horizontal line y = ${mx(fr(1, 2))} holds every point whose sine is ${mx(fr(1, 2))} · press ▶`)),
-    end: S => arcStage(S.el, A_S1) },
-  { cap: () => tx(T(`เส้นนอนตัดวงกลม <b>2 จุด</b> → มีมุมที่ตอบได้หลายมุม: ${rad(1, 6)} และ ${rad(5, 6)} (ยังไม่นับมุมที่หมุนเกินรอบ)`,
-    `The line cuts the circle at <b>2 points</b> → more than one angle works: ${rad(1, 6)} and ${rad(5, 6)} (not counting extra full turns)`)),
-    end: S => arcStage(S.el, A_S2),
-    play: async S => { const m = arcStage(S.el, Object.assign({}, A_S2, { th: 0, deco: null, lines: null }));
-      await m.c.animateTo(PI / 6, 900, S.anim); await S.anim.wait(350); await m.c.animateTo(5 * PI / 6, 1000, S.anim); } },
-  { cap: () => tx(T(`arcsin ตกลงให้ตอบเฉพาะมุมในครึ่งวงขวา [${rad(-1, 2)}, ${rad(1, 2)}] → เหลือ<b>จุดเดียว</b> ${ac('sin', fr(1, 2))} = ${rad(1, 6)}`,
-    `arcsin agrees to answer only with an angle in the right half [${rad(-1, 2)}, ${rad(1, 2)}] → <b>one point</b> is left: ${ac('sin', fr(1, 2))} = ${rad(1, 6)}`)),
+  { cap: () => tx(T(`รู้มุม หาค่า: sin ${radDeg(1, 6)} = ${abHalf()} ทำเป็นแล้ว · กด ▶`, `Known angle, find the value: sin ${radDeg(1, 6)} = ${abHalf()} we can already do · press ▶`)),
+    end: S => abStage(S, abFwd()) },
+  { cap: () => tx(T(`รู้ค่า อยากหามุม · ${ac('sin', fr(1, 2))} = ${TH} เป็นสัญลักษณ์ที่บอกว่า sin ${TH} = ${abHalf()} แต่ยังไม่รู้ ${TH}`, `Known value, want the angle · ${ac('sin', fr(1, 2))} = ${TH} is a symbol saying sin ${TH} = ${abHalf()} while ${TH} is still unknown`)),
+    end: S => abStage(S, abBack(true)),
+    play: async S => { abStage(S, abBack(false)); await S.anim.wait(900); abStage(S, abBack(true)); } },
+  { cap: () => tx(T(`เทียบของที่รู้จัก: ${mx(X + '<sup>2</sup> = 9')} ได้ 2 คำตอบ แต่เครื่องหมาย √ เป็นการถามย้อนกลับที่ตกลงกันไว้ให้ตอบ<b>ตัวเดียว</b>`, `A familiar comparison: ${mx(X + '<sup>2</sup> = 9')} has 2 answers, but the √ sign is a "go backwards" question that we agreed answers with just <b>one</b> value`)),
+    end: S => abStage(S, abSqrt(true) + abRoot(true)),
+    play: async S => { abStage(S, abSqrt(false)); await S.anim.wait(800); abStage(S, abSqrt(true)); await S.anim.wait(1100); abStage(S, abSqrt(true) + abRoot(true), true); } },
+  { cap: () => tx(T(`${mx('sin ' + TH + ' = ' + fr(1, 2))} ก็มีหลายมุมเหมือนกัน — arcsin ต้องตกลงกันว่าจะตอบมุมไหน`, `${mx('sin ' + TH + ' = ' + fr(1, 2))} also has many angles — so arcsin needs an agreement on which one to give`)),
+    end: S => abStage(S, abChips(4)),
+    play: async S => { for (let n = 1; n <= 4; n++) { abStage(S, abChips(n)); await S.anim.wait(850); } } },
+  { cap: () => tx(T(`arcsin ตอบเฉพาะมุมในครึ่งวงขวา [${rad(-1, 2)}, ${rad(1, 2)}] (−90° ถึง 90°) เพราะในครึ่งนี้ความสูงทุกค่าตั้งแต่ −1 ถึง 1 โผล่<b>ครั้งเดียว</b> → ${ac('sin', fr(1, 2))} = ${rad(1, 6)} (30°)`,
+    `arcsin answers only with an angle in the right half [${rad(-1, 2)}, ${rad(1, 2)}] (−90° to 90°) because every height from −1 to 1 shows up <b>exactly once</b> there → ${ac('sin', fr(1, 2))} = ${rad(1, 6)} (30°)`)),
     end: S => arcStage(S.el, A_S3),
     play: async S => { const m = arcStage(S.el, Object.assign({}, A_S3, { th: 5 * PI / 6, deco: null, lines: null }));
       await Promise.all([S.anim.run(1100, t => m.c.setBand(-PI / 2, -PI / 2 + PI * t), EASE.inOut), m.c.animateTo(PI / 6, 1100, S.anim)]); } },
-  { cap: () => tx(T(`arccos ใช้ครึ่งวงบน [0, π] (cos θ = x จึงใช้เส้นตั้ง x = ${mx(fr(1, 2))}) → ${ac('cos', fr(1, 2))} = ${rad(1, 3)} · จุดล่างที่ cos ได้ ${mx(fr(1, 2))} เท่ากัน (${rad(-1, 3)}) อยู่นอกแถบ`,
-    `arccos uses the upper half [0, π] (cos θ = x, so the line is vertical, x = ${mx(fr(1, 2))}) → ${ac('cos', fr(1, 2))} = ${rad(1, 3)} · the lower point with the same cosine (${rad(-1, 3)}) is outside the band`)),
+  { cap: () => tx(T(`กับดัก: ${ac('sin', 'sin ' + rad(5, 6))} = ${ac('sin', fr(1, 2))} = ${rad(1, 6)} <b>ไม่ใช่</b> ${rad(5, 6)} · ได้ ${X} กลับมาเฉพาะเมื่อ ${X} อยู่ในช่วงของ arcsin`, `The trap: ${ac('sin', 'sin ' + rad(5, 6))} = ${ac('sin', fr(1, 2))} = ${rad(1, 6)}, <b>not</b> ${rad(5, 6)} · you get ${X} back only when ${X} is inside the range of arcsin`)),
+    end: S => abStage(S, abTrap()) }
+];
+// ── การ์ด 2: arccos และ arctan — เลือกครึ่งวงคนละแบบ (ฉาก 4–5 เดิม) ──
+const ARC2_SC = [
+  { cap: () => tx(T(`arccos ใช้ครึ่งวงบน [0, π] (cos θ = x จึงใช้เส้นตั้ง x = ${abHalf()}) → ${ac('cos', fr(1, 2))} = ${rad(1, 3)} · จุดล่างที่ cos ได้ ${abHalf()} เท่ากัน (${rad(-1, 3)}) อยู่นอกแถบ · กด ▶`,
+    `arccos uses the upper half [0, π] (cos θ = x, so the line is vertical, x = ${abHalf()}) → ${ac('cos', fr(1, 2))} = ${rad(1, 3)} · the lower point with the same cosine (${rad(-1, 3)}) is outside the band · press ▶`)),
     end: S => arcStage(S.el, A_S4),
     play: async S => { const m = arcStage(S.el, Object.assign({}, A_S3, { deco: null, lines: null })); await S.anim.wait(250);
       m.c.setShow(['vline', 'band']); m.c.setVline(.5, HALF);
@@ -3913,13 +3961,15 @@ function fdBox(c) {
       end: S => { const m = fresh(S); base2(m); m.tri.parts.glow.forEach((g, i) => { if (known.includes(i)) g.style.opacity = 0.3; }); prob(m.R); lineEl(m.R, c.say2()); },
       play: async S => { const m = fresh(S); base2(m); m.tri.vis('all', 0); m.tri.vis('a0', 1); st2(m, 0); prob(m.R); await S.anim.run(1700, t => st2(m, t), EASE.inOut); lineEl(m.R, c.say2(), 'fresh'); } },
     { cap: () => c.cap3(),
-      end: S => { const m = fresh(S); setLabels(m, [0, 1, 2]); prob(m.R); c.steps.forEach(h => lineEl(m.R, h())); },
+      end: S => { const m = fresh(S); setLabels(m, [0, 1, 2]); prob(m.R); },
       play: async S => {
         const m = fresh(S); base2(m); m.tri.parts.glow.forEach((g, i) => { if (known.includes(i)) g.style.opacity = 0.3; }); prob(m.R); lineEl(m.R, c.say2());
         await S.anim.run(1100, t => { m.tri.fillOp(t); m.tri.grow(miss, t, true); m.tri.parts.glow[miss].style.opacity = (0.3 * t).toFixed(3); }, EASE.out);
-        setLabels(m, [0, 1, 2]);
-        for (const h of c.steps) { lineEl(m.R, h(), 'fresh'); await S.anim.wait(1100); }
-      } }
+      } },
+    // กด ▶ ทีละบรรทัด: 1 ขั้นการคำนวณต่อ 1 ฉาก
+    ...c.steps.map((_, j) => ({ cap: () => c.cap3(),
+      end: S => { const m = fresh(S); setLabels(m, [0, 1, 2]); prob(m.R); c.steps.slice(0, j + 1).forEach(h => lineEl(m.R, h())); },
+      play: async S => { const m = fresh(S); setLabels(m, [0, 1, 2]); prob(m.R); c.steps.slice(0, j).forEach(h => lineEl(m.R, h())); await S.anim.wait(300); lineEl(m.R, c.steps[j](), 'fresh'); } }))
   ];
 }
 const IA = {   // cos(arcsin 3/5)
@@ -4382,10 +4432,13 @@ function build() {
 
   // ── แท็บ arc ──
   document.getElementById('tab-arc').innerHTML =
-    card('🧭', d('arcsin คืออะไร', 'What is arcsin?'),
-      `<div id="w-ar"></div><div class="formula"><span>${mx(`${rad(-1, 2)} ≤ ${AF.sin} ${X} ≤ ${rad(1, 2)}`)}</span><span>${mx(`0 ≤ ${AF.cos} ${X} ≤ π`)}</span><span>${mx(`${rad(-1, 2)} &lt; ${AF.tan} ${X} &lt; ${rad(1, 2)}`)}</span></div>`) +
+    card('🧭', d('arcsin คืออะไร: ถามย้อนกลับ', 'What is arcsin? Asking backwards'), '<div id="w-ar"></div>') +
+    card('🧭', d('arccos และ arctan: เลือกครึ่งวงคนละแบบ', 'arccos and arctan: a different half circle each'),
+      `<div id="w-ar2"></div><div class="formula"><span>${mx(`${rad(-1, 2)} ≤ ${AF.sin} ${X} ≤ ${rad(1, 2)}`)}</span><span>${mx(`0 ≤ ${AF.cos} ${X} ≤ π`)}</span><span>${mx(`${rad(-1, 2)} &lt; ${AF.tan} ${X} &lt; ${rad(1, 2)}`)}</span></div>`
+      + `<div class="formula"><span>${mx(`${ac('cos', 'cos ' + X)} = ${X}`)} ${d('เมื่อ', 'when')} ${mx(`0 ≤ ${X} ≤ π`)}</span><span>${mx(`${ac('tan', 'tan ' + X)} = ${X}`)} ${d('เมื่อ', 'when')} ${mx(`${rad(-1, 2)} &lt; ${X} &lt; ${rad(1, 2)}`)}</span></div>`) +
     card('🔮', d('ทายก่อน: arccos', 'Guess first: arccos'), '<div id="w-arp"></div>');
-  makeScenes(document.getElementById('w-ar'), ARC_SC, { prompt: T('กด ▶ ทีละฉาก — ดูว่าเส้นตัดวงกลมที่ไหน และแถบไหนคือคำตอบของตัวผกผัน', 'Press ▶ one scene at a time — see where the line cuts the circle and which band is the answer of the inverse') });
+  makeScenes(document.getElementById('w-ar'), splitScenes(ARC_SC, [[1, 1, 2, '.ab-lines > .tg-line'], [4, 1, 2]], '.tg-R > .tg-line'), { prompt: T('กด ▶ ทีละฉาก — จากหาค่า ไปถามย้อนกลับ', 'Press ▶ one scene at a time — from finding a value to asking backwards') });
+  makeScenes(document.getElementById('w-ar2'), splitScenes(ARC2_SC, [[0, 1, 2], [1, 1, 2]], '.tg-R > .tg-line'), { prompt: T('กด ▶ ทีละฉาก — ดูว่าเส้นตัดวงกลมที่ไหน และแถบไหนคือคำตอบของตัวผกผัน', 'Press ▶ one scene at a time — see where the line cuts the circle and which band is the answer of the inverse') });
   makePredict(document.getElementById('w-arp'), [arcPredItem()], { prompt: T(`ดูเส้นตั้ง x = −${mx(fr(1, 2))} แล้วทายว่า arccos ตอบมุมไหน — มุมที่ถูกจะเลื่อนไปจอดหลังทาย`, `Look at the line x = −${mx(fr(1, 2))} and guess which angle arccos gives — the point slides to the right one after you answer`) });
 
   // ── แท็บ tri ──
@@ -4409,7 +4462,7 @@ function build() {
     card('🔮', d('ทายก่อน: sin x = −√3/2', 'Guess first: sin x = −√3/2'), '<div id="w-bp"></div>') +
     card('♾️', d('คำตอบทั่วไป: คลื่นซ้ำทุกคาบ', 'General solutions: the wave repeats every period'), '<div id="w-bg"></div>') +
     card('🖐️', d('ลองทำ: เลื่อน k ใน sin x = k', 'Try it: slide k in sin x = k'), '<div id="w-bt"></div>');
-  makeScenes(document.getElementById('w-bs'), B_SC, { prompt: T('กด ▶ ทีละฉาก — เส้นเดียวกันบนวงกลมและบนคลื่น', 'Press ▶ one scene at a time — the same line on the circle and on the wave') });
+  makeScenes(document.getElementById('w-bs'), splitScenes(B_SC, [[1, 2, 3]], '.bs-fm .formula > span'), { prompt: T('กด ▶ ทีละฉาก — เส้นเดียวกันบนวงกลมและบนคลื่น', 'Press ▶ one scene at a time — the same line on the circle and on the wave') });
   basicExample(document.getElementById('w-b1'), BX1);
   basicExample(document.getElementById('w-b2'), BX2);
   basicExample(document.getElementById('w-b3'), BX3);

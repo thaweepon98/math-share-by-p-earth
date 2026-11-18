@@ -3758,7 +3758,7 @@ function makeBoxPlot(host, five0, o0) {
 // สี: แถว = น้ำเงิน (hb) · หลัก = ส้ม (ho) · ผล/ถูก = เขียว (hg) · ทแยงหลัก = แดง (hr) · ทแยงรอง = เขียว (hg) · ตัวเลขทุกตัวคำนวณด้วย mDet/mInv/mAdj/mMul (Q แม่นยำ)
 // ⁻¹ ใช้กับตัวผกผันการคูณเท่านั้น (AI) · ตัวผกผันการบวกเขียน −A
 const AI = '<sup>−1</sup>';
-const AT = '<sup>t</sup>';
+const AT = '<sup class="tsup">t</sup>';
 const ia = s => `<i>${s}</i>`;
 const IA = ia('A') + AI;                                   // A⁻¹
 const subij = (i, j) => `<sub>${i + 1}${j + 1}</sub>`;
@@ -3800,6 +3800,10 @@ function ivInjectCss() {
   if (document.getElementById('iv-css')) return;
   const s = document.createElement('style'); s.id = 'iv-css';
   s.textContent = `
+  .tsup { font-size: .86em; font-weight: 800; margin-left: .06em; }
+  .aj-lbl { font-size: 1.3rem; font-weight: 800; }
+  .aj-lbl .tsup { font-size: .85em; margin-left: .1em; }
+  .aj-note { font-size: .95rem; color: var(--muted); font-weight: 600; }
   .iv-g { display: inline-flex; align-items: center; gap: 6px 10px; flex-wrap: nowrap; }
   .iv-nw { white-space: nowrap; }
   .fly-num.fb { background: color-mix(in srgb, var(--g-blue) 26%, var(--card)); box-shadow: inset 0 0 0 2px var(--g-blue); }
@@ -4111,7 +4115,7 @@ async function ajRowPlay(S, r) {
 function ajTrBuild(el, ph) {
   const adjM = AJ_ADJ.map(r => r.map(v => (ph >= 1 ? v : null)));
   el.innerHTML = `<div class="mx-row">${matHtml(AJ_C, { name: ia('C'), key: 'C', diag: true, cls: (i, j) => (i === j ? 'hg' : '') })}${xop('→')}${matHtml(adjM, { name: `adj ${ia('A')}`, key: 'J', diag: true, cls: (i, j) => (ph >= 1 ? (i === j ? 'hg' : 'hb') : '') })}</div>` +
-    `<div class="mx-calc" style="min-height:3.4em">${ph >= 1 ? `${xtag('blue', tx(T('ทุกช่องพลิกข้ามทแยงหลัก (เส้นประ) ไปสลับแถว-หลัก', 'every entry flips across the main diagonal (dashed) and swaps row/column')))}<br>adj ${ia('A')} = ${ia('C')}${AT}` : ''}</div>`; xgroup(el);
+    `<div class="mx-calc" style="min-height:3.4em">${ph >= 1 ? `${xtag('blue', tx(T('ทุกช่องพลิกข้ามทแยงหลัก (เส้นประ) ไปสลับแถว-หลัก', 'every entry flips across the main diagonal (dashed) and swaps row/column')))}<br><span class="aj-lbl">adj ${ia('A')} = ${ia('C')}${AT}</span> <span class="aj-note">${tx(T('(' + 'C' + 't = ทรานสโพสของ C: สลับแถวกับหลัก)', '(Ct = the transpose of C: swap rows and columns)')).replace(/Ct/, 'C' + AT)}</span>` : ''}</div>`; xgroup(el);
 }
 // ── ฉาก ÷ det ──
 function ajDetLine() {

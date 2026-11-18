@@ -4010,12 +4010,23 @@ function scPredItem() {
 function makeScTry(host) {
   const w = { mode: 'sin' };
   host.innerHTML = '<div class="chips"></div><div class="sc-prompt"></div><div class="gp-host"></div>';
-  const chips = host.querySelector('.chips'), pr = host.querySelector('.sc-prompt');
-  const pair = makePair(host.querySelector('.gp-host'), { mode: 'sin', theta: PI / 6, trace: 'theta', drag: true });
+  const chips = host.querySelector('.chips'), pr = host.querySelector('.sc-prompt'), gh = host.querySelector('.gp-host');
+  // makePair เปลี่ยนเป็น tan หลังสร้างไม่ได้ (TAN ถูกอ่านครั้งเดียวตอนสร้าง) → สลับเข้า/ออก tan = จำ θ แล้วล้าง .gp-host สร้างใหม่ · sin ↔ cos ใช้ opt('mode')
+  const mk = (mode, th) => makePair(gh, mode === 'tan' ? { mode: 'tan', theta: th, trace: 'theta', drag: true, asym: 'both' } : { mode, theta: th, trace: 'theta', drag: true });
+  let pair = mk('sin', PI / 6);
+  const pick = m => {
+    if (m === w.mode) return;
+    let th = pair.theta;
+    if ((m === 'tan') !== (w.mode === 'tan')) {
+      if (m === 'tan' && (Math.abs(th - PI / 2) < 1e-6 || Math.abs(th - 1.5 * PI) < 1e-6)) th = PI / 3;       // tan หาค่าไม่ได้ที่ π/2 และ 3π/2
+      gh.innerHTML = ''; w.mode = m; pair = mk(m, th);
+    } else { w.mode = m; pair.opt('mode', m); }
+    paint();
+  };
   const paint = () => {
-    chips.innerHTML = `<span class="chips-label">${tx(T('กราฟ', 'Graph'))}</span>` + ['sin', 'cos'].map(m => `<button class="chip${w.mode === m ? ' active' : ''}" data-m="${m}">${m} θ</button>`).join('');
-    chips.querySelectorAll('.chip').forEach(c => c.onclick = () => { w.mode = c.dataset.m; pair.opt('mode', w.mode); paint(); });
-    pr.innerHTML = tx(T('ลากจุด <i>P</i> บนวงกลม หรือลากจุดบนกราฟ — อีกฝั่งขยับตาม · สลับ sin / cos ได้', 'Drag the point <i>P</i> on the circle, or drag the point on the graph — the other side follows · switch between sin and cos'));
+    chips.innerHTML = `<span class="chips-label">${tx(T('กราฟ', 'Graph'))}</span>` + ['sin', 'cos', 'tan'].map(m => `<button class="chip${w.mode === m ? ' active' : ''}" data-m="${m}">${m} θ</button>`).join('');
+    chips.querySelectorAll('.chip').forEach(c => c.onclick = () => pick(c.dataset.m));
+    pr.innerHTML = tx(T('ลากจุด <i>P</i> บนวงกลม หรือลากจุดบนกราฟ · สลับ sin / cos / tan ได้', 'Drag the point <i>P</i> on the circle, or drag the point on the graph · switch between sin / cos / tan'));
   };
   w.refresh = paint; LIVE.push(w); paint();
   return w;
@@ -4293,7 +4304,7 @@ function build() {
   // ── แท็บ 1: sin, cos ──
   document.getElementById('tab-sincos').innerHTML =
     card('🌊', d('จากวงกลมสู่กราฟ sin และ cos', 'From the circle to the graphs of sin and cos'),
-      `<div id="w-sc"></div><div class="box-info">${d('<b>sin เริ่ม 0 ขึ้นไป 1</b> · <b>cos เริ่ม 1 ลงไป 0</b> — ทั้งสองเป็นคลื่นเดียวกันที่เลื่อนกัน (cos คือ sin ที่เลื่อนซ้าย π/2)', '<b>sin starts at 0 and rises to 1</b> · <b>cos starts at 1 and falls to 0</b> — they are the same wave, shifted (cos is sin shifted left by π/2)')}</div>
+      `<div id="w-sc"></div><div class="box-info">${d('ช่วง 0 ถึง π/2: <b>sin เริ่มที่ 0 จบที่ 1</b> · <b>cos เริ่มที่ 1 จบที่ 0</b> — ทั้งสองเป็นคลื่นเดียวกันที่เลื่อนกัน (cos คือ sin ที่เลื่อนซ้าย π/2)', 'From 0 to π/2: <b>sin starts at 0 and rises to 1</b> · <b>cos starts at 1 and falls to 0</b> — they are the same wave, shifted (cos is sin shifted left by π/2)')}</div>
        <div class="formula"><span>${I('D')} = ${RR}</span><span>${I('R')} = [−1, 1]</span><span>${d('คาบ', 'period')} ${rad(2)}</span></div>`) +
     card('🔮', d('ทายก่อน: sin(3π/2)', 'Guess first: sin(3π/2)'), '<div id="w-scp"></div>') +
     card('🖐️', d('ลองทำ: ลากจุด', 'Try it: drag a point'), '<div id="w-sct"></div>');

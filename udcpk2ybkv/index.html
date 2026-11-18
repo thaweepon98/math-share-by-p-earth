@@ -3784,48 +3784,87 @@ const num3 = (a, b, c) => [T(`ข้าม ${a}`, `opp. ${a}`), T(`ฉาก ${c
 // ═══════════════════════════════════════════════════════════════
 //  แท็บ 1 · อัตราส่วน (sin cos tan · csc sec cot)
 // ═══════════════════════════════════════════════════════════════
-// ── การ์ด 1: ข้าม ชิด ฉาก → sin cos tan (4 ฉาก, ฉากแรกนิ่ง) ──
-// st = { o, a, h: 0–1 (ไฮไลต์ + ป้ายของด้านนั้น) , f: 0–3 (จำนวนสูตรที่โผล่) }
+// ── การ์ด 1: ชื่อเต็มของด้านทั้งสาม → ตั้งชื่อย่อ ข้าม ชิด ฉาก → sin cos tan (5 ฉาก, ฉากแรกนิ่ง) ──
+// st = { o, a, h: 0–1 (ไฮไลต์ + ป้ายของด้านนั้น) , n: 0–1 (ชื่อเต็มหดเป็นชื่อย่อ) , f: 0–3 (จำนวนสูตรที่โผล่) }
+const NMF = { o: T('ด้านตรงข้ามมุม θ', 'side opposite θ'), a: T('ด้านประชิดมุม θ', 'side adjacent to θ'), h: T('ด้านตรงข้ามมุมฉาก', 'side opposite the right angle') };
+// ชื่อเต็มแยก 3 ท่อน [ก่อน, คำที่เก็บไว้เป็นชื่อย่อ, หลัง] · EN ของ h: คำว่า hypotenuse ไม่อยู่ในชื่อเต็ม → null = จางสลับทั้งป้าย
+const NMP = {
+  o: { th: ['ด้านตรง', 'ข้าม', 'มุม θ'], en: ['side ', 'opposite', ' θ'] },
+  a: { th: ['ด้านประ', 'ชิด', 'มุม θ'], en: ['side ', 'adjacent', ' to θ'] },
+  h: { th: ['ด้านตรงข้ามมุม', 'ฉาก', ''], en: null }
+};
+const KF = { o: () => `<span class="hlb">${tx(NMF.o)}</span>`, a: () => `<span class="hl">${tx(NMF.a)}</span>`, h: () => `<span class="hlg">${tx(NMF.h)}</span>` };
+const RT_CLS = { o: 'b', a: 'o', h: 'g' };
+const RT_BOX = { xmin: -0.5, xmax: 6.7, ymin: -0.9, ymax: 3.9 };          // เผื่อที่ทางขวาให้ป้ายชื่อเต็มของด้านตั้ง
 const RT_FM = [['o', 'h', 'sin'], ['a', 'h', 'cos'], ['o', 'a', 'tan']];
-function rtFmLine(i, real) {                      // real = false → ช่องเศษ/ส่วนเป็น "?" จางๆ
-  const [x, y, fn] = RT_FM[i], q = '<span style="opacity:.4">?</span>';
-  return `${fn} ${TH} = ${fr(real ? FW[x]() : q, real ? FW[y]() : q)}`;
+const FWF = { o: () => `<span class="fm-b">${tx(NMF.o)}</span>`, a: () => `<span class="fm-o">${tx(NMF.a)}</span>`, h: () => `<span class="fm-g">${tx(NMF.h)}</span>` };   // ชื่อเต็มในสูตร
+function rtFmLine(i, short) { const [x, y, fn] = RT_FM[i], W = short ? FW : FWF; return `${fn} ${TH} = ${fr(W[x](), W[y]())}`; }
+// ป้ายชื่อของด้าน k: n = 0 ชื่อเต็ม → 0.55 ส่วนที่ไม่เก็บจางหมด → 1 ป้ายหดเหลือชื่อย่อ (ตัวอักษรส่วนที่ทิ้งหดจนคำที่เก็บเลื่อนเข้าที่เอง)
+function rtNameSvg(k, x, y, anchor, rot, op, n) {
+  if (op <= 0) return '';
+  const cls = 'pl-lbl ' + RT_CLS[k], parts = NMP[k][getLang()], fs = parts ? 14 : 13;
+  const a = clamp01(n / 0.55), s = clamp01((n - 0.55) / 0.45);
+  const tr = `transform="translate(${x.toFixed(1)} ${y.toFixed(1)}) rotate(${rot.toFixed(1)})" text-anchor="${anchor}"`;
+  if (!parts) return `<text class="${cls}" ${tr} style="font-size:${fs}px;font-weight:700;opacity:${(op * (1 - a)).toFixed(2)}">${tx(NMF[k])}</text>`
+    + `<text class="${cls}" ${tr} style="font-size:17px;font-weight:800;opacity:${(op * s).toFixed(2)}">${tx(NM[k])}</text>`;
+  const side = `font-size:${Math.max(0.01, fs * (1 - s)).toFixed(2)}px;font-weight:600;fill-opacity:${(1 - a).toFixed(2)}`;
+  return `<text class="${cls}" ${tr} style="font-size:${lerp(fs, 17, s).toFixed(2)}px;font-weight:${n > 0 ? 800 : 700};opacity:${(+op).toFixed(2)}">`
+    + (s < 1 ? `<tspan style="${side}">${parts[0]}</tspan>` : '') + `<tspan>${parts[1]}</tspan>` + (s < 1 && parts[2] ? `<tspan style="${side}">${parts[2]}</tspan>` : '') + '</text>';
 }
 function rtBuild(el) {
   const s = stage2(el);
-  s.R.innerHTML = '<div class="formula rt-fm"></div>';
+  s.R.innerHTML = '<div class="formula rt-fm" style="flex-direction:column;font-size:1.05rem;visibility:hidden"></div>';
   const fm = s.R.querySelector('.rt-fm');
-  fm.innerHTML = [0, 1, 2].map(i => `<span>${rtFmLine(i, false)}</span>`).join('');
-  fm.style.flexDirection = 'column';
-  const tri = tri345(s.L, { sides: [NM.o, NM.h, NM.a] });
-  return { tri, fm, real: [false, false, false] };
+  fm.innerHTML = [0, 1, 2].map(i => '<span style="display:none"></span>').join('');
+  const tri = tri345(s.L, { sides: [null, null, null], box: RT_BOX });
+  return { tri, fm, short: [null, null, null] };
 }
+// สูตรโผล่ทีละบรรทัด (f = จำนวนบรรทัด) · ชื่อเต็ม จนกว่า n ≥ 0.55 แล้วเปลี่ยนเป็นชื่อย่อพร้อมป้ายบนภาพ
 function rtSet(m, st) {
+  const n = st.n || 0, sh = n >= 0.55;
   [['s0', 'o'], ['s1', 'h'], ['s2', 'a']].forEach(([key, k]) => {
     const v = st[k] || 0, i = +key[1];
     m.tri.hl(key, v > 0 ? HLC[key] : null);
     m.tri.parts.glow[i].style.opacity = (0.3 * v).toFixed(3);
-    m.tri.vis(key, v);
   });
+  const V = [0, 1, 2].map(i => m.tri.V(i)), mid = (a, b) => [(V[a][0] + V[b][0]) / 2, (V[a][1] + V[b][1]) / 2], s = clamp01((n - 0.55) / 0.45);
+  const mo = mid(1, 2), ma = mid(0, 1), mh = mid(0, 2), ang = Math.atan2(V[2][1] - V[0][1], V[2][0] - V[0][0]) * 180 / Math.PI;
+  m.tri.g.innerHTML = rtNameSvg('o', mo[0] + 12, mo[1] + 5, 'start', 0, st.o || 0, n)
+    + rtNameSvg('a', ma[0], ma[1] + 26, 'middle', 0, st.a || 0, n)
+    + rtNameSvg('h', lerp(mh[0] - 8, mh[0] - 36, s), lerp(mh[1] - 11, mh[1] - 10, s), 'middle', lerp(ang, 0, s), st.h || 0, n);
+  m.fm.style.visibility = (st.f || 0) > 0.3 ? 'visible' : 'hidden';
   [...m.fm.children].forEach((c, i) => {
-    const real = (st.f || 0) - i > 0.3;
-    if (m.real[i] !== real) { m.real[i] = real; c.innerHTML = rtFmLine(i, real); }
-    c.style.opacity = real ? 1 : 0.85;
+    const vis = (st.f || 0) - i > 0.3;
+    c.style.display = vis ? '' : 'none';
+    if (vis && m.short[i] !== sh) { m.short[i] = sh; c.innerHTML = rtFmLine(i, sh); }
+    if (!vis) m.short[i] = null;
   });
 }
+const RT_ALL = { o: 1, a: 1, h: 1 };
+const rtLine = k => ({
+  cap: () => tx(k < 3 ? [
+    T(`ใช้ชื่อเต็มก่อน: sin ${TH} = ${fr(KF.o(), KF.h())}`, `Full names first: sin ${TH} = ${fr(KF.o(), KF.h())}`),
+    T(`cos ${TH} = ${fr(KF.a(), KF.h())}`, `cos ${TH} = ${fr(KF.a(), KF.h())}`),
+    T(`tan ${TH} = ${fr(KF.o(), KF.a())}`, `tan ${TH} = ${fr(KF.o(), KF.a())}`)
+  ][k] : T(`ชื่อยาวไป ครูเรียกสั้นๆ ว่า ${K.o()} ${K.a()} ${K.h()} — กดอีกทีให้ป้ายและสูตรเปลี่ยนเป็นชื่อย่อ จากนี้ใช้ชื่อย่อตลอด`, `The names are long, so we shorten them to ${K.o()}, ${K.a()}, ${K.h()} — press again and the labels and formulas switch to the short names, used from here on`)),
+  end: S => { const m = rtBuild(S.el); rtSet(m, Object.assign({}, RT_ALL, { f: Math.min(k + 1, 3), n: k === 3 ? 1 : 0 })); },
+  play: async S => {
+    const m = rtBuild(S.el);
+    if (k === 3) { rtSet(m, Object.assign({}, RT_ALL, { f: 3 })); await S.anim.wait(350); await S.anim.run(2600, t => rtSet(m, Object.assign({}, RT_ALL, { f: 3, n: Math.max(0.001, t) })), EASE.lin); }
+    else { rtSet(m, Object.assign({}, RT_ALL, { f: k })); await S.anim.run(500, t => rtSet(m, Object.assign({}, RT_ALL, { f: k + t })), EASE.lin); }
+  }
+});
 const RT_SC = [
   { cap: () => tx(T('สามเหลี่ยมมุมฉากที่มีมุมแหลม <i>θ</i> ที่มุมซ้ายล่าง — ต่อไปเราเรียกด้านทั้งสามตามตำแหน่งเทียบกับมุม <i>θ</i> · กด ▶',
                     'A right triangle with an acute angle <i>θ</i> at the bottom left — we name the three sides by where they sit relative to <i>θ</i>. Press ▶')),
     end: S => { const m = rtBuild(S.el); rtSet(m, {}); } },
-  { cap: () => tx(T(`${K.o()} = ด้านที่อยู่ตรงข้ามมุม <i>θ</i> (ไม่แตะมุม <i>θ</i> เลย)`, `${K.o()} = the side across from angle <i>θ</i> (it does not touch <i>θ</i> at all)`)),
+  { cap: () => tx(T(`ด้านที่อยู่ฝั่งตรงข้ามกับมุม <i>θ</i> (ไม่แตะมุม <i>θ</i> เลย) เรียกว่า ${KF.o()}`, `The side across from angle <i>θ</i> (it does not touch <i>θ</i> at all) is called the ${KF.o()}`)),
     end: S => { const m = rtBuild(S.el); rtSet(m, { o: 1 }); },
     play: async S => { const m = rtBuild(S.el); rtSet(m, {}); await S.anim.run(900, t => rtSet(m, { o: t }), EASE.lin); } },
-  { cap: () => tx(T(`${K.a()} = ด้านที่ติดมุม <i>θ</i> (ไม่ใช่ด้านยาวสุด) · ${K.h()} = ด้านตรงข้ามมุมฉาก ยาวที่สุดเสมอ`, `${K.a()} = the side that touches <i>θ</i> (not the longest one) · ${K.h()} = the side across from the right angle, always the longest`)),
-    end: S => { const m = rtBuild(S.el); rtSet(m, { o: 1, a: 1, h: 1 }); },
-    play: async S => { const m = rtBuild(S.el); rtSet(m, { o: 1 }); await S.anim.run(800, t => rtSet(m, { o: 1, a: t }), EASE.lin); await S.anim.run(800, t => rtSet(m, { o: 1, a: 1, h: t }), EASE.lin); } },
-  { cap: () => tx(T(`ตัวย่อมีแค่ 3 ตัว จำเป็นเศษส่วน: sin = ${fr(K.o(), K.h())} · cos = ${fr(K.a(), K.h())} · tan = ${fr(K.o(), K.a())}`, `Just three short names, remembered as fractions: sin = ${fr(K.o(), K.h())} · cos = ${fr(K.a(), K.h())} · tan = ${fr(K.o(), K.a())}`)),
-    end: S => { const m = rtBuild(S.el); rtSet(m, { o: 1, a: 1, h: 1, f: 3 }); },
-    play: async S => { const m = rtBuild(S.el); rtSet(m, { o: 1, a: 1, h: 1 }); await S.anim.run(2400, t => rtSet(m, { o: 1, a: 1, h: 1, f: t * 3 }), EASE.lin); } }
+  { cap: () => tx(T(`ด้านที่ติดมุม <i>θ</i> และไม่ใช่ด้านยาวสุด เรียกว่า ${KF.a()} · ด้านที่อยู่ตรงข้ามมุมฉาก (ยาวที่สุดเสมอ) เรียกว่า ${KF.h()}`, `The side that touches <i>θ</i> and is not the longest is the ${KF.a()} · the side across from the right angle (always the longest) is the ${KF.h()}`)),
+    end: S => { const m = rtBuild(S.el); rtSet(m, RT_ALL); },
+    play: async S => { const m = rtBuild(S.el); rtSet(m, { o: 1 }); await S.anim.run(800, t => rtSet(m, { o: 1, a: t }), EASE.lin); await S.anim.wait(500); await S.anim.run(800, t => rtSet(m, { o: 1, a: 1, h: t }), EASE.lin); } },
+  rtLine(0), rtLine(1), rtLine(2), rtLine(3)
 ];
 
 // ── ทายก่อน: ข้าม 5 ชิด 12 ฉาก 13 → sin θ ──
@@ -3888,79 +3927,98 @@ const FL_SC = [
   { cap: () => tx(T(`พลิกเศษส่วนของ sin ${TH} → ได้ <b>csc ${TH}</b> = ${mx(fr(5, 3))} (csc ${TH} = 1 ÷ sin ${TH})`, `Flip the fraction of sin ${TH} → <b>csc ${TH}</b> = ${mx(fr(5, 3))} (csc ${TH} = 1 ÷ sin ${TH})`)),
     end: S => { flBuild(S.el, [1, null, null]); },
     play: async S => { const m = flBuild(S.el, [0, null, null]); await S.anim.run(1900, t => m.set(0, t), EASE.lin); } },
-  { cap: () => tx(T(`ทำซ้ำ: cos ${TH} = ${mx(fr(4, 5))} พลิกได้ <b>sec ${TH}</b> = ${mx(fr(5, 4))} · tan ${TH} = ${mx(fr(3, 4))} พลิกได้ <b>cot ${TH}</b> = ${mx(fr(4, 3))}`, `Repeat: cos ${TH} = ${mx(fr(4, 5))} flips to <b>sec ${TH}</b> = ${mx(fr(5, 4))} · tan ${TH} = ${mx(fr(3, 4))} flips to <b>cot ${TH}</b> = ${mx(fr(4, 3))}`)),
+  { cap: () => tx(T(`ทำซ้ำ: cos ${TH} = ${mx(fr(4, 5))} พลิกได้ <b>sec ${TH}</b> = ${mx(fr(5, 4))}`, `Repeat: cos ${TH} = ${mx(fr(4, 5))} flips to <b>sec ${TH}</b> = ${mx(fr(5, 4))}`)),
+    end: S => { flBuild(S.el, [1, 1, null]); },
+    play: async S => { const m = flBuild(S.el, [1, 0, null]); await S.anim.run(1700, t => m.set(1, t), EASE.lin); } },
+  { cap: () => tx(T(`ทำซ้ำอีกที: tan ${TH} = ${mx(fr(3, 4))} พลิกได้ <b>cot ${TH}</b> = ${mx(fr(4, 3))}`, `Once more: tan ${TH} = ${mx(fr(3, 4))} flips to <b>cot ${TH}</b> = ${mx(fr(4, 3))}`)),
     end: S => { flBuild(S.el, [1, 1, 1]); },
-    play: async S => {
-      const m = flBuild(S.el, [1, 0, 0]);
-      await S.anim.run(1700, t => m.set(1, t), EASE.lin);
-      await S.anim.run(1700, t => m.set(2, t), EASE.lin);
-    } }
+    play: async S => { const m = flBuild(S.el, [1, 1, 0]); await S.anim.run(1700, t => m.set(2, t), EASE.lin); } }
 ];
 
 // ═══════════════════════════════════════════════════════════════
 //  แท็บ 2 · มุมพิเศษ (ทริกมือ = พับนิ้ว)
 // ═══════════════════════════════════════════════════════════════
-// นิ้ว 0 = โป้ง … 4 = ก้อย · มุม kπ/n · bx, by = โคนนิ้ว · L ยาว · w กว้าง · rot องศา (โป้งเอียงออก)
+// นิ้ว 0 = โป้ง … 4 = ก้อย · มุม kπ/n · bx, by = โคนนิ้ว · L ยาว · w กว้างที่โคน · rot องศา (ลบ = เอียงซ้าย) — แบบมือตามลายมือครู docs/m5-fixes/p08.jpg
+// ตัววาดมือ (HF … handSvg) พึ่งของนอกบล็อกนี้แค่ T, tx, lerp, radText, _tgDeg — รอบ 2 คัดลอกไปใช้ในสื่อเวกเตอร์
 const HF = [
-  { k: 0, n: 1, bx: 160, by: 332, L: 104, w: 46, rot: -36 },
-  { k: 1, n: 6, bx: 184, by: 268, L: 134, w: 42, rot: 0 },
-  { k: 1, n: 4, bx: 232, by: 268, L: 150, w: 42, rot: 0 },
-  { k: 1, n: 3, bx: 280, by: 268, L: 136, w: 42, rot: 0 },
-  { k: 1, n: 2, bx: 328, by: 268, L: 108, w: 42, rot: 0 }
+  { k: 0, n: 1, bx: 171, by: 312, L: 96, w: 42, rot: -52 },
+  { k: 1, n: 6, bx: 209, by: 250, L: 120, w: 36, rot: -7 },
+  { k: 1, n: 4, bx: 249, by: 244, L: 140, w: 38, rot: -1 },
+  { k: 1, n: 3, bx: 289, by: 246, L: 124, w: 36, rot: 5 },
+  { k: 1, n: 2, bx: 327, by: 256, L: 92, w: 32, rot: 13 }
 ];
 const HAND_H = 420;
 const SKIN = 'color-mix(in srgb, var(--g-curve) 24%, var(--card))', SKIN2 = 'color-mix(in srgb, var(--g-curve) 40%, var(--card))', SKIN_LN = 'color-mix(in srgb, var(--g-curve) 55%, var(--text))';
+// ฝ่ามือ: เส้นเดียว วาดทับโคนนิ้ว · fill ปิด · เส้นขอบเปิดที่ข้อมือ และเว้นช่วงที่นิ้วงอกออกมา (นิ้วจึงต่อเนื่องกับฝ่ามือแบบ p08)
+const HAND_PALM = 'M189 422 C185 360 163 335 159 300 C155 265 167 246 189 242 Q262 230 335 246 C359 252 367 278 363 308 C359 345 345 370 343 422';
+const HAND_EDGE = 'M189 422 C186.5 382.9 176.8 358.5 169 337.1 M164.25 259.4 C169.5 249.75 178 244 189 242 M347.5 251.9 C361.7 262.6 366.2 284 363 308 C359 345 345 370 343 422';
 const fingerTip = (f, L) => { const a = f.rot * Math.PI / 180; return [f.bx + L * Math.sin(a), f.by - L * Math.cos(a)]; };
 // st = { fp: [0–1 ×5] ความพับของแต่ละนิ้ว · act: นิ้วที่ใช้นับ (null = ไม่มี) · gs, gc: 0–1 ความเรืองของฝั่งโป้ง(แดง)/ก้อย(ม่วง) · ar: 0–1 ลูกศร · click: true (นิ้วกดได้) }
 function handSvg(st) {
   st = st || {}; const fp = st.fp || [0, 0, 0, 0, 0], act = st.act === undefined ? null : st.act, gs = st.gs || 0, gc = st.gc || 0;
-  let s = `<rect x="190" y="352" width="142" height="80" rx="16" style="fill:${SKIN};stroke:${SKIN_LN};stroke-width:2.4"/>`;
-  s += `<rect x="152" y="238" width="222" height="150" rx="62" style="fill:${SKIN};stroke:${SKIN_LN};stroke-width:2.6"/>`;
-  s += `<path d="M178 330 q38 -22 96 -6 M196 352 q50 -16 100 -2 M286 300 q30 8 56 -6" style="fill:none;stroke:${SKIN_LN};stroke-width:1.8;stroke-linecap:round;opacity:.45"/>`;
+  const f1 = v => (+v).toFixed(1), ln = `fill:none;stroke:${SKIN_LN};stroke-linecap:round;stroke-linejoin:round`;
   const sideOf = i => act === null ? '' : i === act ? 'fold' : i < act ? 'sin' : 'cos';
   const fingerHtml = i => {
-    const f = HF[i], q = fp[i], L = f.L * (1 - 0.62 * q), r = f.w / 2, side = sideOf(i);
-    const body = `M${-r} 0 L${-r} ${-(L - r)} A${r} ${r} 0 0 1 ${r} ${-(L - r)} L${r} 0 Z`, open = `M${-r} 0 L${-r} ${-(L - r)} A${r} ${r} 0 0 1 ${r} ${-(L - r)} L${r} 0`;
+    const f = HF[i], q = fp[i], L = f.L * (1 - 0.62 * q), r = f.w / 2, rt_ = 0.43 * f.w, side = sideOf(i), DN = 26;      // DN = ส่วนโคนที่ฝ่ามือทับ
+    // นิ้วเรียวปลาย: โคนกว้าง w → ปลายกว้าง 0.86w ปลายมน
+    const open = `M${-r} ${DN} L${-r} 0 C${-r} ${f1(-L * 0.5)} ${f1(-rt_)} ${f1(-L * 0.62)} ${f1(-rt_)} ${f1(-(L - rt_))} A${f1(rt_)} ${f1(rt_)} 0 0 1 ${f1(rt_)} ${f1(-(L - rt_))} C${f1(rt_)} ${f1(-L * 0.62)} ${r} ${f1(-L * 0.5)} ${r} 0 L${r} ${DN}`;
     const col = side === 'sin' ? 'var(--g-red)' : side === 'cos' ? 'var(--g-purple)' : SKIN_LN, gl = side === 'sin' ? gs : side === 'cos' ? gc : 0;
     let g = `<g transform="translate(${f.bx} ${f.by}) rotate(${f.rot})" data-i="${i}"${st.click ? ' style="cursor:pointer"' : ''}>`;
     if (gl > 0) g += `<path d="${open}" style="fill:none;stroke:${col};stroke-width:15;stroke-opacity:${(0.42 * gl).toFixed(3)};stroke-linejoin:round;stroke-linecap:round"/>`;
-    g += `<path d="${body}" style="fill:color-mix(in srgb, ${SKIN2} ${(q * 100).toFixed(0)}%, ${SKIN});stroke:none"/>`;
+    g += `<path d="${open} Z" style="fill:color-mix(in srgb, ${SKIN2} ${(q * 100).toFixed(0)}%, ${SKIN});stroke:none"/>`;
     g += `<path d="${open}" style="fill:none;stroke:${gl > 0 ? col : SKIN_LN};stroke-width:${gl > 0 ? 3.6 : 2.6};stroke-linejoin:round;stroke-linecap:round"/>`;
-    if (q < 0.5) {
+    if (q < 0.5) {                                              // เส้นข้อนิ้ว 2 เส้น
       const op = (1 - q * 2).toFixed(2);
-      [0.42, 0.7].forEach(t => { g += `<path d="M${-r + 7} ${-L * t} q${r - 7} 5 ${f.w - 14} 0" style="fill:none;stroke:${SKIN_LN};stroke-width:1.8;stroke-linecap:round;opacity:${(0.45 * op).toFixed(2)}"/>`; });
-    } else {
-      g += `<path d="M${-r + 7} ${-L + r * 0.9} q${r - 7} 8 ${f.w - 14} 0 M${-r + 10} ${-L + r * 1.5} q${r - 10} 6 ${f.w - 20} 0" style="fill:none;stroke:${SKIN_LN};stroke-width:1.8;stroke-linecap:round;opacity:.55"/>`;
+      [0.42, 0.7].forEach(t => { const hw = lerp(r, rt_, t) - 7; g += `<path d="M${f1(-hw)} ${f1(-L * t)} q${f1(hw)} 5 ${f1(2 * hw)} 0" style="${ln};stroke-width:1.8;opacity:${(0.45 * op).toFixed(2)}"/>`; });
+    } else {                                                    // รอยพับ 2 เส้น
+      g += `<path d="M${f1(-rt_ + 6)} ${f1(-L + rt_ * 0.95)} q${f1(rt_ - 6)} 8 ${f1(2 * rt_ - 12)} 0 M${f1(-rt_ + 9)} ${f1(-L + rt_ * 1.6)} q${f1(rt_ - 9)} 6 ${f1(2 * rt_ - 18)} 0" style="${ln};stroke-width:1.8;opacity:.55"/>`;
     }
     return g + '</g>';
   };
-  [1, 2, 3, 4, 0].forEach(i => { s += fingerHtml(i); });
-  // ป้ายมุมที่ปลายนิ้ว (ปลายนิ้วเดิม แม้นิ้วพับ)
+  let s = '';
+  [4, 3, 2, 1, 0].forEach(i => { s += fingerHtml(i); });                                    // ก้อย → นาง → กลาง → ชี้ → โป้ง
+  s += `<path d="${HAND_PALM} Z" style="fill:${SKIN};stroke:none"/>`;                        // ฝ่ามือทับโคนนิ้ว
+  // ง่ามนิ้วโป้ง: โค้งเว้าจากขอบบนของนิ้วโป้งเข้าหาโคนนิ้วชี้ (โป้งพับ = ง่ามหดเข้าฝ่ามือและจางไป)
+  const T0 = HF[0], ta = T0.rot * Math.PI / 180, tw = lerp(48, 14, fp[0]);
+  const wx = T0.bx + Math.cos(ta) * T0.w / 2 + Math.sin(ta) * tw, wy = T0.by + Math.sin(ta) * T0.w / 2 - Math.cos(ta) * tw;
+  s += `<path d="M${f1(wx)} ${f1(wy)} Q161 275 164.25 259.4 L174 292 Z" style="fill:${SKIN};stroke:none"/>`;
+  s += `<path d="M${f1(wx)} ${f1(wy)} Q161 275 164.25 259.4" style="${ln};stroke-width:2.6;opacity:${(1 - fp[0]).toFixed(2)}"/>`;
+  s += `<path d="${HAND_EDGE}" style="${ln};stroke-width:2.6"/>`;
+  // เส้นลายมือ 2 เส้น
+  s += `<path d="M196 300 Q238 276 322 288 M200 306 Q184 352 206 398" style="${ln};stroke-width:1.8;opacity:.45"/>`;
+  // กลางฝ่ามือ: √นิ้ว ทับ 2
+  const wd = tx(T('นิ้ว', 'fingers')), en_ = wd.length > 4, fsz = en_ ? 21 : 25, tw_ = en_ ? 70 : 38, cx = 270, x0 = cx - (tw_ + 16) / 2;
+  s += `<g style="pointer-events:none"><path d="M${f1(x0)} 333 l5 -3 l5 13 l7 -30 h${tw_ + 4}" style="fill:none;stroke:var(--text);stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round"/>`
+    + `<text x="${f1(x0 + 19 + tw_ / 2)}" y="340" text-anchor="middle" style="font-size:${fsz}px;font-weight:800;fill:var(--text)">${wd}</text>`
+    + `<line x1="${f1(cx - tw_ / 2 - 16)}" y1="352" x2="${f1(cx + tw_ / 2 + 16)}" y2="352" style="stroke:var(--text);stroke-width:3;stroke-linecap:round"/>`
+    + `<text x="${cx}" y="386" text-anchor="middle" style="font-size:34px;font-weight:800;fill:var(--text)">2</text></g>`;
+  // ป้ายมุมเหนือปลายนิ้ว (ปลายนิ้วเดิม แม้นิ้วพับ)
   HF.forEach((f, i) => {
-    const [tx_, ty_] = fingerTip(f, f.L), lx = i === 0 ? tx_ - 24 : tx_, ly = i === 0 ? ty_ - 6 : ty_ - 26, on = act === i;
-    s += `<text class="${on ? 'pl-lbl o' : ''}" x="${lx.toFixed(1)}" y="${(ly - 17).toFixed(1)}" text-anchor="middle" style="font-size:17px;font-weight:800">${radText(f.k, f.n)}</text>`;
-    s += `<text class="${on ? 'pl-lbl o' : 'sc-small'}" x="${lx.toFixed(1)}" y="${ly.toFixed(1)}" text-anchor="middle" style="font-size:13px">${_tgDeg(f.k, f.n)}</text>`;
+    const [lx, ly] = fingerTip(f, f.L + (i === 0 ? 30 : 25)), on = act === i;
+    s += `<text class="${on ? 'pl-lbl o' : ''}" x="${f1(lx)}" y="${f1(ly - 2)}" text-anchor="middle" style="font-size:17px;font-weight:800">${radText(f.k, f.n)}</text>`;
+    s += `<text class="${on ? 'pl-lbl o' : 'sc-small'}" x="${f1(lx)}" y="${f1(ly + 14)}" text-anchor="middle" style="font-size:13px">${_tgDeg(f.k, f.n)}</text>`;
   });
   // ลูกศร sin (แดง → ฝั่งโป้ง) / cos (ม่วง → ฝั่งก้อย)
   if (act !== null && (st.ar || 0) > 0) {
-    const ay = 46, xa = HF[act].bx - (act === 0 ? 0 : 6), xs = 104, xc = 352, a = st.ar, ns = act, nc = 4 - act;
+    const ay = 40, xa = fingerTip(HF[act], HF[act].L)[0], xs = 92, xc = 358, a = st.ar, ns = act, nc = 4 - act;
     const arr = (x1, x2, col, cls, txt) => {
-      const L = Math.abs(x2 - x1); if (L < 14) return `<text class="pl-lbl ${cls}" x="${x1}" y="${ay - 12}" text-anchor="middle" style="font-size:16px;opacity:${a}">${txt}</text>`;
+      const L = Math.abs(x2 - x1); if (L < 24) return `<text class="pl-lbl ${cls}" x="${f1(x2)}" y="${ay - 12}" text-anchor="middle" style="font-size:16px;opacity:${a}">${txt}</text>`;
       const dir = Math.sign(x2 - x1), xe = x1 + (x2 - x1) * a;
-      return `<g style="opacity:${a}"><line x1="${x1}" y1="${ay}" x2="${(xe - dir * 6).toFixed(1)}" y2="${ay}" style="stroke:${col};stroke-width:3.2;stroke-linecap:round"/><polygon points="${xe.toFixed(1)},${ay} ${(xe - dir * 12).toFixed(1)},${ay - 6} ${(xe - dir * 12).toFixed(1)},${ay + 6}" style="fill:${col}"/></g><text class="pl-lbl ${cls}" x="${((x1 + x2) / 2).toFixed(1)}" y="${ay - 12}" text-anchor="middle" style="font-size:16px;opacity:${a}">${txt}</text>`;
+      return `<g style="opacity:${a}"><line x1="${f1(x1)}" y1="${ay}" x2="${(xe - dir * 6).toFixed(1)}" y2="${ay}" style="stroke:${col};stroke-width:3.2;stroke-linecap:round"/><polygon points="${xe.toFixed(1)},${ay} ${(xe - dir * 12).toFixed(1)},${ay - 6} ${(xe - dir * 12).toFixed(1)},${ay + 6}" style="fill:${col}"/></g><text class="pl-lbl ${cls}" x="${((x1 + x2) / 2).toFixed(1)}" y="${ay - 12}" text-anchor="middle" style="font-size:16px;opacity:${a}">${txt}</text>`;
     };
-    s += arr(xa, xs, 'var(--g-red)', 'r', `sin · ${ns} ${tx(T('นิ้ว', ns === 1 ? 'finger' : 'fingers'))}`);
-    s += arr(xa, xc, 'var(--g-purple)', 'p', `cos · ${nc} ${tx(T('นิ้ว', nc === 1 ? 'finger' : 'fingers'))}`);
+    s += arr(xa - 5, xs, 'var(--g-red)', 'r', `sin · ${ns} ${tx(T('นิ้ว', ns === 1 ? 'finger' : 'fingers'))}`);
+    s += arr(xa + 5, xc, 'var(--g-purple)', 'p', `cos · ${nc} ${tx(T('นิ้ว', nc === 1 ? 'finger' : 'fingers'))}`);
   }
   return `<svg class="sc-svg hd-svg" viewBox="0 0 520 ${HAND_H}" xmlns="http://www.w3.org/2000/svg">${s}</svg>`;
 }
-// ค่าที่นับจากนิ้ว: sin = √(นิ้วฝั่งโป้ง)/2 · cos = √(นิ้วฝั่งก้อย)/2 · tan = sin ÷ cos
+// ค่าที่นับจากนิ้ว: sin = √(นิ้วฝั่งโป้ง)/2 · cos = √(นิ้วฝั่งก้อย)/2 · tan = √(นิ้วฝั่งโป้ง) ÷ √(นิ้วฝั่งก้อย) (sin ÷ cos ตัวหาร 2 ตัดกัน)
 function handLines(i) {
   const f = HF[i], ns = i, nc = 4 - i, ang = rad(f.k, f.n);
   const sq = n => mx(fr(sr(n), 2));
   const vs = exactVal('sin', f.k, f.n), vc = exactVal('cos', f.k, f.n), vt = exactVal('tan', f.k, f.n);
   const eq = (fn, n, v) => `<span><span class="mx">${fn} ${ang}</span> = ${sq(n)}${n === 2 || n === 3 ? '' : ' = ' + v}</span>`;
-  return { sin: eq('sin', ns, vs), cos: eq('cos', nc, vc), tan: `<span><span class="mx">tan ${ang}</span> = ${mx('sin ÷ cos')} = ${mx(vs + ' ÷ ' + vc)} = ${vt}</span>`, vs, vc, vt };
+  const tanL = `<span><span class="mx">tan ${ang}</span> = ${mx(sr(ns) + ' ÷ ' + sr(nc))} ` + (nc === 0 ? `→ ${tx(T('หารด้วย 0 ไม่ได้', 'cannot divide by 0'))} → ${vt}` : `= ${vt}`) + '</span>';
+  return { sin: eq('sin', ns, vs), cos: eq('cos', nc, vc), tan: tanL, vs, vc, vt };
 }
 // ตารางค่า 5 มุม (ใช้ exactVal) · filled[i] = แถวที่เติมแล้ว · cur = แถวปัจจุบัน
 function exTable(filled, cur) {
@@ -3985,7 +4043,7 @@ const HD_SC = [
   { cap: () => tx(T(`นิ้วฝั่งก้อยเหลือ <b>3</b> นิ้ว → cos = √3 ÷ 2 = ${mx(fr(sr(3), 2))}`, `The little-finger side has <b>3</b> fingers → cos = √3 ÷ 2 = ${mx(fr(sr(3), 2))}`)),
     end: S => hdPaint(S, { act: 1, p: 1, gs: 1, gc: 1, ar: 1, lines: ['sin', 'cos'] }),
     play: async S => { await S.anim.run(800, t => hdPaint(S, { act: 1, p: 1, gs: 1, gc: t, ar: 1, lines: ['sin'] }), EASE.out); } },
-  { cap: () => tx(T(`tan = sin ÷ cos = ${mx(fr(1, 2))} ÷ ${mx(fr(sr(3), 2))} = ${mx(fr(1, sr(3)))} (ตามสรุปครู) → แถว ${rad(1, 6)} ของตารางเติมเอง`, `tan = sin ÷ cos = ${mx(fr(1, 2))} ÷ ${mx(fr(sr(3), 2))} = ${mx(fr(1, sr(3)))} (as in the teacher's sheet) → the row for ${rad(1, 6)} fills itself in`)),
+  { cap: () => tx(T(`tan = √(นิ้วฝั่งโป้ง) ÷ √(นิ้วฝั่งก้อย) = √1 ÷ √3 = ${mx(fr(1, sr(3)))} (มาจาก sin ÷ cos ตัวหาร 2 ตัดกัน) → แถว ${rad(1, 6)} ของตารางเติมเอง`, `tan = √(thumb-side fingers) ÷ √(little-finger-side fingers) = √1 ÷ √3 = ${mx(fr(1, sr(3)))} (it comes from sin ÷ cos, the two 2s cancel) → the row for ${rad(1, 6)} fills itself in`)),
     end: S => hdPaint(S, { act: 1, p: 1, gs: 1, gc: 1, ar: 1, lines: ['sin', 'cos', 'tan'], table: true }),
     play: async S => { hdPaint(S, { act: 1, p: 1, gs: 1, gc: 1, ar: 1, lines: ['sin', 'cos'] }); await S.anim.wait(500); hdPaint(S, { act: 1, p: 1, gs: 1, gc: 1, ar: 1, lines: ['sin', 'cos', 'tan'] }); await S.anim.wait(700); hdPaint(S, { act: 1, p: 1, gs: 1, gc: 1, ar: 1, lines: ['sin', 'cos', 'tan'], table: true }); } }
 ];
@@ -4053,13 +4111,15 @@ function fdBox(c) {
       end: S => { const m = fresh(S); base2(m); m.tri.parts.glow.forEach((g, i) => { if (known.includes(i)) g.style.opacity = 0.3; }); prob(m.R); lineEl(m.R, c.say2()); },
       play: async S => { const m = fresh(S); base2(m); m.tri.vis('all', 0); m.tri.vis('a0', 1); st2(m, 0); prob(m.R); await S.anim.run(1700, t => st2(m, t), EASE.inOut); lineEl(m.R, c.say2(), 'fresh'); } },
     { cap: () => c.cap3(),
-      end: S => { const m = fresh(S); setLabels(m, [0, 1, 2]); prob(m.R); c.steps.forEach(h => lineEl(m.R, h())); },
+      end: S => { const m = fresh(S); setLabels(m, [0, 1, 2]); prob(m.R); },
       play: async S => {
         const m = fresh(S); base2(m); m.tri.parts.glow.forEach((g, i) => { if (known.includes(i)) g.style.opacity = 0.3; }); prob(m.R); lineEl(m.R, c.say2());
         await S.anim.run(1100, t => { m.tri.fillOp(t); m.tri.grow(miss, t, true); m.tri.parts.glow[miss].style.opacity = (0.3 * t).toFixed(3); }, EASE.out);
-        setLabels(m, [0, 1, 2]);
-        for (const h of c.steps) { lineEl(m.R, h(), 'fresh'); await S.anim.wait(1100); }
-      } }
+      } },
+    // กด ▶ ทีละบรรทัด: 1 ขั้นการคำนวณต่อ 1 ฉาก
+    ...c.steps.map((_, j) => ({ cap: () => c.cap3(),
+      end: S => { const m = fresh(S); setLabels(m, [0, 1, 2]); prob(m.R); c.steps.slice(0, j + 1).forEach(h => lineEl(m.R, h())); },
+      play: async S => { const m = fresh(S); setLabels(m, [0, 1, 2]); prob(m.R); c.steps.slice(0, j).forEach(h => lineEl(m.R, h())); await S.anim.wait(300); lineEl(m.R, c.steps[j](), 'fresh'); } }))
   ];
 }
 const sqEq = (a, op, b, r) => `<span class="mx">${a}² = ${b}² ${op} ${r}²</span>`;
@@ -4162,50 +4222,83 @@ function makeFindTry(host) {
 // ═══════════════════════════════════════════════════════════════
 //  แท็บ 4 · โคฟังก์ชัน
 // ═══════════════════════════════════════════════════════════════
-const CF_GEO = { verts: [[0, 0], [4, 0], [4, 3]], right: 1, box: { xmin: -1.6, xmax: 6, ymin: -1.4, ymax: 4.6 }, pad: 26, w: 480, h: 340, angles: ['θ', null, 'π/2 − θ'], arcR: 30 };
-// วาดตา + ป้าย<span class="frac"><span class="num">ข้าม</span><span class="den">ชิด</span></span> ที่ลอยสลับกัน · p = 0→1 ตาย้ายจากมุม θ ไปมุมบน · q = 0→1 ป้ายสลับที่ · e = ความโปร่งแสงของตา/ป้าย
+// สามเหลี่ยม 30-60-90 (ด้าน 1, √3, 2): จุดยอด 0 = มุม 30° (ซ้ายล่าง) · จุดยอด 2 = มุม 60° (บน)
+const CF_S3 = Math.sqrt(3);
+const CF_GEO = { verts: [[0, 0], [CF_S3, 0], [CF_S3, 1]], right: 1, box: { xmin: -0.62, xmax: 2.62, ymin: -0.5, ymax: 1.45 }, pad: 26, w: 480, h: 320, arcR: 34 };
+// วาดตา + ป้าย ข้าม/ชิด/ฉาก ที่ลอยสลับกัน + ความยาวด้าน · p = 0→1 ตาย้ายจากมุม 30° ไปมุม 60° · q = 0→1 ป้ายสลับที่ · e = ความโปร่งแสงของตา/ป้าย
 function cfDraw(m, p, q, e) {
-  const V0 = m.V(0), V2 = m.V(2), mid02 = [lerp(V0[0], V2[0], p), lerp(V0[1], V2[1], p)];
-  const off0 = [-38, 2], off2 = [34, -22], eye = [lerp(V0[0] + off0[0], V2[0] + off2[0], p), lerp(V0[1] + off0[1], V2[1] + off2[1], p)];
-  const A = m.px(4, 1.5), B = m.px(2, 0), a0 = [A[0] + 38, A[1] + 6], b0 = [B[0], B[1] + 34];        // ตำแหน่งป้ายนอกด้านตั้ง/ด้านนอน
+  const V0 = m.V(0), V2 = m.V(2);
+  const off0 = [-34, 4], off2 = [36, -16], eye = [lerp(V0[0] + off0[0], V2[0] + off2[0], p), lerp(V0[1] + off0[1], V2[1] + off2[1], p)];
+  const A = m.px(CF_S3, 0.5), B = m.px(CF_S3 / 2, 0), a0 = [A[0] + 62, A[1]], b0 = [B[0], B[1] + 48];           // ตำแหน่งป้ายชื่อนอกด้านตั้ง/ด้านนอน
   const G = [(V0[0] + m.V(1)[0] + V2[0]) / 3, (V0[1] + m.V(1)[1] + V2[1]) / 3], mid = [(a0[0] + b0[0]) / 2, (a0[1] + b0[1]) / 2];
   let ux = mid[0] - G[0], uy = mid[1] - G[1]; const ul = Math.hypot(ux, uy) || 1; ux /= ul; uy /= ul;
   const sw = Math.sin(Math.PI * q), pO = [lerp(a0[0], b0[0], q) + ux * sw * 46, lerp(a0[1], b0[1], q) + uy * sw * 46], pA = [lerp(b0[0], a0[0], q) - ux * sw * 26, lerp(b0[1], a0[1], q) - uy * sw * 26];
-  const Hh = m.px(2, 1.5), hypL = [Hh[0] - 40, Hh[1] - 22];
+  const Hh = m.px(CF_S3 / 2, 0.5), hypL = [Hh[0] - 46, Hh[1] - 34];
+  const num = (x, y, t) => `<text x="${x.toFixed(1)}" y="${(y + 6).toFixed(1)}" text-anchor="middle" style="font-size:18px;font-weight:800;fill:var(--text);opacity:${e}">${t}</text>`;
   let s = '';
   s += `<g style="opacity:${e}"><path d="M-16 0 Q0 -13 16 0 Q0 13 -16 0 Z" transform="translate(${eye[0].toFixed(1)} ${eye[1].toFixed(1)})" style="fill:var(--card);stroke:var(--text);stroke-width:2.4"/><circle cx="${(eye[0] + (p < 0.5 ? 4 : -3)).toFixed(1)}" cy="${(eye[1] + (p < 0.5 ? -1 : 2)).toFixed(1)}" r="5.2" style="fill:var(--g-red)"/></g>`;
+  s += num(A[0] + 16, A[1], '1') + num(B[0], B[1] + 19, '√3') + num(Hh[0] - 11, Hh[1] - 14, '2');
   s += `<text class="pl-lbl b" x="${pO[0].toFixed(1)}" y="${(pO[1] + 5).toFixed(1)}" text-anchor="middle" style="font-size:17px;opacity:${e}">${tx(NM.o)}</text>`;
   s += `<text class="pl-lbl o" x="${pA[0].toFixed(1)}" y="${(pA[1] + 5).toFixed(1)}" text-anchor="middle" style="font-size:17px;opacity:${e}">${tx(NM.a)}</text>`;
   s += `<text class="pl-lbl g" x="${hypL[0].toFixed(1)}" y="${(hypL[1] + 5).toFixed(1)}" text-anchor="middle" style="font-size:17px;opacity:${e}">${tx(NM.h)}</text>`;
   m.g.innerHTML = s;
   // ไฮไลต์ด้าน (สีตามป้ายที่อยู่บนด้านนั้น) + มุมที่ตามองอยู่
   const swapped = q >= 0.5;
-  m.hl(e > 0 ? { s0: swapped ? 'orange' : 'blue', s2: swapped ? 'blue' : 'orange', s1: 'green', [p >= 0.5 ? 'a2' : 'a0']: 'red' } : { a0: null });
-  if (e <= 0) m.hl(null);
+  m.hl(e > 0 ? { s0: swapped ? 'orange' : 'blue', s2: swapped ? 'blue' : 'orange', s1: 'green', [p >= 0.5 ? 'a2' : 'a0']: 'red' } : null);
 }
-function cfBuild(el, R_) {                                      // R_ = true → มีคอลัมน์ขวา (สมการ)
+// gen = true → ป้ายมุมเป็น θ และ 90° − θ (ตอนสรุปเป็นสูตร) · R_ = true → มีคอลัมน์ขวา (สมการ)
+function cfBuild(el, R_, gen) {
   const s = R_ ? stage2(el) : { L: el, R: null };
-  const m = makeTriangle(s.L, Object.assign({}, CF_GEO, { sides: [null, null, null] }));
+  const m = makeTriangle(s.L, Object.assign({}, CF_GEO, { sides: [null, null, null], angles: gen ? ['θ', null, '90° − θ'] : ['30°', null, '60°'] }));
   return { tri: m, R: s.R };
 }
-const CF_ROWS = [
-  () => `<span class="mx">sin ${TH} = ${fr(3, 5)} = cos(${rad(1, 2)} − ${TH})</span>`,
-  () => `<span class="mx">tan ${TH} = ${fr(3, 4)} = cot(${rad(1, 2)} − ${TH})</span>`,
-  () => `<span class="mx">sec ${TH} = ${fr(5, 4)} = csc(${rad(1, 2)} − ${TH})</span>`
+const cfBoth = m => m.tri.hl({ a0: 'red', a2: 'red' });                 // มุมแหลมสองมุมเรืองพร้อมกัน
+const CF_L = {
+  sum1: () => `<span class="mx">30° + 60° = 90°</span>`,
+  sum2: () => `<span class="mx">${TH} + (90° − ${TH}) = 90°</span>`,
+  sin: () => `<span class="mx">sin 30° = ${fr(KW.o(), KW.h())} = ${fr(1, 2)}</span>`,
+  s60: () => `<span class="mx">sin 60° = ${fr(KW.o(), KW.h())} = ${fr(sr(3), 2)}</span>`,
+  neq: () => bad(mx(`${fr(sr(3), 2)} ≠ ${fr(1, 2)}`)) + ' ' + tx(T('ไม่เท่ากัน', 'not equal')),
+  cos: () => `<span class="mx">cos 60° = ${fr(KW.a(), KW.h())} = ${fr(1, 2)}</span>`,
+  eq: () => ans('sin 30° = cos 60°'),
+  g1: () => `<span class="mx">sin ${TH} = cos(90° − ${TH})</span>`,
+  g1r: () => `<span class="mx">sin ${TH} = cos(${rad(1, 2)} − ${TH})</span>`,
+  g2: () => `<span class="mx">tan ${TH} = cot(90° − ${TH})</span>`,
+  g3: () => `<span class="mx">sec ${TH} = csc(90° − ${TH})</span>`
+};
+const cfLines = (m, keys, freshLast) => keys.forEach((k, i) => lineEl(m.R, CF_L[k](), freshLast && i === keys.length - 1 ? 'fresh' : ''));
+// กด ▶ ทีละบรรทัด: แต่ละฉากโผล่ 1 บรรทัด · ฉากที่ move = ตาย้ายไปมุม 60° ก่อนแล้วโผล่บรรทัด
+const CF_ST = [
+  { cap: () => tx(T(`สามเหลี่ยมมุมฉาก: มุมในสามเหลี่ยมรวมกันได้ 180° และมุมฉากใช้ไปแล้ว 90° · กด ▶`, `A right triangle: its angles add up to 180°, and the right angle already uses 90° · press ▶`)), eye: [0, 0, 0], lines: [] },
+  { cap: () => tx(T(`เหลืออีก 90° ให้มุมแหลมสองมุมแบ่งกัน — มุมแหลมสองมุมรวมกันได้ 90° (30° + 60° = 90°)`, `The other 90° is shared by the two acute angles — they add up to 90° (30° + 60° = 90°)`)), eye: [0, 0, 0], both: 1, lines: ['sum1'] },
+  { cap: () => tx(T(`ถ้ามุมหนึ่งคือ ${TH} อีกมุมคือ 90° − ${TH} → <b>มุมแหลมสองมุมรวมกันได้ 90° เสมอ</b>`, `If one angle is ${TH} the other is 90° − ${TH} → <b>the two acute angles always add up to 90°</b>`)), eye: [0, 0, 0], both: 1, lines: ['sum1', 'sum2'] },
+  { cap: () => tx(T(`ยืนมองจากมุม 30°: ด้านตั้งยาว 1 คือ ${K.o()} → sin 30° = ${fr(K.o(), K.h())} = ${mx(fr(1, 2))} · ลองเดาก่อนกด ▶: ${mx(fr(1, 2))} นี้เท่ากับค่าของมุม 60° ตัวไหน sin 60° หรือ cos 60°`, `Look from the 30° angle: the upright side of length 1 is the ${K.o()} → sin 30° = ${fr(K.o(), K.h())} = ${mx(fr(1, 2))} · guess before pressing ▶: is this ${mx(fr(1, 2))} the value of sin 60° or of cos 60°`)), eye: [0, 0, 1], lines: ['sin'] },
+  { cap: () => tx(T(`<b>ย้ายตาไปมุม 60°</b> ป้ายสลับที่ · ลองใช้ sin 60° ก่อน: sin 60° = ${fr(K.o(), K.h())} โดย ${K.o()} ตอนนี้คือด้านนอน √3 → ได้ ${mx(fr(sr(3), 2))}`, `<b>Move your eye to the 60° angle</b> and the labels swap · try sin 60° first: sin 60° = ${fr(K.o(), K.h())}, and the ${K.o()} is now the bottom side √3 → we get ${mx(fr(sr(3), 2))}`)), eye: [1, 1, 1], move: 1, lines: ['sin', 's60'] },
+  { cap: () => tx(T(`${mx(fr(sr(3), 2))} ไม่เท่ากับ ${mx(fr(1, 2))} → sin 60° <b>ไม่เท่า</b> sin 30° ใช้ไม่ได้`, `${mx(fr(sr(3), 2))} is not equal to ${mx(fr(1, 2))} → sin 60° is <b>not</b> sin 30°, so that does not work`)), eye: [1, 1, 1], lines: ['sin', 's60', 'neq'] },
+  { cap: () => tx(T(`ลองใช้ cos 60° แทน: ด้านตั้งด้านเดิมกลายเป็น ${K.a()} ของมุม 60° → cos 60° = ${fr(K.a(), K.h())} = ${mx(fr(1, 2))}`, `Try cos 60° instead: that same upright side is now the ${K.a()} of 60° → cos 60° = ${fr(K.a(), K.h())} = ${mx(fr(1, 2))}`)), eye: [1, 1, 1], lines: ['sin', 's60', 'neq', 'cos'] },
+  { cap: () => tx(T(`${mx(fr(1, 2))} เท่ากัน → <b>sin 30° = cos 60°</b> ด้านเดียวกัน ค่าเดียวกัน`, `${mx(fr(1, 2))} is equal → <b>sin 30° = cos 60°</b>: same side, same value`)), eye: [1, 1, 1], lines: ['sin', 's60', 'neq', 'cos', 'eq'] },
+  { cap: () => tx(T(`สรุปเป็นสูตร: <b>sin ของมุมหนึ่ง = cos ของมุมที่รวมกันได้ 90°</b>`, `As a formula: <b>the sine of an angle = the cosine of the angle that completes it to 90°</b>`)), eye: [1, 1, 1], gen: 1, lines: ['g1'] },
+  { cap: () => tx(T(`90° เขียนเป็นเรเดียนคือ ${rad(1, 2)}`, `In radians 90° is ${rad(1, 2)}`)), eye: [1, 1, 1], gen: 1, lines: ['g1', 'g1r'] },
+  { cap: () => tx(T(`คู่ที่สอง <b>สลับได้</b> เมื่อมุมรวมกันได้ 90°: tan กับ cot`, `A second pair can be <b>swapped</b> when the angles add up to 90°: tan with cot`)), eye: [1, 1, 1], gen: 1, lines: ['g1', 'g1r', 'g2'] },
+  { cap: () => tx(T(`คู่ที่สาม: sec กับ csc`, `A third pair: sec with csc`)), eye: [1, 1, 1], gen: 1, lines: ['g1', 'g1r', 'g2', 'g3'] }
 ];
-const CF_SC = [
-  { cap: () => tx(T(`สามเหลี่ยม 3-4-5 เดิม — มุมซ้ายล่างคือ ${TH} ส่วนมุมบนคือ ${rad(1, 2)} − ${TH} (90° − ${TH}) เพราะมุมในสามเหลี่ยมรวม 180° และมีมุมฉากแล้ว 90° · กด ▶`, `The same 3-4-5 triangle — the bottom-left angle is ${TH} and the top angle is ${rad(1, 2)} − ${TH} (90° − ${TH}), since the angles add to 180° and one is already 90° · press ▶`)),
-    end: S => { const m = cfBuild(S.el); cfDraw(m.tri, 0, 0, 0); } },
-  { cap: () => tx(T(`<b>ย้ายตาไปดูจากมุมบน</b> — ด้านเดิมแต่ตำแหน่งเทียบกับมุมใหม่ไม่เหมือนเดิม: ${K.o()} กับ ${K.a()} สลับที่กัน (ฉากยังเป็นฉาก)`, `<b>Move your eye to the top angle</b> — same sides, but their positions relative to the new angle differ: ${K.o()} and ${K.a()} swap places (the hypotenuse stays the hypotenuse)`)),
-    end: S => { const m = cfBuild(S.el); cfDraw(m.tri, 1, 1, 1); },
-    play: async S => { const m = cfBuild(S.el); await S.anim.run(500, t => cfDraw(m.tri, 0, 0, t), EASE.lin); await S.anim.wait(500); await S.anim.run(700, t => cfDraw(m.tri, t, 0, 1), EASE.inOut); await S.anim.run(900, t => cfDraw(m.tri, 1, t, 1), EASE.inOut); } },
-  { cap: () => tx(T(`จากมุม ${TH}: sin ${TH} = ${fr(K.o(), K.h())} = ${mx(fr(3, 5))} · จากมุมบน ด้านเดิมนั้นกลายเป็น ${K.a()} → cos(${rad(1, 2)} − ${TH}) = ${fr(K.a(), K.h())} = ${mx(fr(3, 5))} — เท่ากัน จึง <b>สลับได้</b>`, `From angle ${TH}: sin ${TH} = ${fr(K.o(), K.h())} = ${mx(fr(3, 5))} · from the top angle that same side is now ${K.a()} → cos(${rad(1, 2)} − ${TH}) = ${fr(K.a(), K.h())} = ${mx(fr(3, 5))} — equal, so they can be <b>swapped</b>`)),
-    end: S => { const m = cfBuild(S.el, true); cfDraw(m.tri, 1, 1, 1); lineEl(m.R, CF_ROWS[0]()); },
-    play: async S => { const m = cfBuild(S.el, true); cfDraw(m.tri, 1, 1, 1); await S.anim.wait(500); lineEl(m.R, CF_ROWS[0](), 'fresh'); } },
-  { cap: () => tx(T(`ทำแบบเดียวกันกับคู่อื่น: tan–cot และ sec–csc ก็สลับได้เมื่อรวมกันเป็น ${rad(1, 2)}`, `The same works for the other pairs: tan–cot and sec–csc swap too when the angles add up to ${rad(1, 2)}`)),
-    end: S => { const m = cfBuild(S.el, true); cfDraw(m.tri, 1, 1, 1); CF_ROWS.forEach(r => lineEl(m.R, r())); },
-    play: async S => { const m = cfBuild(S.el, true); cfDraw(m.tri, 1, 1, 1); lineEl(m.R, CF_ROWS[0]()); await S.anim.wait(700); lineEl(m.R, CF_ROWS[1](), 'fresh'); await S.anim.wait(1100); lineEl(m.R, CF_ROWS[2](), 'fresh'); } }
-];
+const CF_SC = CF_ST.map((sc, i) => {
+  const prev = CF_ST[i - 1] || { lines: [], eye: [0, 0, 0] };
+  const build = (S, n, eye) => { const m = cfBuild(S.el, true, sc.gen); const e = eye || sc.eye; cfDraw(m.tri, e[0], e[1], e[2]); if (sc.both) cfBoth(m); cfLines(m, sc.lines.slice(0, n)); return m; };
+  return {
+    cap: sc.cap,
+    end: S => { build(S, sc.lines.length); },
+    play: i === 0 ? undefined : async S => {
+      if (sc.move) {
+        const m = cfBuild(S.el, true); cfDraw(m.tri, 0, 0, 1); cfLines(m, prev.lines);
+        await S.anim.run(800, t => cfDraw(m.tri, t, 0, 1), EASE.inOut); await S.anim.run(1000, t => cfDraw(m.tri, 1, t, 1), EASE.inOut);
+        await S.anim.wait(300); lineEl(m.R, CF_L[sc.lines[sc.lines.length - 1]](), 'fresh'); return;
+      }
+      const m = build(S, sc.lines.length - 1);
+      await S.anim.wait(i === 3 ? 600 : 350); lineEl(m.R, CF_L[sc.lines[sc.lines.length - 1]](), 'fresh');
+    }
+  };
+});
 
 // ทายก่อน: โคฟังก์ชัน 2 ข้อ
 function cfPredItem(chip, qq, geo, ang, ang2) {
@@ -4384,7 +4477,7 @@ const QUIZ = [
 function build() {
   // ── แท็บ 1: อัตราส่วน ──
   document.getElementById('tab-ratio').innerHTML =
-    card('📐', d('ข้าม ชิด ฉาก และ sin cos tan', 'Opposite, adjacent, hypotenuse — and sin, cos, tan'), '<div id="w-rt"></div>') +
+    card('📐', d('ชื่อของด้านทั้งสาม และ sin cos tan', 'Names of the three sides — and sin, cos, tan'), '<div id="w-rt"></div>') +
     card('🔮', d('ทายก่อน: sin θ', 'Guess first: sin θ'), '<div id="w-rtp"></div>') +
     card('🖐️', d('ลองทำ: ขนาดเปลี่ยน อัตราส่วนไม่เปลี่ยน', 'Try it: the size changes, the ratios do not'), '<div id="w-rts"></div>') +
     card('🔁', d('กลับเศษส่วน: csc sec cot', 'Flip the fraction: csc, sec, cot'),
@@ -4430,10 +4523,10 @@ function build() {
 
   // ── แท็บ 4: โคฟังก์ชัน ──
   document.getElementById('tab-cofunc').innerHTML =
-    card('👁️', d('sin θ = cos(π/2 − θ): ย้ายตาไปอีกมุม', 'sin θ = cos(π/2 − θ): move your eye to the other angle'),
+    card('👁️', d('โคฟังก์ชัน: มุมแหลมสองมุมรวมกันได้ 90°', 'Cofunctions: the two acute angles add up to 90°'),
       `<div id="w-cf"></div><div class="box-info">${d(`มุมสองมุมรวมกันได้ ${rad(1, 2)} (90°) → sin ของมุมหนึ่ง = cos ของอีกมุม (คู่ tan–cot และ sec–csc ก็เหมือนกัน)`, `Two angles that add up to ${rad(1, 2)} (90°) → the sine of one = the cosine of the other (the pairs tan–cot and sec–csc work the same way)`)}</div>`) +
     card('🔮', d('ทายก่อน: โคฟังก์ชัน', 'Guess first: cofunctions'), '<div id="w-cfp"></div>');
-  makeScenes(document.getElementById('w-cf'), CF_SC, { prompt: T('กด ▶ ทีละฉาก — ดูตาย้ายไปมุมบนแล้วป้ายสลับที่', 'Press ▶ one scene at a time — the eye moves to the top angle and the labels swap') });
+  makeScenes(document.getElementById('w-cf'), CF_SC, { prompt: T('กด ▶ ทีละฉาก — ดูตาย้ายไปมุม 60° แล้วป้ายสลับที่', 'Press ▶ one scene at a time — the eye moves to the 60° angle and the labels swap') });
   makePredict(document.getElementById('w-cfp'), [
     cfPredItem(T('cos π/3', 'cos π/3'), { q: T(`cos ${radDeg(1, 3)} = sin ?`, `cos ${radDeg(1, 3)} = sin ?`), o: [radDeg(1, 3), radDeg(1, 6), radDeg(2, 3), radDeg(1, 2)], a: 1,
       why: T(`${radDeg(1, 3)} + ${radDeg(1, 6)} = ${radDeg(1, 2)} รวมกันได้ 90° จึง cos ${rad(1, 3)} = sin ${rad(1, 6)} · ด้านล่างเป็นด้านชิดของมุม 60° และเป็นด้านข้ามของมุม 30° (ด้านเดียวกัน)`, `${radDeg(1, 3)} + ${radDeg(1, 6)} = ${radDeg(1, 2)}, the angles add up to 90°, so cos ${rad(1, 3)} = sin ${rad(1, 6)} · the bottom side is adjacent to 60° and opposite 30° (the very same side)`) },

@@ -155,9 +155,8 @@
     main { padding: 20px 10px 50px; }
   }
 
-  .hand-wrap { max-width: 380px; margin: 6px auto; }
+  .hand-wrap { max-width: 460px; margin: 6px auto; }
   svg.hand { width: 100%; height: auto; display: block; }
-  svg.hand .fg { cursor: pointer; transition: fill .2s; }
   .dot-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin: 10px 0; }
   .dot-grid .kv { background: #F8FAFC; border: 2px solid var(--border); border-radius: 12px; padding: 8px 12px; text-align: center; font-weight: 700; line-height: 1.6; }
   .dot-grid .kv small { display: block; color: var(--muted); font-weight: 600; }
@@ -990,7 +989,7 @@ function mountMg() {
 
 // ═══════════════════════ ⑥ dot (ผลคูณเชิงสเกลาร์) ═══════════════════════
 const DT = { U: [3, 1], V: [-1, 3] };
-const HD = { sel: 2 };
+const HD = { sel: 2, fp: [0, 0, 1, 0, 0], tok: 0 };   // sel = นิ้วที่พับ (null = ไม่มี) · fp = ความพับของแต่ละนิ้ว 0–1 (อยู่นอกฟังก์ชันวาด สลับภาษาแล้วไม่รีเซ็ต)
 const HANDDEG = [0, 30, 45, 60, 90];
 function tab_dt() {
   return `
@@ -1008,9 +1007,9 @@ function tab_dt() {
     <div class="readout big" id="dtRead"></div>
     <div class="box-info">${L('<b>ตั้งฉาก</b> ⇔ ', '<b>Perpendicular</b> ⇔ ')}${vu}·${vv} = 0 ${L('(cos 90° = 0)', '(cos 90° = 0)')}</div>
   </div>
-  <div class="card">${title('✋', 'ทริกมือ: ค่า sin ของมุมพิเศษ', 'Hand trick: sin of the special angles')}
-    <p class="intro">${L('นิ้วโป้ง→ก้อย คือ 0°, 30°, 45°, 60°, 90° — ค่า <b>sin</b> = ' + frac('√n', 2) + ' เมื่อ n คือ 0, 1, 2, 3, 4 ตามนิ้ว (cos ไล่กลับด้าน) — กดนิ้วดูได้เลย', 'Thumb → pinky are 0°, 30°, 45°, 60°, 90° — <b>sin</b> = ' + frac('√n', 2) + ' with n = 0, 1, 2, 3, 4 along the fingers (cos runs backwards) — tap a finger.')}</p>
-    <div class="hand-wrap"><svg class="hand" id="handSvg" viewBox="0 0 360 300"></svg></div>
+  <div class="card">${title('✋', 'ทริกมือ: พับนิ้วหาค่า sin cos tan', 'Hand trick: fold a finger to find sin, cos, tan')}
+    <p class="intro">${L('นิ้วโป้งถึงนิ้วก้อยคือ 0°, 30°, 45°, 60°, 90° — กดนิ้วเพื่อพับ แล้วนับนิ้วที่เหลือ: <b>sin</b> = √(นิ้วฝั่งโป้ง) ÷ 2 · <b>cos</b> = √(นิ้วฝั่งก้อย) ÷ 2', 'Thumb to little finger are 0°, 30°, 45°, 60°, 90° — tap a finger to fold it, then count the fingers left: <b>sin</b> = √(fingers on the thumb side) ÷ 2 · <b>cos</b> = √(fingers on the little-finger side) ÷ 2')}</p>
+    <div class="hand-wrap"><svg class="hand" id="handSvg" viewBox="0 0 520 420"></svg></div>
     <div id="handTable"></div>
   </div>
   <div class="card">${title('⭐', 'ดูสูตรยกกำลังสอง', 'The squared-length formulas')}
@@ -1051,27 +1050,111 @@ function drawDt() {
   const sum = [U[0] + W[0], U[1] + W[1]], dif = [U[0] - W[0], U[1] - W[1]];
   $('dtStar').innerHTML = `|${vu}+${vv}|² = ${mag2(sum)} &nbsp;|&nbsp; ${nu} + 2(${d}) + ${nv} = <b>${nu + 2 * d + nv}</b> ${mag2(sum) === nu + 2 * d + nv ? '✅' : '❌'}<br>|${vu}−${vv}|² = ${mag2(dif)} &nbsp;|&nbsp; ${nu} − 2(${d}) + ${nv} = <b>${nu - 2 * d + nv}</b> ${mag2(dif) === nu - 2 * d + nv ? '✅' : '❌'}`;
 }
+// ── ทริกมือ ──────────────────────────────────────────────────────────────
+// ตัววาดมือชุดเดียวกับสื่อตรีโกณ (m5/trigonometry/ratios.html แท็บ "มุมพิเศษ" · tools/lesson_kit/lesson_ratios.js: HF, handSvg) — ลายเส้น สัดส่วน สีเหมือนกัน
+// ต่างแค่: ป้ายเป็นองศาอย่างเดียว · ข้อความใช้ L() · สถานะนิ้วที่พับอยู่ใน HD (นอกฟังก์ชันวาด สลับภาษาแล้วไม่รีเซ็ต)
+// นิ้ว 0 = โป้ง … 4 = ก้อย · bx, by = โคนนิ้ว · L ยาว · w กว้างที่โคน · rot องศา (ลบ = เอียงซ้าย)
+const HD_F = [
+  { bx: 171, by: 312, L: 96, w: 42, rot: -52 },
+  { bx: 209, by: 250, L: 120, w: 36, rot: -7 },
+  { bx: 249, by: 244, L: 140, w: 38, rot: -1 },
+  { bx: 289, by: 246, L: 124, w: 36, rot: 5 },
+  { bx: 327, by: 256, L: 92, w: 32, rot: 13 }
+];
+const HD_SKIN = 'color-mix(in srgb, var(--g-curve) 24%, var(--card))', HD_SKIN2 = 'color-mix(in srgb, var(--g-curve) 40%, var(--card))', HD_LN = 'color-mix(in srgb, var(--g-curve) 55%, var(--text))';
+const HD_PALM = 'M189 422 C185 360 163 335 159 300 C155 265 167 246 189 242 Q262 230 335 246 C359 252 367 278 363 308 C359 345 345 370 343 422';
+const HD_EDGE = 'M189 422 C186.5 382.9 176.8 358.5 169 337.1 M164.25 259.4 C169.5 249.75 178 244 189 242 M347.5 251.9 C361.7 262.6 366.2 284 363 308 C359 345 345 370 343 422';
+const hdTip = (f, len) => { const a = f.rot * Math.PI / 180; return [f.bx + len * Math.sin(a), f.by - len * Math.cos(a)]; };
+const hdLerp = (a, b, t) => a + (b - a) * t;
+const HD_SIN = ['0', frac(1, 2), frac('√2', 2), frac('√3', 2), '1'];
+const HD_COS = ['1', frac('√3', 2), frac('√2', 2), frac(1, 2), '0'];
+const HD_TAN = [() => '0', () => frac(1, '√3'), () => '1', () => '√3', () => L('หาค่าไม่ได้', 'undefined')];
+// fp = ความพับ 0–1 ของแต่ละนิ้ว · act = นิ้วที่เลือก (null = ไม่มี) → ฝั่งโป้งเรืองแดง (sin) ฝั่งก้อยเรืองม่วง (cos) + ลูกศร
+function hdSvg(fp, act) {
+  const f1 = v => (+v).toFixed(1), ln = `fill:none;stroke:${HD_LN};stroke-linecap:round;stroke-linejoin:round`;
+  const ar = act === null ? 0 : fp[act], gs = ar, gc = ar;
+  const sideOf = i => act === null ? '' : i === act ? 'fold' : i < act ? 'sin' : 'cos';
+  const fingerHtml = i => {
+    const f = HD_F[i], q = fp[i], len = f.L * (1 - 0.62 * q), r = f.w / 2, rt_ = 0.43 * f.w, side = sideOf(i), DN = 26;
+    const open = `M${-r} ${DN} L${-r} 0 C${-r} ${f1(-len * 0.5)} ${f1(-rt_)} ${f1(-len * 0.62)} ${f1(-rt_)} ${f1(-(len - rt_))} A${f1(rt_)} ${f1(rt_)} 0 0 1 ${f1(rt_)} ${f1(-(len - rt_))} C${f1(rt_)} ${f1(-len * 0.62)} ${r} ${f1(-len * 0.5)} ${r} 0 L${r} ${DN}`;
+    const col = side === 'sin' ? 'var(--g-red)' : side === 'cos' ? 'var(--g-purple)' : HD_LN, gl = side === 'sin' ? gs : side === 'cos' ? gc : 0;
+    let g = `<g transform="translate(${f.bx} ${f.by}) rotate(${f.rot})" data-i="${i}" style="cursor:pointer" onclick="hdTap(${i})">`;
+    if (gl > 0) g += `<path d="${open}" style="fill:none;stroke:${col};stroke-width:15;stroke-opacity:${(0.42 * gl).toFixed(3)};stroke-linejoin:round;stroke-linecap:round"/>`;
+    g += `<path d="${open} Z" style="fill:color-mix(in srgb, ${HD_SKIN2} ${(q * 100).toFixed(0)}%, ${HD_SKIN});stroke:none"/>`;
+    g += `<path d="${open}" style="fill:none;stroke:${gl > 0 ? col : HD_LN};stroke-width:${gl > 0 ? 3.6 : 2.6};stroke-linejoin:round;stroke-linecap:round"/>`;
+    if (q < 0.5) {                                              // เส้นข้อนิ้ว 2 เส้น
+      const op = (1 - q * 2).toFixed(2);
+      [0.42, 0.7].forEach(t => { const hw = hdLerp(r, rt_, t) - 7; g += `<path d="M${f1(-hw)} ${f1(-len * t)} q${f1(hw)} 5 ${f1(2 * hw)} 0" style="${ln};stroke-width:1.8;opacity:${(0.45 * op).toFixed(2)}"/>`; });
+    } else {                                                    // รอยพับ 2 เส้น
+      g += `<path d="M${f1(-rt_ + 6)} ${f1(-len + rt_ * 0.95)} q${f1(rt_ - 6)} 8 ${f1(2 * rt_ - 12)} 0 M${f1(-rt_ + 9)} ${f1(-len + rt_ * 1.6)} q${f1(rt_ - 9)} 6 ${f1(2 * rt_ - 18)} 0" style="${ln};stroke-width:1.8;opacity:.55"/>`;
+    }
+    return g + '</g>';
+  };
+  let s = '';
+  [4, 3, 2, 1, 0].forEach(i => { s += fingerHtml(i); });                                    // ก้อย → นาง → กลาง → ชี้ → โป้ง
+  s += `<path d="${HD_PALM} Z" style="fill:${HD_SKIN};stroke:none;pointer-events:none"/>`;   // ฝ่ามือทับโคนนิ้ว
+  // ง่ามนิ้วโป้ง (โป้งพับ = ง่ามหดเข้าฝ่ามือและจาง)
+  const T0 = HD_F[0], ta = T0.rot * Math.PI / 180, tw = hdLerp(48, 14, fp[0]);
+  const wx = T0.bx + Math.cos(ta) * T0.w / 2 + Math.sin(ta) * tw, wy = T0.by + Math.sin(ta) * T0.w / 2 - Math.cos(ta) * tw;
+  s += `<g style="pointer-events:none"><path d="M${f1(wx)} ${f1(wy)} Q161 275 164.25 259.4 L174 292 Z" style="fill:${HD_SKIN};stroke:none"/>`;
+  s += `<path d="M${f1(wx)} ${f1(wy)} Q161 275 164.25 259.4" style="${ln};stroke-width:2.6;opacity:${(1 - fp[0]).toFixed(2)}"/>`;
+  s += `<path d="${HD_EDGE}" style="${ln};stroke-width:2.6"/>`;
+  s += `<path d="M196 300 Q238 276 322 288 M200 306 Q184 352 206 398" style="${ln};stroke-width:1.8;opacity:.45"/></g>`;   // เส้นลายมือ
+  // กลางฝ่ามือ: √นิ้ว ทับ 2
+  const wd = L('นิ้ว', 'fingers'), en_ = wd.length > 4, fsz = en_ ? 21 : 25, tw_ = en_ ? 70 : 38, cx = 270, x0 = cx - (tw_ + 16) / 2;
+  s += `<g style="pointer-events:none"><path d="M${f1(x0)} 333 l5 -3 l5 13 l7 -30 h${tw_ + 4}" style="fill:none;stroke:var(--text);stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round"/>`
+    + `<text x="${f1(x0 + 19 + tw_ / 2)}" y="340" text-anchor="middle" style="font-size:${fsz}px;font-weight:800;fill:var(--text)">${wd}</text>`
+    + `<line x1="${f1(cx - tw_ / 2 - 16)}" y1="352" x2="${f1(cx + tw_ / 2 + 16)}" y2="352" style="stroke:var(--text);stroke-width:3;stroke-linecap:round"/>`
+    + `<text x="${cx}" y="386" text-anchor="middle" style="font-size:34px;font-weight:800;fill:var(--text)">2</text></g>`;
+  // ป้ายมุมเหนือปลายนิ้ว (ปลายนิ้วเดิม แม้นิ้วพับ)
+  HD_F.forEach((f, i) => {
+    const [lx, ly] = hdTip(f, f.L + (i === 0 ? 30 : 25)), on = act === i;
+    s += `<text x="${f1(lx)}" y="${f1(ly + 4)}" text-anchor="middle" style="font-size:19px;font-weight:800;pointer-events:none;fill:${on ? 'color-mix(in srgb, var(--g-curve) 68%, var(--text))' : 'var(--text)'}">${HANDDEG[i]}°</text>`;
+  });
+  // ลูกศร sin (แดง → ฝั่งโป้ง) / cos (ม่วง → ฝั่งก้อย)
+  if (act !== null && ar > 0) {
+    const ay = 40, xa = hdTip(HD_F[act], HD_F[act].L)[0], xs = 92, xc = 358, a = ar, ns = act, nc = 4 - act;
+    const arr = (x1, x2, col, txtCol, txt) => {
+      const len = Math.abs(x2 - x1); if (len < 24) return `<text x="${f1(x2)}" y="${ay - 12}" text-anchor="middle" style="font-size:16px;font-weight:800;fill:${txtCol};opacity:${a}">${txt}</text>`;
+      const dir = Math.sign(x2 - x1), xe = x1 + (x2 - x1) * a;
+      return `<g style="opacity:${a}"><line x1="${f1(x1)}" y1="${ay}" x2="${(xe - dir * 6).toFixed(1)}" y2="${ay}" style="stroke:${col};stroke-width:3.2;stroke-linecap:round"/><polygon points="${xe.toFixed(1)},${ay} ${(xe - dir * 12).toFixed(1)},${ay - 6} ${(xe - dir * 12).toFixed(1)},${ay + 6}" style="fill:${col}"/></g><text x="${((x1 + x2) / 2).toFixed(1)}" y="${ay - 12}" text-anchor="middle" style="font-size:16px;font-weight:800;fill:${txtCol};opacity:${a}">${txt}</text>`;
+    };
+    const nm = n => n + ' ' + L('นิ้ว', n === 1 ? 'finger' : 'fingers');
+    s += arr(xa - 5, xs, 'var(--g-red)', 'color-mix(in srgb, var(--g-red) 75%, var(--text))', `sin · ${nm(ns)}`);
+    s += arr(xa + 5, xc, 'var(--g-purple)', 'color-mix(in srgb, var(--g-pink, var(--g-purple)) 75%, var(--text))', `cos · ${nm(nc)}`);
+  }
+  return s;
+}
+// sin = √(นิ้วฝั่งโป้ง)/2 · cos = √(นิ้วฝั่งก้อย)/2 · tan = √(นิ้วฝั่งโป้ง) ÷ √(นิ้วฝั่งก้อย) (sin ÷ cos ตัวหาร 2 ตัดกัน)
+function hdLines(i) {
+  const ns = i, nc = 4 - i, d = HANDDEG[i], sq = n => frac('√' + n, 2);
+  const eq = (fn, n, v) => `${fn} ${d}° = ${sq(n)}${n === 2 || n === 3 ? '' : ' = ' + v}`;
+  const tan = `tan ${d}° = √${ns} ÷ √${nc} ` + (nc === 0 ? `→ ${L('หารด้วย 0 ไม่ได้', 'cannot divide by 0')} → ${HD_TAN[i]()}` : `= ${HD_TAN[i]()}`);
+  return [eq('sin', ns, HD_SIN[i]), eq('cos', nc, HD_COS[i]), tan];
+}
+// กดนิ้ว = พับนิ้วนั้น (กดซ้ำ = กาง) — พับ/กางด้วยแอนิเมชันสั้น ถ้า prefers-reduced-motion ข้ามไปภาพจบ
+function hdTap(i) {
+  HD.sel = HD.sel === i ? null : i;
+  const from = HD.fp.slice(), to = HANDDEG.map((_, k) => k === HD.sel ? 1 : 0), tok = ++HD.tok;
+  const done = () => { HD.fp = to.slice(); drawHand(); };
+  if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return done();
+  const t0 = performance.now(), D = 260;
+  const step = now => {
+    if (tok !== HD.tok) return;
+    const p = Math.min(1, (now - t0) / D), e = p * p * (3 - 2 * p);
+    HD.fp = from.map((v, k) => v + (to[k] - v) * e);
+    if (p < 1) { drawHand(); requestAnimationFrame(step); } else done();
+  };
+  requestAnimationFrame(step);
+}
 function drawHand() {
   const svg = $('handSvg'); if (!svg) return;
-  const F = [
-    { r: '<rect x="56" y="160" width="40" height="100" rx="20" transform="rotate(-42 76 210)"', t: [62, 196] },
-    { r: '<rect x="104" y="72" width="38" height="110" rx="19"', t: [123, 108] },
-    { r: '<rect x="146" y="40" width="40" height="140" rx="20"', t: [166, 76] },
-    { r: '<rect x="190" y="66" width="38" height="116" rx="19"', t: [209, 102] },
-    { r: '<rect x="232" y="92" width="34" height="90" rx="17"', t: [249, 126] },
-  ];
-  let s = F.map((f, i) => `<g class="fg" data-f="${i}" onclick="HD.sel=${i};drawHand()">${f.r} fill="${HD.sel === i ? '#BBF7D0' : '#FDE7D3'}" stroke="${HD.sel === i ? '#15803D' : '#C08457'}" stroke-width="${HD.sel === i ? 4 : 3}"/><text x="${f.t[0]}" y="${f.t[1]}" text-anchor="middle" font-size="19" font-weight="800" fill="#1E3A8A" style="pointer-events:none">${HANDDEG[i]}°</text></g>`).join('');
-  s += '<rect x="90" y="140" width="190" height="140" rx="34" fill="#FDE7D3" stroke="#C08457" stroke-width="3"/>';
-  s += `<text x="185" y="196" text-anchor="middle" font-size="30" font-weight="800" fill="#1E3A8A">√n</text><line x1="145" y1="208" x2="225" y2="208" stroke="#1E3A8A" stroke-width="4" stroke-linecap="round"/><text x="185" y="256" text-anchor="middle" font-size="42" font-weight="800" fill="#1E3A8A">2</text>`;
-  svg.innerHTML = s;
-  const th = HANDDEG, sinN = [0, 1, 2, 3, 4], cosN = [4, 3, 2, 1, 0], simp = ['0', frac(1, 2), frac('√2', 2), frac('√3', 2), '1'], simpC = ['1', frac('√3', 2), frac('√2', 2), frac(1, 2), '0'];
-  const cell = (i, html) => `<td class="${HD.sel === i ? 'hl' : ''}">${html}</td>`;
-  $('handTable').innerHTML = `<div style="overflow-x:auto"><table class="tbl"><tr><th>θ</th>${th.map((d, i) => cell(i, d + '°')).join('')}</tr>
-    <tr><th>sin θ</th>${th.map((d, i) => cell(i, frac('√' + sinN[i], 2))).join('')}</tr>
-    <tr><th></th>${th.map((d, i) => cell(i, simp[i])).join('')}</tr>
-    <tr><th>cos θ</th>${th.map((d, i) => cell(i, frac('√' + cosN[i], 2))).join('')}</tr>
-    <tr><th></th>${th.map((d, i) => cell(i, simpC[i])).join('')}</tr></table></div>
-    ${HD.sel !== null ? `<div class="readout big">sin ${th[HD.sel]}° = ${frac('√' + sinN[HD.sel], 2)} = ${simp[HD.sel]} &nbsp;•&nbsp; cos ${th[HD.sel]}° = ${frac('√' + cosN[HD.sel], 2)} = ${simpC[HD.sel]}</div>` : ''}`;
+  svg.innerHTML = hdSvg(HD.fp, HD.sel);
+  const th = HANDDEG, s = HD.sel;
+  const rows = th.map((d, i) => { const c = s === i ? ' class="hl"' : ''; return `<tr><td${c}>${d}°</td><td${c}>${HD_SIN[i]}</td><td${c}>${HD_COS[i]}</td><td${c}>${HD_TAN[i]()}</td></tr>`; }).join('');
+  const lines = s === null ? `<div class="readout big">${L('กดนิ้วหนึ่งนิ้วเพื่อพับ แล้วนับนิ้วที่เหลือ', 'Tap a finger to fold it, then count the fingers on each side')}</div>`
+    : `<div class="formula" style="flex-direction:column;align-items:center;gap:2px 0;font-size:1.15rem">${hdLines(s).map(x => `<div>${x}</div>`).join('')}</div>`;
+  $('handTable').innerHTML = lines + `<div style="overflow-x:auto"><table class="tbl"><tr><th>θ</th><th>sin θ</th><th>cos θ</th><th>tan θ</th></tr>${rows}</table></div>`;
 }
 function mountDt() {
   bindDrag($('dtBoard'), (n, x, y, ph) => { if (ph === 'up') return; const [a, b] = fromPx(x, y); DT[n] = [clamp(a, -6, 6), clamp(b, -6, 6)]; drawDt(); });
@@ -1088,7 +1171,7 @@ addWk('dt2', { title: T('ตัวอย่าง: หามุมระหว�
     { h: () => P('dot') + al([[`${vu}·${vv}`, '=', '(1×2) + (1×0) = 2']]) },
     { h: () => P(L('หาขนาด', 'Find the magnitudes')) + al([[`|${vu}|`, '=', '√(1² + 1²) = √2'], [`|${vv}|`, '=', '√(2² + 0²) = 2']]) },
     { h: () => P(L('แทนในสูตร', 'Plug into the formula')) + al([['cosθ', '=', `${frac(2, '√2 · 2')} = ${frac(1, '√2')} = ${frac('√2', 2)}`]]) },
-    { h: () => P(L('ดูทริกมือ: sin/cos เท่ากับ ' + frac('√2', 2) + ' คือนิ้วกลาง', 'Hand trick: a value of ' + frac('√2', 2) + ' is the middle finger')) + `<div class="formula">θ = 45°</div>` },
+    { h: () => P(L('ทริกมือ: พับนิ้วกลาง เหลือฝั่งละ 2 นิ้ว ได้ ' + frac('√2', 2) + ' ทั้ง sin และ cos', 'Hand trick: fold the middle finger, 2 fingers are left on each side → ' + frac('√2', 2) + ' for both sin and cos')) + `<div class="formula">θ = 45°</div>` },
   ] });
 addWk('dt3', { title: T('ตัวอย่าง: ตั้งฉาก หา k', 'Example: perpendicular, find k'), prob: () => L(`${vu} = 2${vi} + 3${vj} ตั้งฉากกับ ${vv} = k${vi} − 4${vj} จงหา k`, `${vu} = 2${vi} + 3${vj} is perpendicular to ${vv} = k${vi} − 4${vj}. Find k`),
   steps: [
@@ -1124,7 +1207,7 @@ quizData = [
   { q_th: vu + ' = 3' + vi + ' + 2' + vj + ' และ ' + vv + ' = −2' + vi + ' + 4' + vj + ' ค่าของ ' + vu + '·' + vv + ' คือ?', q_en: vu + ' = 3' + vi + ' + 2' + vj + ' and ' + vv + ' = −2' + vi + ' + 4' + vj + '. What is ' + vu + '·' + vv + '?', opts: ['2', '−14', '14', '−2'], ans: 0,
     exp_th: '(3)(−2) + (2)(4) = −6 + 8 = 2', exp_en: '(3)(−2) + (2)(4) = −6 + 8 = 2' },
   { q_th: 'ถ้า cosθ = ' + frac('√2', 2) + ' แล้ว θ (ระหว่าง 0° ถึง 90°) คือเท่าไร? (ใช้ทริกมือ)', q_en: 'If cosθ = ' + frac('√2', 2) + ', what is θ (between 0° and 90°)? (use the hand trick)', opts: ['45°', '30°', '60°', '90°'], ans: 0,
-    exp_th: frac('√2', 2) + ' อยู่ที่นิ้วกลาง = 45° (ทั้ง sin และ cos)', exp_en: frac('√2', 2) + ' sits on the middle finger = 45° (for both sin and cos)' },
+    exp_th: 'พับนิ้วกลาง เหลือฝั่งละ 2 นิ้ว ได้ ' + frac('√2', 2) + ' ทั้ง sin และ cos → θ = 45°', exp_en: 'Fold the middle finger: 2 fingers are left on each side, giving ' + frac('√2', 2) + ' for both sin and cos → θ = 45°' },
 ];
 
 window.addEventListener('load', () => { initQuiz(); applyLang(getLang()); });

@@ -155,7 +155,7 @@
     main { padding: 20px 10px 50px; }
   }
 
-  svg.hand3 { width: 100%; max-width: 330px; height: auto; display: block; margin: 0 auto; }
+  svg.hand3 { width: 100%; max-width: 350px; height: auto; display: block; margin: 0 auto; }
   .num3 { display: flex; flex-wrap: wrap; gap: 4px 14px; align-items: center; margin: 8px 0; }
   .tbl td.hl { background: #FEF9C3; font-weight: 800; }
   .px { color: #EA580C; } .py { color: #16A34A; } .pz { color: #2563EB; }
@@ -782,21 +782,44 @@ function resetWidgets(id) { if (id === 'bx') { BXR.clear(); } }
 
 // ═══════════════════════ ① แกน 3 มิติ ═══════════════════════
 const AXS = { neg: false };
+// มือขวา (ฝ่ามือหันเข้าหาผู้ดู) — ลายเส้น/สีผิวชุดเดียวกับมือในสื่อตรีโกณและ vectors-2d (นิ้วเรียวปลาย ฝ่ามือทับโคนนิ้ว เส้นข้อนิ้ว 2 เส้น เส้นลายมือ)
+// ท่ามือตรงกับภาพแกนมาตรฐานของหน้านี้: นิ้วกลาง = Z ขึ้นบน · นิ้วชี้ = Y ไปทางขวา · นิ้วโป้ง = X พุ่งออกมาทางซ้ายล่าง (หาผู้ดู) · นิ้วนาง/ก้อยงอเก็บ
+// ตรวจ: X × Y = Z (ทิศหาผู้ดู × ขวา = ขึ้น) ✓
+const RH_SKIN = 'color-mix(in srgb, var(--g-curve) 24%, var(--card))', RH_SKIN2 = 'color-mix(in srgb, var(--g-curve) 40%, var(--card))', RH_LN = 'color-mix(in srgb, var(--g-curve) 55%, var(--text))';
+const RH_PALM = 'M137 204 C133 187 149 176 171 176 C196 176 214 187 214 209 C214 240 212 269 190 284 C170 292 147 286 139 268 C131 250 141 221 137 204 Z';
 function handSvg() {
-  const finger = (x2, y2, col, lab, lx, ly, ax, ay) => `<line x1="150" y1="165" x2="${x2}" y2="${y2}" stroke="#B9814F" stroke-width="30" stroke-linecap="round"/><line x1="150" y1="165" x2="${x2}" y2="${y2}" stroke="#FDE7D3" stroke-width="24" stroke-linecap="round"/>
-    ${svgArrow(x2, y2, ax, ay, { c: col, w: 5, head: 15 })}<text x="${lx}" y="${ly}" font-size="20" font-weight="800" fill="${col}" text-anchor="middle">${lab}</text>`;
-  return `<svg class="hand3" viewBox="0 0 330 300">
-    ${finger(150, 78, CX, L('นิ้วโป้ง = X', 'thumb = X'), 150, 22, 150, 40)}
-    ${finger(70, 160, CY, L('นิ้วชี้ = Y', 'index = Y'), 46, 130, 30, 160)}
-    ${finger(92, 232, CZ, L('นิ้วกลาง = Z', 'middle = Z'), 92, 288, 64, 262)}
-</svg>`;
+  const f1 = v => (+v).toFixed(1), ln = `fill:none;stroke:${RH_LN};stroke-linecap:round;stroke-linejoin:round`;
+  // นิ้วเรียวปลาย: โคนกว้าง w → ปลายกว้าง 0.86w ปลายมน · dn = ส่วนโคนที่ลงไปซ่อนใต้ฝ่ามือ (0 = โคนมนวาดทับฝ่ามือ)
+  const finger = (f, dn) => {
+    const len = f.L, r = f.w / 2, rt = 0.43 * f.w;
+    const body = `M${-r} ${dn} L${-r} 0 C${-r} ${f1(-len * 0.5)} ${f1(-rt)} ${f1(-len * 0.62)} ${f1(-rt)} ${f1(-(len - rt))} A${f1(rt)} ${f1(rt)} 0 0 1 ${f1(rt)} ${f1(-(len - rt))} C${f1(rt)} ${f1(-len * 0.62)} ${r} ${f1(-len * 0.5)} ${r} 0 L${r} ${dn}`;
+    const closed = dn ? body + ' Z' : body + ` A${r} ${r} 0 0 1 ${-r} 0 Z`;
+    let g = `<g transform="translate(${f.x} ${f.y}) rotate(${f.rot})"><path d="${closed}" style="fill:${RH_SKIN};stroke:none"/><path d="${body}${dn ? '' : ` A${r} ${r} 0 0 1 ${-r} 0`}" style="fill:none;stroke:${RH_LN};stroke-width:2.6;stroke-linejoin:round;stroke-linecap:round"/>`;
+    [0.42, 0.7].forEach(t => { const hw = r + (rt - r) * t - 7; g += `<path d="M${f1(-hw)} ${f1(-len * t)} q${f1(hw)} 5 ${f1(2 * hw)} 0" style="${ln};stroke-width:1.8;opacity:.45"/>`; });
+    return g + '</g>';
+  };
+  const tip = f => { const a = f.rot * Math.PI / 180; return [f.x + f.L * Math.sin(a), f.y - f.L * Math.cos(a)]; };
+  const FZ = { x: 168, y: 190, L: 120, w: 38, rot: 0 }, FY = { x: 205, y: 220, L: 80, w: 36, rot: 90 }, FX = { x: 148, y: 242, L: 76, w: 44, rot: -135 };
+  const arrow = (f, col, len) => { const [tx, ty] = tip(f), a = f.rot * Math.PI / 180; return svgArrow(tx + 2 * Math.sin(a), ty - 2 * Math.cos(a), tx + len * Math.sin(a), ty - len * Math.cos(a), { c: col, w: 5, head: 15 }); };
+  const lab = (x, y, col, t) => `<text x="${x}" y="${y}" font-size="19" font-weight="800" fill="${col}" text-anchor="middle">${t}</text>`;
+  let s = finger(FZ, 26) + finger(FY, 26);                                                         // นิ้วกลาง Z · นิ้วชี้ Y (โคนซ่อนใต้ฝ่ามือ)
+  s += `<path d="${RH_PALM}" style="fill:${RH_SKIN};stroke:${RH_LN};stroke-width:2.6;stroke-linejoin:round"/>`;
+  s += `<path d="M146 214 Q176 196 208 206 M143 226 Q132 252 150 272" style="${ln};stroke-width:1.8;opacity:.45"/>`;   // เส้นลายมือ
+  // นิ้วนางและนิ้วก้อยงอเก็บ: ข้อนิ้วมน 2 อัน สีเข้ม ที่มุมขวาล่างของฝ่ามือ
+  [[198, 250, 26, 20], [194, 270, 26, 20]].forEach(([cx, cy, w, h]) => { s += `<rect x="${cx - w / 2}" y="${cy - h / 2}" width="${w}" height="${h}" rx="${h / 2}" style="fill:${RH_SKIN2};stroke:${RH_LN};stroke-width:2.4"/>`; });
+  s += finger(FX, 0);                                                                              // นิ้วโป้งพุ่งหาผู้ดู วาดทับฝ่ามือ
+  s += arrow(FZ, CZ, 44) + arrow(FY, CY, 44) + arrow(FX, CX, 44);
+  s += lab(168, 22, CZ, L('นิ้วกลาง = Z', 'middle = Z'));
+  s += lab(294, 196, CY, L('นิ้วชี้ = Y', 'index = Y'));
+  s += lab(70, 352, CX, L('นิ้วโป้ง = X', 'thumb = X'));
+  return `<svg class="hand3" viewBox="0 0 350 362">${s}</svg>`;
 }
 function tab_ax() {
   return `
   <div class="card">${title('✋', 'กฎมือขวา: กำหนดทิศของแกน', 'The right-hand rule')}
     <p class="intro">${L('ในระบบพิกัดฉาก 3 มิติ เส้นตรง X, Y, Z ตั้งฉากกันและกันที่จุด <b>O</b> เรียกว่า <b>จุดกำเนิด</b> ทิศทางของแกนทั้งสามใช้ระบบมือขวา:', 'In 3D coordinates, the lines X, Y and Z are mutually perpendicular at the point <b>O</b>, the <b>origin</b>. Their directions follow the right-hand rule:')}</p>
     <div class="two-col"><div>${handSvg()}</div>
-      <div class="box-info" style="line-height:2.1">🖐 <b class="px">${L('นิ้วโป้ง', 'Thumb')}</b> = ${L('ทางบวกของแกน', 'positive direction of axis')} <b>X</b><br>☝ <b class="py">${L('นิ้วชี้', 'Index')}</b> = ${L('ทางบวกของแกน', 'positive direction of axis')} <b>Y</b><br>🖕 <b class="pz">${L('นิ้วกลาง', 'Middle')}</b> = ${L('ทางบวกของแกน', 'positive direction of axis')} <b>Z</b></div></div>
+      <div class="box-info" style="line-height:2.1"><span style="display:inline-block;width:.7em;height:.7em;border-radius:50%;background:${CX};margin-right:.5em"></span><b class="px">${L('นิ้วโป้ง', 'Thumb')}</b> = ${L('ทางบวกของแกน', 'positive direction of axis')} <b>X</b><br><span style="display:inline-block;width:.7em;height:.7em;border-radius:50%;background:${CY};margin-right:.5em"></span><b class="py">${L('นิ้วชี้', 'Index')}</b> = ${L('ทางบวกของแกน', 'positive direction of axis')} <b>Y</b><br><span style="display:inline-block;width:.7em;height:.7em;border-radius:50%;background:${CZ};margin-right:.5em"></span><b class="pz">${L('นิ้วกลาง', 'Middle')}</b> = ${L('ทางบวกของแกน', 'positive direction of axis')} <b>Z</b></div></div>
   </div>
   <div class="card">${title('🧭', 'แกนที่เห็นในหนังสือ (ลากหมุนได้)', 'The axes as drawn in the textbook (drag to rotate)')}
     <p class="intro">${L('นิยมวาดแค่แกน<b>ทางบวก</b>ของ X, Y, Z ที่มีหัวลูกศร — มุมมองมาตรฐาน: X พุ่งออกมาซ้ายล่าง, Y ไปทางขวา, Z ขึ้นบน', 'Books usually draw only the <b>positive</b> half of X, Y, Z with arrowheads. Standard view: X comes out to the lower left, Y goes right, Z goes up.')}</p>

@@ -3773,6 +3773,19 @@ const stage2 = el => { el.innerHTML = '<div class="tg-split"><div class="tg-L"><
 const lineEl = (R, html, cls) => { const e = document.createElement('div'); e.className = 'tg-line' + (cls ? ' ' + cls : ''); e.innerHTML = html; R.appendChild(e); return e; };
 const fmBox = (lines, o) => `<div class="formula" style="flex-direction:column;align-items:${(o && o.al) || 'center'};gap:3px 0;font-size:${(o && o.fs) || '1.2rem'};margin:6px 0">${lines.map(l => `<span${l.cls ? ` class="${l.cls}"` : ''}>${l.h || l}</span>`).join('')}</div>`;
 
+// แตกฉากที่โผล่หลายบรรทัดพร้อมกัน เป็นหลายฉาก (กด ▶ ทีละบรรทัด): วาดฉากเต็มแล้วซ่อนบรรทัดที่ยังไม่ถึง
+//   k0 = จำนวนบรรทัดที่เห็นในฉากแรกของชุดที่แตก · total = ทั้งหมด · sel = ตัวเลือกบรรทัด (เรียงตามลำดับที่โผล่)
+function splitScene(sc, k0, total, sel) {
+  const trim = (S, k) => { const els = S.el.querySelectorAll(sel); els.forEach((e, i) => { e.style.display = i < k ? '' : 'none'; }); return els; };
+  const out = [];
+  for (let k = k0; k <= total; k++) out.push({
+    cap: sc.cap, end: S => { sc.end(S); trim(S, k); },
+    play: async S => { S.el.innerHTML = ''; sc.end(S); const els = trim(S, k - 1); await S.anim.wait(300); const e = els[k - 1]; if (e) { e.style.display = ''; e.style.animation = 'rowIn .45s ease'; } }
+  });
+  return out;
+}
+const splitScenes = (arr, specs, sel) => arr.flatMap((sc, i) => { const sp = specs.find(x => x[0] === i); return sp ? splitScene(sc, sp[1], sp[2], sp[3] || sel) : [sc]; });
+
 // สามเหลี่ยมทั่วไป (มุมแหลม) A=(0,0) B=(6,0) C=(2.4,3.6) · ด้าน a = BC, b = CA, c = AB · ป้ายตัวอักษรตัวเอียง
 const SINV = [[0, 0], [6, 0], [2.4, 3.6]];
 const GEN = { verts: SINV, box: { xmin: -1.2, xmax: 7.2, ymin: -1.1, ymax: 4.6 }, w: 480, h: 300, pad: 28, sides: [it('a'), it('b'), it('c')], angles: [it('A'), it('B'), it('C')] };
@@ -3808,7 +3821,8 @@ const czCos = th => Math.abs(th - Math.PI / 2) < 1e-9 ? 0 : Math.cos(th);
 const czC2 = th => COS_A * COS_A + COS_B * COS_B - 2 * COS_A * COS_B * czCos(th);
 const sqi = ch => `${it(ch)}²`;
 // แท่งเปรียบเทียบ: a² + b² (ฟ้า+ส้ม) · c² (เขียว) · ส่วนต่าง −2ab cos C (แดง) จากเส้นประที่ 25
-function czBars(th) {
+function czBars(th, rows, gap) {
+  rows = rows === undefined ? 3 : rows;
   const cv = czCos(th), S = 25, cc = S - 24 * cv, df = cc - S, X = v => 16 + v * 6.6;
   const lbl = (cls, h) => `<tspan class="pl-lbl ${cls}" style="font-size:15px">${h}</tspan>`;
   let s = `<svg class="sc-svg cz-bars" viewBox="0 0 360 206" xmlns="http://www.w3.org/2000/svg">`;
@@ -3816,10 +3830,13 @@ function czBars(th) {
   s += `<rect x="${X(0)}" y="26" width="${(9 * 6.6).toFixed(1)}" height="24" rx="3" style="fill:var(--g-blue);fill-opacity:.85"/><rect x="${X(9).toFixed(1)}" y="26" width="${(16 * 6.6).toFixed(1)}" height="24" rx="3" style="fill:var(--g-curve);fill-opacity:.85"/>`;
   s += `<text x="16" y="80" style="font-size:15px">${lbl('g', sqi('c'))} = ${n2(cc)}</text>`;
   s += `<rect x="${X(0)}" y="88" width="${Math.max(1, cc * 6.6).toFixed(1)}" height="24" rx="3" style="fill:var(--g-green);fill-opacity:.85"/>`;
+  if (gap && df < -0.01) s += `<rect x="${X(cc).toFixed(1)}" y="88" width="${(-df * 6.6).toFixed(1)}" height="24" rx="3" style="fill:none;stroke:var(--g-red);stroke-width:2.6;stroke-dasharray:6 4"/><text class="pl-lbl r" x="${(X(S) + 8).toFixed(1)}" y="106" style="font-size:14px">${tx(T('ขาดไป', 'missing'))} ${n1(-df)}</text>`;
+  if (rows >= 3) {
   s += `<text x="16" y="140" style="font-size:15px">${lbl('r', `−2${it('ab')} cos ${it('C')}`)} = −24 × (${n2(cv)}) = ${n2(df)}</text>`;
   const x0 = Math.min(X(S), X(cc)), ww = Math.abs(df) * 6.6;
   s += ww < 0.6 ? `<rect x="${(X(S) - 1.5).toFixed(1)}" y="148" width="3" height="24" style="fill:var(--g-red)"/>` : `<rect x="${x0.toFixed(1)}" y="148" width="${ww.toFixed(1)}" height="24" rx="3" style="fill:var(--g-red);fill-opacity:.85"/>`;
-  [[22, 54], [86, 114], [146, 180]].forEach(([y1, y2]) => { s += `<line x1="${X(S).toFixed(1)}" y1="${y1}" x2="${X(S).toFixed(1)}" y2="${y2}" style="stroke:var(--muted);stroke-width:1.6;stroke-dasharray:5 4"/>`; });   // เส้นประขาดช่วงบรรทัดข้อความ ไม่พาดทับตัวเลข
+  }
+  [[22, 54], [86, 114], [146, 180]].slice(0, rows).forEach(([y1, y2]) => { s += `<line x1="${X(S).toFixed(1)}" y1="${y1}" x2="${X(S).toFixed(1)}" y2="${y2}" style="stroke:var(--muted);stroke-width:1.6;stroke-dasharray:5 4"/>`; });   // เส้นประขาดช่วงบรรทัดข้อความ ไม่พาดทับตัวเลข
   s += `<text class="sc-small" x="${X(S).toFixed(1)}" y="198" text-anchor="middle">${sqi('a')} + ${sqi('b')}</text>`;
   return s + '</svg>';
 }
@@ -3827,7 +3844,7 @@ function czBars(th) {
 function makeCosViz(host, o) {
   o = o || {};
   host.innerHTML = '<div class="tg-split"><div class="cz-L"></div><div class="cz-R"></div></div><div class="uc-read cz-rd"></div><div class="sc-prompt cz-note" style="text-align:center;min-height:1.6em"></div>';
-  const q = s => host.querySelector(s), w = { th: o.theta === undefined ? Math.PI / 2 : o.theta };
+  const q = s => host.querySelector(s), w = { th: o.theta === undefined ? Math.PI / 2 : o.theta, rows: o.rows === undefined ? 3 : o.rows, gap: !!o.gap };
   const lo = Math.PI / 6, hi = 5 * Math.PI / 6, step = Math.PI / 12;
   const tri = makeTriangle(q('.cz-L'), { verts: czVerts(w.th), names: ['A', 'B', null], angles: [null, null, it('C')], sides: [`${it('a')} = 3`, `${it('b')} = 4`, ''], arcs: [2], box: CZ_BOX, w: 480, h: 290, pad: 26, drag: o.drag ? 1 : undefined,
     onDrag: pt => { let ang = Math.atan2(pt.ry, pt.rx); if (ang < 0) ang = pt.rx < 0 ? hi : lo; ang = Math.max(lo, Math.min(hi, ang)); w.set(Math.round(ang / step) * step); } });
@@ -3838,9 +3855,9 @@ function makeCosViz(host, o) {
     tri.setLabels({ sides: [`${it('a')} = 3`, `${it('b')} = 4`, `${it('c')} = ${n2(Math.sqrt(czC2(th)))}`] });
     const V = [tri.V(0), tri.V(1), tri.V(2)];
     tri.g.innerHTML = Math.abs(th - Math.PI / 2) < 1e-9 ? `<path d="${rmPath(V[2], V[0], V[1])}" style="fill:none;stroke:var(--muted);stroke-width:2"/>` : '';
-    q('.cz-R').innerHTML = czBars(th);
+    q('.cz-R').innerHTML = czBars(th, w.rows, w.gap);
     const cv = czCos(th), cc = czC2(th);
-    q('.cz-rd').innerHTML = `<span class="ptag">${I('C')} = ${radAuto(th)}</span><span class="ptag">cos ${I('C')} = ${cv === 0 ? '0' : n3(cv)}</span>` +
+    q('.cz-rd').innerHTML = o.minimal ? `<span class="ptag">${I('C')} = ${radAuto(th)}</span><span class="ptag">${mx(`${I('c')}² = ${n2(cc)}`)}</span>` : `<span class="ptag">${I('C')} = ${radAuto(th)}</span><span class="ptag">cos ${I('C')} = ${cv === 0 ? '0' : n3(cv)}</span>` +
       `<span class="ptag">${mx(`${I('c')}² = 9 + 16 − 2(3)(4)(${cv === 0 ? '0' : n3(cv)}) = ${n2(cc)}`)}</span><span class="ptag">${mx(`${I('c')} ≈ ${n2(Math.sqrt(cc))}`)}</span>`;
     q('.cz-note').innerHTML = cv === 0
       ? tx(T(`<b>cos <i>C</i> = 0 → ส่วนต่างหายไป เหลือ <i>c</i>² = <i>a</i>² + <i>b</i>² (พีทาโกรัส)</b>`, `<b>cos <i>C</i> = 0 → the difference vanishes and <i>c</i>² = <i>a</i>² + <i>b</i>² (Pythagoras)</b>`))
@@ -3855,29 +3872,97 @@ function makeCosViz(host, o) {
   return w;
 }
 const CZ_FM = () => `<div class="formula" style="margin:8px 0 2px"><span>${sqi('c')} = ${sqi('a')} + ${sqi('b')} − 2${it('ab')} cos ${it('C')}</span></div>`.replace(/<tspan font-style="italic">([^<]*)<\/tspan>/g, '<i>$1</i>');
-function czScene(S, th, withFm) {
+function czScene(S, th, withFm, opt) {
   S.el.innerHTML = '<div class="cz-host"></div>' + (withFm ? '<div class="cz-fm"></div>' : '');
-  const w = makeCosViz(S.el.querySelector('.cz-host'), { theta: th });
+  const w = makeCosViz(S.el.querySelector('.cz-host'), Object.assign({ theta: th }, opt));
   if (withFm) S.el.querySelector('.cz-fm').innerHTML = CZ_FM();
   return w;
 }
+const CZ_TBL = () => {
+  const rows = [[1, 3, fr(1, 2), '−12', 13], [1, 2, '0', '0', 25], [2, 3, '−' + fr(1, 2), '+12', 37]];
+  return `<div class="tbl-scroll"><table class="tbl"><tr><th>${I('C')}</th><th>cos ${I('C')}</th><th>${mx(`−2${I('ab')} cos ${I('C')}`)}</th><th>${mx(sqi('c')).replace(/<tspan font-style="italic">([^<]*)<\/tspan>/g, '<i>$1</i>')}</th></tr>`
+    + rows.map(r => `<tr><td>${radDeg(r[0], r[1])}</td><td>${mx(r[2])}</td><td>${r[3] === '+12' ? `<b>${mx(r[3])}</b>` : mx(r[3])}</td><td><b>${r[4]}</b></td></tr>`).join('') + '</table></div>';
+};
 const CZ_SC = [
-  { cap: () => tx(T(`สามเหลี่ยมที่มุม <i>C</i> = ${rad(1, 2)} (มุมฉาก) และ <i>a</i> = 3, <i>b</i> = 4 → <i>c</i> = 5 เพราะ <i>c</i>² = <i>a</i>² + <i>b</i>² (25 = 9 + 16) · ถ้ามุม <i>C</i> ไม่ใช่มุมฉาก ด้าน <i>c</i> จะเปลี่ยน — กด ▶`,
-                    `A triangle with <i>C</i> = ${rad(1, 2)} (a right angle), <i>a</i> = 3 and <i>b</i> = 4 → <i>c</i> = 5 since <i>c</i>² = <i>a</i>² + <i>b</i>² (25 = 9 + 16) · if <i>C</i> is not a right angle, side <i>c</i> changes — press ▶`)),
-    end: S => { czScene(S, Math.PI / 2); } },
-  { cap: () => tx(T(`หุบมุม <i>C</i> ให้แคบลงเหลือ ${rad(1, 3)}: ด้าน <i>c</i> สั้นลง <i>c</i>² = 13 น้อยกว่า <i>a</i>² + <i>b</i>² = 25 · ส่วนที่ขาดไปคือ −2<i>ab</i> cos <i>C</i> = −2(3)(4)(${fr(1, 2)}) = −12`,
-                    `Close angle <i>C</i> down to ${rad(1, 3)}: side <i>c</i> gets shorter and <i>c</i>² = 13 is less than <i>a</i>² + <i>b</i>² = 25 · the missing part is −2<i>ab</i> cos <i>C</i> = −2(3)(4)(${fr(1, 2)}) = −12`)),
-    end: S => { czScene(S, Math.PI / 3); },
-    play: async S => { const w = czScene(S, Math.PI / 2); await S.anim.run(1500, t => w.set(lerp(Math.PI / 2, Math.PI / 3, t))); } },
-  { cap: () => tx(T(`ถ่างมุม <i>C</i> ออกเป็น ${rad(2, 3)}: cos <i>C</i> = −${fr(1, 2)} ติดลบ จึง −2<i>ab</i> cos <i>C</i> = +12 → <i>c</i>² = 37 มากกว่า <i>a</i>² + <i>b</i>²`,
-                    `Open angle <i>C</i> out to ${rad(2, 3)}: cos <i>C</i> = −${fr(1, 2)} is negative, so −2<i>ab</i> cos <i>C</i> = +12 → <i>c</i>² = 37 is greater than <i>a</i>² + <i>b</i>²`)),
-    end: S => { czScene(S, 2 * Math.PI / 3); },
-    play: async S => { const w = czScene(S, Math.PI / 3); await S.anim.run(2200, t => w.set(lerp(Math.PI / 3, 2 * Math.PI / 3, t))); } },
-  { cap: () => tx(T(`<b>กฎ cos:</b> ส่วนต่างระหว่าง <i>c</i>² กับ <i>a</i>² + <i>b</i>² คือ −2<i>ab</i> cos <i>C</i> เสมอ · เมื่อ <i>C</i> = ${rad(1, 2)} ค่า cos <i>C</i> = 0 ส่วนต่างหายไป กลายเป็นพีทาโกรัส`,
-                    `<b>Law of Cosines:</b> the gap between <i>c</i>² and <i>a</i>² + <i>b</i>² is always −2<i>ab</i> cos <i>C</i> · when <i>C</i> = ${rad(1, 2)} we get cos <i>C</i> = 0, the gap vanishes and it becomes Pythagoras`)),
-    end: S => { czScene(S, Math.PI / 2, true); },
-    play: async S => { const w = czScene(S, 2 * Math.PI / 3); await S.anim.run(1500, t => w.set(lerp(2 * Math.PI / 3, Math.PI / 2, t))); S.el.insertAdjacentHTML('beforeend', '<div class="cz-fm"></div>'); S.el.querySelector('.cz-fm').innerHTML = CZ_FM(); } }
+  { cap: () => tx(T(`มุมฉาก <i>C</i> = ${rad(1, 2)} (90°) และ <i>a</i> = 3, <i>b</i> = 4 → พีทาโกรัส <i>c</i>² = <i>a</i>² + <i>b</i>² = 9 + 16 = 25 แท่ง <i>a</i>² + <i>b</i>² กับแท่ง <i>c</i>² ยาวเท่ากัน · กด ▶`,
+                    `A right angle <i>C</i> = ${rad(1, 2)} (90°) with <i>a</i> = 3, <i>b</i> = 4 → Pythagoras <i>c</i>² = <i>a</i>² + <i>b</i>² = 9 + 16 = 25: the bars <i>a</i>² + <i>b</i>² and <i>c</i>² are equally long · press ▶`)),
+    end: S => { czScene(S, Math.PI / 2, false, { rows: 2, minimal: true }); } },
+  { cap: () => tx(T(`หุบมุม <i>C</i> เหลือ ${rad(1, 3)} (60°): ด้าน <i>c</i> สั้นลง <i>c</i>² เหลือ 13 · ช่องว่างถึงเส้น 25 (กรอบประ) ขาดไป 12 — หายไปไหน`,
+                    `Close angle <i>C</i> to ${rad(1, 3)} (60°): side <i>c</i> gets shorter and <i>c</i>² drops to 13 · the gap up to the 25 line (dashed frame) is missing 12 — where did it go`)),
+    end: S => { czScene(S, Math.PI / 3, false, { rows: 2, gap: true, minimal: true }); },
+    play: async S => { const w = czScene(S, Math.PI / 2, false, { rows: 2, gap: true, minimal: true }); await S.anim.run(1500, t => w.set(lerp(Math.PI / 2, Math.PI / 3, t))); } },
+  { cap: () => tx(T(`กรอบประถูกเติมสีแดง: ส่วนที่หายไปเท่ากับ 2<i>ab</i> cos <i>C</i> พอดี → −2<i>ab</i> cos <i>C</i> = −2(3)(4)${mx(fr(1, 2))} = −12`,
+                    `The dashed frame fills with red: the missing part is exactly 2<i>ab</i> cos <i>C</i> → −2<i>ab</i> cos <i>C</i> = −2(3)(4)${mx(fr(1, 2))} = −12`)),
+    end: S => { czScene(S, Math.PI / 3, false, { rows: 3, minimal: true }); },
+    play: async S => { const w = czScene(S, Math.PI / 3, false, { rows: 2, gap: true, minimal: true }); await S.anim.wait(600); w.rows = 3; w.gap = false; w.set(Math.PI / 3); } },
+  { cap: () => tx(T(`กาง <i>C</i> เป็น ${rad(2, 3)} (120°): <i>c</i>² = 37 เกินเส้น 25 ไป 12 · cos ${rad(2, 3)} = −${mx(fr(1, 2))} จึง −2<i>ab</i> cos <i>C</i> = +12 — มุมป้าน cos ติดลบ ลบกับลบกลายเป็นบวกเพิ่ม`,
+                    `Open <i>C</i> to ${rad(2, 3)} (120°): <i>c</i>² = 37 overshoots the 25 line by 12 · cos ${rad(2, 3)} = −${mx(fr(1, 2))} so −2<i>ab</i> cos <i>C</i> = +12 — for an obtuse angle cos is negative, and minus times minus adds extra`)),
+    end: S => { czScene(S, 2 * Math.PI / 3, false, { rows: 3, minimal: true }); },
+    play: async S => { const w = czScene(S, Math.PI / 3, false, { rows: 3, minimal: true }); await S.anim.run(2000, t => w.set(lerp(Math.PI / 3, 2 * Math.PI / 3, t))); } },
+  { cap: () => tx(T(`สรุป 3 มุม: −2<i>ab</i> cos <i>C</i> คือ<b>ตัวปรับ</b> — มุมแหลมหักออก · มุมฉากเป็นศูนย์ · มุมป้านบวกเพิ่ม`,
+                    `Three angles side by side: −2<i>ab</i> cos <i>C</i> is the <b>adjuster</b> — an acute angle takes away · a right angle adds nothing · an obtuse angle adds extra`)),
+    end: S => { S.el.innerHTML = CZ_TBL(); } },
+  { cap: () => tx(T(`<b>กฎ cos:</b> <i>c</i>² = <i>a</i>² + <i>b</i>² − 2<i>ab</i> cos <i>C</i> · เมื่อ <i>C</i> = ${rad(1, 2)} cos <i>C</i> = 0 ส่วนต่างหายไป กลายเป็นพีทาโกรัส`,
+                    `<b>Law of Cosines:</b> <i>c</i>² = <i>a</i>² + <i>b</i>² − 2<i>ab</i> cos <i>C</i> · when <i>C</i> = ${rad(1, 2)} we get cos <i>C</i> = 0, the gap vanishes and it becomes Pythagoras`)),
+    end: S => { czScene(S, Math.PI / 2, true, { rows: 3, minimal: true }); } }
 ];
+
+// ── พิสูจน์: ทำไมต้องเป็น −2ab cos C (a = 3, b = 4, C = 60° · C อยู่ที่จุดกำเนิด CA วางนอน) ──
+const PF = { verts: [[4, 0], [1.5, 3 * Math.sin(Math.PI / 3)], [0, 0]], box: { xmin: -0.8, xmax: 4.9, ymin: -1, ymax: 3.5 } };   // A, B, C
+const pfLab = (tri, p, txt, cls, dx, dy, anc) => { const q = tri.px(p[0], p[1]); return `<text class="pl-lbl ${cls}" x="${(q[0] + dx).toFixed(1)}" y="${(q[1] + dy).toFixed(1)}" text-anchor="${anc || 'middle'}" style="font-size:15px;font-weight:800;paint-order:stroke;stroke:var(--card);stroke-width:4px;stroke-linejoin:round">${txt}</text>`; };
+// k = 0 เส้นสูง · 1 สามเหลี่ยมซ้าย (BD, CD) · 2 ส่วนที่เหลือ DA · p = ความคืบของเส้นสูง (0–1)
+function pfOverlay(tri, k, p) {
+  const px = (x, y) => tri.px(x, y), D = px(1.5, 0), B = tri.V(1), f = v => v.toFixed(1), poly = (pts, g, op) => `<polygon points="${pts.map(q => f(q[0]) + ',' + f(q[1])).join(' ')}" style="fill:color-mix(in srgb, var(--g-${g}) ${op}%, transparent);stroke:none"/>`;
+  let g = '';
+  if (k >= 1) g += poly([px(0, 0), D, B], 'blue', 20);
+  if (k >= 2) g += poly([D, px(4, 0), B], 'green', 18);
+  const e = [B[0], B[1] + (D[1] - B[1]) * p];
+  g += `<line x1="${f(B[0])}" y1="${f(B[1])}" x2="${f(e[0])}" y2="${f(e[1])}" style="${PURP}"/>`;
+  if (p >= 1) {
+    g += `<path d="M${f(D[0] - 13)} ${f(D[1])} l0 -13 l13 0" style="fill:none;stroke:var(--muted);stroke-width:2"/>` + `<text class="pl-lbl" x="${f(D[0])}" y="${f(D[1] + 20)}" text-anchor="middle" style="font-size:16px;font-weight:800">D</text>`;
+    if (k >= 1) { g += pfLab(tri, [1.5, 1.3], `${it('a')} sin ${it('C')}`, 'p', 6, 4, 'start'); g += pfLab(tri, [0.75, 0], `${it('a')} cos ${it('C')}`, 'b', 0, 40); }
+    if (k >= 2) g += pfLab(tri, [2.75, 0], `${it('b')} − ${it('a')} cos ${it('C')}`, 'g', 0, 40);
+  }
+  tri.g.innerHTML = g;
+}
+function pfBuild(S, k, items, p) {
+  const s = stage2(S.el), tri = makeTriangle(s.L, { verts: PF.verts, box: PF.box, w: 480, h: 300, pad: 26, names: ['A', 'B', 'C'], angles: [null, null, it('C')], sides: [it('a'), it('b'), it('c')], arcs: [2] });
+  tri.hl({ s0: 'blue', s1: 'orange', s2: 'green', a2: 'green' });
+  pfOverlay(tri, k, p === undefined ? 1 : p);
+  items.forEach(h => { lineEl(s.R, h).style.fontSize = '1.02rem'; });
+  return { s, tri };
+}
+const pfNums = () => [
+  `<span class="mx">BD = ${I('a')} sin ${I('C')} = 3 sin ${rad(1, 3)} = ${fr('3' + sr(3), 2)}</span>`,
+  `<span class="mx">CD = ${I('a')} cos ${I('C')} = 3 cos ${rad(1, 3)} = ${fr(3, 2)}</span>`
+];
+const PF_L = () => [
+  [],
+  pfNums(),
+  [`<span class="mx">DA = ${I('b')} − CD = ${I('b')} − ${I('a')} cos ${I('C')} = 4 − ${fr(3, 2)} = ${fr(5, 2)}</span>`],
+  [`<span class="mx">${sqi('c')} = BD² + DA²</span>`, `<span class="mx">${sqi('c')} = (${I('a')} sin ${I('C')})² + (${I('b')} − ${I('a')} cos ${I('C')})²</span>`],
+  [`<span class="mx">${sqi('c')} = ${I('a')}² sin²${I('C')} + ${I('b')}² − 2${I('ab')} cos ${I('C')} + ${I('a')}² cos²${I('C')}</span>`, `<span class="mx">${sqi('c')} = ${I('a')}²(sin²${I('C')} + cos²${I('C')}) + ${I('b')}² − 2${I('ab')} cos ${I('C')}</span>`, `<span class="mx">sin²${I('C')} + cos²${I('C')} = 1</span> (${tx(T('ข้อ 4', 'No. 4'))})`, ans(`${sqi('c')} = ${sqi('a')} + ${sqi('b')} − 2${I('ab')} cos ${I('C')}`).replace(/<tspan font-style="italic">([^<]*)<\/tspan>/g, '<i>$1</i>'), `<span class="mx">${tx(T('ตรวจเลข', 'Check'))}: ${fr('27', 4)} + ${fr('25', 4)} = 13</span>`]
+];
+const PF_CAP = [
+  () => tx(T(`ลากเส้นสูงจาก B ลงด้าน <i>b</i> ที่จุด D — แบ่งสามเหลี่ยมเป็นสามเหลี่ยมมุมฉาก 2 รูป · กด ▶`, `Drop the height from B onto side <i>b</i> at D — it splits the triangle into two right triangles · press ▶`)),
+  () => tx(T(`สามเหลี่ยมซ้าย C-D-B มีด้านยาวสุด (ฉาก) = <i>a</i> → ข้าม BD = <i>a</i> sin <i>C</i> · ชิด CD = <i>a</i> cos <i>C</i> (ค่า: ${mx(fr('3' + sr(3), 2))} และ ${mx(fr(3, 2))})`, `The left triangle C-D-B has hypotenuse <i>a</i> → opposite BD = <i>a</i> sin <i>C</i> · adjacent CD = <i>a</i> cos <i>C</i> (values: ${mx(fr('3' + sr(3), 2))} and ${mx(fr(3, 2))})`)),
+  () => tx(T(`ส่วนที่เหลือของด้าน <i>b</i> คือ DA = <i>b</i> − <i>a</i> cos <i>C</i> = 4 − ${mx(fr(3, 2))} = ${mx(fr(5, 2))}`, `The rest of side <i>b</i> is DA = <i>b</i> − <i>a</i> cos <i>C</i> = 4 − ${mx(fr(3, 2))} = ${mx(fr(5, 2))}`)),
+  () => tx(T(`พีทาโกรัสในสามเหลี่ยมมุมฉาก B-D-A (ฉาก = <i>c</i>): <i>c</i>² = BD² + DA²`, `Pythagoras in the right triangle B-D-A (hypotenuse = <i>c</i>): <i>c</i>² = BD² + DA²`)),
+  () => tx(T(`กระจาย แล้วจับกลุ่ม <i>a</i>²(sin²<i>C</i> + cos²<i>C</i>) → ข้อ 4 ได้ 1 → <b><i>c</i>² = <i>a</i>² + <i>b</i>² − 2<i>ab</i> cos <i>C</i></b> · ตรวจเลข: (3√3/2)² + (5/2)² = 27/4 + 25/4 = 13`, `Expand, then group <i>a</i>²(sin²<i>C</i> + cos²<i>C</i>) → No. 4 gives 1 → <b><i>c</i>² = <i>a</i>² + <i>b</i>² − 2<i>ab</i> cos <i>C</i></b> · numeric check: (3√3/2)² + (5/2)² = 27/4 + 25/4 = 13`))
+];
+// กด ▶ ทีละบรรทัด (เฟรมละบรรทัด): ฉากแรกเป็นเส้นสูงล้วน · ฉากอื่นโผล่ 1 บรรทัดต่อการกด 1 ครั้ง
+const PF_SC = PF_CAP.flatMap((cap, k) => {
+  const own = () => PF_L()[k], before = () => PF_L().slice(0, k).flat(), geo = Math.min(k, 2);
+  if (k === 0) return [{ cap, end: S => { pfBuild(S, 0, []); }, play: async S => { const m = pfBuild(S, 0, [], 0); await S.anim.run(1100, t => pfOverlay(m.tri, 0, t), EASE.out); } }];
+  return own().map((_, c) => ({
+    cap,
+    end: S => { pfBuild(S, geo, before().concat(own().slice(0, c + 1))); },
+    play: async S => {
+      const m = pfBuild(S, geo, before().concat(own().slice(0, c))); await S.anim.wait(c === 0 ? 500 : 250);
+      lineEl(m.s.R, own()[c], 'fresh').style.fontSize = '1.02rem';
+    }
+  }));
+});
 
 // ── สามบรรทัด สามสี (สลับ a, b, c ได้) ──
 const L3 = [
@@ -4256,6 +4341,38 @@ const QUIZ = [
          `cos ${rad(1, 2)} = 0 so −2<i>ab</i> cos <i>C</i> = 0 disappears, leaving <i>c</i>² = <i>a</i>² + <i>b</i>², which is Pythagoras · forgetting that cos ${rad(1, 2)} = 0 leaves the option with a leftover −2<i>ab</i>`) }
 ];
 
+// ── กด ▶ ทีละบรรทัด สำหรับฉากกฎ sin และพื้นที่ (ฉากเดิมโผล่หลายบรรทัดพร้อมกัน) ──
+// diagram(S) → { s, tri } (วาดภาพ) · setHl(tri, n) ไฮไลต์ตามจำนวนบรรทัดใหม่ n · ctx = บรรทัดที่มีอยู่แล้ว · lines = บรรทัดใหม่ { h, raw }
+const addLine = (R, it, fresh) => { if (it.raw) R.insertAdjacentHTML('beforeend', it.h()); else lineEl(R, it.h(), fresh ? 'fresh' : ''); };
+function lineStage(cap, diagram, setHl, ctx, lines, intro) {
+  return lines.map((_, j) => ({
+    cap,
+    end: S => { const m = diagram(S); setHl(m.tri, j + 1); ctx.forEach(h => addLine(m.s.R, h)); lines.slice(0, j + 1).forEach(h => addLine(m.s.R, h)); },
+    play: async S => {
+      const first = j === 0 && intro, m = first ? await intro(S) : diagram(S);
+      if (!first) setHl(m.tri, j);
+      ctx.forEach(h => addLine(m.s.R, h)); lines.slice(0, j).forEach(h => addLine(m.s.R, h));
+      await S.anim.wait(300); setHl(m.tri, j + 1); addLine(m.s.R, lines[j], true);
+    }
+  }));
+}
+const SIN_ROW = [
+  () => `<span class="mx">sin ${kc(0, I('A'))} = ${fr(I('h'), kc(1, I('b')))}</span>`, () => `<span class="mx">${I('h')} = ${kc(1, I('b'))} sin ${kc(0, I('A'))}</span>`,
+  () => `<span class="mx">sin ${kc(1, I('B'))} = ${fr(I('h'), kc(0, I('a')))}</span>`, () => `<span class="mx">${I('h')} = ${kc(0, I('a'))} sin ${kc(1, I('B'))}</span>`,
+  () => `<span class="mx">${kc(1, I('b'))} sin ${kc(0, I('A'))} = ${kc(0, I('a'))} sin ${kc(1, I('B'))}</span>`, () => `<span class="mx">${fr(kc(0, I('a')), `sin ${kc(0, I('A'))}`)} = ${fr(kc(1, I('b')), `sin ${kc(1, I('B'))}`)}</span>`
+].map(h => ({ h }));
+const sinDia = S => { const s = stage2(S.el), tri = genTri(s.L); altitude(tri, 1); return { s, tri }; };
+const SIN_PART = { s0: 'blue', s1: 'orange', a0: 'blue', a1: 'orange' };
+const SIN_SC2 = [SIN_SC[0],
+  ...lineStage(SIN_SC[1].cap, sinDia, (tri, n) => tri.hl(SIN_PART), [], SIN_ROW.slice(0, 4),
+    async S => { const s = stage2(S.el), tri = genTri(s.L); tri.hl(allHl); await S.anim.run(1100, t => altitude(tri, t), EASE.inOut); tri.hl(SIN_PART); return { s, tri }; }),
+  ...lineStage(SIN_SC[2].cap, sinDia, (tri, n) => tri.hl(n >= 3 ? allHl : SIN_PART), [], [SIN_ROW[4], SIN_ROW[5], { h: SIN_FM, raw: true }])];
+const arDia = S => { const s = stage2(S.el), tri = arTri(s.L); arAlt(tri, 1); return { s, tri }; };
+const AR0 = AR_ROWS[0].map(h => ({ h })), AR1 = AR_ROWS[1].map(h => ({ h }));
+const AR_SC2 = [AR_SC[0],
+  ...lineStage(AR_SC[1].cap, arDia, (tri, n) => tri.hl(n === 0 ? { s0: 'blue' } : { s0: 'blue', s1: 'orange', a2: 'green' }), AR0.map(x => x.h ? x : x), AR1),
+  ...lineStage(AR_SC[2].cap, arDia, (tri, n) => tri.hl(n >= 2 ? allHl : { s0: 'blue', s1: 'orange', a2: 'green' }), AR0.concat(AR1), [{ h: AR_ROWS[2][0] }, { h: AR_FM, raw: true }])];
+
 // ═══════════════════════════════════════════════════════════════
 //  ประกอบหน้า
 // ═══════════════════════════════════════════════════════════════
@@ -4263,14 +4380,17 @@ function build() {
   const pr = (th, en) => ({ prompt: T(th, en) });
   // ── แท็บ 1: กฎ cos ──
   document.getElementById('tab-cos').innerHTML =
-    card('📐', d('จากพีทาโกรัสสู่กฎ cos', 'From Pythagoras to the Law of Cosines'), '<div id="w-cz"></div>') +
+    card('📐', d('จากพีทาโกรัสสู่กฎ cos: ลองหุบและกางมุม C', 'From Pythagoras to the Law of Cosines: close and open angle C'), '<div id="w-cz"></div>') +
+    card('🧱', d('พิสูจน์: ทำไมต้องเป็น −2ab cos C', 'Proof: why it has to be −2ab cos C'), `<div id="w-pf"></div><div class="box-info">${d('มุมป้าน: จุด D ตกนอกสามเหลี่ยม แต่สูตรเดิมยังใช้ได้ เพราะ a cos C ติดลบเอง', 'Obtuse angle: D lands outside the triangle, but the same formula still works because a cos C is negative by itself')}</div>`) +
     card('🎨', d('สามบรรทัด สามสี: สลับ a, b, c ได้', 'Three lines, three colors: a, b, c can be swapped'), '<div id="w-l3"></div>') +
     card('📝', d('ตัวอย่าง: หาด้านที่สาม', 'Example: find the third side'), '<div id="w-ec"></div>') +
     card('🔮', d('ทายก่อน: หามุมจากสามด้าน', 'Guess first: find an angle from three sides'), '<div id="w-cp"></div>') +
-    card('🖐️', d('ลองทำ: ลากมุม C', 'Try it: drag angle C'), `<div class="sc-prompt">${d('ลากจุด B รอบจุด C (ด้าน a = 3, b = 4 คงที่) แล้วดูแท่งและตัวเลขสด', 'Drag point B around point C (sides a = 3, b = 4 stay fixed) and watch the bars and numbers')}</div><div id="w-ct"></div>`);
+    card('🖐️', d('ลองทำ: ลากมุม C', 'Try it: drag angle C'), `<div class="sc-prompt">${d('ลากจุด B รอบจุด C (ด้าน a = 3, b = 4 คงที่) แล้วดูแท่งและตัวเลขสด', 'Drag point B around point C (sides a = 3, b = 4 stay fixed) and watch the bars and numbers')}</div><div id="w-ct"></div>`) +
+    `<div class="box-info">${d('<b>เลือกใช้กฎไหน:</b> ถ้าให้ด้านกับมุมตรงข้ามมาคู่กัน ใช้กฎ sin · นอกนั้นใช้กฎ cos', '<b>Which law to use:</b> if a side comes together with its opposite angle, use the Law of Sines · otherwise use the Law of Cosines')}</div>`;
   makeScenes(document.getElementById('w-cz'), CZ_SC, pr('กด ▶ ทีละฉาก — ดูด้าน c เปลี่ยนตามมุม C', 'Press ▶ one scene at a time — watch side c change with angle C'));
+  makeScenes(document.getElementById('w-pf'), PF_SC, pr('กด ▶ ทีละฉาก — ดูเส้นสูงแบ่งสามเหลี่ยมแล้วใช้พีทาโกรัส', 'Press ▶ one scene at a time — the height splits the triangle, then use Pythagoras'));
   makeScenes(document.getElementById('w-l3'), L3_SC, pr('กด ▶ ทีละฉาก — ดูด้านกับมุมสีเดียวกันในแต่ละบรรทัด', 'Press ▶ one scene at a time — see the side and angle of the same color in each line'));
-  makeScenes(document.getElementById('w-ec'), EX_COS, pr('กด ▶ ทีละฉาก — ตั้งสูตร แทนค่า แล้วคำนวณ', 'Press ▶ one scene at a time — write the formula, substitute, compute'));
+  makeScenes(document.getElementById('w-ec'), splitScenes(EX_COS, [[1, 3, 5], [2, 6, 7]], '.tg-R > .tg-line'), pr('กด ▶ ทีละฉาก — ตั้งสูตร แทนค่า แล้วคำนวณ', 'Press ▶ one scene at a time — write the formula, substitute, compute'));
   makePredict(document.getElementById('w-cp'), [cosPredItem()], pr('ดูสามด้านของสามเหลี่ยม แล้วทายมุม C — มุมจะเผยหลังทาย', 'Look at the three sides and guess angle C — the angle is revealed after you answer'));
   makeCosViz(document.getElementById('w-ct'), { theta: Math.PI / 2, drag: true, live: true });
 
@@ -4280,8 +4400,8 @@ function build() {
     card('📝', d('ตัวอย่าง: หาด้านที่ต้องการ', 'Example: find the wanted side'), '<div id="w-es"></div>') +
     card('🔮', d('ทายก่อน: หาด้าน a', 'Guess first: find side a'), '<div id="w-sp"></div>') +
     card('🖐️', d('ลองทำ: ลากจุดยอด C', 'Try it: drag vertex C'), '<div id="w-st"></div>');
-  makeScenes(document.getElementById('w-sn'), SIN_SC, pr('กด ▶ ทีละฉาก — ลงเส้นสูงแล้วเทียบสองสามเหลี่ยมมุมฉาก', 'Press ▶ one scene at a time — drop the altitude and compare the two right triangles'));
-  makeScenes(document.getElementById('w-es'), EX_SIN, pr('กด ▶ ทีละฉาก — จับคู่ด้านกับมุมตรงข้ามแล้วแทนค่า', 'Press ▶ one scene at a time — pair each side with its opposite angle and substitute'));
+  makeScenes(document.getElementById('w-sn'), SIN_SC2, pr('กด ▶ ทีละฉาก — ลงเส้นสูงแล้วเทียบสองสามเหลี่ยมมุมฉาก', 'Press ▶ one scene at a time — drop the altitude and compare the two right triangles'));
+  makeScenes(document.getElementById('w-es'), splitScenes(EX_SIN, [[1, 3, 4], [2, 5, 7]], '.tg-R > .tg-line'), pr('กด ▶ ทีละฉาก — จับคู่ด้านกับมุมตรงข้ามแล้วแทนค่า', 'Press ▶ one scene at a time — pair each side with its opposite angle and substitute'));
   makePredict(document.getElementById('w-sp'), [sinPredItem()], pr('ดูมุมสองมุมกับด้าน b แล้วทายด้าน a', 'Look at the two angles and side b, then guess side a'));
   makeSinTry(document.getElementById('w-st'));
 
@@ -4303,8 +4423,8 @@ function build() {
     card('📝', d('ตัวอย่าง: หาพื้นที่', 'Example: find the area'), '<div id="w-ea"></div>') +
     card('🔮', d('ทายก่อน: พื้นที่', 'Guess first: the area'), '<div id="w-ap"></div>') +
     card('🖐️', d('ลองทำ: ลากจุด B เปลี่ยนมุม C', 'Try it: drag B to change angle C'), '<div id="w-at"></div>');
-  makeScenes(document.getElementById('w-ar'), AR_SC, pr('กด ▶ ทีละฉาก — จากฐาน × สูง ไปเป็น ½ab sin C', 'Press ▶ one scene at a time — from base × height to ½ab sin C'));
-  makeScenes(document.getElementById('w-ea'), EX_AREA, pr('กด ▶ ทีละฉาก — เขียนสูตร แทนค่า แล้วคำนวณ', 'Press ▶ one scene at a time — write the formula, substitute, compute'));
+  makeScenes(document.getElementById('w-ar'), AR_SC2, pr('กด ▶ ทีละฉาก — จากฐาน × สูง ไปเป็น ½ab sin C', 'Press ▶ one scene at a time — from base × height to ½ab sin C'));
+  makeScenes(document.getElementById('w-ea'), splitScenes(EX_AREA, [[1, 3, 4], [2, 5, 6]], '.tg-R > .tg-line'), pr('กด ▶ ทีละฉาก — เขียนสูตร แทนค่า แล้วคำนวณ', 'Press ▶ one scene at a time — write the formula, substitute, compute'));
   makePredict(document.getElementById('w-ap'), [areaPredItem()], pr('ดูสองด้านกับมุมที่คั่น แล้วทายพื้นที่', 'Look at two sides and the angle between them, then guess the area'));
   makeAreaTry(document.getElementById('w-at'));
 

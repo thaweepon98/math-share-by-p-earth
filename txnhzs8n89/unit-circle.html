@@ -810,14 +810,14 @@ input[type=range]{ accent-color:var(--primary); }
   <button id="themeToggle" class="theme-toggle" type="button" onclick="toggleTheme()" title="สลับโหมดสว่าง/มืด" aria-label="สลับโหมดสว่าง/มืด"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6"/></svg></button>
   <button id="langToggle" class="lang-toggle" onclick="toggleLang()">EN</button>
   <h1 data-th="วงกลมหนึ่งหน่วยและเรเดียน" data-en="The Unit Circle and Radians">วงกลมหนึ่งหน่วยและเรเดียน</h1>
-  <p data-th="เรเดียน • cos θ = x, sin θ = y • เครื่องหมาย 4 จตุภาค • มุมอ้างอิง • มุมลบและมุมเกินรอบ • ม.5" data-en="Radians • cos θ = x, sin θ = y • signs in the four quadrants • reference angles • negative and full-turn angles">เรเดียน • cos θ = x, sin θ = y • เครื่องหมาย 4 จตุภาค • มุมอ้างอิง • มุมลบและมุมเกินรอบ • ม.5</p>
+  <p data-th="เรเดียน • cos θ = x, sin θ = y • เครื่องหมาย 4 จตุภาค • ลดทอนมุม • มุมลบและมุมเกินรอบ • ม.5" data-en="Radians • cos θ = x, sin θ = y • signs in the four quadrants • angle reduction • negative and full-turn angles">เรเดียน • cos θ = x, sin θ = y • เครื่องหมาย 4 จตุภาค • ลดทอนมุม • มุมลบและมุมเกินรอบ • ม.5</p>
 </header>
 
 <nav>
   <button class="tab-btn active" onclick="showTab('radian', this)" data-th="เรเดียน" data-en="Radians">เรเดียน</button>
   <button class="tab-btn" onclick="showTab('circle', this)" data-th="วงกลม 1 หน่วย" data-en="Unit Circle">วงกลม 1 หน่วย</button>
   <button class="tab-btn" onclick="showTab('sign', this)" data-th="เครื่องหมาย" data-en="Signs">เครื่องหมาย</button>
-  <button class="tab-btn" onclick="showTab('ref', this)" data-th="มุมอ้างอิง" data-en="Reference Angles">มุมอ้างอิง</button>
+  <button class="tab-btn" onclick="showTab('ref', this)" data-th="ลดทอนมุม" data-en="Angle Reduction">ลดทอนมุม</button>
   <button class="tab-btn" onclick="showTab('neg', this)" data-th="มุมลบ" data-en="Negative Angles">มุมลบ</button>
   <button class="tab-btn" onclick="showTab('quiz', this)" data-th="แบบฝึกหัด" data-en="Quiz">แบบฝึกหัด</button>
 </nav>
@@ -3769,6 +3769,19 @@ const ansF = h => `<span class="ans" style="display:inline-block;line-height:1.3
 const f1 = v => (+v).toFixed(1);
 const stage2 = el => { el.innerHTML = `<div class="tg-split"><div class="tg-L"></div><div class="tg-R"></div></div>`; return { L: el.querySelector('.tg-L'), R: el.querySelector('.tg-R') }; };
 const lineEl = (R, html, cls) => { const e = document.createElement('div'); e.className = 'tg-line' + (cls ? ' ' + cls : ''); e.innerHTML = html; R.appendChild(e); return e; };
+// แตกฉากที่โผล่หลายบรรทัดพร้อมกัน เป็นหลายฉาก (กด ▶ ทีละบรรทัด): วาดฉากเต็มแล้วซ่อนบรรทัดที่ยังไม่ถึง
+//   k0 = จำนวนบรรทัดที่เห็นในฉากแรกของชุดที่แตก · total = ทั้งหมด · sel = ตัวเลือกบรรทัด (เรียงตามลำดับที่โผล่)
+function splitScene(sc, k0, total, sel) {
+  const trim = (S, k) => { const els = S.el.querySelectorAll(sel); els.forEach((e, i) => { e.style.display = i < k ? '' : 'none'; }); return els; };
+  const out = [];
+  for (let k = k0; k <= total; k++) out.push({
+    cap: sc.cap, end: S => { sc.end(S); trim(S, k); },
+    play: async S => { S.el.innerHTML = ''; sc.end(S); const els = trim(S, k - 1); await S.anim.wait(300); const e = els[k - 1]; if (e) { e.style.display = ''; e.style.animation = 'rowIn .45s ease'; } }
+  });
+  return out;
+}
+const splitScenes = (arr, specs, sel) => arr.flatMap((sc, i) => { const sp = specs.find(x => x[0] === i); return sp ? splitScene(sc, sp[1], sp[2], sp[3] || sel) : [sc]; });
+
 const sideLines = (R, arr, freshLast) => { R.innerHTML = ''; arr.forEach((h, i) => lineEl(R, h, freshLast && i === arr.length - 1 ? 'fresh' : '')); };
 const DG = (k, n) => _tgDeg(k, n);                       // '30°'
 const near = (a, b) => Math.abs(a - b) < 1e-6;
@@ -3982,21 +3995,27 @@ const WH_TH = PI / 6;
 const WC = { a: 'color-mix(in srgb, var(--g-blue) 75%, var(--text))', o: 'color-mix(in srgb, var(--g-red) 75%, var(--text))', h: 'color-mix(in srgb, var(--g-green) 72%, var(--text))' };
 const WN = { a: T('ชิด', 'adjacent'), o: T('ข้าม', 'opposite'), h: T('ฉาก', 'hypotenuse') };
 const wk = k => `<span style="color:${WC[k]}">${tx(WN[k])}</span>`;
-// st = { h, a, o: 0–1 ความเรืองของด้าน OP / แนวนอน / แนวตั้ง · lab: ป้ายที่แสดง { h, a, o } }
+// st = { h, a, o: 0–1 ความเรืองของด้าน OP / แนวนอน / แนวตั้ง · tri: 1 = ระบายสามเหลี่ยม · dx, dy: 0–1 เส้นประจาก P ลงแกน x / ไปแกน y (ฉากที่ 2–3)
+//        pxy: ป้าย P เป็น P(x, y) · lab: ป้ายที่แสดง { h, a, o } (ชื่อด้าน = ค่า) · sx, sy: ป้ายสั้น x / y (ก่อนตั้งชื่อด้าน) }
 function whyCircle(el, st) {
   const c = makeUnitCircle(el, { theta: WH_TH, show: ['arc'], draggable: false, readout: [], pLabel: false });
   const x0 = c.cx, y0 = c.cy, px = c.X(Math.cos(WH_TH)), py = c.Y(Math.sin(WH_TH));
   const side = (x1, y1, x2, y2, v, col) => `<line x1="${f1(x1)}" y1="${f1(y1)}" x2="${f1(x2)}" y2="${f1(y2)}" style="stroke:var(--g-${col});stroke-width:15;stroke-linecap:round;opacity:${(0.3 * v).toFixed(2)}"/><line x1="${f1(x1)}" y1="${f1(y1)}" x2="${f1(x2)}" y2="${f1(y2)}" style="stroke:${v > 0 ? 'var(--g-' + col + ')' : 'var(--text)'};stroke-width:${v > 0 ? 5 : 3};stroke-linecap:round"/>`;
   const halo = 'paint-order:stroke;stroke:var(--card);stroke-width:5px;stroke-linejoin:round';
   const lab = (x, y, txt, cls, anc) => `<text class="pl-lbl ${cls}" x="${f1(x)}" y="${f1(y)}" text-anchor="${anc}" style="font-size:16px;font-weight:800;${halo}">${txt}</text>`;
-  let s = `<polygon class="fa-blue" points="${f1(x0)},${f1(y0)} ${f1(px)},${f1(y0)} ${f1(px)},${f1(py)}"/>`;
+  const dash = (x1, y1, x2, y2, p) => p > 0 ? `<line x1="${f1(x1)}" y1="${f1(y1)}" x2="${f1(x1 + (x2 - x1) * p)}" y2="${f1(y1 + (y2 - y1) * p)}" style="stroke:var(--muted);stroke-width:2.2;stroke-dasharray:6 5;stroke-linecap:round"/>` : '';
+  let s = st.tri ? `<polygon class="fa-blue" points="${f1(x0)},${f1(y0)} ${f1(px)},${f1(y0)} ${f1(px)},${f1(py)}"/>` : '';
+  s += dash(px, py, px, y0, st.dx || 0) + dash(px, py, x0, py, st.dy || 0);
   s += side(x0, y0, px, y0, st.a || 0, 'blue') + side(px, y0, px, py, st.o || 0, 'red') + side(x0, y0, px, py, st.h || 0, 'green');
-  s += `<path class="sc-axis" d="M${f1(px - 11)} ${f1(y0)} l0 -11 l11 0" fill="none" style="stroke-width:1.6" transform="translate(0 0)"/>`;
+  if (st.tri || st.dx) s += `<path class="sc-axis" d="M${f1(px - 11)} ${f1(y0)} l0 -11 l11 0" fill="none" style="stroke-width:1.6" transform="translate(0 0)"/>`;
+  if (st.dx) s += `<text class="uc-plab" x="${f1(px)}" y="${f1(y0 + 24)}" text-anchor="middle" style="opacity:${st.dx >= 1 ? 1 : 0}">F</text>`;
   const lb = st.lab || {};
   if (lb.h) s += lab((x0 + px) / 2 - 22, (y0 + py) / 2 - 14, `${tx(WN.h)} = ${tx(T('รัศมี', 'radius'))} = 1`, 'g', 'end');
   if (lb.a) s += lab((x0 + px) / 2, y0 + 24, `${tx(WN.a)} = <tspan font-style="italic">x</tspan>`, 'b', 'middle');
   if (lb.o) s += lab(px + 8, (y0 + py) / 2 + 5, `${tx(WN.o)} = <tspan font-style="italic">y</tspan>`, 'r', 'start');
-  s += `<text class="uc-plab" x="${f1(px + 12)}" y="${f1(py - 12)}" text-anchor="start">P</text>`;
+  if (st.sx) s += lab((x0 + px) / 2, y0 + 24, `<tspan font-style="italic">x</tspan>`, 'b', 'middle');
+  if (st.sy) s += lab(px + 8, (y0 + py) / 2 + 5, `<tspan font-style="italic">y</tspan>`, 'r', 'start');
+  s += st.pxy ? `<text class="uc-plab" x="${f1(px + 12)}" y="${f1(py - 12)}" text-anchor="start">P(<tspan font-style="italic">x</tspan>, <tspan font-style="italic">y</tspan>)</text>` : `<text class="uc-plab" x="${f1(px + 12)}" y="${f1(py - 12)}" text-anchor="start">P</text>`;
   c.g.insertAdjacentHTML('beforeend', s);
   return c;
 }
@@ -4008,31 +4027,49 @@ const whCos = () => `<span class="mx">cos ${TH} = ${fr(wk('a'), wk('h'))} = ${fr
 const whSin = () => `<span class="mx">sin ${TH} = ${fr(wk('o'), wk('h'))} = ${fr(I('y'), 1)} = <b>${I('y')}</b></span>`;
 const whTan = () => `<span class="mx">tan ${TH} = ${fr(wk('o'), wk('a'))} = ${fr(I('y'), I('x'))} = ${fr('sin ' + TH, 'cos ' + TH)}</span>`;
 const whRadius = () => `<span class="mx">${wk('h')} = ${tx(T('รัศมี', 'radius'))} = 1</span>`;
+const whWalkX = () => `<span class="mx">O → F : <b>${I('x')}</b></span>`;
+const whWalkY = () => `<span class="mx">F → P : <b>${I('y')}</b></span>`;
+const whPt = () => `<span class="mx">P = (${I('x')}, ${I('y')})</span>`;
 function whBuild(S, st, lines, fresh) {
   const s = stage2(S.el);
   whyCircle(s.L, st);
   sideLines(s.R, lines, fresh);
   return s;
 }
+// เล่นแอนิเมชันของวงกลม: f(t) คืน st ของเฟรม · R = บรรทัดขวาที่แสดงตลอด
+const whAnim = async (S, f, R) => { const s = stage2(S.el); sideLines(s.R, R); await S.anim.run(900, t => { s.L.innerHTML = ''; whyCircle(s.L, f(t)); }, EASE.out); return s; };
+const WH_END = {};
+WH_END.s1 = {}; WH_END.s2 = { dx: 1, a: 1, sx: 1 }; WH_END.s3 = { dx: 1, dy: 1, a: 1, o: 1, sx: 1, sy: 1, pxy: 1 };
+WH_END.s4 = { tri: 1, h: 1, a: 1, o: 1, pxy: 1, lab: { h: 1, a: 1, o: 1 } };
+WH_END.s5 = { tri: 1, h: 1, a: 1, pxy: 1, lab: { h: 1, a: 1 } };
 const WH_SC = [
-  { cap: () => tx(T(`ใช้ ${wk('o')} ${wk('a')} ${wk('h')} จากชิ้นอัตราส่วนตรีโกณ: ลากเส้นตั้งฉากจาก P ลงแกน <i>x</i> ได้สามเหลี่ยมมุมฉาก มุม ${TH} อยู่ที่จุดกำเนิด · กด ▶`,
-                    `Use the ${wk('o')}, ${wk('a')}, ${wk('h')} of the trig-ratios piece: drop a perpendicular from P to the <i>x</i>-axis for a right triangle with angle ${TH} at the origin · press ▶`)),
-    end: S => { whBuild(S, {}, whRecall()); } },
-  { cap: () => tx(T(`ด้านยาวสุด (${wk('h')}) คือ OP = รัศมีของวงกลมหนึ่งหน่วย = <b>1</b>`, `The longest side (${wk('h')}) is OP = the radius of the unit circle = <b>1</b>`)),
-    end: S => { whBuild(S, { h: 1, lab: { h: 1 } }, whRecall().concat([whRadius()])); },
-    play: async S => { const s = stage2(S.el); sideLines(s.R, whRecall().concat([whRadius()])); await S.anim.run(900, t => { s.L.innerHTML = ''; whyCircle(s.L, { h: t, lab: t > 0.99 ? { h: 1 } : {} }); }, EASE.out); } },
+  { cap: () => tx(T(`วงกลมหนึ่งหน่วย (รัศมี 1) มีจุดกำเนิด O เป็นจุดศูนย์กลาง จุด P อยู่บนวงกลม — อยากรู้ว่า P อยู่ที่พิกัดไหน · กด ▶`,
+                    `The unit circle (radius 1) is centred at the origin O, and P is a point on it — where are P's coordinates? · press ▶`)),
+    end: S => { whBuild(S, WH_END.s1, []); } },
+  { cap: () => tx(T(`ลากเส้นประจาก P ตรงลงแกน <i>x</i> ได้จุด F · จากจุดกำเนิด O เดินไปทางขวา <b><i>x</i> หน่วย</b> ก็ถึง F`,
+                    `Drop a dashed line from P straight down to the <i>x</i>-axis to get F · from the origin O walk right <b><i>x</i> units</b> to reach F`)),
+    end: S => { whBuild(S, WH_END.s2, [whWalkX()]); },
+    play: async S => { await whAnim(S, t => ({ dx: t }), []); await whAnim(S, t => ({ dx: 1, a: t, sx: t > 0.99 ? 1 : 0 }), [whWalkX()]); } },
+  { cap: () => tx(T(`ลากเส้นประจาก P ไปทางซ้ายถึงแกน <i>y</i> · จาก F เดินขึ้นไป <b><i>y</i> หน่วย</b> ก็ถึง P — จึงเรียกจุด P ว่า <b>P(<i>x</i>, <i>y</i>)</b>`,
+                    `Draw a dashed line from P left to the <i>y</i>-axis · from F walk up <b><i>y</i> units</b> and you reach P — so P is written <b>P(<i>x</i>, <i>y</i>)</b>`)),
+    end: S => { whBuild(S, WH_END.s3, [whWalkX(), whWalkY(), whPt()]); },
+    play: async S => { await whAnim(S, t => ({ dx: 1, a: 1, sx: 1, dy: t }), [whWalkX()]); await whAnim(S, t => ({ dx: 1, dy: 1, a: 1, sx: 1, o: t, sy: t > 0.99 ? 1 : 0 }), [whWalkX(), whWalkY()]); const s = stage2(S.el); whyCircle(s.L, WH_END.s3); sideLines(s.R, [whWalkX(), whWalkY(), whPt()], true); } },
+  { cap: () => tx(T(`ระบายสามเหลี่ยม O-F-P จะเห็นสามเหลี่ยมมุมฉากที่มุม ${TH} อยู่ที่ O: OP = รัศมี = 1 คือ ${wk('h')} · OF = <i>x</i> ติดมุม ${TH} คือ ${wk('a')} · FP = <i>y</i> คือ ${wk('o')}`,
+                    `Shade triangle O-F-P: a right triangle with angle ${TH} at O: OP = radius = 1 is the ${wk('h')} · OF = <i>x</i> touches ${TH}, so it is the ${wk('a')} · FP = <i>y</i> is the ${wk('o')}`)),
+    end: S => { whBuild(S, WH_END.s4, whRecall()); },
+    play: async S => { const s = stage2(S.el); sideLines(s.R, []); await S.anim.run(700, t => { s.L.innerHTML = ''; whyCircle(s.L, { tri: t, pxy: 1, a: 1, o: 1, sx: 1, sy: 1 }); }, EASE.out); await S.anim.run(900, t => { s.L.innerHTML = ''; whyCircle(s.L, { tri: 1, pxy: 1, h: t, a: 1, o: 1, lab: t > 0.99 ? { h: 1, a: 1, o: 1 } : {} }); }, EASE.out); sideLines(s.R, whRecall(), true); } },
   { cap: () => tx(T(`ด้านที่ติดมุม ${TH} (${wk('a')}) คือระยะแนวนอน = <i>x</i> → cos ${TH} = ${fr(wk('a'), wk('h'))} = ${fr(I('x'), 1)} = <i>x</i> · ${wk('h')} ยาว 1 จึงหารแล้วเหลือแค่ <i>x</i>`,
                     `The side touching ${TH} (${wk('a')}) is the horizontal distance = <i>x</i> → cos ${TH} = ${fr(wk('a'), wk('h'))} = ${fr(I('x'), 1)} = <i>x</i> · the ${wk('h')} is 1 long, so dividing leaves just <i>x</i>`)),
-    end: S => { whBuild(S, { h: 1, a: 1, lab: { h: 1, a: 1 } }, [whRadius(), whCos()]); },
-    play: async S => { const s = stage2(S.el); sideLines(s.R, [whRadius()]); await S.anim.run(900, t => { s.L.innerHTML = ''; whyCircle(s.L, { h: 1, a: t, lab: t > 0.99 ? { h: 1, a: 1 } : { h: 1 } }); }, EASE.out); sideLines(s.R, [whRadius(), whCos()], true); } },
+    end: S => { whBuild(S, WH_END.s5, [whRadius(), whCos()]); },
+    play: async S => { const s = stage2(S.el); whyCircle(s.L, WH_END.s5); sideLines(s.R, [whRadius()]); await S.anim.wait(500); sideLines(s.R, [whRadius(), whCos()], true); } },
   { cap: () => tx(T(`ด้านตรงข้ามมุม ${TH} (${wk('o')}) คือความสูง = <i>y</i> → sin ${TH} = ${fr(wk('o'), wk('h'))} = ${fr(I('y'), 1)} = <i>y</i> · ฉากยาว 1 จึงเหลือแค่ <i>y</i> เช่นกัน`,
                     `The side across from ${TH} (${wk('o')}) is the height = <i>y</i> → sin ${TH} = ${fr(wk('o'), wk('h'))} = ${fr(I('y'), 1)} = <i>y</i> · the hypotenuse is 1, so just <i>y</i> remains`)),
-    end: S => { whBuild(S, { h: 1, a: 1, o: 1, lab: { h: 1, a: 1, o: 1 } }, [whRadius(), whCos(), whSin()]); },
-    play: async S => { const s = stage2(S.el); sideLines(s.R, [whRadius(), whCos()]); await S.anim.run(900, t => { s.L.innerHTML = ''; whyCircle(s.L, { h: 1, a: 1, o: t, lab: t > 0.99 ? { h: 1, a: 1, o: 1 } : { h: 1, a: 1 } }); }, EASE.out); sideLines(s.R, [whRadius(), whCos(), whSin()], true); } },
+    end: S => { whBuild(S, WH_END.s4, [whRadius(), whCos(), whSin()]); },
+    play: async S => { const s = stage2(S.el); whyCircle(s.L, WH_END.s4); sideLines(s.R, [whRadius(), whCos()]); await S.anim.wait(500); sideLines(s.R, [whRadius(), whCos(), whSin()], true); } },
   { cap: () => tx(T(`tan ${TH} = ${fr(wk('o'), wk('a'))} = ${fr(I('y'), I('x'))} และเพราะ <i>y</i> = sin ${TH}, <i>x</i> = cos ${TH} จึงได้ tan ${TH} = ${fr('sin ' + TH, 'cos ' + TH)}`,
                     `tan ${TH} = ${fr(wk('o'), wk('a'))} = ${fr(I('y'), I('x'))}, and since <i>y</i> = sin ${TH} and <i>x</i> = cos ${TH}, tan ${TH} = ${fr('sin ' + TH, 'cos ' + TH)}`)),
-    end: S => { whBuild(S, { h: 1, a: 1, o: 1, lab: { h: 1, a: 1, o: 1 } }, [whCos(), whSin(), whTan()]); },
-    play: async S => { const s = stage2(S.el); whyCircle(s.L, { h: 1, a: 1, o: 1, lab: { h: 1, a: 1, o: 1 } }); sideLines(s.R, [whCos(), whSin()]); await S.anim.wait(700); sideLines(s.R, [whCos(), whSin(), whTan()], true); } }
+    end: S => { whBuild(S, WH_END.s4, [whCos(), whSin(), whTan()]); },
+    play: async S => { const s = stage2(S.el); whyCircle(s.L, WH_END.s4); sideLines(s.R, [whCos(), whSin()]); await S.anim.wait(700); sideLines(s.R, [whCos(), whSin(), whTan()], true); } }
 ];
 // ลองทำท้ายการ์ด: ลาก P ไปจตุภาคอื่น x, y ติดลบได้
 function makeWhyTry(host) {
@@ -4141,7 +4178,7 @@ const SG_SC = SG_TH.map((th, k) => ({
 //  แท็บ 4 · มุมอ้างอิง
 // ═══════════════════════════════════════════════════════════════
 // หน่วยมุมของแท็บนี้ (สลับเรเดียน ↔ องศาได้ · จำค่าในตัวแปรนี้ ไม่ใช้ localStorage) — แท็บอื่นเรเดียนอย่างเดียว
-const REFU = { deg: false, start: 0 };
+const REFU = { deg: false, start: 0, fn: 'sin' };
 const A = (k, n) => REFU.deg ? mx(DG(k, n)) : rad(k, n);                                          // HTML
 const angAuto = th => REFU.deg ? mx(mn(Math.round(th * 1800 / PI) / 10) + '°') : radAuto(th);
 const angText = th => { if (REFU.deg) return mn(Math.round(th * 1800 / PI) / 10) + '°'; const f = piFrac(th); return f ? radText(f.k, f.n) : mn(Math.round(th * 1000) / 1000) + ' rad'; };   // ข้อความ SVG
@@ -4178,6 +4215,7 @@ function refLabels(c) {
   rects.push([cx + R + 9, cy + 6, cx + R + 52, cy + 24], [cx - R - 54, cy + 6, cx - R - 8, cy + 24], [cx + 8, cy - R - 22, cx + 52, cy - R - 2], [cx + 8, cy + R + 2, cx + 58, cy + R + 22],
     [cx + 1.38 * R, cy + 4, cx + 1.38 * R + 22, cy + 30], [cx + 4, cy - 1.38 * R - 24, cx + 24, cy - 1.38 * R + 2],
     [cx + (R + 24) * Math.cos(th) - 12, cy - (R + 24) * Math.sin(th) - 14, cx + (R + 24) * Math.cos(th) + 12, cy - (R + 24) * Math.sin(th) + 10], [px - 20, py - 20, px + 20, py + 20]);
+  (c._bd || []).forEach(b => rects.push([b[0] - 15, b[1] - 15, b[0] + 15, b[1] + 15]));
   const hit = (x0, y0, x1, y1) => pts.some(p => p[0] > x0 - 4 && p[0] < x1 + 4 && p[1] > y0 - 3 && p[1] < y1 + 3) || rects.some(r => !(x1 < r[0] || x0 > r[2] || y1 < r[1] || y0 > r[3]));
   const halo = 'paint-order:stroke;stroke:var(--card);stroke-width:4px;stroke-linejoin:round';
   const place = (txt, aMid, r0, cls) => {
@@ -4207,34 +4245,52 @@ function refCircle(el, th, o) {
   c.relabel();
   return c;
 }
+// ฟังก์ชันที่เลือกในแท็บนี้ (sin | cos | tan) · เครื่องหมายต่อจตุภาค 1–4 (+1 / −1) — sin: y · cos: x · tan: y/x
+const REF_SGN = { sin: [1, 1, -1, -1], cos: [1, -1, -1, 1], tan: [1, -1, 1, -1] };
+const refSgn = () => REF_SGN[REFU.fn];
+const refMinus = i => refSgn()[i] < 0 ? '−' : '';
+// ป้ายเครื่องหมาย + / − ในมุมของแต่ละจตุภาค (ฉากที่ k โชว์จตุภาค 1…k+1) · ตำแหน่งจอเก็บใน c._bd ให้ refLabels หลบ
+function addSignBadges(c, n) {
+  const d = 0.78 * c.R / Math.SQRT2, pos = [[c.cx + d, c.cy - d], [c.cx - d, c.cy - d], [c.cx - d, c.cy + d], [c.cx + d, c.cy + d]];
+  c._bd = pos.slice(0, n);
+  const col = i => refSgn()[i] > 0 ? 'green' : 'red';
+  c.g.insertAdjacentHTML('beforeend', c._bd.map((p, i) => `<g class="rf-sgn"><circle cx="${f1(p[0])}" cy="${f1(p[1])}" r="13" style="fill:color-mix(in srgb, var(--g-${col(i)}) 24%, var(--card));stroke:var(--g-${col(i)});stroke-width:2"/><text x="${f1(p[0])}" y="${f1(p[1] + 6.5)}" text-anchor="middle" style="font-size:19px;font-weight:800;fill:color-mix(in srgb, var(--g-${col(i)}) 70%, var(--text))">${refSgn()[i] > 0 ? '+' : '−'}</text></g>`).join(''));
+  if (c.relabel) c.relabel();
+}
 const refRows = () => {
-  const q = refTh(), b = refBase(), S = i => vsc('sin', q[i][0], q[i][1]), Ab = A(b[0], b[1]);
+  const fn = REFU.fn, q = refTh(), b = refBase(), V = i => vsc(fn, q[i][0], q[i][1]), Ab = A(b[0], b[1]);
   return [
-    `<span class="mx">sin ${A(q[0][0], q[0][1])} = ${S(0)}</span>`,
-    `<span class="mx">sin ${A(q[1][0], q[1][1])} = sin ${Ab} = ${S(1)}</span>`,
-    `<span class="mx">sin ${A(q[2][0], q[2][1])} = −sin ${Ab} = ${S(2)}</span>`,
-    `<span class="mx">sin ${A(q[3][0], q[3][1])} = −sin ${Ab} = ${S(3)}</span>`
+    `<span class="mx">${fn} ${A(q[0][0], q[0][1])} = ${V(0)}</span>`,
+    ...[1, 2, 3].map(i => `<span class="mx">${fn} ${A(q[i][0], q[i][1])} = ${refMinus(i)}${fn} ${Ab} = ${V(i)}</span>`)
   ];
 };
-function refBuild(S, kc, kt, kg) {                       // วงกลมที่ตำแหน่ง kc · ตาราง kt+1 บรรทัด · รอยจางของตำแหน่งก่อนหน้า kg ตำแหน่ง
+function refBuild(S, kc, kt, kg) {                       // วงกลมที่ตำแหน่ง kc · ตาราง kt+1 บรรทัด · รอยจางของตำแหน่งก่อนหน้า kg ตำแหน่ง · ป้ายเครื่องหมายของจตุภาค 1…kc+1
   const s = stage2(S.el), q = refTh(), p = q[kc];
   const c = refCircle(s.L, th_(p[0], p[1]));
   addGhosts(c, q.slice(0, kg).map(x => th_(x[0], x[1])));
+  addSignBadges(c, kc + 1);
   sideLines(s.R, refRows().slice(0, kt + 1));
   return { c, s };
 }
 const refCap = k => {
-  const q = refTh(), b = refBase(), Ab = A(b[0], b[1]), Aq = i => A(q[i][0], q[i][1]), V = mx(vsc('sin', b[0], b[1]));
-  return [
-    T(`สามเหลี่ยมใต้จุด P ที่ ${Aq(0)} ในจตุภาค 1: มุมแหลมกับแกน x คือ <b>มุมอ้างอิง α</b> = ${Ab} · sin ${Ab} = ${V} · กด ▶`,
-      `The triangle under P at ${Aq(0)} in quadrant 1: its acute angle with the x-axis is the <b>reference angle α</b> = ${Ab} · sin ${Ab} = ${V} · press ▶`),
-    T(`พลิกข้ามแกน y ไปที่ ${Aq(1)}: ความสูง (<i>y</i>) เท่าเดิม มุมอ้างอิงยังเป็น ${Ab} → sin ${Aq(1)} = sin ${Ab}`,
-      `Flip across the y-axis to ${Aq(1)}: the height (<i>y</i>) is the same and the reference angle is still ${Ab} → sin ${Aq(1)} = sin ${Ab}`),
-    T(`พลิกต่อไปจตุภาค 3 ที่ ${Aq(2)}: มุมอ้างอิงยังเป็น ${Ab} แต่ <i>y</i> ติดลบ → sin ${Aq(2)} = −sin ${Ab}`,
-      `Flip on into quadrant 3 at ${Aq(2)}: the reference angle is still ${Ab} but <i>y</i> is negative → sin ${Aq(2)} = −sin ${Ab}`),
-    T(`จตุภาค 4 ที่ ${Aq(3)}: ได้ครบ 4 แขนของ "กากบาท" ทุกแขนทำมุม ${Ab} กับแกน x · ขนาดของ sin เท่ากันหมด ต่างกันที่เครื่องหมาย`,
-      `Quadrant 4 at ${Aq(3)}: now all four arms of the "cross" are there, each making ${Ab} with the x-axis · the size of sin is the same everywhere, only the sign differs`)
-  ][k];
+  const fn = REFU.fn, q = refTh(), b = refBase(), Ab = A(b[0], b[1]), Aq = i => A(q[i][0], q[i][1]), V = mx(vsc(fn, b[0], b[1]));
+  const sg = i => refMinus(i);
+  const res = i => `→ ${fn} ${Aq(i)} = ${sg(i)}${fn} ${Ab}`;
+  const th = {
+    sin: [null, `ความสูง (<i>y</i>) เท่าเดิม`, `<i>y</i> ติดลบ`, `<i>y</i> ยังติดลบ`],
+    cos: [null, `ระยะแนวนอนยาวเท่าเดิมแต่ไปทางซ้าย (<i>x</i> ติดลบ)`, `<i>x</i> ยังติดลบ`, `<i>x</i> กลับมาเป็นบวก`],
+    tan: [null, `<i>y</i> บวก <i>x</i> ลบ เครื่องหมายต่างกัน → <i>y</i>/<i>x</i> ติดลบ`, `<i>y</i> ลบ <i>x</i> ลบ เหมือนกัน → <i>y</i>/<i>x</i> เป็นบวก`, `<i>y</i> ลบ <i>x</i> บวก ต่างกัน → <i>y</i>/<i>x</i> ติดลบ`]
+  }[fn];
+  const en = {
+    sin: [null, `the height (<i>y</i>) is the same`, `<i>y</i> is negative`, `<i>y</i> is still negative`],
+    cos: [null, `the horizontal distance is the same length but now to the left (<i>x</i> is negative)`, `<i>x</i> is still negative`, `<i>x</i> is positive again`],
+    tan: [null, `<i>y</i> positive and <i>x</i> negative, opposite signs → <i>y</i>/<i>x</i> is negative`, `<i>y</i> negative and <i>x</i> negative, same sign → <i>y</i>/<i>x</i> is positive`, `<i>y</i> negative and <i>x</i> positive, opposite signs → <i>y</i>/<i>x</i> is negative`]
+  }[fn];
+  const lead = [null, [`พลิกข้ามแกน y ไปที่ ${Aq(1)}:`, `Flip across the y-axis to ${Aq(1)}:`], [`พลิกต่อไปจตุภาค 3 ที่ ${Aq(2)}:`, `Flip on into quadrant 3 at ${Aq(2)}:`], [`จตุภาค 4 ที่ ${Aq(3)}:`, `Quadrant 4 at ${Aq(3)}:`]];
+  if (k === 0) return T(`สามเหลี่ยมใต้จุด P ที่ ${Aq(0)} ในจตุภาค 1: มุมแหลมกับแกน x คือ <b>มุมอ้างอิง α</b> = ${Ab} · ${fn} ${Ab} = ${V} · ป้าย <b>+</b> บอกว่า ${fn} ในจตุภาค 1 เป็นบวก · กด ▶`,
+                          `The triangle under P at ${Aq(0)} in quadrant 1: its acute angle with the x-axis is the <b>reference angle α</b> = ${Ab} · ${fn} ${Ab} = ${V} · the <b>+</b> badge says ${fn} is positive in quadrant 1 · press ▶`);
+  const tail = k === 3 ? [` · ได้ครบ 4 แขนของ "กากบาท" ทุกแขนทำมุม ${Ab} กับแกน x ขนาดของ ${fn} เท่ากันหมด ต่างกันที่เครื่องหมาย`, ` · now all four arms of the "cross" are there, each making ${Ab} with the x-axis; the size of ${fn} is the same everywhere, only the sign differs`] : ['', ''];
+  return T(`${lead[k][0]} ${th[k]} ${res(k)}${tail[0]}`, `${lead[k][1]} ${en[k]} ${res(k)}${tail[1]}`);
 };
 const REF_SC = [0, 1, 2, 3].map(k => ({
   cap: () => tx(refCap(k)),
@@ -4243,15 +4299,18 @@ const REF_SC = [0, 1, 2, 3].map(k => ({
     const q = refTh(), m = refBuild(S, k - 1, k - 1, k - 1), p = q[k];
     addGhosts(m.c, [th_(q[k - 1][0], q[k - 1][1])]);
     await m.c.animateTo(th_(p[0], p[1]), 1500, S.anim);
+    addSignBadges(m.c, k + 1);
     sideLines(m.s.R, refRows().slice(0, k + 1), true);
   }
 }));
-// ชิปเลือกมุมตั้งต้นของฉากกากบาท (30° / 45° / 60°) — เปลี่ยนแล้วฉากเริ่มใหม่ที่ฉาก 1
+// ชิปเลือกฟังก์ชัน (sin cos tan) และมุมตั้งต้นของฉากกากบาท (30° / 45° / 60°) — เปลี่ยนแล้วฉากเริ่มใหม่ที่ฉาก 1
 function makeRefPick(host, getScenes) {
   const w = {};
   w.refresh = () => {
-    host.innerHTML = `<div class="chips"><span class="chips-label">${tx(T('มุมตั้งต้น', 'Starting angle'))}</span>${REF_BASES.map((p, i) => `<button class="chip${REFU.start === i ? ' active' : ''}" data-i="${i}">${radDeg(p[0], p[1])}</button>`).join('')}</div>`;
-    host.querySelectorAll('.chip').forEach(b => b.onclick = () => { REFU.start = +b.dataset.i; w.refresh(); getScenes().go(0, false); });
+    host.innerHTML = `<div class="chips"><span class="chips-label">${tx(T('ฟังก์ชัน', 'Function'))}</span>${['sin', 'cos', 'tan'].map(f => `<button class="chip${REFU.fn === f ? ' active' : ''}" data-f="${f}">${f}</button>`).join('')}</div>` +
+      `<div class="chips"><span class="chips-label">${tx(T('มุมตั้งต้น', 'Starting angle'))}</span>${REF_BASES.map((p, i) => `<button class="chip${REFU.start === i ? ' active' : ''}" data-i="${i}">${radDeg(p[0], p[1])}</button>`).join('')}</div>`;
+    host.querySelectorAll('.chip[data-i]').forEach(b => b.onclick = () => { REFU.start = +b.dataset.i; w.refresh(); getScenes().go(0, false); });
+    host.querySelectorAll('.chip[data-f]').forEach(b => b.onclick = () => { REFU.fn = b.dataset.f; w.refresh(); getScenes().go(0, false); });
   };
   LIVE.push(w); w.refresh();
 }
@@ -4268,7 +4327,7 @@ function makeRefUnit(host) {
 function makeRefSteps(host) {
   const w = {};
   w.refresh = () => {
-    host.innerHTML = `<div class="box-info">${tx(T(`<b>ขั้น 1</b> หาว่า ${TH} อยู่จตุภาคไหน<br><b>ขั้น 2</b> หามุมอ้างอิง α (มุมแหลมระหว่าง OP กับแกน x)<br><b>ขั้น 3</b> เครื่องหมายจาก ASTC → sin ${TH} = ± sin α`, `<b>Step 1</b> find which quadrant ${TH} is in<br><b>Step 2</b> find the reference angle α (the acute angle between OP and the x-axis)<br><b>Step 3</b> the sign comes from ASTC → sin ${TH} = ± sin α`))}</div>` +
+    host.innerHTML = `<div class="box-info">${tx(T(`<b>ขั้น 1</b> หาว่า ${TH} อยู่จตุภาคไหน<br><b>ขั้น 2</b> หามุมอ้างอิง α (มุมแหลมระหว่าง OP กับแกน x)<br><b>ขั้น 3</b> เครื่องหมายจาก ASTC → sin ${TH} = ± sin α`, `<b>Step 1</b> find which quadrant ${TH} is in<br><b>Step 2</b> find the reference angle α (the acute angle between OP and the x-axis)<br><b>Step 3</b> the sign comes from ASTC → sin ${TH} = ± sin α`))}<br>${tx(T('ตัวอย่าง', 'Examples'))}: <span class="mx">sin 150° = sin 30°</span> · <span class="mx">cos 135° = −cos 45°</span> · <span class="mx">tan 120° = −tan 60°</span></div>` +
       `<div class="formula"><span>${tx(T('จตุภาค 1', 'Quadrant 1'))}: α = ${TH}</span><span>${tx(T('จตุภาค 2', 'Quadrant 2'))}: α = ${A(1)} − ${TH}</span><span>${tx(T('จตุภาค 3', 'Quadrant 3'))}: α = ${TH} − ${A(1)}</span><span>${tx(T('จตุภาค 4', 'Quadrant 4'))}: α = ${A(2)} − ${TH}</span></div>`;
   };
   LIVE.push(w); w.refresh();
@@ -4450,7 +4509,7 @@ function build() {
       `<div class="formula"><span>tan ${TH} = ${fr(I('y'), I('x'))} = ${fr('sin ' + TH, 'cos ' + TH)}</span></div><div id="w-tn"></div><div class="box-info">${d(`ที่ ${rad(1, 2)} และ ${rad(3, 2)} ค่า <i>x</i> = 0 → หารด้วยศูนย์ไม่ได้ → tan <b>หาค่าไม่ได้</b>`, `At ${rad(1, 2)} and ${rad(3, 2)} we have <i>x</i> = 0 → division by zero → tan is <b>undefined</b>`)}</div>`) +
     card('📐', d('มุมพิเศษในจตุภาค 1', 'Special angles in quadrant 1'), '<div id="w-q1"></div>') +
     card('🔮', d('ทายก่อน: cos π', 'Guess first: cos π'), '<div id="w-cp"></div>');
-  makeScenes($('w-wh'), WH_SC, { prompt: T('กด ▶ ทีละฉาก — ดูว่าข้าม ชิด ฉาก กลายเป็น x, y, 1 ได้อย่างไร', 'Press ▶ one scene at a time — see how opposite, adjacent, hypotenuse turn into y, x, 1') });
+  makeScenes($('w-wh'), splitScenes(WH_SC, [[2, 2, 3]], '.tg-R > .tg-line'), { prompt: T('กด ▶ ทีละฉาก — ดูว่าข้าม ชิด ฉาก กลายเป็น x, y, 1 ได้อย่างไร', 'Press ▶ one scene at a time — see how opposite, adjacent, hypotenuse turn into y, x, 1') });
   makeWhyTry($('w-wht'));
   makeScenes($('w-cs'), CIR_SC, { prompt: T(`กด ▶ ทีละฉาก — ดู P วิ่งไปหยุดที่ ${rad(1, 2)}, π, ${rad(3, 2)}, 2π`, `Press ▶ one scene at a time — watch P run and stop at ${rad(1, 2)}, π, ${rad(3, 2)}, 2π`) });
   makeTanCard($('w-tn'));
@@ -4477,8 +4536,8 @@ function build() {
   // ── แท็บ 4: มุมอ้างอิง ──
   $('tab-ref').innerHTML =
     '<div id="w-ru" style="margin-bottom:12px"></div>' +
-    card('🪞', d('มุมอ้างอิง: กากบาท 4 แขนเท่ากัน', 'Reference angles: a cross with four equal arms'), '<div id="w-rfc"></div><div id="w-rf"></div>') +
-    card('🪜', d('3 ขั้นหาค่าด้วยมุมอ้างอิง', 'Three steps with the reference angle'), '<div id="w-rst"></div>') +
+    card('🪞', d('ลดทอนมุม: กากบาท 4 แขนเท่ากัน', 'Angle reduction: a cross with four equal arms'), '<div id="w-rfc"></div><div id="w-rf"></div>') +
+    card('🪜', d('ลดทอนมุม 3 ขั้น: จตุภาค → มุมอ้างอิง → เครื่องหมาย', 'Angle reduction in 3 steps: quadrant → reference angle → sign'), '<div id="w-rst"></div>') +
     card('📐', d(`ตัวอย่างที่ 1: sin(${rad(5, 6)})`, `Example 1: sin(${rad(5, 6)})`), '<div id="w-re1"></div>') +
     card('📐', d(`ตัวอย่างที่ 2: cos(${rad(3, 4)})`, `Example 2: cos(${rad(3, 4)})`), '<div id="w-re2"></div>') +
     card('📐', d(`ตัวอย่างที่ 3: tan(${rad(2, 3)})`, `Example 3: tan(${rad(2, 3)})`), '<div id="w-re3"></div>') +
@@ -4500,7 +4559,7 @@ function build() {
     card('🔁', d('มุมลบ และมุมเกินรอบ', 'Negative angles and angles beyond a full turn'), '<div id="w-ng"></div>') +
     card('🔮', d(`ทายก่อน: cos(−${rad(3, 4)})`, `Guess first: cos(−${rad(3, 4)})`), '<div id="w-ngp"></div>') +
     card('🖐️', d('ลองทำ: ลาก P หลายรอบ', 'Try it: drag P for several turns'), '<div id="w-ngt"></div>');
-  makeScenes($('w-ng'), NG_SC, { prompt: T('กด ▶ ทีละฉาก — P หมุนตามเข็ม แล้วหมุนเกินรอบ', 'Press ▶ one scene at a time — P turns clockwise, then beyond a full turn') });
+  makeScenes($('w-ng'), splitScenes(NG_SC, [[3, 1, 4]], '.tg-R > .tg-line'), { prompt: T('กด ▶ ทีละฉาก — P หมุนตามเข็ม แล้วหมุนเกินรอบ', 'Press ▶ one scene at a time — P turns clockwise, then beyond a full turn') });
   makePredict($('w-ngp'), [ngPredItem()], { prompt: T('ดูตำแหน่ง P ที่มุมลบ แล้วทายค่า cos', 'Look at where P lands at a negative angle, then guess cos') });
   makeNegTry($('w-ngt'));
 

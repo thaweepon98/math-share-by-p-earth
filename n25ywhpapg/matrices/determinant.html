@@ -3760,7 +3760,7 @@ function makeBoxPlot(host, five0, o0) {
 // สเปก: docs/design-matrices.md §3 · ภาพก่อน · ฉาก (makeScenes) · ทายก่อนเฉลย (makePredict) · ลองทำ (makeMatrix แก้เลขสด) · เกม
 // สี: แถว = น้ำเงิน (hb) · หลัก = ส้ม (ho) · ผล/ถูก = เขียว (hg) · เส้นคูณลง = แดง · เส้นคูณขึ้น = เขียว · det เดิม = เหลือง · det ใหม่ = เขียว
 // ตัวเลขทุกตัวในฉาก/ทาย/แบบฝึกหัดคำนวณด้วย mDet/mMinor/mCof (Q แม่นยำ) — ไม่พิมพ์เอง
-const AT = '<sup>t</sup>';
+const AT = '<sup class="tsup">t</sup>';
 const aij = (i, j) => `<i>a</i><sub>${i + 1}${j + 1}</sub>`;                  // เลขจริง 1-based จากดัชนี 0-based
 const mij = (i, j) => `<i>M</i><sub>${i + 1}${j + 1}</sub>`;
 const cij = (i, j) => `<i>C</i><sub>${i + 1}${j + 1}</sub>`;
@@ -3802,6 +3802,7 @@ function dtInjectCss() {
   if (document.getElementById('dt-css')) return;
   const s = document.createElement('style'); s.id = 'dt-css';
   s.textContent = `
+  .tsup { font-size: .86em; font-weight: 800; margin-left: .06em; }
   .dt-stage { position: relative; width: 100%; padding: 8px 0; }
   .dt-pad2 { padding: 46px 0 46px; } .dt-pad3 { padding: 104px 0 104px; } .dt-padc { padding: 66px 0 66px; } .dt-tight { padding: 6px 0; }
   .dt-row { display: flex; align-items: center; justify-content: center; gap: 2px; font-size: 1.5rem; font-weight: 800; }
@@ -3824,6 +3825,7 @@ function dtInjectCss() {
   .dt-ov g.sel .dt-ln { stroke-width: 5.4; opacity: 1; }
   .dt-chip { position: absolute; transform: translateX(-50%); white-space: nowrap; font-weight: 800; font-size: .9rem; line-height: 1.5; padding: 1px 10px; border-radius: 16px; border: 2px solid var(--g-red); background: color-mix(in srgb, var(--g-red) 12%, var(--card)); opacity: 0; transition: opacity .3s; z-index: 7; pointer-events: none; }
   .dt-chip.green { border-color: var(--g-green); background: color-mix(in srgb, var(--g-green) 14%, var(--card)); }
+  .dt-cw { margin-right: .35em; }
   .dt-chip.on { opacity: 1; } .dt-chip.fade { opacity: .22; }
   .dt-chip.tap.on { pointer-events: auto; cursor: pointer; }
   .dt-chip.sel { box-shadow: 0 0 0 3px color-mix(in srgb, var(--g-curve) 55%, transparent); }
@@ -3847,6 +3849,28 @@ function dtInjectCss() {
   .mx-chk.neu { border-color: var(--muted); background: color-mix(in srgb, var(--muted) 8%, var(--card)); }
   .mk-diag line { opacity: .55; }
   .mt-item .mat-wrap { margin: 0; }
+  .ar-note { font-size: .95rem; color: var(--muted); font-weight: 600; margin-top: 4px; text-align: center; line-height: 1.6; }
+  .ar-gray { fill: var(--muted); stroke: none; }
+  .ar-mat { justify-content: center; }
+  .cf-ln { display: block; text-align: center; padding: 3px 0; line-height: 1.9; }
+  .cf-ln .mat-name sup { font-size: .85em; font-weight: 800; margin-left: .08em; }
+  .ar-ph { display: inline-block; font-size: .78rem; font-weight: 800; line-height: 1.5; padding: 0 9px; margin-right: .5em; border-radius: 12px; border: 1.5px solid var(--muted); color: var(--muted); vertical-align: 1px; white-space: nowrap; }
+  .ad-x { background: linear-gradient(var(--ad-c), var(--ad-c)) no-repeat 0 58% / 0 3px; transition: background-size .55s ease; }
+  .ad-x.on { background-size: 100% 3px; } .ad-x.or { --ad-c: var(--g-curve); } .ad-x.pk { --ad-c: var(--g-pink); }
+  .dt-stage .mc.hy { background: color-mix(in srgb, var(--g-curve) 40%, yellow); } .dt-g .mc.hy { color: var(--text); }
+  .ap-pick .mc { cursor: pointer; } .ap-pick .mc:hover { box-shadow: inset 0 0 0 2px var(--g-green); } .ap-sup { font-size: 1.1rem; font-weight: 800; margin-left: 2px; } .ap-ct { display: inline-flex; align-items: flex-start; } .ap-sc { margin-top: 8px; padding: 10px 8px 4px; border-radius: 14px; border: 2px solid var(--border); } .ap-sc .ap-t { text-align: left; line-height: 1.8; } .ap-stg .mc.hy { background: color-mix(in srgb, #f2c200 48%, var(--card)); color: var(--text); } .ap-e { text-align: left; line-height: 1.8; margin-top: 10px; }
+  .pd-cmp { display: inline-grid; grid-template-columns: auto auto; gap: 2px 10px; align-items: center; padding: 6px 14px; margin: 4px 0; border-radius: 12px; border: 2px solid var(--border); }
+  .pd-cmp > .l { text-align: right; } .pd-cmp > .r { text-align: left; }
+  .pd-k, .pd-c, .pd-d { padding: 0 4px; border-radius: 6px; }
+  .pd-k { background: color-mix(in srgb, var(--g-blue) 24%, transparent); box-shadow: inset 0 0 0 1.5px var(--g-blue); }
+  .pd-c { background: color-mix(in srgb, var(--g-curve) 26%, transparent); box-shadow: inset 0 0 0 1.5px var(--g-curve); }
+  .pd-d { background: color-mix(in srgb, var(--muted) 18%, transparent); box-shadow: inset 0 0 0 1.5px var(--muted); }
+  @media (max-width: 520px) { .pd-cmp { grid-template-columns: auto; } .pd-cmp > .l, .pd-cmp > .r { text-align: center; } }
+  .dt-rm { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 10px 8px; padding: 10px 0; }
+  .dt-rmc { display: inline-block; padding: 6px 14px; border-radius: 18px; border: 2px solid var(--g-blue); background: color-mix(in srgb, var(--g-blue) 12%, var(--card)); font-weight: 800; transition: opacity .3s; }
+  .dt-rmc.off, .dt-rma.off { opacity: .14; }
+  .dt-rma { font-size: 1.5rem; font-weight: 800; color: var(--muted); transition: opacity .3s; }
+  .dt-rmb { display: inline-flex; flex-direction: column; gap: 8px; }
   @media (max-width: 700px) {
     .dt-pad2 { padding: 44px 0 44px; } .dt-pad3 { padding: 100px 0 100px; } .dt-padc { padding: 60px 0 60px; }
     .dt-row { font-size: 1.12rem; }
@@ -3935,7 +3959,7 @@ function dtBoard(host, M0, o) {
       const ch = chips[s.id];
       if (ch) {
         const vals = s.cells.map(([i, j]) => M[i][j]);
-        ch.innerHTML = mx(dtProdText(vals));
+        ch.innerHTML = mx(`<span class="dt-cw">${tx(s.dir === 'd' ? T('คูณลง', 'down') : T('คูณขึ้น', 'up'))}</span> ${dtProdText(vals)}`);
         ch.classList.toggle('on', !!st.chips[s.id] && fade < 0.99); ch.classList.toggle('fade', fade > 0.5 && fade < 0.99 && !st.keepChips); ch.classList.toggle('sel', W.sel === s.id);
         const w_ = ch.offsetWidth, rowH = 29, top = s.dir === 'd' ? rowB + 8 + s.k * rowH : rowT - 8 - (s.k + 1) * rowH + 4;
         const cx = s.head ? P(s.head[0], s.head[1]).x : sr.width / 2;
@@ -3945,7 +3969,7 @@ function dtBoard(host, M0, o) {
     calcEl.innerHTML = typeof st.calc === 'function' ? st.calc() : st.calc;
   }
   W.set = st => { apply(st || {}); return W; };
-  W.refresh = () => { if (!host.isConnected) { W._dead = true; return; } apply(W.st); };
+  W.refresh = () => { if (!host.isConnected || !W.mm.el.isConnected) { W._dead = true; return; } apply(W.st); };   // ช่องของเมทริกซ์ถูกล้างไปแล้ว (เช่นทายก่อนวาดใหม่) = ตัวเก่า ไม่ต้องวาด — กันสลับภาษาแล้ว error
   W.dtLayout = W.refresh;
   LIVE.push(W);
   return W;
@@ -4610,6 +4634,699 @@ function detQuiz() {
 }
 
 // ═══════════════════════════════════════════════════════════════
+//  ข้อ 20 · det คืออะไร เรียนไปทำไม — หลักของ A คือลูกศร พื้นที่สี่เหลี่ยมด้านขนาน = |det A| (ที่มา: ครอบกรอบแล้วตัดชิ้นส่วนเกิน)
+//  ซ้าย = กราฟ (x 0–5, y 0–4) · ขวา = เมทริกซ์ (หลักที่ 1 พื้นน้ำเงิน · หลักที่ 2 พื้นส้ม) + บรรทัดคิด · ฉากละ 1 บรรทัดคิดใหม่
+// ═══════════════════════════════════════════════════════════════
+const AR_A = [[3, 1], [1, 2]], AR_SW = [[1, 3], [2, 1]], AR_FLAT = [[2, 4], [1, 2]];
+// ชิ้นส่วนของฉากครอบกรอบ (หน่วยกราฟ): สามเหลี่ยมส้ม 2 ชิ้น · สามเหลี่ยมชมพู 2 ชิ้น · ช่องมุมเทา 2 ช่อง
+const AR_PIECES = [
+  { cls: 'fa-orange', polys: [[[0, 0], [3, 0], [3, 1]], [[1, 2], [1, 3], [4, 3]]] },
+  { cls: 'fa-pink', polys: [[[3, 1], [4, 1], [4, 3]], [[0, 0], [0, 2], [1, 2]]] },
+  { cls: 'ar-gray', polys: [[[3, 0], [4, 0], [4, 1], [3, 1]], [[0, 2], [1, 2], [1, 3], [0, 3]]] }
+];
+const arM = M => M.map(r => r.map(v => Q(v)));
+function arMount(el, M) {
+  el.innerHTML = '<div class="tg-split"><div class="tg-L"><div class="ar-plot"></div></div><div class="tg-R"><div class="mx-row ar-mat"></div><div class="mx-calc ar-calc"></div></div></div>';
+  const s = 72, pl = new Plot({ w: 2 * 28 + 5 * s, h: 2 * 28 + 4 * s, xmin: 0, xmax: 5, ymin: 0, ymax: 4, pad: 28, gx: 1, gy: 1, lx: 1, ly: 1 });
+  const box = el.querySelector('.ar-plot'); box.innerHTML = pl.svg().replace(/<\/svg>$/, '<g class="ar-dyn"></g></svg>');
+  const dyn = box.querySelector('.ar-dyn'), X = x => pl.X(x), Y = y => pl.Y(y);
+  const pts = ps => ps.map(p => X(p[0]) + ',' + Y(p[1])).join(' ');
+  const arrow = (v, g, cls) => {
+    const x2 = v[0] * g, y2 = v[1] * g, L = Math.hypot(X(x2) - X(0), Y(y2) - Y(0)); if (L < 4) return '';
+    const ux = (X(x2) - X(0)) / L, uy = (Y(y2) - Y(0)) / L, hl = 13, bx = X(x2) - ux * hl, by = Y(y2) - uy * hl;
+    return `<line class="pl-c ${cls}" style="stroke-width:3.6" x1="${X(0)}" y1="${Y(0)}" x2="${bx.toFixed(1)}" y2="${by.toFixed(1)}"/><polygon class="${cls.replace('s-', 'f-')}" points="${X(x2)},${Y(y2)} ${(bx - uy * 6).toFixed(1)},${(by + ux * 6).toFixed(1)} ${(bx + uy * 6).toFixed(1)},${(by - ux * 6).toFixed(1)}"/>`;
+  };
+  const lab = (x, y, cl, t) => `<text class="pl-lbl ${cl}" style="font-size:14px;paint-order:stroke;stroke:var(--card);stroke-width:4px;stroke-linejoin:round" x="${X(x) + (x >= 0 ? 10 : -10)}" y="${Y(y) - 9}" text-anchor="start">${t}</text>`;
+  const w = {
+    // st = { v1, v2 (หัวลูกศร) · g1, g2 (ความยาวที่ลากแล้ว 0–1) · sheet (0–1) · flat (เส้นประ) · frame (0–1) · pc: [0–1 ×3] · lab: ข้อความกลางรูป · tags: true (ป้ายพิกัด) }
+    paint(st) {
+      st = Object.assign({ v1: [3, 1], v2: [1, 2], g1: 1, g2: 1, sheet: 0, frame: 0, pc: [0, 0, 0], tags: true }, st);
+      const [a, c] = st.v1, [b, d2] = st.v2, quad = [[0, 0], [a, c], [a + b, c + d2], [b, d2]];
+      let g = '';
+      if (st.sheet > 0) g += `<polygon class="fa-green" style="fill-opacity:${(0.2 * st.sheet).toFixed(3)}" points="${pts(quad)}"/>`;
+      if (st.frame > 0) g += `<rect x="${X(0)}" y="${Y(3)}" width="${X(4) - X(0)}" height="${Y(0) - Y(3)}" style="fill:none;stroke:var(--muted);stroke-width:2.4;stroke-dasharray:7 5;opacity:${st.frame}"/>`;
+      AR_PIECES.forEach((pc, k) => { if (st.pc[k] > 0) pc.polys.forEach(p => { g += `<polygon class="${pc.cls}" style="fill-opacity:${(0.34 * st.pc[k]).toFixed(3)}" points="${pts(p)}"/>`; }); });
+      if (st.sheet > 0) g += `<polygon style="fill:none;stroke:var(--g-green);stroke-width:2.6;stroke-linejoin:round;opacity:${st.sheet};${st.flat ? 'stroke-dasharray:6 5' : ''}" points="${pts(quad)}"/>`;
+      g += arrow(st.v1, st.g1, 's-blue') + arrow(st.v2, st.g2, 's-orange');
+      if (st.tags) { if (st.g1 >= 1) g += lab(a, c, 'b', `(${mn(Math.round(a * 100) / 100)}, ${mn(Math.round(c * 100) / 100)})`); if (st.g2 >= 1) g += lab(b, d2, 'o', `(${mn(Math.round(b * 100) / 100)}, ${mn(Math.round(d2 * 100) / 100)})`); }
+      const lab_ = typeof st.lab === 'function' ? st.lab() : st.lab;
+      if (lab_) g += `<text class="pl-lbl g" style="font-size:16px;paint-order:stroke;stroke:var(--card);stroke-width:4px;stroke-linejoin:round" x="${X((a + b) / 2)}" y="${Y((c + d2) / 2) + 6}" text-anchor="middle">${lab_}</text>`;
+      dyn.innerHTML = g;
+    },
+    mat(M0) { el.querySelector('.ar-mat').innerHTML = matHtml(arM(M0), { name: '<i>A</i>', key: 'A', cls: (i, j) => (j === 0 ? 'hb' : 'ho') }); },
+    calc(h) { el.querySelector('.ar-calc').innerHTML = typeof h === 'function' ? h() : (h || ''); }
+  };
+  w.mat(M);
+  w.X = X; w.Y = Y; w.svg = box.querySelector('svg');
+  return w;
+}
+const arDet = (M, d0) => { const q = arM(M), v = mDet(q); if (d0 !== undefined && !qEq(v, d0)) throw new Error('arDet'); return v; };
+const AR_BASE = (() => {
+  const note = (th, en) => `<div class="ar-note">${tx(T(th, en))}</div>`;
+  const D5 = arDet(AR_A, Q(5)), DSW = arDet(AR_SW, Q(-5)), DFL = arDet(AR_FLAT, Q(0));
+  const detLine = (M, v) => `<span class="mx">det <i>A</i> = (${M[0][0]})(${M[1][1]}) − (${M[0][1]})(${M[1][0]}) = <b>${qHtml(v)}</b></span>`;
+  const mount = (S, M) => arMount(S.el, M);
+  const sc = (cap, M, st, calc, play) => ({ cap, end: S => { const a = mount(S, M); a.paint(st); a.calc(calc); }, play });
+  return [
+    sc(() => tx(T('<b>แต่ละหลัก</b>ของเมทริกซ์ A คือ<b>ลูกศร</b>หนึ่งอัน — หลักที่ 1 = (3, 1) สีน้ำเงิน · หลักที่ 2 = (1, 2) สีส้ม · กด ▶', 'Each <b>column</b> of the matrix A is one <b>arrow</b> — column 1 = (3, 1) in blue · column 2 = (1, 2) in orange · press ▶')), AR_A, {}, '',
+      async S => { const a = mount(S, AR_A); await S.anim.run(800, t => a.paint({ g1: t, g2: 0 })); await S.anim.run(800, t => a.paint({ g2: t })); }),
+    sc(() => tx(T('เติมด้านคู่ขนานให้ครบ ได้<b>สี่เหลี่ยมด้านขนาน</b> (สีเขียว) — พื้นที่ของรูปนี้เท่ากับเท่าไร', 'Complete the parallel sides and you get a <b>parallelogram</b> (green) — what is its area')), AR_A, { sheet: 1 }, () => mx(tx(T('พื้นที่ = ?', 'area = ?'))),
+      async S => { const a = mount(S, AR_A); await S.anim.run(900, t => a.paint({ sheet: t })); a.calc(mx(tx(T('พื้นที่ = ?', 'area = ?')))); }),
+    sc(() => tx(T('<b>สลับสองหลัก</b> → [[1, 3], [2, 1]] ลูกศรสลับสี รูปเดิมเป๊ะ · พื้นที่ยังเป็น 5 · เครื่องหมายแค่บอกว่าเรียงหลักกลับลำดับ → <b>พื้นที่ = |det|</b>', '<b>Swap the two columns</b> → [[1, 3], [2, 1]] — the arrows swap colours, the shape is the same · the area is still 5 · the sign only says the columns came in reverse order → <b>area = |det|</b>')), AR_SW,
+      { v1: [1, 2], v2: [3, 1], sheet: 1, lab: () => tx(T('พื้นที่ = 5', 'area = 5')) }, () => detLine([[1, 3], [2, 1]], DSW) + note('พื้นที่ยังเป็น 5', 'the area is still 5'),
+      async S => { const a = mount(S, AR_A); a.paint({ sheet: 1, lab: tx(T('พื้นที่ = 5', 'area = 5')) }); a.calc(() => detLine([[3, 1], [1, 2]], D5)); await S.anim.wait(500);
+        await S.anim.run(1200, t => a.paint({ v1: [lerp(3, 1, t), lerp(1, 2, t)], v2: [lerp(1, 3, t), lerp(2, 1, t)], sheet: 1, lab: tx(T('พื้นที่ = 5', 'area = 5')) })); a.mat(AR_SW); a.calc(() => detLine([[1, 3], [2, 1]], DSW) + note('พื้นที่ยังเป็น 5', 'the area is still 5')); }),
+    sc(() => tx(T('หลัก (2, 1) กับ (4, 2) ลูกศร<b>ทับแนวเดียวกัน</b> รูปแบนเป็นเส้น · det = 0 แปลว่ารูปแบน: เมทริกซ์แบบนี้<b>ไม่มีอินเวอร์ส</b> (สื่อตัวผกผัน)<br><span class="note">3 × 3: |det| = ปริมาตร (สื่อเวกเตอร์ 3 มิติ)</span>', 'Columns (2, 1) and (4, 2): the arrows <b>lie on one line</b> and the shape collapses · det = 0 means flat: such a matrix has <b>no inverse</b> (the inverse-matrix lesson)<br><span class="note">3 × 3: |det| = volume (the 3D vectors lesson)</span>')), AR_FLAT,
+      { v1: [2, 1], v2: [4, 2], sheet: 1, flat: true, lab: () => tx(T('แบน!', 'flat!')) }, () => detLine([[2, 4], [1, 2]], DFL) + note('det = 0 → รูปแบน', 'det = 0 → a flat shape'),
+      async S => { const a = mount(S, AR_SW); a.paint({ v1: [1, 2], v2: [3, 1], sheet: 1, lab: tx(T('พื้นที่ = 5', 'area = 5')) }); a.calc(() => detLine([[1, 3], [2, 1]], DSW)); await S.anim.wait(500);
+        await S.anim.run(1300, t => a.paint({ v1: [lerp(1, 2, t), lerp(2, 1, t)], v2: [lerp(3, 4, t), lerp(1, 2, t)], sheet: 1, flat: t > 0.97, lab: '' })); a.mat(AR_FLAT); a.paint({ v1: [2, 1], v2: [4, 2], sheet: 1, flat: true, lab: tx(T('แบน!', 'flat!')) }); a.calc(() => detLine([[2, 4], [1, 2]], DFL) + note('det = 0 → รูปแบน', 'det = 0 → a flat shape')); })
+  ];
+})();
+
+// ═══════════════════════════════════════════════════════════════
+//  ข้อ 22 · ไมเนอร์ โคแฟกเตอร์ adj: คืออะไร มาจากไหน ใช้ทำอะไร
+//  ใช้ CF_A เดิม · ฉากละ 1 บรรทัดคิดใหม่ (lineScenes) · ตัวเลขทุกตัวคำนวณจาก mDet/mMinor/mCof/mAdj
+// ═══════════════════════════════════════════════════════════════
+// lineScenes(cap, build, n): n ฉาก ฉาก k วาด build(el, k) ที่มีบรรทัดที่ 1..k · ฉากเล่นแอนิเมชัน = บรรทัดใหม่ (data-ln = k) ค่อยๆ โผล่
+// cap = T | () => html | (k) => html
+function lineScenes(cap, build, n) {
+  const capOf = k => () => { const c = typeof cap === 'function' ? cap(k) : cap; return typeof c === 'string' ? c : tx(c); };
+  return Array.from({ length: n }, (_, i) => {
+    const k = i + 1;
+    return { cap: capOf(k), end: S => { build(S.el, k); },
+      play: async S => { build(S.el, k - 1 || 0); await S.anim.wait(250); build(S.el, k); const ln = S.el.querySelector(`[data-ln="${k}"]`); if (ln) { ln.style.opacity = 0; await S.anim.run(600, t => { ln.style.opacity = t; }, EASE.out); ln.style.opacity = ''; } } };
+  });
+}
+const lnWrap = (k, h) => `<div class="cf-ln" data-ln="${k}">${h}</div>`;
+const cfLines = (rows, k) => rows.slice(0, k).map((h, i) => lnWrap(i + 1, h)).join('');
+// ═══════════════════════════════════════════════════════════════
+//  รอบ 3b · ฉาก "ทำไม" 3 จุด — ก) ad − bc จากการตัดชิ้น · ข) ทำไมต้องต่อ 2 หลัก · ค) A · adj A = (det A) I
+//  กติกา: 1 คลิก = 1 ขั้นคิดใหม่ (บรรทัดคิดใหม่ 1 บรรทัด) · ฉากเล่นแอนิเมชันตอนกด ▶ แล้ววาดภาพจบทับเสมอ · ข้อความทุกอย่างเป็นฟังก์ชัน (สลับภาษากลางฉากได้)
+// ═══════════════════════════════════════════════════════════════
+const lnFade = async (S, k) => { const ln = S.el.querySelector(`[data-ln="${k}"]`); if (ln) { ln.style.opacity = 0; await S.anim.run(500, t => { ln.style.opacity = t; }, EASE.out); ln.style.opacity = ''; } };
+
+// ───────── ก) การ์ด "ทำไมตัดชิ้นส่วนแล้วได้ คูณลง − คูณขึ้น" · ตัวอักษร a b c d บนภาพของ AR_A (หลัก 1 = (a, c) · หลัก 2 = (b, d)) ─────────
+const ai = s => s.replace(/[a-d]/g, m => `<i>${m}</i>`);                                                    // HTML: ตัวอักษร a–d เป็นตัวเอียง (ใช้กับข้อความล้วน ไม่มีแท็ก)
+const aiSvg = s => s.replace(/[a-d]/g, m => `<tspan font-style="italic">${m}</tspan>`);                     // SVG
+{ const a = AR_A[0][0], b = AR_A[0][1], c = AR_A[1][0], d = AR_A[1][1];                                    // ตัวเลขที่ใช้ในบรรทัดคิดต้องตรงกัน ไม่ตรง = หยุดทันที
+  if ((a + b) * (c + d) !== 12 || a * c !== 3 || b * d !== 2 || 2 * b * c !== 2 || a * d - b * c !== 5 || (a + b) * (c + d) - a * c - b * d - 2 * b * c !== 5) throw new Error('AD: ตัวเลขไม่ตรง'); }
+const AD_BASE = { g1: 1, g2: 1, sheet: 0, frame: 0, dims: 0, pc: [0, 0, 0], pl: [0, 0, 0], labA: 0 };
+const adS = o => Object.assign({}, AD_BASE, o);
+const AD_F = 0.2;                                                                                           // ความทึบของชิ้นที่หักล้างไปแล้ว
+const AD_ST = [                                                                                             // สภาพภาพจบของฉาก 1–10 (ดัชนี 0–9)
+  adS({ sheet: 1 }),
+  adS({ sheet: 1, frame: 1, dims: 1 }),
+  adS({ sheet: 1, frame: 1, dims: 1, pc: [1, 0, 0], pl: [1, 0, 0] }),
+  adS({ sheet: 1, frame: 1, dims: 1, pc: [1, 1, 0], pl: [1, 1, 0] }),
+  adS({ sheet: 1, frame: 1, dims: 1, pc: [1, 1, 1], pl: [1, 1, 1] }),
+  adS({ sheet: 1, frame: 1, dims: 1, pc: [1, 1, 1], pl: [1, 1, 1] }),
+  adS({ sheet: 1, frame: 1, dims: 1, pc: [1, 1, 1], pl: [1, 1, 1] }),
+  adS({ sheet: 1, frame: 1, dims: 1, pc: [AD_F, 1, 1], pl: [AD_F, 1, 1] }),
+  adS({ sheet: 1, frame: 1, dims: 1, pc: [AD_F, AD_F, 1], pl: [AD_F, AD_F, 1] }),
+  adS({ sheet: 1, frame: 1, dims: 1, pc: [AD_F, AD_F, 1], pl: [AD_F, AD_F, 1], labA: 1 })
+];
+const adMix = (a, b, t) => { const o = {}; for (const k in b) o[k] = typeof b[k] === 'string' ? b[k] : Array.isArray(b[k]) ? b[k].map((v, j) => lerp(a[k][j], v, t)) : lerp(a[k], b[k], t); return o; };
+function adMount(S) {
+  const w = arMount(S.el, AR_A), X = w.X, Y = w.Y, cl = (i, j) => (j === 0 ? 'hb' : 'ho');
+  S.el.querySelector('.ar-mat').innerHTML = matHtml([[ai('a'), ai('b')], [ai('c'), ai('d')]], { name: '<i>A</i>', key: 'A', cls: cl }) + xop('=') + matHtml(arM(AR_A), { key: 'A2', cls: cl });
+  const lay = sv('g', {}, w.svg); w.lay = lay;
+  w.draw = st => {
+    w.paint({ g1: st.g1, g2: st.g2, sheet: st.sheet, frame: st.frame, pc: st.pc, tags: false, lab: '' });
+    const sty = (op, fs, fill) => `style="font-size:${fs}px;paint-order:stroke;stroke:var(--card);stroke-width:4px;stroke-linejoin:round;opacity:${(+op).toFixed(3)}${fill ? ';fill:' + fill : ''}"`;
+    const tt = (x, y, c, h, op, fs, an, fill) => `<text class="pl-lbl ${c}" ${sty(op, fs, fill)} x="${x.toFixed(1)}" y="${y.toFixed(1)}" text-anchor="${an || 'middle'}">${h}</text>`;
+    let g = '';
+    if (st.dims > 0.004) {                                                                                  // ป้ายความยาวด้านกรอบ: ขอบบน (b, a) · ขอบขวา (c, d)
+      const yb = 3.16, xr = 4.16, tk = 5, ln = d_ => `<path d="${d_}" style="fill:none;stroke:var(--muted);stroke-width:1.8;opacity:${st.dims.toFixed(3)}"/>`;
+      g += ln(`M${X(0) + 2} ${Y(yb) + tk}V${Y(yb)}H${X(1) - 2}V${Y(yb) + tk}`) + ln(`M${X(1) + 2} ${Y(yb) + tk}V${Y(yb)}H${X(4) - 2}V${Y(yb) + tk}`);
+      g += ln(`M${X(xr) - tk} ${Y(0) - 2}H${X(xr)}V${Y(1) + 2}H${X(xr) - tk}`) + ln(`M${X(xr) - tk} ${Y(1) - 2}H${X(xr)}V${Y(3) + 2}H${X(xr) - tk}`);
+      g += tt(X(0.5), Y(yb) - 8, 'o', aiSvg('b'), st.dims, 17) + tt(X(2.5), Y(yb) - 8, 'b', aiSvg('a'), st.dims, 17);
+      g += tt(X(xr) + 9, Y(0.5) + 6, 'b', aiSvg('c'), st.dims, 17, 'start') + tt(X(xr) + 9, Y(2) + 6, 'o', aiSvg('d'), st.dims, 17, 'start');
+    }
+    [[[2, 0.33], [2, 2.64]], [[3.72, 1.6], [0.3, 1.33]], [[3.5, 0.5], [0.5, 2.5]]].forEach((ps, k) => {      // ป้ายในชิ้น: ส้ม ½ac · ชมพู ½bd · เทา bc
+      if (st.pl[k] > 0.004) ps.forEach(([x, y]) => { g += tt(X(x), Y(y) + 5, '', aiSvg(['½ac', '½bd', 'bc'][k]), st.pl[k], 14, 'middle', 'var(--text)'); });
+    });
+    if (st.g1 >= 1) g += tt(X(3) + 10, Y(1) - 9, 'b', '(' + aiSvg('a, c') + ')', 1, 14, 'start');
+    if (st.g2 >= 1) g += tt(X(1) + 10, Y(2) - 9, 'o', '(' + aiSvg('b, d') + ')', 1, 14, 'start');
+    if (st.labA > 0.004) g += tt(X(2), Y(1.5) + 7, 'g', aiSvg(st.labTxt || 'ad − bc'), st.labA, 21);
+    lay.innerHTML = g;
+  };
+  return w;
+}
+// บรรทัดคิด 1–9 · k = ฉากปัจจุบัน (ดัชนี) บอกว่าขีดฆ่าอะไรแล้ว · fresh = คลาสขีดฆ่าที่ "ยังไม่ขีด" (ไว้เล่นแอนิเมชันเส้นขีด)
+const adRows = (k, fresh) => {
+  const sOr = k >= 7, sPk = k >= 8;
+  const t = (s, c, on) => (on ? `<span class="ad-x ${c}${fresh === c ? '' : ' on'}">${ai(s)}</span>` : ai(s));
+  const n = h => `<span class="note">${h}</span>`;
+  return [
+    `<span class="mx">${tx(T('กรอบ', 'frame'))} = ${ai('(a + b)(c + d)')}</span> ${n('(3 + 1)(1 + 2) = 12')}`,
+    `<span class="mx">${tx(T('ส้ม 2 ชิ้น', '2 orange pieces'))} = 2 × ½${ai('ac')} = ${ai('ac')}</span> ${n('(3 × 1 = 3)')}`,
+    `<span class="mx">${tx(T('ชมพู 2 ชิ้น', '2 pink pieces'))} = 2 × ½${ai('bd')} = ${ai('bd')}</span> ${n('(1 × 2 = 2)')}`,
+    `<span class="mx">${tx(T('เทา 2 ช่อง', '2 grey squares'))} = 2${ai('bc')}</span> ${n('(2 × 1 × 1 = 2)')}`,
+    `${tx(T('พื้นที่', 'area'))} = ${ai('(a + b)(c + d) − ac − bd − 2bc')}`,
+    `= ${t('ac', 'or', sOr)} + ${ai('ad')} + ${ai('bc')} + ${ai('bd')} ${t('− ac', 'or', sOr)} − ${ai('bd')} − ${ai('2bc')}`,
+    `= ${ai('ad')} + ${ai('bc')} + ${t('bd', 'pk', sPk)} ${t('− bd', 'pk', sPk)} − ${ai('2bc')}`,
+    `= ${ai('ad')} + ${ai('bc')} − ${ai('2bc')}`,
+    `<span class="mx">= ${ai('ad')} − ${ai('bc')}</span> ${n('= (3)(2) − (1)(1) = 5 ✓')} ${n('(12 − 3 − 2 − 2 = 5)')}`
+  ];
+};
+const adCalc = (count, k, fresh) => adRows(k, fresh).slice(0, count).map((h, i) => lnWrap(i + 1, h)).join('');
+const AD_CAP = [
+  () => tx(T('ให้ตัวอักษรแทนเลขก่อน จะได้เห็นว่าใช้ได้กับ<b>ทุก</b>เมทริกซ์: หลักที่ 1 = (<i>a</i>, <i>c</i>) · หลักที่ 2 = (<i>b</i>, <i>d</i>) — ตัวอย่างนี้ <i>a</i> = 3, <i>c</i> = 1, <i>b</i> = 1, <i>d</i> = 2', 'Use letters for the numbers first, so we see it works for <b>every</b> matrix: column 1 = (<i>a</i>, <i>c</i>) · column 2 = (<i>b</i>, <i>d</i>) — here <i>a</i> = 3, <i>c</i> = 1, <i>b</i> = 1, <i>d</i> = 2')),
+  () => tx(T('ทางอ้อม: ครอบด้วย<b>สี่เหลี่ยมผืนผ้า</b> (เส้นประ) กว้าง <i>a</i> + <i>b</i> สูง <i>c</i> + <i>d</i> — กรอบหาพื้นที่ง่าย แล้วค่อยตัดชิ้นที่เกินออก', 'The detour: wrap it in a <b>rectangle</b> (dashed), <i>a</i> + <i>b</i> wide and <i>c</i> + <i>d</i> tall — the frame is easy, then cut away the extra pieces')),
+  () => tx(T('สามเหลี่ยมส้มมีขาฉากยาว <i>a</i> กับ <i>c</i> → ชิ้นละ ½<i>ac</i> สองชิ้นรวม <i>ac</i>', 'Each orange triangle has legs <i>a</i> and <i>c</i> → ½<i>ac</i> each, <i>ac</i> for the pair')),
+  () => tx(T('สามเหลี่ยมชมพูมีขาฉากยาว <i>b</i> กับ <i>d</i> → สองชิ้นรวม <i>bd</i>', 'The pink triangles have legs <i>b</i> and <i>d</i> → <i>bd</i> for the pair')),
+  () => tx(T('ช่องมุมเทากว้าง <i>b</i> สูง <i>c</i> → สองช่องรวม 2<i>bc</i>', 'Each grey corner is <i>b</i> wide and <i>c</i> tall → 2<i>bc</i> for the pair')),
+  () => tx(T('พื้นที่สีเขียว = กรอบ ลบ ชิ้นส่วนเกินทั้งหมด', 'Green area = frame minus every extra piece')),
+  () => tx(T('กระจายวงเล็บ (<i>a</i> + <i>b</i>)(<i>c</i> + <i>d</i>) ได้ 4 พจน์', 'Expand (<i>a</i> + <i>b</i>)(<i>c</i> + <i>d</i>) into four terms')),
+  () => tx(T('<i>ac</i> กับ −<i>ac</i> หักล้างกัน (คู่ส้ม)', '<i>ac</i> and −<i>ac</i> cancel (the orange pair)')),
+  () => tx(T('<i>bd</i> กับ −<i>bd</i> หักล้างกัน (คู่ชมพู)', '<i>bd</i> and −<i>bd</i> cancel (the pink pair)')),
+  () => tx(T('ในกรอบมี <i>bc</i> อยู่ 1 ก้อน แต่ตัดเทาออกไป 2 ก้อน จึงเหลือ −<i>bc</i> → <b>พื้นที่ = <i>ad</i> − <i>bc</i></b> · ลองแทนเลข: (3)(2) − (1)(1) = 5 ตรงกับ 12 − 3 − 2 − 2 = 5', 'The frame holds one <i>bc</i> but we cut away two, leaving −<i>bc</i> → <b>area = <i>ad</i> − <i>bc</i></b> · with numbers: (3)(2) − (1)(1) = 5, the same as 12 − 3 − 2 − 2 = 5'))
+];
+// ───────── รอบ 3c · การ์ด "det คืออะไร เรียนไปทำไม" รวมเป็นเรื่องเดียว 17 ฉาก: ① เห็นภาพ → ② พิสูจน์ (ตัดชิ้น ad − bc) → ③ สูตรลัด (= คูณลง − คูณขึ้น) → ④ ต่อยอด (สลับหลัก · รูปแบน) ─────────
+const phTag = (th, en) => `<span class="ar-ph">${tx(T(th, en))}</span>`;                                   // ป้ายช่วงหน้าคำบรรยาย (ข้อความเป็นฟังก์ชัน สลับภาษากลางฉากได้)
+const arPh = k => phTag(...{ see: ['① เห็นภาพ', '① See it'], prove: ['② พิสูจน์', '② Prove it'], short: ['③ สูตรลัด', '③ The shortcut'], more: ['④ ต่อยอด', '④ Going further'] }[k]);
+const arSc = (sc, ph, cap) => Object.assign({}, sc, { cap: () => arPh(ph) + (cap || sc.cap)() });
+const adScene = (i, cap, ph) => ({                                                                          // ฉากตัวอักษร a b c d (ดัชนี 0–9) · ฉากแรก (i = 0) ไม่ลากลูกศรใหม่ แค่เผยตัวอักษรบนภาพเดิม
+  cap: () => arPh(ph) + cap(),
+  end: S => { const w = adMount(S); w.draw(AD_ST[i]); w.calc(adCalc(i, i)); },
+  play: async S => {
+    const A = S.anim, w = adMount(S);
+    if (i === 0) {
+      const mt = S.el.querySelector('.ar-mat');
+      w.draw(AD_ST[0]); w.lay.style.opacity = 0; mt.style.opacity = 0; await A.wait(250);
+      await A.run(700, t => { w.lay.style.opacity = t; mt.style.opacity = t; }, EASE.out);
+      w.lay.style.opacity = ''; mt.style.opacity = ''; return;
+    }
+    const prev = AD_ST[i - 1], cur = AD_ST[i], strike = i === 7 ? 'or' : i === 8 ? 'pk' : null;
+    w.draw(prev); w.calc(adCalc(i - 1, i - 1)); await A.wait(250);
+    if (strike) {                                                                                            // 1) เส้นขีดฆ่าวิ่งผ่านคู่ที่หักล้าง
+      w.calc(adCalc(i - 1, i, strike)); await A.wait(80);
+      S.el.querySelectorAll('.ad-x:not(.on)').forEach(e => e.classList.add('on')); await A.wait(750);
+    }
+    if (JSON.stringify(prev) !== JSON.stringify(cur)) await A.run(strike ? 800 : 900, t => w.draw(adMix(prev, cur, t)));   // 2) ภาพเปลี่ยน (ชิ้นโผล่/จาง)
+    w.draw(cur); w.calc(adCalc(i, i)); await lnFade(S, i);                                                  // 3) บรรทัดคิดใหม่โผล่
+  }
+});
+// ฉาก 13–15 (สูตรลัด): ซ้าย = กราฟสะอาด (รูปเขียว + ad − bc = 5) · ขวา = กระดาน 2 × 2 ลากเส้นแดง a·d แล้วเขียว b·c
+{ const a = AR_A[0][0], b = AR_A[0][1], c = AR_A[1][0], d = AR_A[1][1];
+  if (a * d !== 6 || b * c !== 1 || a * d - b * c !== 5 || dtSpecs(2, 'chain').map(s => s.cells.map(p => p.join(',')).join('|')).join(';') !== '0,0|1,1;1,0|0,1') throw new Error('AS: ตัวเลข/เส้นไม่ตรง'); }
+const AR_CLEAN = adS({ sheet: 1, labA: 1, labTxt: 'ad − bc = 5' });
+const AS_ROWS = n => [
+  lnWrap(13, dtDown(`<i>a</i> × <i>d</i> = 3 × 2 = <b>6</b>`)),
+  lnWrap(14, dtUp(`<i>b</i> × <i>c</i> = 1 × 1 = <b>1</b>`)),
+  lnWrap(15, `<span class="mx">det <i>A</i> = <i>ad</i> − <i>bc</i> = 6 − 1 = <b>5</b> = ${tx(T('พื้นที่', 'the area'))} ✓</span>`)
+].slice(0, n).join('');
+const AS_ST = [
+  { lines: { d0: 1 }, chips: { d0: 1 }, marks: [[[[0, 0], [1, 1]], 'red']] },
+  { lines: { d0: 1, u0: 1 }, chips: { d0: 1, u0: 1 }, fade: { d0: 0.6 }, keepChips: true, marks: [[[[1, 0], [0, 1]], 'green']] },
+  { lines: { d0: 1, u0: 1 }, chips: { d0: 1, u0: 1 }, marks: [] }
+];
+const asFull = n => Object.assign({}, AS_ST[n], { calc: () => AS_ROWS(n + 1) });
+function arShortMount(S) {
+  const w = adMount(S), R = S.el.querySelector('.tg-R');
+  R.innerHTML = '<div class="ar-db"></div>';
+  return { w, b: dtBoard(R.querySelector('.ar-db'), AR_A, {}) };
+}
+const AS_CAP = [
+  () => tx(T('แล้ว <i>ad</i> อยู่ตรงไหนในเมทริกซ์? <i>a</i> กับ <i>d</i> อยู่บน<b>เส้นทแยงลง</b> (ซ้ายบน → ขวาล่าง) = <b>คูณลง</b>', 'Where is <i>ad</i> in the matrix? <i>a</i> and <i>d</i> sit on the <b>down diagonal</b> (top left → bottom right) = <b>multiply down</b>')),
+  () => tx(T('<i>b</i> กับ <i>c</i> อยู่บน<b>เส้นทแยงขึ้น</b> (ซ้ายล่าง → ขวาบน) = <b>คูณขึ้น</b>', '<i>b</i> and <i>c</i> sit on the <b>up diagonal</b> (bottom left → top right) = <b>multiply up</b>')),
+  () => tx(T('<b>สูตรลัด</b>: det A = คูณลง − คูณขึ้น = <i>ad</i> − <i>bc</i> = พื้นที่สี่เหลี่ยมด้านขนาน — ต่อไปไม่ต้องวาดกรอบแล้วตัดชิ้น แค่คูณไขว้สองเส้นก็ได้พื้นที่ทันที', '<b>The shortcut</b>: det A = down − up = <i>ad</i> − <i>bc</i> = the parallelogram’s area — no more frames and cutting; two cross products give the area at once'))
+];
+const AS_SC = AS_CAP.map((cap, i) => ({
+  cap: () => arPh('short') + cap(),
+  end: S => { const { w, b } = arShortMount(S); w.draw(AR_CLEAN); b.set(asFull(i)); },
+  play: async S => {
+    const A = S.anim, { w, b } = arShortMount(S);
+    if (i === 0) {                                                                                           // ภาพตัดชิ้นจางหาย → กระดานเปล่า → ลากเส้นแดง a → d
+      w.draw(AD_ST[9]); b.set({ calc: '' }); await A.wait(250);
+      await A.run(700, t => w.draw(adMix(AD_ST[9], AR_CLEAN, t)));
+      await A.wait(200);
+      await A.run(900, p => { b.set({ lines: { d0: p }, marks: AS_ST[0].marks, calc: '' }); }, EASE.inOut);
+      b.set(asFull(0)); await lnFade(S, 13); return;
+    }
+    w.draw(AR_CLEAN); b.set(asFull(i - 1)); await A.wait(300);
+    if (i === 1) {                                                                                           // ลากเส้นเขียว b → c
+      await A.run(900, p => { b.set({ lines: { d0: 1, u0: p }, chips: { d0: 1 }, fade: { d0: 0.6 }, keepChips: true, marks: AS_ST[1].marks, calc: () => AS_ROWS(1) }); }, EASE.inOut);
+    }
+    b.set(asFull(i)); await lnFade(S, 13 + i);
+  }
+}));
+const AR_SC = [
+  arSc(AR_BASE[0], 'see'),
+  arSc(AR_BASE[1], 'see', () => tx(T('ต่อด้านคู่ขนานให้ครบ ได้<b>สี่เหลี่ยมด้านขนาน</b> (สีเขียว) — <b>det A คือพื้นที่ของรูปนี้</b> · แต่พื้นที่เท่าไร? รูปเอียงแบบนี้ไม่มีสูตรตรงๆ ต้องหาทางอ้อม', 'Complete the parallel sides to get a <b>parallelogram</b> (green) — <b>det A is the area of this shape</b> · but how big is it? A slanted shape has no direct formula, so we go round about'))),
+  ...AD_CAP.map((cap, i) => adScene(i, cap, 'prove')),
+  ...AS_SC,
+  arSc(AR_BASE[2], 'more'),
+  arSc(AR_BASE[3], 'more')
+];
+if (AR_SC.length !== 17) throw new Error('AR_SC ต้องมี 17 ฉาก');
+
+// ───────── ข) การ์ด "ทำไมต้องต่อ 2 หลัก" · กระดาน 3 × 3 ของ D3_M · แบบวนรอบ (cyc) เห็นเส้นขาด → ต่อหลัก (chain) แล้วเส้นตรง ─────────
+const SR_M = pad2(D3_M), SR_BY = {}, SR_BH = {};
+dtSpecs(3, 'cyc').forEach(s => { SR_BY[s.id] = s; }); dtSpecs(3, 'chain').forEach(s => { SR_BH[s.id] = s; });
+const SR_DN = ['d0', 'd1', 'd2'], SR_UP = ['u0', 'u1', 'u2'], SR_ALL = SR_DN.concat(SR_UP);
+const SR_P = {}; SR_ALL.forEach(id => { SR_P[id] = dtProd(SR_BY[id].cells.map(([i, j]) => SR_M[i][j])); });
+const SR_D = dtSumQ(SR_DN.map(id => SR_P[id])), SR_U = dtSumQ(SR_UP.map(id => SR_P[id]));
+function dtSumQ(vals) { return vals.reduce((s, v) => qAdd(s, v), Q(0)); }
+if (!(qEq(SR_P.d0, Q(5)) && qEq(SR_P.d1, Q(24)) && qEq(SR_P.d2, Q(6)) && qEq(SR_P.u0, Q(10)) && qEq(SR_P.u1, Q(12)) && qEq(SR_P.u2, Q(6)) && qEq(SR_D, Q(35)) && qEq(SR_U, Q(28)) && qEq(qSub(SR_D, SR_U), mDet(SR_M)) && qEq(mDet(SR_M), Q(7)))) throw new Error('SR: ตัวเลขไม่ตรง');
+SR_ALL.forEach(id => { const v = SR_BH[id].virt.map(([i, j]) => SR_M[i][j % 3]); if (!qEq(dtProd(v), SR_P[id])) throw new Error('SR: virt ' + id); });
+const srOne = ids => Object.fromEntries(ids.map(id => [id, 1]));
+const srFd = (ids, v) => Object.fromEntries(ids.map(id => [id, v]));
+const srCol = j => [[0, j], [1, j], [2, j]];
+const srGhost = j => [[0, 3 + j], [1, 3 + j], [2, 3 + j]];
+const SR_ST = [                                                                                              // สภาพภาพจบของฉาก 1–11 (ดัชนี 0–10) · kind: cyc = วนรอบ · c2 = ต่อ 2 หลัก · c3 = ต่อ 3 หลัก
+  { kind: 'cyc', ghost: 0, lines: {}, fade: {}, marks: [] },
+  { kind: 'cyc', lines: srOne(['d0']), fade: { d0: 0 }, marks: [[SR_BY.d0.cells, 'red']] },
+  { kind: 'cyc', lines: srOne(['d0', 'd1']), fade: { d0: 0.8 }, marks: [[SR_BY.d1.cells, 'red']] },
+  { kind: 'cyc', lines: srOne(SR_DN), fade: srFd(['d0', 'd1'], 0.8), marks: [[SR_BY.d2.cells, 'red']] },
+  { kind: 'c2', ghost: 1, lines: {}, marks: [[srCol(0).concat(srGhost(0)), 'orange']] },
+  { kind: 'c2', ghost: 1, lines: srOne(['d0', 'd1']), fade: { d0: 0.8 }, marks: [[SR_BH.d1.virt, 'red']] },
+  { kind: 'c2', ghost: 2, lines: srOne(['d0', 'd1']), fade: srFd(['d0', 'd1'], 0.8), marks: [[srCol(1).concat(srGhost(1)), 'orange']] },
+  { kind: 'c2', ghost: 2, lines: srOne(SR_DN), fade: srFd(['d0', 'd1'], 0.8), marks: [[SR_BH.d2.virt, 'red']] },
+  { kind: 'c3', ghost: 3, lines: {}, marks: [[[[0, 0], [1, 1], [2, 2], [0, 3], [1, 4], [2, 5]], 'yellow']] },
+  { kind: 'c2', ghost: 2, lines: srOne(SR_ALL), fade: srFd(SR_DN, 0.8), marks: [[SR_UP.flatMap(id => SR_BH[id].virt), 'green']] },
+  { kind: 'c2', ghost: 2, lines: srOne(SR_ALL), fade: srFd(SR_ALL, 0.75), marks: [] }
+];
+const srMk = (S, kind) => dtBoard(S.el, D3_M, kind === 'cyc' ? { ext: 0, mode: 'cyc' } : { ext: kind === 'c3' ? 3 : 2, mode: 'chain', nochips: true });
+const srSym = id => SR_BY[id].cells.map(([i, j]) => aij(i, j)).join('');
+const srVals = id => SR_BY[id].cells.map(([i, j]) => SR_M[i][j]);
+const srCp = j => `${aij(0, j)}, ${aij(1, j)}, ${aij(2, j)}`;
+const srRecap = () => `${dtDown(`${dtSumText(SR_DN.map(id => SR_P[id]))} = <b>${qHtml(SR_D)}</b>`)}`;
+const SR_RW = [                                                                                              // บรรทัดคิดของฉาก i · g = กลุ่ม (ขึ้นกลุ่มใหม่ = ล้างบรรทัดเก่า)
+  null,
+  { g: 'a', h: () => `<span class="mx">+ ${srSym('d0')} = ${dtProdText(srVals('d0'))}</span>` },
+  { g: 'a', h: () => `<span class="mx">+ ${srSym('d1')} = ${dtProdText(srVals('d1'))}</span>` },
+  { g: 'a', h: () => `<span class="mx">+ ${srSym('d2')} = ${dtProdText(srVals('d2'))}</span>` },
+  { g: 'b', h: () => `<span>${tx(T('ต่อหลักที่ 1', 'copy column 1'))} (${srCp(0)}) ${tx(T('ไว้ทางขวา', 'on the right'))}</span>` },
+  { g: 'b', h: () => `<span>${aij(0, 1)} → ${aij(1, 2)} → ${aij(2, 0)} ${tx(T('เป็นเส้นตรงแล้ว', 'is a straight line now'))} ✓</span>` },
+  { g: 'b', h: () => `<span>${tx(T('ต่อหลักที่ 2', 'copy column 2'))} (${srCp(1)}) ${tx(T('ไว้ทางขวา', 'on the right'))}</span>` },
+  { g: 'b', h: () => `<span>${aij(0, 2)} → ${aij(1, 0)} → ${aij(2, 1)} ${tx(T('ตรงแล้ว ✓ ครบ 3 เส้นลง', 'straight too ✓ all 3 lines down'))}</span>` },
+  { g: 'b', h: () => `<span>${tx(T('ต่อหลักที่ 3', 'copy column 3'))} → ${tx(T('เส้นที่ 4', 'line 4'))} = ${aij(0, 0)}${aij(1, 1)}${aij(2, 2)} ${tx(T('ซ้ำก้อนที่ 1', 'repeats product 1'))}</span>` },
+  { g: 'c', h: () => `<span>− (${srSym('u0')} + ${srSym('u1')} + ${srSym('u2')}) = −(${dtSumText(SR_UP.map(id => SR_P[id]))}) = <b>−${qHtml(SR_U)}</b></span>` },
+  { g: 'c', h: () => `<span class="mx">det <i>A</i> = ${qHtml(SR_D)} − ${dtPar(SR_U)} = <b>${qHtml(mDet(SR_M))}</b></span>` }
+];
+const srCalc = i => {
+  const r = SR_RW[i]; if (!r) return '';
+  let h = r.g === 'c' ? lnWrap(0, srRecap()) : '';
+  for (let j = 1; j <= i; j++) if (SR_RW[j] && SR_RW[j].g === r.g) h += lnWrap(j, SR_RW[j].h());
+  return h;
+};
+const srFull = i => Object.assign({}, SR_ST[i], { calc: () => srCalc(i) });
+const srFly = async (S, b, j) => {                                                                          // หลักที่ j บินไปต่อท้าย
+  const from = [0, 1, 2].map(i => b.cellV(i, j)), to = [0, 1, 2].map(i => b.cellV(i, 3 + j));
+  await flyTo(b.stage, from, to, `<span class="dt-fc">${D3_M.map(r => `<span>${qHtml(r[j])}</span>`).join('')}</span>`, S.anim, 1000, { arc: 46 });
+};
+const srPlay = i => async S => {
+  const A = S.anim, st = SR_ST[i];
+  if (i >= 1 && i <= 3) {                                                                                    // วนรอบ: ลากเส้นของฉากนี้ (ชนขอบแล้ววนกลับ)
+    const id = SR_DN[i - 1], b = srMk(S, 'cyc'), base = Object.assign({}, st, { lines: Object.assign({}, st.lines, { [id]: 0 }), calc: () => srCalc(i - 1) });
+    b.set(base); await A.wait(350);
+    await A.run(1700, p => { b.set(Object.assign({}, base, { lines: Object.assign({}, st.lines, { [id]: p }) })); }, EASE.inOut);
+    b.set(srFull(i)); await lnFade(S, i); return;
+  }
+  if (i === 4) { const b = srMk(S, 'c2'); b.set({ ghost: 0, calc: '' }); await A.wait(300); b.set({ ghost: 0, marks: [[srCol(0), 'orange']], calc: '' }); await srFly(S, b, 0); b.set(srFull(4)); await lnFade(S, 4); return; }
+  if (i === 5 || i === 7) {                                                                                  // ต่อหลักแล้วเส้นตรง: ลากเส้น d1 / d2
+    const b = srMk(S, 'c2'), id = i === 5 ? 'd1' : 'd2', prevLines = Object.assign({}, st.lines); delete prevLines[id];
+    const base = Object.assign({}, st, { lines: prevLines, calc: () => srCalc(i - 1) });
+    b.set(base); await A.wait(350);
+    await A.run(1000, p => { b.set(Object.assign({}, base, { lines: Object.assign({}, prevLines, { [id]: p }) })); }, EASE.inOut);
+    b.set(srFull(i)); await lnFade(S, i); return;
+  }
+  if (i === 6) { const b = srMk(S, 'c2'); b.set(Object.assign({}, SR_ST[5], { ghost: 1, fade: srFd(['d0', 'd1'], 0.8), marks: [[srCol(1), 'orange']], calc: () => srCalc(5) })); await A.wait(300); await srFly(S, b, 1); b.set(srFull(6)); await lnFade(S, 6); return; }
+  if (i === 8) {                                                                                             // ลองต่อหลักที่ 3
+    let b = srMk(S, 'c2'); b.set(Object.assign({}, SR_ST[7], { marks: [], calc: () => srCalc(7) })); await A.wait(700);
+    b = srMk(S, 'c3'); b.set({ ghost: 2, marks: [[srCol(2), 'orange']], calc: () => srCalc(7) }); await A.wait(300);
+    await srFly(S, b, 2); b.set(srFull(8)); await lnFade(S, 8); return;
+  }
+  if (i === 9) {                                                                                             // คูณขึ้น: ลากเขียวทีละเส้น
+    const b = srMk(S, 'c2'), lines = srOne(SR_DN), base = { ghost: 2, fade: srFd(SR_DN, 0.8), marks: [], calc: () => lnWrap(0, srRecap()) };
+    b.set(Object.assign({}, base, { lines: Object.assign({}, lines) })); await A.wait(400);
+    for (const id of SR_UP) {
+      const mk = [[SR_BH[id].virt, 'green']];
+      await A.run(1000, p => { b.set(Object.assign({}, base, { lines: Object.assign({}, lines, { [id]: p }), marks: mk })); }, EASE.inOut);
+      lines[id] = 1; b.set(Object.assign({}, base, { lines: Object.assign({}, lines), marks: mk })); await A.wait(350);
+    }
+    b.set(srFull(9)); await lnFade(S, 9); return;
+  }
+  if (i === 10) { const b = srMk(S, 'c2'); b.set(srFull(9)); await A.wait(700); b.set(srFull(10)); await lnFade(S, 10); }
+};
+const SR_CAP = [
+  () => tx(T('6 ตัวนี้อยู่ตรงไหนในเมทริกซ์? เริ่มจากตัว<b>บวก</b> 3 ตัว (5, 24, 6) · กด ▶', 'Where are these six in the matrix? Start with the three <b>plus</b> products (5, 24, 6) · press ▶')),
+  () => tx(T('ก้อนที่ 1 = ทแยงหลัก — เป็นเส้นตรงในรูปอยู่แล้ว', 'Product 1 = the main diagonal — already a straight line in the picture')),
+  () => tx(T('ก้อนที่ 2: เดินทแยงลงได้ 2 ตัวแล้ว<b>ชนขอบขวา</b> ตัวที่ 3 (<i>a</i><sub>31</sub>) อยู่ซ้ายสุด เส้นจึง<b>ขาด</b> ต้องวนกลับ', 'Product 2 runs down two steps, then <b>hits the right edge</b>; the third number (<i>a</i><sub>31</sub>) is far left, so the line is <b>broken</b> and must wrap around')),
+  () => tx(T('ก้อนที่ 3 ชนขอบตั้งแต่ตัวแรก ขาดอีกเส้น — ถ้าไม่วาดวน ต้องจำเองว่าตัวไหนคู่กับตัวไหน', 'Product 3 hits the edge after its first number — broken again; without the wrap you must remember which numbers go together')),
+  () => tx(T('ลองคัด<b>หลักที่ 1</b> (ส้ม) ไปวางต่อขวา …', 'Try copying <b>column 1</b> (orange) to the right …')),
+  () => tx(T('… ตอนนี้ <i>a</i><sub>31</sub> (ตัวที่ต่อ) อยู่ต่อจาก <i>a</i><sub>23</sub> พอดี ก้อนที่ 2 จึงเป็น<b>เส้นตรง</b>', '… now the copied <i>a</i><sub>31</sub> sits right after <i>a</i><sub>23</sub>, so product 2 is a <b>straight line</b>')),
+  () => tx(T('คัด<b>หลักที่ 2</b> (ส้ม) ไปต่ออีกหลัก', 'Copy <b>column 2</b> (orange) as well')),
+  () => tx(T('ก้อนที่ 3 ตรงแล้วเช่นกัน — ครบ 3 เส้นลงโดยไม่ต้องวน', 'Product 3 is straight too — all three lines down, no wrapping')),
+  () => tx(T('ทำไมไม่ต่อหลักที่ 3? เส้นที่ 4 จะเริ่มที่สำเนาของ <i>a</i><sub>11</sub> (เหลือง) แล้วได้ <i>a</i><sub>11</sub><i>a</i><sub>22</sub><i>a</i><sub>33</sub> <b>ซ้ำ</b>ก้อนที่ 1 → 2 หลักพอดี', 'Why not copy column 3? Line 4 would start at the copy of <i>a</i><sub>11</sub> (yellow) and give <i>a</i><sub>11</sub><i>a</i><sub>22</sub><i>a</i><sub>33</sub> <b>again</b> → two columns are exactly enough')),
+  () => tx(T('คูณขึ้นก็เรื่องเดียวกัน: <i>a</i><sub>31</sub><i>a</i><sub>22</sub><i>a</i><sub>13</sub> ตรงอยู่แล้ว อีก 2 เส้นตรงได้เพราะหลักที่ต่อ · ได้ 10, 12, 6 = ตัวลบทั้ง 3 ตัวจากการกระจาย (คนละลำดับ)', 'Going up is the same story: <i>a</i><sub>31</sub><i>a</i><sub>22</sub><i>a</i><sub>13</sub> is already straight, and the other two straighten thanks to the copies · 10, 12, 6 = the three minus products from the expansion (in a different order)')),
+  () => tx(T('สรุป: <b>ซาร์รัสคือวิธีจำ</b> 6 ผลคูณจากการกระจายแถว 1 ไม่ใช่สูตรใหม่ — การต่อ 2 หลักคือการ<b>คลี่เส้นที่วนกลับให้เป็นเส้นตรง</b> — ต่อ 2 แถวไว้ด้านล่างก็ได้ค่าเดียวกัน (เพราะ det <i>A</i> = det <i>A</i><sup class="tsup">t</sup>) · <b>ใช้ได้กับ 3 × 3 เท่านั้น</b>: 4 × 4 มี 24 ก้อน แต่เส้นทแยงให้แค่ 8', 'In short: <b>Sarrus is a way to remember</b> the six products from expanding row 1, not a new formula — copying two columns <b>unrolls the wrapped lines into straight ones</b> — copying two rows below works too (det <i>A</i> = det <i>A</i><sup class="tsup">t</sup>) · <b>3 × 3 only</b>: a 4 × 4 det has 24 products but the diagonals give just 8'))
+];
+const SR_SC = SR_CAP.map((cap, i) => ({ cap, end: S => { srMk(S, SR_ST[i].kind).set(srFull(i)); }, play: i ? srPlay(i) : undefined }));
+
+// ───────── รอบ 3c · การ์ดซาร์รัส: ช่วง ① "มาจากไหน" 5 ฉาก (O1–O5) ต่อหน้า SR_SC · กระจายแถว 1 เหมือนตอนหา u × v ในสื่อเวกเตอร์ 3 มิติ ─────────
+const SO = [0, 1, 2].map(j => {                                                                             // ก้อนที่ j+1: เลข a₁ⱼ · เครื่องหมาย · det 2 × 2 ที่เหลือ · ผลคูณ 2 ตัว
+  const mn = mMinor(SR_M, 0, j), s = j % 2 ? -1 : 1, a = D3_M[0][j], dn = qMul(mn[0][0], mn[1][1]).n, up = qMul(mn[0][1], mn[1][0]).n;
+  return { j, s, a, mn, dn, up, det: mDet(mn).n, p1: s * a * dn, p2: -s * a * up };
+});
+{ const exp = [[-7, 5, -12], [-6, -6, 24], [-4, 6, -10]];                                                   // ตารางในสเปก ไม่ตรง = หยุดทันที
+  SO.forEach((o, j) => { if (o.det !== exp[j][0] || o.p1 !== exp[j][1] || o.p2 !== exp[j][2]) throw new Error('SO ก้อน ' + (j + 1)); });
+  const flat = SO.flatMap(o => [o.p1, o.p2]), plus = flat.filter(v => v > 0), minus = flat.filter(v => v < 0).map(Math.abs);
+  if (plus.reduce((x, y) => x + y, 0) !== 35 || minus.reduce((x, y) => x + y, 0) !== 28 || !qEq(mDet(SR_M), Q(7)) || SO.reduce((x, o) => x + o.a * o.s * o.det, 0) !== 7) throw new Error('SO ผลรวม'); }
+const soSg = v => (v < 0 ? '− ' : '+ ') + Math.abs(v);
+const SO_ROWS = [
+  () => `<span>det <i>A</i> = + ${aij(0, 0)} × ▢ − ${aij(0, 1)} × ▢ + ${aij(0, 2)} × ▢</span> <span class="note">(▢ = ${tx(T('det 2 × 2 ที่เหลือ หลังปิดแถว 1 กับหลักของตัวนั้น', 'the left-over 2 × 2 det after covering row 1 and that number’s column'))})</span>`,
+  ...SO.map(o => () => `<span>${o.s > 0 ? '+' : '−'} ${o.a} × [<span class="mx-nw">(${qHtml(o.mn[0][0])})(${qHtml(o.mn[1][1])})</span> − <span class="mx-nw">(${qHtml(o.mn[0][1])})(${qHtml(o.mn[1][0])})</span>] = ${soSg(o.p1)} ${soSg(o.p2)}</span>`),
+  () => { const flat = SO.flatMap(o => [o.p1, o.p2]), plus = flat.filter(v => v > 0), minus = flat.filter(v => v < 0).map(Math.abs);
+    return `<span>det <i>A</i> = ${xtag('red', tx(T('บวก 3 ตัว', '3 plus')))} (${plus.join(' + ')}) − ${xtag('green', tx(T('ลบ 3 ตัว', '3 minus')))} (${minus.join(' + ')}) = 35 − 28 = <b>7</b></span>`; }
+];
+const soCalc = k => SO_ROWS.slice(0, k + 1).map((h, i) => lnWrap('o' + (i + 1), h())).join('');
+const soSt = k => {
+  if (k === 0 || k === 4) return { calc: () => soCalc(k) };
+  const j = k - 1, o = SO[j];
+  return { sym: `<span class="dt-sym">${o.s > 0 ? '+' : '−'} ${aij(0, j)} = ${o.a}</span>`, hl: [[{ row: 0 }, 'blue'], [{ col: j }, 'orange'], [{ cell: [0, j] }, 'red']], strike: [0, j], minor: { show: true, M: o.mn }, minorName: '', calc: () => soCalc(k) };
+};
+const SO_CAP = [
+  () => tx(T('ในสื่อเวกเตอร์ 3 มิติ (แท็บ ③ cross) เราหา <i>u</i> × <i>v</i> โดย<b>ปิดแถว 1 กับหลักทีละหลัก แล้วหา det 2 × 2 ที่เหลือ</b> เครื่องหมายสลับ + − + · สื่อนั้นบอกไว้ด้วยว่าปริมาตร = det ของสามแถว → det 3 × 3 ก็หาแบบเดียวกัน · กด ▶', 'In the 3D vectors lesson (tab ③ cross) we found <i>u</i> × <i>v</i> by <b>covering row 1 and one column at a time, then taking the left-over 2 × 2 det</b>, with signs + − + · that lesson also said volume = the det of the three rows → a 3 × 3 det works the same way · press ▶')),
+  () => tx(T('ก้อนที่ 1: <i>a</i><sub>11</sub> = 1 · ปิดแถว 1 หลัก 1 เหลือ det 2 × 2 = (5)(1) − (4)(3) · คูณ 1 เข้าไปได้<b>ผลคูณ 2 ตัว</b>: +5 กับ −12', 'Term 1: <i>a</i><sub>11</sub> = 1 · cover row 1 and column 1, the left-over 2 × 2 det is (5)(1) − (4)(3) · multiplying by 1 gives <b>two products</b>: +5 and −12')),
+  () => tx(T('ก้อนที่ 2 (เครื่องหมาย −): <i>a</i><sub>12</sub> = 3 · ปิดแถว 1 หลัก 2 เหลือ (2)(1) − (4)(2) · คูณ −3 เข้าไปได้ −6 กับ +24', 'Term 2 (sign −): <i>a</i><sub>12</sub> = 3 · cover row 1 and column 2, left with (2)(1) − (4)(2) · multiplying by −3 gives −6 and +24')),
+  () => tx(T('ก้อนที่ 3: <i>a</i><sub>13</sub> = 1 · ปิดแถว 1 หลัก 3 เหลือ (2)(3) − (5)(2) · ได้ +6 กับ −10', 'Term 3: <i>a</i><sub>13</sub> = 1 · cover row 1 and column 3, left with (2)(3) − (5)(2) · this gives +6 and −10')),
+  () => tx(T('รวมได้<b>ผลคูณ 6 ตัว: บวก 3 ลบ 3</b> — ทุกตัวหยิบเลข<b>แถวละ 1 ตัว หลักละ 1 ตัว</b> · Sarrus สังเกตว่า 6 ตัวนี้วางอยู่บนเส้นทแยงพอดี → ไปดูกัน', 'Altogether <b>six products: three plus, three minus</b> — each takes <b>one number from every row and every column</b> · Sarrus noticed these six lie exactly on diagonals → let’s look'))
+];
+const SO_SC = SO_CAP.map((cap, k) => ({
+  cap: () => phTag('① มาจากไหน', '① Where it comes from') + cap(),
+  end: S => { cfBuild(S.el, soSt(k), D3_M); },
+  play: async S => {
+    const A = S.anim, id = 'o' + (k + 1);
+    if (k === 0 || k === 4) { cfBuild(S.el, k ? soSt(3) : { calc: '' }, D3_M); await A.wait(250); cfBuild(S.el, soSt(k), D3_M); await lnFade(S, id); return; }
+    const j = k - 1, st = soSt(k), prev = () => soCalc(k - 1);
+    cfBuild(S.el, k > 1 ? soSt(k - 1) : { calc: prev }, D3_M); await A.wait(250);
+    const c = cfBuild(S.el, { sym: st.sym, hl: st.hl, calc: prev }, D3_M);                                   // 1) เรืองแถว 1 · หลัก j · ช่องตัดกัน
+    await A.wait(500);
+    S.el.classList.remove('dt-still'); await c.A.strike(0, j); c.A.el.querySelectorAll('.struck').forEach(e => e.classList.remove('struck')); await A.wait(300);   // 2) ขีดแถว 1 + หลัก j
+    const c2 = cfBuild(S.el, { sym: st.sym, hl: st.hl, strike: [0, j], minor: { show: true, M: null }, calc: prev }, D3_M);
+    const cols = [0, 1, 2].filter(x => x !== j), rest = [[1, cols[0]], [1, cols[1]], [2, cols[0]], [2, cols[1]]];
+    await Promise.all(rest.map(([a, b], q) => flyNum(S, c2.A.cell(a, b), cellEl(S.el, 'N', Math.floor(q / 2), q % 2), qHtml(D3_M[a][b]), 1100, { arc: 40 })));   // 3) เลข 4 ตัวที่เหลือบินไปเป็น det 2 × 2
+    cfBuild(S.el, Object.assign({}, st, { calc: prev }), D3_M); await A.wait(300);
+    cfBuild(S.el, st, D3_M); await lnFade(S, id);                                                           // 4) บรรทัดคิดใหม่
+  }
+}));
+const SRW_PH = i => (i <= 3 ? ['② อยู่ตรงไหน', '② Where they sit'] : i <= 8 ? ['③ ต่อ 2 หลัก', '③ Copy two columns'] : ['④ สรุป', '④ Summary']);
+const SRW_SC = [...SO_SC, ...SR_SC.map((sc, i) => Object.assign({}, sc, { cap: () => phTag(...SRW_PH(i)) + SR_CAP[i]() }))];
+if (SRW_SC.length !== 16) throw new Error('SRW_SC ต้องมี 16 ฉาก');
+
+// 6 ก้อนของ det 3 × 3 (เลขจริงจาก CF_A): คูณลง 3 ก้อนแรก คูณขึ้น 3 ก้อนหลัง
+const CF6 = (() => {
+  const M = pad2(CF_A), a = (i, j) => M[i][j];
+  const dn = [[0, 0, 1, 1, 2, 2], [0, 1, 1, 2, 2, 0], [0, 2, 1, 0, 2, 1]], up = [[0, 2, 1, 1, 2, 0], [0, 0, 1, 2, 2, 1], [0, 1, 1, 0, 2, 2]];
+  const sym = ix => ix.length ? `${aij(ix[0], ix[1])}${aij(ix[2], ix[3])}${aij(ix[4], ix[5])}` : '';
+  const val = ix => qMul(qMul(a(ix[0], ix[1]), a(ix[2], ix[3])), a(ix[4], ix[5]));
+  const D = dn.reduce((s, ix) => qAdd(s, val(ix)), Q(0)), U = up.reduce((s, ix) => qAdd(s, val(ix)), Q(0));
+  if (!qEq(qSub(D, U), mDet(CF_A))) throw new Error('CF6');
+  return { dn, up, sym, val, D, U, det: qSub(D, U) };
+})();
+const CF_M = pad2(CF_A), CF_MN = [0, 1, 2].map(j => mDet(mMinor(CF_M, 0, j))), CF_CO = mCof(CF_M, 0, 0);
+if (!(qEq(CF_MN[0], Q(7)) && qEq(CF_MN[1], Q(-10)) && qEq(CF_MN[2], Q(-2)))) throw new Error('CF_MN');
+// ฉากกลุ่ม 2: det 3×3 = ผลคูณ 6 ก้อน
+function cf2Build(el, k) {
+  const sg = (ix, s) => `${s} ${CF6.sym(ix)}`;
+  const rows = [
+    `${xtag('red', tx(T('คูณลง 3 ก้อน', '3 products going down')))} <span class="mx">${CF6.dn.map(ix => sg(ix, '+')).join(' ')}</span>`,
+    `${xtag('green', tx(T('คูณขึ้น 3 ก้อน', '3 products going up')))} <span class="mx">${CF6.up.map(ix => sg(ix, '−')).join(' ')}</span>`,
+  ];
+  const nums = `<span class="mx">${CF6.dn.map(ix => dtPar(CF6.val(ix))).map((s, i) => (i ? '+ ' : '') + s).join(' ')} ${CF6.up.map(ix => `− ${dtPar(CF6.val(ix))}`).join(' ')} = <b>${qHtml(CF6.det)}</b></span>`;
+  cfBuild(el, { calc: () => cfLines([rows[0], rows[1], nums], k) });
+}
+// ฉากกลุ่ม 3: ก้อนที่มี a₁₁ ดึงตัวร่วม → ไมเนอร์ M₁₁
+function cf3Build(el, k) {
+  const rows = [
+    `<span class="mx">${tx(T('ก้อนที่มี', 'The terms with'))} ${aij(0, 0)}: + ${aij(0, 0)}${aij(1, 1)}${aij(2, 2)} − ${aij(0, 0)}${aij(1, 2)}${aij(2, 1)}</span>`,
+    `<span class="mx">= ${aij(0, 0)}(${aij(1, 1)}${aij(2, 2)} − ${aij(1, 2)}${aij(2, 1)})</span> <span class="note">(${tx(T('ตัวเลข', 'numbers'))}: 2 − (−5) = 7 = 1 × 7)</span>`,
+    `<span class="mx">${aij(1, 1)}${aij(2, 2)} − ${aij(1, 2)}${aij(2, 1)} = ${matHtml([[1, 1], [1, 2], [2, 1], [2, 2]].map(([i, j]) => `<span>${aij(i, j)}</span>`).reduce((r, v, k) => { if (k % 2 === 0) r.push([v]); else r[r.length - 1].push(v); return r; }, []), { br: '|' })} = ${mij(0, 0)} = <b>${qHtml(CF_MN[0])}</b></span>`
+  ];
+  const mn_ = mMinor(CF_M, 0, 0);
+  cfBuild(el, { hl: [[{ cell: [0, 0] }, 'orange']], strike: k >= 3 ? [0, 0] : null, minor: k >= 3 ? { show: true, M: mn_ } : { show: false }, minorName: mij(0, 0), calc: () => cfLines(rows, k) });
+}
+// ฉากกลุ่ม 4: ทำกับ a₁₂ a₁₃ → det = a₁₁M₁₁ − a₁₂M₁₂ + a₁₃M₁₃ → โคแฟกเตอร์
+function cf4Build(el, k) {
+  const m = j => mij(0, j), c = j => cij(0, j);
+  const rows = [
+    `<span class="mx">det <i>A</i> = ${aij(0, 0)}${m(0)} − ${aij(0, 1)}${m(1)} + ${aij(0, 2)}${m(2)}</span> <span class="note">(+ − +)</span>`,
+    `<span class="mx">= (1)(${qHtml(CF_MN[0])}) − (2)(${qHtml(CF_MN[1])}) + (3)(${qHtml(CF_MN[2])}) = ${qHtml(CF_MN[0])} + 20 − 6 = <b>${qHtml(mDet(CF_M))}</b></span>`,
+    `<span class="mx">${cij(0, 0)}, ${cij(0, 1)}, ${cij(0, 2)}: <i>C</i><sub><i>ij</i></sub> = (−1)<sup><i>i</i>+<i>j</i></sup> <i>M</i><sub><i>ij</i></sub> → det <i>A</i> = ${aij(0, 0)}${c(0)} + ${aij(0, 1)}${c(1)} + ${aij(0, 2)}${c(2)}</span>`
+  ];
+  cfBuild(el, { hl: [[{ row: 0 }, 'blue']], calc: () => cfLines(rows, k) });
+}
+// ฉากกลุ่ม 5: ใช้ทำอะไร ① — det ของเมทริกซ์ใหญ่
+function cf5Build(el, k) {
+  const rows = [`<span class="mx">det (4 × 4) = ${aij(0, 0)}${cij(0, 0)} + ${aij(0, 1)}${cij(0, 1)} + ${aij(0, 2)}${cij(0, 2)} + ${aij(0, 3)}${cij(0, 3)}</span> <span class="note">(${tx(T('คูณลง ลบ คูณขึ้นใช้กับ 4 × 4 ไม่ได้', 'down minus up does not work for 4 × 4'))})</span>`];
+  el.innerHTML = `<div class="mx-calc cf-calc">${cfLines(rows, k)}<div class="ar-note">${tx(T('กระจายตามแถวหรือหลักไหนก็ได้ ค่าเท่ากัน — เลือกแถวหรือหลักที่มี 0 เยอะๆ จะคิดน้อยลง', 'Expand along any row or column — the value is the same; pick one with many zeros to save work'))}</div></div>`;
+}
+// ฉากกลุ่ม 6: ใช้ทำอะไร ② — adj A = Cᵗ และ A⁻¹ = adj A ÷ det A
+const CF_C = [0, 1, 2].map(i => [0, 1, 2].map(j => mCof(CF_M, i, j))), CF_ADJ = mAdj(CF_M), CF_DET = mDet(CF_M);
+{ const P = mMul(CF_M, CF_ADJ), I21 = [0, 1, 2].map(i => [0, 1, 2].map(j => (i === j ? CF_DET : Q(0)))); if (!mEq(P, I21) || !mEq(CF_ADJ, [0, 1, 2].map(i => [0, 1, 2].map(j => CF_C[j][i])))) throw new Error('CF_ADJ'); }
+// แผนที่ทาง (ฉาก 1)
+function cf1Build(el, k) {
+  const ch = (h, on) => `<span class="dt-rmc${on ? '' : ' off'}">${h}</span>`, ar = on => `<span class="dt-rma${on ? '' : ' off'}">→</span>`;
+  el.innerHTML = `<div class="dt-rm">${ch('det 3 × 3', k >= 1)}${ar(k >= 2)}${ch(tx(T('ไมเนอร์', 'minor')) + ' ' + mij(0, 0), k >= 2)}${ar(k >= 3)}${ch(tx(T('โคแฟกเตอร์', 'cofactor')) + ' ' + cij(0, 0), k >= 3)}${ar(k >= 4)}<span class="dt-rmb">${ch(tx(T('กระจาย det', 'expand the det')), k >= 4)}${ch('adj <i>A</i> → <i>A</i><sup>−1</sup>', k >= 5)}</span></div>`;
+}
+const CFW_SC = (() => {
+  const cap = (th, en) => () => tx(T(th, en));
+  const g1 = [{ cap: cap('<b>ไมเนอร์</b> <b>โคแฟกเตอร์</b> และ <b>adj</b> คือเครื่องมือชุดเดียวกัน — มาจากการแยกส่วน det 3 × 3 แล้วเอาไปใช้สองทาง: กระจาย det และหา A⁻¹ · กด ▶ ไล่ทีละกล่อง', 'The <b>minor</b>, <b>cofactor</b> and <b>adj</b> are one toolkit — they come from taking the 3 × 3 det apart, and serve two jobs: expanding a det and finding A⁻¹ · press ▶ to go box by box'),
+    end: S => cf1Build(S.el, 5), play: async S => { for (let k = 1; k <= 5; k++) { cf1Build(S.el, k); await S.anim.wait(k === 1 ? 300 : 650); } } }];
+  const g2 = lineScenes('', cf2Build, 3).map((s, i) => Object.assign(s, { cap: () => tx(T(['', 'det 3 × 3 แบบต่อหลักคือ<b>ผลคูณ 6 ก้อน</b> — คูณลง 3 ก้อนแรกเป็น + (เหมือนที่เห็นในการ์ด “กฎของซาร์รัส (ต่อหลัก) มาจากไหน” แท็บ 3 × 3)', 'คูณขึ้นอีก 3 ก้อนเป็น − · ทุกก้อนมีตัวคูณ 1 ตัวจากแต่ละแถวและ 1 ตัวจากแต่ละหลัก', 'ใส่เลขจริงของ A → 2 + 20 + 0 − 6 − (−5) − 0 = 21'][i + 1], ['', 'The 3 × 3 det is a sum of <b>six products</b> — the first three, going down, are + (as in the “Where the Rule of Sarrus comes from” card, 3 × 3 tab)', 'The other three, going up, are − · each product takes one number from every row and every column', 'Put in the real numbers of A → 2 + 20 + 0 − 6 − (−5) − 0 = 21'][i + 1])) }));
+  const g3 = lineScenes('', cf3Build, 3).map((s, i) => Object.assign(s, { cap: () => tx(T(['', 'ดูแค่ก้อนที่มี <i>a</i><sub>11</sub> (เรืองสีส้ม) — มี 2 ก้อน', 'ดึงตัวร่วม <i>a</i><sub>11</sub> ออกมา → วงเล็บคือ <i>a</i><sub>22</sub><i>a</i><sub>33</sub> − <i>a</i><sub>23</sub><i>a</i><sub>32</sub>', 'ในวงเล็บคือ det 2 × 2 ของสิ่งที่เหลือเมื่อ<b>ขีดแถว 1 หลัก 1 ทิ้ง</b> → เรียกว่า<b>ไมเนอร์ M₁₁</b>'][i + 1], ['', 'Look only at the terms with <i>a</i><sub>11</sub> (glowing orange) — there are two', 'Factor out <i>a</i><sub>11</sub> → the bracket is <i>a</i><sub>22</sub><i>a</i><sub>33</sub> − <i>a</i><sub>23</sub><i>a</i><sub>32</sub>', 'The bracket is the 2 × 2 det of what is left after <b>crossing out row 1 and column 1</b> → it is called the <b>minor M₁₁</b>'][i + 1])) }));
+  const g4 = lineScenes('', cf4Build, 3).map((s, i) => Object.assign(s, { cap: () => tx(T(['', 'ทำแบบเดียวกันกับ <i>a</i><sub>12</sub> และ <i>a</i><sub>13</sub> → det A = <i>a</i><sub>11</sub><i>M</i><sub>11</sub> − <i>a</i><sub>12</sub><i>M</i><sub>12</sub> + <i>a</i><sub>13</sub><i>M</i><sub>13</sub> · เครื่องหมายสลับ + − +', 'ใส่เลข: M₁₁ = 7, M₁₂ = −10, M₁₃ = −2 → 1(7) − 2(−10) + 3(−2) = 7 + 20 − 6 = 21 — ได้ค่าเดิม', 'รวมเครื่องหมายเข้ากับไมเนอร์ เรียกว่า<b>โคแฟกเตอร์</b> <i>C</i><sub><i>ij</i></sub> = (−1)<sup><i>i</i>+<i>j</i></sup> <i>M</i><sub><i>ij</i></sub>'][i + 1], ['', 'Do the same for <i>a</i><sub>12</sub> and <i>a</i><sub>13</sub> → det A = <i>a</i><sub>11</sub><i>M</i><sub>11</sub> − <i>a</i><sub>12</sub><i>M</i><sub>12</sub> + <i>a</i><sub>13</sub><i>M</i><sub>13</sub> · the signs alternate + − +', 'Put in numbers: M₁₁ = 7, M₁₂ = −10, M₁₃ = −2 → 1(7) − 2(−10) + 3(−2) = 7 + 20 − 6 = 21 — the same value', 'Fold the sign into the minor and you get the <b>cofactor</b> <i>C</i><sub><i>ij</i></sub> = (−1)<sup><i>i</i>+<i>j</i></sup> <i>M</i><sub><i>ij</i></sub>'][i + 1])) }));
+  const g5 = [{ cap: cap('<b>ใช้ทำอะไร ①</b> — หา det ของเมทริกซ์ 3 × 3 ขึ้นไป: 4 × 4 ใช้คูณลงคูณขึ้นไม่ได้ ต้องกระจายโคแฟกเตอร์ · กระจายตามแถวหรือหลักไหนก็ได้ ค่าเท่ากัน', '<b>What it is for ①</b> — finding the det of a 3 × 3 or bigger matrix: down-minus-up does not work for 4 × 4, so expand by cofactors · any row or column gives the same value'),
+    end: S => cf5Build(S.el, 1), play: async S => { cf5Build(S.el, 0); await S.anim.wait(300); cf5Build(S.el, 1); } }];
+  const g6Html = '<div class="mx-calc cf-calc"><div class="cf-ln" data-ln="1"><span class="mx"><i>A</i><sup>−1</sup> = ' + frac('adj <i>A</i>', 'det <i>A</i>') + '</span></div></div>';
+  const g6 = [{ cap: cap('<b>ใช้ทำอะไร ②</b> — หา A⁻¹: เก็บโคแฟกเตอร์ทุกตัวไว้ในเมทริกซ์ชื่อ <b>adj A</b> แล้ว A⁻¹ = adj A ÷ det A · adj มาจากไหน ทำไมต้องพลิก → การ์ดถัดไป', '<b>What it is for ②</b> — finding A⁻¹: keep every cofactor in a matrix called <b>adj A</b>, then A⁻¹ = adj A ÷ det A · where adj comes from and why it is flipped → the next card'),
+    end: S => { S.el.innerHTML = g6Html; }, play: async S => { S.el.innerHTML = ''; await S.anim.wait(250); S.el.innerHTML = g6Html; await lnFade(S, 1); } }];
+  return [...g1, ...g2, ...g3, ...g4, ...g5, ...g6];
+})();
+
+// ───────── ค) การ์ด "ทำไม A · adj A = (det A) I" · คิดผลคูณ P = A · adj A ทีละช่อง: ทแยงหลัก = กระจาย det · นอกทแยง = แถวฝาแฝด → 0 ─────────
+const PD_P = mMul(CF_M, CF_ADJ), PD_B = [[1, 2, 3], [1, 2, 3], [2, -1, 2]], PD_BQ = pad2(PD_B);
+{ const exp = [[21, 0, 0], [0, 21, 0], [0, 0, 21]];                                                          // ตัวเลขทุกช่องต้องตรงตาราง ไม่ตรง = หยุดทันที
+  for (let i = 0; i < 3; i++) for (let j = 0; j < 3; j++) if (!qEq(PD_P[i][j], Q(exp[i][j]))) throw new Error('PD_P ' + i + j);
+  if (!qEq(mDet(PD_BQ), Q(0)) || !qEq(CF_DET, Q(21))) throw new Error('PD_B');
+  for (let k = 0; k < 3; k++) if (!qEq(mCof(PD_BQ, 1, k), mCof(CF_M, 1, k)) || !qEq(mCof(CF_M, 1, k), CF_ADJ[k][1]) || !qEq(CF_M[0][k], Q(PD_B[1][k]))) throw new Error('PD_B โคแฟกเตอร์แถว 2'); }
+const PD_R2 = [0, 1, 2].reduce((s, j) => qAdd(s, qMul(CF_M[1][j], CF_ADJ[j][1])), Q(0));
+if (!qEq(PD_R2, CF_DET) || !qEq(PD_R2, Q(21))) throw new Error('PD_R2: det A ตามแถว 2 ต้องได้ 21');
+const pdTerms = (i, j) => [0, 1, 2].map(k => qMul(CF_M[i][k], CF_ADJ[k][j]));
+const pdPairs = (i, j) => [0, 1, 2].map(k => `<span class="mx-nw">(${qHtml(CF_M[i][k])})(${qHtml(CF_ADJ[k][j])})</span>`).join(' + ');
+const pdSum = (i, j) => pdTerms(i, j).map((v, k) => (k === 0 ? qHtml(v) : (v.n < 0 ? '− ' + qHtml(qSub(Q(0), v)) : '+ ' + qHtml(v)))).join(' ');
+const pdEq = (i, j) => tx(T(`ช่อง (${i + 1}, ${j + 1})`, `entry (${i + 1}, ${j + 1})`));
+const PD_OFF = [[0, 2], [1, 0], [1, 2], [2, 0], [2, 1]];                                                    // 5 ช่องนอกทแยงที่เหลือ (ช่อง (1,2) ทำไปแล้วในดัชนี 6–8)
+const PD_RW = [                                                                                              // บรรทัดคิดของฉาก i · g = กลุ่ม (ขึ้นกลุ่มใหม่ = ล้างบรรทัดเก่า)
+  { g: 1, h: () => `<span>${tx(T('หลักที่ 1 ของ adj A', 'column 1 of adj A'))} = (${cij(0, 0)}, ${cij(0, 1)}, ${cij(0, 2)}) = (${[0, 1, 2].map(r => qHtml(CF_ADJ[r][0])).join(', ')})</span>` },
+  { g: 1, h: () => `<span>${pdEq(0, 0)} = ${pdPairs(0, 0)}</span>` },
+  { g: 1, h: () => `<span class="mx">= ${aij(0, 0)}${cij(0, 0)} + ${aij(0, 1)}${cij(0, 1)} + ${aij(0, 2)}${cij(0, 2)}</span>` },
+  { g: 1, h: () => `<span>= ${pdSum(0, 0)} = <b>${qHtml(PD_P[0][0])}</b> = det <i>A</i></span>` },
+  { g: 2, h: () => `<span>${pdEq(1, 1)} = ${pdPairs(1, 1)} = <b>${qHtml(PD_P[1][1])}</b></span>` },
+  { g: 2, h: () => `<span>${pdEq(2, 2)} = ${pdPairs(2, 2)} = <b>${qHtml(PD_P[2][2])}</b></span>` },
+  { g: 3, h: () => `<span>${pdEq(0, 1)} = ${pdPairs(0, 1)}</span>` },
+  { g: 3, h: () => `<span>= ${pdSum(0, 1)} = <b>${qHtml(PD_P[0][1])}</b></span>` },
+  { g: 3, h: () => { const k = (i, j) => `<span class="${i ? 'pd-d' : 'pd-k'}">${aij(i, j)}</span>`, c = j => `<span class="pd-c">${cij(1, j)}</span>`, f = i => [0, 1, 2].map(j => k(i, j) + c(j)).join(' + ');
+    return `<div class="pd-cmp"><span class="l">det <i>A</i> <span class="note">(${tx(T('กระจายตามแถว 2', 'along row 2'))})</span> =</span><span class="r">${f(1)} = ${[0, 1, 2].map(j => `<span class="mx-nw">(${qHtml(CF_M[1][j])})(${qHtml(CF_ADJ[j][1])})</span>`).join(' + ')} = <b>${qHtml(PD_R2)}</b></span><span class="l">${tx(T('ช่อง (1, 2)', 'entry (1, 2)'))} =</span><span class="r">${f(0)} = <b>${qHtml(PD_P[0][1])}</b></span></div><br><span class="note">${tx(T('C ชุดเดียวกัน (ส้ม) ต่างแค่ตัวคูณ: แถว 2 (เทา) → แถว 1 (ฟ้า) → ช่อง (1, 2) <b>ตรงกับสูตรหา det</b> แต่แถว 2 ถูกแทนด้วยแถว 1', 'the same C’s (orange), only the multipliers differ: row 2 (grey) → row 1 (blue) → entry (1, 2) <b>matches the det formula</b>, with row 2 replaced by row 1'))}</span>`; } },
+  { g: 4, h: () => PD_OFF.map(([r, c]) => `<span>(${r + 1}, ${c + 1}) = ${pdSum(r, c)} = <b>${qHtml(PD_P[r][c])}</b></span>`).join('<br>') },
+  { g: 4, h: () => `<span class="mx"><i>A</i> · adj <i>A</i> = ${qHtml(CF_DET)} <i>I</i> = (det <i>A</i>) <i>I</i></span>` },
+  { g: 4, h: () => `<span>${tx(T('หารด้วย det A (≠ 0):', 'divide by det A (≠ 0):'))} <i>A</i> · (adj <i>A</i> ÷ ${qHtml(CF_DET)}) = <i>I</i> → <b><i>A</i><sup>−1</sup> = adj <i>A</i> ÷ det <i>A</i></b></span>` }
+];
+const pdCalc = i => { let h = ''; for (let j = 0; j <= i; j++) if (PD_RW[j].g === PD_RW[i].g) h += lnWrap(j, PD_RW[j].h()); return h; };
+const PD_DIAG = [[0, 0], [1, 1], [2, 2]];
+const PD_ALL = PD_DIAG.concat([[0, 1]], PD_OFF);
+const PD_ST = [                                                                                              // สภาพภาพจบของฉาก 3 × 3 (ดัชนี 0–11) · aRow แถวของ A (น้ำเงิน) · aDim แถวที่ถูกขีดทิ้ง · jCol หลักของ adj (ส้ม) · focus ช่องของ P (เขียว) · fill ช่องที่คิดเสร็จแล้ว
+  { aRow: -1, jCol: 0, focus: null, fill: [] },
+  { aRow: 0, jCol: 0, focus: [0, 0], fill: [] },
+  { aRow: 0, jCol: 0, focus: [0, 0], fill: [] },
+  { aRow: 0, jCol: 0, focus: [0, 0], fill: [[0, 0]] },
+  { aRow: 1, jCol: 1, focus: [1, 1], fill: [[0, 0], [1, 1]] },
+  { aRow: 2, jCol: 2, focus: [2, 2], fill: PD_DIAG },
+  { aRow: 0, jCol: 1, focus: [0, 1], fill: PD_DIAG },
+  { aRow: 0, jCol: 1, focus: [0, 1], fill: PD_DIAG.concat([[0, 1]]) },
+  { aRow: 0, aDim: 1, jCol: 1, focus: [0, 1], fill: PD_DIAG.concat([[0, 1]]) },
+  { aRow: -1, jCol: -1, focus: null, fill: PD_ALL },
+  { aRow: -1, jCol: -1, focus: null, fill: PD_ALL, pname: true },
+  { aRow: -1, jCol: -1, focus: null, fill: PD_ALL, pname: true }
+];
+function pdBuild(el, st, calc) {
+  const has = (r, c) => st.fill.some(f => f[0] === r && f[1] === c);
+  const aM = matHtml(CF_M, { name: '<i>A</i>', key: 'A', cls: r => (st.aRow === r ? 'hb' : st.aDim === r ? 'dim' : '') });
+  const jM = matHtml(CF_ADJ, { name: 'adj <i>A</i>', key: 'J', cls: (r, c) => (st.jCol === c ? 'ho' : '') });
+  const pM = matHtml(PD_P.map((row, r) => row.map((v, c) => (has(r, c) ? v : null))), { name: st.pname ? `${qHtml(CF_DET)} <i>I</i>` : '', eq: false, key: 'P', cls: (r, c) => (st.focus && st.focus[0] === r && st.focus[1] === c ? 'hg' : '') });
+  el.innerHTML = `<div class="mx-row pd-row">${aM}${xop('·')}${jM}${xop('=')}${pM}</div><div class="mx-calc cf-calc pd-calc">${typeof calc === 'function' ? calc() : (calc || '')}</div>`;
+  xgroup(el);
+}
+const PD_CAP = [
+  () => tx(T('3 × 3 ทำแบบเดียวกัน: adj A = C<sup class="tsup">t</sup> → <b>หลักที่ <i>j</i> ของ adj A</b> = โคแฟกเตอร์ของ<b>แถวที่ <i>j</i></b> ของ A · กด ▶', 'A 3 × 3 works the same way: adj A = C<sup class="tsup">t</sup> → <b>column <i>j</i> of adj A</b> = the cofactors of <b>row <i>j</i></b> of A · press ▶')),
+  () => tx(T('ช่อง (1, 1) ของผลคูณ = แถว 1 ของ A คูณกับหลัก 1 ของ adj A', 'Entry (1, 1) of the product = row 1 of A times column 1 of adj A')),
+  () => tx(T('เลขแถว 1 คูณกับ<b>โคแฟกเตอร์ของตัวเอง</b> — นี่คือการกระจาย det ตามแถว 1', 'Row 1\'s numbers times <b>their own cofactors</b> — that is expanding the det along row 1')),
+  () => tx(T('จึงได้ det A = 21', 'So it is det A = 21')),
+  () => tx(T('แถว 2 คูณกับโคแฟกเตอร์ของแถว 2 เอง → กระจายตามแถว 2 → det A อีกครั้ง', 'Row 2 with row 2\'s own cofactors → expanding along row 2 → det A again')),
+  () => tx(T('<b>ทุกช่องบนทแยงหลัก = det A</b>', '<b>Every entry on the main diagonal = det A</b>')),
+  () => tx(T('นอกทแยง: เอาแถว 1 ไปคูณกับโคแฟกเตอร์<b>ของแถว 2</b> — คนละแถวกัน', 'Off the diagonal: row 1 times the cofactors <b>of row 2</b> — different rows')),
+  () => tx(T('ได้ 0! ทำไม?', 'It is 0! Why?')),
+  () => tx(T('เขียนเป็นตัวอักษรแล้ว<b>วางเทียบกับสูตรหา det A</b> แบบกระจายตามแถว 2: โคแฟกเตอร์ <i>C</i><sub>21</sub>, <i>C</i><sub>22</sub>, <i>C</i><sub>23</sub> ชุดเดียวกัน (ส้ม) ต่างกันแค่ตัวคูณ — สูตร det ใช้เลขแถว 2 (0, 1, 5) แต่ช่อง (1, 2) ใช้เลขแถว 1 (1, 2, 3) → ช่อง (1, 2) <b>ก็คือสูตรหา det</b> ที่แถว 2 ถูกแทนด้วยแถว 1 · C ไม่เปลี่ยนเพราะคิดจากการขีดแถว 2 ทิ้ง (แถวจาง)', 'Write it in letters and <b>set it beside the det formula</b> expanded along row 2: the cofactors <i>C</i><sub>21</sub>, <i>C</i><sub>22</sub>, <i>C</i><sub>23</sub> are the same (orange), only the multipliers differ — the det formula uses row 2 (0, 1, 5), entry (1, 2) uses row 1 (1, 2, 3) → entry (1, 2) <b>is the det formula</b> with row 2 replaced by row 1 · the C’s do not change because they come from crossing out row 2 (faded)')),
+  () => tx(T('นอกทแยงทุกช่องเป็นแบบเดียวกัน: แถวหนึ่งคูณโคแฟกเตอร์ของอีกแถว = สูตรหา det ที่แถวหนึ่งถูกแทนด้วยอีกแถว → ได้ 0 ทุกช่อง', 'Every off-diagonal entry is the same story: one row times another row\'s cofactors = the det formula with one row replaced by another → 0 every time')),
+  () => tx(T('ทแยงหลักได้ det A ทุกช่อง นอกทแยงได้ 0 ทุกช่อง → <b>(det A) I</b> — ไม่ใช่ I เฉยๆ', 'Diagonal entries are all det A, the rest are 0 → <b>(det A) I</b> — not just I')),
+  () => tx(T('หารด้วย det A ทั้งสองข้างจึงได้สูตรอินเวอร์ส — ใช้ได้เมื่อ det A ≠ 0', 'Divide both sides by det A to get the inverse formula — valid when det A ≠ 0'))
+];
+const PD_SC = PD_CAP.map((cap, i) => ({
+  cap,
+  end: S => { pdBuild(S.el, PD_ST[i], () => pdCalc(i)); },
+  play: async S => {
+    const A = S.anim;
+    if (i === 9) {                                                                                           // เติม P อีก 5 ช่องทีละช่อง (ไฮไลต์แถวของ A กับหลักของ adj ตามไปด้วย)
+      const done = PD_DIAG.concat([[0, 1]]);
+      pdBuild(S.el, PD_ST[8], ''); await A.wait(300);
+      for (const [r, c] of PD_OFF) {
+        pdBuild(S.el, { aRow: r, jCol: c, focus: [r, c], fill: done.slice() }, ''); await A.wait(350);
+        done.push([r, c]); pdBuild(S.el, { aRow: r, jCol: c, focus: [r, c], fill: done.slice() }, ''); await A.wait(450);
+      }
+      pdBuild(S.el, PD_ST[9], () => pdCalc(9)); await lnFade(S, 9); return;
+    }
+    pdBuild(S.el, i ? PD_ST[i - 1] : PD_ST[0], i ? () => pdCalc(i - 1) : ''); await A.wait(250);
+    if (i === 0) { pdBuild(S.el, PD_ST[0], () => pdCalc(0)); await lnFade(S, 0); return; }
+    pdBuild(S.el, PD_ST[i], () => pdCalc(i));
+    await lnFade(S, i);
+  }
+}));
+
+// ───────── รอบ 3c · การ์ด "adj มาจากไหน": ช่วง ① 2 × 2 นำหน้า 6 ฉาก (ใช้ A เดียวกับสื่อตัวผกผัน I2_A) ต่อด้วยฉาก 3 × 3 เดิม ─────────
+const P2_A = [[4, 3], [6, 5]], P2_Q = pad2(P2_A);
+const P2_C = [0, 1].map(i => [0, 1].map(j => mCof(P2_Q, i, j))), P2_ADJ = mAdj(P2_Q), P2_DET = mDet(P2_Q), P2_AC = mMul(P2_Q, P2_C), P2_P = mMul(P2_Q, P2_ADJ);
+{ const same = (M, E) => M.every((r, i) => r.every((v, j) => qEq(v, Q(E[i][j]))));                           // ตารางในสเปก ไม่ตรง = หยุดทันที
+  if (!(same(P2_C, [[5, -6], [-3, 4]]) && same(P2_ADJ, [[5, -3], [-6, 4]]) && same(P2_AC, [[11, -12], [15, -16]]) && same(P2_P, [[2, 0], [0, 2]]) && qEq(P2_DET, Q(2)))) throw new Error('P2: ตัวเลขไม่ตรง'); }
+const p2Cr = (i, j) => `${cij(i, j)} = ${(i + j) % 2 ? '−' : '+'}(${qHtml(P2_Q[1 - i][1 - j])}) = <b>${qHtml(P2_C[i][j])}</b>`;
+const P2_RW = {                                                                                              // บรรทัดคิดของฉาก k · กลุ่ม a = k 1–2 · กลุ่ม b = k 3–6 (ขึ้นกลุ่ม b = ล้างกลุ่ม a)
+  1: o => `<span>${tx(T('แถว 1', 'row 1'))}: ${p2Cr(0, 0)} · ${p2Cr(0, 1)}</span> <span class="note">${tx(T('(2 × 2 ปิดแถวกับหลักแล้วเหลือเลขตัวเดียว คือตัวที่ทแยงกับช่องนั้น · เครื่องหมาย + − ตามตำแหน่ง)', '(in a 2 × 2, covering a row and a column leaves one number: the one diagonal to that cell · signs + − by position)'))}</span>`,
+  2: o => `<span>${tx(T('แถว 2', 'row 2'))}: ${p2Cr(1, 0)} · ${p2Cr(1, 1)}</span>`,
+  3: o => `<div class="mx-row">${matHtml(P2_AC, { name: '<i>A</i> · <i>C</i>', key: 'AC', cls: () => 'hr' })}<span class="mx-mark" style="color:var(--g-red)">✗</span></div>`,
+  4: o => `<div class="mx-row">${matHtml(o.adjNull ? P2_ADJ.map(r => r.map(() => null)) : P2_ADJ, { name: `adj <i>A</i> = <i>C</i>${AT}`, key: 'AJ', cls: (i, j) => (!o.adjNull && j === 0 ? 'ho' : '') })}<span class="note">${tx(T('พลิกแถวเป็นหลัก: (5, −6) ลงไปอยู่หลัก 1', 'rows become columns: (5, −6) moves down into column 1'))}</span></div><div class="mx-chk ok">${tx(T('สรุป: <b>adj A = เอาโคแฟกเตอร์มาเรียงเป็น C แล้วทรานสโพส</b> (adj A = C<sup class="tsup">t</sup>)', 'In short: <b>adj A = put the cofactors in C, then transpose</b> (adj A = C<sup class="tsup">t</sup>)'))}</div>`,
+  5: o => `<div class="mx-row"><span class="mx"><i>A</i> · adj <i>A</i></span>${xop('=')}${matHtml(P2_Q, { key: 'M1' })}${matHtml(P2_ADJ, { key: 'M2' })}${xop('=')}${matHtml(P2_P, { key: 'AP', cls: (i, j) => (i === j ? 'hg' : '') })}</div><div class="ar-note">${tx(T('บนซ้าย: (4)(5) + (3)(−6) = 2 · บนขวา: (4)(−3) + (3)(4) = 0 · ล่างซ้าย: (6)(5) + (5)(−6) = 0 · ล่างขวา: (6)(−3) + (5)(4) = 2', 'top-left: (4)(5) + (3)(−6) = 2 · top-right: (4)(−3) + (3)(4) = 0 · bottom-left: (6)(5) + (5)(−6) = 0 · bottom-right: (6)(−3) + (5)(4) = 2'))}</div>`,
+  6: o => `<div class="mx-row">${xop('=')}<span class="mx">${qHtml(P2_DET)}</span>${matHtml([['1', '0'], ['0', '1']], { key: 'I2' })}<span class="mx">= ${qHtml(P2_DET)} <i>I</i></span></div><div class="mx-chk ok"><span class="mx">det <i>A</i> = ${qHtml(P2_DET)} → <b><i>A</i> · adj <i>A</i> = (det <i>A</i>) <i>I</i></b></span></div>`,
+  7: o => `<div class="mx-row"><span>${tx(T('หารด้วย det A ทั้งสองข้าง (det A ≠ 0):', 'divide both sides by det A (det A ≠ 0):'))}</span><span class="mx"><i>A</i> ·${frac('adj <i>A</i>', 'det <i>A</i>')} = <i>I</i></span></div><div class="mx-row"><span class="mx">→ <i>A</i><sup>−1</sup> = ${frac('adj <i>A</i>', 'det <i>A</i>')} = ${frac(1, qHtml(P2_DET))}</span>${matHtml(P2_ADJ, { key: 'AI' })}</div><div class="ar-note">${tx(T('(สื่อตัวผกผันสอนว่า “สลับทแยงหลัก จิ้มลบทแยงรอง” — นั่นคือ adj ของ 2 × 2 นั่นเอง)', '(the inverse-matrix lesson says “swap the main diagonal, negate the other one” — that is exactly adj of a 2 × 2)'))}</div>`
+};
+function p2Build(el, k, o) {
+  o = o || {};
+  const fill = (r) => k >= 2 || (k === 1 && r === 0), hr = k === 1 ? 0 : k === 2 ? 1 : -1;
+  // ฉาก 1–2: โคแฟกเตอร์ C[hr][c] มาจากเลขที่ "ทแยง" กับช่อง (hr, c) · คู่ทแยงหลัก = ฟ้า · คู่ทแยงรอง = ส้ม · ช่องของ C ใช้สีเดียวกับคู่ของมัน
+  const pc = (i, j) => (i === hr ? j : 1 - j), col = c => ((hr + c) % 2 ? 'ho' : 'hb');
+  const aM = matHtml(P2_Q, { name: '<i>A</i>', key: 'A', cls: (i, j) => (hr < 0 ? '' : col(pc(i, j))) });
+  const cM = matHtml(P2_C.map((row, r) => row.map(v => (fill(r) ? v : null))), { name: '<i>C</i>', key: 'C', cls: (i, j) => (i === hr ? col(j) : '') });
+  let rows = '';
+  for (let q = (k <= 2 ? 1 : k <= 4 ? 3 : 5); q <= k; q++) rows += lnWrap('p' + q, P2_RW[q](o));   // กลุ่ม a = 1–2 · b = 3–4 · c = 5–7 (ขึ้นกลุ่มใหม่ = ล้างกลุ่มเก่า)
+  el.innerHTML = `<div class="mx-row">${aM}${xop('→')}${cM}</div><div class="mx-calc cf-calc">${rows}</div>`;
+  xgroup(el);
+}
+const P2_CAP = [
+  () => tx(T('เริ่มจาก 2 × 2: หาโคแฟกเตอร์ของ<b>แถว 1</b> — ปิดแถว 1 หลัก 1 (ที่ 4) เหลือ <b>5 ซึ่งอยู่ทแยงกับ 4</b> (ฟ้า) · ปิดแถว 1 หลัก 2 (ที่ 3) เหลือ <b>6 ซึ่งอยู่ทแยงกับ 3</b> (ส้ม) แล้วติดลบ เพราะตำแหน่งนี้เครื่องหมาย − · กด ▶', 'Start with a 2 × 2: the cofactors of <b>row 1</b> — cover row 1, column 1 (the 4) and <b>5 is left, diagonal to the 4</b> (blue) · cover row 1, column 2 (the 3) and <b>6 is left, diagonal to the 3</b> (orange), made negative because that position has sign − · press ▶')),
+  () => tx(T('โคแฟกเตอร์ของ<b>แถว 2</b> ก็ทแยงเหมือนกัน: 6 ทแยงกับ 3 (ส้ม, เครื่องหมาย −) · 5 ทแยงกับ 4 (ฟ้า) → ได้เมทริกซ์ <i>C</i> ครบ', 'The cofactors of <b>row 2</b> are diagonal too: 6 is diagonal to 3 (orange, sign −) · 5 is diagonal to 4 (blue) → <i>C</i> is complete')),
+  () => tx(T('ลองคูณ A · C ตรงๆ — ได้เลขไม่สวย ✗ เพราะการคูณเมทริกซ์จับ<b>แถว</b>ของ A กับ<b>หลัก</b>ของ C: แถว 1 ของ A ไปเจอ (5, −3) ซึ่งไม่ใช่โคแฟกเตอร์ของแถว 1 · โคแฟกเตอร์ของแถว 1 คือ (5, −6) ยังนอนเป็น<b>แถว</b>อยู่ใน C', 'Try A · C directly — the numbers are a mess ✗ because matrix multiplication pairs <b>rows</b> of A with <b>columns</b> of C: row 1 of A meets (5, −3), which are not row 1’s cofactors · row 1’s cofactors (5, −6) are still lying as a <b>row</b> of C')),
+  () => tx(T('จึง<b>พลิก C</b> (ทรานสโพส: แถวกลายเป็นหลัก) ให้โคแฟกเตอร์ของแถว 1 ไปอยู่<b>หลัก</b> 1 — เมทริกซ์ใหม่นี้ชื่อ <b>adj A</b> · สรุป: adj A คือเอาโคแฟกเตอร์มาทรานสโพส', 'So <b>flip C</b> (transpose: rows become columns) so that row 1’s cofactors stand in <b>column</b> 1 — this new matrix is called <b>adj A</b> · in short: adj A is the cofactors, transposed')),
+  () => tx(T('คูณใหม่ด้วย adj A: แถว 1 ของ A เจอหลัก 1 ของ adj A ซึ่งคือโคแฟกเตอร์ของแถว 1 เอง → (4)(5) + (3)(−6) = 2 · ช่องอื่นคิดแบบเดียวกัน (บรรทัดเล็กข้างล่าง)', 'Multiply by adj A instead: row 1 of A meets column 1 of adj A, which holds row 1’s own cofactors → (4)(5) + (3)(−6) = 2 · the other entries work the same way (small line below)')),
+  () => tx(T('ผลคูณ = 2 คูณเมทริกซ์เอกลักษณ์ = 2I และ 2 ก็คือ det A พอดี → ได้สมการ <b>A · adj A = (det A) I</b>', 'The product = 2 times the identity matrix = 2I, and 2 is exactly det A → the equation <b>A · adj A = (det A) I</b>')),
+  () => tx(T('จากสมการนี้ หารด้วย det A ทั้งสองข้าง: A คูณ adj A ÷ det A ได้ I → <b>adj A ÷ det A คือ A⁻¹</b> · 3 × 3 ใช้หลักเดียวกัน แต่ต้องตอบให้ได้ว่า<b>ทำไม</b>ทแยงได้ det และนอกทแยงได้ 0 → ไปดูกัน', 'From this equation, divide both sides by det A: A times adj A ÷ det A gives I → <b>adj A ÷ det A is A⁻¹</b> · a 3 × 3 works the same way, but we must show <b>why</b> the diagonal gives det and the rest give 0 → let’s see'))
+];
+const P2_SC = P2_CAP.map((cap, i) => {
+  const k = i + 1;
+  return {
+    cap: () => phTag('① 2 × 2', '① 2 × 2') + cap(), end: S => { p2Build(S.el, k); },
+    play: async S => {
+      const A = S.anim;
+      if (k === 4) {                                                                                         // เลข 4 ตัวของ C บินไปช่องที่พลิกใน adj A
+        p2Build(S.el, 3); await A.wait(250); p2Build(S.el, 4, { adjNull: true }); await A.wait(300);
+        await Promise.all([[0, 0], [0, 1], [1, 0], [1, 1]].map(([r, c]) => flyNum(S, cellEl(S.el, 'C', r, c), cellEl(S.el, 'AJ', c, r), qHtml(P2_C[r][c]), 1100, { arc: r === c ? 20 : 44, cls: 'fb' })));
+        p2Build(S.el, 4); return;
+      }
+      p2Build(S.el, k - 1); await A.wait(250); p2Build(S.el, k);
+      if (k <= 2) [0, 1].forEach(c => { const e = cellEl(S.el, 'C', k - 1, c); if (e) e.classList.add('pop'); });
+      await lnFade(S, 'p' + k);
+    }
+  };
+});
+const PDW_PH = i => (i <= 5 ? ['② 3 × 3 ทแยงหลัก', '② 3 × 3 diagonal'] : i <= 8 ? ['③ 3 × 3 นอกทแยง', '③ 3 × 3 off-diagonal'] : ['④ สรุป', '④ Summary']);
+const PDW_SC = [...P2_SC, ...PD_SC.map((sc, i) => Object.assign({}, sc, { cap: () => phTag(...PDW_PH(i)) + PD_CAP[i]() }))];
+if (P2_SC.length !== 7 || PD_SC.length !== 12 || PD_ST.length !== 12 || PD_RW.length !== 12 || PDW_SC.length !== 19) throw new Error('PDW_SC ต้องมี 19 ฉาก (2 × 2 7 + 3 × 3 12)');
+
+// ───────── รอบ 3g · ลองทำ: คลิกตำแหน่ง (i, j) ใน A · adj A → ดูว่าเป็น det ของ "A ใหม่" (แถว j ถูกแทนด้วยแถว i) ─────────
+function makeAdjPick(host) {
+  host.innerHTML = '<div class="mx-note ap-p"></div><div class="mx-row ap-c"></div><div class="mx-row ap-top"></div><div class="mx-calc ap-s"></div>' +
+    '<div class="ap-sc"><div class="ap-stg"></div><div class="wg-nav"><button class="btn ghost ap-prev"></button><span class="wg-cnt ap-cnt"></span><button class="btn ap-next"></button></div></div><div class="ar-note ap-e"></div>';
+  const q = s => host.querySelector(s);
+  let I = 0, J = 1, K = 0;                                                                                  // K = ฉากของส่วน "A ใหม่" (0 = A เดิม, 1 = A ใหม่)
+  const scene = () => {
+    const i = I + 1, j = J + 1, twin = I !== J;
+    const cf = [0, 1, 2].map(k => CF_C[J][k]);                                                              // โคแฟกเตอร์แถว j = หลัก j ของ adj A
+    const N = CF_M.map((row, r) => (r === J ? CF_M[I].slice() : row.slice()));                              // A ใหม่: แถว j ← แถว i
+    const val = [0, 1, 2].reduce((s, k) => qAdd(s, qMul(CF_M[I][k], cf[k])), Q(0));
+    if (!qEq(val, mDet(N)) || !qEq(val, PD_P[I][J]) || !cf.every((c, k) => qEq(c, CF_ADJ[k][J]))) throw new Error('ap: ตัวเลขไม่ตรง');
+    const sum = [0, 1, 2].map(k => `<span class="mx-nw">(${qHtml(CF_M[I][k])})(${qHtml(cf[k])})</span>`).join(' + ');
+    const col = twin ? 'var(--g-curve)' : 'var(--g-green)';
+    const rowI = CF_M[I].map(qHtml).join(', '), rowJ = CF_M[J].map(qHtml).join(', ');
+    if (K === 0) {
+      const mA = matHtml(CF_M, { key: 'A0', cls: r => (r === J ? 'dim' : r === I ? 'hb' : '') });
+      const note = twin
+        ? T(`<b>A เดิม</b>: ตอนหาโคแฟกเตอร์แถว ${j} เราตัดแถว ${j} ทิ้ง (จาง) · สูตรหา det A ต้องคูณด้วยเลขแถว ${j} เอง (${rowJ}) แต่ตำแหน่งนี้คูณด้วยเลขแถว ${i} (ฟ้า) → <b>ยังไม่ใช่ det A</b><br>แต่ถ้าเอาเลขที่คูณ (${rowI}) <b>ไปใส่ตรงแถว ${j} ที่ตัดทิ้ง</b> จะกลายเป็นสูตร det ของเมทริกซ์ใหม่ → กดถัดไป`,
+            `<b>The original A</b>: to find the cofactors of row ${j} we crossed out row ${j} (faded) · the det A formula multiplies by row ${j}’s own numbers (${rowJ}), but this entry multiplies by row ${i} (blue) → <b>it is not det A</b><br>But if we <b>put the multipliers (${rowI}) where row ${j} was crossed out</b>, it becomes the det formula of a new matrix → press next`)
+        : T(`<b>A เดิม</b>: ตอนหาโคแฟกเตอร์แถว ${j} เราตัดแถว ${j} ทิ้ง (จาง) · ตำแหน่งนี้คูณด้วยเลขแถว ${i} ซึ่งก็คือ<b>แถวที่ตัดทิ้งนั่นเอง</b> → นี่คือสูตรหา det A พอดี → กดถัดไป`,
+            `<b>The original A</b>: to find the cofactors of row ${j} we crossed out row ${j} (faded) · this entry multiplies by row ${i}, which is <b>the very row we crossed out</b> → this is exactly the det A formula → press next`);
+      return `<div class="mx-row"><span class="note">${tx(T('A เดิม', 'Original A'))}</span>${mA}</div><div class="mx-calc"><span>${tx(T(`ตำแหน่ง (${i}, ${j})`, `entry (${i}, ${j})`))} = ${sum}</span></div><div class="ar-note ap-t">${tx(note)}</div>`;
+    }
+    const mN = matHtml(N, { key: 'N', cls: r => (twin ? (r === I || r === J ? 'hy' : '') : (r === J ? 'hb' : '')) });
+    // แถว j ของ A ใหม่ (= แถว i ของ A) คูณหลัก j ของ adj A (= โคแฟกเตอร์แถว j) = กระจาย det(A ใหม่) ตามแถว j
+    const NP = mMul(N, CF_ADJ);
+    if (!qEq(NP[J][J], val) || ![0, 1, 2].every(k => qEq(mCof(N, J, k), CF_C[J][k]))) throw new Error('ap: A ใหม่ · adj A ไม่ตรง');
+    const nA = tx(T('A ใหม่', 'new A'));
+    const link = twin
+      ? T(`ตำแหน่ง (${j}, ${j}) = แถว ${j} ของ A ใหม่ (ฟ้า) × โคแฟกเตอร์แถว ${j} (ส้ม) = <b>det(A ใหม่)</b> · A ใหม่มี<b>แถว ${Math.min(i, j)} กับแถว ${Math.max(i, j)} ซ้ำกัน</b> → ลูกศรทับกัน รูปแบน → <b>det(A ใหม่) = 0</b> · ค่าที่คูณไม่ได้เปลี่ยน แค่มองเป็น det ของ A ใหม่`,
+          `Entry (${j}, ${j}) = row ${j} of new A (blue) × the row-${j} cofactors (orange) = <b>det(new A)</b> · new A has <b>rows ${Math.min(i, j)} and ${Math.max(i, j)} the same</b> → the arrows lie on top of each other, the shape is flat → <b>det(new A) = 0</b> · the numbers being multiplied did not change; we only read them as the det of new A`)
+      : T(`A ใหม่ = A เดิม → แถว ${j} คูณโคแฟกเตอร์แถว ${j} ของตัวเอง = <b>det A = ${qHtml(CF_DET)}</b>`, `new A = A → row ${j} times its own row-${j} cofactors = <b>det A = ${qHtml(CF_DET)}</b>`);
+    const concl = twin ? `<div class="mx-chk ok ap-k">${tx(T('ทุกตำแหน่งรอบนอก (นอกทแยง) ของ A · adj A ก็มี A ใหม่ที่มีแถวซ้ำแบบนี้ → det(A ใหม่) = 0 → <b>รอบนอก = 0 หมด</b> → A · adj A = (det A) I', 'Every entry around the outside (off the diagonal) of A · adj A has a new A with a repeated row like this → det(new A) = 0 → <b>the outside is all 0</b> → A · adj A = (det A) I'))}</div>` : '';
+    return `<div class="mx-row"><span class="note">${tx(T(`A ใหม่ (แถว ${j} ← แถว ${i})`, `New A (row ${j} ← row ${i})`))}</span>${mN}</div><div class="mx-calc"><span>${tx(T(`ตำแหน่ง (${i}, ${j})`, `entry (${i}, ${j})`))} = ${sum} = det(${nA}) = <b style="color:${col}">${qHtml(val)}</b></span></div>` +
+      `<div class="mx-row ap-np"><span class="mx">${nA} · <i>C</i>${AT}</span>${xop('=')}${matHtml(N, { key: 'N1', cls: r => (r === J ? 'hb' : '') })}<span class="ap-ct">${matHtml(CF_C, { key: 'C2', cls: r => (r === J ? 'ho' : '') })}<sup class="tsup ap-sup">t</sup></span></div>` +
+      `<div class="mx-row ap-np">${xop('=')}<span class="mx">${nA} · adj <i>A</i></span>${xop('=')}${matHtml(N, { key: 'N2', cls: r => (r === J ? 'hb' : '') })}${matHtml(CF_ADJ, { key: 'J2', cls: (r, c) => (c === J ? 'ho' : '') })}<span class="mx ap-res">→ ${tx(T(`ตำแหน่ง (${j}, ${j})`, `entry (${j}, ${j})`))} = det(${nA}) = <b style="color:${col}">${qHtml(val)}</b></span></div><div class="mx-calc"><span>${tx(link)}</span></div>${concl}`;
+  };
+  const paintScene = fade => {
+    const st = q('.ap-stg'); st.innerHTML = scene();
+    if (fade && !matchMedia('(prefers-reduced-motion: reduce)').matches) { st.style.opacity = 0; requestAnimationFrame(() => { st.style.transition = 'opacity .35s'; st.style.opacity = 1; setTimeout(() => { st.style.transition = ''; }, 400); }); }
+    q('.ap-prev').disabled = K === 0; q('.ap-next').disabled = K === 1;
+    q('.ap-cnt').textContent = tx(T(`ฉากที่ ${K + 1} / 2`, `Scene ${K + 1} / 2`));
+  };
+  const paint = () => {
+    const i = I + 1, j = J + 1;
+    q('.ap-p').innerHTML = tx(T('<b>คลิกตำแหน่งไหนก็ได้</b>ในผลคูณ (เมทริกซ์ขวาสุด) แล้วดูว่าตำแหน่งนั้นมาจากอะไร', '<b>Click any entry</b> of the product (the matrix on the right) and see where it comes from'));
+    q('.ap-c').innerHTML = `<span class="mx"><i>A</i> · <i>C</i>${AT}</span>${xop('=')}${matHtml(CF_M, { key: 'A1', cls: r => (r === I ? 'hb' : '') })}<span class="ap-ct">${matHtml(CF_C, { key: 'C', cls: r => (r === J ? 'ho' : '') })}<sup class="tsup ap-sup">t</sup></span>`;
+    q('.ap-top').innerHTML = `${xop('=')}<span class="mx"><i>A</i> · adj <i>A</i></span>${xop('=')}` + matHtml(CF_M, { key: 'A', cls: r => (r === I ? 'hb' : '') }) +
+      matHtml(CF_ADJ, { key: 'J', cls: (r, c) => (c === J ? 'ho' : '') }) + xop('=') +
+      `<span class="ap-pick">${matHtml(PD_P, { key: 'PP', cls: (r, c) => (r === I && c === J ? 'hg' : '') })}</span>`;
+    xgroup(q('.ap-c')); xgroup(q('.ap-top'));
+    q('.ap-top').querySelectorAll('[data-m="PP"] .mc').forEach(e => { e.onclick = () => { I = +e.dataset.i; J = +e.dataset.j; K = 0; paint(); }; });
+    q('.ap-s').innerHTML =
+      `<span>① ${tx(T(`กฎคูณเมทริกซ์: ตำแหน่ง (${i}, ${j}) = <b>แถว ${i} ของ A</b> (ฟ้า) × <b>หลัก ${j} ของ adj A</b> (ส้ม)`, `Matrix multiplication: entry (${i}, ${j}) = <b>row ${i} of A</b> (blue) × <b>column ${j} of adj A</b> (orange)`))}</span><br>` +
+      `<span>② ${tx(T(`adj A = C<sup class="tsup">t</sup>: <b>แถว ${j} ของ C</b> (ส้ม) พลิกลงมาเป็น<b>หลัก ${j} ของ adj A</b> = โคแฟกเตอร์ของแถว ${j}`, `adj A = C<sup class="tsup">t</sup>: <b>row ${j} of C</b> (orange) is flipped down into <b>column ${j} of adj A</b> = the cofactors of row ${j}`))} = (${[0, 1, 2].map(k => cij(J, k)).join(', ')}) = (${CF_C[J].map(qHtml).join(', ')})</span><br>` +
+      `<span>③ ${tx(T(`แถว ${i} × โคแฟกเตอร์แถว ${j} ได้อะไร — ดูทีละฉากด้านล่าง`, `what row ${i} × the cofactors of row ${j} gives — see the two scenes below`))}</span>`;
+    q('.ap-prev').textContent = tx(T('◀ ย้อน', '◀ Back')); q('.ap-next').textContent = tx(T('ถัดไป ▶', 'Next ▶'));
+    paintScene(false);
+    q('.ap-e').innerHTML = tx(T(
+      '<b>สรุป</b>: A · adj A = A · C<sup class="tsup">t</sup> และ<b>แต่ละตำแหน่ง</b>ของผลคูณคือ det ของ “A ใหม่” ที่ได้จากการเอาแถว <i>i</i> ไปใส่แทนแถว <i>j</i> (เลขตัวหน้า = เอาแถวไหนไปใส่ · เลขตัวหลัง = ใส่แทนแถวไหน)<br>' +
+      '• <b>ตำแหน่งบนทแยงหลัก</b> (<i>i</i> = <i>j</i>): ใส่แถวตัวเองแทนตัวเอง → A ใหม่ = A เดิม → ได้ <b>det A</b><br>' +
+      '• <b>ตำแหน่งนอกทแยง</b> (<i>i</i> ≠ <i>j</i>): A ใหม่มี<b>แถวซ้ำ</b> → ลูกศรสองแถวทับกัน รูปแบน → det = <b>0</b> · แต่ละตำแหน่งมี A ใหม่ของตัวเอง ทั้ง 6 ตำแหน่งจึงได้ 0<br>' +
+      '→ ผลคูณทั้งก้อน = <b>(det A) I</b> (ไม่ใช่ 0 ทั้งก้อน) · ซ้ำที่<b>แถว</b>เพราะสิ่งที่เอาไปใส่คือแถวของ A',
+      '<b>Summary</b>: A · adj A = A · C<sup class="tsup">t</sup>, and <b>each entry</b> of the product is the det of a “new A” made by putting row <i>i</i> in place of row <i>j</i> (first number = which row goes in · second number = which row it replaces)<br>' +
+      '• <b>On the main diagonal</b> (<i>i</i> = <i>j</i>): a row goes back in its own place → the new A is A → <b>det A</b><br>' +
+      '• <b>Off the diagonal</b> (<i>i</i> ≠ <i>j</i>): the new A has a <b>repeated row</b> → two row arrows lie on top of each other, the shape is flat → det = <b>0</b> · each entry has its own new A, so all six give 0<br>' +
+      '→ the whole product = <b>(det A) I</b> (not all zeros) · the repeat is in the <b>rows</b> because what we put in is a row of A'));
+  };
+  q('.ap-prev').onclick = () => { if (K > 0) { K--; paintScene(true); } };
+  q('.ap-next').onclick = () => { if (K < 1) { K++; paintScene(true); } };
+  const w = { refresh: paint }; LIVE.push(w); paint();
+  return w;
+}
+
+// ═══════════════════════════════════════════════════════════════
 //  ประกอบหน้า
 // ═══════════════════════════════════════════════════════════════
 function build() {
@@ -4620,11 +5337,13 @@ function build() {
   const pre = (th, en) => `<div class="sc-prompt">${d(th, en)}</div>`;
   // ── แท็บ 1: 2×2 ──
   el('tab-d2').innerHTML =
+    card('🧭', d('det คืออะไร เรียนไปทำไม', 'What is the det, and why learn it'), fm('|det <i>A</i>| = ' + d('พื้นที่ของสี่เหลี่ยมด้านขนานที่เกิดจากหลักของ A', 'the area of the parallelogram made by the columns of A')) + '<div id="d2-why"></div><div class="ar-note">' + d('แนวคิด det = พื้นที่ (ตัวคูณพื้นที่) อ้างอิง: 3Blue1Brown, <i>Essence of Linear Algebra</i> ตอน “The determinant” — <a href="https://www.3blue1brown.com/lessons/determinant" target="_blank" rel="noopener">3blue1brown.com/lessons/determinant</a> · การครอบกรอบแล้วตัดชิ้นส่วนเกินเป็นบทพิสูจน์มาตรฐาน', 'The idea det = area (an area scale factor): 3Blue1Brown, <i>Essence of Linear Algebra</i>, “The determinant” — <a href="https://www.3blue1brown.com/lessons/determinant" target="_blank" rel="noopener">3blue1brown.com/lessons/determinant</a> · wrapping in a rectangle and cutting away the extra pieces is the standard proof') + '<br>' + d('รูปนี้วาดกรณีลูกศรน้ำเงินอยู่ต่ำกว่าลูกศรส้ม (ทุกเลขเป็นบวก) · กรณีอื่นตัดชิ้นต่างไป แต่ได้ <i>ad</i> − <i>bc</i> เหมือนเดิม และเครื่องหมายบอกลำดับของหลัก (ดูฉากสลับหลักท้ายชุดนี้)', 'The picture shows the case where the blue arrow sits below the orange one (all numbers positive) · other cases cut different pieces but still give <i>ad</i> − <i>bc</i>, and the sign tells the order of the columns (see the column-swap scene at the end of this set)') + '</div>') +
+    card('🖐️', d('ลองทำ: ลากลูกศรดูพื้นที่กับ det', 'Try it: drag the arrows and watch the area and the det'), '<div id="d2-area"></div>') +
     card('↘', d('คูณลง ลบ คูณขึ้น', 'Down minus up'), '<div id="d2-sc"></div>' + fm('det <i>A</i> = ' + d('(คูณลง) − (คูณขึ้น)', '(down) − (up)'))) +
     card('📐', d('ตัวอย่างที่ 2: มีเลขลบ', 'Example 2: with negatives'), pre('กด “ถัดไป” ทีละขั้น — สมการเขียนเต็มฝั่งซ้ายทุกบรรทัด', 'Press “Next” one step at a time — every line starts with the full left side') + '<div id="d2-ex"></div>') +
     card('🔮', d('ทายก่อน', 'Guess first'), '<div id="d2-pr"></div>') +
-    card('🖐️', d('ลองทำ: แก้เลขดูเส้นและ det สด', 'Try it: edit the numbers and watch the lines and det'), '<div id="d2-try"></div>') +
-    card('📏', d('det คือพื้นที่', 'The det is an area'), '<div id="d2-area"></div>');
+    card('🖐️', d('ลองทำ: แก้เลขดูเส้นและ det สด', 'Try it: edit the numbers and watch the lines and det'), '<div id="d2-try"></div>');
+  scenes('d2-why', AR_SC, T('กด ▶ ทีละฉาก — เห็นภาพ → พิสูจน์ → สูตรลัด', 'Press ▶ one scene at a time — see it → prove it → the shortcut'));
   scenes('d2-sc', D2_SC, T('กด ▶ ทีละฉาก — ดูเส้นแดงลงและเส้นเขียวขึ้น', 'Press ▶ one scene at a time — watch the red line down and the green line up'));
   makeSteps(el('d2-ex'), dtEx2Rows);
   makePredict(el('d2-pr'), [d2PredItem()], { prompt: T('ดูเมทริกซ์ แล้วทาย det — เฉลยบนภาพหลังทาย', 'Look at the matrix and guess its det — the answer shows on the picture') });
@@ -4632,26 +5351,34 @@ function build() {
   makeAreaTry(el('d2-area'));
   // ── แท็บ 2: 3×3 ──
   el('tab-d3').innerHTML =
+    card('❓', d('กฎของซาร์รัส (ต่อหลัก) มาจากไหน', 'Where the Rule of Sarrus (copying columns) comes from'), '<div id="d3-why"></div><div class="ar-note">' + d('วิธีต่อหลักนี้ชื่อ <b>กฎของซาร์รัส</b> (Rule of Sarrus) ตามชื่อนักคณิตศาสตร์ชาวฝรั่งเศส Pierre Frédéric Sarrus — <a href="https://en.wikipedia.org/wiki/Rule_of_Sarrus" target="_blank" rel="noopener">en.wikipedia.org/wiki/Rule_of_Sarrus</a>', 'This copy-the-columns method is the <b>Rule of Sarrus</b>, after the French mathematician Pierre Frédéric Sarrus — <a href="https://en.wikipedia.org/wiki/Rule_of_Sarrus" target="_blank" rel="noopener">en.wikipedia.org/wiki/Rule_of_Sarrus</a>') + '<br>' + d('เครื่องหมาย + − + มาจากสูตร u × v ในสื่อเวกเตอร์ 3 มิติ (ก้อนกลางติดลบ) — แท็บโคแฟกเตอร์จะเรียกก้อน det 2 × 2 ที่เหลือว่า <b>ไมเนอร์</b> และเรียกตารางเครื่องหมายว่า<b>หมากรุก</b>', 'The + − + signs come from the u × v formula in the 3D vectors lesson (the middle term is negative) — the cofactor tab calls each left-over 2 × 2 det a <b>minor</b> and the sign pattern a <b>chessboard</b>') + '</div>') +
     card('➡️', d('แบบต่อหลัก (วิธีหลัก)', 'Copy the columns (the main way)'), '<div id="d3-ch"></div>') +
     card('🔄', d('แบบวนรอบ (วิธีขั้นสูงของครู)', 'Wrap around (the teacher’s advanced way)'), '<div id="d3-cy"></div>') +
     card('🔮', d('ทายก่อน: det 3 × 3', 'Guess first: a 3 × 3 det'), '<div id="d3-pr"></div>') +
     card('🖐️', d('ลองทำ: แก้เลข แตะป้ายผลคูณ', 'Try it: edit numbers, tap a product label'), '<div id="d3-try"></div>');
   scenes('d3-ch', D3_CHAIN, T('กด ▶ ทีละฉาก — ดูหลักบินไปต่อท้าย แล้วลากเส้น', 'Press ▶ one scene at a time — watch the columns fly across, then the lines'));
+  scenes('d3-why', SRW_SC, T('กด ▶ ทีละฉาก — มาจากไหน → อยู่ตรงไหนในเมทริกซ์ → ทำไมต่อ 2 หลัก', 'Press ▶ one scene at a time — where it comes from → where it sits in the matrix → why two columns'));
   scenes('d3-cy', D3_CYC, T('กด ▶ ทีละฉาก — ดูเส้นชนขอบแล้ววนกลับ', 'Press ▶ one scene at a time — watch the lines hit the edge and wrap around'));
   makePredict(el('d3-pr'), [d3PredItem()], { prompt: T('ดูเมทริกซ์ แล้วทาย det', 'Look at the matrix and guess its det') });
   makeD3Try(el('d3-try'));
   // ── แท็บ 3: โคแฟกเตอร์ ──
   el('tab-cof').innerHTML =
+    card('🧭', d('ไมเนอร์ โคแฟกเตอร์ adj: คืออะไร มาจากไหน ใช้ทำอะไร', 'Minor, cofactor, adj: what they are, where they come from, what they are for'), '<div id="cf-why"></div>') +
+    card('❓', d('adj มาจากไหน — ทำไม A · adj A = (det A) I', 'Where adj comes from — why A · adj A = (det A) I'), '<div id="cf-adj"></div><div class="ar-note">' + d('อ้างอิง: Gilbert Strang, <i>Introduction to Linear Algebra</i> หัวข้อ 5.3 (Cramer’s Rule, Inverses, and Volumes) · <a href="https://en.wikipedia.org/wiki/Adjugate_matrix" target="_blank" rel="noopener">Wikipedia: Adjugate matrix</a>', 'Reference: Gilbert Strang, <i>Introduction to Linear Algebra</i>, section 5.3 (Cramer’s Rule, Inverses, and Volumes) · <a href="https://en.wikipedia.org/wiki/Adjugate_matrix" target="_blank" rel="noopener">Wikipedia: Adjugate matrix</a>') + '</div>') +
+    card('🖐️', d('ลองทำ: คลิกตำแหน่งใน A · adj A — ทำไมทแยงได้ det นอกทแยงได้ 0', 'Try it: click an entry of A · adj A — why the diagonal gives det and the rest give 0'), '<div id="cf-pick"></div>') +
     card('✂️', d('ไมเนอร์: ขีดแถวขีดหลักทิ้ง', 'Minors: cross out a row and a column'), '<div id="cf-mn"></div>') +
     card('♟️', d('เครื่องหมายหมากรุก และโคแฟกเตอร์', 'The chessboard signs and cofactors'), '<div id="cf-sg"></div>') +
     card('📐', d('ตัวอย่าง: กระจายตามหลักที่ 1', 'Example: expand along column 1'), '<div id="cf-ex"></div>') +
     card('🔮', d('ทายก่อน: กระจายตามอะไรดี', 'Guess first: which one to expand along'), '<div id="cf-pr"></div>') +
     card('🖐️', d('ลองทำ: เลือกแถวหรือหลักเอง', 'Try it: choose the row or column'), '<div id="cf-try"></div>');
+  scenes('cf-why', CFW_SC, T('กด ▶ ทีละฉาก — det 3 × 3 ถูกแยกส่วนเป็นไมเนอร์ โคแฟกเตอร์ และ adj', 'Press ▶ one scene at a time — the 3 × 3 det is taken apart into minors, cofactors and adj'));
+  scenes('cf-adj', PDW_SC, T('กด ▶ ทีละฉาก — เริ่มจาก 2 × 2 แล้วดูว่าทำไมต้องพลิก C', 'Press ▶ one scene at a time — start with a 2 × 2 and see why C is flipped'));
   scenes('cf-mn', CF_MIN_SC, T('กด ▶ ทีละฉาก — ถอดสัญลักษณ์ทีละตัว แล้วขีดทิ้ง', 'Press ▶ one scene at a time — take the symbol apart, then cross out'));
   scenes('cf-sg', SG_SC, T('กด ▶ ทีละฉาก — ปูเครื่องหมายทีละช่อง', 'Press ▶ one scene at a time — lay the signs one by one'));
   scenes('cf-ex', EX_SC, T('กด ▶ ทีละฉาก — ดูทีละพจน์', 'Press ▶ one scene at a time — one term at a time'));
   makePredict(el('cf-pr'), [cfPredItem()], { prompt: T('ดูเมทริกซ์ แล้วเลือกแถวหรือหลักที่คิดน้อยที่สุด', 'Look at the matrix and pick the row or column with the least work') });
   makeCofTry(el('cf-try'));
+  makeAdjPick(el('cf-pick'));
   // ── แท็บ 4: สมบัติ ──
   el('tab-props').innerHTML =
     card('🔁', d('det ของทรานสโพส', 'The det of a transpose'), fm('det(<i>A</i>' + AT + ') = det <i>A</i>') + '<div id="pp-t"></div>') +

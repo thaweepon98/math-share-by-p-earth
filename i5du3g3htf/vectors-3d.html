@@ -971,7 +971,7 @@ function tab_cr() {
     <div class="readout" id="crRead"></div>
     <div class="box-info">✋ ${L('<b>ทิศ</b> ใช้กฎมือขวา: ม้วนนิ้วทั้งสี่จาก ' + V('u', 'cu') + ' ไปหา ' + V('v', 'cv') + ' นิ้วโป้งชี้ทิศของ ' + V('u', 'cu') + '×' + V('v', 'cv') + ' (สลับลำดับ ' + V('v', 'cv') + '×' + V('u', 'cu') + ' ทิศจะกลับ)', '<b>Direction</b>: right-hand rule — curl the fingers from ' + V('u', 'cu') + ' toward ' + V('v', 'cv') + ', the thumb points along ' + V('u', 'cu') + '×' + V('v', 'cv') + ' (swap the order and it flips).')}</div>
     <div class="formula">|${V('u', 'cu')}×${V('v', 'cv')}| = |${V('u', 'cu')}||${V('v', 'cv')}| sinθ</div>
-    <div class="btn-row">${viewBtn('cr3')}</div>
+    <div class="btn-row">${viewBtn('cr3')}<button class="btn ghost small" onclick="spinCr()" ${reducedMotion() ? 'disabled' : ''}>${L('หมุนดูรอบ', 'Spin around')}</button></div>
   </div>`;
 }
 const det2 = (a, b, c, d) => `<span class="det"><span>${a}</span><span>${b}</span><span>${c}</span><span>${d}</span></span>`;
@@ -997,12 +997,40 @@ addWk('cr1', { title: T('ตัวอย่างที่ 2: u × v ทั่�
     { h: () => P(L('รวมทั้งสามตัว', 'Put the three together')) + `<div class="formula">${V('u', 'cu')} × ${V('v', 'cv')} = 5${vi} − ${vj} − 3${vk}</div>` },
   ] });
 const crossOf = () => cross3(S3.cu, S3.cv);
-function setCr(u, v) { S3.cu = u.slice(); S3.cv = v.slice(); renderAll(); }
+function setCr(u, v) { S3.cu = u.slice(); S3.cv = v.slice(); renderAll(); wobbleCr(); }
+// ── แอนิเมชันมุมมอง (ปุ่ม "หมุนดูรอบ" และแกว่ง ±40° หลังกดปุ่มตัวอย่าง) ──
+// ลากภาพ / วาดฉากใหม่ / เปิดแท็บอื่น = viewTok เปลี่ยน แอนิเมชันหยุดเอง · prefers-reduced-motion = ไม่เคลื่อนไหว
+let viewTok = 0;
+const reducedMotion = () => !!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
+function viewAnim(name, ms, yawAt) {
+  const tok = ++viewTok; if (reducedMotion()) return;
+  const sc = SC[name]; if (!sc) return; const y0 = sc.yaw, t0 = performance.now();
+  const step = now => {
+    if (tok !== viewTok || SC[name] !== sc) return;
+    const t = Math.min(1, (now - t0) / ms); sc.yaw = y0 + yawAt(t); SCV[name] = { yaw: sc.yaw, pitch: sc.pitch }; sc.render();
+    if (t < 1) requestAnimationFrame(step);
+  };
+  requestAnimationFrame(step);
+}
+const spinCr = () => viewAnim('cr3', 4000, t => 2 * Math.PI * t);                                  // หมุน yaw ครบ 360° ใน 4 วินาที
+const wobbleCr = () => viewAnim('cr3', 2400, t => 40 * Math.PI / 180 * Math.sin(2 * Math.PI * t));  // แกว่ง ±40° หนึ่งรอบ
+// ส่วนเสริมของภาพ cross: แผ่นโปร่งแสง (สี่เหลี่ยมด้านขนานของ u, v) + เครื่องหมายมุมฉากที่จุดกำเนิด (u×v ตั้งฉากกับ u และกับ v) · u ∥ v หรือมีเวกเตอร์ศูนย์ = ไม่วาด
+const unit3 = v => scl3(v, 1 / len3(v));
+function rightAng(S, p, a, b, size, col) {     // p = จุดมุม · a, b = เวกเตอร์หน่วยของสองทิศ · วาดสี่เหลี่ยมเล็กด้าน size
+  const A = add3(p, scl3(a, size)), B = add3(p, scl3(b, size)), C = add3(A, scl3(b, size));
+  return S.line(A, C, { c: col, w: 2 }) + S.line(B, C, { c: col, w: 2 });
+}
+function crSheet(S, u, v) { const c = cross3(u, v); return len3sq(c) ? S.poly([[0, 0, 0], u, add3(u, v), v], '#F59E0B', .18, '#B45309') : ''; }
+function crRight(S, u, v) {
+  const c = cross3(u, v); if (!len3sq(c)) return '';
+  const O = [0, 0, 0], k = unit3(c);
+  return rightAng(S, O, k, unit3(u), .35, CR) + rightAng(S, O, k, unit3(v), .35, CR);
+}
 function updCr() {
   SC.cr3.render();
   const u = S3.cu, v = S3.cv, c = crossOf(), n = len3sq(c);
   const h = `${V('u', 'cu')} × ${V('v', 'cv')} = ${det2(sg(u[1]), sg(u[2]), sg(v[1]), sg(v[2]))}${vi} − ${det2(sg(u[0]), sg(u[2]), sg(v[0]), sg(v[2]))}${vj} + ${det2(sg(u[0]), sg(u[1]), sg(v[0]), sg(v[1]))}${vk}<br>= ${sg(c[0])}${vi} − (${sg(-c[1])})${vj} + ${par(c[2])}${vk} = <b style="background:#FEF9C3;border-radius:8px;padding:2px 10px">${comb(...c)}</b>
-    <br><span class="note">${L('ตรวจ: ตั้งฉากกับทั้งคู่ →', 'Check: perpendicular to both →')} ${V('u', 'cu')}·(${V('u', 'cu')}×${V('v', 'cv')}) = ${dot3(u, c)} ${dot3(u, c) === 0 ? '✅' : '❌'} , ${V('v', 'cv')}·(${V('u', 'cu')}×${V('v', 'cv')}) = ${dot3(v, c)} ${dot3(v, c) === 0 ? '✅' : '❌'}</span>
+    <br><span class="note">${L('ตรวจว่าตั้งฉาก:', 'Check it is perpendicular:')} (${V('u', 'cu')}×${V('v', 'cv')})·${V('u', 'cu')} = ${dot3(c, u)} ${dot3(c, u) === 0 ? '✓' : '✗'} , (${V('u', 'cu')}×${V('v', 'cv')})·${V('v', 'cv')} = ${dot3(c, v)} ${dot3(c, v) === 0 ? '✓' : '✗'} — ${L('dot = 0 แปลว่าตั้งฉาก (จากแท็บ dot)', 'dot = 0 means perpendicular (from the dot tab)')}</span>
     <br>|${V('u', 'cu')}×${V('v', 'cv')}| = √${n}${sqrtStr(n) !== '√' + n ? ' = ' + sqrtStr(n) : ''} = |${V('u', 'cu')}||${V('v', 'cv')}| sinθ ${n === 0 ? `<span class="note">(${L('ขนานกัน → cross = 0', 'parallel → cross = 0')})</span>` : ''}`;
   $('crRead').innerHTML = h;
 }
@@ -1010,26 +1038,27 @@ function mountCr() {
   const s0 = mkScene('cr0', 'cr0Svg', { R: 5.6, fit: .96 });
   if (s0) s0.draw = S => {
     const u = [2, 0, 0], v = [0, 2, 0], c = cross3(u, v), k = 5 / len3(c), cs = c.map(x => x * k * .8);
-    let s = S.plane('xy', 4.5, '#94A3B8') + S.grid('xy', 4) + S.axes({ len: 5.6, neg: false });
+    let s = S.plane('xy', 4.5, '#94A3B8') + S.grid('xy', 4) + S.axes({ len: 5.6, neg: false }) + crSheet(S, u, v);
     s += S.arrow([0, 0, 0], u, { c: CU, w: 5 }) + S.lab(u, ['^u'], CU, 19, { dx: 16, dy: 6 }) + S.arrow([0, 0, 0], v, { c: CV, w: 5 }) + S.lab(v, ['^v'], CV, 19, { dx: -16, dy: 6 });
-    s += S.arrow([0, 0, 0], cs, { c: CR, w: 6 }) + S.lab(cs, ['^u', '×', '^v'], CR, 18, { dx: 42, dy: -6 });
+    s += S.arrow([0, 0, 0], cs, { c: CR, w: 6 }) + S.lab(cs, ['^u', '×', '^v'], CR, 18, { dx: 42, dy: -6 }) + crRight(S, u, v);
     return s + S.text([2.6, 3.4, 0], L('ระนาบ XY (พื้น)', 'XY-plane (floor)'), '#64748B', 13);
   };
   if (s0) s0.render();
   const sc = mkScene('cr3', 'crSvg', { R: 5.6, fit: .96 }); if (!sc) return;
   sc.draw = S => {
     const u = S3.cu, v = S3.cv, c = crossOf(), O = [0, 0, 0], L3 = len3(c), k = L3 > 5 ? 5 / L3 : 1, cs = c.map(x => x * k);
-    let s = S.grid('xy', 5) + S.axes({ len: 5.6, neg: true, ticks: true });
+    let s = S.grid('xy', 5) + S.axes({ len: 5.6, neg: true, ticks: true }) + crSheet(S, u, v);
     if (len3sq(u)) s += S.arrow(O, u, { c: CU, w: 5 }) + S.lab(u.map(x => x / 2), ['^u'], CU, 19, { dx: -14, dy: -8 });
     if (len3sq(v)) s += S.arrow(O, v, { c: CV, w: 5 }) + S.lab(v.map(x => x / 2), ['^v'], CV, 19, { dx: 14, dy: -8 });
     if (L3) s += S.arrow(O, cs, { c: CR, w: 6 }) + S.lab(cs, ['^u', '×', '^v'], CR, 17, { dx: 40, dy: -6 }) + (k < 1 ? S.text(cs, L('(ย่อส่วน)', '(scaled down)'), '#64748B', 12, { dy: 20 }) : '');
-    return s;
+    return s + crRight(S, u, v);
   };
+  sc.svg.addEventListener('pointerdown', () => { viewTok++; });
   updCr();
 }
 
 // ═══════════════════════ ④ ประยุกต์ ═══════════════════════
-const AP = { k: 'para' };
+const AP = { k: 'para', why: 0 };      // why = ขั้น "ทำไม" ที่กำลังดู (0 = ยังไม่เริ่ม) · เปลี่ยนชิปแล้วเริ่มใหม่
 // ทุกรูปวางขนานแกน/ระนาบพิกัด (เริ่มที่จุดกำเนิด) เพื่อให้เห็นชัดจากมุมมองมาตรฐาน
 const APS = { para: { u: [0, 3, 0], v: [0, 1, 2] }, tri: { u: [0, 3, 0], v: [0, 1, 2] }, vol: { u: [2, 0, 0], v: [0, 2, 0], w: [1, 1, 3] } };
 function tab_ap() {
@@ -1037,10 +1066,11 @@ function tab_ap() {
   return `
   <div class="card">${title('🧱', 'ใช้ cross หาพื้นที่และปริมาตร', 'Using cross for area and volume')}
     ${linkTag('จากแท็บ ③: ' + 'cross', 'From tab ③: cross')}
-    <div class="chips">${Object.keys(ks).map(k => `<button class="chip ${AP.k === k ? 'active' : ''}" onclick="AP.k='${k}';renderAll()">${ks[k]}</button>`).join('')}</div>
+    <div class="chips">${Object.keys(ks).map(k => `<button class="chip ${AP.k === k ? 'active' : ''}" onclick="AP.k='${k}';AP.why=0;renderAll()">${ks[k]}</button>`).join('')}</div>
     ${apFormula()}
     ${sceneBox('apSvg')}
     <div class="btn-row">${viewBtn('ap')}</div>
+    <div id="apWhyBox">${apWhyBox()}</div>
     <div class="readout" id="apRead"></div>
   </div>
   ${wkHtml('ap_' + AP.k)}`;
@@ -1050,6 +1080,58 @@ function apFormula() {
   if (AP.k === 'para') return `<div class="formula">${L('พื้นที่ □', 'area of □')} = |${AB} × ${AC}|</div><div class="box-info">${L('ด้านที่ออกจากมุมเดียวกัน 2 ด้าน คือ ' + AB + ' กับ ' + AC + ' — ในภาพวางบนระนาบ YZ (ผนังด้านหลัง) ' + AB + ' ไปตามแกน Y (ขวา) ' + AC + ' เฉียงขึ้น', 'Two sides from the same corner are ' + AB + ' and ' + AC + ' — drawn on the YZ-plane (the back wall): ' + AB + ' runs along Y (right) and ' + AC + ' slants upward.')}</div>`;
   if (AP.k === 'tri') return `<div class="formula">${L('พื้นที่ △', 'area of △')} = ${frac(1, 2)}|${AB} × ${AC}|</div><div class="box-info">${L('สามเหลี่ยมคือ <b>ครึ่งหนึ่ง</b>ของสี่เหลี่ยมด้านขนานที่มี ' + AB + ', ' + AC + ' เป็นด้าน (ภาพเดียวกับสี่เหลี่ยมด้านขนาน ตัดครึ่ง)', 'A triangle is <b>half</b> of the parallelogram with sides ' + AB + ' and ' + AC + ' (the same picture, cut in half).')}</div>`;
   return `<div class="formula">${L('ปริมาตร', 'volume')} = |(${V('u', 'cu')} × ${V('v', 'cv')}) · ${V('w', 'cw')}| = |det ${L('แถว', 'rows')} ${V('u', 'cu')}, ${V('v', 'cv')}, ${V('w', 'cw')}|</div><div class="box-info">${L('ในภาพ ' + V('u', 'cu') + ' ไปตามแกน X, ' + V('v', 'cv') + ' ไปตามแกน Y (ฐานอยู่บนพื้น) ส่วน ' + V('w', 'cw') + ' ชี้เฉียงขึ้น — ฐาน = |u×v| แล้วคูณด้วยความสูง', 'In the picture ' + V('u', 'cu') + ' runs along X and ' + V('v', 'cv') + ' along Y (the base lies on the floor) while ' + V('w', 'cw') + ' leans upward — base = |u×v|, times the height.')}</div>`;
+}
+// ── ชุดขั้น "ทำไม": ◀ ▶ วาดทับฉาก 3 มิติเดิม · ข้อความอยู่ใต้ปุ่ม ──
+const AP_WHY_N = { para: 3, tri: 4, vol: 3 };
+function apWhyCapHtml() {
+  const k = AP.k, n = AP.why, AB = V('AB', 'cu'), AC = V('AC', 'cv'), u = V('u', 'cu'), v = V('v', 'cv'), w = V('w', 'cw');
+  const why = L('ขนาดของ cross นิยามไว้ว่า |u||v| sin θ (สูตรในแท็บ cross) จึงเท่ากับพื้นที่พอดี', 'The size of a cross product is defined as |u||v| sin θ (the formula in the cross tab), so it equals the area exactly.');
+  if (n === 0) return `<span class="note">${L('กด ▶ เพื่อดูว่าทำไมสูตรนี้ถึงได้พื้นที่/ปริมาตร', 'Press ▶ to see why this formula gives the area / volume')}</span>`;
+  if (k === 'vol') {
+    if (n === 1) return L(`ขั้น 1 — <b>ฐาน</b>คือสี่เหลี่ยมด้านขนานของ ${u} กับ ${v}: พื้นที่ฐาน = <b>|${u} × ${v}| = 4</b> · ลูกศร ${u} × ${v} ชี้<b>ตั้งฉากกับฐาน</b>`, `Step 1 — the <b>base</b> is the parallelogram of ${u} and ${v}: base area = <b>|${u} × ${v}| = 4</b> · the arrow ${u} × ${v} points <b>perpendicular to the base</b>`);
+    if (n === 2) return L(`ขั้น 2 — <b>สูง</b>คือ "เงา" ของ ${w} บนแนว ${u} × ${v} (เส้นประตั้งฉากกับฐาน) = <b>|${w} · (${u} × ${v})| ÷ |${u} × ${v}| = 12 ÷ 4 = 3</b>`, `Step 2 — the <b>height</b> is the "shadow" of ${w} along ${u} × ${v} (the dashed line, perpendicular to the base) = <b>|${w} · (${u} × ${v})| ÷ |${u} × ${v}| = 12 ÷ 4 = 3</b>`);
+    return L(`ขั้น 3 — ปริมาตร = พื้นที่ฐาน × สูง = |${u} × ${v}| × ${frac(`|${w} · (${u} × ${v})|`, `|${u} × ${v}|`)} = <b>|${w} · (${u} × ${v})| = 12</b><br><span class="note">|${u} × ${v}| ตัดกัน เหลือแค่ dot กับ cross</span>`,
+      `Step 3 — volume = base area × height = |${u} × ${v}| × ${frac(`|${w} · (${u} × ${v})|`, `|${u} × ${v}|`)} = <b>|${w} · (${u} × ${v})| = 12</b><br><span class="note">the |${u} × ${v}| cancels, leaving just a dot and a cross</span>`);
+  }
+  if (n === 1) return L(`ขั้น 1 — เลือก<b>ฐาน</b> = ${AB} ยาว <b>|${AB}| = 3</b>`, `Step 1 — pick the <b>base</b> = ${AB}, of length <b>|${AB}| = 3</b>`);
+  if (n === 2) return L(`ขั้น 2 — <b>สูง</b>คือระยะตั้งฉากจากปลาย ${AC} ลงมาที่แนว ${AB} (เส้นประ) = <b>|${AC}| sin θ = 2</b> (θ = มุมระหว่าง ${AB} กับ ${AC})`, `Step 2 — the <b>height</b> is the perpendicular distance from the tip of ${AC} down to the line of ${AB} (dashed) = <b>|${AC}| sin θ = 2</b> (θ = the angle between ${AB} and ${AC})`);
+  if (n === 3) return L(`ขั้น 3 — ${k === 'tri' ? 'ต่อเป็นสี่เหลี่ยมด้านขนาน (เส้นประ) พื้นที่ □' : 'พื้นที่'} = ฐาน × สูง = |${AB}||${AC}| sin θ = |${AB} × ${AC}| = <b>6</b><br><span class="note">${why}</span>`,
+    `Step 3 — ${k === 'tri' ? 'complete it to a parallelogram (dashed); area □' : 'area'} = base × height = |${AB}||${AC}| sin θ = |${AB} × ${AC}| = <b>6</b><br><span class="note">${why}</span>`);
+  return L(`ขั้น 4 — สามเหลี่ยมคือ<b>ครึ่งหนึ่ง</b>ของสี่เหลี่ยมด้านขนาน → พื้นที่ △ = ${frac(1, 2)}|${AB} × ${AC}| = ${frac(1, 2)}(6) = <b>3</b>`, `Step 4 — the triangle is <b>half</b> of the parallelogram → area △ = ${frac(1, 2)}|${AB} × ${AC}| = ${frac(1, 2)}(6) = <b>3</b>`);
+}
+function apWhyBox() {
+  const N = AP_WHY_N[AP.k];
+  return `<div class="btn-row" style="justify-content:center;margin-top:10px">
+      <span class="note">${L('ทำไมถึงได้อย่างนี้?', 'Why does it work?')}</span>
+      <button class="btn ghost small" onclick="apWhy(-1)" ${AP.why <= 0 ? 'disabled' : ''}>◀ ${L('ย้อน', 'Back')}</button>
+      <span class="note" style="min-width:3em;text-align:center">${AP.why}/${N}</span>
+      <button class="btn small" onclick="apWhy(1)" ${AP.why >= N ? 'disabled' : ''}>${L('ถัดไป', 'Next')} ▶</button>
+      <button class="btn ghost small" onclick="apWhy(-99)" ${AP.why === 0 ? 'disabled' : ''}>↺</button></div>
+    <div class="cap" id="apWhyCap" style="margin-top:8px">${apWhyCapHtml()}</div>`;
+}
+function apWhy(d) { AP.why = clamp(AP.why + d, 0, AP_WHY_N[AP.k]); $('apWhyBox').innerHTML = apWhyBox(); if (SC.ap) SC.ap.render(); }
+// วาดทับฉากตามขั้นที่ดูอยู่ (เรียกจาก draw ของ mountAp)
+function apWhyDraw(S, O, sh) {
+  const n = AP.why, HC = '#F59E0B', HT = '#7C3AED', tt = (p, t, c, o) => S.text(p, t, c, 14, o);
+  let s = '';
+  if (!n) return s;
+  if (AP.k === 'vol') {
+    const u = sh.u, v = sh.v, w = sh.w, c = cross3(u, v), F = [w[0], w[1], 0], K = [0, 0, 1];
+    if (n >= 1) {
+      s += S.poly([O, u, add3(u, v), v], HC, .38, '#B45309') + S.arrow(O, c, { c: CR, w: 6 }) + S.lab(c, ['^u', '×', '^v'], CR, 18, { dx: -48, dy: -4 }) + rightAng(S, O, K, unit3(u), .35, CR);
+      s += tt([1, 1, 0], L('พื้นที่ฐาน = |u × v| = 4', 'base area = |u × v| = 4'), '#B45309', { dy: 34 });
+    }
+    if (n >= 2) s += S.line(w, F, { c: HT, w: 3, dash: '6 4' }) + S.dot(F, HT, 4) + rightAng(S, F, K, [1, 0, 0], .35, HT) + tt([1, 1, 1.5], L('สูง = 12 ÷ 4 = 3', 'height = 12 ÷ 4 = 3'), HT, { dx: 66 });
+    if (n >= 3) s += tt([1, 1, 0], '', '#fff') + S.text(w, L('ปริมาตร = 4 × 3 = 12', 'volume = 4 × 3 = 12'), '#B45309', 14, { dx: 110, dy: -38 });
+    return s;
+  }
+  const B = sh.u, C = sh.v, D = add3(B, C), F = [0, 1, 0], Y = [0, 1, 0], Zd = [0, 0, 1];
+  if (n >= 1) s += S.line(O, B, { c: HC, w: 13, op: .45 }) + S.arrow(O, B, { c: CU, w: 5 }) + tt(scl3(B, .5), L('ฐาน = |AB| = 3', 'base = |AB| = 3'), '#B45309', { dy: 50 });
+  if (n >= 2) s += S.line(C, F, { c: HT, w: 3, dash: '6 4' }) + S.dot(F, HT, 4) + rightAng(S, F, Zd, scl3(Y, -1), .35, HT) + tt([0, 1, .55], L('สูง = |AC| sin θ = 2', 'height = |AC| sin θ = 2'), HT, { dx: -104 });
+  if (n === 3 || (n >= 3 && AP.k === 'para')) s += tt([0, 2.7, 1], L('พื้นที่ = 3 × 2 = 6', 'area = 3 × 2 = 6'), '#B45309', { dy: 6 });
+  if (n >= 3) s += (AP.k === 'tri' ? S.poly([O, B, D, C], HC, .16, '#B45309') + S.line(B, D, { c: '#B45309', w: 2, dash: '5 4' }) + S.line(C, D, { c: '#B45309', w: 2, dash: '5 4' }) : S.poly([O, B, D, C], HC, .3, '#B45309'));
+  if (n >= 4) s += S.poly([O, B, C], HC, .5, '#B45309') + tt(scl3(add3(B, C), 1 / 3), L('½ × 6 = 3', '½ × 6 = 3'), '#111827', { dx: -4, dy: 4 });
+  return s;
 }
 function mountAp() {
   const sc = mkScene('ap', 'apSvg', { R: 5.6, fit: .96 }); if (!sc) return;
@@ -1071,7 +1153,7 @@ function mountAp() {
       s += S.dot(B, '#111827', 5) + S.text(B, 'B' + P3(B), CU, 13, { dx: 8, dy: 20 }) + S.dot(C, '#111827', 5) + S.text(C, 'C' + P3(C), CV, 13, { dx: -8, dy: -10 });
       s += S.text(O, 'A', '#111827', 14, { dx: 16, dy: 22 });
     }
-    return s + S.dot(O, '#111827', 5);
+    return s + apWhyDraw(S, O, sh) + S.dot(O, '#111827', 5);
   };
   sc.render();
   const c = cross3(u, v), n = len3sq(c);

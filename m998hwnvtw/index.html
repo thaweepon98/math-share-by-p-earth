@@ -3760,7 +3760,7 @@ function makeBoxPlot(host, five0, o0) {
 // ══════════════ เมทริกซ์และการดำเนินการ ══════════════
 // สเปก: docs/design-matrices.md §2 · ภาพก่อน · ฉาก (makeScenes) · ทายก่อนเฉลย (makePredict) · ลองทำ (makeMatrix แก้เลขสด) · เกม
 // สี: แถว = น้ำเงิน (hb) · หลัก = ส้ม (ho) · ผล/ถูก = เขียว (hg) · ผิด = แดง (hr) · ตัวเลขทุกตัวคำนวณด้วย mAdd/mMul/mT (Q แม่นยำ)
-const AT = '<sup>t</sup>';
+const AT = '<sup class="tsup">t</sup>';
 const ital = s => `<i>${s}</i>`;
 const aij = (i, j) => `<i>a</i><sub>${i + 1}${j + 1}</sub>`;                  // aᵢⱼ แบบเลขจริง (1-based)
 const xrow = (...p) => `<div class="mx-row">${p.join('')}</div>`;
@@ -3785,6 +3785,10 @@ function opInjectCss() {
   if (document.getElementById('op-css')) return;
   const s = document.createElement('style'); s.id = 'op-css';
   s.textContent = `
+  .tsup { font-size: .86em; font-weight: 800; margin-left: .06em; }
+  .at-ctl { display: flex; flex-wrap: wrap; gap: 8px 12px; justify-content: center; align-items: center; margin: 10px 0 2px; }
+  .at-ctl .btn { padding: 8px 18px; }
+  .at-cc { font-weight: 800; color: var(--muted); min-width: 7em; text-align: center; }
   .wh-wrap { position: relative; display: inline-block; margin: 8px 16px 58px 92px; vertical-align: top; }
   .wh-al { position: absolute; white-space: nowrap; font-weight: 800; font-size: 1rem; line-height: 1.25; text-align: center; pointer-events: none; }
   .wh-rl { transform: translate(-100%, -50%); color: color-mix(in srgb, var(--g-blue) 75%, var(--text)); }
@@ -4124,16 +4128,16 @@ function subPredItem() {
 }
 // ── ลองทำ: A, B แก้ได้ · + − kA ──
 function makeAddTry(host) {
-  host.innerHTML = '<div class="chips at-chips"></div><div class="mx-row at-row"><span class="at-kk"></span><span class="mx-op at-op1"></span><div class="at-a"></div><span class="mx-op at-op"></span><div class="at-b"></div><span class="mx-op at-eq">=</span><div class="at-r"></div></div><div class="slider-row at-k" style="justify-content:center"><b><i>k</i> =</b><input type="range" min="-3" max="3" step="1" value="2"><span class="slider-val"></span></div><div class="mx-note at-n"></div>';
+  host.innerHTML = '<div class="chips at-chips"></div><div class="mx-row at-row"><span class="at-kk"></span><span class="mx-op at-op1"></span><div class="at-a"></div><span class="mx-op at-op"></span><div class="at-b"></div><span class="mx-op at-eq">=</span><div class="at-r"></div></div><div class="slider-row at-k" style="justify-content:center"><b><i>k</i> =</b><input type="range" min="-3" max="3" step="1" value="2"><span class="slider-val"></span></div><div class="at-ctl"><button class="btn ghost at-cp"></button><button class="btn at-cn"></button><span class="at-cc"></span><button class="btn ghost at-ca"></button></div><div class="mx-calc at-calc"></div><div class="mx-note at-n"></div>';
   const q = s => host.querySelector(s);
-  const st = { mode: '+', k: 2 };
-  const A = makeMatrix(q('.at-a'), [[1, -2], [3, 0]], { edit: true, resize: { r: [1, 3], c: [1, 3] }, name: 'A', dim: true, onChange: () => paint() });
-  const B = makeMatrix(q('.at-b'), [[4, 1], [-1, 5]], { edit: true, resize: { r: [1, 3], c: [1, 3] }, name: 'B', dim: true, onChange: () => paint() });
+  const st = { mode: '+', k: 2, cell: null };                 // cell = null (โชว์ผลครบ · ค่าเริ่ม) | ดัชนีช่องของผล เรียงตามแถว (0-based)
+  const A = makeMatrix(q('.at-a'), [[1, -2], [3, 0]], { edit: true, resize: { r: [1, 3], c: [1, 3] }, name: 'A', dim: true, onChange: () => { st.cell = null; paint(); } });
+  const B = makeMatrix(q('.at-b'), [[4, 1], [-1, 5]], { edit: true, resize: { r: [1, 3], c: [1, 3] }, name: 'B', dim: true, onChange: () => { st.cell = null; paint(); } });
   const kin = q('.at-k input');
-  kin.oninput = () => { st.k = +kin.value; paint(); };
+  kin.oninput = () => { st.k = +kin.value; st.cell = null; paint(); };
   const paint = () => {
     q('.at-chips').innerHTML = [['+', 'A + B'], ['−', 'A − B'], ['k', '<i>k</i> · A']].map(([m, l]) => `<button class="chip${st.mode === m ? ' active' : ''}" data-m="${m}">${l}</button>`).join('');
-    q('.at-chips').querySelectorAll('.chip').forEach(c => c.onclick = () => { st.mode = c.dataset.m; paint(); });
+    q('.at-chips').querySelectorAll('.chip').forEach(c => c.onclick = () => { st.mode = c.dataset.m; st.cell = null; paint(); });
     const isK = st.mode === 'k';
     q('.at-b').style.display = isK ? 'none' : ''; q('.at-op').style.display = isK ? 'none' : ''; q('.at-k').style.display = isK ? 'flex' : 'none';
     q('.at-kk').innerHTML = isK ? xtag('orange', `<b>${mn(st.k)}</b>`) : ''; q('.at-op1').textContent = isK ? '·' : '';
@@ -4141,8 +4145,29 @@ function makeAddTry(host) {
     q('.at-k .slider-val').textContent = mn(st.k);
     const a = A.M, b = B.M; let R, note = '';
     if (isK) R = mScale(a, st.k); else { R = st.mode === '+' ? mAdd(a, b) : mSub(a, b); if (!R) note = tx(T(`ทำไม่ได้ — มิติไม่เท่ากัน (${a.length}×${a[0].length} กับ ${b.length}×${b[0].length}) ต้องปรับให้เท่ากันก่อน`, `Not possible — the sizes differ (${a.length}×${a[0].length} and ${b.length}×${b[0].length}); make them equal first`)); }
-    q('.at-r').innerHTML = R ? matHtml(R, { name: isK ? `${mn(st.k)}<i>A</i>` : (st.mode === '+' ? '<i>A</i> + <i>B</i>' : '<i>A</i> − <i>B</i>'), dim: true }) : `<span class="bad">${tx(T('ทำไม่ได้', 'not possible'))}</span>`;
-    q('.at-n').innerHTML = note || tx(T('แตะเลขในเมทริกซ์เพื่อเปลี่ยน — ผลเปลี่ยนสดทันที', 'Tap a number to change it — the result updates at once'));
+    // โหมดทีละช่อง: A, B เน้นช่องที่เดินถึง · ผลโชว์เฉพาะช่องที่เดินถึง (ช่องปัจจุบันเขียว · ที่เหลือ ?) · บรรทัดคิดใต้เมทริกซ์
+    const cols = R ? R[0].length : 0, total = R ? R.length * cols : 0, cur = R && st.cell !== null ? Math.min(st.cell, total - 1) : null;
+    if (R && st.cell !== null) st.cell = cur;
+    A.clear(); B.clear();
+    let shown = R, clsFn = null, calc = '';
+    if (R && cur !== null) {
+      const ci = Math.floor(cur / cols), cj = cur % cols;
+      A.hl({ cell: [ci, cj] }, 'blue'); if (!isK) B.hl({ cell: [ci, cj] }, 'orange');
+      shown = R.map((r, i) => r.map((v, j) => (i * cols + j <= cur ? v : null)));
+      clsFn = (i, j) => (i === ci && j === cj ? 'hg' : '');
+      const pa = qHtml(a[ci][cj]), pr = qHtml(R[ci][cj]);
+      calc = `${tx(T(`ช่อง (แถว ${ci + 1}, หลัก ${cj + 1})`, `entry (row ${ci + 1}, column ${cj + 1})`))}: ` + (isK ? `${mn(st.k)} × (${pa}) = <b>${pr}</b>` : `(${pa}) ${st.mode === '+' ? '+' : '−'} (${qHtml(b[ci][cj])}) = <b>${pr}</b>`);
+    }
+    q('.at-r').innerHTML = R ? matHtml(shown, { name: isK ? `${mn(st.k)}<i>A</i>` : (st.mode === '+' ? '<i>A</i> + <i>B</i>' : '<i>A</i> − <i>B</i>'), dim: true, cls: clsFn }) : `<span class="bad">${tx(T('ทำไม่ได้', 'not possible'))}</span>`;
+    q('.at-calc').innerHTML = calc ? `<span class="mx">${calc}</span>` : '';
+    q('.at-cp').textContent = '◀'; q('.at-cp').disabled = !R || cur === null;
+    q('.at-cn').textContent = tx(T(cur === null ? 'ทีละช่อง ▶' : 'ช่องถัดไป ▶', cur === null ? 'One entry at a time ▶' : 'Next entry ▶')); q('.at-cn').disabled = !R || (cur !== null && cur >= total - 1);
+    q('.at-cc').textContent = R ? (cur === null ? tx(T(`ผลครบ ${total} ช่อง`, `all ${total} entries`)) : tx(T(`ช่องที่ ${cur + 1} / ${total}`, `entry ${cur + 1} / ${total}`))) : '';
+    q('.at-ca').textContent = tx(T('ดูทั้งหมด', 'Show all')); q('.at-ca').disabled = !R || cur === null;
+    q('.at-cp').onclick = () => { st.cell = cur === 0 ? null : cur - 1; paint(); };
+    q('.at-cn').onclick = () => { st.cell = cur === null ? 0 : cur + 1; paint(); };
+    q('.at-ca').onclick = () => { st.cell = null; paint(); };
+    q('.at-n').innerHTML = note || tx(T('แตะเลขในเมทริกซ์เพื่อเปลี่ยน — ผลเปลี่ยนสดทันที · หรือกด "ทีละช่อง" ดูผลโผล่ทีละช่อง', 'Tap a number to change it — the result updates at once · or press "One entry at a time" to see the result appear entry by entry'));
   };
   const w = { refresh: paint }; LIVE.push(w); paint();
   return w;
@@ -4246,7 +4271,7 @@ function makeMulReveal(host, A, B) {
 
 // ── ลองทำ: A, B (2×2) แก้ได้ · แตะช่องของผล → แถว/หลักเรือง + บรรทัดคำนวณ ──
 function makeMulTry(host) {
-  host.innerHTML = '<div class="mx-note mt-p"></div><div class="mx-row"><div class="mt-a"></div><span class="mx-g"><span class="mx-op">·</span><div class="mt-b"></div></span><span class="mx-g mt-rg"><span class="mx-op">=</span><div class="mt-r"></div></span></div><div class="mx-calc mt-c"></div>';
+  host.innerHTML = '<div class="mx-note mt-p"></div><div class="mx-row"><div class="mt-a"></div><span class="mx-g"><span class="mx-op">·</span><div class="mt-b"></div></span><span class="mx-g mt-rg"><span class="mx-op">=</span><div class="mt-r"></div></span></div><div class="at-ctl mt-ctl"><button class="btn ghost mt-cp">◀</button><button class="btn mt-cn"></button><span class="at-cc mt-cc"></span></div><div class="mx-calc mt-c"></div>';
   const q = s => host.querySelector(s);
   let sel = [0, 0];
   const rz = { r: [1, 3], c: [1, 3] };
@@ -4257,6 +4282,11 @@ function makeMulTry(host) {
     const a = A.M, b = B.M, R = mMul(a, b);
     A.clear(); B.clear(); Rm.clear();
     q('.mt-p').innerHTML = tx(T('แตะช่องของผลคูณ — แถวของ A (น้ำเงิน) คูณหลักของ B (ส้ม) · แตะเลขใน A หรือ B เพื่อเปลี่ยน · ปุ่ม +/− ปรับขนาดได้ถึง 3 × 3', 'Tap an entry of the product — the row of A (blue) times the column of B (orange) · tap a number in A or B to change it · the +/− buttons resize up to 3 × 3'));
+    const cols = R ? R[0].length : 0, total = R ? R.length * cols : 0, idx = R ? Math.min(sel[0] * cols + sel[1], total - 1) : 0;
+    q('.mt-cp').disabled = !R || idx <= 0; q('.mt-cn').disabled = !R || idx >= total - 1;
+    q('.mt-cn').textContent = tx(T('ช่องถัดไป ▶', 'Next entry ▶')); q('.mt-cc').textContent = R ? tx(T(`ช่องที่ ${idx + 1} / ${total}`, `entry ${idx + 1} / ${total}`)) : '';
+    q('.mt-cp').onclick = () => { if (!R) return; const k = idx - 1; sel = [Math.floor(k / cols), k % cols]; upd(); };
+    q('.mt-cn').onclick = () => { if (!R) return; const k = idx + 1; sel = [Math.floor(k / cols), k % cols]; upd(); };
     if (!R) {
       q('.mt-rg').style.display = 'none';
       q('.mt-c').innerHTML = `<span class="bad">${tx(T('คูณไม่ได้', 'cannot multiply'))}</span> ${tx(T(`หลักของ A (${a[0].length}) ไม่เท่ากับแถวของ B (${b.length}) — ตัวในต้องเท่ากัน`, `the columns of A (${a[0].length}) differ from the rows of B (${b.length}) — the inner numbers must match`))}`;
@@ -4354,10 +4384,10 @@ async function trPlay(S, r) {
 const TR_SC = [
   { cap: () => tx(T('A มิติ 2 × 3 — ทรานสโพสคือ <b>กลับแถวเป็นหลัก</b> · กด ▶', 'A is 2 × 3 — transposing means <b>turning rows into columns</b> · press ▶')),
     end: S => trBuild(S.el, 0) },
-  { cap: () => tx(T('แถวที่ 1 ของ A หมุนลงไปเป็นหลักที่ 1 ของ A<sup>t</sup>', 'Row 1 of A turns downward and becomes column 1 of A<sup>t</sup>')),
+  { cap: () => tx(T('แถวที่ 1 ของ A หมุนลงไปเป็นหลักที่ 1 ของ A<sup class="tsup">t</sup>', 'Row 1 of A turns downward and becomes column 1 of A<sup class="tsup">t</sup>')),
     end: S => { trBuild(S.el, 1); trMarks(S.el, 0); },
     play: async S => { await trPlay(S, 0); } },
-  { cap: () => tx(T('แถวที่ 2 เป็นหลักที่ 2 → A<sup>t</sup> มิติ 3 × 2 (มิติสลับกัน)', 'Row 2 becomes column 2 → A<sup>t</sup> is 3 × 2 (the size swaps)')),
+  { cap: () => tx(T('แถวที่ 2 เป็นหลักที่ 2 → A<sup class="tsup">t</sup> มิติ 3 × 2 (มิติสลับกัน)', 'Row 2 becomes column 2 → A<sup class="tsup">t</sup> is 3 × 2 (the size swaps)')),
     end: S => { trBuild(S.el, 2); trMarks(S.el, 1); },
     play: async S => { trBuild(S.el, 1); await trPlay(S, 1); } }
 ];
@@ -4375,7 +4405,7 @@ function makeTransTry(host) {
   const one = async (i, j) => {
     fresh(); const v = qHtml(M[i][j]);
     if (i === j) { A.hl({ cell: [i, j] }, 'green'); Tm.hl({ cell: [i, j] }, 'green'); msg(() => `${aij(i, j)} = <b>${v}</b> ${tx(T('อยู่บนทแยงหลัก → ช่องนี้อยู่ที่เดิม', 'sits on the main diagonal → it stays where it is'))}`); return; }
-    A.hl({ cell: [i, j] }, 'blue'); msg(() => `${aij(i, j)} = <b>${v}</b> ${tx(T('พลิกข้ามทแยงหลักไปเป็น', 'flips across the main diagonal to'))} ${aij(j, i)} ${tx(T('ของ', 'of'))} A<sup>t</sup>`);
+    A.hl({ cell: [i, j] }, 'blue'); msg(() => `${aij(i, j)} = <b>${v}</b> ${tx(T('พลิกข้ามทแยงหลักไปเป็น', 'flips across the main diagonal to'))} ${aij(j, i)} ${tx(T('ของ', 'of'))} A<sup class="tsup">t</sup>`);
     const anim = st.anim;
     await flyNum({ el: stage, anim }, A.cell(i, j), Tm.cell(j, i), v, 850, { arc: 52 });
     if (anim.dead) return; Tm.hl({ cell: [j, i] }, 'blue');
@@ -4406,15 +4436,15 @@ function transPredItems() {
   return [
     { chip: T('(Aᵗ)ᵗ', '(Aᵗ)ᵗ'), draw: (el, ctx) => {
       const d0 = ctx.done[0];
-      el.innerHTML = xrow(matHtml(TR_A, { name: '<i>A</i>' }), xop(`→<sup>t</sup>`), matHtml(TA, { name: `<i>A</i>${AT}` }), xop(`→<sup>t</sup>`), matHtml(d0 ? mT(TA) : nullsOf(2, 3), { name: `(<i>A</i>${AT})${AT}`, cls: () => d0 ? 'hg' : '' }));
+      el.innerHTML = xrow(matHtml(TR_A, { name: '<i>A</i>' }), xop(`→<sup class="tsup">t</sup>`), matHtml(TA, { name: `<i>A</i>${AT}` }), xop(`→<sup class="tsup">t</sup>`), matHtml(d0 ? mT(TA) : nullsOf(2, 3), { name: `(<i>A</i>${AT})${AT}`, cls: () => d0 ? 'hg' : '' }));
     }, qs: [{
-      q: T(`ทรานสโพส 2 ครั้ง (A<sup>t</sup>)<sup>t</sup> เท่ากับข้อใด`, `Transposing twice, (A<sup>t</sup>)<sup>t</sup>, equals which one`), o: [mx('−<i>A</i>'), mx('<i>A</i>'), mx(`<i>A</i>${AT}`), mx('<i>I</i>')], a: 1,
+      q: T(`ทรานสโพส 2 ครั้ง (A<sup class="tsup">t</sup>)<sup class="tsup">t</sup> เท่ากับข้อใด`, `Transposing twice, (A<sup class="tsup">t</sup>)<sup class="tsup">t</sup>, equals which one`), o: [mx('−<i>A</i>'), mx('<i>A</i>'), mx(`<i>A</i>${AT}`), mx('<i>I</i>')], a: 1,
       why: T('พลิกแถวเป็นหลักแล้วพลิกกลับอีกครั้ง ทุกช่องกลับที่เดิม → ได้ A เดิม (ช่องสีเขียวตรงกับ A ทุกช่อง)', 'Turn rows into columns and then back again — every entry returns home → you get A itself (the green entries match A)')
     }] },
     { chip: T('มิติของ Aᵗ', 'Size of Aᵗ'), draw: (el, ctx) => {
       el.innerHTML = xrow(matHtml(nullsOf(2, 5), { name: '<i>A</i>', dim: true }), ctx.done[0] ? xop('→') + matHtml(nullsOf(5, 2), { name: `<i>A</i>${AT}`, dim: true }) : '');
     }, qs: [{
-      q: T(`A มิติ 2 × 5 แล้ว A<sup>t</sup> มิติเท่าไร`, `A is 2 × 5 — what size is A<sup>t</sup>`), o: [mx('2 × 5'), mx('2 × 2'), mx('5 × 2'), mx('5 × 5')], a: 2,
+      q: T(`A มิติ 2 × 5 แล้ว A<sup class="tsup">t</sup> มิติเท่าไร`, `A is 2 × 5 — what size is A<sup class="tsup">t</sup>`), o: [mx('2 × 5'), mx('2 × 2'), mx('5 × 2'), mx('5 × 5')], a: 2,
       why: T('แถวกลายเป็นหลัก หลักกลายเป็นแถว มิติจึงสลับ: 2 × 5 → 5 × 2', 'Rows become columns and columns become rows, so the size swaps: 2 × 5 → 5 × 2')
     }] }
   ];
@@ -4434,11 +4464,12 @@ function typeLevel(M) {
 }
 const TY_LAYERS = [
   { cc: 'purple', t: T('เมทริกซ์จัตุรัส', 'Square matrix'), ex: [[1, 2], [3, 4]], def: T('<b>เมทริกซ์จัตุรัส</b>: จำนวนแถว = จำนวนหลัก (n × n)', '<b>Square matrix</b>: the number of rows = the number of columns (n × n)') },
-  { cc: 'blue', t: T('สมมาตร', 'Symmetric'), ex: [[1, 7], [7, 4]], def: T('<b>เมทริกซ์สมมาตร</b>: A = A<sup>t</sup> — ช่องที่อยู่ตรงข้ามกันข้ามทแยงหลักเท่ากัน (<i>a</i><sub><i>ij</i></sub> = <i>a</i><sub><i>ji</i></sub>)', '<b>Symmetric matrix</b>: A = A<sup>t</sup> — entries opposite each other across the main diagonal are equal (<i>a</i><sub><i>ij</i></sub> = <i>a</i><sub><i>ji</i></sub>)') },
+  { cc: 'blue', t: T('สมมาตร', 'Symmetric'), ex: [[1, 7], [7, 4]], def: T('<b>เมทริกซ์สมมาตร</b>: A = A<sup class="tsup">t</sup> — ช่องที่อยู่ตรงข้ามกันข้ามทแยงหลักเท่ากัน (<i>a</i><sub><i>ij</i></sub> = <i>a</i><sub><i>ji</i></sub>)', '<b>Symmetric matrix</b>: A = A<sup class="tsup">t</sup> — entries opposite each other across the main diagonal are equal (<i>a</i><sub><i>ij</i></sub> = <i>a</i><sub><i>ji</i></sub>)') },
   { cc: 'orange', t: T('ทแยง', 'Diagonal'), ex: [[2, 0], [0, 5]], def: T('<b>เมทริกซ์ทแยง</b>: มีเลขที่ทแยงหลัก ที่เหลือเป็น 0', '<b>Diagonal matrix</b>: numbers on the main diagonal, everything else is 0') },
   { cc: 'green', t: T('สเกลาร์', 'Scalar'), ex: [[3, 0], [0, 3]], def: T('<b>เมทริกซ์สเกลาร์</b>: เมทริกซ์ทแยงที่เลขเท่ากัน', '<b>Scalar matrix</b>: a diagonal matrix whose diagonal numbers are all equal') },
   { cc: 'pink', t: T('เอกลักษณ์', 'Identity'), ex: [[1, 0], [0, 1]], def: T('<b>เมทริกซ์เอกลักษณ์ <i>I</i></b>: เมทริกซ์สเกลาร์ที่เลขที่ทแยงหลักเป็น 1 ทั้งหมด', '<b>Identity matrix <i>I</i></b>: the scalar matrix whose diagonal numbers are all 1') }
 ];
+TY_LAYERS.forEach((L, k) => { if (typeLevel(L.ex) !== k) throw new Error('TY_LAYERS ex ไม่ตรงชั้น ' + k); });
 function makeTypeNest(host) {
   host.innerHTML = '<div class="tn-nest"></div><div class="nest-def"></div><div class="mx-note tn-p"></div><div class="mx-row tn-edit"></div><div class="mx-calc tn-st"></div>';
   const q = s => host.querySelector(s);
@@ -4447,9 +4478,9 @@ function makeTypeNest(host) {
   const nestHtml = k => { const L = TY_LAYERS[k]; return `<div class="nest cl-${L.cc}${st.sel === k ? ' on' : ''}" data-k="${k}"><div class="nest-h"><span class="nest-t">${tx(L.t)}</span>${matHtml(L.ex)}</div>${k + 1 < TY_LAYERS.length ? nestHtml(k + 1) : ''}</div>`; };
   const paint = () => {
     q('.tn-nest').innerHTML = nestHtml(0);
-    q('.tn-nest').querySelectorAll('.nest').forEach(n => n.onclick = e => { e.stopPropagation(); st.sel = +n.dataset.k; paint(); });
+    q('.tn-nest').querySelectorAll('.nest').forEach(n => n.onclick = e => { e.stopPropagation(); const k = +n.dataset.k; mm.set(TY_LAYERS[k].ex.map(r => r.slice())); classify(); st.sel = k; paint(); });   // กดกล่อง = M เปลี่ยนเป็นตัวอย่างของกล่องนั้น (แก้เลข/ขนาดต่อได้)
     q('.nest-def').innerHTML = st.sel === null ? `<span style="color:var(--muted)">${tx(T('แตะกล่องแต่ละชั้นเพื่อดูความหมาย — กล่องเล็กอยู่ในกล่องใหญ่เสมอ', 'Tap each layer to see what it means — a smaller box always sits inside the bigger one'))}</span>` : tx(TY_LAYERS[st.sel].def);
-    q('.tn-p').innerHTML = tx(T('ลองเอง: แก้เลขหรือขนาดของ M — ดูว่า M ตกอยู่ในกล่องชั้นไหน', 'Try it: change the numbers or the size of M — see which box M falls into'));
+    q('.tn-p').innerHTML = tx(T('กดกล่องเพื่อดูตัวอย่างของชนิดนั้น แล้วลองแก้เลข — ดูว่า M ย้ายไปอยู่กล่องไหน', 'Tap a box to see an example of that type, then edit the numbers — watch which box M moves to'));
     const M = mm.M, lv = typeLevel(M);
     q('.tn-st').innerHTML = lv < 0 ? `${xtag('red', tx(T('ไม่ใช่เมทริกซ์จัตุรัส', 'not a square matrix')))} ${tx(T(`(${M.length} แถว ≠ ${M[0].length} หลัก) — อยู่นอกกล่องทั้งหมด`, `(${M.length} rows ≠ ${M[0].length} columns) — outside every box`))}` : `${tx(T('M อยู่ในกล่องที่เล็กที่สุด:', 'The smallest box M fits in:'))} ${xtag(TY_LAYERS[lv].cc, tx(TY_LAYERS[lv].t))}`;
   };
@@ -4495,10 +4526,10 @@ async function syFold(S, M, pairs, badPair, startMarks) {
 const SY_SC = [
   { cap: () => tx(T('เส้นประคือทแยงหลัก · ถ้าพับกระดาษตามเส้นนี้ ช่องที่ทับกันจะเป็นคู่ <i>a</i><sub><i>ij</i></sub> กับ <i>a</i><sub><i>ji</i></sub> · กด ▶', 'The dashed line is the main diagonal · fold the paper along it and the entries that land on each other are the pairs <i>a</i><sub><i>ij</i></sub> and <i>a</i><sub><i>ji</i></sub> · press ▶')),
     end: S => syBuild(S.el, SY1, {}) },
-  { cap: () => tx(T('พับตามทแยงหลัก: ช่องมุมขวาบนบินไปทับช่องมุมซ้ายล่างทีละคู่ — ทับกันเท่ากันทุกคู่ (เขียว) → A = A<sup>t</sup> <b>สมมาตร</b>', 'Fold along the main diagonal: each upper-right entry flies onto its lower-left partner — all pairs match (green) → A = A<sup>t</sup>, <b>symmetric</b>')),
+  { cap: () => tx(T('พับตามทแยงหลัก: ช่องมุมขวาบนบินไปทับช่องมุมซ้ายล่างทีละคู่ — ทับกันเท่ากันทุกคู่ (เขียว) → A = A<sup class="tsup">t</sup> <b>สมมาตร</b>', 'Fold along the main diagonal: each upper-right entry flies onto its lower-left partner — all pairs match (green) → A = A<sup class="tsup">t</sup>, <b>symmetric</b>')),
     end: S => { syBuild(S.el, SY1, syAll(SY1)); S.el.querySelector('.sy-c').innerHTML = syCalcOf(SY1, 1, 2, false); },
     play: async S => { await syFold(S, SY1, SY_PAIRS, null); } },
-  { cap: () => tx(T('เปลี่ยน <i>a</i><sub>31</sub> เป็น 2 — พับแล้วคู่หนึ่งไม่ทับกัน (แดง) → A ≠ A<sup>t</sup> <b>ไม่สมมาตร</b>', 'Change <i>a</i><sub>31</sub> to 2 — after folding one pair does not match (red) → A ≠ A<sup>t</sup>, <b>not symmetric</b>')),
+  { cap: () => tx(T('เปลี่ยน <i>a</i><sub>31</sub> เป็น 2 — พับแล้วคู่หนึ่งไม่ทับกัน (แดง) → A ≠ A<sup class="tsup">t</sup> <b>ไม่สมมาตร</b>', 'Change <i>a</i><sub>31</sub> to 2 — after folding one pair does not match (red) → A ≠ A<sup class="tsup">t</sup>, <b>not symmetric</b>')),
     end: S => { syBuild(S.el, SY2, syAll(SY2, [0, 2])); S.el.querySelector('.sy-c').innerHTML = syCalcOf(SY2, 1, 2, false); },
     play: async S => { await syFold(S, SY2, SY_PAIRS, [0, 2]); } }
 ];
@@ -4510,7 +4541,7 @@ function makeSymTry(host) {
     const M = mm.M; mm.clear(); let bad = null;
     SY_PAIRS.forEach(([i, j]) => { const ok = qEq(M[i][j], M[j][i]); mm.hl({ cell: [i, j] }, ok ? 'green' : 'red'); mm.hl({ cell: [j, i] }, ok ? 'green' : 'red'); if (!ok && !bad) bad = [i, j]; });
     q('.sy-p').innerHTML = tx(T('แก้เลขใน A ให้ทุกคู่เป็นสีเขียว — A จะสมมาตร (คู่ที่ไม่เท่ากันเป็นสีแดง)', 'Edit the numbers until every pair turns green — then A is symmetric (unequal pairs are red)'));
-    q('.sy-s').innerHTML = bad ? `${xtag('red', tx(T('ยังไม่สมมาตร', 'not symmetric yet')))} ${aij(bad[0], bad[1])} = ${qHtml(M[bad[0]][bad[1]])} ${xop('≠')} ${aij(bad[1], bad[0])} = ${qHtml(M[bad[1]][bad[0]])}` : `${xtag('green', tx(T('สมมาตร ✓', 'symmetric ✓')))} A = A<sup>t</sup>`;
+    q('.sy-s').innerHTML = bad ? `${xtag('red', tx(T('ยังไม่สมมาตร', 'not symmetric yet')))} ${aij(bad[0], bad[1])} = ${qHtml(M[bad[0]][bad[1]])} ${xop('≠')} ${aij(bad[1], bad[0])} = ${qHtml(M[bad[1]][bad[0]])}` : `${xtag('green', tx(T('สมมาตร ✓', 'symmetric ✓')))} A = A<sup class="tsup">t</sup>`;
   };
   const w = { refresh: paint }; LIVE.push(w); paint();
   return w;
@@ -4580,10 +4611,10 @@ function ptBuild(el, ph) {
   const t = ph >= 2 ? AT : '';
   const slots = ph === 0 ? '<span class="pt-slot" data-s="1"></span><span class="pt-slot" data-s="2"></span>'
     : `<span class="pt-slot" data-s="1" style="border-style:solid;border-color:transparent">${chip('orange', `<i>B</i>${t}`, 'b2')}</span><span class="pt-slot" data-s="2" style="border-style:solid;border-color:transparent">${chip('blue', `<i>A</i>${t}`, 'a2')}</span>`;
-  el.innerHTML = `<div class="pt-row"><span>(</span>${chip('blue', '<i>A</i>', 'a')}${chip('orange', '<i>B</i>', 'b')}<span>)<sup>t</sup></span></div><div class="pt-row"><span>=</span>${slots}</div>`;
+  el.innerHTML = `<div class="pt-row"><span>(</span>${chip('blue', '<i>A</i>', 'a')}${chip('orange', '<i>B</i>', 'b')}<span>)<sup class="tsup">t</sup></span></div><div class="pt-row"><span>=</span>${slots}</div>`;
 }
 const PT_SC = [
-  { cap: () => tx(T('(AB)<sup>t</sup> — ทรานสโพสทั้งก้อน AB · ผลจะเป็นอะไร กด ▶', '(AB)<sup>t</sup> — the transpose of the whole product AB · what does it become? press ▶')),
+  { cap: () => tx(T('(AB)<sup class="tsup">t</sup> — ทรานสโพสทั้งก้อน AB · ผลจะเป็นอะไร กด ▶', '(AB)<sup class="tsup">t</sup> — the transpose of the whole product AB · what does it become? press ▶')),
     end: S => ptBuild(S.el, 0) },
   { cap: () => tx(T('วงเล็บถูกถอด แล้ว A กับ B <b>สลับที่</b>บินข้ามกัน → B มาก่อน A', 'The brackets come off and A and B <b>swap places</b>, flying across each other → B now comes first')),
     end: S => ptBuild(S.el, 1),
@@ -4594,7 +4625,7 @@ const PT_SC = [
       await Promise.all([flyTo(S.el, a, s2, fa, S.anim, 1100, { arc: 70 }), flyTo(S.el, b, s1, fb, S.anim, 1100, { arc: 30 })]);
       ptBuild(S.el, 1);
     } },
-  { cap: () => tx(T('แล้วทรานสโพสตามไปทีละตัว → B<sup>t</sup>A<sup>t</sup> · เรียกว่า <b>กระจายสลับที่</b>', 'Then each one gets its own transpose → B<sup>t</sup>A<sup>t</sup> · this is <b>distribute and swap</b>')),
+  { cap: () => tx(T('แล้วทรานสโพสตามไปทีละตัว → B<sup class="tsup">t</sup>A<sup class="tsup">t</sup> · เรียกว่า <b>กระจายสลับที่</b>', 'Then each one gets its own transpose → B<sup class="tsup">t</sup>A<sup class="tsup">t</sup> · this is <b>distribute and swap</b>')),
     end: S => ptBuild(S.el, 2),
     play: async S => {
       ptBuild(S.el, 1);
@@ -4608,11 +4639,11 @@ function transChainPredItem() {
   const I_ = s => `<i>${s}</i>`;
   return { chip: T('(ABC)ᵗ', '(ABC)ᵗ'), draw: (el, ctx) => {
     const d0 = ctx.done[0];
-    el.innerHTML = `<div class="pt-row"><span>(</span>${ch('blue', I_('A'))}${ch('orange', I_('B'))}${ch('green', I_('C'))}<span>)<sup>t</sup></span>${d0 ? `<span>=</span>${ch('green', I_('C') + AT)}${ch('orange', I_('B') + AT)}${ch('blue', I_('A') + AT)}` : '<span>= ?</span>'}</div>`;
+    el.innerHTML = `<div class="pt-row"><span>(</span>${ch('blue', I_('A'))}${ch('orange', I_('B'))}${ch('green', I_('C'))}<span>)<sup class="tsup">t</sup></span>${d0 ? `<span>=</span>${ch('green', I_('C') + AT)}${ch('orange', I_('B') + AT)}${ch('blue', I_('A') + AT)}` : '<span>= ?</span>'}</div>`;
   }, qs: [{
-    q: T('(ABC)<sup>t</sup> เท่ากับข้อใด', '(ABC)<sup>t</sup> equals which one'),
+    q: T('(ABC)<sup class="tsup">t</sup> เท่ากับข้อใด', '(ABC)<sup class="tsup">t</sup> equals which one'),
     o: [mx(`${I_('A')}${AT}${I_('B')}${AT}${I_('C')}${AT}`), mx(`${I_('B')}${AT}${I_('A')}${AT}${I_('C')}${AT}`), mx(`${I_('C')}${AT}${I_('B')}${AT}${I_('A')}${AT}`), mx(`${I_('C')}${I_('B')}${I_('A')}${AT}`)], a: 2,
-    why: T('กระจายสลับที่ทีละคู่: (ABC)<sup>t</sup> = C<sup>t</sup>(AB)<sup>t</sup> = C<sup>t</sup>B<sup>t</sup>A<sup>t</sup> → ลำดับกลับหลังไปหน้า และทุกตัวมี t · ข้อที่ไม่กลับลำดับ หรือกลับไม่หมด หรือใส่ t แค่ตัวสุดท้าย ผิดทั้งหมด', 'Distribute and swap one pair at a time: (ABC)<sup>t</sup> = C<sup>t</sup>(AB)<sup>t</sup> = C<sup>t</sup>B<sup>t</sup>A<sup>t</sup> → the order reverses and every factor carries a t · answers that keep the order, only partly reverse it, or put t on the last factor alone are all wrong')
+    why: T('กระจายสลับที่ทีละคู่: (ABC)<sup class="tsup">t</sup> = C<sup class="tsup">t</sup>(AB)<sup class="tsup">t</sup> = C<sup class="tsup">t</sup>B<sup class="tsup">t</sup>A<sup class="tsup">t</sup> → ลำดับกลับหลังไปหน้า และทุกตัวมี t · ข้อที่ไม่กลับลำดับ หรือกลับไม่หมด หรือใส่ t แค่ตัวสุดท้าย ผิดทั้งหมด', 'Distribute and swap one pair at a time: (ABC)<sup class="tsup">t</sup> = C<sup class="tsup">t</sup>(AB)<sup class="tsup">t</sup> = C<sup class="tsup">t</sup>B<sup class="tsup">t</sup>A<sup class="tsup">t</sup> → the order reverses and every factor carries a t · answers that keep the order, only partly reverse it, or put t on the last factor alone are all wrong')
   }] };
 }
 
@@ -4643,15 +4674,15 @@ function opQuiz() {
     { q: T(`${M(a5, { name: '<i>A</i>' })} ${M(b5, { name: '<i>B</i>' })}<br><i>AB</i> เท่ากับข้อใด`, `${M(a5, { name: '<i>A</i>' })} ${M(b5, { name: '<i>B</i>' })}<br>What is <i>AB</i>`),
       o: [M(r5), M(ba5), M(had5), M(mAdd(a5, b5))], a: 0,
       e: T(`นอนคูณตั้ง: ช่องแรก = (2)(1) + (−1)(5) = −3 · (2)(4) + (−1)(−2) = 10 · (3)(1) + (0)(5) = 3 · (3)(4) + (0)(−2) = 12 → ${M(r5)} · ${M(ba5)} คือ BA (สลับที่) · อีกสองตัวคือคูณทีละช่องตรงๆ และ A + B`, `Row times column: first entry = (2)(1) + (−1)(5) = −3 · (2)(4) + (−1)(−2) = 10 · (3)(1) + (0)(5) = 3 · (3)(4) + (0)(−2) = 12 → ${M(r5)} · ${M(ba5)} is BA (swapped order) · the other two multiply entry by entry, and A + B`) },
-    { q: T(`${M(a6, { name: '<i>A</i>' })}<br>A<sup>t</sup> เท่ากับข้อใด`, `${M(a6, { name: '<i>A</i>' })}<br>What is A<sup>t</sup>`),
+    { q: T(`${M(a6, { name: '<i>A</i>' })}<br>A<sup class="tsup">t</sup> เท่ากับข้อใด`, `${M(a6, { name: '<i>A</i>' })}<br>What is A<sup class="tsup">t</sup>`),
       o: [M(t6), M(a6), M([[3, 5, -1], [1, -2, 0]]), M([[1, -2], [0, 3], [5, -1]])], a: 0,
       e: T(`กลับแถวเป็นหลัก: แถว 1 (1, −2, 0) กลายเป็นหลัก 1 · แถว 2 (3, 5, −1) กลายเป็นหลัก 2 → 3 × 2 · ตัวที่ยังเป็น 2 × 3 ไม่ได้สลับมิติ · ตัวสุดท้ายแค่เรียงเลขเดิมใหม่ ไม่ได้กลับแถวเป็นหลัก`, `Turn rows into columns: row 1 (1, −2, 0) becomes column 1 · row 2 (3, 5, −1) becomes column 2 → 3 × 2 · the 2 × 3 ones did not swap the size · the last one just re-reads the numbers into a new shape instead of turning rows into columns`) },
     { q: T('ข้อใดเป็นเมทริกซ์สเกลาร์ที่ไม่ใช่เมทริกซ์เอกลักษณ์', 'Which is a scalar matrix that is not the identity matrix'),
       o: [M([[4, 0], [0, 4]]), M([[4, 0], [0, -4]]), M([[0, 4], [4, 0]]), M(mId(2))], a: 0,
       e: T('สเกลาร์ = ทแยงที่เลขเท่ากัน · [4 0; 0 4] เท่ากัน และไม่ใช่ 1 → ใช่ · [4 0; 0 −4] เป็นทแยงแต่เลขไม่เท่ากัน · [0 4; 4 0] สมมาตรแต่ไม่ใช่ทแยง · I เป็นสเกลาร์ที่เป็นเอกลักษณ์ ซึ่งโจทย์ตัดออก', 'Scalar = diagonal with equal numbers · [4 0; 0 4] has equal numbers and is not 1 → yes · [4 0; 0 −4] is diagonal but the numbers differ · [0 4; 4 0] is symmetric but not diagonal · I is a scalar matrix that is the identity, which the question rules out') },
-    { q: T(`${M(a8, { name: '<i>A</i>' })} ${M(b8, { name: '<i>B</i>' })} ได้ ${M(ab8, { name: '<i>AB</i>' })}<br>(AB)<sup>t</sup> เท่ากับข้อใด`, `${M(a8, { name: '<i>A</i>' })} ${M(b8, { name: '<i>B</i>' })} give ${M(ab8, { name: '<i>AB</i>' })}<br>What is (AB)<sup>t</sup>`),
+    { q: T(`${M(a8, { name: '<i>A</i>' })} ${M(b8, { name: '<i>B</i>' })} ได้ ${M(ab8, { name: '<i>AB</i>' })}<br>(AB)<sup class="tsup">t</sup> เท่ากับข้อใด`, `${M(a8, { name: '<i>A</i>' })} ${M(b8, { name: '<i>B</i>' })} give ${M(ab8, { name: '<i>AB</i>' })}<br>What is (AB)<sup class="tsup">t</sup>`),
       o: [M(mT(ab8)), M(mMul(mT(a8), mT(b8))), M(ab8), M(ba8)], a: 0,
-      e: T(`(AB)<sup>t</sup> = B<sup>t</sup>A<sup>t</sup> (กระจายสลับที่) = ทรานสโพสของ AB = ${M(mT(ab8))} · ${M(mMul(mT(a8), mT(b8)))} คือ A<sup>t</sup>B<sup>t</sup> ซึ่งไม่เท่า · ${M(ab8)} ยังไม่ได้ทรานสโพส · ${M(ba8)} คือ BA และ AB ≠ BA`, `(AB)<sup>t</sup> = B<sup>t</sup>A<sup>t</sup> (distribute and swap) = the transpose of AB = ${M(mT(ab8))} · ${M(mMul(mT(a8), mT(b8)))} is A<sup>t</sup>B<sup>t</sup>, which is different · ${M(ab8)} was not transposed · ${M(ba8)} is BA and AB ≠ BA`) }
+      e: T(`(AB)<sup class="tsup">t</sup> = B<sup class="tsup">t</sup>A<sup class="tsup">t</sup> (กระจายสลับที่) = ทรานสโพสของ AB = ${M(mT(ab8))} · ${M(mMul(mT(a8), mT(b8)))} คือ A<sup class="tsup">t</sup>B<sup class="tsup">t</sup> ซึ่งไม่เท่า · ${M(ab8)} ยังไม่ได้ทรานสโพส · ${M(ba8)} คือ BA และ AB ≠ BA`, `(AB)<sup class="tsup">t</sup> = B<sup class="tsup">t</sup>A<sup class="tsup">t</sup> (distribute and swap) = the transpose of AB = ${M(mT(ab8))} · ${M(mMul(mT(a8), mT(b8)))} is A<sup class="tsup">t</sup>B<sup class="tsup">t</sup>, which is different · ${M(ab8)} was not transposed · ${M(ba8)} is BA and AB ≠ BA`) }
   ];
 }
 
