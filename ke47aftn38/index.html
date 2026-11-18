@@ -3870,7 +3870,11 @@ function pfCss() {
   .formula .fm-n { font-size: .9rem; font-weight: 700; opacity: .85; }
   .gm-stat { text-align: center; font-weight: 700; color: var(--muted); }
   .mx-op { font-size: 1.5rem; font-weight: 700; color: var(--muted); padding: 0 2px; }
+  .pf-eqs { padding: 4px 0; } .cb-line.pf-eqln { font-size: 1.15rem; line-height: 2.2; } .pf-eqln.old { opacity: .5; } .pf-tk { display: inline-block; white-space: nowrap; margin: 0 2px; }
+  .pf-pl { position: relative; } .pf-scale { position: absolute; left: 6px; bottom: 6px; z-index: 4; font-size: .78rem; font-weight: 700; color: var(--muted); background: var(--card); border: 1.5px solid var(--border); border-radius: 9px; padding: 0 8px; line-height: 1.6; pointer-events: none; }
+  .pf-pl.fadein .cp-wrap { animation: pfFade .3s ease; } @keyframes pfFade { from { opacity: .25; } to { opacity: 1; } } @media (prefers-reduced-motion: reduce) { .pf-pl.fadein .cp-wrap { animation: none; } }
   @media (max-width: 700px) {
+    .cb-line.pf-eqln { font-size: .98rem; line-height: 2; }
     .cb-big { font-size: 1.3rem; } .cb-big.sm { font-size: 1.05rem; } .cb-line { font-size: 1.05rem; } .pf-out .cb-big { font-size: 1.2rem; } .pf-out .cb-line { font-size: 1rem; }
     .pf-side { min-height: 0; } .pf-cell { font-size: .92rem; padding: 1px 5px; } .pf-eq { font-size: 1.2rem; }
   }`;
@@ -4080,35 +4084,47 @@ const DV_CFG = {
   items: [
     { kind: 'dot', at: [DVX, DVY], c: 'b', step: 0 },
     { kind: 'label', at: [DVX, DVY], html: zI, c: 'b', pos: 'tr', step: 0 },
-    { kind: 'arrow', a: [0, 0], b: [DVX, DVY], c: 'b', step: 1, order: 0 },
-    { kind: 'label', at: [DVX / 2, DVY / 2], html: rI, c: 'b', pos: 'tl', step: 1, order: 0 },
-    { kind: 'arc', r: 0.8, t0: 0, t1: DVT, c: 'b', head: true, step: 1, order: 1 },
-    { kind: 'label', at: P2(0.8, DVT / 2), html: TH, c: 'b', step: 1, order: 1 },
-    { kind: 'seg', a: [0, 0], b: [DVX, 0], c: 'm', dash: true, step: 1, order: 2 },
-    { kind: 'seg', a: [DVX, 0], b: [DVX, DVY], c: 'm', dash: true, step: 1, order: 2 },
-    { kind: 'raw', svg: rightAngle(DVX, 0, -1, 1, 0.2), step: 1, order: 2 },
-    { kind: 'label', at: [1.5, 0], html: xI, c: '', pos: 'b', step: 1, until: 2, order: 2 },
-    { kind: 'label', at: [DVX, DVY / 2], html: yI, c: '', pos: 'l', step: 1, until: 3, order: 2 },
-    { kind: 'seg', a: [0, 0], b: [DVX, 0], c: 'o', w: 6, step: 2 },
-    { kind: 'label', at: [1.5, 0], html: oX(xI), c: 'o', pos: 'b', step: 2 },
-    { kind: 'seg', a: [DVX, 0], b: [DVX, DVY], c: 't', w: 6, step: 3 },
-    { kind: 'label', at: [DVX, DVY / 2], html: tY(yI), c: '', pos: 'l', step: 3 }
+    // ข้อ 29ข: 10 ฉาก (เดิม 6) — ฉาก 1 จุด z · 2 ลูกศร r · 3 มุม θ · 4 เส้นตั้งฉาก (สามเหลี่ยม ชิด/ฉาก/ข้าม) · 5–6 cos θ → x · 7–8 sin θ → y · 9 แทนค่า · 10 ดึง r
+    { kind: 'arrow', a: [0, 0], b: [DVX, DVY], c: 'b', step: 1 },
+    { kind: 'label', at: [DVX / 2, DVY / 2], html: rI, c: 'b', pos: 'tl', step: 1 },
+    { kind: 'arc', r: 0.8, t0: 0, t1: DVT, c: 'b', head: true, step: 2 },
+    { kind: 'label', at: P2(0.8, DVT / 2), html: TH, c: 'b', step: 2 },
+    { kind: 'seg', a: [0, 0], b: [DVX, 0], c: 'm', dash: true, step: 3, order: 0 },
+    { kind: 'seg', a: [DVX, 0], b: [DVX, DVY], c: 'm', dash: true, step: 3, order: 0 },
+    { kind: 'raw', svg: rightAngle(DVX, 0, -1, 1, 0.2), step: 3, order: 0 },
+    { kind: 'label', at: [1.5, 0], html: xI, c: '', pos: 'b', step: 3, until: 4, order: 1 },
+    { kind: 'label', at: [DVX, DVY / 2], html: yI, c: '', pos: 'l', step: 3, until: 6, order: 1 },
+    { kind: 'seg', a: [0, 0], b: [DVX, 0], c: 'o', w: 6, step: 4 },
+    { kind: 'label', at: [1.5, 0], html: oX(xI), c: 'o', pos: 'b', step: 4 },
+    { kind: 'seg', a: [DVX, 0], b: [DVX, DVY], c: 't', w: 6, step: 6 },
+    { kind: 'label', at: [DVX, DVY / 2], html: tY(yI), c: '', pos: 'l', step: 6 }
   ],
   panel: k => {
     const zEq = `${zI} = ${xI} + ${yI}${I}`, xEq = oX(`${xI} = <span data-t="xr">${rI} ${COS}</span>`), yEq = tY(`${yI} = <span data-t="yr">${rI} ${SIN}</span>`);
     const zSub = `${zI} = ${oX(`${rI} ${COS}`)} + ${tY(`(${rI} ${SIN})`)} ${I}`;
-    if (k <= 1) return [{ key: 'z', html: bigl(zEq) }];
-    if (k === 2) return [{ key: 'z', html: ln(zEq) }, { key: 'c1', html: bigl(`${COS} = ${fr(oX(xI), rI)}`) }, { key: 'x', html: bigl(xEq) }];
-    if (k === 3) return [{ key: 'x', html: bigl(xEq) }, { key: 'c2', html: bigl(`${SIN} = ${fr(tY(yI), rI)}`) }, { key: 'y', html: bigl(yEq) }];
-    if (k === 4) return [{ key: 'x', html: ln(xEq) }, { key: 'y', html: ln(yEq) }, { key: 'z2', html: bigl(zSub) }];
+    const w3 = (th, en) => tx(T(th, en));
+    const c1 = f => f(`${COS} = ${w3('ชิด', 'adjacent')} ÷ ${w3('ฉาก', 'hypotenuse')} = ${fr(oX(xI), rI)}`), c2 = f => f(`${SIN} = ${w3('ข้าม', 'opposite')} ÷ ${w3('ฉาก', 'hypotenuse')} = ${fr(tY(yI), rI)}`);
+    if (k === 0) return [{ key: 'z', html: bigl(zEq) }];
+    if (k === 1) return [{ key: 'z', html: bigl(zEq) }, { key: 'rA', html: ln(`${rI} = |${zI}|`) }];
+    if (k === 2) return [{ key: 'z', html: bigl(zEq) }, { key: 'rA', html: ln(`${rI} = |${zI}|`) }, { key: 'thA', html: ln(`${TH} = ${w3('มุมจากแกนจริงทางบวก', 'the angle from the positive real axis')}`) }];
+    if (k === 3) return [{ key: 'tx', html: ln(`${oX(xI)} = ${w3('ขาล่าง', 'bottom leg')} (${w3('ชิด', 'adjacent')})`) }, { key: 'ty', html: ln(`${tY(yI)} = ${w3('ขาตั้ง', 'vertical leg')} (${w3('ข้าม', 'opposite')})`) }, { key: 'tr', html: ln(`${co('b', rI)} = ${w3('ด้านยาวสุด', 'longest side')} (${w3('ฉาก', 'hypotenuse')})`) }];
+    if (k === 4) return [{ key: 'c1', html: c1(bigl) }];
+    if (k === 5) return [{ key: 'c1', html: c1(ln) }, { key: 'x', html: bigl(xEq) }];
+    if (k === 6) return [{ key: 'x', html: ln(xEq) }, { key: 'c2', html: c2(bigl) }];
+    if (k === 7) return [{ key: 'x', html: ln(xEq) }, { key: 'c2', html: c2(ln) }, { key: 'y', html: bigl(yEq) }];
+    if (k === 8) return [{ key: 'x', html: ln(xEq) }, { key: 'y', html: ln(yEq) }, { key: 'z2', html: bigl(zSub) }];
     return [{ key: 'z2', html: ln(zSub) }, { key: 'f', html: bigl(`${zI} = ${rP}(${COS} + ${I} ${SIN})`) }, { key: 'cis', html: bigl(`${zI} = ${rI} cis ${TH}`) }];
   }
 };
 const DV_SC = pfScenes(DV_CFG, [
   { cap: T('จำนวนเชิงซ้อน z = x + yi เป็นจุดบนระนาบ — อยากเขียน z ด้วย "ความยาว" กับ "มุม" แทน x กับ y · กด ▶', 'The complex number z = x + yi is a point on the plane — we want to write z with a "length" and an "angle" instead of x and y · press ▶') },
-  { cap: T('ลากลูกศรจากจุดกำเนิดไป z ยาว <b>r</b> แล้ววัดมุม <b>θ</b> จากแกนจริง → ได้สามเหลี่ยมมุมฉาก ขาล่างยาว <b>x</b> ขาตั้งยาว <b>y</b>', 'Draw the arrow from the origin to z, of length <b>r</b>, and measure the angle <b>θ</b> from the real axis → a right triangle: the bottom leg is <b>x</b>, the vertical leg is <b>y</b>') },
-  { cap: T('ดูขาล่าง: cos θ = ด้านประชิด ÷ ด้านตรงข้ามมุมฉาก = x ÷ r → คูณ r ทั้งสองข้าง ได้ <b>x = r cos θ</b>', 'The bottom leg: cos θ = adjacent ÷ hypotenuse = x ÷ r → multiply both sides by r to get <b>x = r cos θ</b>') },
-  { cap: T('ดูขาตั้ง: sin θ = ด้านตรงข้าม ÷ ด้านตรงข้ามมุมฉาก = y ÷ r → คูณ r ทั้งสองข้าง ได้ <b>y = r sin θ</b>', 'The vertical leg: sin θ = opposite ÷ hypotenuse = y ÷ r → multiply both sides by r to get <b>y = r sin θ</b>') },
+  { cap: T('ลากลูกศรจากจุดกำเนิดไปที่ z — ความยาวลูกศรเรียกว่า <b>r</b> (r คือ |z|)', 'Draw the arrow from the origin to z — the length of the arrow is called <b>r</b> (r is |z|)') },
+  { cap: T('วัดมุม <b>θ</b> จากแกนจริงทางบวก หมุนทวนเข็มนาฬิกาไปจนถึงลูกศร (โค้งค่อยๆ กวาด)', 'Measure the angle <b>θ</b> from the positive real axis, turning counterclockwise up to the arrow (the arc sweeps out slowly)') },
+  { cap: T('ลากเส้นตั้งฉากจาก z ลงแกนจริง → ได้สามเหลี่ยมมุมฉาก: ขาล่างยาว <b>x</b> (ชิด) · ขาตั้งยาว <b>y</b> (ข้าม) · ด้านยาวสุดคือ <b>r</b> (ฉาก)', 'Drop a perpendicular from z to the real axis → a right triangle: the bottom leg is <b>x</b> (adjacent) · the vertical leg is <b>y</b> (opposite) · the longest side is <b>r</b> (hypotenuse)') },
+  { cap: T('ดูขาล่าง (สีส้ม): cos θ = ชิด ÷ ฉาก = x ÷ r', 'Look at the bottom leg (orange): cos θ = adjacent ÷ hypotenuse = x ÷ r') },
+  { cap: T('คูณ r ทั้งสองข้างของ cos θ = x ÷ r ได้ <b>x = r cos θ</b>', 'Multiply both sides of cos θ = x ÷ r by r to get <b>x = r cos θ</b>') },
+  { cap: T('ดูขาตั้ง (สีเขียวน้ำทะเล): sin θ = ข้าม ÷ ฉาก = y ÷ r', 'Look at the vertical leg (teal): sin θ = opposite ÷ hypotenuse = y ÷ r') },
+  { cap: T('คูณ r ทั้งสองข้างของ sin θ = y ÷ r ได้ <b>y = r sin θ</b>', 'Multiply both sides of sin θ = y ÷ r by r to get <b>y = r sin θ</b>') },
   { cap: T('แทน x และ y ใน z = x + yi — ค่าของ x กับ y บินเข้าไปแทน → <b>z = r cos θ + (r sin θ) i</b>', 'Substitute x and y into z = x + yi — the values of x and y fly into place → <b>z = r cos θ + (r sin θ) i</b>'),
     hook: async (S, ctx) => {
       const L = ctx.side.querySelector('[data-key=z2]'), fin = L.innerHTML;
@@ -4382,6 +4398,55 @@ const DVS_SC = pfScenes(DVS_CFG, [
   { cap: T('<b>มุมลบกัน</b>: ลูกศรเขียวหมุนกลับ π/3 (มุมของ z₂ · โค้งส้มวิ่งย้อนทาง) → 5π/6 − π/3 = π/2', '<b>The angles subtract</b>: the green arrow turns back by π/3 (the angle of z₂ · the orange arc runs backwards) → 5π/6 − π/3 = π/2') },
   { cap: T('ได้ผลหาร <b>4 cis π/2 = 4i</b> (สีเขียว) · "r หารกัน มุมลบกัน"', 'The quotient is <b>4 cis π/2 = 4i</b> (green) · "lengths divide, angles subtract"') }
 ]);
+// ── ข้อ 30: ที่มาของการคูณ/หาร — แสดงสมการทีละบรรทัด ──
+// eqScenes(stages, o): stages = [{ cap, lines: [() => html …] }] · ฉาก k วาดบรรทัดของฉาก 0..k (บรรทัดของฉากก่อนจาง) · play = บรรทัดของฉาก k จางเข้าทีละบรรทัด (หน่วง 250 ms) · ภาษาเปลี่ยนวาดใหม่จาก end() ได้เอง
+function eqScenes(stages, o) {
+  o = o || {};
+  const paint = (S, k, upto) => {
+    S.el.style.minHeight = (o.minH || 230) + 'px';
+    S.el.innerHTML = '<div class="pf-eqs">' + stages.slice(0, k + 1).map((st, j) => st.lines.map((h, i) => (j < k || upto === undefined || i < upto) ? `<div class="cb-line pf-eqln${j < k && !st.keep ? ' old' : ''}" data-j="${j}">${h()}</div>` : '').join('')).join('') + '</div>';
+  };
+  return stages.map((st, k) => {
+    const sc = { cap: st.cap, end: S => { paint(S, k); } };
+    if (k > 0) sc.play = async S => {
+      paint(S, k, 0); await S.anim.wait(250);
+      for (let i = 0; i < st.lines.length; i++) {
+        paint(S, k, i + 1);
+        const es = S.el.querySelectorAll(`[data-j="${k}"]`), last = es[es.length - 1];
+        last.style.opacity = 0; await S.anim.run(450, t => { last.style.opacity = t; }); await S.anim.wait(250);
+      }
+    };
+    return sc;
+  });
+}
+const R1 = iz('r') + '₁', R2 = iz('r') + '₂', T1 = iz('θ') + '₁', T2 = iz('θ') + '₂';
+const rhoI = iz('ρ'), phiI = iz('φ'), wI = iz('w');
+const tk = h => `<span class="pf-tk">${h}</span>`;                  // กลุ่มที่ไม่ตัดบรรทัดกลางกลุ่ม (inline-block ไม่ใช่ inline-flex — เว้นวรรคในกลุ่มต้องไม่หาย)
+const bxc = (c, h) => `<span class="bx ${c}">${h}</span>`;
+const idnB = n => `<span style="display:inline-block;font-size:.62em;font-weight:800;border:1.5px solid currentColor;border-radius:9px;padding:0 7px;margin-left:8px;vertical-align:.25em;white-space:nowrap;line-height:1.6">${tx(T('ข้อ ' + n, 'No. ' + n))}</span>`;   // ป้ายเลขข้อของชีทครู (แบบเดียวกับสื่อเอกลักษณ์)
+const cis1 = `(cos ${T1} + ${I} sin ${T1})`, cis2 = `(cos ${T2} + ${I} sin ${T2})`;
+const cos12 = `cos ${T1} cos ${T2} − sin ${T1} sin ${T2}`, sin12 = `sin ${T1} cos ${T2} + cos ${T1} sin ${T2}`;
+const sumT = `${T1} + ${T2}`;
+const MO_SC = eqScenes([
+  { cap: T('เขียน z₁z₂ ในรูปเชิงขั้ว แล้วรวม r₁r₂ ไว้ข้างหน้า · กด ▶', 'Write z₁z₂ in polar form, then collect r₁r₂ at the front · press ▶'),
+    lines: [() => `${tk(`${z1I}${z2I} =`)} ${tk(`${R1}${cis1}`)} · ${tk(`${R2}${cis2}`)}`, () => `${tk('=')} ${tk(`${R1}${R2}`)} ${tk(cis1)}${tk(cis2)}`] },
+  { cap: T('คูณกระจาย 4 พจน์ — ทุกตัวในวงเล็บแรกคูณทุกตัวในวงเล็บหลัง', 'Multiply out the 4 terms — every term of the first bracket times every term of the second'),
+    lines: [() => `${tk('=')} ${tk(`${R1}${R2}`)} [ ${tk(`cos ${T1} cos ${T2}`)} + ${tk(`${I} cos ${T1} sin ${T2}`)} + ${tk(`${I} sin ${T1} cos ${T2}`)} + ${tk(`${I}² sin ${T1} sin ${T2}`)} ]`] },
+  { cap: T('<b>i² = −1</b> แล้วจับกลุ่มส่วนจริงกับส่วนจินตภาพ', '<b>i² = −1</b>, then group the real part and the imaginary part'),
+    lines: [() => `${tk('=')} ${tk(`${R1}${R2}`)} [ ${tk(`(${cos12})`)} + ${I} ${tk(`(${sin12})`)} ]`] },
+  { cap: T('จำได้ไหม: วงเล็บแรกคือสูตรของ cos(θ₁ + θ₂) (ข้อ 11) · วงเล็บหลังคือสูตรของ sin(θ₁ + θ₂) (ข้อ 10)', 'Do you recognise them? The first bracket is the formula for cos(θ₁ + θ₂) (No. 11) · the second is the formula for sin(θ₁ + θ₂) (No. 10)'), keep: true,
+    lines: [() => `${bxc('b', cos12)} = ${co('b', `cos(${sumT})`)} ${idnB(11)}`, () => `${bxc('o', sin12)} = ${co('o', `sin(${sumT})`)} ${idnB(10)}`] },
+  { cap: T('แทนกลับ: <b>z₁z₂ = r₁r₂ cis(θ₁ + θ₂)</b> · มุมบวกกันเพราะสูตรผลบวกมุมของตรีโกณมิติ · "r คูณกัน มุมบวกกัน"', 'Substitute back: <b>z₁z₂ = r₁r₂ cis(θ₁ + θ₂)</b> · the angles add because of the angle-sum formulas of trigonometry · "lengths multiply, angles add"'),
+    lines: [() => `${tk(`${z1I}${z2I} =`)} ${tk(`${R1}${R2}`)} [ ${tk(co('b', `cos(${sumT})`))} + ${I} ${tk(co('o', `sin(${sumT})`))} ]`, () => `${tk(`${z1I}${z2I} =`)} ${bxc('g', `${R1}${R2} cis(${sumT})`)}`] }
+], { minH: 260 });
+const DO_SC = eqScenes([
+  { cap: T('ให้ผลหาร z₁ ÷ z₂ = w = ρ cis φ (ยังไม่รู้ ρ กับ φ) · การหารคือย้อนการคูณ → <b>w · z₂ = z₁</b> · กด ▶', 'Let the quotient be z₁ ÷ z₂ = w = ρ cis φ (ρ and φ not known yet) · dividing undoes multiplying → <b>w · z₂ = z₁</b> · press ▶'),
+    lines: [() => `${tk(`${z1I} ÷ ${z2I} = ${wI} =`)} ${tk(`${rhoI} cis ${phiI}`)}`, () => `${tk(tx(T('แปลว่า', 'which means')))} ${tk(`${wI} · ${z2I} = ${z1I}`)}`] },
+  { cap: T('ใช้กฎคูณกับ w · z₂ แล้วเทียบกับ z₁ = r₁ cis θ₁ → เทียบขนาดและเทียบมุม', 'Use the multiplication rule on w · z₂ and compare with z₁ = r₁ cis θ₁ → compare the lengths and compare the angles'),
+    lines: [() => `${tk(`${rhoI} ${R2} cis(${phiI} + ${T2})`)} ${tk(`= ${R1} cis ${T1}`)}`, () => `${tk(co('b', `${rhoI} ${R2} = ${R1}`))} ${tx(T('(ขนาดเท่ากัน)', '(lengths equal)'))}`, () => `${tk(co('o', `${phiI} + ${T2} = ${T1}`))} ${tx(T('(มุมเท่ากัน)', '(angles equal)'))}`] },
+  { cap: T('ได้ <b>ρ = r₁/r₂</b> และ <b>φ = θ₁ − θ₂</b> → "r หารกัน มุมลบกัน" · ตรวจกับฉากภาพ: 4 cis π/2 × 2 cis π/3 = 8 cis 5π/6 ✓', 'So <b>ρ = r₁/r₂</b> and <b>φ = θ₁ − θ₂</b> → "lengths divide, angles subtract" · check with the picture scene: 4 cis π/2 × 2 cis π/3 = 8 cis 5π/6 ✓'),
+    lines: [() => `${tk(co('b', `${rhoI} = ${fr(R1, R2)}`))} , ${tk(co('o', `${phiI} = ${T1} − ${T2}`))}`, () => `${tk(`${z1I} ÷ ${z2I} =`)} ${bxc('g', `${fr(R1, R2)} cis(${T1} − ${T2})`)}`, () => `<span class="cb-sm">${tx(T('ตรวจ', 'check'))}: ${tk(`4 cis ${RAD(1, 2)}`)} × ${tk(`2 cis ${RAD(1, 3)}`)} = ${tk(`8 cis(${RAD(1, 2)} + ${RAD(1, 3)})`)} = ${tk(`8 cis ${RAD(5, 6)}`)}</span>`] }
+], { minH: 230 });
 // ── การ์ดโยง ①: คูณด้วย i = หมุน π/2 (วงล้อ iⁿ คือการหมุนบนระนาบนี้) ──
 const LK_STOP = [[1, 0], [0, 1], [-1, 0], [0, -1], [1, 0]];
 const LK_LBL = [`1`, `<i>i</i>¹ = ${I}`, `<i>i</i>² = −1`, `<i>i</i>³ = −${I}`, `<i>i</i>⁴ = 1`];
@@ -4638,14 +4703,33 @@ function snapHalf(x, y) {
 const fmtQ = (p, q) => { const g_ = gcd(p, q); p /= g_; q /= g_; return q === 1 ? { h: String(p), v: p } : { h: fr(p, q), v: p / q }; };
 function makePowerTry(host) {
   host.innerHTML = `<div class="slider-row"><b><i>n</i></b><input type="range" id="pwn" min="1" max="12" step="1" value="3"><span class="slider-val" id="pwnv"></span></div><div class="pf-try"><div class="pf-pl"></div><div class="pf-out"></div></div>`;
+  // ข้อ 31ก: ช่วงของระนาบย่ออัตโนมัติ (8 → 16 → 32 → 64) ให้ z และ zⁿ อยู่ในกรอบ — ระนาบสร้างใหม่ได้เฉพาะตอนเลื่อน n หรือปล่อยนิ้ว (ห้ามสร้างระหว่างลาก: จะหลุดการจับ pointer)
   const g = { r2: 3, deg: 45, n: 3 };
-  const xyz = () => P2(g.r2 / 2, g.deg * Math.PI / 180), RNG = 8;
-  const pl = cplane(host.querySelector('.pf-pl'), { range: RNG, points: [{ id: 'z', z: Z(...xyz()), cls: 'b', drag: true, arrow: false, snap: 0, label: () => zI }],
-    onChange: zs => { const s = snapHalf(qNum(zs.z.re), qNum(zs.z.im)); g.r2 = s.r2; g.deg = s.deg; sync(); } });
+  const xyz = () => P2(g.r2 / 2, g.deg * Math.PI / 180);
+  const need = () => { const m = Math.max(g.r2 / 2, Math.pow(g.r2 / 2, g.n)); return [8, 16, 32, 64].find(R => m <= R - 0.4) || 64; };   // ค่าน้อยสุดที่ m ≤ ช่วง − 0.4
+  let RNG = need(), pl = null;
+  const plHost = host.querySelector('.pf-pl'), AT8 = ['r', 'tr', 't', 'tl', 'l', 'bl', 'b', 'br'];
+  const mk = fade => {
+    if (pl) pl._dead = true;
+    const tv = RNG / 4;                                                       // ระยะขีดบนแกน = 1 ช่องของตาราง: 2 · 4 · 8 · 16
+    pl = cplane(plHost, { range: RNG, tick: tv, points: [{ id: 'z', z: Z(...xyz()), cls: 'b', drag: true, arrow: false, snap: 0 }],
+      onChange: zs => { const s = snapHalf(qNum(zs.z.re), qNum(zs.z.im)); g.r2 = s.r2; g.deg = s.deg; sync(); } });
+    pl.svg.querySelectorAll('line.pl-grid').forEach(e => {                    // ตารางห่างทีละ tv หน่วย (ไม่ให้แน่นจนเป็นสีทึบ)
+      const vert = Math.abs(+e.getAttribute('x1') - +e.getAttribute('x2')) < 1e-6, u = vert ? pl.plot.ix(+e.getAttribute('x1')) : pl.plot.iy(+e.getAttribute('y1'));
+      if (Math.abs(Math.round(u / tv) * tv - u) > 1e-6) e.style.display = 'none';
+    });
+    plHost.insertAdjacentHTML('beforeend', '<div class="pf-scale"></div>');
+    if (fade) { plHost.classList.remove('fadein'); void plHost.offsetWidth; plHost.classList.add('fadein'); }
+  };
+  const settle = () => { const nr = need(); if (nr !== RNG) { RNG = nr; mk(true); sync(); } };
+  plHost.addEventListener('pointerup', settle); plHost.addEventListener('pointercancel', settle);
+  mk(false);
   const out = host.querySelector('.pf-out'), sl = host.querySelector('#pwn'), slv = host.querySelector('#pwnv');
   const sync = () => {
     const n = g.n, r = g.r2 / 2, th = g.deg * Math.PI / 180;
     pl.set('z', Z(...xyz()), true); pl.clearExtras();
+    const sc = plHost.querySelector('.pf-scale'); if (sc) sc.textContent = tx(T(`มาตราส่วน: 1 ช่อง = ${RNG / 4}`, `Scale: 1 square = ${RNG / 4}`));
+    pl.label(...xyz(), zI, 'b', { at: AT8[Math.round(g.deg / 45) % 8], gap: 14 });   // ป้าย z ถอยออกจากจุดกำเนิดอย่างน้อย 18 px แม้ระนาบย่อมาก
     const pt = j => P2(Math.pow(r, j), j * th), inR = j => Math.pow(r, j) <= RNG - 0.4;
     // เกลียว (เส้นประ) ผ่านจุด z¹ … zⁿ เท่าที่อยู่ในกรอบ
     const m = 60 * n, pts = []; for (let i = 0; i <= m; i++) { const u = 1 + (n - 1) * i / m, q = pt(u); if (Math.hypot(q[0], q[1]) > RNG - 0.2) break; const p = pl.toSvg(q[0], q[1]); pts.push((pts.length ? 'L' : 'M') + p[0].toFixed(1) + ' ' + p[1].toFixed(1)); }
@@ -4669,7 +4753,7 @@ function makePowerTry(host) {
       bigl(`${znI(n)} = ${cisG(`${small ? cisPQ(p, q, red) : '≈ ' + dec(p / q, 1) + ' cis ' + DEG(red)}`)}`) +
       (exactOk ? ln(`${znI(n)} = ${cisG(csdHtml(e.re, e.im))}`) : '') + (inside ? '' : `<div class="pf-note">${tx(T('zⁿ ใหญ่เกินกว่าที่ระนาบนี้จะวาดได้', 'zⁿ is too big to draw on this plane'))}</div>`);
   };
-  sl.oninput = () => { g.n = +sl.value; sync(); };
+  sl.oninput = () => { g.n = +sl.value; const nr = need(); if (nr !== RNG) { RNG = nr; mk(true); } sync(); };   // เลื่อน n: ช่วงเปลี่ยน = สร้างระนาบใหม่ทันที (จางเข้า)
   const w = { refresh: sync }; LIVE.push(w); sync();
   return w;
 }
@@ -4721,6 +4805,56 @@ const R3_SC = pfScenes(R3_CFG, [
       await S.anim.run(700, u => ps.forEach(e => { e.style.opacity = 1 - u; }));
       ps.forEach(e => e.remove());
     } }
+]);
+// ── ข้อ 31ข: ที่มาของสูตรรากที่ n (ตัวอย่างรากที่ 3 ของ 8) — w = ρ cis φ → เดอมัวฟวร์ → เทียบขนาด → เทียบมุม → k → ครบ n ตัว → สูตรทั่วไป ──
+const RV_A0 = Math.PI / 4;                                                   // มุมของ w ที่วาดเป็นตัวอย่างก่อนรู้ค่า (สัญลักษณ์เท่านั้น)
+R3.forEach(o => { if (Math.abs(Math.pow(2, 3) - 8) > 1e-12 || Math.abs(3 * o.ang - 2 * o.k * Math.PI) > 1e-9) throw new Error('RV: 3φ = 2kπ ตรวจไม่ผ่าน'); });
+const RV_CFG = {
+  range: 3, hideAx: true,
+  items: [
+    { kind: 'arrow', a: [0, 0], b: P2(1.7, RV_A0), c: 'b', dash: true, step: 0, until: 2 },
+    { kind: 'label', at: P2(1.7, RV_A0), html: wI, c: 'b', pos: 'tr', step: 0, until: 2 },
+    { kind: 'label', at: P2(0.85, RV_A0), html: rhoI, c: 'b', pos: 'tl', step: 0, until: 2 },
+    { kind: 'arc', r: 0.5, t0: 0, t1: RV_A0, c: 'o', head: true, step: 0, until: 4 },
+    { kind: 'label', at: P2(0.5, RV_A0 / 2), html: phiI, c: 'o', pos: 'r', step: 0, until: 4 },
+    { kind: 'circle', r: 2, c: 'o', dash: true, step: 2 },
+    { kind: 'arrow', a: [0, 0], b: P2(2, RV_A0), c: 'b', step: 2, until: 4, order: 1 },
+    { kind: 'label', at: P2(2, RV_A0), html: wI, c: 'b', pos: 'tr', step: 2, until: 4, order: 1 },
+    { kind: 'label', at: P2(1, RV_A0), html: co('b', `${rhoI} = 2`), c: 'b', pos: 'tl', step: 2, until: 4, order: 1 },
+    { kind: 'arc', r: 0.8, t0: 0, t1: TAU, c: 'g', head: true, step: 3, until: 4, ms: 1600 },
+    { kind: 'dot', at: [2, 0], c: 'g', step: 3, until: 4 },
+    { kind: 'label', at: [2, 0], html: `0, 2π, 4π, …`, c: 'g', pos: 'tr', step: 3, until: 4 },
+    ...R3.flatMap(o => [
+      { kind: 'dot', at: o.pt, c: 'g', step: 4, order: o.k },
+      { kind: 'label', at: o.pt, html: `${kI} = ${o.k}`, c: 'g', pos: ['tr', 'tl', 'bl'][o.k], step: 4, order: o.k }]),
+    { kind: 'raw', svg: pl => { const p = pl.toSvg(2, 0); return `<circle class="cp-halo f-green" style="fill-opacity:.45" cx="${p[0]}" cy="${p[1]}" r="17"/>`; }, id: 'flash', step: 5, until: 6 },
+    { kind: 'label', at: [2, 0], html: `${kI} = 3`, c: 'g', pos: 'br', gap: 14, step: 5, until: 6 }
+  ],
+  panel: k => {
+    const rho3 = `${rhoI}³ cis 3${phiI} = 8 cis 0`;
+    if (k === 0) return [{ key: 'a', html: bigl(`${wI}³ = 8`) }, { key: 'b', html: ln(tx(T('ยังไม่รู้ w จึงเขียนเป็นรูปเชิงขั้ว', 'w is unknown, so write it in polar form'))) }, { key: 'c', html: bigl(`${wI} = ${rhoI} cis ${phiI}`) }];
+    if (k === 1) return [{ key: 'a', html: bigl(`${wI}³ = ${rhoI}³ cis 3${phiI}`) }, { key: 'b', html: ln(`8 = 8 cis 0`) }, { key: 'c', html: bigl(rho3) }];
+    if (k === 2) return [{ key: 'c', html: ln(rho3) }, { key: 'd', html: bigl(`${rhoI}³ = 8`) }, { key: 'e', html: bigl(`${rhoI} = ${nsq(3, '8')} = 2`) }];
+    if (k === 3) return [{ key: 'c', html: ln(rho3) }, { key: 'f', html: bigl(`3${phiI} = 0 + 2${kI}π`) }, { key: 'g', html: ln(tg('green', tx(T('มุม 0, 2π, 4π, … ชี้ทิศเดียวกัน', 'the angles 0, 2π, 4π, … point the same way')))) }];
+    if (k === 4) return [{ key: 'f', html: ln(`3${phiI} = 2${kI}π`) }, { key: 'h', html: bigl(`${phiI} = ${fr(`2${kI}π`, 3)}`) }, ...R3.map(o => ({ key: 'k' + o.k, cls: 'pf-cell', html: `<span class="pf-k">${kI} = ${o.k}</span>${DEG(R3_DEG[o.k])}`, order: o.k }))];
+    if (k === 5) return [{ key: 'h', html: ln(`${phiI} = ${fr(`2${kI}π`, 3)}`) }, { key: 'k3', html: bigl(`${kI} = 3: ${phiI} = 2π`) }, { key: 'n', html: ln(tg('orange', tx(T('จึงมีรากแค่ n ตัว: k = 0, 1, …, n − 1', 'so there are only n roots: k = 0, 1, …, n − 1')))) }];
+    return [{ key: 'gen', html: bigl(`${nsq(nI, `${rI} cis ${TH}`)} = ${nsq(nI, rI)} cis ${fr(`${TH} + 2${kI}π`, nI)}`) }, { key: 'sub', html: ln(`8 → ${rI} , &nbsp;0 → ${TH} , &nbsp;3 → ${nI}`) }, { key: 'kk', html: ln(`${kI} = 0, 1, 2, …, ${nI} − 1`) }];
+  }
+};
+const RV_SC = pfScenes(RV_CFG, [
+  { cap: T('หา w ที่ w³ = 8 · ยังไม่รู้ w จึงเขียนเป็นรูปเชิงขั้ว <b>w = ρ cis φ</b> (ไม่รู้ทั้ง ρ และ φ) · กด ▶', 'Find w with w³ = 8 · w is unknown, so write it in polar form <b>w = ρ cis φ</b> (both ρ and φ unknown) · press ▶') },
+  { cap: T('ยกกำลัง 3 (เดอมัวฟวร์จากแท็บยกกำลัง): <b>w³ = ρ³ cis 3φ</b> · และเขียน 8 = 8 cis 0 → ρ³ cis 3φ = 8 cis 0', 'Cube it (de Moivre, from the Powers tab): <b>w³ = ρ³ cis 3φ</b> · and write 8 = 8 cis 0 → ρ³ cis 3φ = 8 cis 0') },
+  { cap: T('เทียบขนาด: ρ³ = 8 → ρ = ³√8 = 2 — ρ เป็นความยาว (จำนวนจริงบวก) จึงมีค่าเดียว → นี่คือเหตุที่ r กลายเป็น ⁿ√r (วงกลมรัศมี 2 ปรากฏ)', 'Compare the lengths: ρ³ = 8 → ρ = ∛8 = 2 — ρ is a length (a positive real number), so it has only one value → this is why r becomes ⁿ√r (the circle of radius 2 appears)') },
+  { cap: T('เทียบมุม: มุม 0, 2π, 4π, … ชี้ทิศเดียวกันหมด (โค้งหมุนครบรอบให้ดู) → <b>3φ = 0 + 2kπ</b> — นี่คือที่มาของ 2kπ', 'Compare the angles: 0, 2π, 4π, … all point the same way (watch the arc turn a full circle) → <b>3φ = 0 + 2kπ</b> — this is where the 2kπ comes from') },
+  { cap: T('หาร 3: <b>φ = 2kπ/3</b> → k = 0: 0 · k = 1: 2π/3 · k = 2: 4π/3 (จุดผุดทีละจุด) — แต่ละครั้งที่ k เพิ่ม มุมเพิ่ม 2π/3 = 2π หาร n → รากห่างกันเท่ากัน', 'Divide by 3: <b>φ = 2kπ/3</b> → k = 0: 0 · k = 1: 2π/3 · k = 2: 4π/3 (the points appear one by one) — each time k grows by 1 the angle grows by 2π/3 = 2π ÷ n → the roots are equally spaced') },
+  { cap: T('k = 3: φ = 2π วนมาทับ k = 0 (จุดกะพริบทับ) — จึงมีรากแค่ n ตัว: <b>k = 0, 1, …, n − 1</b>', 'k = 3: φ = 2π lands back on k = 0 (the point blinks on top) — so there are only n roots: <b>k = 0, 1, …, n − 1</b>'),
+    hook: async (S, ctx, reveal) => {
+      await reveal();
+      const el = ctx.els.flash;
+      if (el) for (let j = 0; j < 3; j++) { await S.anim.run(260, t => { el.style.opacity = 1 - 0.85 * Math.sin(Math.PI * t); }); }
+      if (el) el.style.opacity = 1;
+    } },
+  { cap: T('ทำแบบเดียวกันโดยแทน 8 ด้วย r และ 0 ด้วย θ (และ 3 ด้วย n) → สูตรรากที่ n ทั่วไป', 'Do the same thing with r in place of 8, θ in place of 0 (and n in place of 3) → the general nth-root formula') }
 ]);
 // ── ตัวอย่าง: รากที่ 5 ของ 2 cis 2π/3 ──
 const R5R = Math.pow(2, 1 / 5), R5D = [0, 1, 2, 3, 4].map(k => (120 + 360 * k) / 5);        // 24°, 96°, 168°, 240°, 312°
@@ -4926,11 +5060,15 @@ function build() {
 
   // ── แท็บ muldiv ──
   el('tab-muldiv').innerHTML =
+    card('🧮', d('ที่มา: ทำไม r คูณกัน มุมบวกกัน', 'Where it comes from: why the lengths multiply and the angles add'), '<div id="md-mo"></div>') +
     card('✖️', d('คูณ: r คูณกัน มุมบวกกัน', 'Multiply: lengths multiply, angles add'), `<div class="formula"><span>${r1} cis ${t1} · ${r2} cis ${t2} = ${r1}${r2} cis (${t1} + ${t2})</span></div><div id="md-mu"></div>`) +
+    card('🧮', d('ที่มา: หารคือย้อนการคูณ', 'Where it comes from: dividing undoes multiplying'), '<div id="md-do"></div>') +
     card('➗', d('หาร: r หารกัน มุมลบกัน', 'Divide: lengths divide, angles subtract'), `<div class="formula"><span>${r1} cis ${t1} ÷ ${r2} cis ${t2} = ${fr(r1, r2)} cis (${t1} − ${t2})</span></div><div id="md-dv"></div>`) +
     card('🔄', d('คูณด้วย i = หมุน π/2', 'Multiplying by i = turning by π/2'), '<div id="md-lk"></div>') +
     card('🔮', d('ทายก่อน: คูณและหาร', 'Guess first: multiplying and dividing'), '<div id="md-pr"></div>') +
     card('🖐️', d('ลองทำ: ลาก z₁ และ z₂', 'Try it: drag z₁ and z₂'), '<div id="md-try"></div>');
+  scenes('md-mo', MO_SC, T('กด ▶ ทีละฉาก — ดูสมการโผล่ทีละบรรทัด จนได้ว่ามุมบวกกัน', 'Press ▶ one scene at a time — watch the equations appear line by line until the angles add'));
+  scenes('md-do', DO_SC, T('กด ▶ ทีละฉาก — ดูการหารเป็นการย้อนการคูณ', 'Press ▶ one scene at a time — watch the division undo the multiplication'));
   scenes('md-mu', MU_SC, T('กด ▶ ทีละฉาก — ดูลูกศรหมุนแล้วยืด', 'Press ▶ one scene at a time — watch the arrow turn and stretch'));
   scenes('md-dv', DVS_SC, T('กด ▶ ทีละฉาก — ดูลูกศรหดแล้วหมุนกลับ', 'Press ▶ one scene at a time — watch the arrow shrink and turn back'));
   scenes('md-lk', LK_SC, T('กด ▶ ทีละฉาก — คูณ i ทีละครั้ง ลูกศรหมุนทีละ π/2', 'Press ▶ one scene at a time — each multiplication by i turns the arrow by π/2'));
@@ -4952,11 +5090,13 @@ function build() {
 
   // ── แท็บ roots ──
   el('tab-roots').innerHTML =
-    card('🔱', d('รากที่ n: ห่างกัน 2π/n เท่ากัน', 'nth roots: equally spaced by 2π/n'), rootsFormula + '<div id="rt-sc"></div>') +
+    card('🌱', d('ที่มาของสูตรรากที่ n', 'Where the nth-root formula comes from'), '<div id="rt-or"></div>') +
+    card('🔱', d('เห็นภาพ: รากที่ 3 ของ 8 ห่างกัน 2π/3', 'The picture: the cube roots of 8 are 2π/3 apart'), rootsFormula + '<div id="rt-sc"></div>') +
     card('📐', d('ตัวอย่าง: รากที่ 5 ของ 2 cis 2π/3', 'Example: the 5th roots of 2 cis 2π/3'), '<div id="rt-e5"></div>') +
     card('🔮', d('ทายก่อน: รากที่ n', 'Guess first: nth roots'), '<div id="rt-pr"></div>') +
     card('🖐️', d('ลองทำ: ลาก z และเลื่อน n', 'Try it: drag z and move n'), '<div id="rt-try"></div>') +
     card('📏', d('สมบัติข้อ 9: |√z| = √|z|', 'Property 9: |√z| = √|z|'), prFormula + '<div id="rt-p9"></div>');
+  scenes('rt-or', RV_SC, T('กด ▶ ทีละฉาก — จาก w³ = 8 ไปถึงสูตรรากที่ n', 'Press ▶ one scene at a time — from w³ = 8 to the nth-root formula'));
   scenes('rt-sc', R3_SC, T('กด ▶ ทีละฉาก — ดูรากที่ 3 ของ 8 ผุดบนวงกลม', 'Press ▶ one scene at a time — watch the cube roots of 8 appear on a circle'));
   scenes('rt-e5', R5_SC, T('กด ▶ ทีละฉาก — ดูรากที่ 5 ผุดทีละจุดเป็นห้าเหลี่ยม', 'Press ▶ one scene at a time — watch the 5th roots appear one by one as a pentagon'));
   makePredict(el('rt-pr'), mixP(rootsPredItems(), [2, 3]), { label: T('โจทย์', 'Problem'), prompt: T('เลือกโจทย์ แล้วทาย — เฉลยบนภาพ', 'Pick a problem and guess — the answer shows on the picture') });

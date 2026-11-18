@@ -3860,7 +3860,12 @@ function cbCss() {
   .mt-c.re { background: color-mix(in srgb, var(--g-green) 14%, var(--card)); }
   .mt-c.sel { border-color: var(--text); box-shadow: 0 0 0 3px color-mix(in srgb, var(--text) 18%, transparent); }
   .mt-e { font-size: .9rem; color: var(--muted); } .mt-r { font-size: 1.05rem; }
-  .mt-stp { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px 40px; margin-top: 8px; } .mt-stp .cx-out { font-size: 1.1rem; }
+  .mt-stp { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px 40px; margin: 8px 0 14px; } .mt-stp .cx-out { font-size: 1.1rem; }
+  .cb-prob { border: 1.5px solid var(--border); border-radius: 14px; background: color-mix(in srgb, var(--g-blue) 8%, var(--card)); padding: 8px 16px; margin: 0 auto 10px; max-width: 640px; text-align: center; font-weight: 700; font-size: 1.15rem; line-height: 1.9; }
+  .cb-ans { border: 2px solid var(--border); border-radius: 14px; background: var(--card); padding: 2px 16px; margin: 12px auto 0; max-width: 640px; font-weight: 700; font-size: 1.1rem; line-height: 1.8; }
+  .cb-ar { display: grid; grid-template-columns: 4.6em 1fr; align-items: baseline; gap: 2px 14px; padding: 8px 0; border-top: 1.5px solid var(--border); } .cb-ar:first-child { border-top: 0; }
+  .cb-al { text-align: center; color: var(--muted); font-size: 1.05rem; white-space: nowrap; } .cb-ans .cb-sm { font-size: .95rem; color: var(--muted); }
+  @media (max-width: 700px) { .cb-prob { font-size: 1rem; padding: 6px 10px; } .cb-ans { font-size: .98rem; padding: 2px 10px; } .cb-ar { grid-template-columns: 3.6em 1fr; gap: 2px 8px; } }
   @media (max-width: 700px) {
     .cb-row { font-size: 1.2rem; } .cb-eqsrc { font-size: 1rem; } .cb-eqln { font-size: 1.05rem; } .cb-dvrow { font-size: 1.05rem; } .pg-v { font-size: 1.15rem; } .pg-p { font-size: .8rem; } .mt-h { font-size: 1.05rem; min-width: 44px; } .mt-r { font-size: .95rem; } .mt-e { font-size: .8rem; } .side-box { font-size: .95rem; padding: 4px 8px; }
     .i-split { flex-direction: column; } .i-panel { font-size: 1.05rem; min-width: 0; }
@@ -3869,6 +3874,29 @@ function cbCss() {
     .wl-tbl { font-size: 1.05rem; } .wl-tbl td { padding: 4px 8px; } .k-b, .k-o, .k-g, .k-p, .k-r { padding: 0 4px; }
   }`;
   document.head.appendChild(s);
+}
+
+// เรขาคณิตลูกศรโค้ง (พิกัดสัมพัทธ์กับ stage) — ลูกศรนิ่งของ cbMount และป้ายที่บินตามเส้น (cbMove) ใช้เส้นเดียวกัน
+//   a = { a, b (selector ต้น/ปลาย), side: 't'|'b', depth: px โค้งสูงจากจุดสูงสุดของปลายทั้งสอง, to: 'r' = ปลายแตะขอบขวาของ b และโค้งอ้อมขอบขวาของ clr (selector) ห่าง pad px (ค่าเริ่ม 10) ไม่ให้ทับตัวเลข · ไม่ใส่ to = ปลายแตะขอบบน/ล่างของ b }
+function cbArcGeom(stage, a) {
+  const ea = stage.querySelector(a.a), eb = stage.querySelector(a.b), sr = stage.getBoundingClientRect(); if (!ea || !eb || !sr.width) return null;
+  const ra = ea.getBoundingClientRect(), rb = eb.getBoundingClientRect(), top = a.side !== 'b';
+  const x0 = ra.left + ra.width / 2 - sr.left, y0 = (top ? ra.top - 3 : ra.bottom + 3) - sr.top;
+  if (a.to !== 'r') {
+    const x1 = rb.left + rb.width / 2 - sr.left, y1 = (top ? rb.top - 3 : rb.bottom + 3) - sr.top;
+    return { x0, y0, x1, y1, cx: (x0 + x1) / 2, cy: top ? Math.min(y0, y1) - a.depth : Math.max(y0, y1) + a.depth };
+  }
+  const x1 = rb.right + 3 - sr.left, y1 = rb.top + rb.height / 2 - sr.top, cy = Math.min(y0, y1) - a.depth, ec = a.clr && stage.querySelector(a.clr), rc = ec && ec.getBoundingClientRect();
+  let cx = Math.max(x0, x1) + 24;
+  if (rc) {                                                              // ขยายจุดควบคุมออกขวาจนเส้นโค้งพ้นขอบขวาของ clr (+10 px) ตลอดช่วงความสูงของมัน
+    const need = rc.right - sr.left + (a.pad || 10), yt = rc.top - sr.top + 2, yb = rc.bottom - sr.top - 2;
+    for (let d = 24; d <= 300; d += 8) {
+      cx = Math.max(x0, x1) + d; let ok = true;
+      for (let i = 4; i <= 40; i++) { const t = i / 40, u = 1 - t, px = u * u * x0 + 2 * u * t * cx + t * t * x1, py = u * u * y0 + 2 * u * t * cy + t * t * y1; if (py > yt && py < yb && px < need) { ok = false; break; } }
+      if (ok) break;
+    }
+  }
+  return { x0, y0, x1, y1, cx, cy };
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -3890,14 +3918,10 @@ function cbMount(el, spec, k, vmax) {
     svg.setAttribute('viewBox', `0 0 ${sr.width.toFixed(1)} ${sr.height.toFixed(1)}`);
     const f = v => v.toFixed(1);
     svg.innerHTML = spec.arrows(k).map(a => {
-      const ea = stage.querySelector(a.a), eb = stage.querySelector(a.b); if (!ea || !eb) return '';
-      const ra = ea.getBoundingClientRect(), rb = eb.getBoundingClientRect(), top = a.side !== 'b';
-      const x0 = ra.left + ra.width / 2 - sr.left, x1 = rb.left + rb.width / 2 - sr.left;
-      const y0 = (top ? ra.top - 3 : ra.bottom + 3) - sr.top, y1 = (top ? rb.top - 3 : rb.bottom + 3) - sr.top;
-      const cx = (x0 + x1) / 2, cy = (top ? Math.min(y0, y1) - a.depth : Math.max(y0, y1) + a.depth);
-      let ux = x1 - cx, uy = y1 - cy; const L = Math.hypot(ux, uy) || 1; ux /= L; uy /= L;
-      const bx = x1 - ux * 13, by = y1 - uy * 13, nx = -uy * 6.5, ny = ux * 6.5, col = `var(--g-${a.c})`;
-      return `<g data-v="${a.v === undefined ? 0 : a.v}"><path d="M${f(x0)} ${f(y0)} Q${f(cx)} ${f(cy)} ${f(bx)} ${f(by)}" fill="none" stroke="${col}" stroke-width="3.2" stroke-linecap="round"/><polygon fill="${col}" points="${f(x1)},${f(y1)} ${f(bx + nx)},${f(by + ny)} ${f(bx - nx)},${f(by - ny)}"/></g>`;
+      const g = cbArcGeom(stage, a); if (!g) return '';
+      let ux = g.x1 - g.cx, uy = g.y1 - g.cy; const L = Math.hypot(ux, uy) || 1; ux /= L; uy /= L;
+      const bx = g.x1 - ux * 13, by = g.y1 - uy * 13, nx = -uy * 6.5, ny = ux * 6.5, col = `var(--g-${a.c})`;
+      return `<g data-v="${a.v === undefined ? 0 : a.v}"><path d="M${f(g.x0)} ${f(g.y0)} Q${f(g.cx)} ${f(g.cy)} ${f(bx)} ${f(by)}" fill="none" stroke="${col}" stroke-width="3.2" stroke-linecap="round"/><polygon fill="${col}" points="${f(g.x1)},${f(g.y1)} ${f(bx + nx)},${f(by + ny)} ${f(bx - nx)},${f(by - ny)}"/></g>`;
     }).join('');
     apply();
   };
@@ -3947,19 +3971,52 @@ async function cbFly(S, from, to, hA, o) {
   }, EASE.inOut);
   c.remove();
 }
+// ย้ายข้างแบบ ม.4 (จังหวะตามต้นแบบ m4/real-numbers/equations.html mvAnimate): ลูกศรโค้งโผล่ 450 ms → ป้าย hA บินตามเส้นโค้งเดียวกับลูกศร 1500 ms (inOut)
+//   → ถึงครึ่งทางสลับเป็น hB (เครื่องหมายกลับ) พร้อมเด้งขยาย 1.35 เท่า → ลงที่ปลายทาง · คืนป้ายที่ค้างอยู่ปลายทาง (ผู้เรียกสั่ง .remove() หลังบรรทัดปลายทางจางเข้าแล้ว)
+//   arrow = ลูกศรเดียวกับที่ spec.arrows ของ cbMount ให้ไว้ (ลูกศรนิ่งในสภาพจบฉากค้างอยู่ ย้อน/กระโดดแล้วยังอยู่) — ลูกศรต้องมี data-v ที่ไม่ซ้ำชิ้นอื่น (ไม่ใส่ = 0)
+async function cbMove(S, m, arrow, hA, hB) {
+  const stage = m.stage, g = cbArcGeom(stage, arrow), ea = stage.querySelector(arrow.a), eb = stage.querySelector(arrow.b), av = arrow.v === undefined ? 0 : arrow.v;
+  if (!g || !ea || !eb) return null;
+  m.setItem(av, 0);
+  const sr = stage.getBoundingClientRect(), ra = ea.getBoundingClientRect(), rb = eb.getBoundingClientRect();
+  // ป้ายวิ่งบนเส้นโค้งเดียวกับลูกศร (ปลายลูกศรอยู่ขอบกล่อง ป้ายต้องลงกลางกล่อง) จึงบวกระยะเยื้องที่ค่อยๆ เปลี่ยนจาก "กลางกล่องต้นทาง − จุดเริ่มลูกศร" เป็น "กลางกล่องปลายทาง − ปลายลูกศร" (ช้าตอนต้น เร็วตอนท้าย)
+  const o0 = [ra.left + ra.width / 2 - sr.left - g.x0, ra.top + ra.height / 2 - sr.top - g.y0], o1 = [rb.left + rb.width / 2 - sr.left - g.x1, rb.top + rb.height / 2 - sr.top - g.y1];
+  const lab = document.createElement('div'); lab.className = 'fly'; lab.style.fontSize = getComputedStyle(ea).fontSize; lab.innerHTML = hA; lab.style.visibility = 'hidden'; stage.appendChild(lab);
+  const place = (p, s) => {
+    const u = 1 - p, q = p * p;
+    lab.style.left = (u * u * g.x0 + 2 * u * p * g.cx + p * p * g.x1 + o0[0] + (o1[0] - o0[0]) * q).toFixed(1) + 'px';
+    lab.style.top = (u * u * g.y0 + 2 * u * p * g.cy + p * p * g.y1 + o0[1] + (o1[1] - o0[1]) * q).toFixed(1) + 'px';
+    lab.style.transform = `translate(-50%, -50%) scale(${s.toFixed(3)})`;
+  };
+  place(0, 1);
+  await S.anim.run(450, t => m.setItem(av, t), EASE.lin);
+  lab.style.visibility = '';
+  let tf = -1;
+  await S.anim.run(1500, p => {
+    if (tf < 0 && p > 0.5) { tf = performance.now(); lab.innerHTML = hB; }
+    place(p, tf < 0 ? 1 : 1 + 0.35 * (1 - Math.min(1, (performance.now() - tf) / 380)));
+  });
+  place(1, 1);
+  return lab;
+}
 const bx = (c, h, on, t) => `<span${t ? ` data-t="${t}"` : ''} class="bx${on ? ' ' + c : ''}">${h}</span>`;
 const sqrtN = n => (Number.isInteger(Math.sqrt(n)) ? String(Math.sqrt(n)) : null);
 // ── ฉาก i: ย้ายข้างแบบเขียนบนกระดาน → ถอดราก → ตั้งชื่อ i → √(−9) ──
 const X2 = pwr('<i>x</i>', '2');
 // ฉาก i: ย้ายข้าง → ถอดราก → (กล่องข้างขวา) ตั้งชื่อ i แล้ว i บินแทน √(−1) → ลองคิด √(−9) ก่อน แล้วเฉลยทีละขั้น
+// ลูกศรย้ายข้าง "+ 1" → "−1": ค้างอยู่ตั้งแต่ฉาก 2 ถึง 5 (วาดใน spec.arrows จึงอยู่ทั้งตอนเล่น ย้อน กระโดด และ reduced-motion) · โค้งอ้อมขอบขวาของ "0" ในบรรทัดแรก ไม่ทับตัวเลข
+const I_ARC = { a: '[data-t="one"]', b: '[data-t="dest"]', side: 't', depth: 44, c: 'red', v: 0, to: 'r', clr: '[data-t="zero"]', pad: 22 };
 const I_SPEC = {
+  arrows: k => (k >= 1 && k <= 4 ? [I_ARC] : []),
   html: k => {
     if (k <= 4) {
       const last = k === 4 ? `<i>x</i> = ±<span data-t="rt">${I}</span>` : `<i>x</i> = ±<span data-t="rt">${sqn('−1')}</span>`;
-      const stack = `<div class="i-stack"><div class="cb-big">${X2} + ${bx('r', '1', k >= 1, 'one')} = 0</div>` +
+      // กล่อง "+ 1" ทั้งก้อน (เครื่องหมายอยู่ในกล่อง) · หลังย้ายแล้วต้นทางจางและมีขีดฆ่า
+      const one = `<span data-t="one" class="bx${k >= 1 ? ' r cb-dim' : ''}">+ 1</span>`;
+      const stack = `<div class="i-stack"><div class="cb-big">${X2} ${one} = <span data-t="zero">0</span></div>` +
         bigl(`${X2} = ${bx('r', '−1', true, 'dest')}`, 1) + bigl(last, 2) + '</div>';
       const panel = `<div class="i-panel" data-v="4"><div>${tx(T('ให้', 'Let'))} <span data-t="pi" class="bx g">${I}</span> = ${sqn('−1')}</div><div>${pwr(I, '2')} = −1</div><div data-v="5">${tx(T('จะได้', 'so'))} <i>x</i> = ±${I}</div></div>`;
-      return `<div class="i-split">${stack}${panel}</div>`;
+      return `<div class="i-split" style="padding-top:24px;column-gap:56px">${stack}${panel}</div>`;          // ที่ว่างด้านบนให้ลูกศรโค้ง
     }
     return bigl(`${sqn('−9')} = ?`, 6) + bigl(`${sqn('−9')} = ${co('b', sqn('9'))} · ${co('p', sqn('−1'))}`, 7) + bigl(`${sqn('−9')} = ${co('b', '3')} · ${co('p', I)}`, 8) + bigl(`${sqn('−9')} = <b class="t-g">3${I}</b>`, 9);
   }
@@ -3967,10 +4024,15 @@ const I_SPEC = {
 const seqReveal = async (S, m, a, b) => { for (let v = a; v <= b; v++) { await S.anim.run(650, t => m.setItem(v, t)); m.setItem(v, 1); await S.anim.wait(350); } };
 const I_SC = scenesFrom(I_SPEC, [
   { cap: T('สมการ x² + 1 = 0 — อยากหาค่า x · กด ▶', 'The equation x² + 1 = 0 — we want to find x · press ▶'), k: 0, vmax: 0 },
-  { cap: T('ย้ายข้าง: +1 บินข้ามเครื่องหมาย = แล้วเปลี่ยนเป็น <b>−1</b> ได้ x² = −1', 'Move it across: the +1 flies over the = sign and turns into <b>−1</b>, giving x² = −1'), k: 1,
+  { cap: T('ย้ายข้าง: <b>+1</b> บินตามลูกศรโค้งข้ามเครื่องหมาย = ไปอีกข้าง แล้วเปลี่ยนเป็น <b>−1</b> ได้ x² = −1', 'Move it across: the <b>+1</b> follows the curved arrow over the = sign to the other side and turns into <b>−1</b>, giving x² = −1'), k: 1,
     hook: async (S, m, reveal) => {
-      await cbFly(S, cbT(m, '[data-t="one"]'), cbT(m, '[data-t="dest"]'), '<span class="bx r">+1</span>', { ms: 1300, arc: 80, hB: '<span class="bx r">−1</span>' });
-      await reveal(1, 1);
+      const one = cbT(m, '[data-t="one"]');
+      one.classList.remove('cb-dim');                                      // ต้นทางยังชัดอยู่ระหว่างบิน
+      const lab = await cbMove(S, m, I_ARC, '<span class="bx r">+ 1</span>', '<span class="bx r">−1</span>');
+      await reveal(1, 1);                                                  // บรรทัด x² = −1 จางเข้าใต้ป้ายที่ลงจอดแล้ว
+      if (lab) lab.remove();
+      one.style.transition = 'opacity .45s'; one.classList.add('cb-dim');  // ต้นทางจาง + ขีดฆ่า
+      await S.anim.wait(450);
     } },
   { cap: T('ถอดรากที่สองทั้งสองข้าง: x = ±√(−1)', 'Take the square root of both sides: x = ±√(−1)'), k: 2 },
   { cap: T('<span class="t-r">ไม่มีจำนวนจริงใดยกกำลังสองแล้วติดลบ</span> — จึงตั้งชื่อจำนวนใหม่ว่า <b>i</b> โดยให้ i = √(−1) นั่นคือ <b>i² = −1</b>', '<span class="t-r">No real number squared is negative</span> — so we name a new number <b>i</b>, with i = √(−1), that is <b>i² = −1</b>'), k: 3, vmax: 4 },
@@ -4434,7 +4496,8 @@ function mulPredItem() {
 }
 // ── ลองทำ: ตารางคูณ 2×2 (box method) — แถว = a, bi ของ z₁ (น้ำเงิน) · หลัก = c, di ของ z₂ (ส้ม) · ช่อง = ผลคูณแต่ละคู่ ──
 function makeMulTry(host) {
-  host.innerHTML = '<div class="mt-t"></div><div class="mx-calc mt-sum"></div><div class="mt-stp"><div class="mt-s1"></div><div class="mt-s2"></div></div>';
+  // ลำดับบนลงล่าง: กล่องโจทย์ → ตัวปรับ z₁ z₂ → ตารางคูณ → บรรทัดคำตอบ (ข้อ 27 · ขึ้นโจทย์มาก่อน)
+  host.innerHTML = '<div class="cb-prob mt-pb"></div><div class="mt-stp"><div class="mt-s1"></div><div class="mt-s2"></div></div><div class="mt-t"></div><div class="mx-calc mt-sum"></div>';
   let sel = [0, 0];
   const S1 = makeCStepper(host.querySelector('.mt-s1'), MU1, { name: 'z₁', cls: 'b', onChange: () => paint() });
   const S2 = makeCStepper(host.querySelector('.mt-s2'), MU2, { name: 'z₂', cls: 'o', onChange: () => paint() });
@@ -4443,6 +4506,7 @@ function makeMulTry(host) {
   const pf = (z, i) => { const h = ph(z, i); return (i ? qNum(z.im) < 0 : qNum(z.re) < 0) ? par(h) : h; };   // ในวงเล็บถ้าติดลบ
   const paint = () => {
     const a = S1.z, c = S2.z;
+    host.querySelector('.mt-pb').innerHTML = `${tx(T('โจทย์', 'Problem'))}: ${tx(T('หา', 'find'))} ${mx(`<i>z</i>₁<i>z</i>₂`)} ${tx(T('เมื่อ', 'when'))} ${zh(a, { var: 'z₁' })} ${tx(T('และ', 'and'))} ${zh(c, { var: 'z₂' })}`;
     const prod = (r, k) => cxMul(part(a, r), part(c, k));
     const cell = (r, k) => {
       const p = prod(r, k), isRe = r === k, e = `${pf(a, r)} × ${pf(c, k)}`;
@@ -4552,14 +4616,19 @@ function divPredItem() {
            `Multiply top and bottom by the conjugate 1 + 3i: bottom (1 − 3i)(1 + 3i) = 1² + 3² = 10 · top 10(1 + 3i) = 10 + 30i → divide by 10 to get <b>${cxText(good)}</b> · ${cxText(m8)} takes the denominator as 1 − 9 (it must be 1 + 9) · ${cxText(forgot)} forgets to divide by 10 · ${cxText(same)} never changes the sign`) }] };
 }
 function makeDivTry(host) {
-  host.innerHTML = '<div class="dv-s"></div><div class="mx-calc dv-r"></div>';
+  // ข้อ 27: กล่องโจทย์ → ตัวปรับ → แผงคำตอบมีกรอบ 3 แถว (ป้ายหัวข้อ z̄ · z · z̄ · z⁻¹ ตามด้วยค่า)
+  host.innerHTML = '<div class="cb-prob dv-pb"></div><div class="dv-s"></div><div class="cb-ans dv-r"></div>';
   const S1 = makeCStepper(host.querySelector('.dv-s'), Z(3, 4), { name: 'z', cls: 'b', onChange: () => paint() });
   const paint = () => {
     const z = S1.z, c = cxConj(z), p = cxMul(z, c);
-    let h = `${zbar('z')} = ${co('p', zh(c))}<br>${mx(`<i>z</i> · ${zbar('z')}`)} = ${mx(`(${zh(z)})(${zh(c)})`)} = <b class="t-g">${qHtml(p.re)}</b> ${tx(T('(จำนวนจริง = a² + b²)', '(a real number = a² + b²)'))}<br>`;
-    if (qIsZero(cxAbs2(z))) h += `<span class="bad">0 ${tx(T('ไม่มีตัวผกผันการคูณ (หารด้วย 0 ไม่ได้)', 'has no multiplicative inverse (we cannot divide by 0)'))}</span>`;
-    else { const iv = cxDiv(1, z); h += `${mx('<i>z</i><sup>−1</sup>')} = ${fr(`1`, zh(z))} = ${fr(zh(c), qHtml(p.re))} = <b class="t-g">${zh(iv)}</b> <br><span class="cb-sm">${mx(`<i>z</i> · <i>z</i><sup>−1</sup>`)} = ${zh(cxMul(z, iv))}</span>`; }
-    host.querySelector('.dv-r').innerHTML = h;
+    host.querySelector('.dv-pb').innerHTML = `${tx(T('โจทย์: ให้', 'Problem: let'))} ${zh(z, { var: 'z' })} ${tx(T('หา', 'find'))} ${zbar('z')}, ${mx(`<i>z</i> · ${zbar('z')}`)} ${tx(T('และ', 'and'))} ${mx('<i>z</i><sup>−1</sup>')}`;
+    const row = (lab, v) => `<div class="cb-ar"><span class="cb-al">${lab}</span><span>${v}</span></div>`;
+    const r1 = row(zbar('z'), `${zbar('z')} = ${co('p', zh(c))}`);
+    const r2 = row(mx(`<i>z</i> · ${zbar('z')}`), `${mx(`(${zh(z)})(${zh(c)})`)} = <b class="t-g">${qHtml(p.re)}</b> ${tx(T('(จำนวนจริง = a² + b²)', '(a real number = a² + b²)'))}`);
+    let r3;
+    if (qIsZero(cxAbs2(z))) r3 = row(mx('<i>z</i><sup>−1</sup>'), `<span class="bad">0 ${tx(T('ไม่มีตัวผกผันการคูณ (หารด้วย 0 ไม่ได้)', 'has no multiplicative inverse (we cannot divide by 0)'))}</span>`);
+    else { const iv = cxDiv(1, z); r3 = row(mx('<i>z</i><sup>−1</sup>'), `${mx('<i>z</i><sup>−1</sup>')} = ${fr(`1`, zh(z))} = ${fr(zh(c), qHtml(p.re))} = <b class="t-g">${zh(iv)}</b><br><span class="cb-sm">${mx(`<i>z</i> · <i>z</i><sup>−1</sup>`)} = ${zh(cxMul(z, iv))}</span>`); }
+    host.querySelector('.dv-r').innerHTML = r1 + r2 + r3;
   };
   const w = { refresh: paint }; LIVE.push(w); paint();
   return w;

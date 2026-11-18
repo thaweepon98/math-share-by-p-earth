@@ -3931,6 +3931,7 @@ function planeScenes(o) {
   const mount = (S, k) => {
     S.el.innerHTML = `<div class="pn-row"><div class="pn-plane"></div><div class="pn-side">${o.lines.map((L, i) => `<div class="${L.big ? 'cb-big' : 'cb-line'}" data-i="${i}">${L.h()}</div>`).join('')}</div></div>`;
     const w = pCP(S.el.querySelector('.pn-plane'), { range: o.range, tick: o.tick, points: o.pts ? o.pts(k) : [] });
+    if (o.setup) o.setup(w, k, S.el.querySelector('.pn-plane'));          // ตั้งค่าหลังสร้างระนาบ (เช่น ซ่อนแกนตั้งในฉากเส้นจำนวน)
     const els = [...S.el.querySelectorAll('[data-i]')];
     const draw = p => {
       w.clearExtras(); o.extras(w, k, p); pnAx(w);
@@ -3955,6 +3956,31 @@ function planeScenes(o) {
 const PZ = Z(3, 2);
 const PINS = [Z(-2, 1), Z(-3, 0), Z(0, 4)];
 const PIN_Q = ['', '', ''];
+// ── ข้อ 28: ฉากนำ "ทำไมต้องมีแกนตั้ง" — ใช้ระนาบเดิมแต่ซ่อนแกนตั้ง/ตาราง/ชื่อแกน Im จนถึงฉาก 4 (ฉาก 4 วาดแกนตั้งเพิ่มทีละน้อย) ──
+//   nlTag(w, host) เก็บชิ้นส่วนของแกนตั้งในระนาบ (ตาราง · เส้นแกน · ขีด+เลขแกนตั้ง · ป้าย Im) · nlShow(n, v) v = 0 ซ่อนหมด · 0..1 ค่อยๆ ขึ้น (แกนยาวออกจากจุดกำเนิด) · 1 = เหมือนระนาบปกติ
+function nlTag(w, host) {
+  const X0 = w.toSvg(0, 0)[0], Y0 = w.toSvg(0, 0)[1], n = { grid: [], yk: [], yax: null, im: null }, at = (e, a) => +e.getAttribute(a);
+  w.svg.querySelectorAll('line.pl-grid').forEach(e => n.grid.push(e));
+  w.svg.querySelectorAll('line.pl-axis').forEach(e => {
+    const x1 = at(e, 'x1'), x2 = at(e, 'x2'), y1 = at(e, 'y1'), y2 = at(e, 'y2');
+    if (Math.abs(x1 - X0) < 1 && Math.abs(x2 - X0) < 1 && Math.abs(y2 - y1) > 100) n.yax = { e, y1, y2 };                          // เส้นแกนตั้ง (ยาวเต็มกรอบ)
+    else if (Math.abs(y1 - y2) < 1 && Math.abs(x1 + x2 - 2 * X0) < 1 && Math.abs(y1 - Y0) > 2) n.yk.push(e);                       // ขีดบนแกนตั้ง
+  });
+  const ar = w.svg.querySelector('path.pl-axis');                                                                                  // หัวลูกศรปลายแกน: ท่อนแรกของ d = แกนนอน ท่อนหลัง = แกนตั้ง
+  if (ar) { const d = ar.getAttribute('d'), i = d.indexOf(' M', 3); n.arr = { e: ar, full: d, x: i > 0 ? d.slice(0, i) : d }; }
+  w.svg.querySelectorAll('text.pl-tick').forEach(e => { if (e.getAttribute('text-anchor') === 'end') n.yk.push(e); });              // เลขแกนตั้ง (i, 2i, …)
+  n.im = host.querySelectorAll('.cp-lbl.ax')[1] || null; n.Y0 = Y0;
+  return n;
+}
+function nlShow(n, v) {
+  const on = v > 0, set = (e, o) => { e.style.display = on ? '' : 'none'; e.style.opacity = o; };
+  n.grid.forEach(e => set(e, ramp(v, .35, 1)));
+  n.yk.forEach(e => set(e, ramp(v, .3, 1)));
+  if (n.yax) { set(n.yax.e, 1); n.yax.e.setAttribute('y1', (n.Y0 + (n.yax.y1 - n.Y0) * v).toFixed(1)); n.yax.e.setAttribute('y2', (n.Y0 + (n.yax.y2 - n.Y0) * v).toFixed(1)); }
+  if (n.arr) n.arr.e.setAttribute('d', v >= .97 ? n.arr.full : n.arr.x);
+  if (n.im) set(n.im, ramp(v, .6, 1));
+}
+const NL_ROT = th => Z(3 * Math.cos(th), 3 * Math.sin(th));                  // ลูกศร 3 หมุนไป th เรเดียน (ทวนเข็ม) รอบจุด 0
 function planeBaseSc() {
   const zl = () => cxHtml(PZ, { var: 'z' });
   const walkPath = (w, p) => {                                              // เดินขวา 3 แล้วขึ้น 2 ทิ้งรอยเส้นประ
@@ -3964,34 +3990,88 @@ function planeBaseSc() {
     return p2 > 0 ? tip : Z(3 * p1, 0);
   };
   const walkFull = w => { pLine(w, 0, Z(3, 0), 'b'); pLine(w, Z(3, 0), PZ, 'b'); };
+  // ฉาก 1–4 (ใหม่ ข้อ 28): เส้นจำนวน → คูณ −1 = หมุน 180° → คูณ i สองครั้ง → วาดแกนตั้ง · ฉาก 5–8 = ฉาก 1–4 เดิม (kk = k − 4)
+  const nlLab = (w, z, c, h, at) => { w.label(rv(Cx(z)), iv(Cx(z)), h, c, { at: at || 't' }); };
   return planeScenes({
     range: 6,
+    ms: [0, 2400, 3800, 2400],
+    setup: (w, k, host) => { w._nl = nlTag(w, host); if (k < 3) nlShow(w._nl, 0); },
     caps: [
-      T('ระนาบเชิงซ้อน: แกนนอนเก็บ<b>ส่วนจริง</b> แกนตั้งเก็บ<b>ส่วนจินตภาพ</b> · จำนวน z = 3 + 2i จะเป็นจุด (3, 2) · กด ▶', 'The complex plane: the horizontal axis holds the <b>real part</b>, the vertical axis the <b>imaginary part</b> · z = 3 + 2i will be the point (3, 2) · press ▶'),
+      T('เส้นจำนวนแนวนอน มีจุด 3 และ −2 — จำนวนจริงทุกตัวอยู่บนเส้นนี้ · แล้ว <i>i</i> อยู่ตรงไหน? ไม่อยู่บนเส้นนี้ เพราะไม่มีจำนวนจริงที่ยกกำลังสองได้ −1 · กด ▶', 'A horizontal number line with the points 3 and −2 — every real number sits on this line · so where is <i>i</i>? It is not on this line, because no real number squares to −1 · press ▶'),
+      T('คูณด้วย −1 = <b>หมุน 180°</b> (ครึ่งรอบ = π เรเดียน) รอบจุด 0 — ลูกศร 3 หมุนไปเป็น −3', 'Multiplying by −1 = <b>a 180° turn</b> (half a turn = π radians) about the point 0 — the arrow 3 turns into −3'),
+      T('คูณด้วย <i>i</i> สองครั้ง = หมุน 180° (เพราะ <i>i</i> · <i>i</i> = −1) → <b>คูณด้วย <i>i</i> หนึ่งครั้ง = หมุน 90°</b> (π/2 เรเดียน) ทวนเข็ม · ลูกศร 3 หมุนไปเป็น 3<i>i</i> อยู่ “ข้างบน” ตั้งฉากกับเส้นจำนวน แล้วหมุนอีก 90° ถึง −3', 'Multiplying by <i>i</i> twice = a 180° turn (because <i>i</i> · <i>i</i> = −1) → <b>multiplying by <i>i</i> once = a 90° turn</b> (π/2 radians) counterclockwise · the arrow 3 turns into 3<i>i</i>, “above” the line and perpendicular to it, then turns another 90° to −3'),
+      T('จึงต้องมีแกนที่สอง: แกนนอน = <b>แกนจริง</b> (จำนวนจริงเดิม) · แกนตั้ง = <b>แกนจินตภาพ</b> (จำนวนที่มี <i>i</i>)', 'So we need a second axis: the horizontal axis = the <b>real axis</b> (the real numbers we already had) · the vertical axis = the <b>imaginary axis</b> (the numbers with <i>i</i>)'),
+      T('<i>z</i> = 3 + 2<i>i</i> อ่านว่า “ไปขวา 3 แล้วขึ้น 2” → จะเป็นจุด (3, 2) · แกนนอนเก็บ<b>ส่วนจริง</b> แกนตั้งเก็บ<b>ส่วนจินตภาพ</b>', '<i>z</i> = 3 + 2<i>i</i> reads “3 to the right, then 2 up” → it will be the point (3, 2) · the horizontal axis holds the <b>real part</b>, the vertical axis the <b>imaginary part</b>'),
       T('จุดเดินจากจุดกำเนิด <b>ไปขวา 3</b> (ส่วนจริง) แล้ว <b>ขึ้น 2</b> (ส่วนจินตภาพ) ทิ้งรอยเส้นประไว้', 'The point walks from the origin <b>3 to the right</b> (real part), then <b>2 up</b> (imaginary part), leaving a dashed trail'),
       T('ลูกศรพุ่งจากจุดกำเนิดไปที่จุดนั้น — <b>z เป็นได้ทั้งจุดและลูกศร</b>', 'An arrow shoots from the origin to that point — <b>z can be a point and an arrow</b>'),
       T('ปักจุดอื่นทีละจุด: −2 + i (ซ้าย 2 ขึ้น 1) · −3 (อยู่บนแกนจริง) · 4i (อยู่บนแกนจินตภาพ)', 'Pin more points one at a time: −2 + i (2 left, 1 up) · −3 (on the real axis) · 4i (on the imaginary axis)')
     ],
     lines: [
-      { from: 0, big: true, keep: true, until: 2, h: () => co('b', zh(PZ, { var: 'z' })) },
-      { from: 0, h: () => `${tx(T('ส่วนจริง', 'real part'))} <b class="t-b">3</b> · ${tx(T('ส่วนจินตภาพ', 'imaginary part'))} <b class="t-b">2</b>` },
-      { from: 1, h: () => `→ ${tx(T('ไปขวา', 'right'))} <b>3</b>`, a: 0, b: .5 },
-      { from: 1, h: () => `↑ ${tx(T('ขึ้น', 'up'))} <b>2</b>`, a: .5, b: 1 },
-      { from: 2, big: true, h: () => `<i>z</i> = ${tx(T('จุด', 'point'))} = ${tx(T('ลูกศร', 'arrow'))}` },
-      { from: 3, h: () => `${zh(PINS[0])} → ${tx(T('ซ้าย 2 ขึ้น 1', '2 left, 1 up'))}`, a: 0, b: .33 },
-      { from: 3, h: () => `${zh(PINS[1])} → ${tx(T('บนแกนจริง', 'on the real axis'))}`, a: .33, b: .66 },
-      { from: 3, h: () => `${zh(PINS[2])} → ${tx(T('บนแกนจินตภาพ', 'on the imaginary axis'))}`, a: .66, b: 1 }
+      // ฉาก 1: เส้นจำนวน
+      { from: 0, big: true, h: () => `${co('b', '3')} , ${co('o', '−2')}` },
+      { from: 0, h: () => tx(T('จำนวนจริงทุกตัว = จุดบนเส้นนี้', 'every real number = a point on this line')) },
+      { from: 0, h: () => `<i>i</i> ${tx(T('อยู่ตรงไหน?', 'is where?'))}`, a: .5, b: 1 },
+      // ฉาก 2: คูณ −1
+      { from: 1, big: true, h: () => `${co('b', '3')} × (−1) = ${co('r', '−3')}` },
+      { from: 1, h: () => tx(T('คูณด้วย −1 = หมุน 180° รอบจุด 0', 'multiply by −1 = a 180° turn about 0')), a: .3, b: .6 },
+      { from: 1, h: () => `<span class="cb-sm">${tx(T('(ครึ่งรอบ = π เรเดียน)', '(half a turn = π radians)'))}</span>`, a: .6, b: 1 },
+      // ฉาก 3: คูณ i
+      { from: 2, big: true, h: () => `<i>i</i> · <i>i</i> = −1`, a: 0, b: .15 },
+      { from: 2, h: () => `${tx(T('คูณ', 'multiply by'))} <i>i</i> ${tx(T('หนึ่งครั้ง = หมุน 90°', 'once = a 90° turn'))}: ${co('b', '3')} → ${co('g', '3<i>i</i>')}`, a: .15, b: .45 },
+      { from: 2, h: () => `${tx(T('อีกครั้ง = หมุนอีก 90°', 'again = another 90° turn'))}: ${co('g', '3<i>i</i>')} → ${co('r', '−3')}`, a: .6, b: .9 },
+      { from: 2, h: () => `<span class="cb-sm">${tx(T('เลือกหมุนทวนเข็มเป็น i ตามข้อตกลง (ตามเข็มคือ −i) · พิสูจน์ว่าคูณ i = หมุน 90° อยู่ในสื่อรูปเชิงขั้ว', 'we pick counterclockwise as i by convention (clockwise is −i) · the proof that multiplying by i = a 90° turn is in the Polar Form piece'))}</span>`, a: .9, b: 1 },
+      // ฉาก 4: แกนตั้ง
+      { from: 3, big: true, h: () => `${co('b', '3')} ${tx(T('บนแกนนอน', 'on the horizontal axis'))}`, a: 0, b: .4 },
+      { from: 3, big: true, h: () => `${co('g', '3<i>i</i>')} ${tx(T('บนแกนตั้ง', 'on the vertical axis'))}`, a: .4, b: .7 },
+      { from: 3, h: () => tx(T('แกนนอน = <b>แกนจริง</b>', 'horizontal = <b>real axis</b>')), a: .7, b: .85 },
+      { from: 3, h: () => tx(T('แกนตั้ง = <b>แกนจินตภาพ</b>', 'vertical = <b>imaginary axis</b>')), a: .85, b: 1 },
+      // ฉาก 5–8 (เดิม 1–4)
+      { from: 4, big: true, keep: true, until: 6, h: () => co('b', zh(PZ, { var: 'z' })) },
+      { from: 4, h: () => `${tx(T('ส่วนจริง', 'real part'))} <b class="t-b">3</b> · ${tx(T('ส่วนจินตภาพ', 'imaginary part'))} <b class="t-b">2</b>` },
+      { from: 5, h: () => `→ ${tx(T('ไปขวา', 'right'))} <b>3</b>`, a: 0, b: .5 },
+      { from: 5, h: () => `↑ ${tx(T('ขึ้น', 'up'))} <b>2</b>`, a: .5, b: 1 },
+      { from: 6, big: true, h: () => `<i>z</i> = ${tx(T('จุด', 'point'))} = ${tx(T('ลูกศร', 'arrow'))}` },
+      { from: 7, h: () => `${zh(PINS[0])} → ${tx(T('ซ้าย 2 ขึ้น 1', '2 left, 1 up'))}`, a: 0, b: .33 },
+      { from: 7, h: () => `${zh(PINS[1])} → ${tx(T('บนแกนจริง', 'on the real axis'))}`, a: .33, b: .66 },
+      { from: 7, h: () => `${zh(PINS[2])} → ${tx(T('บนแกนจินตภาพ', 'on the imaginary axis'))}`, a: .66, b: 1 }
     ],
     extras: (w, k, p) => {
-      if (k === 1) { const tip = walkPath(w, p); pDot(w, tip, 'b'); if (p >= 1) w.label(3, 2, zl, 'b'); return; }
-      if (k >= 2) {
+      if (k < 4) {
+        const ghost = () => w.arrow(0, Z(3, 0), 'm', { dash: true, width: 2.6 });
+        if (k === 0) {                                                         // เส้นจำนวน: จุด 3 และ −2 · ป้าย "i = ?" ลอยเหนือเส้น
+          pDot(w, 3, 'b'); nlLab(w, 3, 'b', '3'); pDot(w, -2, 'o'); nlLab(w, -2, 'o', '−2');
+          if (p >= .5) w.label(0, 2.2, '<i>i</i> = ?', 'r', { at: 't' });
+        } else if (k === 1) {                                                  // × (−1): หมุนครึ่งรอบ
+          const th = Math.PI * p; ghost();
+          if (p > 0) w.arc(2.2, 0, th, 'o', { head: true, dash: true });
+          if (p > 0.02) w.arrow(0, NL_ROT(th), 'b');
+          pDot(w, NL_ROT(th), 'b'); nlLab(w, 3, 'b', '3', 'tr');
+          if (p >= 1) nlLab(w, -3, 'r', '−3');
+        } else if (k === 2) {                                                  // × i สองครั้ง: 0 → 90° (หยุด) → 180°
+          const a = ramp(p, 0, .4), b = ramp(p, .6, 1), th = (Math.PI / 2) * (a + b); ghost();
+          if (a > 0) w.arc(1.8, 0, (Math.PI / 2) * a, 'o', { head: true, dash: true });
+          if (b > 0) w.arc(2.5, Math.PI / 2, Math.PI / 2 + (Math.PI / 2) * b, 'p', { head: true, dash: true });
+          if (p > 0.02) w.arrow(0, NL_ROT(th), 'b');
+          pDot(w, NL_ROT(th), 'b'); nlLab(w, 3, 'b', '3', 'tr');
+          if (a >= 1) nlLab(w, Z(0, 3), 'g', '3<i>i</i>', 'r');
+          if (p >= 1) nlLab(w, -3, 'r', '−3');
+        } else {                                                               // วาดแกนตั้งทีละน้อย
+          nlShow(w._nl, p);
+          pDot(w, 3, 'b'); nlLab(w, 3, 'b', '3', 'tr');
+          if (p >= .4) { pDot(w, Z(0, 3), 'g'); nlLab(w, Z(0, 3), 'g', '3<i>i</i>', 'r'); }
+        }
+        return;
+      }
+      const kk = k - 4;
+      if (kk === 1) { const tip = walkPath(w, p); pDot(w, tip, 'b'); if (p >= 1) w.label(3, 2, zl, 'b'); return; }
+      if (kk >= 2) {
         walkFull(w);
-        const e = k === 2 ? ramp(p, 0, 1) : 1;
+        const e = kk === 2 ? ramp(p, 0, 1) : 1;
         if (e > 0) w.arrow(0, Z(3 * e, 2 * e), 'b');
         pDot(w, PZ, 'b');
-        if (k > 2 || p >= 1) w.label(3, 2, zl, 'b');
+        if (kk > 2 || p >= 1) w.label(3, 2, zl, 'b');
       }
-      if (k === 3) {
+      if (kk === 3) {
         PINS.forEach((z, i) => {
           const q = ramp(p, i / 3, (i + 1) / 3); if (q <= 0) return;
           pDot(w, z, 'o', 7.5 * Math.min(1, q * 1.4));
@@ -4370,20 +4450,56 @@ function absPredItems() {
       why: T('|z| คือระยะจากจุดกำเนิด — ทุกจุดที่ห่างจากจุดกำเนิดเท่ากับ 2 ก็คือ<b>วงกลมรัศมี 2</b> · จุด 2 กับ −2 เป็นแค่สองจุดบนแกนจริงที่ห่าง 2 (ยังมี 2i, −2i และจุดอื่นอีกมาก) · เส้นตรงหรือสี่เหลี่ยมไม่ใช่เซตของจุดที่ห่างจากจุดเดียวกันเท่ากัน', '|z| is the distance from the origin — all the points at distance 2 from the origin form a <b>circle of radius 2</b> · 2 and −2 are just two of those points on the real axis (2i, −2i and many more also qualify) · a line or a square is not the set of points equally far from one point') }] }
   ];
 }
+// ── ข้อ 29ก: z แบบทศนิยม 2 ตำแหน่ง (ใช้ตอนล็อก |z| ที่จุดไม่อยู่บนพิกัดจำนวนเต็ม) · จำนวนเต็มเขียนเต็ม ไม่มี .00 · ex = ทั้งสองส่วนเป็นจำนวนเต็มพอดี (ใช้ "=" ไม่ใช่ "≈") ──
+function zDecStr(z) {
+  const a = rv(z), b = iv(z), A = Math.round(a * 100) / 100, B = Math.round(b * 100) / 100, dec = v => { const r = Math.abs(v); return Number.isInteger(r) ? String(r) : r.toFixed(2); };
+  const ex = Math.abs(a - Math.round(a)) < 1e-4 && Math.abs(b - Math.round(b)) < 1e-4, bi = Math.abs(B) === 1 ? '' : dec(B);
+  let s = A !== 0 ? (A < 0 ? '−' : '') + dec(A) : '';
+  if (B !== 0) s += s ? ` ${B < 0 ? '−' : '+'} ${bi}${I}` : `${B < 0 ? '−' : ''}${bi}${I}`;
+  return { s: s || '0', ex };
+}
+const zDecHtml = (z, v) => { const d = zDecStr(z); return mx(`${v ? '<i>' + v + '</i> ' + (d.ex ? '=' : '≈') + ' ' : ''}${d.s}`); };
 function makeAbsTry(host) {
   host.innerHTML = '<div class="chips ab-c"></div><div class="pn-row"><div class="pn-plane ab-p"></div><div class="pn-side ab-r"></div></div><div class="mx-note ab-n"></div>';
-  let mode = 1, st = { z: Z(3, 4), z1: Z(6, 5), z2: Z(2, 2) }, w = null;
-  const R = 6;
-  const build = () => {
-    const pt = mode === 1 ? [{ id: 'z', z: st.z, cls: 'g', drag: true, arrow: true, guide: true, label: z => cxHtml(z, { var: 'z' }) }]
+  // lock = |z| ที่ล็อกไว้ (null = ปิด) · lockN = |z|² (จำนวนเต็ม) ไว้แสดง |z| ให้เป๊ะ · trail = จุดที่ลากผ่านตอนล็อก (จางๆ สูงสุด 24)
+  let mode = 1, st = { z: Z(3, 4), z1: Z(6, 5), z2: Z(2, 2), lock: null, lockN: 0, trail: [], msg: '' }, w = null;
+  const R = 6, STEP = Math.PI / 12;
+  const build = () => {   // ⚠️ สร้างระนาบใหม่ได้เฉพาะตอนสลับสวิตช์/โหมด — ห้ามเรียกระหว่างลาก (จะหลุดการจับ pointer)
+    const lk = st.lock !== null;
+    const pt = mode === 1 ? [{ id: 'z', z: st.z, cls: 'g', drag: true, arrow: true, guide: true, snap: lk ? 0 : 1, label: lk ? (z => zDecHtml(z, 'z')) : (z => cxHtml(z, { var: 'z' })) }]
       : [{ id: 'z1', z: st.z1, cls: 'b', drag: true, label: '<i>z</i>₁' }, { id: 'z2', z: st.z2, cls: 'o', drag: true, label: '<i>z</i>₂' }];
-    w = pCP(host.querySelector('.ab-p'), { range: R, points: pt, onChange: zs => { Object.assign(st, zs); paint(); } });
+    w = pCP(host.querySelector('.ab-p'), { range: R, points: pt, onChange: (zs, id) => {
+      if (st.lock !== null && id === 'z') {                                    // ล็อก: หามุมของตำแหน่งที่ลาก ดูดเข้าทุก 15° แล้ววางจุดที่ lock · cis θ
+        const q = zs.z, ai = ((Math.round(Math.atan2(iv(q), rv(q)) / STEP) % 24) + 24) % 24, x = st.lock * Math.cos(ai * STEP), y = st.lock * Math.sin(ai * STEP);
+        w.set('z', Cx(x, y), true);
+        if (!st.trail.some(t => t.k === ai)) { st.trail.push({ k: ai, x, y }); if (st.trail.length > 24) st.trail.shift(); }
+        st.z = w.get('z'); st.msg = ''; note(); paint(); return;
+      }
+      Object.assign(st, zs); paint();
+    } });
+  };
+  const toggleLock = () => {
+    if (st.lock !== null) {                                                      // ปิด: ปัดจุดกลับเข้าพิกัดจำนวนเต็มที่ใกล้สุด แล้วลากอิสระแบบเดิม
+      const z = w.get('z'); st.z = Cx(Math.round(rv(z)), Math.round(iv(z))); st.lock = null; st.trail = []; st.msg = '';
+    } else {
+      const z = w.get('z'), N = Math.round(qNum(cxAbs2(z)));
+      if (N === 0) st.msg = 'zero'; else if (Math.sqrt(N) > R + 1e-9) st.msg = 'far';
+      else { st.msg = ''; st.z = z; st.lock = Math.sqrt(N); st.lockN = N; st.trail = [{ k: 'init', x: rv(z), y: iv(z) }]; }
+    }
+    chips(); note(); build(); paint();
   };
   const sqLine = (N, pre) => `${pre} = ${cxRt(String(N))}${pyth(N) ? ` = <b class="t-g">${Math.round(Math.sqrt(N))}</b>` : `<b class="t-g">${decOf(Math.sqrt(N)) || ''}</b>`}`;
   const paint = () => {
     w.clearExtras(); pnAx(w);
     let h;
-    if (mode === 1) {
+    if (mode === 1 && st.lock !== null) {
+      const z = w.get('z'), N = st.lockN, S = pyth(N) ? String(Math.round(Math.sqrt(N))) : sqH(N);
+      w.circle(st.lock, 'g');                                                    // วงกลมทึบ
+      st.trail.forEach(t => { const p = w.toSvg(t.x, t.y); w.layer.insertAdjacentHTML('beforeend', `<circle class="pl-dot f-green" style="opacity:.3" cx="${p[0]}" cy="${p[1]}" r="6"/>`); });
+      w.label(0, -st.lock * .55, `${mx('|<i>z</i>|')} = ${S} ${tx(T('เท่ากันทุกจุดบนวงกลม', 'the same for every point on the circle'))}`, 'g', { at: 'b', gap: 0 });   // อยู่ในวงกลมด้านล่าง ไม่ชนป้ายของจุด z
+      h = ln(co('g', zDecHtml(z, 'z'))) + ln(`${mx('|<i>z</i>|')} = <b class="t-g">${S}</b>${pyth(N) ? '' : `<b class="t-g">${decOf(st.lock)}</b>`}`) +
+        ln(`<span class="cb-sm">${tx(T('|z| คงที่ แต่ส่วนจริง a และส่วนจินตภาพ b เปลี่ยนไปตามตำแหน่ง', '|z| stays fixed while the real part a and the imaginary part b change with the position'))}</span>`);
+    } else if (mode === 1) {
       const z = w.get('z'), a = rv(z), b = iv(z), N = qNum(cxAbs2(z));
       if (N > 0) w.circle(Math.sqrt(N), 'g', { dash: true });
       h = ln(`<i>z</i> = ${co('g', zh(z))}`) + ln(`${mx('|<i>z</i>|')} = ${cxRt(`${pn(a)}² + ${pn(b)}²`)} = ${cxRt(String(N))}${pyth(N) ? ` = <b class="t-g">${Math.round(Math.sqrt(N))}</b>` : `<b class="t-g">${decOf(Math.sqrt(N))}</b>`}`);
@@ -4394,14 +4510,23 @@ function makeAbsTry(host) {
     }
     host.querySelector('.ab-r').innerHTML = h;
   };
+  const note = () => {
+    const on = st.lock !== null;
+    host.querySelector('.ab-n').textContent = tx(st.msg === 'zero' ? T('ลากจุดออกจากจุดกำเนิดก่อน (z = 0 ไม่มีวงกลมให้ล็อก)', 'Drag the point away from the origin first (z = 0 has no circle to lock)')
+      : st.msg === 'far' ? T('|z| เกิน 6 วงกลมจะล้นกรอบ — ลากจุดเข้าใกล้จุดกำเนิดก่อนแล้วค่อยล็อก', '|z| is above 6, so the circle would leave the frame — drag the point closer to the origin before locking')
+      : mode === 2 ? T('ลากจุดสีน้ำเงินหรือสีส้ม — |z₁ − z₂| คือความยาวลูกศรสีเขียว', 'Drag the blue or the orange point — |z₁ − z₂| is the length of the green arrow')
+      : on ? T('ลากจุดสีเขียว — จุดวิ่งอยู่บนวงกลมที่ |z| คงที่ (ดูดทุก 15°) · จุดจางคือตำแหน่งที่ลากผ่าน: จำนวนเชิงซ้อนหลายตัวมีขนาดเท่ากันได้', 'Drag the green point — it runs on the circle where |z| stays fixed (snapping every 15°) · the faint dots are the places you passed: many complex numbers can have the same modulus')
+      : T('ลากจุดสีเขียว — เส้นประคือขาของสามเหลี่ยมมุมฉาก วงกลมคือระยะ |z|', 'Drag the green point — the dashes are the legs of the right triangle, the circle is the distance |z|'));
+  };
   const chips = () => {
     const c = host.querySelector('.ab-c');
-    c.innerHTML = [[1, T('1 จุด: |z|', '1 point: |z|')], [2, T('2 จุด: |z₁ − z₂|', '2 points: |z₁ − z₂|')]].map(([m, l]) => `<button class="chip${mode === m ? ' active' : ''}" data-m="${m}">${tx(l)}</button>`).join('');
-    c.querySelectorAll('.chip').forEach(b => b.onclick = () => { mode = +b.dataset.m; chips(); build(); paint(); });
-    host.querySelector('.ab-n').textContent = tx(mode === 1 ? T('ลากจุดสีเขียว — เส้นประคือขาของสามเหลี่ยมมุมฉาก วงกลมคือระยะ |z|', 'Drag the green point — the dashes are the legs of the right triangle, the circle is the distance |z|') : T('ลากจุดสีน้ำเงินหรือสีส้ม — |z₁ − z₂| คือความยาวลูกศรสีเขียว', 'Drag the blue or the orange point — |z₁ − z₂| is the length of the green arrow'));
+    c.innerHTML = [[1, T('1 จุด: |z|', '1 point: |z|')], [2, T('2 จุด: |z₁ − z₂|', '2 points: |z₁ − z₂|')]].map(([m, l]) => `<button class="chip${mode === m ? ' active' : ''}" data-m="${m}">${tx(l)}</button>`).join('') +
+      (mode === 1 ? `<button class="chip${st.lock !== null ? ' active' : ''}" data-lock="1" aria-pressed="${st.lock !== null}">${tx(T('ล็อก |z|', 'Lock |z|'))}</button>` : '');
+    c.querySelectorAll('.chip[data-m]').forEach(b => b.onclick = () => { mode = +b.dataset.m; if (mode === 2 && st.lock !== null) { const z = w.get('z'); st.z = Cx(Math.round(rv(z)), Math.round(iv(z))); st.lock = null; st.trail = []; } st.msg = ''; chips(); note(); build(); paint(); });
+    const lk = c.querySelector('.chip[data-lock]'); if (lk) lk.onclick = toggleLock;
   };
-  const wr = { refresh: () => { chips(); paint(); } }; LIVE.push(wr);
-  chips(); build(); paint();
+  const wr = { refresh: () => { chips(); note(); paint(); } }; LIVE.push(wr);
+  chips(); note(); build(); paint();
   return wr;
 }
 
@@ -4607,13 +4732,14 @@ function build() {
 
   // ── แท็บ plane ──
   el('tab-plane').innerHTML =
-    card('🧭', d('ระนาบเชิงซ้อน: z เป็นจุดและลูกศร', 'The complex plane: z as a point and an arrow'), '<div id="p-sc"></div>') +
+    card('🧭', d('ระนาบเชิงซ้อน: ทำไมต้องมีแกนตั้ง', 'The complex plane: why do we need a vertical axis'), '<div id="p-sc"></div>' +
+      `<div class="mx-note">${d('แนวคิด “คูณ i = หมุน 90°” อ้างอิง: BetterExplained, “A Visual, Intuitive Guide to Imaginary Numbers” — betterexplained.com/articles/a-visual-intuitive-guide-to-imaginary-numbers/', 'The idea “multiplying by i = a 90° turn” is from: BetterExplained, “A Visual, Intuitive Guide to Imaginary Numbers” — betterexplained.com/articles/a-visual-intuitive-guide-to-imaginary-numbers/')}</div>`) +
     card('➕', d('บวกเป็นภาพ: ต่อหัวลูกศร', 'Adding as a picture: head to tail'), '<div id="p-ad"></div>') +
     card('➖', d('ลบเป็นภาพ: จากหัวถึงหัว', 'Subtracting as a picture: head to head'), '<div id="p-sb"></div>') +
     card('🔮', d('ทายก่อน: จตุภาค', 'Guess first: the quadrant'), '<div id="p-pr"></div>') +
     card('🎯', d('เกม: ปักจุด', 'Game: pin the point'), '<div id="p-gm"></div>') +
     card('🖐️', d('ลองทำ: ลากหัวลูกศร z₁ และ z₂', 'Try it: drag the heads of z₁ and z₂'), '<div id="p-try"></div>');
-  scenes('p-sc', planeBaseSc(), T('กด ▶ ทีละฉาก — ดูจุดเดินไปตามส่วนจริงและส่วนจินตภาพ', 'Press ▶ one scene at a time — watch the point walk along the real and imaginary parts'));
+  scenes('p-sc', planeBaseSc(), T('กด ▶ ทีละฉาก — จากเส้นจำนวนสู่ระนาบ แล้วดูจุดเดินไปตามส่วนจริงและส่วนจินตภาพ', 'Press ▶ one scene at a time — from the number line to the plane, then watch the point walk along the real and imaginary parts'));
   scenes('p-ad', addBaseSc(), T('กด ▶ ทีละฉาก — ดูลูกศร z₂ เลื่อนไปต่อหัว z₁', 'Press ▶ one scene at a time — watch the arrow z₂ slide to the head of z₁'));
   scenes('p-sb', subBaseSc(), T('กด ▶ ทีละฉาก — ดูลูกศรผลลบเลื่อนมาที่จุดกำเนิด', 'Press ▶ one scene at a time — watch the difference arrow slide to the origin'));
   makePredict(el('p-pr'), [quadItem()], { prompt: T('ดูจุดแล้วทาย — เฉลยบนระนาบ', 'Look at the point and guess — the answer shows on the plane') });
