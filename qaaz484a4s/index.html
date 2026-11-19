@@ -1003,7 +1003,7 @@ function toggleLang() {
   try { localStorage.setItem('siteLang', next); } catch (e) {}
   // ถ้าโจทย์ตัวอย่าง (ชื่อกลุ่ม/รายชื่อ) ยังเป็นค่าเริ่มต้นของภาษาเดิมอยู่ (ครูยังไม่ได้แก้เอง)
   // ให้สลับเป็นค่าเริ่มต้นของภาษาใหม่ไปด้วย — ถ้าครูแก้เองแล้วจะไม่แตะต้อง
-  if (isUsingIntroDefaults(prev)) {
+  if (isUsingIntroDefaults('th') || isUsingIntroDefaults('en')) {
     setIntroDefaults(next);
     generateIntroPuzzle();
   }
@@ -1252,7 +1252,9 @@ window.addEventListener('load', () => {
   renderDirect2();
   renderDirect3();
   const savedIntro = loadIntroCustom();
-  if (savedIntro) {
+  // ถ้าที่จำไว้คือ "ค่าเริ่มต้น" ของภาษาใดภาษาหนึ่ง (ครูไม่ได้แก้เอง) ให้ใช้ค่าเริ่มต้นของภาษาปัจจุบัน
+  // (เดิมจะค้างชุดภาษาอังกฤษไว้ แม้เปิดหน้าเป็นภาษาไทย)
+  if (savedIntro && !isIntroDefaultsData(savedIntro)) {
     document.getElementById('introLabelA').value = savedIntro.labelA;
     document.getElementById('introLabelB').value = savedIntro.labelB;
     document.getElementById('introMembersA').value = savedIntro.membersA;
@@ -1313,6 +1315,14 @@ function loadIntroCustom() {
     const raw = localStorage.getItem(INTRO_CUSTOM_KEY);
     return raw ? JSON.parse(raw) : null;
   } catch (e) { return null; }
+}
+
+function isIntroDefaultsData(o) {
+  return ['th', 'en'].some(lang => {
+    const d = INTRO_DEFAULTS[lang];
+    return o.labelA === d.labelA && o.labelB === d.labelB
+      && o.membersA === d.membersA && o.membersB === d.membersB;
+  });
 }
 
 function isUsingIntroDefaults(lang) {
