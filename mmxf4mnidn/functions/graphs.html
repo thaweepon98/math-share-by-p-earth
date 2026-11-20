@@ -4616,15 +4616,30 @@ window.addEventListener('load', () => {
       + '</div>'
       + `<button type="button" class="pen-main" data-l="main" aria-pressed="false">${ICON.pen}</button>`;
     document.body.appendChild(bar);
+    // iPad + Apple Pencil: จิ้มด้วยปากกามักขยับนิดนึง → Safari ไม่ยิง "click" ให้ ปุ่มเลยกดไม่ติด (นิ้วกดได้ปกติ)
+    // → ปากกา stylus ให้ทำงานตอนยกปากกา (pointerup) บนปุ่มเดียวกับที่จิ้มลง แล้วกัน click ที่อาจตามมาไม่ให้กดซ้ำ
+    let penBtn = null, penTapAt = 0;
+    bar.addEventListener('pointerdown', e => { penBtn = e.pointerType === 'pen' ? e.target.closest('button') : null; });
+    bar.addEventListener('pointerup', e => {
+      if (e.pointerType !== 'pen' || !penBtn) return;
+      const b = penBtn; penBtn = null;
+      const r = b.getBoundingClientRect(), slop = 14;   // ยกปากกาเลยขอบปุ่มได้นิดหน่อย
+      if (e.clientX < r.left - slop || e.clientX > r.right + slop || e.clientY < r.top - slop || e.clientY > r.bottom + slop) return;
+      e.preventDefault(); penTapAt = Date.now(); act(b);
+    });
+    bar.addEventListener('pointercancel', () => { penBtn = null; });
     bar.addEventListener('click', e => {
-      const b = e.target.closest('button'); if (!b) return;
+      if (Date.now() - penTapAt < 700) return;
+      const b = e.target.closest('button'); if (b) act(b);
+    });
+    function act(b) {
       if (b.classList.contains('pen-main')) { setOn(!S.on); return; }
       if (b.dataset.c) { S.color = b.dataset.c; if (S.tool === 'eraser') S.tool = 'pen'; }
       else if (b.dataset.t) S.tool = S.tool === b.dataset.t ? 'pen' : b.dataset.t;
       else if (b.dataset.a === 'undo') undo();
       else if (b.dataset.a === 'clear') clearView();
       syncMode();
-    });
+    }
     resize(); syncMode(); relabel();
     window.addEventListener('resize', resize);
     window.addEventListener('scroll', schedule, true);
