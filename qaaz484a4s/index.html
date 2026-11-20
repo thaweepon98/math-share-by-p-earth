@@ -535,7 +535,7 @@ input[type=range]{ accent-color:var(--primary); }
       <div class="card">
         <div class="card-title"><span class="icon">🖐️</span><span data-th="ลากชื่อของกินไปวางในกลุ่มให้ถูกต้อง" data-en="Drag each food name into the correct group">ลากชื่อของกินไปวางในกลุ่มให้ถูกต้อง</span></div>
         <div class="total-row">
-          <div><span data-th="จัดถูกแล้ว" data-en="Placed">จัดถูกแล้ว</span> <strong id="introProgress">0</strong> / <strong id="introTotal">12</strong> <span data-th="อย่าง" data-en="items">อย่าง</span></div>
+          <div><span data-th="จัดถูกแล้ว" data-en="Placed">จัดถูกแล้ว</span> <strong id="introProgress">0</strong> <span data-th="อย่าง" data-en="items">อย่าง</span></div>
         </div>
         <div id="introPool" class="chip-pool"></div>
 
@@ -1541,7 +1541,7 @@ function generateIntroPuzzle() {
   introCountsHidden = false;
   renderIntroCounts();
   document.getElementById('introProgress').textContent = '0';
-  document.getElementById('introTotal').textContent = union.length;
+  // ไม่โชว์จำนวนทั้งหมด (/ 12) เพราะเท่ากับเฉลย n(A∪B)
   const matchEl = document.getElementById('introMatch');
   matchEl.className = '';
   matchEl.textContent = '';
